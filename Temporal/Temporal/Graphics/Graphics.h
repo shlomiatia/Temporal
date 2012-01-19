@@ -1,5 +1,6 @@
 #pragma once
 #include <Temporal\Base\Base.h>
+#include "Texture.h"
 
 namespace Temporal
 {
@@ -35,8 +36,10 @@ namespace Temporal
 		void validate(void) const;
 
 		// draws shapes to the screen to the screen
-		void drawRect(const Rect& rect, const Color& color = Color::White, const float angle = 0.0f) const;
+		void drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const;
+		void drawRect(const Rect& rect, const Color& color = Color::White) const;
 		void drawLine(const Line& line, const Color& color = Color::White) const;
+
 	private:
 		static const int BIT_DEPTH = 32;
 		Vector _translation;

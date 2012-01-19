@@ -1,0 +1,43 @@
+#include "Sprite.h"
+#include "Graphics.h"
+
+namespace Temporal
+{
+	void Sprite::update(void)
+	{
+		_update = (_update + 1) % UPDATES_PER_FRAME;
+		if(_update == 0 && (!isEnded() || _repeat))
+		{
+			int modifier = _rewind ? -1 : 1;
+			_frame = (_frame + modifier) % getFramesCount();
+		}
+	}
+
+	void Sprite::draw(const Vector& location, Orientation::Type orientation) const
+	{
+		bool mirrored = orientation != SPRITE_ORIENTATION;
+		const Frame& frame = *_spritesheet._elements[_animation]->_elements[_frame];
+		float anchoredX = location.getX() - orientation * SPRITE_ORIENTATION * frame.getOffset().getX();
+		float anchoredY = location.getY() - frame.getOffset().getY();
+
+		Vector anchoredLocation(anchoredX, anchoredY);
+
+		const Texture& texture = _spritesheet.getTexture();
+
+		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored);
+	}
+
+	void Sprite::reset(int animation, bool rewind, bool repeat)
+	{
+		_update = 0;
+		_animation = animation;
+		_rewind = rewind;
+		_repeat = repeat;
+		_frame = !_rewind ? 0 : getFramesCount() - 1;
+	}
+
+	bool Sprite::isEnded(void) const
+	{
+		return !_rewind ? _frame == 0 : _frame == getFramesCount() - 1;
+	}
+}

@@ -37,6 +37,11 @@ namespace Temporal
 		float getWidth(void) const { return _size.getWidth(); }
 		float getHeight(void) const { return _size.getHeight(); }
 
+		float getGraphicsLeft(void) const { return getLeft(); }
+		float getGraphicsRight(void) const { return getRight() + 1.0f; }
+		float getGraphicsTop(void) const { return getBottom(); }
+		float getGraphicsBottom(void) const { return getTop() + 1.0; }
+
 		float getSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 

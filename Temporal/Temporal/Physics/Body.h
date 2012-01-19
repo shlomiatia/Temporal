@@ -10,7 +10,10 @@ namespace Temporal
 	class Body
 	{
 	public:
+		// TODO: Dynamic
 		static const int MAX_ELEMENTS = 10;
+		Sensor* _elements[MAX_ELEMENTS];
+		int _elementsCount;
 
 		Body(bool isDynamic, const Vector& position, const Vector& size, Orientation::Type orientation = Orientation::RIGHT)
 			: _isDynamic(isDynamic), _bounds(position, size), _orientation(orientation), _force(Vector::Zero), _gravityScale(1.0f), _elementsCount(0), _collision(Direction::NONE) {}
@@ -38,9 +41,7 @@ namespace Temporal
 		void applyForce(void) { _bounds += _force; }
 		void add(Sensor* element) { assert(_elementsCount < MAX_ELEMENTS); _elements[_elementsCount++] = element; }
 
-		// TODO: Dynamic
-		Sensor* _elements[MAX_ELEMENTS];
-		int _elementsCount;
+		
 	private:
 		bool _isDynamic;
 		Rect _bounds;

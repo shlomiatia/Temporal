@@ -24,6 +24,11 @@
     <ClInclude Include="Game\EntityStates.h" />
     <ClInclude Include="Game\InputEntityController.h" />
     <ClInclude Include="Game\EntityStateID.h" />
+    <ClInclude Include="Graphics\Frame.h" />
+    <ClInclude Include="Graphics\Animation.h" />
+    <ClInclude Include="Graphics\Texture.h" />
+    <ClInclude Include="Graphics\SpriteSheet.h" />
+    <ClInclude Include="Graphics\Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -43,5 +48,7 @@
     <ClCompile Include="Game\EntityStatesFactory.cpp" />
     <ClCompile Include="Game\EntityStates.cpp" />
     <ClCompile Include="Game\InputEntityController.cpp" />
+    <ClCompile Include="Graphics\Texture.cpp" />
+    <ClCompile Include="Graphics\Sprite.cpp" />
   </ItemGroup>
 </Project>

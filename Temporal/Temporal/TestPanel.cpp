@@ -11,12 +11,18 @@ namespace Temporal
 {
 	void TestPanel::init(void)
 	{
-		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
-		DebugInfo::get().setShowingFPS(false);
+		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(256.0f, 192.0f));
+		DebugInfo::get().setShowingFPS(true);
 
-		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::RIGHT);
 		const EntityController* const controller = new InputEntityController();
-		_entity = new Entity(*body, controller);
+		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
+		const Texture* const texture = Texture::load("c:\\pop.png");
+		SpriteSheet* spritesheet = new SpriteSheet(texture);
+		Animation* animation = new Animation();
+		spritesheet->add(animation);
+		animation->add(new Frame(Rect(26.5,48,22,85), Vector(5,-2)));
+		_entity = new Entity(controller, *body, *spritesheet);
+		_entity->getSprite().reset(0);
 		Physics::get().add(body);
 
 		// Jump Sensor
@@ -98,7 +104,8 @@ namespace Temporal
 	void TestPanel::draw(void)
 	{
 		DebugInfo::get().draw();
-		for(int i = 0; i < Physics::get()._elementsCount; ++i)
+		_entity->draw();
+		/*for(int i = 0; i < Physics::get()._elementsCount; ++i)
 		{
 			const Body& body = *Physics::get()._elements[i];
 			Graphics::get().drawRect(body.getBounds());
@@ -107,7 +114,7 @@ namespace Temporal
 				const Sensor& sensor = *body._elements[j];
 				Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() == NULL ? Color::Yellow : Color::Red);
 			}
-		}
+		}*/
 	}
 
 	void TestPanel::dispose(void)
