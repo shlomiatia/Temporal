@@ -11,8 +11,8 @@ namespace Temporal
 {
 	void TestPanel::init(void)
 	{
-		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(256.0f, 192.0f));
-		DebugInfo::get().setShowingFPS(true);
+		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
+		DebugInfo::get().setShowingFPS(false);
 
 		const EntityController* const controller = new InputEntityController();
 		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
@@ -105,7 +105,7 @@ namespace Temporal
 	{
 		DebugInfo::get().draw();
 		_entity->draw();
-		/*for(int i = 0; i < Physics::get()._elementsCount; ++i)
+		for(int i = 0; i < Physics::get()._elementsCount; ++i)
 		{
 			const Body& body = *Physics::get()._elements[i];
 			Graphics::get().drawRect(body.getBounds());
@@ -114,7 +114,7 @@ namespace Temporal
 				const Sensor& sensor = *body._elements[j];
 				Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() == NULL ? Color::Yellow : Color::Red);
 			}
-		}*/
+		}
 	}
 
 	void TestPanel::dispose(void)
