@@ -38,7 +38,6 @@ namespace Temporal
 		// draws shapes to the screen to the screen
 		void drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const;
 		void drawRect(const Rect& rect, const Color& color = Color::White) const;
-		void drawLine(const Line& line, const Color& color = Color::White) const;
 
 	private:
 		static const int BIT_DEPTH = 32;

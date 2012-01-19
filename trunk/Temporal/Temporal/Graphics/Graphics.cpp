@@ -34,17 +34,13 @@ namespace Temporal
 			// TODO: Error Failed setting video mode
 			exit(1);
 		}
-
 		// init GL stuff
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glViewport(0, 0, (int)resolution.getWidth(), (int)resolution.getHeight());
-		glClear(GL_COLOR_BUFFER_BIT);
- 
+		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, viewSize.getX(), 0, viewSize.getY(), 0, 1);
@@ -114,28 +110,28 @@ namespace Temporal
 		{
 			// set opengl matrix & color properties
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
-			glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
 			glColor3f(1.0f, 1.0f, 1.0f);
+ 
+			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(),
+										 -texturePart.getOffsetX(), texturePart.getOffsetY(),
+										  texturePart.getOffsetX(), texturePart.getOffsetY(),
+										  texturePart.getOffsetX(), -texturePart.getOffsetY() };
 
-			glBegin(GL_QUADS);
-			{
-				//Bottom-left vertex (corner)
-				glTexCoord2f(textureX0, textureBottom);
-				glVertex2f(-texturePart.getOffsetX(), -texturePart.getOffsetY());
-	
-				//Bottom-right vertex (corner)
-				glTexCoord2f(textureX1, textureBottom);
-				glVertex2f(texturePart.getOffsetX(), -texturePart.getOffsetY());
-	
-				//Top-right vertex (corner)
-				glTexCoord2f(textureX1, textureTop);
-				glVertex2f(texturePart.getOffsetX(), texturePart.getOffsetY());
-	
-				//Top-left vertex (corner)
-				glTexCoord2f(textureX0, textureTop);
-				glVertex2f(-texturePart.getOffsetX(), texturePart.getOffsetY());
-			}
-			glEnd();
+			GLfloat textureVertices[] = { textureX0, textureBottom,
+										  textureX0, textureTop,
+										  textureX1, textureTop,
+										  textureX1, textureBottom };
+ 
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ 
+			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
+ 
+			glDrawArrays(GL_QUADS, 0, 4);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 		glPopMatrix();
 	}
@@ -148,27 +144,19 @@ namespace Temporal
 			
 			glTranslatef(rect.getCenterX(), rect.getCenterY(), 0.0f);
 
-			glBegin(GL_LINE_LOOP);
-			{
-				glVertex2f(-rect.getOffsetX(), -rect.getOffsetY());
-				glVertex2f(-rect.getOffsetX(), rect.getOffsetY());
-				glVertex2f(rect.getOffsetX(), rect.getOffsetY());
-				glVertex2f(rect.getOffsetX(), -rect.getOffsetY());
-			}
-			glEnd();
+			GLfloat vertices[] = {-rect.getOffsetX(), -rect.getOffsetY(),
+								  -rect.getOffsetX(), rect.getOffsetY(),
+								   rect.getOffsetX(), rect.getOffsetY(),
+								   rect.getOffsetX(), -rect.getOffsetY()};
+ 
+			glEnableClientState(GL_VERTEX_ARRAY);
+ 
+			glVertexPointer(2, GL_FLOAT, 0, vertices);
+ 
+			glDrawArrays(GL_LINE_LOOP, 0, 4);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
 		}
 		glPopMatrix();
-	}
-
-	void Graphics::drawLine(const Line& line, const Color& color) const
-	{
-		setColor(color);
-
-		glBegin(GL_LINES);
-		{
-			glVertex2f(line.getX1(), line.getY1());
-			glVertex2f(line.getX2(), line.getX2());
-		}
-		glEnd();
 	}
 }

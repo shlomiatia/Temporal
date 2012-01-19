@@ -99,7 +99,7 @@ namespace Temporal
 			{
 				angle = toRadians(105.0f);
 			}
-			else if(x <= hangSensorSize - 1.0f)
+			else if(x < hangSensorSize - 1.0f)
 			{
 				angle = toRadians(90.0f);
 			}
