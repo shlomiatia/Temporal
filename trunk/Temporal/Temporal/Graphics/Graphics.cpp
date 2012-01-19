@@ -1,6 +1,7 @@
 #include "Graphics.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include <cstdlib>
 
 namespace Temporal
 {
@@ -9,6 +10,7 @@ namespace Temporal
 		// init SDL video if not initialized already
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
 		{
+			exit(1);
 			// TODO: Error Failed initializing SDL video
 		}
 
@@ -21,6 +23,7 @@ namespace Temporal
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
 			// TODO: Error Failed setting SDL OpenGL double buffering attribute
+			exit(1);
 		}
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
@@ -29,6 +32,7 @@ namespace Temporal
 		if (SDL_SetVideoMode((int)resolution.getWidth(), (int)resolution.getHeight(), BIT_DEPTH, flags) == NULL)
 		{
 			// TODO: Error Failed setting video mode
+			exit(1);
 		}
 
 		// init GL stuff
@@ -85,6 +89,7 @@ namespace Temporal
 		if (error != GL_NO_ERROR)
 		{
 			// TODO: Error OpenGL error
+			exit(1);
 		}
 	}
 
@@ -93,14 +98,55 @@ namespace Temporal
 		glColor3f(color.getR(), color.getG(), color.getB());
 	}
 
-	void Graphics::drawRect(const Rect& rect, const Color& color, const float angle) const
+	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const
 	{
-		setColor(color);
+		float textureWidth = texture.getSize().getWidth() - 1;
+		float textureHeight = texture.getSize().getHeight() - 1;
+
+		const float textureX0 = (!mirrored ? texturePart.getGraphicsLeft() : texturePart.getGraphicsRight()) / textureWidth;
+		const float textureX1 = (!mirrored ? texturePart.getGraphicsRight() : texturePart.getGraphicsLeft()) / textureWidth;
+		const float textureTop = (texturePart.getGraphicsTop()) / textureHeight;
+		const float textureBottom = (texturePart.getGraphicsBottom()) / textureHeight;
+
+		glBindTexture(GL_TEXTURE_2D, texture.getID());
 
 		glPushMatrix();
 		{
+			// set opengl matrix & color properties
+			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
+			glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			glBegin(GL_QUADS);
+			{
+				//Bottom-left vertex (corner)
+				glTexCoord2f(textureX0, textureBottom);
+				glVertex2f(-texturePart.getOffsetX(), -texturePart.getOffsetY());
+	
+				//Bottom-right vertex (corner)
+				glTexCoord2f(textureX1, textureBottom);
+				glVertex2f(texturePart.getOffsetX(), -texturePart.getOffsetY());
+	
+				//Top-right vertex (corner)
+				glTexCoord2f(textureX1, textureTop);
+				glVertex2f(texturePart.getOffsetX(), texturePart.getOffsetY());
+	
+				//Top-left vertex (corner)
+				glTexCoord2f(textureX0, textureTop);
+				glVertex2f(-texturePart.getOffsetX(), texturePart.getOffsetY());
+			}
+			glEnd();
+		}
+		glPopMatrix();
+	}
+
+	void Graphics::drawRect(const Rect& rect, const Color& color) const
+	{
+		setColor(color);
+		glPushMatrix();
+		{
+			
 			glTranslatef(rect.getCenterX(), rect.getCenterY(), 0.0f);
-			glRotatef(angle, 0.0f, 0.0f, 1.0f);
 
 			glBegin(GL_LINE_LOOP);
 			{
@@ -113,6 +159,7 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
+
 	void Graphics::drawLine(const Line& line, const Color& color) const
 	{
 		setColor(color);

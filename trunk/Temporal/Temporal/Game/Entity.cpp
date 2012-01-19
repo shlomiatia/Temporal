@@ -15,8 +15,8 @@ namespace Temporal
 	const int Entity::BACK_EDGE_SENSOR = 2;
 	const int Entity::FRONT_EDGE_SENSOR = 3;
 
-	Entity::Entity(Body& body, const EntityController* controller)
-		: _body(body), _controller(controller), _state(EntityStatesFactory::get().getInitialState()) {}
+	Entity::Entity(const EntityController* const controller, Body& body, const SpriteSheet& spritesheet)
+		: _controller(controller), _body(body), _sprite(spritesheet), _state(EntityStatesFactory::get().getInitialState()) {}
 
 	void Entity::changeState(EntityStateID::Type stateType)
 	{
@@ -26,7 +26,7 @@ namespace Temporal
 			EntityStatesFactory::get().releaseState(_state);
 		}
 		_state = EntityStatesFactory::get().getState(stateType);
-		Graphics::get().setTitle(_state->getName());
+		//Graphics::get().setTitle(_state->getName());
 		_state->enter(*this);
 		_state->update(*this);
 	}
@@ -34,6 +34,7 @@ namespace Temporal
 	void Entity::update(void)
 	{
 		_state->update(*this);
+		_sprite.update();
 	}
 
 	bool Entity::isMovingForward(void) const
