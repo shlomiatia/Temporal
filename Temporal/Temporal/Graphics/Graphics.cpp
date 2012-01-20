@@ -38,6 +38,8 @@ namespace Temporal
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
 
+		glDepthMask(GL_FALSE);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glViewport(0, 0, (int)resolution.getWidth(), (int)resolution.getHeight());
 		
