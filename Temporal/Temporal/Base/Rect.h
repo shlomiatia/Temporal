@@ -34,8 +34,6 @@ namespace Temporal
 		float getSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
-		Rect operator+(const Vector& vec) const { return (Rect(getCenter() + vec, getSize())); }
-		Rect operator-(const Vector& vec) const { return (Rect(getCenter() - vec, getSize())); }
 		Rect& operator+=(const Vector& vec)
 		{
 			_center += vec;
@@ -52,4 +50,7 @@ namespace Temporal
 		Vector _center;
 		Vector _size;
 	};
+
+	inline Rect operator+(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() + vec, rect.getSize())); }
+	inline Rect operator-(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() - vec, rect.getSize())); }
 }

@@ -27,13 +27,14 @@ namespace Temporal
 		~Entity(void) { delete _controller; }
 
 		const EntityController& getController(void) const { return *_controller; }
-		Body& getBody(void) { return _body; }
 		const Body& getBody(void) const { return _body; }
+		Body& getBody(void) { return _body; }
+		const Sprite& getSprite(void) const { return _sprite; }
 		Sprite& getSprite(void) { return _sprite; }
 
 		void changeState(EntityStateID::Type stateType);
 		void update(void);
-		void draw(void) { getSprite().draw(getBody().getBounds().getCenter(), getBody().getOrientation()); }
+		void draw(void) const;
 
 		bool isMovingForward(void) const;
 		bool isMovingBackward(void) const;

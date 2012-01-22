@@ -23,7 +23,7 @@ namespace Temporal
 			: _gravityResponse(gravityResponse), _supportsHang(supportsHang) {}
 		virtual ~EntityState(void) {};
 
-		virtual const char* getName(void) = 0;
+		virtual const char* getName(void) const = 0;
 
 		void enter(Entity& entity);
 		void exit(Entity& entity);
