@@ -18,9 +18,9 @@ namespace Temporal
 		void play(void) { _paused = false; }
 		void pause(void) { _paused = true; }
 		
-		bool isEnded(void) const;
+		bool isAnimationEnded(void) const;
 	private:
-		static const int UPDATES_PER_FRAME = 4;
+		static const int UPDATES_PER_FRAME = 2;
 		static const Orientation::Type SPRITE_ORIENTATION = Orientation::LEFT;
 
 		const SpriteSheet& _spritesheet;

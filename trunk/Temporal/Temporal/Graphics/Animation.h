@@ -8,7 +8,7 @@ namespace Temporal
 	{
 	public:
 		// TODO: Dynamic
-		static const int MAX_ELEMENTS = 10;
+		static const int MAX_ELEMENTS = 20;
 		const Frame* _elements[MAX_ELEMENTS];
 		int _elementsCount;
 		Animation(void) : _elementsCount(0) {}

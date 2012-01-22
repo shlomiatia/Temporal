@@ -5,8 +5,9 @@ namespace Temporal
 {
 	void Sprite::update(void)
 	{
+		bool animationEnded = isAnimationEnded();
 		_update = (_update + 1) % UPDATES_PER_FRAME;
-		if(_update == 0 && (!isEnded() || _repeat))
+		if(_update == 0 && (!animationEnded || _repeat))
 		{
 			int modifier = _rewind ? -1 : 1;
 			_frame = (_frame + modifier) % getFramesCount();
@@ -36,8 +37,8 @@ namespace Temporal
 		_frame = !_rewind ? 0 : getFramesCount() - 1;
 	}
 
-	bool Sprite::isEnded(void) const
+	bool Sprite::isAnimationEnded(void) const
 	{
-		return !_rewind ? _frame == 0 : _frame == getFramesCount() - 1;
+		return _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frame == getFramesCount() - 1 : _frame == 0);
 	}
 }
