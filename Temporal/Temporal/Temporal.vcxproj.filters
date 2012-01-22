@@ -29,6 +29,8 @@
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Graphics\Sprite.h" />
+    <ClInclude Include="Base\Enums.h" />
+    <ClInclude Include="Base\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
