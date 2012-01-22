@@ -52,7 +52,7 @@ namespace Temporal
 
 	void Turn::stateUpdate(Entity& entity)
 	{
-		if(entity.getSprite().isAnimationEnded())
+		if(entity.getSprite().isEnded())
 		{
 			entity.getBody().flipOrientation();	
 			entity.changeState(EntityStateID::STAND);
@@ -128,7 +128,7 @@ namespace Temporal
 
 	void JumpStart::stateUpdate(Entity& entity)
 	{
-		if(entity.getSprite().isAnimationEnded())
+		if(entity.getSprite().isEnded())
 		{
 			entity.getBody().setForce(_force);
 			if(_isJumpingForward)
@@ -148,7 +148,7 @@ namespace Temporal
 
 	void JumpForward::stateUpdate(Entity& entity)
 	{
-		if(entity.getBody().getForce().getY() <= 0 && entity.getBody().getCollision() & Direction::BOTTOM)
+		if(entity.getBody().getCollision() & Direction::BOTTOM)
 		{
 			entity.changeState(EntityStateID::JUMP_FORWARD_END);
 		}
@@ -156,7 +156,7 @@ namespace Temporal
 
 	void JumpForwardEnd::stateUpdate(Entity& entity)
 	{
-		if(entity.getSprite().isAnimationEnded())
+		if(entity.getSprite().isEnded())
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
@@ -180,9 +180,10 @@ namespace Temporal
 		float platformFront = _platform->getOppositeSide(orientation);
 		float entityFront = entity.getBody().getFront();
 		float moveX = (platformFront - entityFront) * orientation;
+
 		if(moveX != 0 || moveY != 0)
 			entity.getBody().setForce(Vector(moveX, moveY));
-		else if(entity.getSprite().isAnimationEnded())
+		else if(entity.getSprite().isEnded())
 			entity.changeState(EntityStateID::HANG);
 	}
 
@@ -222,7 +223,7 @@ namespace Temporal
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
-		else if (entity.getSprite().isAnimationEnded())
+		else if (entity.getSprite().isEnded())
 		{
 			float forceX = 1.0f;
 			float forceY = entity.getBody().getBounds().getHeight() - 1.0f;
@@ -265,7 +266,7 @@ namespace Temporal
 		{
 			entity.changeState(EntityStateID::HANG);
 		}
-		else if (entity.getSprite().isAnimationEnded())
+		else if (entity.getSprite().isEnded())
 		{
 			float forceX = -1.0f;
 			float forceY = -(entity.getBody().getBounds().getHeight() - 1.0f);

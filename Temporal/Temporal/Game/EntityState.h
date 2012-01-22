@@ -19,6 +19,7 @@ namespace Temporal
 	class EntityState
 	{
 	public:
+		// TODO: Accept animation, movements
 		EntityState(GravityResponse::Type gravityResponse, bool supportsHang)
 			: _gravityResponse(gravityResponse), _supportsHang(supportsHang) {}
 		virtual ~EntityState(void) {};

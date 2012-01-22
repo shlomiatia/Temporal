@@ -9,7 +9,7 @@ namespace Temporal
 	{
 	public:
 		Sprite(const SpriteSheet& spritesheet) :
-			_spritesheet(spritesheet) {}
+			_spritesheet(spritesheet), _rewind(false), _repeat(false), _paused(false), _update(0), _animation(0), _frame(0)  {}
 		
 		void update(void);
 		void draw(const Vector& location, Orientation::Type orientation) const;
@@ -18,7 +18,7 @@ namespace Temporal
 		void play(void) { _paused = false; }
 		void pause(void) { _paused = true; }
 		
-		bool isAnimationEnded(void) const;
+		bool isEnded(void) const;
 	private:
 		static const int UPDATES_PER_FRAME = 4;
 		static const Orientation::Type SPRITE_ORIENTATION = Orientation::LEFT;

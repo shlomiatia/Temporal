@@ -12,4 +12,4 @@ namespace Temporal
 					_size.getWidth(),
 					_size.getHeight());
 	}
-}
+}l
