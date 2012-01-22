@@ -2,17 +2,22 @@
 
 namespace Temporal
 {
+	const Vector& EntityState::getDrawCenter(const Entity& entity) const
+	{
+		return entity.getBody().getBounds().getCenter(); 
+	}
+
 	void EntityState::enter(Entity& entity)
 	{
 		if(_gravityResponse == GravityResponse::DISABLE_GRAVITY)
-			entity.getBody().setGravityScale(0.0f);
+			entity.getBody().setGravityEnabled(false);
 		stateEnter(entity);
 	}
 
 	void EntityState::exit(Entity& entity)
 	{
 		if(_gravityResponse == GravityResponse::DISABLE_GRAVITY)
-			entity.getBody().setGravityScale(1.0f);
+			entity.getBody().setGravityEnabled(true);
 		stateExit(entity);
 	}
 

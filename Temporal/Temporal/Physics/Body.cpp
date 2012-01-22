@@ -14,7 +14,7 @@ namespace Temporal
 	}
 
 	Body::Body(bool isDynamic, const Vector& position, const Vector& size, Orientation::Type orientation)
-		: _isDynamic(isDynamic), _bounds(position, size), _orientation(orientation), _force(Vector::Zero), _gravityScale(1.0f), _elementsCount(0), _collision(Direction::NONE)
+		: _isDynamic(isDynamic), _bounds(position, size), _orientation(orientation), _force(Vector::Zero), _gravityEnabled(true), _elementsCount(0), _collision(Direction::NONE)
 	{
 		assert(getBounds().getSize().getX() > 0);
 		assert(getBounds().getSize().getY() > 0);
@@ -30,11 +30,14 @@ namespace Temporal
 
 	void Body::applyGravity(float gravity, float maxGravity)
 	{
-		float y = getForce().getY();
-		y -= gravity * getGravityScale();
-		if(y < maxGravity)
-			y = maxGravity;
-		_force.setY(y);
+		if(isGravityEnabled())
+		{
+			float y = getForce().getY();
+			y -= gravity;
+			if(y < maxGravity)
+				y = maxGravity;
+			_force.setY(y);
+		}
 	}
 
 	void Body::correctCollision(const Rect& bodyBounds)

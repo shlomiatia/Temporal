@@ -24,8 +24,8 @@ namespace Temporal
 		Orientation::Type getOrientation(void) const { return _orientation; }
 		const Vector getForce(void) const { return _force; }
 		void setForce(const Vector& force) { _force = Vector(force.getX() * getOrientation(), force.getY()); }
-		float getGravityScale(void) const { return _gravityScale; }
-		void setGravityScale(float gravityScale) { _gravityScale = gravityScale; }
+		bool isGravityEnabled(void) const { return _gravityEnabled; }
+		void setGravityEnabled(bool gravityEnabled) { _gravityEnabled = gravityEnabled; }
 		const Sensor& getSensor(int id) const { return *_elements[id]; }
 		float getFront(void) const { return getBounds().getSide(getOrientation()); }
 		float getBack(void) const { return getBounds().getOppositeSide(getOrientation()); }
@@ -45,7 +45,7 @@ namespace Temporal
 		Rect _bounds;
 		Orientation::Type _orientation;
 		Vector _force;
-		float _gravityScale;
+		bool _gravityEnabled;
 		Direction::Type _collision;
 
 		Body(const Body&);

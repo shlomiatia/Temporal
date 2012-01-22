@@ -12,7 +12,7 @@ namespace Temporal
 	void TestPanel::init(void)
 	{
 		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
-		DebugInfo::get().setShowingFPS(false);
+		DebugInfo::get().setShowingFPS(true);
 
 		const EntityController* const controller = new InputEntityController();
 		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
@@ -74,31 +74,31 @@ animation->add(new Frame(Rect(582, 187.5, 33, 96), Vector(8, -8)));
 // JumpUp - 6
 animation = new Animation();
 spritesheet->add(animation);
-animation->add(new Frame(Rect(630, 189.5, 33, 104), Vector(3, -12)));
+animation->add(new Frame(Rect(630, 189.5, 33, 104), Vector(3, 12)));
 // Hang - 7
 animation = new Animation();
 spritesheet->add(animation);
-animation->add(new Frame(Rect(717.5, 190.5, 24, 112), Vector(0, -16)));
+animation->add(new Frame(Rect(717.5, 190.5, 24, 112), Vector(-3, 16)));
 // Climbe - 8
 animation = new Animation();
 spritesheet->add(animation);
-animation->add(new Frame(Rect(24.5, 342, 22, 107), Vector(-6, 50)));
-animation->add(new Frame(Rect(67, 348, 25, 89), Vector(-8, 39)));
-animation->add(new Frame(Rect(109, 348.5, 27, 90), Vector(-4, 31)));
-animation->add(new Frame(Rect(150.5, 346.5, 34, 92), Vector(0, 18)));
-animation->add(new Frame(Rect(200.5, 348.5, 46, 82), Vector(5, 13)));
-animation->add(new Frame(Rect(258, 349, 49, 71), Vector(9, 9)));
-animation->add(new Frame(Rect(319, 349.5, 47, 60), Vector(7, 2)));
-animation->add(new Frame(Rect(385.5, 346, 62, 47), Vector(17, -9)));
-animation->add(new Frame(Rect(459.5, 347.5, 60, 42), Vector(3, -9)));
-animation->add(new Frame(Rect(528, 346.5, 63, 52), Vector(15, -12)));
-animation->add(new Frame(Rect(600, 344.5, 57, 46), Vector(16, -20)));
-animation->add(new Frame(Rect(660, 344.5, 53, 48), Vector(20, -21)));
-animation->add(new Frame(Rect(727.5, 338.5, 54, 58), Vector(10, -25)));
-animation->add(new Frame(Rect(787, 332.5, 53, 64), Vector(15, -28)));
-animation->add(new Frame(Rect(843, 330, 51, 69), Vector(20, -28)));
-animation->add(new Frame(Rect(896, 324, 31, 79), Vector(4, -36)));
-animation->add(new Frame(Rect(937, 324.5, 23, 80), Vector(2, -39)));
+animation->add(new Frame(Rect(24.5, 342, 22, 107), Vector(-6, 49)));
+animation->add(new Frame(Rect(67, 348, 25, 89), Vector(-8, 40)));
+animation->add(new Frame(Rect(109, 348.5, 27, 90), Vector(-3, 31)));
+animation->add(new Frame(Rect(150.5, 346.5, 34, 92), Vector(-2, 20)));
+animation->add(new Frame(Rect(200.5, 348.5, 46, 82), Vector(5, 14)));
+animation->add(new Frame(Rect(258, 349, 49, 71), Vector(7, 10)));
+animation->add(new Frame(Rect(319, 349.5, 47, 60), Vector(6, 3)));
+animation->add(new Frame(Rect(385.5, 346, 62, 47), Vector(15, -8)));
+animation->add(new Frame(Rect(459.5, 347.5, 60, 42), Vector(20, -10)));
+animation->add(new Frame(Rect(528, 346.5, 63, 52), Vector(10, -13)));
+animation->add(new Frame(Rect(600, 344.5, 57, 46), Vector(15, -21)));
+animation->add(new Frame(Rect(660, 344.5, 53, 48), Vector(20, -22)));
+animation->add(new Frame(Rect(727.5, 338.5, 54, 58), Vector(10, -26)));
+animation->add(new Frame(Rect(787, 332.5, 53, 64), Vector(17, -32)));
+animation->add(new Frame(Rect(843, 330, 51, 69), Vector(19, -31)));
+animation->add(new Frame(Rect(896, 324, 31, 79), Vector(3, -37)));
+animation->add(new Frame(Rect(937, 324.5, 23, 80), Vector(1, -39)));
 // JumpForwardStart - 9
 animation = new Animation();
 spritesheet->add(animation);
@@ -143,20 +143,20 @@ animation->add(new Frame(Rect(634.5, 732, 22, 83), Vector(0, -1)));
 // HangingForward - 13
 animation = new Animation();
 spritesheet->add(animation);
-animation->add(new Frame(Rect(32.5, 859.5, 30, 112), Vector(3, -16)));
-animation->add(new Frame(Rect(91.5, 859.5, 34, 110), Vector(6, -15)));
-animation->add(new Frame(Rect(152.5, 863.5, 42, 108), Vector(10, -14)));
-animation->add(new Frame(Rect(206, 861.5, 41, 104), Vector(7, -12)));
+animation->add(new Frame(Rect(32.5, 859.5, 30, 112), Vector(3, 16)));
+animation->add(new Frame(Rect(91.5, 859.5, 34, 110), Vector(6, 15)));
+animation->add(new Frame(Rect(152.5, 863.5, 42, 108), Vector(11, 14)));
+animation->add(new Frame(Rect(206, 861.5, 41, 104), Vector(9, 12)));
 // HangingBackwards - 14
 animation = new Animation();
 spritesheet->add(animation);
-animation->add(new Frame(Rect(252.5, 864.5, 24, 110), Vector(-2, -15)));
-animation->add(new Frame(Rect(295.5, 864, 36, 109), Vector(-10, -14)));
-animation->add(new Frame(Rect(348.5, 863, 46, 107), Vector(-14, -13)));
-animation->add(new Frame(Rect(408, 860.5, 53, 102), Vector(-19, -11)));
-animation->add(new Frame(Rect(475.5, 860, 56, 103), Vector(-22, -11)));
-animation->add(new Frame(Rect(539, 859.5, 57, 102), Vector(-23, -11)));
-animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-28, -10)));
+animation->add(new Frame(Rect(252.5, 864.5, 24, 110), Vector(-6, 15)));
+animation->add(new Frame(Rect(295.5, 864, 36, 109), Vector(-14, 14)));
+animation->add(new Frame(Rect(348.5, 863, 46, 107), Vector(-19, 13)));
+animation->add(new Frame(Rect(408, 860.5, 53, 102), Vector(-22, 11)));
+animation->add(new Frame(Rect(475.5, 860, 56, 103), Vector(-22, 11)));
+animation->add(new Frame(Rect(539, 859.5, 57, 102), Vector(-24, 11)));
+animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 
 #pragma endregion Crap
 

@@ -25,6 +25,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const = 0;
 
+		virtual const Vector& getDrawCenter(const Entity& entity) const;
 		void enter(Entity& entity);
 		void exit(Entity& entity);
 		void update(Entity& entity);
