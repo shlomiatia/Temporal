@@ -30,7 +30,7 @@ namespace Temporal
 		}
 	}
 
-	EntityState* EntityStatesFactory::getState(EntityStateID::Type stateType) const
+	EntityState* EntityStatesFactory::getState(EntityStateID::Type stateType)
 	{
 		return _elements[stateType];
 	}

@@ -14,9 +14,9 @@ namespace Temporal
 			return (instance);
 		}
 
-		EntityState* getInitialState(void) const { return getState(EntityStateID::STAND); }
-		EntityState* getState(EntityStateID::Type stateType) const;
-		void releaseState(EntityState* state) const {};
+		EntityState* getInitialState(void) { return getState(EntityStateID::STAND); }
+		EntityState* getState(EntityStateID::Type stateType);
+		void releaseState(EntityState* state) {};
 	private:
 		static const int MAX_ELEMENTS = 20;
 

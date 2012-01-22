@@ -12,7 +12,7 @@ namespace Temporal
 		static const int MAX_ELEMENTS = 10;
 		Animation* _elements[MAX_ELEMENTS];
 		int _elementsCount;
-		SpriteSheet(const Texture* const texture) 
+		SpriteSheet(const Texture* texture) 
 			: _texture(texture), _elementsCount(0) {}
 		~SpriteSheet(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } delete _texture; }
 		void add(Animation* element) { _elements[_elementsCount++] = element; }

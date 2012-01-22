@@ -15,13 +15,13 @@ namespace Temporal
 		}
 
 		// create a window (replacing existing window, if any) as the screen view surface
-		void init(const Vector& resolution, const Vector& viewSize, const bool fullScreen = false);
+		void init(const Vector& resolution, const Vector& viewSize, bool fullScreen = false);
 
 		// destroys the Graphics, disposing of all resources and closing the window
 		void dispose(void) const;
 
 		// set the Graphics window properties
-		void setVideoMode(const Vector& resolution, const Vector& viewSize, const bool fullScreen = false) const;
+		void setVideoMode(const Vector& resolution, const Vector& viewSize, bool fullScreen = false) const;
 
 		void setTitle(const char* title) const;
 

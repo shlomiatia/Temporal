@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	void Graphics::init(const Vector& resolution, const Vector& viewSize, const bool fullScreen)
+	void Graphics::init(const Vector& resolution, const Vector& viewSize, bool fullScreen)
 	{
 		// init SDL video if not initialized already
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
@@ -17,7 +17,7 @@ namespace Temporal
 		// call existing methods to set window properties
 		setVideoMode(resolution, viewSize, fullScreen);
 	}
-	void Graphics::setVideoMode(const Vector& resolution, const Vector& viewSize, const bool fullScreen) const
+	void Graphics::setVideoMode(const Vector& resolution, const Vector& viewSize, bool fullScreen) const
 	{
 		// set video mode flags
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)

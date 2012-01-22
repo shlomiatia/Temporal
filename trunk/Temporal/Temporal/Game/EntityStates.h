@@ -10,7 +10,7 @@ namespace Temporal
 		Stand(void) 
 			: EntityState(GravityResponse::FALL, false) {};
 
-		virtual const char* getName(void) { return "Stand"; }
+		virtual const char* getName(void) const { return "Stand"; }
 
 		virtual void stateUpdate(Entity& entity);
 	};
@@ -21,7 +21,7 @@ namespace Temporal
 		Fall(void) 
 			: EntityState(GravityResponse::KEEP_STATE, true) {};
 
-		virtual const char* getName(void) { return "Fall"; }
+		virtual const char* getName(void) const { return "Fall"; }
 
 	protected:
 		virtual void stateUpdate(Entity& entity);
@@ -32,7 +32,7 @@ namespace Temporal
 	public:
 		Walk(void) : EntityState(GravityResponse::FALL, false) {};
 
-		virtual const char* getName(void) { return "Walk"; }
+		virtual const char* getName(void) const { return "Walk"; }
 
 		virtual void stateUpdate(Entity& entity);
 	};
@@ -42,7 +42,7 @@ namespace Temporal
 	public:
 		Turn(void) : EntityState(GravityResponse::FALL, false) {};
 
-		virtual const char* getName(void) { return "Turn"; }
+		virtual const char* getName(void) const { return "Turn"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
@@ -57,7 +57,7 @@ namespace Temporal
 	public:
 		Jump(void) : EntityState(GravityResponse::KEEP_STATE, true), _force(Vector::Zero) {};
 
-		virtual const char* getName(void) { return "Jump"; }
+		virtual const char* getName(void) const { return "Jump"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
@@ -75,7 +75,7 @@ namespace Temporal
 	public:
 		Hanging(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false)  {};
 
-		virtual const char* getName(void) { return "Hanging"; }
+		virtual const char* getName(void) const { return "Hanging"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
@@ -90,7 +90,7 @@ namespace Temporal
 	public:
 		Hang(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false) {};
 
-		virtual const char* getName(void) { return "Hang"; }
+		virtual const char* getName(void) const { return "Hang"; }
 
 		virtual void stateUpdate(Entity& entity);
 	};
@@ -100,7 +100,7 @@ namespace Temporal
 	public:
 		Drop(void) : EntityState(GravityResponse::KEEP_STATE, false) {};
 
-		virtual const char* getName(void) { return "Drop"; }
+		virtual const char* getName(void) const { return "Drop"; }
 
 		virtual void stateUpdate(Entity& entity);
 	};
@@ -110,7 +110,7 @@ namespace Temporal
 	public:
 		Climbe(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _crap(0) {};
 
-		virtual const char* getName(void) { return "Climbe"; }
+		virtual const char* getName(void) const { return "Climbe"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
@@ -125,7 +125,7 @@ namespace Temporal
 	public:
 		PrepareToDescend(void) : EntityState(GravityResponse::FALL, false) {};
 
-		virtual const char* getName(void) { return "PrepareToDescend"; }
+		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
@@ -139,7 +139,7 @@ namespace Temporal
 	public:
 		Descend(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _crap(0) {};
 
-		virtual const char* getName(void) { return "Descend"; }
+		virtual const char* getName(void) const { return "Descend"; }
 
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);

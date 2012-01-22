@@ -37,6 +37,13 @@ namespace Temporal
 		_sprite.update();
 	}
 
+	void Entity::draw(void) const
+	{
+		const Vector& center = getBody().getBounds().getCenter();
+		Orientation::Type orientation = getBody().getOrientation();
+		getSprite().draw(center, orientation); 
+	}
+
 	bool Entity::isMovingForward(void) const
 	{
 		return ((getBody().getOrientation() == Orientation::LEFT && getController().isLeft()) ||
