@@ -3,7 +3,7 @@
 namespace Temporal
 {
 	const float Physics::GRAVITY = 2.0;
-	const float Physics::MAX_GRAVITY = -15.0;
+	const float Physics::MAX_GRAVITY = -20.0;
 
 	Direction::Type getCollision(const Rect& boundsA, Orientation::Type orientationA, const Rect& boundsB)
 	{

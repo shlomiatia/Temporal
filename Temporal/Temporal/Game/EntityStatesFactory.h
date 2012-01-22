@@ -14,7 +14,6 @@ namespace Temporal
 			return (instance);
 		}
 
-		EntityState* getInitialState(void) { return getState(EntityStateID::STAND); }
 		EntityState* getState(EntityStateID::Type stateType);
 		void releaseState(EntityState* state) {};
 	private:

@@ -12,17 +12,155 @@ namespace Temporal
 	void TestPanel::init(void)
 	{
 		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
-		DebugInfo::get().setShowingFPS(true);
+		DebugInfo::get().setShowingFPS(false);
 
 		const EntityController* const controller = new InputEntityController();
 		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		const Texture* const texture = Texture::load("c:\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
-		Animation* animation = new Animation();
-		spritesheet->add(animation);
-		animation->add(new Frame(Rect(26.5,48,22,85), Vector(5,-2)));
+		Animation* animation;
+		
+#pragma region Crap
+// Stand - 0
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(26.5, 48, 22, 85), Vector(5, -2)));
+// Turn - 1
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(60.5, 50, 24, 81), Vector(6, 0)));
+animation->add(new Frame(Rect(95.5, 50, 26, 81), Vector(7, 0)));
+animation->add(new Frame(Rect(134.5, 48, 30, 85), Vector(5, -2)));
+animation->add(new Frame(Rect(177, 49.5, 39, 82), Vector(0, -1)));
+animation->add(new Frame(Rect(224.5, 50, 44, 81), Vector(-5, 0)));
+animation->add(new Frame(Rect(276, 52, 37, 77), Vector(-11, 2)));
+animation->add(new Frame(Rect(316.5, 51, 32, 79), Vector(-8, 1)));
+animation->add(new Frame(Rect(359, 51.5, 29, 80), Vector(-8, 0)));
+// Drop - 2
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(418.5, 58.5, 24, 110), Vector(-5, -15)));
+animation->add(new Frame(Rect(462.5, 60, 22, 97), Vector(1, -8)));
+animation->add(new Frame(Rect(509, 65, 23, 87), Vector(3, -3)));
+animation->add(new Frame(Rect(546.5, 69.5, 26, 78), Vector(6, 1)));
+animation->add(new Frame(Rect(584.5, 67.5, 26, 82), Vector(8, -1)));
+// FallStart - 3
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(667.5, 71, 72, 77), Vector(4, 2)));
+animation->add(new Frame(Rect(737, 68.5, 63, 76), Vector(4, 2)));
+animation->add(new Frame(Rect(805.5, 67, 52, 73), Vector(9, 4)));
+animation->add(new Frame(Rect(866, 62, 55, 81), Vector(9, 0)));
+// Fall - 4
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(927, 63, 35, 79), Vector(-1, 1)));
+// JumpUpStart - 5
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(30, 193.5, 23, 84), Vector(2, -2)));
+animation->add(new Frame(Rect(72.5, 193, 24, 85), Vector(3, -2)));
+animation->add(new Frame(Rect(114, 194, 23, 83), Vector(3, -1)));
+animation->add(new Frame(Rect(158, 195, 29, 81), Vector(0, 0)));
+animation->add(new Frame(Rect(202, 195, 37, 81), Vector(-2, 0)));
+animation->add(new Frame(Rect(245.5, 194.5, 44, 82), Vector(-6, -1)));
+animation->add(new Frame(Rect(296, 194.5, 49, 82), Vector(-8, -1)));
+animation->add(new Frame(Rect(349.5, 196, 44, 79), Vector(2, 1)));
+animation->add(new Frame(Rect(396, 198.5, 33, 74), Vector(8, 3)));
+animation->add(new Frame(Rect(438, 198.5, 33, 74), Vector(7, 3)));
+animation->add(new Frame(Rect(486, 197.5, 43, 72), Vector(13, 4)));
+animation->add(new Frame(Rect(536, 195.5, 35, 76), Vector(13, 2)));
+animation->add(new Frame(Rect(582, 187.5, 33, 96), Vector(8, -8)));
+// JumpUp - 6
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(630, 189.5, 33, 104), Vector(3, -12)));
+// Hang - 7
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(717.5, 190.5, 24, 112), Vector(0, -16)));
+// Climbe - 8
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(24.5, 342, 22, 107), Vector(-6, 50)));
+animation->add(new Frame(Rect(67, 348, 25, 89), Vector(-8, 39)));
+animation->add(new Frame(Rect(109, 348.5, 27, 90), Vector(-4, 31)));
+animation->add(new Frame(Rect(150.5, 346.5, 34, 92), Vector(0, 18)));
+animation->add(new Frame(Rect(200.5, 348.5, 46, 82), Vector(5, 13)));
+animation->add(new Frame(Rect(258, 349, 49, 71), Vector(9, 9)));
+animation->add(new Frame(Rect(319, 349.5, 47, 60), Vector(7, 2)));
+animation->add(new Frame(Rect(385.5, 346, 62, 47), Vector(17, -9)));
+animation->add(new Frame(Rect(459.5, 347.5, 60, 42), Vector(3, -9)));
+animation->add(new Frame(Rect(528, 346.5, 63, 52), Vector(15, -12)));
+animation->add(new Frame(Rect(600, 344.5, 57, 46), Vector(16, -20)));
+animation->add(new Frame(Rect(660, 344.5, 53, 48), Vector(20, -21)));
+animation->add(new Frame(Rect(727.5, 338.5, 54, 58), Vector(10, -25)));
+animation->add(new Frame(Rect(787, 332.5, 53, 64), Vector(15, -28)));
+animation->add(new Frame(Rect(843, 330, 51, 69), Vector(20, -28)));
+animation->add(new Frame(Rect(896, 324, 31, 79), Vector(4, -36)));
+animation->add(new Frame(Rect(937, 324.5, 23, 80), Vector(2, -39)));
+// JumpForwardStart - 9
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(20.5, 502, 26, 85), Vector(4, -2)));
+animation->add(new Frame(Rect(59.5, 503, 28, 83), Vector(7, -1)));
+animation->add(new Frame(Rect(106, 503, 43, 81), Vector(8, 0)));
+animation->add(new Frame(Rect(159.5, 508, 48, 69), Vector(12, 6)));
+animation->add(new Frame(Rect(225, 509, 57, 65), Vector(16, 8)));
+animation->add(new Frame(Rect(298.5, 507.5, 56, 66), Vector(24, 7)));
+animation->add(new Frame(Rect(369, 505, 55, 69), Vector(22, 6)));
+// JumpForward - 10
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(449.5, 503, 80, 71), Vector(0, 5)));
+animation->add(new Frame(Rect(557.5, 501, 100, 71), Vector(0, 5)));
+animation->add(new Frame(Rect(678.5, 507.5, 104, 62), Vector(0, 9)));
+animation->add(new Frame(Rect(788, 506.5, 85, 56), Vector(0, 12)));
+// JumpForwardEnd - 11
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(52, 620.5, 59, 56), Vector(-8, 12)));
+animation->add(new Frame(Rect(114.5, 621.5, 42, 52), Vector(-4, 14)));
+animation->add(new Frame(Rect(189.5, 618, 56, 61), Vector(-13, 10)));
+animation->add(new Frame(Rect(248, 613, 45, 71), Vector(-10, 5)));
+animation->add(new Frame(Rect(306.5, 609, 36, 81), Vector(-5, 0)));
+animation->add(new Frame(Rect(352, 608, 31, 83), Vector(-3, -1)));
+// Walk - 12
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(34, 735.5, 25, 82), Vector(0, -1)));
+animation->add(new Frame(Rect(76, 735, 23, 81), Vector(0, 0)));
+animation->add(new Frame(Rect(117.5, 736.5, 28, 78), Vector(0, 1)));
+animation->add(new Frame(Rect(164.5, 734.5, 42, 78), Vector(0, 1)));
+animation->add(new Frame(Rect(226, 734.5, 55, 76), Vector(0, 2)));
+animation->add(new Frame(Rect(290, 734, 59, 77), Vector(0, 2)));
+animation->add(new Frame(Rect(358.5, 734, 58, 79), Vector(0, 1)));
+animation->add(new Frame(Rect(424.5, 735, 54, 77), Vector(0, 2)));
+animation->add(new Frame(Rect(487, 734, 51, 79), Vector(0, 1)));
+animation->add(new Frame(Rect(543.5, 733, 42, 81), Vector(0, 0)));
+animation->add(new Frame(Rect(593, 732.5, 27, 82), Vector(0, -1)));
+animation->add(new Frame(Rect(634.5, 732, 22, 83), Vector(0, -1)));
+// HangingForward - 13
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(32.5, 859.5, 30, 112), Vector(3, -16)));
+animation->add(new Frame(Rect(91.5, 859.5, 34, 110), Vector(6, -15)));
+animation->add(new Frame(Rect(152.5, 863.5, 42, 108), Vector(10, -14)));
+animation->add(new Frame(Rect(206, 861.5, 41, 104), Vector(7, -12)));
+// HangingBackwards - 14
+animation = new Animation();
+spritesheet->add(animation);
+animation->add(new Frame(Rect(252.5, 864.5, 24, 110), Vector(-2, -15)));
+animation->add(new Frame(Rect(295.5, 864, 36, 109), Vector(-10, -14)));
+animation->add(new Frame(Rect(348.5, 863, 46, 107), Vector(-14, -13)));
+animation->add(new Frame(Rect(408, 860.5, 53, 102), Vector(-19, -11)));
+animation->add(new Frame(Rect(475.5, 860, 56, 103), Vector(-22, -11)));
+animation->add(new Frame(Rect(539, 859.5, 57, 102), Vector(-23, -11)));
+animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-28, -10)));
+
+#pragma endregion Crap
+
 		_entity = new Entity(controller, *body, *spritesheet);
-		_entity->getSprite().reset(0);
 		Physics::get().add(body);
 
 		// Jump Sensor
@@ -88,6 +226,8 @@ namespace Temporal
 		Physics::get().add(body);
 		body = new Body(false, Vector(1014.0f, 45.0f), Vector(21.0f, 90.0f));
 		Physics::get().add(body);
+
+		_entity->changeState(EntityStateID::STAND);
 	}
 
 	void TestPanel::update(void)

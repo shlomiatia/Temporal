@@ -11,7 +11,10 @@ namespace Temporal
 		_elements[_elementsCount++] = new Fall();
 		_elements[_elementsCount++] = new Walk();
 		_elements[_elementsCount++] = new Turn();
-		_elements[_elementsCount++] = new Jump();
+		_elements[_elementsCount++] = new JumpStart();
+		_elements[_elementsCount++] = new JumpUp();
+		_elements[_elementsCount++] = new JumpForward();
+		_elements[_elementsCount++] = new JumpForwardEnd();
 		_elements[_elementsCount++] = new Hanging();
 		_elements[_elementsCount++] = new Hang();
 		_elements[_elementsCount++] = new Drop();

@@ -12,6 +12,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Stand"; }
 
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(0.0f, 0.0f)); entity.getSprite().reset(0); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -24,6 +26,7 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Fall"; }
 
 	protected:
+		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(4); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -34,6 +37,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Walk"; }
 
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(5.0f, 0.0f)); entity.getSprite().reset(12, false, true); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -44,7 +49,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Turn"; }
 
-		virtual void stateEnter(Entity& entity);
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(1); }
 		virtual void stateUpdate(Entity& entity);
 
 	private:
@@ -52,13 +58,14 @@ namespace Temporal
 		int _crap;
 	};
 
-	class Jump : public EntityState
+	class JumpStart : public EntityState
 	{
 	public:
-		Jump(void) : EntityState(GravityResponse::KEEP_STATE, true), _force(Vector::Zero) {};
+		JumpStart(void) : EntityState(GravityResponse::FALL, false), _force(Vector::Zero) {};
 
-		virtual const char* getName(void) const { return "Jump"; }
+		virtual const char* getName(void) const { return "JumpStart"; }
 
+	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
@@ -66,8 +73,43 @@ namespace Temporal
 		static const float ANGLES_SIZE;
 		static const float ANGLES[];
 		Vector _force;
-		bool _isJumpStarted;
+		bool _isJumpingForward;
+	};
 
+	class JumpUp : public EntityState
+	{
+	public:
+		JumpUp(void) : EntityState(GravityResponse::KEEP_STATE, true)  {};
+
+		virtual const char* getName(void) const { return "JumpUp"; }
+
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(6); }
+		virtual void stateUpdate(Entity& entity);
+	};
+
+	class JumpForward : public EntityState
+	{
+	public:
+		JumpForward(void) : EntityState(GravityResponse::KEEP_STATE, true)  {};
+
+		virtual const char* getName(void) const { return "JumpForward"; }
+
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(10); }
+		virtual void stateUpdate(Entity& entity);
+	};
+
+	class JumpForwardEnd : public EntityState
+	{
+	public:
+		JumpForwardEnd(void) : EntityState(GravityResponse::FALL, false)  {};
+
+		virtual const char* getName(void) const { return "JumpForwardEnd"; }
+
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(11); }
+		virtual void stateUpdate(Entity& entity);
 	};
 
 	class Hanging : public EntityState
@@ -77,12 +119,12 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
+	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
 	private:
 		const Rect* _platform;
-
 	};
 
 	class Hang : public EntityState
@@ -92,6 +134,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hang"; }
 
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(7); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -102,6 +146,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Drop"; }
 
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(2); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -112,6 +158,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Climbe"; }
 
+	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
@@ -127,6 +174,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
+	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
@@ -141,6 +189,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Descend"; }
 
+	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
