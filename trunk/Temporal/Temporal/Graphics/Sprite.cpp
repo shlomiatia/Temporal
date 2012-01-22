@@ -5,7 +5,7 @@ namespace Temporal
 {
 	void Sprite::update(void)
 	{
-		bool animationEnded = isAnimationEnded();
+		bool animationEnded = isEnded();
 		_update = (_update + 1) % UPDATES_PER_FRAME;
 		if(_update == 0 && (!animationEnded || _repeat))
 		{
@@ -37,7 +37,7 @@ namespace Temporal
 		_frame = !_rewind ? 0 : getFramesCount() - 1;
 	}
 
-	bool Sprite::isAnimationEnded(void) const
+	bool Sprite::isEnded(void) const
 	{
 		return _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frame == getFramesCount() - 1 : _frame == 0);
 	}

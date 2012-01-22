@@ -52,12 +52,10 @@ namespace Temporal
 	protected:
 		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(1); }
 		virtual void stateUpdate(Entity& entity);
-
-	private:
-		// TODO: Delete this shit
-		int _crap;
 	};
 
+
+	// TODO: Redirect to actual jump start classes
 	class JumpStart : public EntityState
 	{
 	public:
@@ -154,7 +152,7 @@ namespace Temporal
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero) {};
+		Climbe(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero), _isFinished(false) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
 
@@ -171,7 +169,7 @@ namespace Temporal
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(void) : EntityState(GravityResponse::FALL, false) {};
+		PrepareToDescend(void) : EntityState(GravityResponse::FALL, false), _platformEdge(0) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
@@ -186,7 +184,7 @@ namespace Temporal
 	class Descend : public EntityState
 	{
 	public:
-		Descend(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero) {};
+		Descend(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero), _isFinished(0) {};
 
 		virtual const char* getName(void) const { return "Descend"; }
 

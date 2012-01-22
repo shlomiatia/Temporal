@@ -1,4 +1,5 @@
 #pragma once
+#include <Temporal\Base\Base.h>
 #include "Panel.h"
 
 namespace Temporal
@@ -31,7 +32,7 @@ namespace Temporal
 		Panel* _panel;
 		Panel* _nextPanel;
 
-		Game(void) : _running(false), _paused(false) {}
+		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL) {}
 		~Game(void);
 		Game(const Game&);
 		Game& operator=(const Game&);
