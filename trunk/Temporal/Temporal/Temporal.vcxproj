@@ -27,7 +27,6 @@
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\Body.h" />
     <ClInclude Include="DebugInfo.h" />
-    <ClInclude Include="Base\Line.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="Base\Vector.h" />

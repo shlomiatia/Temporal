@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	Rect::Rect(const float centerX, const float centerY, const float getWidth, const float getHeight)
+	Rect::Rect(float centerX, float centerY, float getWidth, float getHeight)
 				: _center(centerX, centerY), _size(getWidth, getHeight)
 	{
 		assert(getSize().getWidth() > 0);

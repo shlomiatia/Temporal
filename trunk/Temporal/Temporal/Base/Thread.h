@@ -5,7 +5,7 @@ namespace Temporal
 	class Thread
 	{
 	public:
-		static void sleep(long millis);
+		static void sleep(unsigned long millis);
 		static long ticks(void);
 	private:
 		Thread(void) {}

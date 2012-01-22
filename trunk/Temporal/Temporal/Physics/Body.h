@@ -15,8 +15,7 @@ namespace Temporal
 		Sensor* _elements[MAX_ELEMENTS];
 		int _elementsCount;
 
-		Body(bool isDynamic, const Vector& position, const Vector& size, Orientation::Type orientation = Orientation::RIGHT)
-			: _isDynamic(isDynamic), _bounds(position, size), _orientation(orientation), _force(Vector::Zero), _gravityScale(1.0f), _elementsCount(0), _collision(Direction::NONE) {}
+		Body(bool isDynamic, const Vector& position, const Vector& size, Orientation::Type orientation = Orientation::RIGHT);
 		~Body(void);
 
 		bool isDynamic(void) const { return _isDynamic; }
