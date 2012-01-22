@@ -63,8 +63,8 @@ namespace Temporal
 		float _y;
 	};
 
-	extern inline Vector operator+(const Vector& vector, float scalar);
-	extern inline Vector operator-(const Vector& vector, float scalar);
-	extern inline Vector operator*(const Vector& vector, float scalar);
-	extern inline Vector operator/(const Vector& vector, float scalar);
+	inline Vector operator+(const Vector& vector, float scalar) { return Vector(vector.getX() + scalar, vector.getY() + scalar); }
+	inline Vector operator-(const Vector& vector, float scalar) { return vector + -scalar; }
+	inline Vector operator*(const Vector& vector, float scalar) { return Vector(vector.getX() * scalar, vector.getY() * scalar); }
+	inline Vector operator/(const Vector& vector, float scalar) { return vector * (1.0f / scalar); }
 }

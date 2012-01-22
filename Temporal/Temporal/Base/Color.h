@@ -1,5 +1,4 @@
 #pragma once
-#include <assert.h>
 
 namespace Temporal
 {
@@ -15,13 +14,7 @@ namespace Temporal
 		static const Color Magenta;
 		static const Color Cyan;
 
-		Color(const float r, const float g, const float b)
-			: _r(r), _g(g), _b(b)
-		{
-			assert(r >= 0.0f); assert(r <= 1.0f);
-			assert(g >= 0.0f); assert(g <= 1.0f);
-			assert(b >= 0.0f); assert(b <= 1.0f);
-		}
+		inline Color(float r, float g, float b);
 
 		float getR(void) const { return _r; }
 		float getG(void) const { return _g; }

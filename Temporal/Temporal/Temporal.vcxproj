@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\Color.cpp" />
+    <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="Base\Vector.cpp" />
     <ClCompile Include="Game\Entity.cpp" />

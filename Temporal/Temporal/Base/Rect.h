@@ -1,25 +1,14 @@
 #pragma once
 #include "Enums.h"
 #include "Vector.h"
-#include <assert.h>
 
 namespace Temporal
 {
 	class Rect
 	{
 	public:
-		Rect(const float centerX, const float centerY, const float getWidth, const float getHeight)
-			: _center(centerX, centerY), _size(getWidth, getHeight)
-		{
-			assert(getSize().getWidth() > 0);
-			assert(getSize().getHeight() > 0);
-		}
-		Rect(const Vector& center, const Vector& size)
-			: _center(center), _size(size)
-		{
-			assert(getSize().getWidth() > 0);
-			assert(getSize().getHeight() > 0);
-		}
+		Rect(float centerX, float centerY, float getWidth, float getHeight);
+		Rect(const Vector& center, const Vector& size);
 
 		const Vector& getCenter(void) const { return (_center); }
 		const Vector& getSize(void) const { return (_size); }

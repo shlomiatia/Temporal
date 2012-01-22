@@ -39,9 +39,8 @@ namespace Temporal
 		void applyGravity(float gravity, float maxGravity);
 		void correctCollision(const Rect& bodyBounds);
 		void applyForce(void) { _bounds += _force; }
-		void add(Sensor* element) { assert(_elementsCount < MAX_ELEMENTS); _elements[_elementsCount++] = element; }
+		void add(Sensor* element) { _elements[_elementsCount++] = element; }
 
-		
 	private:
 		bool _isDynamic;
 		Rect _bounds;
