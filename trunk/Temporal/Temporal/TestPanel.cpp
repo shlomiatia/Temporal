@@ -12,7 +12,7 @@ namespace Temporal
 	void TestPanel::init(void)
 	{
 		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
-		DebugInfo::get().setShowingFPS(false);
+		DebugInfo::get().setShowingFPS(true);
 
 		const EntityController* const controller = new InputEntityController();
 		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);

@@ -15,7 +15,7 @@ namespace Temporal
 		SpriteSheet(const Texture* const texture) 
 			: _texture(texture), _elementsCount(0) {}
 		~SpriteSheet(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } delete _texture; }
-		void add(Animation* element) { assert(_elementsCount < MAX_ELEMENTS); _elements[_elementsCount++] = element; }
+		void add(Animation* element) { _elements[_elementsCount++] = element; }
 
 		const Texture& getTexture(void) const { return *_texture; }
 	private:

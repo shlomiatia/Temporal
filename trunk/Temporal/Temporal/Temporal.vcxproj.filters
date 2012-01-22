@@ -52,5 +52,6 @@
     <ClCompile Include="Game\InputEntityController.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
+    <ClCompile Include="Base\Rect.cpp" />
   </ItemGroup>
 </Project>

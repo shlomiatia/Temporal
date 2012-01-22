@@ -20,13 +20,7 @@ namespace Temporal
 			: _elementsCount(0) {};
 		~Physics(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } }
 
-		void add(Body* const element) { assert(_elementsCount < MAX_ELEMENTS); _elements[_elementsCount++] = element; }
-		void processBodies(bool isDynamic, void (Physics::*processBody)(Body&, void*), void* param = NULL);
-		void correctCollision(Body& staticBody, void* param);
-		void detectCollision(Body& staticBody, void* param);
-		void processCollisions(Body& dynamicBody, void* param);
-		void processSensor(Body& staticBody, void* param);
-		void processSensors(Body& dynamicBody, void* param);
+		void add(Body* const element) { _elements[_elementsCount++] = element; }
 
 		void update(void);
 
@@ -35,6 +29,13 @@ namespace Temporal
 		int _elementsCount;
 	private:
 		static const float MAX_GRAVITY;
+
+		void processBodies(bool isDynamic, void (Physics::*processBody)(Body&, void*), void* param = NULL);
+		void correctCollision(Body& staticBody, void* param);
+		void detectCollision(Body& staticBody, void* param);
+		void processCollisions(Body& dynamicBody, void* param);
+		void processSensor(Body& staticBody, void* param);
+		void processSensors(Body& dynamicBody, void* param);
 
 		Physics(const Physics&);
 		Physics& operator=(const Physics&);

@@ -1,5 +1,6 @@
 #include "EntityStatesFactory.h"
 #include "EntityStates.h"
+#include <assert.h>
 
 namespace Temporal
 {

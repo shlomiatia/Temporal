@@ -15,6 +15,7 @@ namespace Temporal
 			FALL
 		};
 	}
+
 	class EntityState
 	{
 	public:
