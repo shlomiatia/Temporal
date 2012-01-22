@@ -15,13 +15,12 @@ namespace Temporal
 	{
 		enum Type
 		{
+			NONE = 0,
 			TOP = 1,
 			BOTTOM = 2,
 			FRONT = 4,
 			BACK = 8
 		};
-
-		static const Direction::Type NONE = (Direction::Type)(0);
 	}
 	inline Direction::Type operator|(Direction::Type a, Direction::Type b) { return (Direction::Type)((int)a | (int)b); }
 	inline Direction::Type operator&(Direction::Type a, Direction::Type b) { return (Direction::Type)((int)a & (int)b); }

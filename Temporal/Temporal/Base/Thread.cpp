@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	void Thread::sleep(const long millis)
+	void Thread::sleep(unsigned long millis)
 	{
 		SDL_Delay(millis);
 	}

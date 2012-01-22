@@ -1,5 +1,6 @@
 #include "Body.h"
 #include <algorithm>
+#include <assert.h>
 
 namespace Temporal
 {
@@ -10,6 +11,13 @@ namespace Temporal
 		else if(force < 0 && minDynamic >= maxStatic)
 			force = std::max(force, maxStatic - minDynamic);
 		return force;
+	}
+
+	Body::Body(bool isDynamic, const Vector& position, const Vector& size, Orientation::Type orientation)
+		: _isDynamic(isDynamic), _bounds(position, size), _orientation(orientation), _force(Vector::Zero), _gravityScale(1.0f), _elementsCount(0), _collision(Direction::NONE)
+	{
+		assert(getBounds().getSize().getX() > 0);
+		assert(getBounds().getSize().getY() > 0);
 	}
 
 	Body::~Body(void)
