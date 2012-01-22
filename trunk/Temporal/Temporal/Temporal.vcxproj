@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClInclude Include="Base\Base.h" />
     <ClInclude Include="Base\Color.h" />
+    <ClInclude Include="Base\Enums.h" />
+    <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Game\EntityController.h" />
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\EntityStateID.h" />

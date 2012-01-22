@@ -1,5 +1,5 @@
 #pragma once
-#include "Base.h"
+#include "Enums.h"
 #include "Vector.h"
 #include <assert.h>
 
@@ -40,7 +40,7 @@ namespace Temporal
 		float getGraphicsLeft(void) const { return getLeft(); }
 		float getGraphicsRight(void) const { return getRight() + 1.0f; }
 		float getGraphicsTop(void) const { return getBottom(); }
-		float getGraphicsBottom(void) const { return getTop() + 1.0; }
+		float getGraphicsBottom(void) const { return getTop() + 1.0f; }
 
 		float getSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Type orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
