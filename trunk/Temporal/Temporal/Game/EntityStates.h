@@ -154,17 +154,18 @@ namespace Temporal
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _crap(0) {};
+		Climbe(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
 
+		virtual const Vector& getDrawCenter(const Entity& entity) const { return _drawCenter; }
 	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
 	private:
-		// TODO: Remove this shit
-		int _crap;
+		Vector _drawCenter;
+		bool _isFinished;
 	};
 
 	class PrepareToDescend : public EntityState
@@ -185,16 +186,17 @@ namespace Temporal
 	class Descend : public EntityState
 	{
 	public:
-		Descend(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _crap(0) {};
+		Descend(void) : EntityState(GravityResponse::DISABLE_GRAVITY, false), _drawCenter(Vector::Zero) {};
 
 		virtual const char* getName(void) const { return "Descend"; }
 
+		virtual const Vector& getDrawCenter(const Entity& entity) const { return _drawCenter; }
 	protected:
 		virtual void stateEnter(Entity& entity);
 		virtual void stateUpdate(Entity& entity);
 
 	private:
-		// TODO: Remove this shit
-		int _crap;
+		Vector _drawCenter;
+		bool _isFinished;
 	};
 }

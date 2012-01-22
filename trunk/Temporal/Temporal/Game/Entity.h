@@ -16,7 +16,6 @@ namespace Temporal
 	public:
 		static const float WALK_FORCE;
 		static const float JUMP_FORCE;
-		static const float CLIMBE_FORCE;
 
 		static const int JUMP_SENSOR;
 		static const int HANG_SENSOR;

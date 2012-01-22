@@ -6,9 +6,8 @@
 
 namespace Temporal
 {
-	const float Entity::WALK_FORCE = 5.0f;
-	const float Entity::JUMP_FORCE = 20.0f;
-	const float Entity::CLIMBE_FORCE = 5.0f;
+	const float Entity::WALK_FORCE = 1.0f;
+	const float Entity::JUMP_FORCE = 15.0f;
 
 	const int Entity::JUMP_SENSOR = 0;
 	const int Entity::HANG_SENSOR = 1;
@@ -26,7 +25,6 @@ namespace Temporal
 			EntityStatesFactory::get().releaseState(_state);
 		}
 		_state = EntityStatesFactory::get().getState(stateType);
-		Graphics::get().setTitle(_state->getName());
 		_state->enter(*this);
 	}
 
@@ -38,7 +36,7 @@ namespace Temporal
 
 	void Entity::draw(void) const
 	{
-		const Vector& center = getBody().getBounds().getCenter();
+		const Vector& center = _state->getDrawCenter(*this);
 		Orientation::Type orientation = getBody().getOrientation();
 		getSprite().draw(center, orientation); 
 	}

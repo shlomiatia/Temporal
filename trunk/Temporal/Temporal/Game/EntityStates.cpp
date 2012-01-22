@@ -8,17 +8,17 @@ namespace Temporal
 {
 	void Stand::stateUpdate(Entity& entity)
 	{
-		if(entity.isMovingForward())
+		if(entity.getController().isUp())
+		{
+			entity.changeState(EntityStateID::JUMP_START);
+		}
+		else if(entity.isMovingForward())
 		{
 			entity.changeState(EntityStateID::WALK);
 		}
 		else if(entity.isMovingBackward())
 		{
 			entity.changeState(EntityStateID::TURN);
-		}
-		else if(entity.getController().isUp())
-		{
-			entity.changeState(EntityStateID::JUMP_START);
 		}
 		else if(entity.getController().isDown() && match(entity.getBody().getSensor(entity.BACK_EDGE_SENSOR).getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
 		{
@@ -209,27 +209,25 @@ namespace Temporal
 	void Climbe::stateEnter(Entity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
-		_crap = 0;
+		float drawCenterX = EntityState::getDrawCenter(entity).getX();
+		float drawCenterY = entity.getBody().getBounds().getTop();
+		_drawCenter = Vector(drawCenterX, drawCenterY);
+		entity.getSprite().reset(8);
+		_isFinished = false;
 	}
 
 	void Climbe::stateUpdate(Entity& entity)
 	{
-		float frames = entity.getBody().getBounds().getHeight() / entity.CLIMBE_FORCE;
-		if (_crap == frames)
+		if(_isFinished)
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
-		else 
+		else if (entity.getSprite().isAnimationEnded())
 		{
-			float forceX = 0.0f;
-			float forceY = entity.CLIMBE_FORCE;
-			if(_crap == frames - 1)
-			{
-				forceX += 1.0f;
-				forceY -= 1.0f;
-			}
+			float forceX = 1.0f;
+			float forceY = entity.getBody().getBounds().getHeight() - 1.0f;
 			entity.getBody().setForce(Vector(forceX, forceY));
-			++_crap;
+			_isFinished = true;
 		}
 	}
 
@@ -254,27 +252,25 @@ namespace Temporal
 	void Descend::stateEnter(Entity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
-		_crap = 0;
+		float drawCenterX = EntityState::getDrawCenter(entity).getX();
+		float drawCenterY = entity.getBody().getBounds().getBottom();
+		_drawCenter = Vector(drawCenterX, drawCenterY);
+		entity.getSprite().reset(8, true);
+		_isFinished = false;
 	}
 
 	void Descend::stateUpdate(Entity& entity)
 	{
-		float frames = entity.getBody().getBounds().getHeight() / entity.CLIMBE_FORCE;
-		if (_crap == frames)
+		if(_isFinished)
 		{
 			entity.changeState(EntityStateID::HANG);
 		}
-		else 
+		else if (entity.getSprite().isAnimationEnded())
 		{
-			float forceX = 0.0f;
-			float forceY = -entity.CLIMBE_FORCE;
-			if(_crap == 0)
-			{
-				forceX -= 1.0f;
-				forceY += 1.0f;
-			}
+			float forceX = -1.0f;
+			float forceY = -(entity.getBody().getBounds().getHeight() - 1.0f);
 			entity.getBody().setForce(Vector(forceX, forceY));
-			++_crap;
+			_isFinished = true;
 		}
 	}
 }
