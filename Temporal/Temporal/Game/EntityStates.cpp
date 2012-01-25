@@ -200,26 +200,21 @@ namespace Temporal
 
 	void Climbe::stateEnter(Entity& entity)
 	{
-		entity.getBody().setForce(Vector::Zero);
 		float drawCenterX = EntityState::getDrawCenter(entity).getX();
 		float drawCenterY = entity.getBody().getBounds().getTop();
 		_drawCenter = Vector(drawCenterX, drawCenterY);
+		float forceX = 1.0f;
+		float forceY = entity.getBody().getBounds().getHeight() - 1.0f;
+		entity.getBody().setForce(Vector(forceX, forceY));
 		entity.getSprite().reset(8);
-		_isFinished = false;
 	}
 
 	void Climbe::stateUpdate(Entity& entity)
 	{
-		if(_isFinished)
+		entity.getBody().setForce(Vector::Zero);
+		if (entity.getSprite().isEnded())
 		{
 			entity.changeState(EntityStateID::STAND);
-		}
-		else if (entity.getSprite().isEnded())
-		{
-			float forceX = 1.0f;
-			float forceY = entity.getBody().getBounds().getHeight() - 1.0f;
-			entity.getBody().setForce(Vector(forceX, forceY));
-			_isFinished = true;
 		}
 	}
 
@@ -247,22 +242,18 @@ namespace Temporal
 		float drawCenterX = EntityState::getDrawCenter(entity).getX();
 		float drawCenterY = entity.getBody().getBounds().getBottom();
 		_drawCenter = Vector(drawCenterX, drawCenterY);
+		float forceX = -1.0f;
+		float forceY = -(entity.getBody().getBounds().getHeight() - 1.0f);
+		entity.getBody().setForce(Vector(forceX, forceY));
 		entity.getSprite().reset(8, true);
-		_isFinished = false;
 	}
 
 	void Descend::stateUpdate(Entity& entity)
 	{
-		if(_isFinished)
+		entity.getBody().setForce(Vector::Zero);
+		if (entity.getSprite().isEnded())
 		{
 			entity.changeState(EntityStateID::HANG);
-		}
-		else if (entity.getSprite().isEnded())
-		{
-			float forceX = -1.0f;
-			float forceY = -(entity.getBody().getBounds().getHeight() - 1.0f);
-			entity.getBody().setForce(Vector(forceX, forceY));
-			_isFinished = true;
 		}
 	}
 }
