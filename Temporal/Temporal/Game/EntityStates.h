@@ -13,7 +13,7 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Stand"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(0.0f, 0.0f)); entity.getSprite().reset(0); }
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(0); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -38,7 +38,7 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Walk"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(entity.WALK_FORCE, 0.0f)); entity.getSprite().reset(12, false, true); }
+		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(12, false, true); }
 		virtual void stateUpdate(Entity& entity);
 	};
 

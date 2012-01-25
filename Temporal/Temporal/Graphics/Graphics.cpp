@@ -7,19 +7,16 @@ namespace Temporal
 {
 	void Graphics::init(const Vector& resolution, const Vector& viewSize, bool fullScreen)
 	{
-		// init SDL video if not initialized already
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
 		{
 			exit(1);
 			// TODO: Error Failed initializing SDL video
 		}
 
-		// call existing methods to set window properties
 		setVideoMode(resolution, viewSize, fullScreen);
 	}
 	void Graphics::setVideoMode(const Vector& resolution, const Vector& viewSize, bool fullScreen) const
 	{
-		// set video mode flags
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
 			// TODO: Error Failed setting SDL OpenGL double buffering attribute
@@ -28,13 +25,11 @@ namespace Temporal
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
 
-		// set video mode for SDL
 		if (SDL_SetVideoMode((int)resolution.getWidth(), (int)resolution.getHeight(), BIT_DEPTH, flags) == NULL)
 		{
 			// TODO: Error Failed setting video mode
 			exit(1);
 		}
-		// init GL stuff
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
 
@@ -64,20 +59,16 @@ namespace Temporal
 	}
 	void Graphics::prepareForDrawing(void) const
 	{
-		// Clear the buffer
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Set translation
 		glLoadIdentity();
 		glTranslatef(_translation.getX(), _translation.getY(), 0.0f);
 	}
 
 	void Graphics::finishDrawing(void) const
 	{
-		// Swap to the drawn buffer
 		SDL_GL_SwapBuffers();
 
-		// Check if exception was thrown while drawing
 		validate();
 	}
 
@@ -110,7 +101,6 @@ namespace Temporal
 
 		glPushMatrix();
 		{
-			// set opengl matrix & color properties
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
 			glColor3f(1.0f, 1.0f, 1.0f);
  

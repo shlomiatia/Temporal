@@ -19,7 +19,6 @@ namespace Temporal
 	private:
 		static const int MAX_ELEMENTS = 20;
 
-		// TODO: Dynamic
 		EntityState* _elements[MAX_ELEMENTS];
 		int _elementsCount;
 

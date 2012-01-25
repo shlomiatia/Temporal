@@ -5,7 +5,6 @@ namespace Temporal
 	class Input
 	{
 	public:
-		// gets the singleton Input instance
 		static Input& get(void)
 		{
 			static Input instance;

@@ -10,7 +10,7 @@ namespace Temporal
 		if(_update == 0 && (!animationEnded || _repeat))
 		{
 			int modifier = _rewind ? -1 : 1;
-			_frame = (_frame + modifier) % getFramesCount();
+			_frame = (getFramesCount() + _frame + modifier) % getFramesCount();
 		}
 	}
 
