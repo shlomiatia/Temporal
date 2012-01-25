@@ -4,7 +4,6 @@ namespace Temporal
 	class DebugInfo
 	{
 	public:
-		// gets the singleton DebugInfo instance
 		static DebugInfo& get(void)
 		{
 			static DebugInfo instance;

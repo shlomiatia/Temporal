@@ -8,7 +8,6 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		// TODO: Dynamic
 		static const int MAX_ELEMENTS = 20;
 		Animation* _elements[MAX_ELEMENTS];
 		int _elementsCount;

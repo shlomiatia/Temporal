@@ -10,7 +10,6 @@ namespace Temporal
 	class Body
 	{
 	public:
-		// TODO: Dynamic
 		static const int MAX_ELEMENTS = 10;
 		Sensor* _elements[MAX_ELEMENTS];
 		int _elementsCount;

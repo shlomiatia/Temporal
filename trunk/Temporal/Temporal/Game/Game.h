@@ -7,17 +7,14 @@ namespace Temporal
 	class Game
 	{
 	public:
-		// gets the singleton Game instance
 		static Game& get(void)
 		{
 			static Game instance;
 			return (instance);
 		}
 
-		// set panel data for the game
 		void setPanel(Panel* panel);
 
-		// get running state, get/set paused state
 		bool isRunning(void) const { return (_running); }
 		bool isPaused(void) const { return (_paused); }
 

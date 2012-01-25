@@ -15,7 +15,6 @@ namespace Temporal
 		float getY(void) const { return (_y); }
 		void setY(float y) { _y = y; }
 
-		// Treat vector as size
 		float getWidth(void) const { return (_x); }
 		void setWidth(float width) { _x = width; }
 		float getHeight(void) const { return (_y); }

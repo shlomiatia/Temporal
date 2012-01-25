@@ -24,7 +24,6 @@ namespace Temporal
 
 		void update(void);
 
-		// TODO: Dynamic
 		Body* _elements[MAX_ELEMENTS];
 		int _elementsCount;
 	private:

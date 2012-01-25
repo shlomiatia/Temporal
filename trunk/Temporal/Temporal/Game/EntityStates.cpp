@@ -8,17 +8,17 @@ namespace Temporal
 {
 	void Stand::stateUpdate(Entity& entity)
 	{
-		if(entity.getController().isUp())
-		{
-			entity.changeState(EntityStateID::PREPARE_TO_JUMP);
-		}
-		else if(entity.isMovingForward())
+		if(entity.isMovingForward())
 		{
 			entity.changeState(EntityStateID::WALK);
 		}
 		else if(entity.isMovingBackward())
 		{
 			entity.changeState(EntityStateID::TURN);
+		}
+		else if(entity.getController().isUp())
+		{
+			entity.changeState(EntityStateID::PREPARE_TO_JUMP);
 		}
 		else if(entity.getController().isDown() && match(entity.getBody().getSensor(entity.BACK_EDGE_SENSOR).getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
 		{
@@ -48,6 +48,10 @@ namespace Temporal
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
+		else
+		{
+			entity.getBody().setForce(Vector(entity.WALK_FORCE, 0.0f)); 
+		}
 	}
 
 	void Turn::stateUpdate(Entity& entity)
@@ -73,7 +77,6 @@ namespace Temporal
 		EntityStateID::Type jumpStartState = entity.isMovingForward() ? EntityStateID::JUMP_START_45 : EntityStateID::JUMP_START_90;
 		if(match(jumpSensor.getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
 		{
-			// TODO: ID
 			const float hangSensorSize = body.getSensor(entity.HANG_SENSOR).getBounds().getWidth();
 			const Body* const platform = jumpSensor.getSensedBody();
 			Orientation::Type orientation = body.getOrientation();
