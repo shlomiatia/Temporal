@@ -11,7 +11,12 @@ namespace Temporal
 		_elements[_elementsCount++] = new Fall();
 		_elements[_elementsCount++] = new Walk();
 		_elements[_elementsCount++] = new Turn();
-		_elements[_elementsCount++] = new JumpStart();
+		_elements[_elementsCount++] = new PrepareToJump();
+		_elements[_elementsCount++] = new JumpStart(toRadians(45), 9, EntityStateID::JUMP_FORWARD);
+		_elements[_elementsCount++] = new JumpStart(toRadians(60), 9, EntityStateID::JUMP_FORWARD);
+		_elements[_elementsCount++] = new JumpStart(toRadians(75), 5, EntityStateID::JUMP_UP);
+		_elements[_elementsCount++] = new JumpStart(toRadians(90), 5, EntityStateID::JUMP_UP);
+		_elements[_elementsCount++] = new JumpStart(toRadians(105), 5, EntityStateID::JUMP_UP);
 		_elements[_elementsCount++] = new JumpUp();
 		_elements[_elementsCount++] = new JumpForward();
 		_elements[_elementsCount++] = new JumpForwardEnd();

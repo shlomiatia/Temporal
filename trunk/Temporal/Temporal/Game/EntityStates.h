@@ -38,7 +38,7 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Walk"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(5.0f, 0.0f)); entity.getSprite().reset(12, false, true); }
+		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector(entity.WALK_FORCE, 0.0f)); entity.getSprite().reset(12, false, true); }
 		virtual void stateUpdate(Entity& entity);
 	};
 
@@ -55,23 +55,37 @@ namespace Temporal
 	};
 
 
-	// TODO: Redirect to actual jump start classes
-	class JumpStart : public EntityState
+	class PrepareToJump : public EntityState
 	{
 	public:
-		JumpStart(void) : EntityState(GravityResponse::FALL, false), _force(Vector::Zero) {};
+		PrepareToJump(void) : EntityState(GravityResponse::FALL, false) {};
 
-		virtual const char* getName(void) const { return "JumpStart"; }
+		virtual const char* getName(void) const { return "PrepareToJump"; }
 
 	protected:
 		virtual void stateEnter(Entity& entity);
-		virtual void stateUpdate(Entity& entity);
 
 	private:
 		static const float ANGLES_SIZE;
 		static const float ANGLES[];
-		Vector _force;
-		bool _isJumpingForward;
+		static const EntityStateID::Type JUMP_START_STATES[];
+	};
+
+	class JumpStart : public EntityState
+	{
+	public:
+		JumpStart(float angle, int animation, EntityStateID::Type jumpState) : EntityState(GravityResponse::FALL, false), _angle(angle), _animation(animation), _jumpState(jumpState) {};
+
+		virtual const char* getName(void) const { return "JumpStart"; }
+
+	protected:
+		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(_animation); }
+		virtual void stateUpdate(Entity& entity);
+
+	private:
+		float _angle;
+		int _animation;
+		EntityStateID::Type _jumpState;
 	};
 
 	class JumpUp : public EntityState

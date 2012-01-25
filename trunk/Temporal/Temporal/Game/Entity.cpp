@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	const float Entity::WALK_FORCE = 1.0f;
+	const float Entity::WALK_FORCE = 2.0f;
 	const float Entity::JUMP_FORCE = 15.0f;
 
 	const int Entity::JUMP_SENSOR = 0;
