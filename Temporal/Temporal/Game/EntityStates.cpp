@@ -10,7 +10,7 @@ namespace Temporal
 	{
 		if(entity.getController().isUp())
 		{
-			entity.changeState(EntityStateID::JUMP_START);
+			entity.changeState(EntityStateID::PREPARE_TO_JUMP);
 		}
 		else if(entity.isMovingForward())
 		{
@@ -42,7 +42,7 @@ namespace Temporal
 	{
 		if(entity.getController().isUp())
 		{
-			entity.changeState(EntityStateID::JUMP_START);
+			entity.changeState(EntityStateID::PREPARE_TO_JUMP);
 		}
 		else if(!entity.isMovingForward())
 		{
@@ -59,42 +59,36 @@ namespace Temporal
 		}
 	}
 
-	const float JumpStart::ANGLES_SIZE = 3;
-	const float JumpStart::ANGLES[] = {toRadians(45.0f), toRadians(60.0f), toRadians(75.0f) };
+	const float PrepareToJump::ANGLES_SIZE = 4;
+	const float PrepareToJump::ANGLES[] = { toRadians(45.0f), toRadians(60.0f), toRadians(75.0f), toRadians(105.0) };
+	const EntityStateID::Type PrepareToJump::JUMP_START_STATES[] = { EntityStateID::JUMP_START_45, EntityStateID::JUMP_START_60, EntityStateID::JUMP_START_75, EntityStateID::JUMP_START_105 };
 
-	void JumpStart::stateEnter(Entity& entity)
+	void PrepareToJump::stateEnter(Entity& entity)
 	{
-		entity.getBody().setForce(Vector::Zero);
-		const float defaultAngle = entity.isMovingForward() ? toRadians(45.0f) : toRadians(90.0f);
-		const float F = entity.JUMP_FORCE;
-		const Body& body = entity.getBody();
-		// TODO: ID
-		const float hangSensorSize = body.getSensor(entity.HANG_SENSOR).getBounds().getWidth();
+		Body& body = entity.getBody();
+		body.setForce(Vector::Zero);
 		const Sensor& jumpSensor = body.getSensor(entity.JUMP_SENSOR);
-		const Body* const platform = jumpSensor.getSensedBody();
-		float angle;
-		if(!match(jumpSensor.getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
+		const float F = entity.JUMP_FORCE;
+		
+		EntityStateID::Type jumpStartState = entity.isMovingForward() ? EntityStateID::JUMP_START_45 : EntityStateID::JUMP_START_90;
+		if(match(jumpSensor.getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
 		{
-			angle = defaultAngle;
-		}
-		else
-		{
+			// TODO: ID
+			const float hangSensorSize = body.getSensor(entity.HANG_SENSOR).getBounds().getWidth();
+			const Body* const platform = jumpSensor.getSensedBody();
 			Orientation::Type orientation = body.getOrientation();
 			float target = platform->getBounds().getOppositeSide(orientation);
 			float front = body.getFront();
 			float x = (target - front) * orientation;
-			if(x >= -hangSensorSize + 1.0f && x < 0.0f)
+			
+			if(x >= 0 && x < hangSensorSize - 1.0f)
 			{
-				angle = toRadians(105.0f);
-			}
-			else if(x < hangSensorSize - 1.0f)
-			{
-				angle = toRadians(90.0f);
+				jumpStartState = EntityStateID::JUMP_START_90;
 			}
 			else
 			{
-				angle = defaultAngle;
 				float max = 0.0f;
+				float G = Physics::GRAVITY;
 				for(int i = 0; i < ANGLES_SIZE; ++i)
 				{
 					/* x = Time*Force*cos(Angle)
@@ -106,35 +100,29 @@ namespace Temporal
 					 * y = (-G*x^2 + F^2*sin(A)*cos(A)*x)/(F*cos(A))/F*cos(A) // Multiply with common denominator
 					 * y = (-G*x^2 + F^2*sin(A)*cos(A)*x)/(F*cos(A))^2
 					 */
-					float G = Physics::GRAVITY;
 					float A = ANGLES[i];
-
 					float y = (-G*pow(x, 2) + pow(F, 2)*sin(A)*cos(A)*x)/pow(F*cos(A), 2);
 					if(max < y)
 					{
 						max = y;
-						angle = A;
+						jumpStartState = JUMP_START_STATES[i];
 					}
 				}
 			}
 		}
-		_force = Vector(F*cos(angle), F*sin(angle));
-		_isJumpingForward =  angle == toRadians(45) || angle == toRadians(60);
-		if(_isJumpingForward)
-			entity.getSprite().reset(9);
-		else
-			entity.getSprite().reset(5);
+		entity.changeState(jumpStartState);
 	}
 
 	void JumpStart::stateUpdate(Entity& entity)
 	{
 		if(entity.getSprite().isEnded())
+		{	
+			entity.getBody().setForce(Vector(entity.JUMP_FORCE*cos(_angle), entity.JUMP_FORCE*sin(_angle)));
+			entity.changeState(_jumpState);
+		}
+		else if(entity.isMovingForward() && _angle != toRadians(45) && !(entity.getBody().getSensor(entity.JUMP_SENSOR).getSensedBodyDirection() & (Direction::BOTTOM | Direction::BACK)))
 		{
-			entity.getBody().setForce(_force);
-			if(_isJumpingForward)
-				entity.changeState(EntityStateID::JUMP_FORWARD);
-			else
-				entity.changeState(EntityStateID::JUMP_UP);
+			entity.changeState(EntityStateID::JUMP_START_45);
 		}
 	}
 

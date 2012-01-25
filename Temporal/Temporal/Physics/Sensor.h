@@ -34,4 +34,3 @@ namespace Temporal
 		Sensor& operator=(const Sensor&);
 	};
 }
-
