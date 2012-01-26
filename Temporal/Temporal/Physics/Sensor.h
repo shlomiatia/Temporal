@@ -10,25 +10,26 @@ namespace Temporal
 	class Sensor
 	{
 	public:
-		Rect getBounds(void) const;
+		Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size, Direction::Type positive, Direction::Type negative);
+		~Sensor(void) {}
 
 		const DynamicBody& getOwner(void) const { return _owner; }
-		const Body* getSensedBody(void) const { return _sensedBody; }
-		Direction::Type getSensedBodyDirection(void) const { return _sensedBodyDirection; }
-		void clearCollision(void) { _sensedBody = NULL; _sensedBodyDirection = Direction::NONE; }
-		void setCollision(const Body* sensedBody, Direction::Type sensedBodyDirection) {  _sensedBody = sensedBody; _sensedBodyDirection = sensedBodyDirection; }
+		Rect getBounds(void) const;
+		const Body* const getSensedBody(void) const { return _sensedBody; }
+		void setSensedBody(const Body* const sensedBody) { _sensedBody = sensedBody; }
+		bool isSensing(void) const { return getSensedBody() != NULL; }
+		Direction::Type getPositive(void) const { return _positive; }
+		Direction::Type getNegative(void) const { return _negative; }
 
-		Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size);
-		~Sensor(void) {}
 	private:
-		
 		const DynamicBody& _owner;
 
 		const Vector _offsetFromBody;
 		const Vector _size;
 
 		const Body* _sensedBody;
-		Direction::Type _sensedBodyDirection;
+		Direction::Type _positive;
+		Direction::Type _negative;
 
 		Sensor(const Sensor&);
 		Sensor& operator=(const Sensor&);

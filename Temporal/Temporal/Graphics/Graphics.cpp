@@ -40,7 +40,7 @@ namespace Temporal
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, viewSize.getX(), 0, viewSize.getY(), 0, 1);
+		glOrtho(0, viewSize.getX(), 0, viewSize.getY(), -1, 1);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -89,8 +89,8 @@ namespace Temporal
 
 	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const
 	{
-		float textureWidth = texture.getSize().getWidth() - 1;
-		float textureHeight = texture.getSize().getHeight() - 1;
+		float textureWidth = texture.getSize().getWidth();
+		float textureHeight = texture.getSize().getHeight();
 
 		const float textureX0 = (!mirrored ? texturePart.getGraphicsLeft() : texturePart.getGraphicsRight()) / textureWidth;
 		const float textureX1 = (!mirrored ? texturePart.getGraphicsRight() : texturePart.getGraphicsLeft()) / textureWidth;

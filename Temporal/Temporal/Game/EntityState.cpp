@@ -27,7 +27,7 @@ namespace Temporal
 		{
 			entity.changeState(EntityStateID::FALL);
 		}
-		else if(_supportsHang && match(entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBodyDirection(), Direction::BOTTOM | Direction::FRONT))
+		else if(_supportsHang && entity.getBody().getSensor(entity.HANG_SENSOR).isSensing())
 		{
 			entity.changeState(EntityStateID::HANGING);
 		}
