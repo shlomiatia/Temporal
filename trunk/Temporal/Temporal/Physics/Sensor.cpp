@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	Sensor::Sensor(Body& owner, const Vector& offsetFromBody, const Vector& size)
+	Sensor::Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size)
 			: _owner(owner), _offsetFromBody(offsetFromBody), _size(size), _sensedBody(NULL), _sensedBodyDirection(Direction::NONE) { owner.add(this); }
 
 	Rect Sensor::getBounds(void) const

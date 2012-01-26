@@ -1,9 +1,9 @@
 #pragma once
 
-namespace Temporal { class Body; }
+namespace Temporal { class DynamicBody; }
 
 #include <Temporal\Base\Base.h>
-#include "Body.h"
+#include "DynamicBody.h"
 
 namespace Temporal
 {
@@ -12,17 +12,17 @@ namespace Temporal
 	public:
 		Rect getBounds(void) const;
 
-		const Body& getOwner(void) const { return _owner; }
+		const DynamicBody& getOwner(void) const { return _owner; }
 		const Body* getSensedBody(void) const { return _sensedBody; }
 		Direction::Type getSensedBodyDirection(void) const { return _sensedBodyDirection; }
 		void clearCollision(void) { _sensedBody = NULL; _sensedBodyDirection = Direction::NONE; }
 		void setCollision(const Body* sensedBody, Direction::Type sensedBodyDirection) {  _sensedBody = sensedBody; _sensedBodyDirection = sensedBodyDirection; }
 
-		Sensor(Body& owner, const Vector& offsetFromBody, const Vector& size);
+		Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size);
 		~Sensor(void) {}
 	private:
 		
-		const Body& _owner;
+		const DynamicBody& _owner;
 
 		const Vector _offsetFromBody;
 		const Vector _size;

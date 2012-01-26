@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Body.h"
+#include "DynamicBody.h"
 
 namespace Temporal
 {
@@ -18,24 +19,22 @@ namespace Temporal
 		}
 
 		Physics(void)
-			: _elementsCount(0) {};
-		~Physics(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } }
+			: _staticBodiesCount(0), _dynamicBodiesCount(0) {};
+		~Physics(void) { for(int i = 0; i < _staticBodiesCount; ++i) { delete _staticBodies[i]; } for(int i = 0; i < _dynamicBodiesCount; ++i) { delete _dynamicBodies[i]; }  }
 
-		void add(Body* const element) { _elements[_elementsCount++] = element; }
+		void add(Body* const element) { _staticBodies[_staticBodiesCount++] = element; }
+		void add(DynamicBody* const element) { _dynamicBodies[_dynamicBodiesCount++] = element; }
 
 		bool rayCast(const Body& source, const Body& destination) const;
 		void update(void);
 
-		Body* _elements[MAX_ELEMENTS];
-		int _elementsCount;
+		Body* _staticBodies[MAX_ELEMENTS];
+		int _staticBodiesCount;
+		DynamicBody* _dynamicBodies[MAX_ELEMENTS];
+		int _dynamicBodiesCount;
 	private:
-
-		void processBodies(bool isDynamic, void (Physics::*processBody)(Body&, void*), void* param = NULL);
-		void correctCollision(Body& staticBody, void* param);
-		void detectCollision(Body& staticBody, void* param);
-		void processCollisions(Body& dynamicBody, void* param);
-		void processSensor(Body& staticBody, void* param);
-		void processSensors(Body& dynamicBody, void* param);
+		void processCollisions(DynamicBody& dynamicBody);
+		void processSensors(DynamicBody& dynamicBody);
 
 		Physics(const Physics&);
 		Physics& operator=(const Physics&);

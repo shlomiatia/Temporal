@@ -12,7 +12,7 @@ namespace Temporal
 	bool _crappy(false);
 	void addSensors(Entity& entity)
 	{
-		Body& body = entity.getBody();
+		DynamicBody& body = entity.getBody();
 		// Jump Sensor
 		/* y = Time*(Force-Time*Gravity)
 		 * Sum = N*(A1+AN)/2
@@ -75,7 +75,7 @@ namespace Temporal
 		DebugInfo::get().setShowingFPS(true);
 
 		const EntityController* const controller = new InputEntityController();
-		Body* body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
+		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		const Texture* const texture = Texture::load("c:\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
 		Animation* animation;
@@ -220,27 +220,27 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 
 #pragma endregion Crap
 
-		_player = new Entity(controller, *body, *spritesheet);
+		_player = new Entity(controller, *dynamicBody, *spritesheet);
 		addSensors(*_player);
-		Physics::get().add(body);
-		body = new Body(true, Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
-		_enemy = new Entity(new CrappyEntityController(), *body, *spritesheet);
+		Physics::get().add(dynamicBody);
+		dynamicBody = new DynamicBody(Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
+		_enemy = new Entity(new CrappyEntityController(), *dynamicBody, *spritesheet);
 		addSensors(*_enemy);
-		Physics::get().add(body);
+		Physics::get().add(dynamicBody);
 
-		body = new Body(false, Vector(512.0f, 10.0f), Vector(1024.0f, 21.0f));
+		Body* body = new Body(Vector(512.0f, 10.0f), Vector(1024.0f, 21.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(10.0f, 384.0f), Vector(21.0f, 768.0f));
+		body = new Body(Vector(10.0f, 384.0f), Vector(21.0f, 768.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(256.0f, 150.0f), Vector(256.0f, 21.0f));
+		body = new Body(Vector(256.0f, 150.0f), Vector(256.0f, 21.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(768.0f, 150.0f), Vector(256.0f, 21.0f));
+		body = new Body(Vector(768.0f, 150.0f), Vector(256.0f, 21.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(1014.0f, 384.0f), Vector(21.0f, 768.0f));
+		body = new Body(Vector(1014.0f, 384.0f), Vector(21.0f, 768.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(512.0f, 280.0f), Vector(512.0f, 21.0f));
+		body = new Body(Vector(512.0f, 280.0f), Vector(512.0f, 21.0f));
 		Physics::get().add(body);
-		body = new Body(false, Vector(512.0f, 70.0f), Vector(21.0f, 100.0f));
+		body = new Body(Vector(512.0f, 70.0f), Vector(21.0f, 100.0f));
 		Physics::get().add(body);
 
 		_player->changeState(EntityStateID::STAND);
@@ -264,9 +264,14 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 	{
 		DebugInfo::get().draw();
 		_player->draw();
-		for(int i = 0; i < Physics::get()._elementsCount; ++i)
+		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
-			const Body& body = *Physics::get()._elements[i];
+			const Body& body = *Physics::get()._staticBodies[i];
+			Graphics::get().drawRect(body.getBounds());
+		}
+		for(int i = 0; i < Physics::get()._dynamicBodiesCount; ++i)
+		{
+			const DynamicBody& body = *Physics::get()._dynamicBodies[i];
 			Graphics::get().drawRect(body.getBounds());
 			for(int j = 0; j < body._elementsCount; ++j)
 			{

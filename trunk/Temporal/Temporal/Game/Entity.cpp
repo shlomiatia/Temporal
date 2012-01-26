@@ -14,7 +14,7 @@ namespace Temporal
 	const int Entity::BACK_EDGE_SENSOR = 2;
 	const int Entity::FRONT_EDGE_SENSOR = 3;
 
-	Entity::Entity(const EntityController* const controller, Body& body, const SpriteSheet& spritesheet)
+	Entity::Entity(const EntityController* const controller, DynamicBody& body, const SpriteSheet& spritesheet)
 		: _controller(controller), _body(body), _sprite(spritesheet), _state(NULL) {}
 
 	void Entity::changeState(EntityStateID::Type stateType)
