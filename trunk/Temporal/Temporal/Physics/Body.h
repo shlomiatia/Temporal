@@ -33,8 +33,10 @@ namespace Temporal
 		void addCollision(Direction::Type collision) { _collision = _collision | collision; }
 		bool isColliding(void) const { return getCollision() != Direction::NONE; }
 
+		bool rayCast(const Body& other) const;
+
 		void flipOrientation() { _orientation = _orientation == Orientation::LEFT ? Orientation::RIGHT : Orientation::LEFT; }
-		void applyGravity(float gravity, float maxGravity);
+		void applyGravity(void);
 		void correctCollision(const Rect& bodyBounds);
 		void applyForce(void) { _bounds += _force; }
 		void add(Sensor* const element) { _elements[_elementsCount++] = element; }

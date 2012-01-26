@@ -1,4 +1,6 @@
-#include "Physics.h"
+﻿#include "Physics.h"
+#include <math.h>
+#include <algorithm>
 
 namespace Temporal
 {
@@ -24,6 +26,47 @@ namespace Temporal
 		}
 
 		return collision;
+	}
+
+	bool Physics::rayCast(const Body& source, const Body& destination) const
+	{
+		float x0 = source.getBounds().getCenterX();
+		float y0 = source.getBounds().getCenterY();
+		float x1 = destination.getBounds().getCenterX();
+		float y1 = destination.getBounds().getCenterY();
+        const float STEP = 20.0f;
+        
+		float dx = abs(x1-x0);
+        float dy = abs(y1 - y0);
+        float sx = x0 < x1 ? 1.0f : -1.0f;
+        float sy = y0 < y1 ? 1.0f : -1.0f;
+        float err = dx - dy;
+		float e2;
+        while(true)
+        {
+            e2 = 2.0f * err;
+            if(e2 > -dy)
+            {
+                err -= dy;
+                x0 += sx * STEP;
+            }
+            if(e2 < dx)
+            {
+                err += dx;
+                y0 += sy * STEP;
+            }
+			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
+                return true;
+			for(int bodiesIndex = 0; bodiesIndex < _elementsCount; ++bodiesIndex)
+			{
+				Body& body = *_elements[bodiesIndex];
+				if(!body.isDynamic())
+				{
+					if(&body != &source && &body != &destination && body.getBounds().contains(x0, y0))
+						return false;
+				}
+			}
+        }
 	}
 
 	void Physics::processBodies(bool isDynamic, void (Physics::*processBody)(Body&, void*), void* param)
@@ -57,7 +100,7 @@ namespace Temporal
 
 	void Physics::processCollisions(Body& dynamicBody, void* param)
 	{
-		dynamicBody.applyGravity(GRAVITY, MAX_GRAVITY);
+		dynamicBody.applyGravity();
 		processBodies(false, &Physics::correctCollision, &dynamicBody);
 		dynamicBody.applyForce();
 

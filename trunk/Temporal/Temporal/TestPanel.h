@@ -15,7 +15,8 @@ namespace Temporal
 		void draw(void);
 		void dispose(void);
 
-		Entity* _entity;
+		Entity* _player;
+		Entity* _enemy;
 	};
 }
 
