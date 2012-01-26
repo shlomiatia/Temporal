@@ -69,7 +69,7 @@ namespace Temporal
 
 	void PrepareToJump::stateEnter(Entity& entity)
 	{
-		Body& body = entity.getBody();
+		DynamicBody& body = entity.getBody();
 		body.setForce(Vector::Zero);
 		const Sensor& jumpSensor = body.getSensor(entity.JUMP_SENSOR);
 		const float F = entity.JUMP_FORCE;
@@ -192,7 +192,7 @@ namespace Temporal
 
 	void Drop::stateUpdate(Entity& entity)
 	{
-		if(!entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBodyDirection() & (Direction::TOP | Direction::FRONT))
+		if(!match(entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBodyDirection(), Direction::BOTTOM | Direction::FRONT))
 		{
 			entity.changeState(EntityStateID::STAND);
 		}

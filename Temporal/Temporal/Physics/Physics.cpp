@@ -28,7 +28,34 @@ namespace Temporal
 		return collision;
 	}
 
-	bool Physics::rayCast(const Body& source, const Body& destination) const
+	void correctCollision(Body& staticBody, DynamicBody& dynamicBody)
+	{
+		const Rect& staticBodyBounds = staticBody.getBounds();
+		dynamicBody.correctCollision(staticBodyBounds);
+	}
+
+	void detectCollision(Body& staticBody, DynamicBody& dynamicBody)
+	{
+		const Rect& dynamicBodyBounds = dynamicBody.getBounds();
+		Orientation::Type dynamicBodyOrientation = dynamicBody.getOrientation();
+		const Rect& staticBodyBounds = staticBody.getBounds();
+		Direction::Type collision = getCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
+		dynamicBody.addCollision(collision);
+	}
+
+	void processSensor(Body& staticBody, Sensor& sensor)
+	{
+		const Rect& sensorBounds = sensor.getBounds();
+		Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
+		const Rect& staticBodyBounds = staticBody.getBounds();
+		Direction::Type collision = getCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
+		if(collision != Direction::NONE)
+		{
+			sensor.setCollision(&staticBody, collision);
+		}
+	}
+
+		bool Physics::rayCast(const Body& source, const Body& destination) const
 	{
 		float x0 = source.getBounds().getCenterX();
 		float y0 = source.getBounds().getCenterY();
@@ -57,83 +84,59 @@ namespace Temporal
             }
 			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
                 return true;
-			for(int bodiesIndex = 0; bodiesIndex < _elementsCount; ++bodiesIndex)
+			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 			{
-				Body& body = *_elements[bodiesIndex];
-				if(!body.isDynamic())
-				{
-					if(&body != &source && &body != &destination && body.getBounds().contains(x0, y0))
-						return false;
-				}
+				Body& staticBody = *_staticBodies[staticBodiesIndex];
+				if(&staticBody != &source && &staticBody != &destination && staticBody.getBounds().contains(x0, y0))
+					return false;
 			}
         }
 	}
 
-	void Physics::processBodies(bool isDynamic, void (Physics::*processBody)(Body&, void*), void* param)
-	{
-		for(int bodiesIndex = 0; bodiesIndex < _elementsCount; ++bodiesIndex)
-		{
-			Body& body = *_elements[bodiesIndex];
-			if(body.isDynamic() == isDynamic)
-			{
-				(this->*processBody)(body, param);
-			}
-		}
-	}
-
-	void Physics::correctCollision(Body& staticBody, void* param)
-	{
-		Body& dynamicBody = *(Body*)param;
-		const Rect& staticBodyBounds = staticBody.getBounds();
-		dynamicBody.correctCollision(staticBodyBounds);
-	}
-
-	void Physics::detectCollision(Body& staticBody, void* param)
-	{
-		Body& dynamicBody = *(Body*)param;
-		const Rect& dynamicBodyBounds = dynamicBody.getBounds();
-		Orientation::Type dynamicBodyOrientation = dynamicBody.getOrientation();
-		const Rect& staticBodyBounds = staticBody.getBounds();
-		Direction::Type collision = getCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
-		dynamicBody.addCollision(collision);
-	}
-
-	void Physics::processCollisions(Body& dynamicBody, void* param)
+	void Physics::processCollisions(DynamicBody& dynamicBody)
 	{
 		dynamicBody.applyGravity();
-		processBodies(false, &Physics::correctCollision, &dynamicBody);
-		dynamicBody.applyForce();
-
-		dynamicBody.clearCollision();
-		processBodies(false, &Physics::detectCollision, &dynamicBody);
-	}
-
-	void Physics::processSensor(Body& staticBody, void* param)
-	{
-		Sensor& sensor = *(Sensor*)param;
-		const Rect& sensorBounds = sensor.getBounds();
-		Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
-		const Rect& staticBodyBounds = staticBody.getBounds();
-		Direction::Type collision = getCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
-		if(collision != Direction::NONE)
+		for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 		{
-			sensor.setCollision(&staticBody, collision);
+			Body& staticBody = *_staticBodies[staticBodiesIndex];
+			correctCollision(staticBody, dynamicBody);
+		}
+		dynamicBody.applyForce();
+		dynamicBody.clearCollision();
+		for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
+		{
+			Body& staticBody = *_staticBodies[staticBodiesIndex];
+			detectCollision(staticBody, dynamicBody);
 		}
 	}
 
-	void Physics::processSensors(Body& dynamicBody, void* param)
+	
+
+	void Physics::processSensors(DynamicBody& dynamicBody)
 	{
 		for(int sensorIndex = 0; sensorIndex < dynamicBody._elementsCount; ++sensorIndex)
 		{
 			Sensor& sensor = *dynamicBody._elements[sensorIndex];
 			sensor.clearCollision();
-			processBodies(false, &Physics::processSensor, &sensor);
+			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
+			{
+				Body& staticBody = *_staticBodies[staticBodiesIndex];
+				processSensor(staticBody, sensor);
+			}
 		}
 	}
 
 	void Physics::update(void)
 	{
-		processBodies(true, &Physics::processCollisions);
-		processBodies(true, &Physics::processSensors);
+		for(int dynamicBodiesIndex = 0; dynamicBodiesIndex < _dynamicBodiesCount; ++dynamicBodiesIndex)
+		{
+			DynamicBody& dynamicBody = *_dynamicBodies[dynamicBodiesIndex];
+			processCollisions(dynamicBody);
+		}
+		for(int dynamicBodiesIndex = 0; dynamicBodiesIndex < _dynamicBodiesCount; ++dynamicBodiesIndex)
+		{
+			DynamicBody& dynamicBody = *_dynamicBodies[dynamicBodiesIndex];
+			processSensors(dynamicBody);
+		}
 	}
 }
