@@ -10,7 +10,7 @@ namespace Temporal
 	public:
 		static const float GRAVITY;
 		static const float MAX_GRAVITY;
-		static const int MAX_ELEMENTS = 10;
+		static const int MAX_ELEMENTS = 20;
 
 		static Physics& get(void)
 		{

@@ -21,8 +21,8 @@ namespace Temporal
 			bool overlapsY = boundsA.getBottom() < boundsB.getTop() && boundsA.getTop() > boundsB.getBottom();
 			if(boundsA.getTop() >= boundsB.getTop() && overlapsX) collision = collision | Direction::BOTTOM;
 			if(boundsA.getBottom() <= boundsB.getBottom() && overlapsX) collision = collision | Direction::TOP;
-			if((frontB - frontA) * orientationA >= 0 && overlapsY) collision = collision | Direction::FRONT;
-			if((backA - backB) * orientationA >= 0 && overlapsY) collision = collision | Direction::BACK;
+			if((frontA - frontB) * orientationA >= 0 && overlapsY) collision = collision | Direction::BACK;
+			if((backB - backA) * orientationA >= 0 && overlapsY) collision = collision | Direction::FRONT;
 		}
 
 		return collision;
@@ -43,19 +43,7 @@ namespace Temporal
 		dynamicBody.addCollision(collision);
 	}
 
-	void processSensor(Body& staticBody, Sensor& sensor)
-	{
-		const Rect& sensorBounds = sensor.getBounds();
-		Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
-		const Rect& staticBodyBounds = staticBody.getBounds();
-		Direction::Type collision = getCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
-		if(collision != Direction::NONE)
-		{
-			sensor.setCollision(&staticBody, collision);
-		}
-	}
-
-		bool Physics::rayCast(const Body& source, const Body& destination) const
+	bool Physics::rayCast(const Body& source, const Body& destination) const
 	{
 		float x0 = source.getBounds().getCenterX();
 		float y0 = source.getBounds().getCenterY();
@@ -117,11 +105,23 @@ namespace Temporal
 		for(int sensorIndex = 0; sensorIndex < dynamicBody._elementsCount; ++sensorIndex)
 		{
 			Sensor& sensor = *dynamicBody._elements[sensorIndex];
-			sensor.clearCollision();
+			sensor.setSensedBody(NULL);
 			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 			{
 				Body& staticBody = *_staticBodies[staticBodiesIndex];
-				processSensor(staticBody, sensor);
+				const Rect& sensorBounds = sensor.getBounds();
+				Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
+				const Rect& staticBodyBounds = staticBody.getBounds();
+				Direction::Type collision = getCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
+				if(match(collision, sensor.getPositive(), sensor.getNegative()))
+				{
+					sensor.setSensedBody(&staticBody);
+				}
+				else if(collision != Direction::NONE)
+				{
+					sensor.setSensedBody(NULL);
+					break;
+				}
 			}
 		}
 	}

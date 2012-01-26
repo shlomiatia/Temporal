@@ -20,11 +20,11 @@ namespace Temporal
 		{
 			entity.changeState(EntityStateID::PREPARE_TO_JUMP);
 		}
-		else if(entity.getController().isDown() && match(entity.getBody().getSensor(entity.BACK_EDGE_SENSOR).getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
+		else if(entity.getController().isDown() && entity.getBody().getSensor(entity.BACK_EDGE_SENSOR).isSensing())
 		{
 			entity.changeState(EntityStateID::PREPARE_TO_DESCEND);
 		}
-		else if(entity.getController().isDown() && match(entity.getBody().getSensor(entity.FRONT_EDGE_SENSOR).getSensedBodyDirection(), Direction::BOTTOM, Direction::FRONT))
+		else if(entity.getController().isDown() && entity.getBody().getSensor(entity.FRONT_EDGE_SENSOR).isSensing())
 		{
 			entity.changeState(EntityStateID::TURN);
 		}
@@ -75,7 +75,7 @@ namespace Temporal
 		const float F = entity.JUMP_FORCE;
 		
 		EntityStateID::Type jumpStartState = entity.isMovingForward() ? EntityStateID::JUMP_START_45 : EntityStateID::JUMP_START_90;
-		if(match(jumpSensor.getSensedBodyDirection(), Direction::BOTTOM, Direction::BACK))
+		if(jumpSensor.isSensing())
 		{
 			const float hangSensorSize = body.getSensor(entity.HANG_SENSOR).getBounds().getWidth();
 			const Body* const platform = jumpSensor.getSensedBody();
@@ -123,7 +123,7 @@ namespace Temporal
 			entity.getBody().setForce(Vector(entity.JUMP_FORCE*cos(_angle), entity.JUMP_FORCE*sin(_angle)));
 			entity.changeState(_jumpState);
 		}
-		else if(entity.isMovingForward() && _angle != toRadians(45) && !(entity.getBody().getSensor(entity.JUMP_SENSOR).getSensedBodyDirection() & (Direction::BOTTOM | Direction::BACK)))
+		else if(entity.isMovingForward() && _angle != toRadians(45) && !(entity.getBody().getSensor(entity.JUMP_SENSOR).isSensing()))
 		{
 			entity.changeState(EntityStateID::JUMP_START_45);
 		}
@@ -192,7 +192,7 @@ namespace Temporal
 
 	void Drop::stateUpdate(Entity& entity)
 	{
-		if(!match(entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBodyDirection(), Direction::BOTTOM | Direction::FRONT))
+		if(!entity.getBody().getSensor(entity.HANG_SENSOR).isSensing())
 		{
 			entity.changeState(EntityStateID::STAND);
 		}

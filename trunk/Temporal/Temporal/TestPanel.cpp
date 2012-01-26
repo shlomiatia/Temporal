@@ -34,15 +34,15 @@ namespace Temporal
 		const float G = Physics::GRAVITY;
 		const float A = toRadians(45);
 		float playerWidth = body.getBounds().getWidth();
+		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
 		float playerHeight = body.getBounds().getHeight();
-		float halfOfPlayerWidth = playerWidth / 2.0f;
-		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + halfOfPlayerWidth; 
+		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + jumpSensorBackOffset; 
 		float jumpSensorHeight = (F*(F-G))/(2*G);
-		float sensorOffsetX = (jumpSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
+		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(body, sensorOffset, sensorSize));
+		Sensor* sensor(new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
 		
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
@@ -50,7 +50,7 @@ namespace Temporal
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(body, sensorOffset, sensorSize);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::TOP);
 
 		float edgeSensorWidth = playerWidth * 2.0f;
 
@@ -59,14 +59,14 @@ namespace Temporal
 		sensorOffsetY = -body.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::TOP);
 
 		// Front edge sensor
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
 		sensorOffsetY = -body.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::TOP);
 	}
 
 	void TestPanel::init(void)
@@ -75,7 +75,7 @@ namespace Temporal
 		DebugInfo::get().setShowingFPS(true);
 
 		const EntityController* const controller = new InputEntityController();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
+		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		const Texture* const texture = Texture::load("c:\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
 		Animation* animation;
@@ -223,24 +223,33 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		_player = new Entity(controller, *dynamicBody, *spritesheet);
 		addSensors(*_player);
 		Physics::get().add(dynamicBody);
-		dynamicBody = new DynamicBody(Vector(512.0f, 1024.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
+		
+		dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		_enemy = new Entity(new CrappyEntityController(), *dynamicBody, *spritesheet);
 		addSensors(*_enemy);
 		Physics::get().add(dynamicBody);
 
-		Body* body = new Body(Vector(512.0f, 10.0f), Vector(1024.0f, 21.0f));
+		Body* body = new Body(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(10.0f, 384.0f), Vector(21.0f, 768.0f));
+		body = new Body(Vector(8.0f, 384.0f), Vector(16.0f, 768.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(256.0f, 150.0f), Vector(256.0f, 21.0f));
+		body = new Body(Vector(1016.0f, 384.0f), Vector(16.0f, 768.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(768.0f, 150.0f), Vector(256.0f, 21.0f));
+		body = new Body(Vector(896.0f, 128.0f), Vector(256.0f, 16.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(1014.0f, 384.0f), Vector(21.0f, 768.0f));
+		body = new Body(Vector(128.0f, 128.0f), Vector(256.0f, 16.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(512.0f, 280.0f), Vector(512.0f, 21.0f));
+		body = new Body(Vector(776.0f, 68.0f), Vector(16.0f, 136.0f));
 		Physics::get().add(body);
-		body = new Body(Vector(512.0f, 70.0f), Vector(21.0f, 100.0f));
+		body = new Body(Vector(64.0f, 256.0f), Vector(128.0f, 16.0f));
+		Physics::get().add(body);
+		body = new Body(Vector(120.0f, 312.0f), Vector(16.0f, 128.0f));
+		Physics::get().add(body);
+		body = new Body(Vector(120.0f, 68.0f), Vector(16.0f, 136.0f));
+		Physics::get().add(body);
+		body = new Body(Vector(512.0f, 128.0f), Vector(300.0f, 16.0f));
+		Physics::get().add(body);
+		body = new Body(Vector(960.0f, 184.0f), Vector(128.0f, 128.0f));
 		Physics::get().add(body);
 
 		_player->changeState(EntityStateID::STAND);
@@ -264,6 +273,7 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 	{
 		DebugInfo::get().draw();
 		_player->draw();
+		_enemy->draw();
 		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
 			const Body& body = *Physics::get()._staticBodies[i];
@@ -276,7 +286,7 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 			for(int j = 0; j < body._elementsCount; ++j)
 			{
 				const Sensor& sensor = *body._elements[j];
-				Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() == NULL ? Color::Red : Color::Green);
+				Graphics::get().drawRect(sensor.getBounds(), sensor.isSensing() ? Color::Green : Color::Red);
 			}
 		}
 		Graphics::get().drawLine(_player->getBody().getBounds().getCenter(), _enemy->getBody().getBounds().getCenter(), _crappy ? Color::Green : Color::Red);
