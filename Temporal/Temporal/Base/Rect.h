@@ -46,7 +46,7 @@ namespace Temporal
 		}
 		bool intersectsInclusive(const Rect& rect) const { return getLeft() <= rect.getRight() && getRight() >= rect.getLeft() && getBottom() <= rect.getTop() && getTop() >= rect.getBottom(); }
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
-		bool contains(float x, float y) const { return getLeft() < x && getRight() > x && getBottom() < y && getTop() > y; }
+		bool contains(float x, float y) const { return getLeft() <= x && getRight() >= x && getBottom() <= y && getTop() >= y; }
 	private:
 		Vector _center;
 		Vector _size;

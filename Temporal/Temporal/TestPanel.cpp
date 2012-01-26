@@ -50,7 +50,7 @@ namespace Temporal
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::TOP);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		float edgeSensorWidth = playerWidth * 2.0f;
 
@@ -59,14 +59,14 @@ namespace Temporal
 		sensorOffsetY = -body.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::TOP);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		// Front edge sensor
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
 		sensorOffsetY = -body.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::TOP);
+		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 	}
 
 	void TestPanel::init(void)

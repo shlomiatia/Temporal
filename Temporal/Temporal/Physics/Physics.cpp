@@ -1,4 +1,5 @@
 ﻿#include "Physics.h"
+//#include <Temporal\Graphics\Graphics.h>
 #include <math.h>
 #include <algorithm>
 
@@ -49,7 +50,7 @@ namespace Temporal
 		float y0 = source.getBounds().getCenterY();
 		float x1 = destination.getBounds().getCenterX();
 		float y1 = destination.getBounds().getCenterY();
-        const float STEP = 20.0f;
+        const float STEP = 15.0f;
         
 		float dx = abs(x1-x0);
         float dy = abs(y1 - y0);
@@ -70,6 +71,7 @@ namespace Temporal
                 err += dx;
                 y0 += sy * STEP;
             }
+			//Graphics::get().drawRect(Rect(x0, y0, 3.0f, 3.0f), Color::Cyan);
 			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
                 return true;
 			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
