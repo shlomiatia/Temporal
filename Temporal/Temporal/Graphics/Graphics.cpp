@@ -151,4 +151,18 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
+	void Graphics::drawLine(const Vector& p1, const Vector& p2, const Color& color) const
+	{
+		glColor3f(color.getR(), color.getG(), color.getB());
+
+		GLfloat vertices[] = { p1.getX(), p1.getY(), p2.getX(), p2.getY() };
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+ 
+		glVertexPointer(2, GL_FLOAT, 0, vertices);
+ 
+		glDrawArrays(GL_LINES, 0, 2);
+ 
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
 }

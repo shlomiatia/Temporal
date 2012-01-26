@@ -18,12 +18,20 @@ namespace Temporal
 		bool isUp(void) const { return (_up); }
 		bool isDown(void) const { return (_down); }
 		bool isQuit(void) const { return (_quit); }
+		bool isW(void) const { return (_w); }
+		bool isA(void) const { return (_a); }
+		bool isS(void) const { return (_s); }
+		bool isD(void) const { return (_d); }
 
 	private:
 		bool _left;
 		bool _right;
 		bool _up;
 		bool _down;
+		bool _w;
+		bool _a;
+		bool _s;
+		bool _d;
 		bool _quit;
 
 		Input(void) {}

@@ -1,4 +1,5 @@
 #include "Body.h"
+#include "Physics.h"
 #include <algorithm>
 #include <assert.h>
 
@@ -28,14 +29,19 @@ namespace Temporal
 		} 
 	}
 
-	void Body::applyGravity(float gravity, float maxGravity)
+	bool Body::rayCast(const Body& other) const
+	{
+		return Physics::get().rayCast(*this, other);
+	}
+
+	void Body::applyGravity(void)
 	{
 		if(isGravityEnabled())
 		{
 			float y = getForce().getY();
-			y -= gravity;
-			if(y < maxGravity)
-				y = maxGravity;
+			y -= Physics::GRAVITY;
+			if(y < Physics::MAX_GRAVITY)
+				y = Physics::MAX_GRAVITY;
 			_force.setY(y);
 		}
 	}
