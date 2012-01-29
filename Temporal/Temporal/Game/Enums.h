@@ -33,7 +33,8 @@ namespace Temporal
 		enum Type
 		{
 			BACKGROUND = 0,
-			DYNAMIC = 1
+			STATIC = 1,
+			DYNAMIC = 2
 		};
 
 		static const int FARTHEST = BACKGROUND;

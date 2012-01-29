@@ -4,6 +4,8 @@
 
 namespace Temporal
 {
+	typedef class Body StaticBody;
+
 	class Body
 	{
 	public:

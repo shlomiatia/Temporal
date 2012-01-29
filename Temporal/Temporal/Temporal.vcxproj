@@ -20,6 +20,7 @@
     <ClInclude Include="Game\DynamicEntity.h" />
     <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Game\InputEntityController.h" />
+    <ClInclude Include="Game\StaticEntity.h" />
     <ClInclude Include="Game\VisualEntity.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Graphics\Frame.h" />
@@ -51,6 +52,7 @@
     <ClCompile Include="Base\Vector.cpp" />
     <ClCompile Include="Game\DynamicEntity.cpp" />
     <ClCompile Include="Game\InputEntityController.cpp" />
+    <ClCompile Include="Game\StaticEntity.cpp" />
     <ClCompile Include="Game\VisualEntity.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
