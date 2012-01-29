@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntityStateID.h"
+#include "Enums.h"
 #include "EntityState.h"
 
 namespace Temporal

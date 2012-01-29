@@ -14,8 +14,9 @@ namespace Temporal
 	}
 
 	DynamicBody::DynamicBody(const Vector& position, const Vector& size, Orientation::Type orientation)
-		: Body(position, size), _orientation(orientation), _force(Vector::Zero), _gravityEnabled(true), _elementsCount(0), _collision(Direction::NONE)
-	{}
+		: Body(position, size), _orientation(orientation), _force(Vector::Zero), _gravityEnabled(true), _elementsCount(0), _collision(Direction::NONE) {}
+
+	DynamicBody::~DynamicBody(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } }
 
 	bool DynamicBody::rayCast(const DynamicBody& other) const
 	{

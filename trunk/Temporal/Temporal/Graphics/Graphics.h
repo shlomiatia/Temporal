@@ -29,7 +29,7 @@ namespace Temporal
 
 		void validate(void) const;
 
-		void drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, float layer) const;
+		void drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const;
 		void drawRect(const Rect& rect, const Color& color = Color::White) const;
 		void drawLine(const Vector& p1, const Vector& p2, const Color& color = Color::White) const;
 

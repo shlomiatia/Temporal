@@ -27,4 +27,16 @@ namespace Temporal
 			DESCEND
 		};
 	}
+
+	namespace VisualLayer
+	{
+		enum Type
+		{
+			BACKGROUND = 0,
+			DYNAMIC = 1
+		};
+
+		static const int FARTHEST = BACKGROUND;
+		static const int NEAREST = DYNAMIC;
+	}
 }

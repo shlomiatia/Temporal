@@ -8,6 +8,8 @@ namespace Temporal
 	class Sprite
 	{
 	public:
+		static const Orientation::Type ORIENTATION = Orientation::LEFT;
+
 		Sprite(const SpriteSheet& spritesheet) :
 			_spritesheet(spritesheet), _rewind(false), _repeat(false), _paused(false), _update(0), _animation(0), _frame(0)  {}
 		
@@ -20,9 +22,9 @@ namespace Temporal
 		
 		bool isEnded(void) const;
 	private:
+		// TODO: Use time instad
 		static const int UPDATES_PER_FRAME = 4;
-		static const Orientation::Type SPRITE_ORIENTATION = Orientation::LEFT;
-
+		
 		const SpriteSheet& _spritesheet;
 
 		bool _rewind;
