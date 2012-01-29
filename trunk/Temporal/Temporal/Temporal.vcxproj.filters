@@ -33,6 +33,7 @@
     <ClInclude Include="Game\VisualEntity.h" />
     <ClInclude Include="Game\BackgroundEntity.h" />
     <ClInclude Include="Game\Enums.h" />
+    <ClInclude Include="Game\StaticEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -57,5 +58,6 @@
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Game\DynamicEntity.cpp" />
     <ClCompile Include="Game\VisualEntity.cpp" />
+    <ClCompile Include="Game\StaticEntity.cpp" />
   </ItemGroup>
 </Project>

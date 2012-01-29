@@ -22,13 +22,13 @@ namespace Temporal
 			: _staticBodiesCount(0), _dynamicBodiesCount(0) {};
 		~Physics(void) { for(int i = 0; i < _staticBodiesCount; ++i) { delete _staticBodies[i]; } for(int i = 0; i < _dynamicBodiesCount; ++i) { delete _dynamicBodies[i]; }  }
 
-		void add(Body* const element) { _staticBodies[_staticBodiesCount++] = element; }
+		void add(StaticBody* const element) { _staticBodies[_staticBodiesCount++] = element; }
 		void add(DynamicBody* const element) { _dynamicBodies[_dynamicBodiesCount++] = element; }
 
 		bool rayCast(const Body& source, const Body& destination) const;
 		void update(void);
 
-		Body* _staticBodies[MAX_ELEMENTS];
+		StaticBody* _staticBodies[MAX_ELEMENTS];
 		int _staticBodiesCount;
 		DynamicBody* _dynamicBodies[MAX_ELEMENTS];
 		int _dynamicBodiesCount;

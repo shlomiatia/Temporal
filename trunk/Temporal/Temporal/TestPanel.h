@@ -2,9 +2,7 @@
 
 #include <Temporal\Base\Base.h>
 #include <Temporal\Game\Game.h>
-#include <Temporal\Physics\Body.h>
-#include <Temporal\Game\BackgroundEntity.h>
-#include <Temporal\Game\DynamicEntity.h>
+#include <Temporal\Game\VisualEntity.h>
 
 namespace Temporal
 {
@@ -18,7 +16,7 @@ namespace Temporal
 		void draw(void);
 		void dispose(void);
 
-		static const int MAX_ELEMENTS = 10;
+		static const int MAX_ELEMENTS = 20;
 		VisualEntity* _elements[MAX_ELEMENTS];
 		int _elementsCount;
 	};

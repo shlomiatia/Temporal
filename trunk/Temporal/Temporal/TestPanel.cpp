@@ -3,8 +3,12 @@
 
 #include <Temporal\Graphics\Graphics.h>
 #include <Temporal\Input\Input.h>
+#include <Temporal\Physics\Body.h>
 #include <Temporal\Physics\Physics.h>
 #include <Temporal\Game\InputEntityController.h>
+#include <Temporal\Game\BackgroundEntity.h>
+#include <Temporal\Game\StaticEntity.h>
+#include <Temporal\Game\DynamicEntity.h>
 #include <math.h>
 
 namespace Temporal
@@ -12,7 +16,7 @@ namespace Temporal
 	bool _crappy(false);
 	void addSensors(DynamicEntity& entity)
 	{
-		DynamicBody& body = entity.getBody();
+		DynamicBody& staticBody = entity.getBody();
 		// Jump Sensor
 		/* y = Time*(Force-Time*Gravity)
 		 * Sum = N*(A1+AN)/2
@@ -33,16 +37,16 @@ namespace Temporal
 		const float F = entity.JUMP_FORCE;
 		const float G = Physics::GRAVITY;
 		const float A = toRadians(45);
-		float playerWidth = body.getBounds().getWidth();
+		float playerWidth = staticBody.getBounds().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
-		float playerHeight = body.getBounds().getHeight();
+		float playerHeight = staticBody.getBounds().getHeight();
 		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + jumpSensorBackOffset; 
 		float jumpSensorHeight = (F*(F-G))/(2*G);
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
+		Sensor* sensor(new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
 		
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
@@ -50,23 +54,23 @@ namespace Temporal
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		float edgeSensorWidth = playerWidth * 2.0f;
 
 		// Back Edge Sensor
 		sensorOffsetX = -(edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -body.getBounds().getOffsetY();
+		sensorOffsetY = -staticBody.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		// Front edge sensor
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -body.getBounds().getOffsetY();
+		sensorOffsetY = -staticBody.getBounds().getOffsetY();
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 	}
 
 	void TestPanel::init(void)
@@ -230,28 +234,46 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
 		Physics::get().add(dynamicBody);
 
-		Body* body = new Body(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(8.0f, 384.0f), Vector(16.0f, 768.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(1016.0f, 384.0f), Vector(16.0f, 768.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(896.0f, 128.0f), Vector(256.0f, 16.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(128.0f, 128.0f), Vector(256.0f, 16.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(776.0f, 68.0f), Vector(16.0f, 136.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(64.0f, 256.0f), Vector(128.0f, 16.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(120.0f, 312.0f), Vector(16.0f, 128.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(120.0f, 68.0f), Vector(16.0f, 136.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(512.0f, 128.0f), Vector(300.0f, 16.0f));
-		Physics::get().add(body);
-		body = new Body(Vector(960.0f, 184.0f), Vector(128.0f, 128.0f));
-		Physics::get().add(body);
+		texture = Texture::load("c:\\tile.png");
+		spritesheet = new SpriteSheet(texture);
+		animation = new Animation();
+		spritesheet->add(animation);
+		const Vector TILE_SIZE(32.0f, 32.0f);
+		animation->add(new Frame(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
+
+		StaticBody* staticBody = new StaticBody(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(8.0f, 384.0f), Vector(16.0f, 768.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(1016.0f, 384.0f), Vector(16.0f, 768.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(896.0f, 128.0f), Vector(256.0f, 16.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(128.0f, 128.0f), Vector(256.0f, 16.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(776.0f, 68.0f), Vector(16.0f, 136.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(64.0f, 256.0f), Vector(128.0f, 16.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(120.0f, 312.0f), Vector(16.0f, 128.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(120.0f, 68.0f), Vector(16.0f, 136.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(512.0f, 128.0f), Vector(300.0f, 16.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
+		staticBody = new StaticBody(Vector(960.0f, 184.0f), Vector(128.0f, 128.0f));
+		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
+		Physics::get().add(staticBody);
 
 		texture = Texture::load("c:\\bg.png");
 		spritesheet = new SpriteSheet(texture);
@@ -282,21 +304,21 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 				if(_elements[i]->getVisualLayer() == layer)
 					_elements[i]->draw();
 		
-		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
+		/*for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
-			const Body& body = *Physics::get()._staticBodies[i];
-			Graphics::get().drawRect(body.getBounds());
+			const StaticBody& staticBody = *Physics::get()._staticBodies[i];
+			Graphics::get().drawRect(staticBody.getBounds());
 		}
 		for(int i = 0; i < Physics::get()._dynamicBodiesCount; ++i)
 		{
-			const DynamicBody& body = *Physics::get()._dynamicBodies[i];
-			Graphics::get().drawRect(body.getBounds());
-			for(int j = 0; j < body._elementsCount; ++j)
+			const DynamicBody& staticBody = *Physics::get()._dynamicBodies[i];
+			Graphics::get().drawRect(staticBody.getBounds());
+			for(int j = 0; j < staticBody._elementsCount; ++j)
 			{
-				const Sensor& sensor = *body._elements[j];
+				const Sensor& sensor = *staticBody._elements[j];
 				Graphics::get().drawRect(sensor.getBounds(), sensor.isSensing() ? Color::Green : Color::Red);
 			}
-		}
+		}*/
 	}
 
 	void TestPanel::dispose(void)

@@ -1,5 +1,4 @@
 ﻿#include "Physics.h"
-//#include <Temporal\Graphics\Graphics.h>
 #include <math.h>
 #include <algorithm>
 
@@ -29,13 +28,13 @@ namespace Temporal
 		return collision;
 	}
 
-	void correctCollision(Body& staticBody, DynamicBody& dynamicBody)
+	void correctCollision(StaticBody& staticBody, DynamicBody& dynamicBody)
 	{
 		const Rect& staticBodyBounds = staticBody.getBounds();
 		dynamicBody.correctCollision(staticBodyBounds);
 	}
 
-	void detectCollision(Body& staticBody, DynamicBody& dynamicBody)
+	void detectCollision(StaticBody& staticBody, DynamicBody& dynamicBody)
 	{
 		const Rect& dynamicBodyBounds = dynamicBody.getBounds();
 		Orientation::Type dynamicBodyOrientation = dynamicBody.getOrientation();
@@ -50,37 +49,37 @@ namespace Temporal
 		float y0 = source.getBounds().getCenterY();
 		float x1 = destination.getBounds().getCenterX();
 		float y1 = destination.getBounds().getCenterY();
-        const float STEP = 15.0f;
-        
+		const float STEP = 15.0f;
+		
 		float dx = abs(x1-x0);
-        float dy = abs(y1 - y0);
-        float sx = x0 < x1 ? 1.0f : -1.0f;
-        float sy = y0 < y1 ? 1.0f : -1.0f;
-        float err = dx - dy;
+		float dy = abs(y1 - y0);
+		float sx = x0 < x1 ? 1.0f : -1.0f;
+		float sy = y0 < y1 ? 1.0f : -1.0f;
+		float err = dx - dy;
 		float e2;
-        while(true)
-        {
-            e2 = 2.0f * err;
-            if(e2 > -dy)
-            {
-                err -= dy;
-                x0 += sx * STEP;
-            }
-            if(e2 < dx)
-            {
-                err += dx;
-                y0 += sy * STEP;
-            }
+		while(true)
+		{
+			e2 = 2.0f * err;
+			if(e2 > -dy)
+			{
+				err -= dy;
+				x0 += sx * STEP;
+			}
+			if(e2 < dx)
+			{
+				err += dx;
+				y0 += sy * STEP;
+			}
 			//Graphics::get().drawRect(Rect(x0, y0, 3.0f, 3.0f), Color::Cyan);
 			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
-                return true;
+				return true;
 			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 			{
-				Body& staticBody = *_staticBodies[staticBodiesIndex];
+				StaticBody& staticBody = *_staticBodies[staticBodiesIndex];
 				if(&staticBody != &source && &staticBody != &destination && staticBody.getBounds().contains(x0, y0))
 					return false;
 			}
-        }
+		}
 	}
 
 	void Physics::processCollisions(DynamicBody& dynamicBody)
@@ -88,14 +87,14 @@ namespace Temporal
 		dynamicBody.applyGravity();
 		for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 		{
-			Body& staticBody = *_staticBodies[staticBodiesIndex];
+			StaticBody& staticBody = *_staticBodies[staticBodiesIndex];
 			correctCollision(staticBody, dynamicBody);
 		}
 		dynamicBody.applyForce();
 		dynamicBody.clearCollision();
 		for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 		{
-			Body& staticBody = *_staticBodies[staticBodiesIndex];
+			StaticBody& staticBody = *_staticBodies[staticBodiesIndex];
 			detectCollision(staticBody, dynamicBody);
 		}
 	}
@@ -110,7 +109,7 @@ namespace Temporal
 			sensor.setSensedBody(NULL);
 			for(int staticBodiesIndex = 0; staticBodiesIndex < _staticBodiesCount; ++staticBodiesIndex)
 			{
-				Body& staticBody = *_staticBodies[staticBodiesIndex];
+				StaticBody& staticBody = *_staticBodies[staticBodiesIndex];
 				const Rect& sensorBounds = sensor.getBounds();
 				Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
 				const Rect& staticBodyBounds = staticBody.getBounds();

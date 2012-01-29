@@ -10,7 +10,7 @@ namespace Temporal
 	class VisualEntity
 	{
 	public:
-		VisualEntity(const SpriteSheet& spritesheet, VisualLayer::Type visualLayer);
+		VisualEntity(const SpriteSheet& spritesheet, VisualLayer::Type visualLayer) : _sprite(spritesheet), _visualLayer(visualLayer) {};
 		virtual ~VisualEntity(void) {}
 
 		const Sprite& getSprite(void) const { return _sprite; }
