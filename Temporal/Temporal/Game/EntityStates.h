@@ -13,8 +13,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Stand"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(0); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(0); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Fall : public EntityState
@@ -26,8 +26,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Fall"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(4); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getSprite().reset(4); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Walk : public EntityState
@@ -38,8 +38,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Walk"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(12, false, true); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getSprite().reset(12, false, true); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Turn : public EntityState
@@ -50,8 +50,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Turn"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(1); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(1); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 
@@ -63,7 +63,7 @@ namespace Temporal
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity);
 
 	private:
 		static const float ANGLES_SIZE;
@@ -79,8 +79,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "JumpStart"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(_animation); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getSprite().reset(_animation); }
+		virtual void stateUpdate(DynamicEntity& entity);
 
 	private:
 		float _angle;
@@ -96,8 +96,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "JumpUp"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(6); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getSprite().reset(6); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class JumpForward : public EntityState
@@ -108,8 +108,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "JumpForward"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getSprite().reset(10); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getSprite().reset(10); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class JumpForwardEnd : public EntityState
@@ -120,8 +120,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "JumpForwardEnd"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(11); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(11); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Hanging : public EntityState
@@ -132,8 +132,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Hanging"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity);
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity);
+		virtual void stateUpdate(DynamicEntity& entity);
 
 	private:
 		const Rect* _platform;
@@ -147,8 +147,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Hang"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(7); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(7); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Drop : public EntityState
@@ -159,8 +159,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "Drop"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(2); }
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity) { entity.getBody().setForce(Vector::Zero); entity.getSprite().reset(2); }
+		virtual void stateUpdate(DynamicEntity& entity);
 	};
 
 	class Climbe : public EntityState
@@ -170,10 +170,10 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Climbe"; }
 
-		virtual const Vector& getDrawCenter(const Entity& entity) const { return _drawCenter; }
+		virtual const Vector& getDrawCenter(const DynamicEntity& entity) const { return _drawCenter; }
 	protected:
-		virtual void stateEnter(Entity& entity);
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity);
+		virtual void stateUpdate(DynamicEntity& entity);
 
 	private:
 		Vector _drawCenter;
@@ -187,8 +187,8 @@ namespace Temporal
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
 	protected:
-		virtual void stateEnter(Entity& entity);
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity);
+		virtual void stateUpdate(DynamicEntity& entity);
 
 	private:
 		float _platformEdge;
@@ -201,10 +201,10 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Descend"; }
 
-		virtual const Vector& getDrawCenter(const Entity& entity) const { return _drawCenter; }
+		virtual const Vector& getDrawCenter(const DynamicEntity& entity) const { return _drawCenter; }
 	protected:
-		virtual void stateEnter(Entity& entity);
-		virtual void stateUpdate(Entity& entity);
+		virtual void stateEnter(DynamicEntity& entity);
+		virtual void stateUpdate(DynamicEntity& entity);
 
 	private:
 		Vector _drawCenter;

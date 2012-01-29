@@ -15,10 +15,12 @@
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\Enums.h" />
     <ClInclude Include="Base\Math.h" />
+    <ClInclude Include="Game\BackgroundEntity.h" />
     <ClInclude Include="Game\EntityController.h" />
-    <ClInclude Include="Game\Entity.h" />
-    <ClInclude Include="Game\EntityStateID.h" />
+    <ClInclude Include="Game\DynamicEntity.h" />
+    <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Game\InputEntityController.h" />
+    <ClInclude Include="Game\VisualEntity.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Graphics\Frame.h" />
     <ClInclude Include="Graphics\Sprite.h" />
@@ -47,8 +49,9 @@
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="Base\Vector.cpp" />
-    <ClCompile Include="Game\Entity.cpp" />
+    <ClCompile Include="Game\DynamicEntity.cpp" />
     <ClCompile Include="Game\InputEntityController.cpp" />
+    <ClCompile Include="Game\VisualEntity.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />

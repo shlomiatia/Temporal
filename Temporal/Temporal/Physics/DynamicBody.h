@@ -6,8 +6,6 @@ namespace Temporal { class Sensor; }
 #include "Body.h"
 #include "Sensor.h"
 
-namespace Temporal { class Sensor; }
-
 namespace Temporal
 {
 	class DynamicBody : public Body
@@ -18,7 +16,7 @@ namespace Temporal
 		int _elementsCount;
 
 		DynamicBody(const Vector& position, const Vector& size, Orientation::Type orientation = Orientation::RIGHT);
-		virtual ~DynamicBody(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } }
+		virtual ~DynamicBody(void);
 
 		Orientation::Type getOrientation(void) const { return _orientation; }
 		const Vector getForce(void) const { return _force; }

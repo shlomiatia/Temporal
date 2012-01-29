@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	void Stand::stateUpdate(Entity& entity)
+	void Stand::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.isMovingForward())
 		{
@@ -30,7 +30,7 @@ namespace Temporal
 		}
 	}
 
-	void Fall::stateUpdate(Entity& entity)
+	void Fall::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getBody().getCollision() & Direction::BOTTOM)
 		{
@@ -38,7 +38,7 @@ namespace Temporal
 		}
 	}
 
-	void Walk::stateUpdate(Entity& entity)
+	void Walk::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getController().isUp())
 		{
@@ -54,7 +54,7 @@ namespace Temporal
 		}
 	}
 
-	void Turn::stateUpdate(Entity& entity)
+	void Turn::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getSprite().isEnded())
 		{
@@ -67,7 +67,7 @@ namespace Temporal
 	const float PrepareToJump::ANGLES[] = { toRadians(45.0f), toRadians(60.0f), toRadians(75.0f), toRadians(105.0) };
 	const EntityStateID::Type PrepareToJump::JUMP_START_STATES[] = { EntityStateID::JUMP_START_45, EntityStateID::JUMP_START_60, EntityStateID::JUMP_START_75, EntityStateID::JUMP_START_105 };
 
-	void PrepareToJump::stateEnter(Entity& entity)
+	void PrepareToJump::stateEnter(DynamicEntity& entity)
 	{
 		DynamicBody& body = entity.getBody();
 		body.setForce(Vector::Zero);
@@ -116,7 +116,7 @@ namespace Temporal
 		entity.changeState(jumpStartState);
 	}
 
-	void JumpStart::stateUpdate(Entity& entity)
+	void JumpStart::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getSprite().isEnded())
 		{	
@@ -129,7 +129,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpUp::stateUpdate(Entity& entity)
+	void JumpUp::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getBody().getCollision() & Direction::TOP || entity.getBody().getForce().getY() <= 0)
 		{
@@ -137,7 +137,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpForward::stateUpdate(Entity& entity)
+	void JumpForward::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getBody().getCollision() & Direction::BOTTOM)
 		{
@@ -145,7 +145,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpForwardEnd::stateUpdate(Entity& entity)
+	void JumpForwardEnd::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getSprite().isEnded())
 		{
@@ -153,14 +153,14 @@ namespace Temporal
 		}
 	}
 
-	void Hanging::stateEnter(Entity& entity)
+	void Hanging::stateEnter(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		_platform = &entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBody()->getBounds();
 		entity.getSprite().reset(14, true);
 	}
 
-	void Hanging::stateUpdate(Entity& entity)
+	void Hanging::stateUpdate(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		float platformTop = _platform->getTop();
@@ -178,7 +178,7 @@ namespace Temporal
 			entity.changeState(EntityStateID::HANG);
 	}
 
-	void Hang::stateUpdate(Entity& entity)
+	void Hang::stateUpdate(DynamicEntity& entity)
 	{
 		if(entity.getController().isDown())
 		{
@@ -190,7 +190,7 @@ namespace Temporal
 		}
 	}
 
-	void Drop::stateUpdate(Entity& entity)
+	void Drop::stateUpdate(DynamicEntity& entity)
 	{
 		if(!entity.getBody().getSensor(entity.HANG_SENSOR).isSensing())
 		{
@@ -198,7 +198,7 @@ namespace Temporal
 		}
 	}
 
-	void Climbe::stateEnter(Entity& entity)
+	void Climbe::stateEnter(DynamicEntity& entity)
 	{
 		float drawCenterX = EntityState::getDrawCenter(entity).getX();
 		float drawCenterY = entity.getBody().getBounds().getTop();
@@ -209,7 +209,7 @@ namespace Temporal
 		entity.getSprite().reset(8);
 	}
 
-	void Climbe::stateUpdate(Entity& entity)
+	void Climbe::stateUpdate(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		if (entity.getSprite().isEnded())
@@ -218,14 +218,14 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToDescend::stateEnter(Entity& entity)
+	void PrepareToDescend::stateEnter(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		Orientation::Type orientation = entity.getBody().getOrientation();
 		_platformEdge = entity.getBody().getSensor(entity.BACK_EDGE_SENSOR).getSensedBody()->getBounds().getOppositeSide(orientation) + 1.0f * orientation;
 	}
 
-	void PrepareToDescend::stateUpdate(Entity& entity)
+	void PrepareToDescend::stateUpdate(DynamicEntity& entity)
 	{
 		Orientation::Type orientation = entity.getBody().getOrientation();
 		float entityFront = entity.getBody().getFront();
@@ -236,7 +236,7 @@ namespace Temporal
 			entity.changeState(EntityStateID::DESCEND);
 	}
 
-	void Descend::stateEnter(Entity& entity)
+	void Descend::stateEnter(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		float drawCenterX = EntityState::getDrawCenter(entity).getX();
@@ -248,7 +248,7 @@ namespace Temporal
 		entity.getSprite().reset(8, true);
 	}
 
-	void Descend::stateUpdate(Entity& entity)
+	void Descend::stateUpdate(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
 		if (entity.getSprite().isEnded())

@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Temporal { class Entity; }
+namespace Temporal { class DynamicEntity; }
 
-#include "Entity.h"
+#include "DynamicEntity.h"
 
 namespace Temporal
 {
@@ -26,15 +26,15 @@ namespace Temporal
 
 		virtual const char* getName(void) const = 0;
 
-		virtual const Vector& getDrawCenter(const Entity& entity) const;
-		void enter(Entity& entity);
-		void exit(Entity& entity);
-		void update(Entity& entity);
+		virtual const Vector& getDrawCenter(const DynamicEntity& entity) const;
+		void enter(DynamicEntity& entity);
+		void exit(DynamicEntity& entity);
+		void update(DynamicEntity& entity);
 
 	protected:
-		virtual void stateEnter(Entity& entity) {};
-		virtual void stateExit(Entity& entity) {};
-		virtual void stateUpdate(Entity& entity) {};
+		virtual void stateEnter(DynamicEntity& entity) {};
+		virtual void stateExit(DynamicEntity& entity) {};
+		virtual void stateUpdate(DynamicEntity& entity) {};
 
 	private:
 		GravityResponse::Type _gravityResponse;

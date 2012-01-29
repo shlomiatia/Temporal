@@ -16,16 +16,16 @@ namespace Temporal
 
 	void Sprite::draw(const Vector& location, Orientation::Type orientation) const
 	{
-		bool mirrored = orientation != SPRITE_ORIENTATION;
+		bool mirrored = orientation != ORIENTATION;
 		const Frame& frame = *_spritesheet._elements[_animation]->_elements[_frame];
-		float anchoredX = location.getX() - orientation * SPRITE_ORIENTATION * frame.getOffset().getX();
+		float anchoredX = location.getX() - orientation * ORIENTATION * frame.getOffset().getX();
 		float anchoredY = location.getY() - frame.getOffset().getY();
 
 		Vector anchoredLocation(anchoredX, anchoredY);
 
 		const Texture& texture = _spritesheet.getTexture();
 
-		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored, 0.0f);
+		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored);
 	}
 
 	void Sprite::reset(int animation, bool rewind, bool repeat)

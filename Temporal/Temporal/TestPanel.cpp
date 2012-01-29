@@ -10,7 +10,7 @@
 namespace Temporal
 {
 	bool _crappy(false);
-	void addSensors(Entity& entity)
+	void addSensors(DynamicEntity& entity)
 	{
 		DynamicBody& body = entity.getBody();
 		// Jump Sensor
@@ -71,12 +71,13 @@ namespace Temporal
 
 	void TestPanel::init(void)
 	{
-		Graphics::get().init(Vector(1024.0f, 768.0f), Vector(1024.0f, 768.0f));
+		Vector screenSize = Vector(1024.0f, 768.0f);
+		Graphics::get().init(screenSize, screenSize);
 		DebugInfo::get().setShowingFPS(true);
 
 		const EntityController* const controller = new InputEntityController();
 		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
-		const Texture* const texture = Texture::load("c:\\pop.png");
+		const Texture* texture = Texture::load("c:\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
 		Animation* animation;
 		
@@ -220,13 +221,13 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 
 #pragma endregion Crap
 
-		_player = new Entity(controller, *dynamicBody, *spritesheet);
-		addSensors(*_player);
+		_elements[_elementsCount++] = new DynamicEntity(controller, *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
+		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
 		Physics::get().add(dynamicBody);
 		
 		dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
-		_enemy = new Entity(new CrappyEntityController(), *dynamicBody, *spritesheet);
-		addSensors(*_enemy);
+		_elements[_elementsCount++] = new DynamicEntity(new CrappyEntityController(), *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
+		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
 		Physics::get().add(dynamicBody);
 
 		Body* body = new Body(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
@@ -252,10 +253,12 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		body = new Body(Vector(960.0f, 184.0f), Vector(128.0f, 128.0f));
 		Physics::get().add(body);
 
-		_player->changeState(EntityStateID::STAND);
-		_enemy->changeState(EntityStateID::STAND);
-
-		_bg = Texture::load("c:\\bg.png");
+		texture = Texture::load("c:\\bg.png");
+		spritesheet = new SpriteSheet(texture);
+		animation = new Animation();
+		spritesheet->add(animation);
+		animation->add(new Frame(Rect(screenSize / 2.0f, screenSize), Vector::Zero));
+		_elements[_elementsCount++] = new BackgroundEntity(screenSize / 2.0f, *spritesheet, VisualLayer::BACKGROUND);
 	}
 
 	void TestPanel::update(void)
@@ -265,17 +268,20 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		{
 			Game::get().stop();
 		}
-		_player->update();
-		_enemy->update();
+		for(int i = 0; i < _elementsCount; ++i)
+			_elements[i]->update();
 		Physics::get().update();
-		
 	}
 
 	void TestPanel::draw(void)
 	{
 		DebugInfo::get().draw();
-		_player->draw();
-		_enemy->draw();
+		
+		for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
+			for(int i = 0; i < _elementsCount; ++i)
+				if(_elements[i]->getVisualLayer() == layer)
+					_elements[i]->draw();
+		
 		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
 			const Body& body = *Physics::get()._staticBodies[i];
@@ -291,15 +297,12 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 				Graphics::get().drawRect(sensor.getBounds(), sensor.isSensing() ? Color::Green : Color::Red);
 			}
 		}
-		Graphics::get().drawLine(_player->getBody().getBounds().getCenter(), _enemy->getBody().getBounds().getCenter(), _crappy ? Color::Green : Color::Red);
-		_crappy = _player->getBody().rayCast(_enemy->getBody());
-		Graphics::get().drawTexture(*_bg, Rect(_bg->getSize() / 2.0f, _bg->getSize()), _bg->getSize() / 2.0f, false, -1.0f);
 	}
 
 	void TestPanel::dispose(void)
 	{
-		delete _player;
-		delete _enemy;
+		for(int i = 0; i < _elementsCount; ++i)
+			delete _elements[i];
 		Graphics::get().dispose();
 	}
 }
