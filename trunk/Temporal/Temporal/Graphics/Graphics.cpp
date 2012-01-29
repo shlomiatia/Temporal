@@ -30,20 +30,22 @@ namespace Temporal
 			// TODO: Error Failed setting video mode
 			exit(1);
 		}
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_TEXTURE_2D);
-
-		glDepthMask(GL_FALSE);
-
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		
 		glViewport(0, 0, (int)resolution.getWidth(), (int)resolution.getHeight());
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, viewSize.getX(), 0, viewSize.getY(), -1, 1);
+		glOrtho(0.0f, viewSize.getX(), 0.0f, viewSize.getY(), -1.0f, 1.0f);
 
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(GL_TRUE);
 
 		validate();
 	}
@@ -59,7 +61,7 @@ namespace Temporal
 	}
 	void Graphics::prepareForDrawing(void) const
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glLoadIdentity();
 		glTranslatef(_translation.getX(), _translation.getY(), 0.0f);
@@ -84,10 +86,10 @@ namespace Temporal
 
 	void setColor(const Color& color)
 	{
-		glColor3f(color.getR(), color.getG(), color.getB());
+		glColor4f(color.getR(), color.getG(), color.getB(), 1.0f);
 	}
 
-	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const
+	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, float layer) const
 	{
 		float textureWidth = texture.getSize().getWidth();
 		float textureHeight = texture.getSize().getHeight();
@@ -99,15 +101,16 @@ namespace Temporal
 
 		glBindTexture(GL_TEXTURE_2D, texture.getID());
 
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 		glPushMatrix();
-		{
+		{	
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
-			glColor3f(1.0f, 1.0f, 1.0f);
  
-			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(),
-										 -texturePart.getOffsetX(), texturePart.getOffsetY(),
-										  texturePart.getOffsetX(), texturePart.getOffsetY(),
-										  texturePart.getOffsetX(), -texturePart.getOffsetY() };
+			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(), layer,
+										 -texturePart.getOffsetX(), texturePart.getOffsetY(), layer,
+										  texturePart.getOffsetX(), texturePart.getOffsetY(), layer,
+										  texturePart.getOffsetX(), -texturePart.getOffsetY(), layer };
 
 			GLfloat textureVertices[] = { textureX0, textureBottom,
 										  textureX0, textureTop,
@@ -117,7 +120,7 @@ namespace Temporal
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
  
-			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+			glVertexPointer(3, GL_FLOAT, 0, screenVertices);
 			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
  
 			glDrawArrays(GL_QUADS, 0, 4);
@@ -130,10 +133,10 @@ namespace Temporal
 
 	void Graphics::drawRect(const Rect& rect, const Color& color) const
 	{
-		setColor(color);
 		glPushMatrix();
 		{
-			
+			setColor(color);
+
 			glTranslatef(rect.getCenterX(), rect.getCenterY(), 0.0f);
 
 			GLfloat vertices[] = {-rect.getOffsetX(), -rect.getOffsetY(),
@@ -153,7 +156,7 @@ namespace Temporal
 	}
 	void Graphics::drawLine(const Vector& p1, const Vector& p2, const Color& color) const
 	{
-		glColor3f(color.getR(), color.getG(), color.getB());
+		setColor(color);
 
 		GLfloat vertices[] = { p1.getX(), p1.getY(), p2.getX(), p2.getY() };
 

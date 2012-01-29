@@ -25,7 +25,7 @@ namespace Temporal
 
 		const Texture& texture = _spritesheet.getTexture();
 
-		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored);
+		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored, 0.0f);
 	}
 
 	void Sprite::reset(int animation, bool rewind, bool repeat)
