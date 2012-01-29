@@ -17,6 +17,7 @@ namespace Temporal
 
 		Entity* _player;
 		Entity* _enemy;
+		const Texture* _bg;
 	};
 }
 

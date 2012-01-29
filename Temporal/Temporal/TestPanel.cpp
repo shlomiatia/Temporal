@@ -38,7 +38,7 @@ namespace Temporal
 		float playerHeight = body.getBounds().getHeight();
 		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + jumpSensorBackOffset; 
 		float jumpSensorHeight = (F*(F-G))/(2*G);
-		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0);
+		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
@@ -254,6 +254,8 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 
 		_player->changeState(EntityStateID::STAND);
 		_enemy->changeState(EntityStateID::STAND);
+
+		_bg = Texture::load("c:\\bg.png");
 	}
 
 	void TestPanel::update(void)
@@ -291,6 +293,7 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		}
 		Graphics::get().drawLine(_player->getBody().getBounds().getCenter(), _enemy->getBody().getBounds().getCenter(), _crappy ? Color::Green : Color::Red);
 		_crappy = _player->getBody().rayCast(_enemy->getBody());
+		Graphics::get().drawTexture(*_bg, Rect(_bg->getSize() / 2.0f, _bg->getSize()), _bg->getSize() / 2.0f, false, -1.0f);
 	}
 
 	void TestPanel::dispose(void)

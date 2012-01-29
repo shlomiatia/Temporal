@@ -2,7 +2,6 @@
 #include "EntityStatesFactory.h"
 #include <Temporal\Input\Input.h>
 #include <Temporal\Graphics\Graphics.h>
-#include <sstream>
 
 namespace Temporal
 {
