@@ -4,6 +4,7 @@
 
 namespace Temporal
 {
+	// TODO: Switch case
 	EntityStatesFactory::EntityStatesFactory(void)
 			: _elementsCount(0) 
 	{
