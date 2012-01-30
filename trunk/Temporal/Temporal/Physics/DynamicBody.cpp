@@ -41,6 +41,8 @@ namespace Temporal
 		
 		if(futureBounds.intersectsExclusive(DynamicBodyBounds))
 		{
+			// TODO: Correct smallest axis
+			// TODO: Gradual test
 			float x = correctCollisionInAxis(getForce().getX(), getBounds().getLeft(), getBounds().getRight(), DynamicBodyBounds.getLeft(), DynamicBodyBounds.getRight());
 			float y = correctCollisionInAxis(getForce().getY(), getBounds().getBottom(), getBounds().getTop(), DynamicBodyBounds.getBottom(), DynamicBodyBounds.getTop());
 			_force.setX(x);

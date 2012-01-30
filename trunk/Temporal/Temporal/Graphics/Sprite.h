@@ -14,7 +14,7 @@ namespace Temporal
 			_spritesheet(spritesheet), _rewind(false), _repeat(false), _paused(false), _update(0), _animation(0), _frame(0)  {}
 		
 		void update(void);
-		void draw(const Vector& location, Orientation::Type orientation) const;
+		void draw(const Vector& location, Orientation::Type orientation, float rotation = 0.0f) const;
 
 		void reset(int animation, bool rewind = false, bool repeat = false);
 		void play(void) { _paused = false; }

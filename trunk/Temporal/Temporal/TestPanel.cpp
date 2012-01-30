@@ -243,37 +243,38 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Frame(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
+		// TODO: Create from top left
 		StaticBody* staticBody = new StaticBody(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(8.0f, 384.0f), Vector(16.0f, 768.0f));
+		staticBody = new StaticBody(Vector(6.0f, 384.0f), Vector(16.0f - 4.0, 768.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(1016.0f, 384.0f), Vector(16.0f, 768.0f));
+		staticBody = new StaticBody(Vector(1018.0f, 384.0f), Vector(16.0f - 4.0, 768.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(896.0f, 128.0f), Vector(256.0f, 16.0f));
+		staticBody = new StaticBody(Vector(898.0f, 132.0f), Vector(256.0f - 4.0, 16.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(128.0f, 128.0f), Vector(256.0f, 16.0f));
+		staticBody = new StaticBody(Vector(120.0f, 132.0f), Vector(256.0f - 4.0, 16.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(776.0f, 68.0f), Vector(16.0f, 136.0f));
+		staticBody = new StaticBody(Vector(778.0f, 68.0f), Vector(16.0f - 4.0, 144.0));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(64.0f, 256.0f), Vector(128.0f, 16.0f));
+		staticBody = new StaticBody(Vector(62.0f, 256.0f), Vector(128.0f - 4.0, 16.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(120.0f, 312.0f), Vector(16.0f, 128.0f));
+		staticBody = new StaticBody(Vector(118.0f, 320.0f), Vector(16.0f - 4.0, 144.0));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(120.0f, 68.0f), Vector(16.0f, 136.0f));
+		staticBody = new StaticBody(Vector(120.0f, 68.0f), Vector(16.0f - 4.0, 144.0));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(512.0f, 128.0f), Vector(300.0f, 16.0f));
+		staticBody = new StaticBody(Vector(512.0f, 132.0f), Vector(256.0f - 4.0f, 16.0f));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(960.0f, 184.0f), Vector(128.0f, 128.0f));
+		staticBody = new StaticBody(Vector(962.0f, 196.0f), Vector(128.0f - 4.0, 144.0));
 		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
 		Physics::get().add(staticBody);
 
@@ -301,15 +302,13 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 	{
 		DebugInfo::get().draw();
 		
-		/*for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
+		for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
 			for(int i = 0; i < _elementsCount; ++i)
 				if(_elements[i]->getVisualLayer() == layer)
 				{
-					//_elements[i]->draw();
-				}*/
+					_elements[i]->draw();
+				}
 		
-					
-		Graphics::get().drawLine(Vector(0.0, 0.0f), Vector(50.0f, 50.f), Color::Blue);
 		// TODO: Move to entities
 		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
