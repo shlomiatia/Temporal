@@ -7,6 +7,7 @@ namespace Temporal
 	class Animation
 	{
 	public:
+		// TODO: Use normal data structure
 		static const int MAX_ELEMENTS = 20;
 		const Frame* _elements[MAX_ELEMENTS];
 		int _elementsCount;

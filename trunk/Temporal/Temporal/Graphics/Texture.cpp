@@ -13,7 +13,7 @@ namespace Temporal
 		if (!image)
 		{
 			exit(1);
-			// TODO: Failed loading image
+			// ERROR: Failed loading image
 		}
 		GLenum texture_format;
 		if (image->format->BytesPerPixel == 4)
@@ -33,7 +33,7 @@ namespace Temporal
 		else
 		{
 			exit(1);
-			// TODO: Invalid bytes per pixel
+			// ERROR: Invalid bytes per pixel
 		}
 
 		GLuint id;

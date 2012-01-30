@@ -79,6 +79,7 @@ namespace Temporal
 		Graphics::get().init(screenSize, screenSize);
 		DebugInfo::get().setShowingFPS(true);
 
+		// TODO: Central spritesheet container
 		const EntityController* const controller = new InputEntityController();
 		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		const Texture* texture = Texture::load("c:\\pop.png");
@@ -228,6 +229,7 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		_elements[_elementsCount++] = new DynamicEntity(controller, *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
 		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
 		Physics::get().add(dynamicBody);
+		// TODO: Add to physics in entity
 		
 		dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		_elements[_elementsCount++] = new DynamicEntity(new CrappyEntityController(), *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
@@ -299,12 +301,17 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 	{
 		DebugInfo::get().draw();
 		
-		for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
+		/*for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
 			for(int i = 0; i < _elementsCount; ++i)
 				if(_elements[i]->getVisualLayer() == layer)
-					_elements[i]->draw();
+				{
+					//_elements[i]->draw();
+				}*/
 		
-		/*for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
+					
+		Graphics::get().drawLine(Vector(0.0, 0.0f), Vector(50.0f, 50.f), Color::Blue);
+		// TODO: Move to entities
+		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
 		{
 			const StaticBody& staticBody = *Physics::get()._staticBodies[i];
 			Graphics::get().drawRect(staticBody.getBounds());
@@ -318,7 +325,7 @@ animation->add(new Frame(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 				const Sensor& sensor = *staticBody._elements[j];
 				Graphics::get().drawRect(sensor.getBounds(), sensor.isSensing() ? Color::Green : Color::Red);
 			}
-		}*/
+		}
 	}
 
 	void TestPanel::dispose(void)
