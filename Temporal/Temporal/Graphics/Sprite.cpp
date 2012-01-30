@@ -14,7 +14,7 @@ namespace Temporal
 		}
 	}
 
-	void Sprite::draw(const Vector& location, Orientation::Type orientation) const
+	void Sprite::draw(const Vector& location, Orientation::Type orientation, float rotation) const
 	{
 		bool mirrored = orientation != ORIENTATION;
 		const Frame& frame = *_spritesheet._elements[_animation]->_elements[_frame];
@@ -25,7 +25,7 @@ namespace Temporal
 
 		const Texture& texture = _spritesheet.getTexture();
 
-		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored);
+		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored, rotation);
 	}
 
 	void Sprite::reset(int animation, bool rewind, bool repeat)

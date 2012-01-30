@@ -42,6 +42,7 @@ namespace Temporal
 
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
 
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
@@ -59,7 +60,7 @@ namespace Temporal
 	}
 	void Graphics::prepareForDrawing(void) const
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
 		glTranslatef(_translation.getX(), _translation.getY(), 0.0f);
@@ -87,7 +88,7 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), 1.0f);
 	}
 
-	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored) const
+	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, float rotation) const
 	{
 		float textureWidth = texture.getSize().getWidth();
 		float textureHeight = texture.getSize().getHeight();
@@ -104,7 +105,8 @@ namespace Temporal
 		glPushMatrix();
 		{	
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
- 
+			glRotatef(rotation, 0.0, 0.0, 1.0f);
+
 			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(),
 										 -texturePart.getOffsetX(), texturePart.getOffsetY(),
 										  texturePart.getOffsetX(), texturePart.getOffsetY(),
@@ -131,6 +133,8 @@ namespace Temporal
 
 	void Graphics::drawRect(const Rect& rect, const Color& color) const
 	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 		glPushMatrix();
 		{
 			setColor(color);
@@ -154,6 +158,8 @@ namespace Temporal
 	}
 	void Graphics::drawLine(const Vector& p1, const Vector& p2, const Color& color) const
 	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 		setColor(color);
 
 		GLfloat vertices[] = { p1.getX(), p1.getY(), p2.getX(), p2.getY() };
