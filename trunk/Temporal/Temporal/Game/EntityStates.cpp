@@ -56,7 +56,7 @@ namespace Temporal
 
 	void Turn::stateUpdate(DynamicEntity& entity)
 	{
-		if(entity.getSprite().isEnded())
+		if(entity.getAnimator().isEnded())
 		{
 			entity.getBody().flipOrientation();	
 			entity.changeState(EntityStateID::STAND);
@@ -118,7 +118,7 @@ namespace Temporal
 
 	void JumpStart::stateUpdate(DynamicEntity& entity)
 	{
-		if(entity.getSprite().isEnded())
+		if(entity.getAnimator().isEnded())
 		{	
 			entity.getBody().setForce(Vector(entity.JUMP_FORCE*cos(_angle), entity.JUMP_FORCE*sin(_angle)));
 			entity.changeState(_jumpState);
@@ -147,7 +147,7 @@ namespace Temporal
 
 	void JumpForwardEnd::stateUpdate(DynamicEntity& entity)
 	{
-		if(entity.getSprite().isEnded())
+		if(entity.getAnimator().isEnded())
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
@@ -157,7 +157,7 @@ namespace Temporal
 	{
 		entity.getBody().setForce(Vector::Zero);
 		_platform = &entity.getBody().getSensor(entity.HANG_SENSOR).getSensedBody()->getBounds();
-		entity.getSprite().reset(14, true);
+		entity.getAnimator().reset(14, true);
 	}
 
 	void Hanging::stateUpdate(DynamicEntity& entity)
@@ -174,7 +174,7 @@ namespace Temporal
 
 		if(moveX != 0 || moveY != 0)
 			entity.getBody().setForce(Vector(moveX, moveY));
-		else if(entity.getSprite().isEnded())
+		else if(entity.getAnimator().isEnded())
 			entity.changeState(EntityStateID::HANG);
 	}
 
@@ -206,13 +206,13 @@ namespace Temporal
 		float forceX = 1.0f;
 		float forceY = entity.getBody().getBounds().getHeight() - 1.0f;
 		entity.getBody().setForce(Vector(forceX, forceY));
-		entity.getSprite().reset(8);
+		entity.getAnimator().reset(8);
 	}
 
 	void Climbe::stateUpdate(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
-		if (entity.getSprite().isEnded())
+		if (entity.getAnimator().isEnded())
 		{
 			entity.changeState(EntityStateID::STAND);
 		}
@@ -245,13 +245,13 @@ namespace Temporal
 		float forceX = -1.0f;
 		float forceY = -(entity.getBody().getBounds().getHeight() - 1.0f);
 		entity.getBody().setForce(Vector(forceX, forceY));
-		entity.getSprite().reset(8, true);
+		entity.getAnimator().reset(8, true);
 	}
 
 	void Descend::stateUpdate(DynamicEntity& entity)
 	{
 		entity.getBody().setForce(Vector::Zero);
-		if (entity.getSprite().isEnded())
+		if (entity.getAnimator().isEnded())
 		{
 			entity.changeState(EntityStateID::HANG);
 		}

@@ -21,11 +21,8 @@
     <ClInclude Include="Game\EntityStatesFactory.h" />
     <ClInclude Include="Game\EntityStates.h" />
     <ClInclude Include="Game\InputEntityController.h" />
-    <ClInclude Include="Graphics\Frame.h" />
-    <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
-    <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Base\Enums.h" />
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
@@ -34,6 +31,9 @@
     <ClInclude Include="Game\BackgroundEntity.h" />
     <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Game\StaticEntity.h" />
+    <ClInclude Include="Graphics\Animator.h" />
+    <ClInclude Include="Graphics\Sprite.h" />
+    <ClInclude Include="Graphics\SpriteGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -53,11 +53,11 @@
     <ClCompile Include="Game\EntityStates.cpp" />
     <ClCompile Include="Game\InputEntityController.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
-    <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Game\DynamicEntity.cpp" />
     <ClCompile Include="Game\VisualEntity.cpp" />
     <ClCompile Include="Game\StaticEntity.cpp" />
+    <ClCompile Include="Graphics\Animator.cpp" />
   </ItemGroup>
 </Project>

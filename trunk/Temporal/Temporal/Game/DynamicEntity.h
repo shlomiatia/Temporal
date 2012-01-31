@@ -4,7 +4,7 @@ namespace Temporal { class EntityState; }
 
 #include <Temporal\Base\Base.h>
 #include <Temporal\Physics\DynamicBody.h>
-#include <Temporal\Graphics\Sprite.h>
+#include <Temporal\Graphics\Animator.h>
 #include "EntityController.h"
 #include "EntityState.h"
 #include "Enums.h"

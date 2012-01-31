@@ -1,9 +1,9 @@
-#include "Sprite.h"
+#include "Animator.h"
 #include "Graphics.h"
 
 namespace Temporal
 {
-	void Sprite::update(void)
+	void Animator::update(void)
 	{
 		bool animationEnded = isEnded();
 		_update = (_update + 1) % UPDATES_PER_FRAME;
@@ -14,10 +14,10 @@ namespace Temporal
 		}
 	}
 
-	void Sprite::draw(const Vector& location, Orientation::Type orientation, float rotation) const
+	void Animator::draw(const Vector& location, Orientation::Type orientation, float rotation) const
 	{
 		bool mirrored = orientation != ORIENTATION;
-		const Frame& frame = *_spritesheet._elements[_animation]->_elements[_frame];
+		const Sprite& frame = *_spritesheet._elements[_animation]->_elements[_frame];
 		float anchoredX = location.getX() - orientation * ORIENTATION * frame.getOffset().getX();
 		float anchoredY = location.getY() - frame.getOffset().getY();
 
@@ -28,7 +28,7 @@ namespace Temporal
 		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored, rotation);
 	}
 
-	void Sprite::reset(int animation, bool rewind, bool repeat)
+	void Animator::reset(int animation, bool rewind, bool repeat)
 	{
 		_update = 0;
 		_animation = animation;
@@ -37,7 +37,7 @@ namespace Temporal
 		_frame = !_rewind ? 0 : getFramesCount() - 1;
 	}
 
-	bool Sprite::isEnded(void) const
+	bool Animator::isEnded(void) const
 	{
 		return _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frame == getFramesCount() - 1 : _frame == 0);
 	}
