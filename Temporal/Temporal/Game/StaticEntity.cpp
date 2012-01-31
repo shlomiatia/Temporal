@@ -14,9 +14,9 @@ namespace Temporal
 				float angle = xc <= 2.0f && y > 0.0f ? 90.0f : 0.0f;
 				Orientation::Type orientation = xc > 2.0f ? getOrientation() : (Orientation::Type)(-1 * getOrientation());
 				if(x <= xc / 2.0f + 1.0f)
-					getSprite().draw(Vector(centerX, centerY), orientation, angle); 
+					getAnimator().draw(Vector(centerX, centerY), orientation, angle); 
 				if(x >= xc / 2.0f)
-					getSprite().draw(Vector(centerX, centerY), (Orientation::Type)(-1 * orientation), angle); 
+					getAnimator().draw(Vector(centerX, centerY), (Orientation::Type)(-1 * orientation), angle); 
 			}
 	}
 }

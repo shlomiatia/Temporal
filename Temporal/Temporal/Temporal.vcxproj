@@ -22,9 +22,9 @@
     <ClInclude Include="Game\InputEntityController.h" />
     <ClInclude Include="Game\StaticEntity.h" />
     <ClInclude Include="Game\VisualEntity.h" />
-    <ClInclude Include="Graphics\Animation.h" />
-    <ClInclude Include="Graphics\Frame.h" />
+    <ClInclude Include="Graphics\SpriteGroup.h" />
     <ClInclude Include="Graphics\Sprite.h" />
+    <ClInclude Include="Graphics\Animator.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
@@ -54,7 +54,7 @@
     <ClCompile Include="Game\InputEntityController.cpp" />
     <ClCompile Include="Game\StaticEntity.cpp" />
     <ClCompile Include="Game\VisualEntity.cpp" />
-    <ClCompile Include="Graphics\Sprite.cpp" />
+    <ClCompile Include="Graphics\Animator.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
