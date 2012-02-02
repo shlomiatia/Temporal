@@ -1,4 +1,6 @@
 #pragma once
+
+#include <vector>
 #include <Temporal\Base\Base.h>
 #include "Texture.h"
 #include "SpriteGroup.h"
@@ -8,17 +10,17 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		static const int MAX_ELEMENTS = 20;
-		SpriteGroup* _elements[MAX_ELEMENTS];
-		int _elementsCount;
-		SpriteSheet(const Texture* texture) 
-			: _texture(texture), _elementsCount(0) {}
-		~SpriteSheet(void) { for(int i = 0; i < _elementsCount; ++i) { delete _elements[i]; } delete _texture; }
-		void add(SpriteGroup* const element) { _elements[_elementsCount++] = element; }
+		SpriteSheet(const Texture* texture, Orientation::Type orientation) : _texture(texture), _orientation(orientation) {}
+		~SpriteSheet(void);
+		void add(const SpriteGroup* const element);
 
 		const Texture& getTexture(void) const { return *_texture; }
+		Orientation::Type getOrientation(void) const { return _orientation; }
+		const SpriteGroup& get(int spriteGroupID) const;
 	private:
 		const Texture* const _texture;
+		std::vector<const SpriteGroup* const> _spriteGroups;
+		const Orientation::Type _orientation;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

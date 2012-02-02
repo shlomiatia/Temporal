@@ -1,41 +1,31 @@
 #pragma once
 #include <Temporal\Base\Base.h>
-#include "SpriteSheet.h"
-#include "Texture.h"
+#include <Temporal\Game\Component.h>
+#include <Temporal\Game\MessageParams.h>
+#include "SpriteGroup.h"
 
 namespace Temporal
 {
-	class Animator
+	class Animator : public Component
 	{
 	public:
-		static const Orientation::Type ORIENTATION = Orientation::LEFT;
-
-		Animator(const SpriteSheet& spritesheet) :
-			_spritesheet(spritesheet), _rewind(false), _repeat(false), _paused(false), _update(0), _animation(0), _frame(0)  {}
+		Animator(void) : _rewind(false), _repeat(false), _frameID(0), _update(0) {}
 		
+		virtual ComponentType::Type getType(void) const { return ComponentType::ANIMATOR; }
+
+		virtual void handleMessage(Message& message);
 		void update(void);
-		void draw(const Vector& location, Orientation::Type orientation, float rotation = 0.0f) const;
-
-		void reset(int animation, bool rewind = false, bool repeat = false);
-		void play(void) { _paused = false; }
-		void pause(void) { _paused = true; }
-		
-		bool isEnded(void) const;
 	private:
 		// TODO: Use time instad
 		static const int UPDATES_PER_FRAME = 4;
-		
-		const SpriteSheet& _spritesheet;
 
 		bool _rewind;
 		bool _repeat;
-		bool _paused;
-
+		int _frameID;
 		int _update;
-		int _animation;
-		int _frame;
 
-		int getFramesCount(void) const { return _spritesheet._elements[_animation]->_elementsCount; }
+		void reset(const ResetAnimationParams& resetAnimationParams);
+		const SpriteGroup& getSpriteGroup(void) const;
 
 		Animator(const Animator&);
 		Animator& operator=(const Animator&);

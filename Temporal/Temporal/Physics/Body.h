@@ -1,22 +1,23 @@
 #pragma once
 
 #include <Temporal\Base\Base.h>
+#include <Temporal\Game\Component.h>
 
 namespace Temporal
 {
-	typedef class Body StaticBody;
-
-	class Body
+	class Body : public Component
 	{
 	public:
-		Body(const Vector& position, const Vector& size);
+		Body(const Vector& size);
 		virtual ~Body(void) {};
 
-		const Vector& getPosition(void) const { return _bounds.getCenter(); }
-		const Rect& getBounds(void) const { return _bounds; }
+		const Vector& getSize(void) const { return _size; }
+		Rect getBounds(void) const;
+
+		virtual void handleMessage(Message& message);
 
 	protected:
-		Rect _bounds;
+		Vector _size;
 
 	private:
 		Body(const Body&);
