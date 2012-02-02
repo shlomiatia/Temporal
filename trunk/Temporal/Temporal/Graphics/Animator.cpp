@@ -1,44 +1,58 @@
 #include "Animator.h"
-#include "Graphics.h"
+#include "Sprite.h"
 
 namespace Temporal
 {
+	void Animator::handleMessage(Message& message)
+	{
+		switch(message.getID())
+		{
+			case(MessageID::RESET_ANIMATION):
+			{
+				reset(message.getParam<ResetAnimationParams>());
+				break;
+			}
+			case(MessageID::UPDATE):
+			{
+				update();
+				break;
+			}
+		}
+	}
+
 	void Animator::update(void)
 	{
-		bool animationEnded = isEnded();
+		const SpriteGroup& spriteGroup = getSpriteGroup();
+		int framesCount = spriteGroup.getSize();
+		bool animationEnded = _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frameID == framesCount - 1 : _frameID == 0);
 		_update = (_update + 1) % UPDATES_PER_FRAME;
 		if(_update == 0 && (!animationEnded || _repeat))
 		{
 			int modifier = _rewind ? -1 : 1;
-			_frame = (getFramesCount() + _frame + modifier) % getFramesCount();
+			_frameID = (framesCount + _frameID + modifier) % framesCount;
+			sendMessage(Message(MessageID::SET_SPRITE_ID, &_frameID));
 		}
+		if(animationEnded)
+			sendMessage(Message(MessageID::ANIMATION_ENDED));
 	}
 
-	void Animator::draw(const Vector& location, Orientation::Type orientation, float rotation) const
+	const SpriteGroup& Animator::getSpriteGroup(void) const
 	{
-		bool mirrored = orientation != ORIENTATION;
-		const Sprite& frame = *_spritesheet._elements[_animation]->_elements[_frame];
-		float anchoredX = location.getX() - orientation * ORIENTATION * frame.getOffset().getX();
-		float anchoredY = location.getY() - frame.getOffset().getY();
-
-		Vector anchoredLocation(anchoredX, anchoredY);
-
-		const Texture& texture = _spritesheet.getTexture();
-
-		Graphics::get().drawTexture(texture, frame.getBounds(), anchoredLocation, mirrored, rotation);
+		Message getSpriteGroup(MessageID::GET_SPRITE_GROUP);
+		sendMessage(getSpriteGroup);
+		const SpriteGroup& spriteGroup = getSpriteGroup.getParam<SpriteGroup>();
+		return spriteGroup;
 	}
 
-	void Animator::reset(int animation, bool rewind, bool repeat)
+	void Animator::reset(const ResetAnimationParams& resetAnimationParams)
 	{
 		_update = 0;
-		_animation = animation;
-		_rewind = rewind;
-		_repeat = repeat;
-		_frame = !_rewind ? 0 : getFramesCount() - 1;
-	}
-
-	bool Animator::isEnded(void) const
-	{
-		return _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frame == getFramesCount() - 1 : _frame == 0);
+		_rewind = resetAnimationParams.getRewind();
+		_repeat = resetAnimationParams.getRepeat();
+		int animationID = resetAnimationParams.getAnimationID();
+		sendMessage(Message(MessageID::SET_SPRITE_GROUP_ID, &animationID));
+		const SpriteGroup& spriteGroup = getSpriteGroup();
+		_frameID = !_rewind ? 0 : spriteGroup.getSize() - 1;
+		sendMessage(Message(MessageID::SET_SPRITE_ID, &_frameID));
 	}
 }

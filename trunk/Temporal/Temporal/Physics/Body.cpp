@@ -1,12 +1,30 @@
 #include "Body.h"
+#include <Temporal/Graphics/Graphics.h>
 #include <assert.h>
 
 namespace Temporal
 {
-	Body::Body(const Vector& position, const Vector& size)
-		: _bounds(position, size)
+	Body::Body(const Vector& size)
+		: _size(size)
 	{
-		assert(getBounds().getSize().getX() > 0);
-		assert(getBounds().getSize().getY() > 0);
+		assert(_size.getWidth() > 0.0f);
+		assert(_size.getHeight() > 0.0f);
 	}
+
+	Rect Body::getBounds(void) const
+	{
+		Message getPosition(MessageID::GET_POSITION);
+		sendMessage(getPosition);
+		const Vector& position = getPosition.getParam<Vector>();
+		return Rect(position, _size);
+	}
+
+	void Body::handleMessage( Message& message )
+	{
+		if(message.getID() == MessageID::DRAW)
+		{
+			Graphics::get().drawRect(getBounds());
+		}
+	}
+
 }

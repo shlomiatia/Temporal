@@ -10,20 +10,21 @@ namespace Temporal
 	class Sensor
 	{
 	public:
-		Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size, Direction::Type positive, Direction::Type negative);
+		Sensor(SensorID::Type id, DynamicBody& owner, const Vector& offsetFromBody, const Vector& size, Direction::Type positive, Direction::Type negative);
 		~Sensor(void) {}
 
 		const DynamicBody& getOwner(void) const { return _owner; }
+		SensorID::Type getID() const { return _id; }
 		Rect getBounds(void) const;
 		const Body* const getSensedBody(void) const { return _sensedBody; }
 		void setSensedBody(const Body* const sensedBody) { _sensedBody = sensedBody; }
-		bool isSensing(void) const { return getSensedBody() != NULL; }
 		Direction::Type getPositive(void) const { return _positive; }
 		Direction::Type getNegative(void) const { return _negative; }
 
 	private:
 		const DynamicBody& _owner;
 
+		const SensorID::Type _id;
 		const Vector _offsetFromBody;
 		const Vector _size;
 

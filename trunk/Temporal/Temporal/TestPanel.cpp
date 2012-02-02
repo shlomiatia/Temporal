@@ -1,22 +1,24 @@
 #include "TestPanel.h"
 #include "DebugInfo.h"
 
-#include <Temporal\Graphics\Graphics.h>
-#include <Temporal\Input\Input.h>
-#include <Temporal\Physics\Body.h>
-#include <Temporal\Physics\Physics.h>
-#include <Temporal\Game\InputEntityController.h>
-#include <Temporal\Game\BackgroundEntity.h>
-#include <Temporal\Game\StaticEntity.h>
-#include <Temporal\Game\DynamicEntity.h>
+#include <Temporal/Base/Base.h>
+#include <Temporal/Input/Input.h>
+#include <Temporal/Input/InputController.h>
+#include <Temporal/Physics/StaticBody.h>
+#include <Temporal/Physics/DynamicBody.h>
+#include <Temporal/Graphics/SpriteSheet.h>
+#include <Temporal/Graphics/Renderer.h>
+#include <Temporal/Graphics/Animator.h>
+#include <Temporal/Graphics/Graphics.h>
+#include <Temporal/Game/Transform.h>
+#include <Temporal/Game/EntityStateMachine.h>
+#include <Temporal/Game/World.h>
 #include <math.h>
 
 namespace Temporal
 {
-	bool _crappy(false);
-	void addSensors(DynamicEntity& entity)
+	void addSensors(DynamicBody& body)
 	{
-		DynamicBody& staticBody = entity.getBody();
 		// Jump Sensor
 		/* y = Time*(Force-Time*Gravity)
 		 * Sum = N*(A1+AN)/2
@@ -34,19 +36,19 @@ namespace Temporal
 		 * Sum = (2*(sin(45)*F)/G)*(2*cos(45)*F)/2
 		 * Sum = (2*sin(45)*cos(45)*F^2)/G
 		 */
-		const float F = entity.JUMP_FORCE;
-		const float G = Physics::GRAVITY;
+		const float F = 15.0f;
+		const float G = 1.0f;
 		const float A = toRadians(45);
-		float playerWidth = staticBody.getBounds().getWidth();
+		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
-		float playerHeight = staticBody.getBounds().getHeight();
+		float playerHeight = body.getSize().getHeight();
 		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + jumpSensorBackOffset; 
 		float jumpSensorHeight = (F*(F-G))/(2*G);
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
+		Sensor* sensor(new Sensor(SensorID::JUMP, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
 		
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
@@ -54,23 +56,35 @@ namespace Temporal
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(SensorID::HANG, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		float edgeSensorWidth = playerWidth * 2.0f;
 
 		// Back Edge Sensor
 		sensorOffsetX = -(edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -staticBody.getBounds().getOffsetY();
+		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(SensorID::BACK_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 
 		// Front edge sensor
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -staticBody.getBounds().getOffsetY();
+		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(staticBody, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		sensor = new Sensor(SensorID::FRONT_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+	}
+	
+	Entity* CreatePlatform(Vector postion, Vector size, SpriteSheet* spritesheet) 
+	{
+		Transform* transform = new Transform(postion);
+		StaticBody* staticBody = new StaticBody(size);
+		Renderer* renderer(new Renderer(*spritesheet));
+		Entity* entity = new Entity();
+		entity->add(transform);
+		entity->add(staticBody);
+		entity->add(renderer);
+		return entity;
 	}
 
 	void TestPanel::init(void)
@@ -79,11 +93,8 @@ namespace Temporal
 		Graphics::get().init(screenSize, screenSize);
 		DebugInfo::get().setShowingFPS(true);
 
-		// TODO: Central resources container
-		const EntityController* const controller = new InputEntityController();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
 		const Texture* texture = Texture::load("c:\\pop.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture);
+		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
 		SpriteGroup* animation;
 		
 #pragma region Crap
@@ -226,64 +237,60 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 
 #pragma endregion Crap
 
-		_elements[_elementsCount++] = new DynamicEntity(controller, *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
-		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
-		Physics::get().add(dynamicBody);
+		// TODO: Central resources container
+		Transform* transform(new Transform(Vector(512.0f, 768.0f), Orientation::LEFT));
+		InputController* controller(new InputController());
+		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
+		addSensors(*dynamicBody);
 		// TODO: Add to physics in entity
+		EntityStateMachine* stateMachine = new EntityStateMachine(EntityStateID::STAND);
+		Animator* animator(new Animator());
+		Renderer* renderer(new Renderer(*spritesheet));
 		
-		dynamicBody = new DynamicBody(Vector(512.0f, 768.0f), Vector(20.0f, 80.0f), Orientation::LEFT);
-		_elements[_elementsCount++] = new DynamicEntity(new CrappyEntityController(), *dynamicBody, *spritesheet, VisualLayer::DYNAMIC, EntityStateID::STAND);
-		addSensors(*(DynamicEntity*)_elements[_elementsCount - 1]);
-		Physics::get().add(dynamicBody);
-
+		Entity* entity = new Entity();
+		
+		entity->add(transform);
+		entity->add(controller);
+		entity->add(dynamicBody);
+		entity->add(stateMachine);
+		entity->add(animator);
+		entity->add(renderer);
+		World::get().add(entity);
+		
+		
 		texture = Texture::load("c:\\tile.png");
-		spritesheet = new SpriteSheet(texture);
+		spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
 		// TODO: Create from top left
-		StaticBody* staticBody = new StaticBody(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(6.0f, 384.0f), Vector(16.0f - 4.0, 768.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(1018.0f, 384.0f), Vector(16.0f - 4.0, 768.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(898.0f, 132.0f), Vector(256.0f - 4.0, 16.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(120.0f, 132.0f), Vector(256.0f - 4.0, 16.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(778.0f, 68.0f), Vector(16.0f - 4.0, 144.0));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(62.0f, 256.0f), Vector(128.0f - 4.0, 16.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(118.0f, 320.0f), Vector(16.0f - 4.0, 144.0));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(120.0f, 68.0f), Vector(16.0f - 4.0, 144.0));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(512.0f, 132.0f), Vector(256.0f - 4.0f, 16.0f));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-		staticBody = new StaticBody(Vector(962.0f, 196.0f), Vector(128.0f - 4.0, 144.0));
-		_elements[_elementsCount++] = new StaticEntity(*staticBody, *spritesheet, VisualLayer::STATIC);
-		Physics::get().add(staticBody);
-
+		World::get().add(CreatePlatform(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(6.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(1018.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(898.0f, 132.0f), Vector(256.0f - 4.0, 16.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(120.0f, 132.0f), Vector(256.0f - 4.0, 16.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(778.0f, 68.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
+		World::get().add(CreatePlatform(Vector(62.0f, 256.0f), Vector(128.0f - 4.0, 16.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(118.0f, 320.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
+		World::get().add(CreatePlatform(Vector(120.0f, 68.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
+		World::get().add(CreatePlatform(Vector(512.0f, 132.0f), Vector(256.0f - 4.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatform(Vector(962.0f, 196.0f), Vector(128.0f - 4.0, 144.0), spritesheet));
+		
 		texture = Texture::load("c:\\bg.png");
-		spritesheet = new SpriteSheet(texture);
+		spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
 		animation->add(new Sprite(Rect(screenSize / 2.0f, screenSize), Vector::Zero));
-		_elements[_elementsCount++] = new BackgroundEntity(screenSize / 2.0f, *spritesheet, VisualLayer::BACKGROUND);
+
+		transform = new Transform(screenSize / 2.0f);
+		renderer = new Renderer(*spritesheet);
+		entity = new Entity();
+		entity->add(transform);
+		entity->add(renderer);
+		//World::get().add(entity);
+		
 	}
 
 	void TestPanel::update(void)
@@ -293,44 +300,19 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		{
 			Game::get().stop();
 		}
-		for(int i = 0; i < _elementsCount; ++i)
-			_elements[i]->update();
-		Physics::get().update();
+		World::get().broadcastMessage(Message(MessageID::UPDATE));
 	}
 
 	void TestPanel::draw(void)
 	{
 		DebugInfo::get().draw();
 		
-		for(int layer = VisualLayer::FARTHEST; layer <= VisualLayer::NEAREST; ++layer)
-			for(int i = 0; i < _elementsCount; ++i)
-				if(_elements[i]->getVisualLayer() == layer)
-				{
-					_elements[i]->draw();
-				}
-		
-		// TODO: Move to entities
-		for(int i = 0; i < Physics::get()._staticBodiesCount; ++i)
-		{
-			const StaticBody& staticBody = *Physics::get()._staticBodies[i];
-			Graphics::get().drawRect(staticBody.getBounds());
-		}
-		for(int i = 0; i < Physics::get()._dynamicBodiesCount; ++i)
-		{
-			const DynamicBody& staticBody = *Physics::get()._dynamicBodies[i];
-			Graphics::get().drawRect(staticBody.getBounds());
-			for(int j = 0; j < staticBody._elementsCount; ++j)
-			{
-				const Sensor& sensor = *staticBody._elements[j];
-				Graphics::get().drawRect(sensor.getBounds(), sensor.isSensing() ? Color::Green : Color::Red);
-			}
-		}
+		World::get().broadcastMessage(Message(MessageID::DRAW));
 	}
 
 	void TestPanel::dispose(void)
 	{
-		for(int i = 0; i < _elementsCount; ++i)
-			delete _elements[i];
+		World::get().dispose();
 		Graphics::get().dispose();
 	}
 }

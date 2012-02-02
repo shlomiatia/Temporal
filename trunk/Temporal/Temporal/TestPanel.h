@@ -1,24 +1,20 @@
 #pragma once
 
-#include <Temporal\Base\Base.h>
+#include <vector>
 #include <Temporal\Game\Game.h>
-#include <Temporal\Game\VisualEntity.h>
+#include <Temporal\Game\Entity.h>
 
 namespace Temporal
 {
 	class TestPanel : public Panel
 	{
 	public:
-		TestPanel(void) : _elementsCount(0) {}
+		TestPanel(void) {}
 
 		void init(void);
 		void update(void);
 		void draw(void);
 		void dispose(void);
-
-		static const int MAX_ELEMENTS = 20;
-		VisualEntity* _elements[MAX_ELEMENTS];
-		int _elementsCount;
 	};
 }
 

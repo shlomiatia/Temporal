@@ -2,13 +2,14 @@
 
 namespace Temporal
 {
-	Sensor::Sensor(DynamicBody& owner, const Vector& offsetFromBody, const Vector& size, Direction::Type positive, Direction::Type negative)
-			: _owner(owner), _offsetFromBody(offsetFromBody), _size(size), _sensedBody(NULL), _positive(positive), _negative(negative) { owner.add(this); }
+	Sensor::Sensor(SensorID::Type id, DynamicBody& owner, const Vector& offsetFromBody, const Vector& size, Direction::Type positive, Direction::Type negative)
+			: _id(id), _owner(owner), _offsetFromBody(offsetFromBody), _size(size), _sensedBody(NULL), _positive(positive), _negative(negative) { owner.add(this); }
 
 	Rect Sensor::getBounds(void) const
 	{
-		return Rect(_owner.getPosition().getX() + _offsetFromBody.getX() * _owner.getOrientation(),
-					_owner.getPosition().getY() + _offsetFromBody.getY(),
+		const Rect& ownerBounds(_owner.getBounds());
+		return Rect(ownerBounds.getCenterX() + _offsetFromBody.getX() * _owner.getOrientation(),
+					ownerBounds.getCenterY() + _offsetFromBody.getY(),
 					_size.getWidth(),
 					_size.getHeight());
 	}

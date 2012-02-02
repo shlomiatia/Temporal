@@ -1,46 +1,37 @@
 #pragma once
 
-namespace Temporal { class DynamicEntity; }
+namespace Temporal { class EntityStateMachine; }
 
-#include "DynamicEntity.h"
+#include "Message.h"
+#include "EntityStateMachine.h"
+#include "MessageParams.h"
 
 namespace Temporal
 {
-	namespace GravityResponse
-	{
-		enum Type
-		{
-			DISABLE_GRAVITY,
-			KEEP_STATE,
-			FALL
-		};
-	}
-
 	class EntityState
 	{
 	public:
-		// TODO: Accept animation, movements
-		EntityState(GravityResponse::Type gravityResponse, bool supportsHang)
-			: _gravityResponse(gravityResponse), _supportsHang(supportsHang) {}
+		EntityState(EntityStateGravityResponse::Type gravityResponse, bool supportsHang, bool stopForce, const ResetAnimationParams& animation)
+			: _gravityResponse(gravityResponse), _supportsHang(supportsHang), _stopForce(stopForce), _animation(animation) {}
 		virtual ~EntityState(void) {};
 
 		virtual const char* getName(void) const = 0;
 
-		virtual const Vector& getDrawCenter(const DynamicEntity& entity) const;
-		void enter(DynamicEntity& entity);
-		void exit(DynamicEntity& entity);
-		void update(DynamicEntity& entity);
+		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
 
 	protected:
-		virtual void stateEnter(DynamicEntity& entity) {};
-		virtual void stateExit(DynamicEntity& entity) {};
-		virtual void stateUpdate(DynamicEntity& entity) {};
+		void sendMessage(EntityStateMachine& stateMachine, Message& message);
+		bool isSensorMessage(Message& message, SensorID::Type sensorID);
 
 	private:
-		GravityResponse::Type _gravityResponse;
-		bool _supportsHang;
+		const EntityStateGravityResponse::Type _gravityResponse;
+		const bool _supportsHang;
+		const bool _stopForce;
+		const ResetAnimationParams _animation;
 
-		EntityState(const EntityState&) {};
-		EntityState& operator=(const EntityState&) {};
+		void handleGravity(EntityStateMachine& stateMachine, bool gravityEnabled);
+
+		EntityState(const EntityState&);
+		EntityState& operator=(const EntityState&);
 	};
 }
