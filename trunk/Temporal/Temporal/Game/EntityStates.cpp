@@ -1,6 +1,6 @@
 #include "EntityStates.h"
-#include <Temporal/Physics/Sensor.h>
 #include <math.h>
+#include <Temporal/Physics/Sensor.h>
 
 namespace Temporal
 {
@@ -34,7 +34,8 @@ namespace Temporal
 			}
 			case(MessageID::ACTION_UP):
 			{
-				stateMachine.changeState(EntityStateID::PREPARE_TO_JUMP);
+				EntityStateID::Type defaultJumpStartState = EntityStateID::JUMP_START_90;
+				stateMachine.changeState(EntityStateID::PREPARE_TO_JUMP, &defaultJumpStartState);
 				break;
 			}
 			case(MessageID::ACTION_DOWN):
@@ -53,7 +54,7 @@ namespace Temporal
 		{
 			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
 			{
-				stateMachine.changeState(EntityStateID::PREPARE_TO_DESCEND);
+				stateMachine.changeState(EntityStateID::PREPARE_TO_DESCEND, &message.getParam<Sensor>());
 			}
 			else if(isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
 			{
@@ -78,7 +79,8 @@ namespace Temporal
 		{
 			case(MessageID::ACTION_UP):
 			{
-				stateMachine.changeState(EntityStateID::PREPARE_TO_JUMP);
+				EntityStateID::Type defaultJumpStartState = EntityStateID::JUMP_START_45;
+				stateMachine.changeState(EntityStateID::PREPARE_TO_JUMP, &defaultJumpStartState);
 				break;
 			}
 			case(MessageID::ENTER_STATE):
@@ -121,17 +123,17 @@ namespace Temporal
 	{
 		EntityState::handleMessage(stateMachine, message);
 
-		// TODO: Handle default
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_jumpStartState = EntityStateID::JUMP_START_90;
+			_jumpStartState = message.getParam<EntityStateID::Type>();
+			_platformFound = false;
 		}
 		else if(isSensorMessage(message, SensorID::JUMP))
 		{
-			const float F = JUMP_FORCE;
 			const Sensor& sensor = message.getParam<Sensor>();
 			const Body& sensorOwner = sensor.getOwner();
 			const Body* const sensedBody = sensor.getSensedBody();
+			const float F = JUMP_FORCE;
 			const float hangSensorSize = 20.0f; // TODO:
 			Message getOrientation(MessageID::GET_ORIENTATION);
 			sendMessage(stateMachine, getOrientation);
@@ -143,6 +145,7 @@ namespace Temporal
 			if(x >= 0 && x < hangSensorSize - 1.0f)
 			{
 				_jumpStartState = EntityStateID::JUMP_START_90;
+				_platformFound = true;
 			}
 			else
 			{
@@ -165,13 +168,14 @@ namespace Temporal
 					{
 						max = y;
 						_jumpStartState = JUMP_START_STATES[i];
+						_platformFound = true;
 					}
 				}
 			}
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			stateMachine.changeState(_jumpStartState);
+			stateMachine.changeState(_jumpStartState, &_platformFound);
 		}
 		
 	}
@@ -181,6 +185,11 @@ namespace Temporal
 		EntityState::handleMessage(stateMachine, message);
 		switch(message.getID())
 		{
+			case(MessageID::ENTER_STATE):
+			{
+				_platformFound = message.getParam<bool>();
+				break;
+			}
 			case(MessageID::ANIMATION_ENDED):
 			{	
 				sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(JUMP_FORCE*cos(_angle), JUMP_FORCE*sin(_angle))));
@@ -189,8 +198,13 @@ namespace Temporal
 			}
 			case(MessageID::ACTION_FORWARD):	
 			{
-				/*if(_angle != toRadians(45) && !(stateMachine.getBody().getSensor(stateMachine.JUMP_SENSOR).isSensing()))
-					stateMachine.changeState(EntityStateID::JUMP_START_45);*/
+				if(_angle != toRadians(45) && !_platformFound)
+					stateMachine.changeState(EntityStateID::JUMP_START_45, &_platformFound);
+				break;
+			}
+			case(MessageID::ACTION_BACKWARD):
+			{
+				stateMachine.changeState(EntityStateID::TURN);
 				break;
 			}
 		}
@@ -235,22 +249,33 @@ namespace Temporal
 	void Hanging::handleMessage(EntityStateMachine& stateMachine, Message& message)
 	{
 		EntityState::handleMessage(stateMachine, message);
-		/*
-		ENTER = _platform = &stateMachine.getBody().getSensor(stateMachine.HANG_SENSOR).getSensedBody()->getBounds();
-		stateMachine.getBody().setForce(Vector::Zero);
-		float platformTop = _platform->getTop();
-		float entityTop = stateMachine.getBody().getBounds().getTop();
-		float moveY = platformTop - entityTop;
+		
+		if(message.getID() == MessageID::ENTER_STATE)
+		{
+			const Sensor& sensor = message.getParam<Sensor>();
+			_person = &sensor.getOwner();
+			_platform = sensor.getSensedBody();
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			const Rect& personBounds = _person->getBounds();
+			const Rect& platformBounds = _platform->getBounds();
+			float platformTop = platformBounds.getTop();
+			float entityTop = personBounds.getTop();
+			float moveY = platformTop - entityTop;
 
-		Orientation::Type orientation = stateMachine.getBody().getOrientation();
-		float platformFront = _platform->getOppositeSide(orientation);
-		float entityFront = stateMachine.getBody().getFront();
-		float moveX = (platformFront - entityFront) * orientation;
-
-		if(moveX != 0 || moveY != 0)
-			stateMachine.getBody().setForce(Vector(moveX, moveY));
-		else if(stateMachine.getAnimator().isEnded())
-			stateMachine.changeState(EntityStateID::HANG);*/
+			Message getOrientation(MessageID::GET_ORIENTATION);
+			sendMessage(stateMachine, getOrientation);
+			Orientation::Type orientation = getOrientation.getParam<Orientation::Type>();
+			float platformFront = platformBounds.getOppositeSide(orientation);
+			float entityFront = personBounds.getSide(orientation);
+			float moveX = (platformFront - entityFront) * orientation;
+			sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(moveX, moveY)));
+		}
+		else if(message.getID() == MessageID::ANIMATION_ENDED)
+		{
+			stateMachine.changeState(EntityStateID::HANG);
+		}
 	}
 
 	void Hang::handleMessage(EntityStateMachine& stateMachine, Message& message)
@@ -274,21 +299,32 @@ namespace Temporal
 	void Drop::handleMessage(EntityStateMachine& stateMachine, Message& message)
 	{
 		EntityState::handleMessage(stateMachine, message);
-		/*if(!stateMachine.getBody().getSensor(stateMachine.HANG_SENSOR).isSensing())
+		if(isSensorMessage(message, SensorID::HANG))
 		{
-			stateMachine.changeState(EntityStateID::STAND);
-		}*/
+			_platformFound = true;
+		}
+		else if(message.getID() == MessageID::ENTER_STATE)
+		{
+			_platformFound = false;
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			if(!_platformFound)
+				stateMachine.changeState(EntityStateID::STAND);
+			else
+				_platformFound = false;
+
+		}
 	}
 
 	void Climbe::enter(EntityStateMachine& stateMachine)
 	{
-		/*EntityState::enter(stateMachine);
-		float drawCenterX = EntityState::getDrawCenter(stateMachine).getX();
-		float drawCenterY = stateMachine.getBody().getBounds().getTop();
-		_drawCenter = Vector(drawCenterX, drawCenterY);
+		Message getSize(MessageID::GET_SIZE);
+		sendMessage(stateMachine, getSize);
+		const Vector& size = getSize.getParam<Vector>();
 		float forceX = 1.0f;
-		float forceY = stateMachine.getBody().getBounds().getHeight() - 1.0f;
-		stateMachine.getBody().setForce(Vector(forceX, forceY));*/
+		float forceY = size.getHeight() - 1.0f;
+		sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
 	}
 
 	void Climbe::handleMessage(EntityStateMachine& stateMachine, Message& message)
@@ -312,33 +348,42 @@ namespace Temporal
 				break;
 			}
 		}
-		
 	}
 
 	void PrepareToDescend::handleMessage(EntityStateMachine& stateMachine, Message& message)
 	{
-		
-		/*ENTER = Orientation::Type orientation = stateMachine.getBody().getOrientation();
-		_platformEdge = stateMachine.getBody().getSensor(stateMachine.BACK_EDGE_SENSOR).getSensedBody()->getBounds().getOppositeSide(orientation) + 1.0f * orientation;
-
 		EntityState::handleMessage(stateMachine, message);
-		Orientation::Type orientation = stateMachine.getBody().getOrientation();
-		float entityFront = stateMachine.getBody().getFront();
-		float moveX = (_platformEdge - entityFront) * orientation;
-		if(moveX != 0.0f)
-			stateMachine.getBody().setForce(Vector(moveX, 0.0f));
-		else
-			stateMachine.changeState(EntityStateID::DESCEND);*/
+		if(message.getID() == MessageID::ENTER_STATE)
+		{
+			const Sensor& sensor = message.getParam<Sensor>();
+			_person = &sensor.getOwner();
+			_platform = sensor.getSensedBody();
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			Message getOrientation(MessageID::GET_ORIENTATION);
+			sendMessage(stateMachine, getOrientation);
+			Orientation::Type orientation = getOrientation.getParam<Orientation::Type>();
+			const Rect& personBounds = _person->getBounds();
+			const Rect& platformBounds = _platform->getBounds();
+			float platformEdge = platformBounds.getOppositeSide(orientation) + 1.0f * orientation;
+			float entityFront = personBounds.getSide(orientation);
+			float moveX = (platformEdge - entityFront) * orientation;
+			if(moveX != 0.0f)
+				sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(moveX, 0.0f)));
+			else
+				stateMachine.changeState(EntityStateID::DESCEND);
+		}
 	}
 
 	void Descend::enter(EntityStateMachine& stateMachine)
 	{
-		/*float drawCenterX = EntityState::getDrawCenter(stateMachine).getX();
-		float drawCenterY = stateMachine.getBody().getBounds().getBottom();
-		_drawCenter = Vector(drawCenterX, drawCenterY);
+		Message getSize(MessageID::GET_SIZE);
+		sendMessage(stateMachine, getSize);
+		const Vector& size = getSize.getParam<Vector>();
 		float forceX = -1.0f;
-		float forceY = -(stateMachine.getBody().getBounds().getHeight() - 1.0f);
-		stateMachine.getBody().setForce(Vector(forceX, forceY));*/
+		float forceY = -(size.getHeight() - 1.0f);
+		sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
 	}
 
 	void Descend::handleMessage(EntityStateMachine& stateMachine, Message& message)

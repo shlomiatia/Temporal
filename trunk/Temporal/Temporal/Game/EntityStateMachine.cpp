@@ -40,14 +40,14 @@ namespace Temporal
 		}
 	}
 
-	void EntityStateMachine::changeState(EntityStateID::Type stateType)
+	void EntityStateMachine::changeState(EntityStateID::Type stateType, const void* const param)
 	{
 		if(_currentState != NULL)
 		{
 			_currentState->handleMessage(*this, Message(MessageID::EXIT_STATE));
 		}
 		_currentState = _states[stateType];
-		_currentState->handleMessage(*this, Message(MessageID::ENTER_STATE));
+		_currentState->handleMessage(*this, Message(MessageID::ENTER_STATE, param));
 	}
 
 	void EntityStateMachine::handleMessage(Message& message)

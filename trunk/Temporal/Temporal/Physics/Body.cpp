@@ -21,7 +21,11 @@ namespace Temporal
 
 	void Body::handleMessage( Message& message )
 	{
-		if(message.getID() == MessageID::DRAW)
+		if(message.getID() == MessageID::GET_SIZE)
+		{
+			message.setParam(&_size);
+		}
+		else if(message.getID() == MessageID::DRAW)
 		{
 			Graphics::get().drawRect(getBounds());
 		}

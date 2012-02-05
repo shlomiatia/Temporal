@@ -17,7 +17,7 @@ namespace Temporal
 
 		virtual ComponentType::Type getType(void) const { return ComponentType::STATE_MACHINE; }
 
-		void changeState(EntityStateID::Type state);
+		void changeState(EntityStateID::Type state, const void* const param = NULL);
 
 		virtual void handleMessage(Message& message);
 	private:
