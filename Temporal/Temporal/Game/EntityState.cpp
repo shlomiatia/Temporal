@@ -53,7 +53,7 @@ namespace Temporal
 		}
 		else if(_supportsHang && isSensorMessage(message, SensorID::HANG))
 		{
-			stateMachine.changeState(EntityStateID::HANGING);
+			stateMachine.changeState(EntityStateID::HANGING, &message.getParam<Sensor>());
 		}
 	}
 

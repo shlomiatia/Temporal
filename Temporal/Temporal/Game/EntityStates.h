@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EntityState.h"
+#include <Temporal/Physics/Body.h>
 
 namespace Temporal
 {
@@ -60,7 +61,7 @@ namespace Temporal
 	class PrepareToJump : public EntityState
 	{
 	public:
-		PrepareToJump(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(0)) {};
+		PrepareToJump(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(0)), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
@@ -73,12 +74,13 @@ namespace Temporal
 		static const EntityStateID::Type JUMP_START_STATES[];
 
 		EntityStateID::Type _jumpStartState;
+		bool _platformFound;
 	};
 
 	class JumpStart : public EntityState
 	{
 	public:
-		JumpStart(float angle, int animation, EntityStateID::Type jumpState) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(animation)), _angle(angle), _jumpState(jumpState) {};
+		JumpStart(float angle, int animation, EntityStateID::Type jumpState) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(animation)), _angle(angle), _jumpState(jumpState), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
@@ -88,6 +90,7 @@ namespace Temporal
 	private:
 		float _angle;
 		EntityStateID::Type _jumpState;
+		bool _platformFound;
 	};
 
 	class JumpUp : public EntityState
@@ -127,7 +130,7 @@ namespace Temporal
 	class Hanging : public EntityState
 	{
 	public:
-		Hanging(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(14, true))  {};
+		Hanging(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(14, true)), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
@@ -135,7 +138,8 @@ namespace Temporal
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
 
 	private:
-		const Rect* _platform;
+		const Body* _person;
+		const Body* _platform;
 	};
 
 	class Hang : public EntityState
@@ -152,34 +156,32 @@ namespace Temporal
 	class Drop : public EntityState
 	{
 	public:
-		Drop(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, false, true, ResetAnimationParams(2)) {};
+		Drop(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, false, true, ResetAnimationParams(2)), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "Drop"; }
 
 	protected:
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+
+	private:
+		bool _platformFound;
 	};
 
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(8)), _drawCenter(Vector::Zero){};
+		Climbe(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(8)) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
-
-		virtual const Vector& getDrawCenter(const EntityStateMachine& stateMachine) const { return _drawCenter; }
 	protected:
 		void enter(EntityStateMachine& stateMachine);
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
-
-	private:
-		Vector _drawCenter;
 	};
 
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(0)), _platformEdge(0) {};
+		PrepareToDescend(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(0)) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
@@ -187,22 +189,18 @@ namespace Temporal
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
 
 	private:
-		float _platformEdge;
+		const Body* _person;
+		const Body* _platform;
 	};
 
 	class Descend : public EntityState
 	{
 	public:
-		Descend(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(8, true)), _drawCenter(Vector::Zero) {};
+		Descend(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(8, true)){};
 
 		virtual const char* getName(void) const { return "Descend"; }
-
-		virtual const Vector& getDrawCenter(const EntityStateMachine& stateMachine) const { return _drawCenter; }
 	protected:
 		void enter(EntityStateMachine& stateMachine);
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
-
-	private:
-		Vector _drawCenter;
 	};
 }

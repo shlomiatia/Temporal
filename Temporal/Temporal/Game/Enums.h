@@ -33,6 +33,7 @@ namespace Temporal
 			ACTION_FORWARD,
 			ACTION_BACKWARD,
 			
+			GET_SIZE,
 			SET_GRAVITY,
 			GET_FORCE,
 			SET_FORCE,
