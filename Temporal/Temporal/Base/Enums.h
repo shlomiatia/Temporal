@@ -4,7 +4,7 @@ namespace Temporal
 {
 	namespace Orientation
 	{ 
-		enum Type
+		enum Enum
 		{
 			NONE = 0,
 			LEFT = -1,
@@ -14,17 +14,18 @@ namespace Temporal
 
 	namespace Direction
 	{
-		enum Type
+		enum Enum
 		{
 			NONE = 0,
 			TOP = 1,
 			BOTTOM = 2,
 			FRONT = 4,
-			BACK = 8
+			BACK = 8,
+			ALL = 15,
 		};
 	}
-	inline Direction::Type operator|(Direction::Type a, Direction::Type b) { return (Direction::Type)((int)a | (int)b); }
-	inline Direction::Type operator&(Direction::Type a, Direction::Type b) { return (Direction::Type)((int)a & (int)b); }
-	inline bool match(Direction::Type direction, Direction::Type positive) { return (direction & positive) == positive; }
-	inline bool match(Direction::Type direction, Direction::Type positive, Direction::Type negative) { return match(direction, positive) && !(direction & negative); }
+	inline Direction::Enum operator|(Direction::Enum a, Direction::Enum b) { return (Direction::Enum)((int)a | (int)b); }
+	inline Direction::Enum operator&(Direction::Enum a, Direction::Enum b) { return (Direction::Enum)((int)a & (int)b); }
+	inline bool match(Direction::Enum direction, Direction::Enum positive) { return positive == Direction::ALL || (direction & positive) == positive; }
+	inline bool match(Direction::Enum direction, Direction::Enum positive, Direction::Enum negative) { return match(direction, positive) && !(direction & negative); }
 }

@@ -6,9 +6,9 @@
 
 namespace Temporal
 {
-	Direction::Type calculateCollision(const Rect& boundsA, Orientation::Type orientationA, const Rect& boundsB)
+	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Rect& boundsB)
 	{
-		Direction::Type collision(Direction::NONE);
+		Direction::Enum collision(Direction::NONE);
 
 		if(boundsA.intersectsInclusive(boundsB))
 		{
@@ -42,11 +42,9 @@ namespace Temporal
 			delete *i;
 	}
 
-	Orientation::Type DynamicBody::getOrientation(void) const
+	Orientation::Enum DynamicBody::getOrientation(void) const
 	{
-		Message getPosition(MessageID::GET_ORIENTATION);
-		sendMessage(getPosition);
-		Orientation::Type orientation = getPosition.getParam<Orientation::Type>();
+		Orientation::Enum orientation = sendQueryMessageToOwner<Orientation::Enum>(MessageID::GET_ORIENTATION);
 		return orientation;
 	}
 
@@ -64,9 +62,9 @@ namespace Temporal
 
 	void DynamicBody::applyForce(void)
 	{
-		Vector position(getBounds().getCenter());
+		Vector position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
 		position += _force;
-		sendMessage(Message(MessageID::SET_POSITION, &position));
+		sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
 	}
 
 	void DynamicBody::add(Sensor* const sensor)
@@ -77,37 +75,37 @@ namespace Temporal
 	void DynamicBody::handleMessage(Message& message)
 	{
 		Body::handleMessage(message);
-		switch(message.getID())
+		if(message.getID() == MessageID::GET_FORCE)
 		{
-			case(MessageID::GET_FORCE):
+			message.setParam(&_force);
+		}
+		else if(message.getID() == MessageID::SET_FORCE)
+		{
+			const Vector& force = message.getParam<Vector>();
+			_force = Vector(force.getX() * getOrientation(), force.getY()); 
+		}
+		else if(message.getID() == MessageID::SET_GRAVITY)
+		{
+			_gravityEnabled = message.getParam<bool>();
+		}
+		else if(message.getID() == MessageID::RAY_CAST)
+		{
+			const Vector& destination = message.getParam<Vector>();
+			if(rayCast(destination))
 			{
-				message.setParam(&_force);
-				break;
+				sendMessageToOwner(Message(MessageID::RAY_CAST_SUCCESS));
 			}
-			case(MessageID::SET_FORCE):
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			update();
+		}
+		else if(message.getID() == MessageID::DRAW)
+		{
+			for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
 			{
-				const Vector& force = message.getParam<Vector>();
-				_force = Vector(force.getX() * getOrientation(), force.getY()); 
-				break;
-			}
-			case(MessageID::SET_GRAVITY):
-			{
-				_gravityEnabled = message.getParam<bool>();
-				break;
-			}
-			case(MessageID::UPDATE):
-			{
-				update();
-				break;
-			}
-			case(MessageID::DRAW):
-			{
-				for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
-				{
-					const Sensor& sensor = **i;
-					Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() != NULL ? Color::Green : Color::Red);
-				}
-				break;
+				const Sensor& sensor = **i;
+				Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() != NULL ? Color::Green : Color::Red);
 			}
 		}
 	}
@@ -130,7 +128,7 @@ namespace Temporal
 			detectCollision(staticBody);
 		}
 
-		sendMessage(Message(MessageID::BODY_COLLISION, &_collision));
+		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 		for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
 		{
 			Sensor& sensor = **i;
@@ -140,9 +138,9 @@ namespace Temporal
 			while(iterator.next())
 			{
 				StaticBody& staticBody = (StaticBody&)iterator.current();
-				Orientation::Type sensorOwnerOrientation = sensor.getOwner().getOrientation();
+				Orientation::Enum sensorOwnerOrientation = sensor.getOwner().getOrientation();
 				const Rect& staticBodyBounds = staticBody.getBounds();
-				Direction::Type collision = calculateCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
+				Direction::Enum collision = calculateCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
 				if(match(collision, sensor.getPositive(), sensor.getNegative()))
 				{
 					sensor.setSensedBody(&staticBody);
@@ -156,7 +154,7 @@ namespace Temporal
 			const Body* const body = sensor.getSensedBody();
 			if(body != NULL)
 			{
-				sendMessage(Message(MessageID::SENSOR_COLLISION, &sensor));
+				sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &sensor));
 			}
 		}
 	}
@@ -181,9 +179,51 @@ namespace Temporal
 	void DynamicBody::detectCollision( const Body& staticBody )
 	{
 		const Rect& dynamicBodyBounds = getBounds();
-		Orientation::Type dynamicBodyOrientation = getOrientation();
+		Orientation::Enum dynamicBodyOrientation = getOrientation();
 		const Rect& staticBodyBounds = staticBody.getBounds();
-		Direction::Type collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
+		Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
 		_collision = _collision | collision;
+	}
+
+	bool DynamicBody::rayCast(const Vector& destination) const
+	{
+		const Vector& position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
+		float x0 = position.getX();
+		float y0 = position.getY();
+		float x1 = destination.getX();
+		float y1 = destination.getY();
+		const float STEP = 10.0f;
+
+		float dx = abs(x1-x0);
+		float dy = abs(y1 - y0);
+		float sx = x0 < x1 ? 1.0f : -1.0f;
+		float sy = y0 < y1 ? 1.0f : -1.0f;
+		float err = dx - dy;
+		float e2;
+		while(true)
+		{
+			e2 = 2.0f * err;
+			if(e2 > -dy)
+			{
+				err -= dy;
+				x0 += sx * STEP;
+			}
+			if(e2 < dx)
+			{
+				err += dx;
+				y0 += sy * STEP;
+			}
+			// TODO: Investigate
+			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
+				return true;
+			ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
+			while(iterator.next())
+			{
+				StaticBody& staticBody = (StaticBody&)iterator.current();
+				Rect staticBodyBounds = staticBody.getBounds();
+				if(staticBodyBounds.contains(x0, y0))
+					return false;
+			}
+		}
 	}
 }

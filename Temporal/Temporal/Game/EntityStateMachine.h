@@ -12,12 +12,12 @@ namespace Temporal
 	class EntityStateMachine : public Component
 	{
 	public:
-		EntityStateMachine(EntityStateID::Type initialState);
+		EntityStateMachine(EntityStateID::Enum initialState);
 		~EntityStateMachine(void);
 
-		virtual ComponentType::Type getType(void) const { return ComponentType::STATE_MACHINE; }
+		virtual ComponentType::Enum getType(void) const { return ComponentType::STATE_MACHINE; }
 
-		void changeState(EntityStateID::Type state, const void* const param = NULL);
+		void changeState(EntityStateID::Enum state, const void* const param = NULL);
 
 		virtual void handleMessage(Message& message);
 	private:
@@ -26,8 +26,6 @@ namespace Temporal
 
 		EntityStateMachine(const EntityStateMachine&) {};
 		EntityStateMachine& operator=(const EntityStateMachine&) {};
-
-		friend class EntityState;
 	};
 }
 

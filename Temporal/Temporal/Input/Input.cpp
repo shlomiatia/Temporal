@@ -12,6 +12,12 @@ namespace Temporal
 			{
 				_quit = true;
 			}
+			else if (event.type == SDL_MOUSEMOTION)
+			{
+				_mouse.setX(event.motion.x);
+				_mouse.setY(768.0f - event.motion.y);
+				break;
+			}
 			else if ((event.type == SDL_KEYDOWN) || (event.type == SDL_KEYUP))
 			{
 				switch (event.key.keysym.sym)
@@ -34,26 +40,6 @@ namespace Temporal
 					case (SDLK_RIGHT):
 					{
 						_right = event.type == SDL_KEYDOWN;
-						break;
-					}
-					case (SDLK_w):
-					{
-						_w = event.type == SDL_KEYDOWN;
-						break;
-					}
-					case (SDLK_a):
-					{
-						_a = event.type == SDL_KEYDOWN;
-						break;
-					}
-					case (SDLK_s):
-					{
-						_s = event.type == SDL_KEYDOWN;
-						break;
-					}
-					case (SDLK_d):
-					{
-						_d = event.type == SDL_KEYDOWN;
 						break;
 					}
 					case (SDLK_ESCAPE):

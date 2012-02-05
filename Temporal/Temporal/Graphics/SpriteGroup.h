@@ -8,11 +8,10 @@ namespace Temporal
 	class SpriteGroup
 	{
 	public:
-		// TODO: Use normal data structure
 		SpriteGroup(void) {}
 		~SpriteGroup(void);
 		void add(const Sprite* const sprite);
-		const Sprite& get(int spriteID) const;
+		const Sprite& get(unsigned int spriteID) const;
 		int getSize(void) const;
 	private:
 		std::vector<const Sprite* const> _sprites;

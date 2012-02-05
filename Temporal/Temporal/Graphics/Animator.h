@@ -11,7 +11,7 @@ namespace Temporal
 	public:
 		Animator(void) : _rewind(false), _repeat(false), _frameID(0), _update(0) {}
 		
-		virtual ComponentType::Type getType(void) const { return ComponentType::ANIMATOR; }
+		virtual ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
 		virtual void handleMessage(Message& message);
 		void update(void);

@@ -15,11 +15,18 @@ namespace Temporal
 		virtual ~Component(void) {}
 		void setEntity(Entity* entity) { _entity = entity; }
 
-		virtual ComponentType::Type getType(void) const = 0;
+		virtual ComponentType::Enum getType(void) const = 0;
 		virtual void handleMessage(Message& message) = 0;
 
-	protected:
-		void sendMessage(Message& message) const;
+		void sendMessageToOwner(Message& message) const;
+
+		template <class T>
+		const T& sendQueryMessageToOwner(MessageID::Enum property) const
+		{
+			Message query(property);
+			sendMessageToOwner(query);
+			return query.getParam<T>();
+		}
 
 	private:
 		Entity* _entity;

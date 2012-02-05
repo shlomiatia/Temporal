@@ -4,26 +4,26 @@
 
 namespace Temporal
 {
-	void EntityState::handleGravity(EntityStateMachine& stateMachine, bool gravityEnabled)
+	void EntityState::handleGravity(bool gravityEnabled) const
 	{
 		if(_gravityResponse == EntityStateGravityResponse::DISABLE_GRAVITY)
 		{
-			stateMachine.sendMessage(Message(MessageID::SET_GRAVITY, &gravityEnabled));
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_GRAVITY, &gravityEnabled));
 		}
 	}
 
-	bool isFallingMessage(const Message& message)
+	bool EntityState::isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative) const
 	{
 		if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			Direction::Type direction = message.getParam<Direction::Type>();
-			if(!(direction & Direction::BOTTOM))
+			Direction::Enum direction = message.getParam<Direction::Enum>();
+			if(match(direction, positive, negative))
 				return true;
 		}
 		return false;
 	}
 
-	bool EntityState::isSensorMessage(Message& message, SensorID::Type sensorID)
+	bool EntityState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{
@@ -34,31 +34,26 @@ namespace Temporal
 		return NULL;
 	}
 
-	void EntityState::handleMessage(EntityStateMachine& stateMachine, Message& message)
+	void EntityState::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			handleGravity(stateMachine, false);
-			stateMachine.sendMessage(Message(MessageID::RESET_ANIMATION, &_animation));
+			handleGravity(false);
+			_stateMachine.sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &_animation));
 			if(_stopForce)
-				stateMachine.sendMessage(Message(MessageID::SET_FORCE, &Vector::Zero));
+				_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
 		}
 		else if(message.getID() == MessageID::EXIT_STATE)
 		{
-			handleGravity(stateMachine, true);
+			handleGravity(true);
 		}
-		else if(_gravityResponse == EntityStateGravityResponse::FALL && isFallingMessage(message))
+		else if(_gravityResponse == EntityStateGravityResponse::FALL && isBodyCollisionMessage(message, Direction::ALL, Direction::BOTTOM))
 		{
-			stateMachine.changeState(EntityStateID::FALL);
+			_stateMachine.changeState(EntityStateID::FALL);
 		}
 		else if(_supportsHang && isSensorMessage(message, SensorID::HANG))
 		{
-			stateMachine.changeState(EntityStateID::HANGING, &message.getParam<Sensor>());
+			_stateMachine.changeState(EntityStateID::HANGING, &message.getParam<Sensor>());
 		}
-	}
-
-	void EntityState::sendMessage(EntityStateMachine& stateMachine, Message& message)
-	{
-		stateMachine.sendMessage(message);
 	}
 }

@@ -7,14 +7,14 @@ namespace Temporal
 	class ResetAnimationParams
 	{
 	public:
-		ResetAnimationParams(int animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
+		ResetAnimationParams(AnimationID::Enum animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
 
-		int getAnimationID(void) const { return _animationID; }
+		AnimationID::Enum getAnimationID(void) const { return _animationID; }
 		bool getRewind(void) const { return _rewind; }
 		bool getRepeat(void) const { return _repeat; }
 
 	private:
-		const int _animationID;
+		const AnimationID::Enum _animationID;
 		const bool _rewind;
 		const bool _repeat;
 	};

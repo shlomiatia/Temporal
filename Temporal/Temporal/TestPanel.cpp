@@ -10,13 +10,22 @@
 #include <Temporal/Graphics/Renderer.h>
 #include <Temporal/Graphics/Animator.h>
 #include <Temporal/Graphics/Graphics.h>
-#include <Temporal/Game/Transform.h>
+#include <Temporal/Game/Position.h>
+#include <Temporal/Game/EntityOrientation.h>
 #include <Temporal/Game/EntityStateMachine.h>
 #include <Temporal/Game/World.h>
 #include <math.h>
 
 namespace Temporal
 {
+	static bool _crappy = false;
+	class RayCastTester : public Component
+	{
+		virtual ComponentType::Enum getType(void) const  { return ComponentType::OTHER; }
+		virtual void handleMessage(Message& message) { if(message.getID() == MessageID::RAY_CAST_SUCCESS) _crappy = true; }
+	public:
+	};
+
 	void addSensors(DynamicBody& body)
 	{
 		// Jump Sensor
@@ -36,6 +45,7 @@ namespace Temporal
 		 * Sum = (2*(sin(45)*F)/G)*(2*cos(45)*F)/2
 		 * Sum = (2*sin(45)*cos(45)*F^2)/G
 		 */
+		// TODO: Constants SLOTH!
 		const float F = 15.0f;
 		const float G = 1.0f;
 		const float A = toRadians(45);
@@ -77,11 +87,11 @@ namespace Temporal
 	
 	Entity* CreatePlatform(Vector postion, Vector size, SpriteSheet* spritesheet) 
 	{
-		Transform* transform = new Transform(postion);
+		Position* position = new Position(postion);
 		StaticBody* staticBody = new StaticBody(size);
 		Renderer* renderer(new Renderer(*spritesheet));
 		Entity* entity = new Entity();
-		entity->add(transform);
+		entity->add(position);
 		entity->add(staticBody);
 		entity->add(renderer);
 		return entity;
@@ -238,23 +248,25 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 #pragma endregion Crap
 
 		// TODO: Central resources container
-		Transform* transform(new Transform(Vector(512.0f, 768.0f), Orientation::LEFT));
+		Position* position(new Position(Vector(512.0f, 768.0f)));
+		EntityOrientation* orientation(new EntityOrientation(Orientation::LEFT));
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
 		addSensors(*dynamicBody);
-		// TODO: Add to physics in entity
 		EntityStateMachine* stateMachine = new EntityStateMachine(EntityStateID::STAND);
 		Animator* animator(new Animator());
 		Renderer* renderer(new Renderer(*spritesheet));
 		
 		Entity* entity = new Entity();
 		
-		entity->add(transform);
+		entity->add(position);
+		entity->add(orientation);
 		entity->add(controller);
 		entity->add(dynamicBody);
 		entity->add(stateMachine);
 		entity->add(animator);
 		entity->add(renderer);
+		entity->add(new RayCastTester());
 		World::get().add(entity);
 		
 		
@@ -265,7 +277,7 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		// TODO: Create from top left
+		// TODO: Create from top left SLOTH!
 		World::get().add(CreatePlatform(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatform(Vector(6.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
 		World::get().add(CreatePlatform(Vector(1018.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
@@ -284,11 +296,12 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		spritesheet->add(animation);
 		animation->add(new Sprite(Rect(screenSize / 2.0f, screenSize), Vector::Zero));
 
-		transform = new Transform(screenSize / 2.0f);
+		position = new Position(screenSize / 2.0f);
 		renderer = new Renderer(*spritesheet);
 		entity = new Entity();
-		entity->add(transform);
+		entity->add(position);
 		entity->add(renderer);
+		// TODO: Visual layer SLOTH!
 		//World::get().add(entity);
 		
 	}
@@ -300,14 +313,21 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		{
 			Game::get().stop();
 		}
-		World::get().broadcastMessage(Message(MessageID::UPDATE));
+		World::get().sendMessageToAllEntities(Message(MessageID::UPDATE));
+		_crappy = false;
+		Vector mouse = Input::get().mouse();
+		Message crappy(MessageID::RAY_CAST, &mouse);
+		World::get().get(0).handleMessage(crappy);
 	}
 
 	void TestPanel::draw(void)
 	{
 		DebugInfo::get().draw();
-		
-		World::get().broadcastMessage(Message(MessageID::DRAW));
+		World::get().sendMessageToAllEntities(Message(MessageID::DRAW));
+		Message crappy(MessageID::GET_POSITION);
+		World::get().get(0).handleMessage(crappy);
+		const Vector crappo = crappy.getParam<Vector>();
+		Graphics::get().drawLine(crappo, Input::get().mouse(), _crappy ? Color::Green : Color::Red);
 	}
 
 	void TestPanel::dispose(void)

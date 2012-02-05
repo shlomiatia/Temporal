@@ -13,12 +13,12 @@ namespace Temporal
 		_entities.push_back(entity);
 	}
 
-	ComponentOfTypeIteraor World::getComponentOfTypeIteraor( ComponentType::Type type )
+	ComponentOfTypeIteraor World::getComponentOfTypeIteraor( ComponentType::Enum type )
 	{
 		return ComponentOfTypeIteraor(type);
 	}
 
-	void World::broadcastMessage(Message& message)
+	void World::sendMessageToAllEntities(Message& message)
 	{
 		for(std::vector<Entity* const>::iterator i = _entities.begin(); i != _entities.end(); ++i)
 			(**i).handleMessage(message);

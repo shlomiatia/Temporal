@@ -16,7 +16,7 @@ namespace Temporal
 		~Entity(void);
 
 		void add(Component* const component);
-		Component* const getByType(ComponentType::Type type);
+		Component* const getByType(ComponentType::Enum type);
 
 		void handleMessage(Message& message);
 

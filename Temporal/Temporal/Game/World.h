@@ -19,9 +19,11 @@ namespace Temporal
 		void dispose(void);
 
 		void add(Entity* const entity);
-		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Type type);
+		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Enum type);
 
-		void broadcastMessage(Message& message);
+		void sendMessageToAllEntities(Message& message);
+
+		Entity& get(int i) { return *_entities[i]; }
 	private:
 		std::vector<Entity* const> _entities;
 
@@ -35,13 +37,13 @@ namespace Temporal
 	class ComponentOfTypeIteraor
 	{
 	public:
-		ComponentOfTypeIteraor(ComponentType::Type type) : _type(type), _current(NULL) { reset(); }
+		ComponentOfTypeIteraor(ComponentType::Enum type) : _type(type), _current(NULL) { reset(); }
 
 		void reset(void);
 		Component& current(void) { return *_current; };
 		bool next(void);
 	private:
-		ComponentType::Type _type;
+		ComponentType::Enum _type;
 		std::vector<Entity* const>::iterator _iterator;
 		Component* _current;
 	};

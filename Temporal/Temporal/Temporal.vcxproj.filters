@@ -31,11 +31,12 @@
     <ClInclude Include="Game\Message.h" />
     <ClInclude Include="Game\EntityStateMachine.h" />
     <ClInclude Include="Graphics\Renderer.h" />
-    <ClInclude Include="Game\Transform.h" />
     <ClInclude Include="Game\MessageParams.h" />
     <ClInclude Include="Physics\StaticBody.h" />
     <ClInclude Include="Game\World.h" />
     <ClInclude Include="Input\InputController.h" />
+    <ClInclude Include="Game\Position.h" />
+    <ClInclude Include="Game\EntityOrientation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -60,9 +61,10 @@
     <ClCompile Include="Graphics\SpriteGroup.cpp" />
     <ClCompile Include="Graphics\SpriteSheet.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
-    <ClCompile Include="Game\Transform.cpp" />
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
     <ClCompile Include="Game\World.cpp" />
+    <ClCompile Include="Game\Position.cpp" />
+    <ClCompile Include="Game\EntityOrientation.cpp" />
   </ItemGroup>
 </Project>
