@@ -170,12 +170,14 @@ namespace Temporal
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(8)) {};
+		Climbe(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(8)), _moved(false) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
 	protected:
-		void enter(EntityStateMachine& stateMachine);
 		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+
+	private:
+		bool _moved;
 	};
 
 	class PrepareToDescend : public EntityState

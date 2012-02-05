@@ -317,16 +317,6 @@ namespace Temporal
 		}
 	}
 
-	void Climbe::enter(EntityStateMachine& stateMachine)
-	{
-		Message getSize(MessageID::GET_SIZE);
-		sendMessage(stateMachine, getSize);
-		const Vector& size = getSize.getParam<Vector>();
-		float forceX = 1.0f;
-		float forceY = size.getHeight() - 1.0f;
-		sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
-	}
-
 	void Climbe::handleMessage(EntityStateMachine& stateMachine, Message& message)
 	{
 		EntityState::handleMessage(stateMachine, message);
@@ -334,17 +324,27 @@ namespace Temporal
 		{
 			case(MessageID::ENTER_STATE):
 			{
-				enter(stateMachine);
+				sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector::Zero));
+				_moved = false;
 				break;
 			}
 			case(MessageID::ANIMATION_ENDED):
 			{
-				stateMachine.changeState(EntityStateID::STAND);
+				Message getSize(MessageID::GET_SIZE);
+				sendMessage(stateMachine, getSize);
+				const Vector& size = getSize.getParam<Vector>();
+				float forceX = 1.0f;
+				float forceY = size.getHeight() - 1.0f;
+				sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
+				_moved = true;
 				break;
 			}
 			case(MessageID::UPDATE):
 			{
-				sendMessage(stateMachine, Message(MessageID::SET_FORCE, &Vector::Zero));
+				if(_moved)
+				{
+					stateMachine.changeState(EntityStateID::STAND);
+				}
 				break;
 			}
 		}
