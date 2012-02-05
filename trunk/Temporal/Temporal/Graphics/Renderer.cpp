@@ -11,46 +11,35 @@ namespace Temporal
 
 	void Renderer::handleMessage(Message& message)
 	{
-		switch(message.getID())
+		if(message.getID() == MessageID::GET_SPRITE_GROUP)
 		{
-			case(MessageID::GET_SPRITE_GROUP):
-			{
-				message.setParam(&_spritesheet.get(_spriteGroupID));
-				break;
-			}
-			case(MessageID::GET_SPRITE):
-			{
-				message.setParam(&_spritesheet.get(_spriteGroupID).get(_spriteID));
-				break;
-			}
-			case(MessageID::SET_SPRITE_GROUP_ID):
-			{
-				_spriteGroupID = message.getParam<int>();
-				break;
-			}
-			case(MessageID::SET_SPRITE_ID):
-			{
-				_spriteID = message.getParam<int>();
-				break;
-			}
-			case(MessageID::DRAW):
-			{
-				draw();
-				break;
-			}
+			message.setParam(&_spritesheet.get(_spriteGroupID));
+		}
+		else if(message.getID() == MessageID::GET_SPRITE)
+		{
+			message.setParam(&_spritesheet.get(_spriteGroupID).get(_spriteID));
+		}
+		else if(message.getID() == MessageID::SET_SPRITE_GROUP_ID)
+		{
+			_spriteGroupID = message.getParam<int>();
+		}
+		else if(message.getID() == MessageID::SET_SPRITE_ID)
+		{
+			_spriteID = message.getParam<int>();
+		}
+		else if(message.getID() == MessageID::DRAW)
+		{
+			draw();
 		}
 	}
 	
 	void Renderer::draw(void) const
 	{
-		Message getPosition(MessageID::GET_POSITION);
-		sendMessage(getPosition);
-		const Vector& position = getPosition.getParam<Vector>();
+		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
+		const Vector& position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
 		Message getOrientation(MessageID::GET_ORIENTATION);
-		sendMessage(getOrientation);
-		Orientation::Type spritesheetOrientation = _spritesheet.getOrientation();
-
-		Orientation::Type orientation = getOrientation.isNullParam() ? spritesheetOrientation : getOrientation.getParam<Orientation::Type>();
+		sendMessageToOwner(getOrientation);
+		Orientation::Enum orientation = getOrientation.isNullParam() ? spritesheetOrientation : getOrientation.getParam<Orientation::Enum>();
 		if(orientation == Orientation::NONE)
 			orientation = spritesheetOrientation;
 		

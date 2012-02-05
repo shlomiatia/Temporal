@@ -14,7 +14,7 @@ namespace Temporal
 		_components.push_back(component);
 	}
 
-	Component* const Entity::getByType(ComponentType::Type type)
+	Component* const Entity::getByType(ComponentType::Enum type)
 	{
 		for(std::vector<Component* const>::iterator i = _components.begin(); i != _components.end(); ++i)
 			if((**i).getType() == type)

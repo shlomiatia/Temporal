@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Temporal/Base/Base.h>
+
 namespace Temporal
 {
 	class Input
@@ -18,23 +20,17 @@ namespace Temporal
 		bool isUp(void) const { return (_up); }
 		bool isDown(void) const { return (_down); }
 		bool isQuit(void) const { return (_quit); }
-		bool isW(void) const { return (_w); }
-		bool isA(void) const { return (_a); }
-		bool isS(void) const { return (_s); }
-		bool isD(void) const { return (_d); }
+		const Vector& mouse(void) const { return _mouse; }
 
 	private:
 		bool _left;
 		bool _right;
 		bool _up;
 		bool _down;
-		bool _w;
-		bool _a;
-		bool _s;
-		bool _d;
 		bool _quit;
+		Vector _mouse;
 
-		Input(void) {}
+		Input(void) : _mouse(Vector::Zero) {}
 		~Input(void) {}
 		Input(const Input&);
 		Input& operator=(const Input&);

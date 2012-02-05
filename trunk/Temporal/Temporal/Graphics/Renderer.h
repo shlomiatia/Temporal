@@ -9,7 +9,7 @@ namespace Temporal
 	public:
 		Renderer(const SpriteSheet& spritesheet, int spriteGroupID = 0, int spriteID = 0);
 
-		virtual ComponentType::Type getType(void) const { return ComponentType::RENDERER; }
+		virtual ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
 
 		virtual void handleMessage(Message& message);
 		void draw(void) const;

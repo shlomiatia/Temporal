@@ -8,13 +8,12 @@ namespace Temporal
 	class Stand : public EntityState
 	{
 	public:
-		Stand(void) 
-			: EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(0)) ,_isDescending(false) {};
+		Stand(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)) ,_isDescending(false) {};
 
 		virtual const char* getName(void) const { return "Stand"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		bool _isDescending;
@@ -23,24 +22,23 @@ namespace Temporal
 	class Fall : public EntityState
 	{
 	public:
-		Fall(void) 
-			: EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(4)) {};
+		Fall(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::FALL)) {};
 
 		virtual const char* getName(void) const { return "Fall"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 	};
 
 	class Walk : public EntityState
 	{
 	public:
-		Walk(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(12, false, true)), _stillWalking(false) {};
+		Walk(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::WALK, false, true)), _stillWalking(false) {};
 
 		virtual const char* getName(void) const { return "Walk"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		bool _stillWalking;
@@ -49,93 +47,93 @@ namespace Temporal
 	class Turn : public EntityState
 	{
 	public:
-		Turn(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(1)) {};
+		Turn(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::TURN)) {};
 
 		virtual const char* getName(void) const { return "Turn"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 	};
 
 
 	class PrepareToJump : public EntityState
 	{
 	public:
-		PrepareToJump(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(0)), _platformFound(false) {};
+		PrepareToJump(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		static const float ANGLES_SIZE;
 		static const float ANGLES[];
-		static const EntityStateID::Type JUMP_START_STATES[];
+		static const EntityStateID::Enum JUMP_START_STATES[];
 
-		EntityStateID::Type _jumpStartState;
+		EntityStateID::Enum _jumpStartState;
 		bool _platformFound;
 	};
 
 	class JumpStart : public EntityState
 	{
 	public:
-		JumpStart(float angle, int animation, EntityStateID::Type jumpState) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(animation)), _angle(angle), _jumpState(jumpState), _platformFound(false) {};
+		JumpStart(EntityStateMachine& stateMachine, float angle, AnimationID::Enum animation, EntityStateID::Enum jumpState) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(animation)), _angle(angle), _jumpState(jumpState), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		float _angle;
-		EntityStateID::Type _jumpState;
+		EntityStateID::Enum _jumpState;
 		bool _platformFound;
 	};
 
 	class JumpUp : public EntityState
 	{
 	public:
-		JumpUp(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(6))  {};
+		JumpUp(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::JUMP_UP))  {};
 
 		virtual const char* getName(void) const { return "JumpUp"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
-		void update(EntityStateMachine& stateMachine);
+		virtual void handleMessage(Message& message);
+		void update(void);
 	};
 
 	class JumpForward : public EntityState
 	{
 	public:
-		JumpForward(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(10))  {};
+		JumpForward(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::JUMP_FORWARD))  {};
 
 		virtual const char* getName(void) const { return "JumpForward"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 	};
 
 	class JumpForwardEnd : public EntityState
 	{
 	public:
-		JumpForwardEnd(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(11))  {};
+		JumpForwardEnd(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::JUMP_FORWARD_END))  {};
 
 		virtual const char* getName(void) const { return "JumpForwardEnd"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 	};
 
 	class Hanging : public EntityState
 	{
 	public:
-		Hanging(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(14, true)), _platform(NULL) {};
+		Hanging(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG_FORWARD, true)), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		const Body* _person;
@@ -145,23 +143,23 @@ namespace Temporal
 	class Hang : public EntityState
 	{
 	public:
-		Hang(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(7)) {};
+		Hang(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG)) {};
 
 		virtual const char* getName(void) const { return "Hang"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 	};
 
 	class Drop : public EntityState
 	{
 	public:
-		Drop(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, false, true, ResetAnimationParams(2)), _platformFound(false) {};
+		Drop(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::KEEP_STATE, false, true, ResetAnimationParams(AnimationID::DROP)), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "Drop"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		bool _platformFound;
@@ -170,11 +168,11 @@ namespace Temporal
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(8)), _moved(false) {};
+		Climbe(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMBE)), _moved(false) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		bool _moved;
@@ -183,12 +181,12 @@ namespace Temporal
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(0)) {};
+		PrepareToDescend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::STAND)) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
 	protected:
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		virtual void handleMessage(Message& message);
 
 	private:
 		const Body* _person;
@@ -198,11 +196,11 @@ namespace Temporal
 	class Descend : public EntityState
 	{
 	public:
-		Descend(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(8, true)){};
+		Descend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::CLIMBE, true)){};
 
 		virtual const char* getName(void) const { return "Descend"; }
 	protected:
-		void enter(EntityStateMachine& stateMachine);
-		virtual void handleMessage(EntityStateMachine& stateMachine, Message& message);
+		void enter(void);
+		virtual void handleMessage(Message& message);
 	};
 }

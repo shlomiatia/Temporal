@@ -4,21 +4,23 @@ namespace Temporal
 {
 	namespace ComponentType
 	{
-		enum Type
+		enum Enum
 		{
 			INPUT_CONTROLLER,
-			TRANSFORM,
+			POSITION,
+			ORIENTATION,
 			DYNAMIC_BODY,
 			STATIC_BODY,
 			STATE_MACHINE,
 			ANIMATOR,
-			RENDERER
+			RENDERER,
 
+			OTHER
 		};
 	}
 	namespace MessageID
 	{
-		enum Type
+		enum Enum
 		{
 			UPDATE,
 			DRAW,
@@ -37,6 +39,8 @@ namespace Temporal
 			SET_GRAVITY,
 			GET_FORCE,
 			SET_FORCE,
+			RAY_CAST,
+			RAY_CAST_SUCCESS,
 			BODY_COLLISION,
 			SENSOR_COLLISION,
 			
@@ -52,9 +56,31 @@ namespace Temporal
 		};
 	}
 
+	namespace AnimationID
+	{
+		enum Enum
+		{
+			STAND,
+			TURN,
+			DROP,
+			FALL_START,
+			FALL,
+			JUMP_UP_START,
+			JUMP_UP,
+			HANG,
+			CLIMBE,
+			JUMP_FORWARD_START,
+			JUMP_FORWARD,
+			JUMP_FORWARD_END,
+			WALK,
+			HANG_FORWARD,
+			HANG_BACKWARD,
+		};
+	}
+
 	namespace SensorID
 	{
-		enum Type
+		enum Enum
 		{
 			JUMP,
 			HANG,
@@ -65,7 +91,7 @@ namespace Temporal
 
 	namespace EntityStateID
 	{
-		enum Type
+		enum Enum
 		{
 			STAND,
 			FALL,
@@ -91,7 +117,7 @@ namespace Temporal
 
 	namespace EntityStateGravityResponse
 	{
-		enum Type
+		enum Enum
 		{
 			DISABLE_GRAVITY,
 			KEEP_STATE,
@@ -101,7 +127,7 @@ namespace Temporal
 
 	namespace VisualLayer
 	{
-		enum Type
+		enum Enum
 		{
 			BACKGROUND = 0,
 			STATIC = 1,

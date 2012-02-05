@@ -5,18 +5,13 @@ namespace Temporal
 {
 	void Animator::handleMessage(Message& message)
 	{
-		switch(message.getID())
+		if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			case(MessageID::RESET_ANIMATION):
-			{
-				reset(message.getParam<ResetAnimationParams>());
-				break;
-			}
-			case(MessageID::UPDATE):
-			{
-				update();
-				break;
-			}
+			reset(message.getParam<ResetAnimationParams>());
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			update();
 		}
 	}
 
@@ -30,17 +25,15 @@ namespace Temporal
 		{
 			int modifier = _rewind ? -1 : 1;
 			_frameID = (framesCount + _frameID + modifier) % framesCount;
-			sendMessage(Message(MessageID::SET_SPRITE_ID, &_frameID));
+			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &_frameID));
 		}
 		if(animationEnded)
-			sendMessage(Message(MessageID::ANIMATION_ENDED));
+			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
 	}
 
 	const SpriteGroup& Animator::getSpriteGroup(void) const
 	{
-		Message getSpriteGroup(MessageID::GET_SPRITE_GROUP);
-		sendMessage(getSpriteGroup);
-		const SpriteGroup& spriteGroup = getSpriteGroup.getParam<SpriteGroup>();
+		const SpriteGroup& spriteGroup = sendQueryMessageToOwner<SpriteGroup>(MessageID::GET_SPRITE_GROUP);
 		return spriteGroup;
 	}
 
@@ -50,9 +43,9 @@ namespace Temporal
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
 		int animationID = resetAnimationParams.getAnimationID();
-		sendMessage(Message(MessageID::SET_SPRITE_GROUP_ID, &animationID));
+		sendMessageToOwner(Message(MessageID::SET_SPRITE_GROUP_ID, &animationID));
 		const SpriteGroup& spriteGroup = getSpriteGroup();
 		_frameID = !_rewind ? 0 : spriteGroup.getSize() - 1;
-		sendMessage(Message(MessageID::SET_SPRITE_ID, &_frameID));
+		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &_frameID));
 	}
 }

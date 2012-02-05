@@ -10,17 +10,17 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		SpriteSheet(const Texture* texture, Orientation::Type orientation) : _texture(texture), _orientation(orientation) {}
+		SpriteSheet(const Texture* texture, Orientation::Enum orientation) : _texture(texture), _orientation(orientation) {}
 		~SpriteSheet(void);
 		void add(const SpriteGroup* const element);
 
 		const Texture& getTexture(void) const { return *_texture; }
-		Orientation::Type getOrientation(void) const { return _orientation; }
-		const SpriteGroup& get(int spriteGroupID) const;
+		Orientation::Enum getOrientation(void) const { return _orientation; }
+		const SpriteGroup& get(unsigned int spriteGroupID) const;
 	private:
 		const Texture* const _texture;
 		std::vector<const SpriteGroup* const> _spriteGroups;
-		const Orientation::Type _orientation;
+		const Orientation::Enum _orientation;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

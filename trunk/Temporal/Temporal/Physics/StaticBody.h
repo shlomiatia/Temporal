@@ -9,6 +9,6 @@ namespace Temporal
 	public:
 		StaticBody(const Vector& size) : Body(size) {};
 
-		virtual ComponentType::Type getType(void) const { return ComponentType::STATIC_BODY; }
+		virtual ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
 	};
 }

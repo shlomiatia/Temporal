@@ -15,8 +15,8 @@ namespace Temporal
 		DynamicBody(const Vector& size) : Body(size), _force(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
 		virtual ~DynamicBody(void);
 
-		virtual ComponentType::Type getType(void) const { return ComponentType::DYNAMIC_BODY; }
-		Orientation::Type getOrientation(void) const;
+		virtual ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
+		Orientation::Enum getOrientation(void) const;
 
 		void applyForce(void);
 		void applyGravity(void);
@@ -24,6 +24,7 @@ namespace Temporal
 
 		virtual void handleMessage(Message& message);
 		void update(void);
+		bool rayCast(const Vector& destination) const;
 
 		void correctCollision(const Body& staticBody);
 		void detectCollision(const Body& staticBody);
@@ -31,7 +32,7 @@ namespace Temporal
 	private:
 		Vector _force;
 		bool _gravityEnabled;
-		Direction::Type _collision;
+		Direction::Enum _collision;
 		std::vector<Sensor* const> _sensors;
 	};
 }

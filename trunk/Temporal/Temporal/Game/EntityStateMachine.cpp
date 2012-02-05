@@ -5,29 +5,28 @@
 
 namespace Temporal
 {
-	// TODO: Switch case
-	EntityStateMachine::EntityStateMachine(EntityStateID::Type initialState)
+	EntityStateMachine::EntityStateMachine(EntityStateID::Enum initialState)
 		: _currentState(NULL)
 	{
-		_states.push_back(new Stand());
-		_states.push_back(new Fall());
-		_states.push_back(new Walk());
-		_states.push_back(new Turn());
-		_states.push_back(new PrepareToJump());
-		_states.push_back(new JumpStart(toRadians(45), 9, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(toRadians(60), 9, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(toRadians(75), 5, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(toRadians(90), 5, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(toRadians(105), 5, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpUp());
-		_states.push_back(new JumpForward());
-		_states.push_back(new JumpForwardEnd());
-		_states.push_back(new Hanging());
-		_states.push_back(new Hang());
-		_states.push_back(new Drop());
-		_states.push_back(new Climbe());
-		_states.push_back(new PrepareToDescend());
-		_states.push_back(new Descend());
+		_states.push_back(new Stand(*this));
+		_states.push_back(new Fall(*this));
+		_states.push_back(new Walk(*this));
+		_states.push_back(new Turn(*this));
+		_states.push_back(new PrepareToJump(*this));
+		_states.push_back(new JumpStart(*this, toRadians(45), AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(*this, toRadians(60), AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(*this, toRadians(75), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpStart(*this, toRadians(90), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpStart(*this, toRadians(105), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpUp(*this));
+		_states.push_back(new JumpForward(*this));
+		_states.push_back(new JumpForwardEnd(*this));
+		_states.push_back(new Hanging(*this));
+		_states.push_back(new Hang(*this));
+		_states.push_back(new Drop(*this));
+		_states.push_back(new Climbe(*this));
+		_states.push_back(new PrepareToDescend(*this));
+		_states.push_back(new Descend(*this));
 		
 		_currentState = _states[initialState];
 	}
@@ -40,18 +39,18 @@ namespace Temporal
 		}
 	}
 
-	void EntityStateMachine::changeState(EntityStateID::Type stateType, const void* const param)
+	void EntityStateMachine::changeState(EntityStateID::Enum stateType, const void* const param)
 	{
 		if(_currentState != NULL)
 		{
-			_currentState->handleMessage(*this, Message(MessageID::EXIT_STATE));
+			_currentState->handleMessage(Message(MessageID::EXIT_STATE));
 		}
 		_currentState = _states[stateType];
-		_currentState->handleMessage(*this, Message(MessageID::ENTER_STATE, param));
+		_currentState->handleMessage(Message(MessageID::ENTER_STATE, param));
 	}
 
 	void EntityStateMachine::handleMessage(Message& message)
 	{
-		_currentState->handleMessage(*this, message);
+		_currentState->handleMessage(message);
 	}
 }

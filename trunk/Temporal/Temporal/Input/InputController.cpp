@@ -9,21 +9,19 @@ namespace Temporal
 		{
 			if(Input::get().isUp())
 			{
-				sendMessage(Message(MessageID::ACTION_UP));
+				sendMessageToOwner(Message(MessageID::ACTION_UP));
 			}
 			if(Input::get().isDown())
 			{
-				sendMessage(Message(MessageID::ACTION_DOWN));
+				sendMessageToOwner(Message(MessageID::ACTION_DOWN));
 			}
 			if(Input::get().isLeft() || Input::get().isRight())
 			{
-				Message getOrientation(MessageID::GET_ORIENTATION);
-				sendMessage(getOrientation);
-				Orientation::Type orientation = getOrientation.getParam<Orientation::Type>();
+				Orientation::Enum orientation =sendQueryMessageToOwner<Orientation::Enum>(MessageID::GET_ORIENTATION);
 				if((Input::get().isLeft() && orientation == Orientation::LEFT) || (Input::get().isRight() && orientation == Orientation::RIGHT))
-					sendMessage(Message(MessageID::ACTION_FORWARD));
+					sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 				else
-					sendMessage(Message(MessageID::ACTION_BACKWARD));
+					sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 			}
 		}
 	}
