@@ -11,6 +11,7 @@ namespace Temporal
 	class EntityState
 	{
 	public:
+		// TODO: Either pass component to entity constructor, or create a property here
 		EntityState(EntityStateMachine& stateMachine, EntityStateGravityResponse::Enum gravityResponse, bool supportsHang, bool stopForce, const ResetAnimationParams& animation)
 			: _stateMachine(stateMachine), _gravityResponse(gravityResponse), _supportsHang(supportsHang), _stopForce(stopForce), _animation(animation) {}
 		virtual ~EntityState(void) {};
@@ -25,7 +26,6 @@ namespace Temporal
 		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
 
 	private:
-		
 		const EntityStateGravityResponse::Enum _gravityResponse;
 		const bool _supportsHang;
 		const bool _stopForce;

@@ -13,7 +13,7 @@ namespace Temporal
 
 	Rect Body::getBounds(void) const
 	{
-		const Vector& position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
+		const Vector& position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
 		return Rect(position, _size);
 	}
 

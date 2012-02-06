@@ -48,7 +48,7 @@ namespace Temporal
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
 	{
-		Orientation::Enum orientation = sendQueryMessageToOwner<Orientation::Enum>(MessageID::GET_ORIENTATION);
+		Orientation::Enum orientation = sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
 		return orientation;
 	}
 
@@ -66,7 +66,7 @@ namespace Temporal
 
 	void DynamicBody::applyForce(void)
 	{
-		Vector position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
+		Vector position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
 		position += _force;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
 	}
@@ -202,7 +202,7 @@ namespace Temporal
 
 	bool DynamicBody::rayCast(const Vector& destination) const
 	{
-		const Vector& position = sendQueryMessageToOwner<Vector>(MessageID::GET_POSITION);
+		const Vector& position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
 		float x0 = position.getX();
 		float y0 = position.getY();
 		float x1 = destination.getX();

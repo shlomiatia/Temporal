@@ -13,17 +13,17 @@ namespace Temporal
 	public:
 		Component(void) {}
 		virtual ~Component(void) {}
+
 		void setEntity(Entity* entity) { _entity = entity; }
-
 		virtual ComponentType::Enum getType(void) const = 0;
-		virtual void handleMessage(Message& message) = 0;
 
+		virtual void handleMessage(Message& message) = 0;
 		void sendMessageToOwner(Message& message) const;
 
+		// TODO: Remove all templates
 		template <class T>
-		const T& sendQueryMessageToOwner(MessageID::Enum property, void* param = NULL) const
+		const T& sendQueryMessageToOwner(Message& query) const
 		{
-			Message query(property, param);
 			sendMessageToOwner(query);
 			return query.getParam<T>();
 		}

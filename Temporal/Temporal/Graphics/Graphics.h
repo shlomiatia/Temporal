@@ -14,15 +14,12 @@ namespace Temporal
 		}
 
 		void init(const Vector& resolution, const Vector& viewSize, bool fullScreen = false);
-
 		void dispose(void) const;
 
 		void setVideoMode(const Vector& resolution, const Vector& viewSize, bool fullScreen = false) const;
-
 		void setTitle(const char* title) const;
 
 		void prepareForDrawing(void) const;
-
 		void finishDrawing(void) const;
 
 		Vector setTranslation(const Vector& translation) { _translation = translation; }

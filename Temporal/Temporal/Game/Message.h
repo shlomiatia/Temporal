@@ -12,9 +12,10 @@ namespace Temporal
 		Message(MessageID::Enum id, const void* const param = NULL) : _id(id), _param(param) {}
 
 		MessageID::Enum getID(void) const { return _id; }
-		void setParam(const void* const param) { _param = param; }
 		bool isNullParam(void) const { return getParam() == NULL; }
+		void setParam(const void* const param) { _param = param; }
 
+		// TODO: Force external users to const cast
 		template <class T>
 		const T& getParam(void) const
 		{
