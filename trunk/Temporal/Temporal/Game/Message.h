@@ -13,14 +13,20 @@ namespace Temporal
 
 		MessageID::Enum getID(void) const { return _id; }
 		void setParam(const void* const param) { _param = param; }
-		
 		bool isNullParam(void) const { return getParam() == NULL; }
 
 		template <class T>
 		const T& getParam(void) const
 		{
 			assert(!isNullParam());
-			return *((T*)getParam());
+			return *((const T*)getParam());
+		}
+
+		template <class T>
+		void setOutParam(const T& param)
+		{
+			T* tp = (T*)_param;
+			*tp = param;
 		}
 		
 	private:

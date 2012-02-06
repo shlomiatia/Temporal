@@ -42,7 +42,6 @@ namespace Temporal
 			GET_FORCE,
 			SET_FORCE,
 			RAY_CAST,
-			RAY_CAST_SUCCESS,
 			BODY_COLLISION,
 			SENSOR_COLLISION,
 

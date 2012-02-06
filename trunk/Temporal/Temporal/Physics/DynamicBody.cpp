@@ -1,5 +1,6 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
+#include <Temporal/Game/MessageParams.h>
 #include <Temporal/Game/World.h>
 #include <Temporal/Graphics/Graphics.h>
 #include <algorithm>
@@ -103,11 +104,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::RAY_CAST)
 		{
-			const Vector& destination = message.getParam<Vector>();
-			if(rayCast(destination))
-			{
-				sendMessageToOwner(Message(MessageID::RAY_CAST_SUCCESS));
-			}
+			RayCastParams param = message.getParam<RayCastParams>();
+			const Vector& target = param.getTarget();
+			bool rayCastSuccessful = rayCast(target);
+			param.setResult(rayCastSuccessful);
+			message.setOutParam(param);
+
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{

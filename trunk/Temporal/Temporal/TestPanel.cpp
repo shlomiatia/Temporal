@@ -18,13 +18,7 @@
 
 namespace Temporal
 {
-	static bool _crappy = false;
-	class RayCastTester : public Component
-	{
-		virtual ComponentType::Enum getType(void) const  { return ComponentType::OTHER; }
-		virtual void handleMessage(Message& message) { if(message.getID() == MessageID::RAY_CAST_SUCCESS) _crappy = true; }
-	public:
-	};
+	static bool _rayCastSuccessful = false;
 
 	void addSensors(DynamicBody& body)
 	{
@@ -271,7 +265,6 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		entity->add(stateMachine);
 		entity->add(animator);
 		entity->add(renderer);
-		entity->add(new RayCastTester());
 		World::get().add(entity);
 		
 		
@@ -316,10 +309,12 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 			Game::get().stop();
 		}
 		World::get().sendMessageToAllEntities(Message(MessageID::UPDATE));
-		_crappy = false;
-		Vector mouse = Input::get().mouse();
-		Message crappy(MessageID::RAY_CAST, &mouse);
-		World::get().get(0).handleMessage(crappy);
+
+		const Vector& mouse = Input::get().mouse();
+		RayCastParams params(mouse);
+		Message message(MessageID::RAY_CAST, &params);
+		World::get().get(0).handleMessage(message);
+		_rayCastSuccessful = params.getResult();
 	}
 
 	void TestPanel::draw(void)
@@ -328,10 +323,10 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			World::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		Message crappy(MessageID::GET_POSITION);
-		World::get().get(0).handleMessage(crappy);
-		const Vector crappo = crappy.getParam<Vector>();
-		Graphics::get().drawLine(crappo, Input::get().mouse(), _crappy ? Color::Green : Color::Red);
+		Message message(MessageID::GET_POSITION);
+		World::get().get(0).handleMessage(message);
+		const Vector position = message.getParam<Vector>();
+		Graphics::get().drawLine(position, Input::get().mouse(), _rayCastSuccessful ? Color::Green : Color::Red);
 	}
 
 	void TestPanel::dispose(void)
