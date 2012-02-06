@@ -4,8 +4,6 @@
 
 namespace Temporal
 {
-	const float JUMP_FORCE = 15.0f;
-
 	void Stand::handleMessage(Message& message)
 	{
 		EntityState::handleMessage(message);
@@ -73,7 +71,7 @@ namespace Temporal
 			}
 			else
 			{
-				_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(2.0f, 0.0f)));
+				_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(_stateMachine.WALK_FORCE, 0.0f)));
 				_stillWalking = false;
 			}
 		}
@@ -107,14 +105,16 @@ namespace Temporal
 			const Sensor& sensor = message.getParam<Sensor>();
 			const Body& sensorOwner = sensor.getOwner();
 			const Body* const sensedBody = sensor.getSensedBody();
-			const float F = JUMP_FORCE;
-			const float hangSensorSize = 20.0f; // TODO: SLOTH!
+			const float F = _stateMachine.JUMP_FORCE;
+			SensorID::Enum hangSensorID = SensorID::HANG;
+			const Vector& hangSensorSize = _stateMachine.sendQueryMessageToOwner<Vector>(MessageID::GET_SENSOR_SIZE, &hangSensorID);
+			float hangSensorWidth = hangSensorSize.getWidth();
 			Orientation::Enum orientation = _stateMachine.sendQueryMessageToOwner<Orientation::Enum>(MessageID::GET_ORIENTATION);
 			float target = sensedBody->getBounds().getOppositeSide(orientation);
 			float front = sensorOwner.getBounds().getSide(orientation);
 			float x = (target - front) * orientation;
 			
-			if(x >= 0 && x < hangSensorSize - 1.0f)
+			if(x >= 0 && x < hangSensorWidth - 1.0f)
 			{
 				_jumpStartState = EntityStateID::JUMP_START_90;
 				_platformFound = true;
@@ -122,7 +122,7 @@ namespace Temporal
 			else
 			{
 				float max = 0.0f;
-				float G = 1.0f;
+				float G = _stateMachine.sendQueryMessageToOwner<float>(MessageID::GET_GRAVITY);
 				for(int i = 0; i < ANGLES_SIZE; ++i)
 				{
 					/* x = Time*Force*cos(Angle)
@@ -161,7 +161,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ANIMATION_ENDED)
 		{	
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(JUMP_FORCE*cos(_angle), JUMP_FORCE*sin(_angle))));
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(_stateMachine.JUMP_FORCE*cos(_angle), _stateMachine.JUMP_FORCE*sin(_angle))));
 			_stateMachine.changeState(_jumpState);
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)

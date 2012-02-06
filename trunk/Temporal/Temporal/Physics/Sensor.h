@@ -7,6 +7,7 @@ namespace Temporal { class DynamicBody; }
 
 namespace Temporal
 {
+	// TODO: Serparte to a different component
 	class Sensor
 	{
 	public:
@@ -15,6 +16,7 @@ namespace Temporal
 
 		const DynamicBody& getOwner(void) const { return _owner; }
 		SensorID::Enum getID() const { return _id; }
+		const Vector& getSize(void) const { return _size; }
 		Rect getBounds(void) const;
 		const Body* const getSensedBody(void) const { return _sensedBody; }
 		void setSensedBody(const Body* const sensedBody) { _sensedBody = sensedBody; }

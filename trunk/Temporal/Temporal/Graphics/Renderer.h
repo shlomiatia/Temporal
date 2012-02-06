@@ -7,7 +7,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		Renderer(const SpriteSheet& spritesheet, int spriteGroupID = 0, int spriteID = 0);
+		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, int spriteGroupID = 0, int spriteID = 0);
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
 
@@ -18,6 +18,7 @@ namespace Temporal
 
 		int _spriteGroupID;
 		int _spriteID;
+		VisualLayer::Enum _layer;
 
 		Renderer(const Renderer&);
 		Renderer& operator=(const Renderer&);

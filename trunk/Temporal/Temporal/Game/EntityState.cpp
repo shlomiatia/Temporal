@@ -8,7 +8,7 @@ namespace Temporal
 	{
 		if(_gravityResponse == EntityStateGravityResponse::DISABLE_GRAVITY)
 		{
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_GRAVITY, &gravityEnabled));
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 		}
 	}
 

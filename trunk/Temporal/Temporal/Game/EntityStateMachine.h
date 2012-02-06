@@ -12,6 +12,9 @@ namespace Temporal
 	class EntityStateMachine : public Component
 	{
 	public:
+		static const float WALK_FORCE;
+		static const float JUMP_FORCE;
+
 		EntityStateMachine(EntityStateID::Enum initialState);
 		~EntityStateMachine(void);
 

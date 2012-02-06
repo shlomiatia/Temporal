@@ -12,6 +12,9 @@ namespace Temporal
 	class DynamicBody : public Body
 	{
 	public:
+		static const float GRAVITY;
+		static const float MAX_GRAVITY;
+
 		DynamicBody(const Vector& size) : Body(size), _force(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
 		virtual ~DynamicBody(void);
 
@@ -30,6 +33,7 @@ namespace Temporal
 		void detectCollision(const Body& staticBody);
 
 	private:
+
 		Vector _force;
 		bool _gravityEnabled;
 		Direction::Enum _collision;
