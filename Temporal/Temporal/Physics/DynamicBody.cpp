@@ -6,6 +6,9 @@
 
 namespace Temporal
 {
+	const float DynamicBody::GRAVITY(1.0f);
+	const float DynamicBody::MAX_GRAVITY(20.0f);
+
 	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Rect& boundsB)
 	{
 		Direction::Enum collision(Direction::NONE);
@@ -53,9 +56,9 @@ namespace Temporal
 		if(_gravityEnabled)
 		{
 			float y = _force.getY();
-			y -= 1.0f;
-			if(y < -20.0f)
-				y = -20.0f;
+			y -= GRAVITY;
+			if(y < -MAX_GRAVITY)
+				y = -MAX_GRAVITY;
 			_force.setY(y);
 		}
 	}
@@ -79,12 +82,22 @@ namespace Temporal
 		{
 			message.setParam(&_force);
 		}
+		else if(message.getID() == MessageID::GET_SENSOR_SIZE)
+		{
+			SensorID::Enum sensorID = message.getParam<SensorID::Enum>();
+			const Vector& size = _sensors[sensorID]->getSize();
+			message.setParam(&size);
+		}
+		else if(message.getID() == MessageID::GET_GRAVITY)
+		{
+			message.setParam(&GRAVITY);
+		}
 		else if(message.getID() == MessageID::SET_FORCE)
 		{
 			const Vector& force = message.getParam<Vector>();
 			_force = Vector(force.getX() * getOrientation(), force.getY()); 
 		}
-		else if(message.getID() == MessageID::SET_GRAVITY)
+		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled = message.getParam<bool>();
 		}

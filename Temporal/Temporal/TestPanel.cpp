@@ -45,9 +45,8 @@ namespace Temporal
 		 * Sum = (2*(sin(45)*F)/G)*(2*cos(45)*F)/2
 		 * Sum = (2*sin(45)*cos(45)*F^2)/G
 		 */
-		// TODO: Constants SLOTH!
-		const float F = 15.0f;
-		const float G = 1.0f;
+		const float F = EntityStateMachine::JUMP_FORCE;
+		const float G = DynamicBody::GRAVITY;
 		const float A = toRadians(45);
 		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
@@ -84,17 +83,23 @@ namespace Temporal
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
 		sensor = new Sensor(SensorID::FRONT_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 	}
-	
-	Entity* CreatePlatform(Vector postion, Vector size, SpriteSheet* spritesheet) 
+
+	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet) 
 	{
-		Position* position = new Position(postion);
+		Position* position = new Position(center);
 		StaticBody* staticBody = new StaticBody(size);
-		Renderer* renderer(new Renderer(*spritesheet));
+		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::STATIC));
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(staticBody);
 		entity->add(renderer);
 		return entity;
+	}
+
+	Entity* CreatePlatformFromBottomLeft(const Vector& bottomLeft, const Vector&  size, SpriteSheet* spritesheet)
+	{
+		Vector center(bottomLeft.getX() + (size.getWidth() - 1.0f) / 2.0f, bottomLeft.getY() + (size.getHeight() - 1.0f) / 2.0f);
+		return CreatePlatformFromCenter(center, size, spritesheet);
 	}
 
 	void TestPanel::init(void)
@@ -255,7 +260,7 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		addSensors(*dynamicBody);
 		EntityStateMachine* stateMachine = new EntityStateMachine(EntityStateID::STAND);
 		Animator* animator(new Animator());
-		Renderer* renderer(new Renderer(*spritesheet));
+		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::DYNAMIC));
 		
 		Entity* entity = new Entity();
 		
@@ -277,18 +282,17 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		// TODO: Create from top left SLOTH!
-		World::get().add(CreatePlatform(Vector(512.0f, 8.0f), Vector(1024.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(6.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(1018.0f, 384.0f), Vector(16.0f - 4.0, 768.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(898.0f, 132.0f), Vector(256.0f - 4.0, 16.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(120.0f, 132.0f), Vector(256.0f - 4.0, 16.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(778.0f, 68.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
-		World::get().add(CreatePlatform(Vector(62.0f, 256.0f), Vector(128.0f - 4.0, 16.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(118.0f, 320.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
-		World::get().add(CreatePlatform(Vector(120.0f, 68.0f), Vector(16.0f - 4.0, 144.0), spritesheet));
-		World::get().add(CreatePlatform(Vector(512.0f, 132.0f), Vector(256.0f - 4.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatform(Vector(962.0f, 196.0f), Vector(128.0f - 4.0, 144.0), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(1024.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(128.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
 		
 		texture = Texture::load("c:\\bg.png");
 		spritesheet = new SpriteSheet(texture, Orientation::NONE);
@@ -297,13 +301,11 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 		animation->add(new Sprite(Rect(screenSize / 2.0f, screenSize), Vector::Zero));
 
 		position = new Position(screenSize / 2.0f);
-		renderer = new Renderer(*spritesheet);
+		renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND);
 		entity = new Entity();
 		entity->add(position);
 		entity->add(renderer);
-		// TODO: Visual layer SLOTH!
-		//World::get().add(entity);
-		
+		World::get().add(entity);	
 	}
 
 	void TestPanel::update(void)
@@ -323,7 +325,9 @@ animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-26, 10)));
 	void TestPanel::draw(void)
 	{
 		DebugInfo::get().draw();
-		World::get().sendMessageToAllEntities(Message(MessageID::DRAW));
+		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
+			World::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+
 		Message crappy(MessageID::GET_POSITION);
 		World::get().get(0).handleMessage(crappy);
 		const Vector crappo = crappy.getParam<Vector>();

@@ -21,9 +21,9 @@ namespace Temporal
 		void sendMessageToOwner(Message& message) const;
 
 		template <class T>
-		const T& sendQueryMessageToOwner(MessageID::Enum property) const
+		const T& sendQueryMessageToOwner(MessageID::Enum property, void* param = NULL) const
 		{
-			Message query(property);
+			Message query(property, param);
 			sendMessageToOwner(query);
 			return query.getParam<T>();
 		}

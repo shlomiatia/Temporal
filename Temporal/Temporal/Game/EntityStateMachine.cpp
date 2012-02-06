@@ -5,6 +5,9 @@
 
 namespace Temporal
 {
+	const float EntityStateMachine::WALK_FORCE(2.0f);
+	const float EntityStateMachine::JUMP_FORCE(15.0f);
+
 	EntityStateMachine::EntityStateMachine(EntityStateID::Enum initialState)
 		: _currentState(NULL)
 	{

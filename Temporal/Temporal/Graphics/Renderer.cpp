@@ -4,8 +4,8 @@
 
 namespace Temporal
 {
-	Renderer::Renderer(const SpriteSheet& spritesheet, int spriteGroupID, int spriteID)
-		: _spritesheet(spritesheet), _spriteGroupID(spriteGroupID), _spriteID(spriteID)
+	Renderer::Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, int spriteGroupID, int spriteID)
+		: _spritesheet(spritesheet), _layer(layer), _spriteGroupID(spriteGroupID), _spriteID(spriteID)
 	{
 	}
 
@@ -29,7 +29,9 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			draw();
+			VisualLayer::Enum layer = message.getParam<VisualLayer::Enum>();
+			if(_layer == layer)
+				draw();			
 		}
 	}
 	
