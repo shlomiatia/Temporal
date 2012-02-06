@@ -18,4 +18,18 @@ namespace Temporal
 		const bool _rewind;
 		const bool _repeat;
 	};
+
+	class RayCastParams
+	{
+	public:
+		RayCastParams(Vector target) : _target(target) {}
+
+		const Vector& getTarget(void) const { return _target; }
+		bool getResult(void) const { return _result; }
+		void setResult(bool result) { _result = result; }
+	private:
+		Vector _target;
+		bool _result;
+		
+	};
 }
