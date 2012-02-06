@@ -59,7 +59,7 @@ namespace Temporal
 	class PrepareToJump : public EntityState
 	{
 	public:
-		PrepareToJump(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)), _platformFound(false) {};
+		PrepareToJump(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)) {};
 
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
@@ -72,7 +72,8 @@ namespace Temporal
 		static const EntityStateID::Enum JUMP_START_STATES[];
 
 		EntityStateID::Enum _jumpStartState;
-		bool _platformFound;
+
+		void handleJumpSensor(Message &message);
 	};
 
 	class JumpStart : public EntityState
@@ -100,7 +101,6 @@ namespace Temporal
 
 	protected:
 		virtual void handleMessage(Message& message);
-		void update(void);
 	};
 
 	class JumpForward : public EntityState
@@ -138,6 +138,8 @@ namespace Temporal
 	private:
 		const Body* _person;
 		const Body* _platform;
+
+		void update(void);
 	};
 
 	class Hang : public EntityState
@@ -191,6 +193,8 @@ namespace Temporal
 	private:
 		const Body* _person;
 		const Body* _platform;
+
+		void update(void);
 	};
 
 	class Descend : public EntityState
@@ -200,7 +204,6 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Descend"; }
 	protected:
-		void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 }

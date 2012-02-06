@@ -9,6 +9,7 @@ namespace Temporal { class Component; }
 
 namespace Temporal
 {
+	// TODO: ID & component order
 	class Entity
 	{
 	public:

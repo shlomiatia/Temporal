@@ -53,6 +53,7 @@ namespace Temporal
 		}
 		else if(_supportsHang && isSensorMessage(message, SensorID::HANG))
 		{
+			// TODO: Transfer parameters between states
 			_stateMachine.changeState(EntityStateID::HANGING, &message.getParam<Sensor>());
 		}
 	}

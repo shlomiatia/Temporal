@@ -25,6 +25,6 @@ namespace Temporal
 	void Entity::handleMessage(Message& message)
 	{
 		for(std::vector<Component* const>::iterator i = _components.begin(); i != _components.end(); ++i)
-			(*i)->handleMessage(message);
+			(**i).handleMessage(message);
 	}
 }

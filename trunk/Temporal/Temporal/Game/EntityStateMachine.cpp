@@ -37,9 +37,7 @@ namespace Temporal
 	EntityStateMachine::~EntityStateMachine(void)
 	{
 		for(std::vector<EntityState*>::iterator i = _states.begin(); i != _states.end(); ++i)
-		{
 			delete *i;
-		}
 	}
 
 	void EntityStateMachine::changeState(EntityStateID::Enum stateType, const void* const param)
