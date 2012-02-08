@@ -3,7 +3,7 @@
 namespace Temporal { class Sensor; }
 
 #include <Temporal\Base\Base.h>
-#include "Body.h"
+#include "StaticBody.h"
 #include "Sensor.h"
 #include <vector>
 
@@ -29,8 +29,8 @@ namespace Temporal
 		void update(void);
 		bool rayCast(const Vector& destination) const;
 
-		void correctCollision(const Body& staticBody);
-		void detectCollision(const Body& staticBody);
+		void correctCollision(const StaticBody& staticBody);
+		void detectCollision(const StaticBody& staticBody);
 
 	private:
 		Vector _force;

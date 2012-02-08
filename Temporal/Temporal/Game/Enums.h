@@ -134,10 +134,12 @@ namespace Temporal
 		{
 			BACKGROUND = 0,
 			STATIC = 1,
-			DYNAMIC = 2
+			PC = 2,
+			COVER = 3,
+			NPC = 4
 		};
 
 		static const int FARTHEST = BACKGROUND;
-		static const int NEAREST = DYNAMIC;
+		static const int NEAREST = NPC;
 	}
 }
