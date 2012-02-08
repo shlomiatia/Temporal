@@ -28,7 +28,7 @@ namespace Temporal
 			const Rect bounds(getBounds());
 			message.setOutParam(bounds);
 		}
-		else if(message.getID() == MessageID::DRAW)
+		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			Graphics::get().drawRect(getBounds());
 		}

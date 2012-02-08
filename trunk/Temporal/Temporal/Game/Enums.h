@@ -24,6 +24,7 @@ namespace Temporal
 		{
 			UPDATE,
 			DRAW,
+			DEBUG_DRAW,
 
 			GET_POSITION,
 			SET_POSITION,
