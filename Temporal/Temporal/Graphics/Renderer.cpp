@@ -38,7 +38,11 @@ namespace Temporal
 	void Renderer::draw(void) const
 	{
 		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Vector& position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
+		Vector position(Vector::Zero);
+		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
+		sendMessageToOwner(getDrawPosition);
+		if(position == Vector::Zero)
+			position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
 		Message getOrientation(MessageID::GET_ORIENTATION);
 		sendMessageToOwner(getOrientation);
 

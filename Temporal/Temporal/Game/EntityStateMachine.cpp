@@ -9,7 +9,7 @@ namespace Temporal
 	const float EntityStateMachine::JUMP_FORCE(15.0f);
 
 	EntityStateMachine::EntityStateMachine(EntityStateID::Enum initialState)
-		: _currentState(NULL)
+		: _currentState(NULL), _drawPositionOverride(Vector::Zero)
 	{
 		_states.push_back(new Stand(*this));
 		_states.push_back(new Fall(*this));
@@ -52,6 +52,23 @@ namespace Temporal
 
 	void EntityStateMachine::handleMessage(Message& message)
 	{
-		_currentState->handleMessage(message);
+		if(message.getID() == MessageID::GET_DRAW_POSITION)
+		{
+			if(_drawPositionOverride != Vector::Zero)
+			{
+				message.setOutParam(_drawPositionOverride);
+			}
+			else
+			{
+				Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
+				sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
+				Vector drawPosition(bounds.getCenterX(), bounds.getBottom());
+				message.setOutParam(drawPosition);
+			}
+		}
+		else
+		{
+			_currentState->handleMessage(message);
+		}
 	}
 }
