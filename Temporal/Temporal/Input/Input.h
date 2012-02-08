@@ -30,7 +30,7 @@ namespace Temporal
 		bool _quit;
 		Vector _mouse;
 
-		Input(void) : _mouse(Vector::Zero) {}
+		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _mouse(Vector::Zero) {}
 		~Input(void) {}
 		Input(const Input&);
 		Input& operator=(const Input&);

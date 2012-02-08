@@ -15,7 +15,7 @@ namespace Temporal
 		bool isNullParam(void) const { return getParam() == NULL; }
 		void setParam(const void* const param) { _param = param; }
 
-		// TODO: Force external users to const cast
+		// TODO: Force external users to const cast SLOTH!
 		template <class T>
 		const T& getParam(void) const
 		{

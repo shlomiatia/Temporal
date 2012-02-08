@@ -33,7 +33,6 @@ namespace Temporal
 		void detectCollision(const Body& staticBody);
 
 	private:
-
 		Vector _force;
 		bool _gravityEnabled;
 		Direction::Enum _collision;

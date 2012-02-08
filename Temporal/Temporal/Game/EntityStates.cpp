@@ -93,7 +93,7 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Convert angles to std:vector
+	// TODO: Convert angles to std:vector SLOTH!
 	const float PrepareToJump::ANGLES_SIZE = 4;
 	const float PrepareToJump::ANGLES[] = { toRadians(45.0f), toRadians(60.0f), toRadians(75.0f), toRadians(105.0) };
 	const EntityStateID::Enum PrepareToJump::JUMP_START_STATES[] = { EntityStateID::JUMP_START_45, EntityStateID::JUMP_START_60, EntityStateID::JUMP_START_75, EntityStateID::JUMP_START_105 };
@@ -181,7 +181,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			// TODO: Constants for each angle
+			// TODO: Constants for each angle SLOTH!
 			if(_angle != toRadians(45) && !_platformFound)
 				_stateMachine.changeState(EntityStateID::JUMP_START_45, &_platformFound);
 		}
@@ -308,23 +308,19 @@ namespace Temporal
 		EntityState::handleMessage(message);
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
-			_moved = false;
-		}
-		else if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
 			const Vector& size = _stateMachine.sendQueryMessageToOwner<Vector>(Message(MessageID::GET_SIZE));
 			float forceX = 1.0f;
 			float forceY = size.getHeight() - 1.0f;
 			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
-			_moved = true;
+			
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(_moved)
-			{
-				_stateMachine.changeState(EntityStateID::STAND);
-			}
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
+		}
+		else if(message.getID() == MessageID::ANIMATION_ENDED)
+		{
+			_stateMachine.changeState(EntityStateID::STAND);
 		}
 	}
 

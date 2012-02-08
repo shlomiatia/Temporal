@@ -7,7 +7,7 @@ namespace Temporal { class DynamicBody; }
 
 namespace Temporal
 {
-	// TODO: Serparte to a different component
+	// TODO: Serparte to a different component SLOTH!
 	class Sensor
 	{
 	public:

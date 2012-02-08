@@ -10,7 +10,10 @@ namespace Temporal
 	public:
 		SpriteGroup(void) {}
 		~SpriteGroup(void);
+
 		void add(const Sprite* const sprite);
+
+		// TODO: Maybe use sprite iterator instead
 		const Sprite& get(unsigned int spriteID) const;
 		int getSize(void) const;
 	private:
