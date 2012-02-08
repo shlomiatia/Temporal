@@ -26,7 +26,7 @@ namespace Temporal
 		float getWidth(void) const { return _size.getWidth(); }
 		float getHeight(void) const { return _size.getHeight(); }
 
-		// TODO: Graphics bounds
+		// TODO: Graphics bounds SLOTH!
 		float getGraphicsLeft(void) const { return getLeft(); }
 		float getGraphicsRight(void) const { return getRight() + 1.0f; }
 		float getGraphicsTop(void) const { return getBottom(); }

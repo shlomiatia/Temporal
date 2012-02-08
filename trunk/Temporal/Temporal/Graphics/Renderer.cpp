@@ -4,11 +4,6 @@
 
 namespace Temporal
 {
-	Renderer::Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, int spriteGroupID, int spriteID)
-		: _spritesheet(spritesheet), _layer(layer), _spriteGroupID(spriteGroupID), _spriteID(spriteID)
-	{
-	}
-
 	void Renderer::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_SPRITE_GROUP)
@@ -46,7 +41,7 @@ namespace Temporal
 		Message getOrientation(MessageID::GET_ORIENTATION);
 		sendMessageToOwner(getOrientation);
 
-		// TODO: Find a solution for output message parameters
+		// TODO: Find a solution for output message parameters SLOTH!
 		Orientation::Enum orientation = getOrientation.isNullParam() ? spritesheetOrientation : getOrientation.getParam<Orientation::Enum>();
 		if(orientation == Orientation::NONE)
 			orientation = spritesheetOrientation;

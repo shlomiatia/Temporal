@@ -3,6 +3,8 @@
 #include "EntityState.h"
 #include <Temporal/Physics/Body.h>
 
+// TODO: Order the mother fuckers states SLOTH!
+
 namespace Temporal
 {
 	class Stand : public EntityState
@@ -128,7 +130,7 @@ namespace Temporal
 	class Hanging : public EntityState
 	{
 	public:
-		Hanging(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG_FORWARD, true)), _platform(NULL) {};
+		Hanging(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG_FORWARD, true)), _person(NULL), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
@@ -170,20 +172,17 @@ namespace Temporal
 	class Climbe : public EntityState
 	{
 	public:
-		Climbe(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMBE)), _moved(false) {};
+		Climbe(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMBE)) {};
 
 		virtual const char* getName(void) const { return "Climbe"; }
 	protected:
 		virtual void handleMessage(Message& message);
-
-	private:
-		bool _moved;
 	};
 
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::STAND)) {};
+		PrepareToDescend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::STAND)), _person(NULL), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 

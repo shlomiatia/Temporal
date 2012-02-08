@@ -17,7 +17,7 @@ namespace Temporal
 		static const float WALK_FORCE;
 		static const float JUMP_FORCE;
 
-		// TODO: Where to get initial state
+		// TODO: Where to get initial state SLOTH!
 		EntityStateMachine(EntityStateID::Enum initialState);
 		~EntityStateMachine(void);
 
@@ -25,7 +25,7 @@ namespace Temporal
 		void resetDrawPositionOverride(void) { _drawPositionOverride = Vector::Zero; }
 		void setDrawPositionOverride(Vector val) { _drawPositionOverride = val; }
 
-		// TODO: Change state with a message
+		// TODO: Change state with a message SLOTH!
 		void changeState(EntityStateID::Enum state, const void* const param = NULL);
 
 		virtual void handleMessage(Message& message);

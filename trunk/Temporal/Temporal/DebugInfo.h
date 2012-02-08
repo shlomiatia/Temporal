@@ -16,7 +16,7 @@ namespace Temporal
 	private:
 		bool _showingFPS;
 
-		DebugInfo(void) {}
+		DebugInfo(void) : _showingFPS(false) {}
 		~DebugInfo(void) {}
 		DebugInfo(const DebugInfo&);
 		DebugInfo& operator=(const DebugInfo&);

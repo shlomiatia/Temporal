@@ -19,8 +19,8 @@ namespace Temporal
 		const SpriteGroup& get(unsigned int spriteGroupID) const;
 	private:
 		const Texture* const _texture;
-		std::vector<const SpriteGroup* const> _spriteGroups;
 		const Orientation::Enum _orientation;
+		std::vector<const SpriteGroup* const> _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

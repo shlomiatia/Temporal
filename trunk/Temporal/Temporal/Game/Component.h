@@ -11,7 +11,7 @@ namespace Temporal
 	class Component
 	{
 	public:
-		Component(void) {}
+		Component(void) : _entity(NULL) {}
 		virtual ~Component(void) {}
 
 		void setEntity(Entity* entity) { _entity = entity; }
@@ -20,7 +20,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message) = 0;
 		void sendMessageToOwner(Message& message) const;
 
-		// TODO: Remove all templates
+		// TODO: Remove all templates SLOTH!
 		template <class T>
 		const T& sendQueryMessageToOwner(Message& query) const
 		{

@@ -7,8 +7,7 @@ namespace Temporal
 	public:
 		static const Vector Zero;
 
-		Vector(float x, float y)
-			: _x(x), _y(y) {}
+		Vector(float x, float y) : _x(x), _y(y) {}
 
 		float getX(void) const { return (_x); }
 		void setX(float x) { _x = x; }
