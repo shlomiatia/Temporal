@@ -18,6 +18,46 @@
 
 namespace Temporal
 {
+	class AreaRenderer : public Component
+	{
+	public: 
+		AreaRenderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, int spriteGroupID = 0, int spriteID = 0) : _spritesheet(spritesheet), _layer(layer), _spriteGroupID(spriteGroupID), _spriteID(spriteID) {};
+
+		virtual ComponentType::Enum getType(void) const { return ComponentType::OTHER; }
+
+		virtual void handleMessage(Message& message)
+		{
+			if(message.getID() == MessageID::DRAW)
+			{
+				VisualLayer::Enum layer = message.getParam<VisualLayer::Enum>();
+				if(_layer == layer)
+				{
+					Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
+					sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
+					const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
+
+					for(float x = bounds.getLeft(); x <= bounds.getRight(); x += 31.0f)
+					{
+						if(bounds.getWidth() < 32.0f)
+							x = bounds.getCenterX();
+						for(float y = bounds.getBottom(); y <= bounds.getTop(); y += 31.0f)
+						{
+							if(bounds.getHeight() < 32.0f)
+								y = bounds.getCenterY();
+							Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), Vector(x, y), false);
+						}
+					}
+				}
+			}
+		}
+
+		const SpriteSheet& _spritesheet;
+
+		int _spriteGroupID;
+		int _spriteID;
+		VisualLayer::Enum _layer;
+	};
+
 	static bool _rayCastSuccessful = false;
 
 	void addSensors(DynamicBody& body)
@@ -82,7 +122,7 @@ namespace Temporal
 	{
 		Position* position = new Position(center);
 		StaticBody* staticBody = new StaticBody(size, cover);
-		Renderer* renderer(new Renderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
+		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(staticBody);
@@ -276,15 +316,15 @@ namespace Temporal
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(1024.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 112.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 112.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 128.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(128.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 128.0f), spritesheet));
-		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 176.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 120.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 48.0f), Vector(256.0f, 64.0f), spritesheet, true));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 112.0f), Vector(128.0f, 128.0f), spritesheet));
 		
 		texture = Texture::load("c:\\bg.png");
 		spritesheet = new SpriteSheet(texture, Orientation::NONE);
@@ -322,10 +362,12 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			World::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
+		//World::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+
 		Message message(MessageID::GET_POSITION);
 		World::get().get(0).handleMessage(message);
 		const Vector position = message.getParam<Vector>();
-		Graphics::get().drawLine(position, Input::get().mouse(), _rayCastSuccessful ? Color::Green : Color::Red);
+		//Graphics::get().drawLine(position, Input::get().mouse(), _rayCastSuccessful ? Color::Green : Color::Red);
 	}
 
 	void TestPanel::dispose(void)

@@ -115,7 +115,7 @@ namespace Temporal
 		{
 			update();
 		}
-		else if(message.getID() == MessageID::DRAW)
+		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
 			{
