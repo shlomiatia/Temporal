@@ -23,6 +23,11 @@ namespace Temporal
 		{
 			message.setParam(&_size);
 		}
+		else if(message.getID() == MessageID::GET_BOUNDS)
+		{
+			const Rect bounds(getBounds());
+			message.setOutParam(bounds);
+		}
 		else if(message.getID() == MessageID::DRAW)
 		{
 			Graphics::get().drawRect(getBounds());

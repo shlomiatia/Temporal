@@ -24,9 +24,14 @@ namespace Temporal
 		{
 			_isDescending = true;
 		}
-		else if(message.getID() == MessageID::ENTER_STATE || message.getID() == MessageID::UPDATE)
+		else if(message.getID() == MessageID::ENTER_STATE)
 		{
+			_stateMachine.resetDrawPositionOverride();
 			_isDescending = false;
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			_isDescending = false;	
 		}
 		// TODO: Consider creating new state for descending, or quering controller directly
 		if(_isDescending)
@@ -229,6 +234,13 @@ namespace Temporal
 			const Sensor& sensor = message.getParam<Sensor>();
 			_person = &sensor.getOwner();
 			_platform = sensor.getSensedBody();
+
+			const Rect& platformBounds = _platform->getBounds();
+			float platformTop = platformBounds.getTop();
+			const Rect& personBounds = _person->getBounds();
+			float personCenterX = personBounds.getCenterX();
+			Vector drawPosition(personCenterX, platformTop);
+			_stateMachine.setDrawPositionOverride(drawPosition);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -249,9 +261,9 @@ namespace Temporal
 		float moveY = platformTop - entityTop;
 
 		Orientation::Enum orientation = _stateMachine.sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
-		float platformFront = platformBounds.getOppositeSide(orientation);
+		float platformEdge = platformBounds.getOppositeSide(orientation);
 		float entityFront = personBounds.getSide(orientation);
-		float moveX = (platformFront - entityFront) * orientation;
+		float moveX = (platformEdge - entityFront) * orientation;
 		_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(moveX, moveY)));
 	}
 
@@ -278,6 +290,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
+			_stateMachine.resetDrawPositionOverride();
+
 			_platformFound = false;
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -339,9 +353,18 @@ namespace Temporal
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
 		if(moveX != 0.0f)
+		{
 			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(moveX, 0.0f)));
+		}
 		else
+		{
+			float personCenterX = personBounds.getCenterX();
+			float platformTop = platformBounds.getTop();
+			Vector drawPosition(personCenterX, platformTop);
+			_stateMachine.setDrawPositionOverride(drawPosition);
+
 			_stateMachine.changeState(EntityStateID::DESCEND);
+		}
 	}
 
 	void Descend::handleMessage(Message& message)
@@ -354,13 +377,13 @@ namespace Temporal
 			float forceY = -(size.getHeight() - 1.0f);
 			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
 		}
-		else if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine.changeState(EntityStateID::HANG);
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
+		}
+		else if(message.getID() == MessageID::ANIMATION_ENDED)
+		{
+			_stateMachine.changeState(EntityStateID::HANG);
 		}
 	}
 
