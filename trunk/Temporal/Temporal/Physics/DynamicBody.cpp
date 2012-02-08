@@ -153,17 +153,20 @@ namespace Temporal
 			while(iterator.next())
 			{
 				StaticBody& staticBody = (StaticBody&)iterator.current();
-				Orientation::Enum sensorOwnerOrientation = sensor.getOwner().getOrientation();
-				const Rect& staticBodyBounds = staticBody.getBounds();
-				Direction::Enum collision = calculateCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
-				if(match(collision, sensor.getPositive(), sensor.getNegative()))
+				if(!staticBody.isCover())
 				{
-					sensor.setSensedBody(&staticBody);
-				}
-				else if(collision != Direction::NONE)
-				{
-					sensor.setSensedBody(NULL);
-					break;
+					Orientation::Enum sensorOwnerOrientation = sensor.getOwner().getOrientation();
+					const Rect& staticBodyBounds = staticBody.getBounds();
+					Direction::Enum collision = calculateCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
+					if(match(collision, sensor.getPositive(), sensor.getNegative()))
+					{
+						sensor.setSensedBody(&staticBody);
+					}
+					else if(collision != Direction::NONE)
+					{
+						sensor.setSensedBody(NULL);
+						break;
+					}
 				}
 			}
 			const Body* const body = sensor.getSensedBody();
@@ -174,13 +177,13 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::correctCollision(const Body& staticBody)
+	void DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
 		const Rect& staticBodyBounds(staticBody.getBounds());
 		const Rect& dynamicBodyBounds(getBounds());
 		const Rect& futureBounds = dynamicBodyBounds + _force;
 
-		if(futureBounds.intersectsExclusive(staticBodyBounds))
+		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
 			// TODO: Correct smallest axis
 			// TODO: Gradual test
@@ -191,13 +194,16 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::detectCollision( const Body& staticBody )
+	void DynamicBody::detectCollision(const StaticBody& staticBody)
 	{
-		const Rect& dynamicBodyBounds = getBounds();
-		Orientation::Enum dynamicBodyOrientation = getOrientation();
-		const Rect& staticBodyBounds = staticBody.getBounds();
-		Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
-		_collision = _collision | collision;
+		if(!staticBody.isCover())
+		{
+			const Rect& dynamicBodyBounds = getBounds();
+			Orientation::Enum dynamicBodyOrientation = getOrientation();
+			const Rect& staticBodyBounds = staticBody.getBounds();
+			Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
+			_collision = _collision | collision;
+		}
 	}
 
 	bool DynamicBody::rayCast(const Vector& destination) const

@@ -78,11 +78,11 @@ namespace Temporal
 		sensor = new Sensor(SensorID::FRONT_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 	}
 
-	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet) 
+	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet, bool cover = false) 
 	{
 		Position* position = new Position(center);
-		StaticBody* staticBody = new StaticBody(size);
-		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::STATIC));
+		StaticBody* staticBody = new StaticBody(size, cover);
+		Renderer* renderer(new Renderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(staticBody);
@@ -90,10 +90,10 @@ namespace Temporal
 		return entity;
 	}
 
-	Entity* CreatePlatformFromBottomLeft(const Vector& bottomLeft, const Vector&  size, SpriteSheet* spritesheet)
+	Entity* CreatePlatformFromBottomLeft(const Vector& bottomLeft, const Vector&  size, SpriteSheet* spritesheet, bool cover = false)
 	{
 		Vector center(bottomLeft.getX() + (size.getWidth() - 1.0f) / 2.0f, bottomLeft.getY() + (size.getHeight() - 1.0f) / 2.0f);
-		return CreatePlatformFromCenter(center, size, spritesheet);
+		return CreatePlatformFromCenter(center, size, spritesheet, cover);
 	}
 
 	void TestPanel::init(void)
@@ -253,7 +253,7 @@ namespace Temporal
 		addSensors(*dynamicBody);
 		EntityStateMachine* stateMachine = new EntityStateMachine(EntityStateID::STAND);
 		Animator* animator(new Animator());
-		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::DYNAMIC));
+		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
 		Entity* entity = new Entity();
 		
@@ -283,6 +283,7 @@ namespace Temporal
 		World::get().add(CreatePlatformFromBottomLeft(Vector(128.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 128.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 176.0f), Vector(256.0f, 64.0f), spritesheet, true));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
 		
 		texture = Texture::load("c:\\bg.png");
