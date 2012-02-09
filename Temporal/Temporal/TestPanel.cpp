@@ -14,6 +14,7 @@
 #include <Temporal/Game/EntityOrientation.h>
 #include <Temporal/Game/EntityStateMachine.h>
 #include <Temporal/Game/World.h>
+#include <Temporal/Game/JumpAngles.h>
 #include <math.h>
 
 namespace Temporal
@@ -81,7 +82,7 @@ namespace Temporal
 		 */
 		const float F = EntityStateMachine::JUMP_FORCE;
 		const float G = DynamicBody::GRAVITY;
-		const float A = toRadians(45);
+		const float A = DEGREES_45;
 		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
 		float playerHeight = body.getSize().getHeight();

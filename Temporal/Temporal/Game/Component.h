@@ -14,20 +14,15 @@ namespace Temporal
 		Component(void) : _entity(NULL) {}
 		virtual ~Component(void) {}
 
-		void setEntity(Entity* entity) { _entity = entity; }
+		void setEntity(const Entity* entity) { _entity = entity; }
 		virtual ComponentType::Enum getType(void) const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
 		void sendMessageToOwner(Message& message) const;
-
-		const void* const sendQueryMessageToOwner(Message& query) const
-		{
-			sendMessageToOwner(query);
-			return query.getParam();
-		}
+		const void* const sendQueryMessageToOwner(Message& query) const;
 
 	private:
-		Entity* _entity;
+		const Entity* _entity;
 
 		Component(const Component&);
 		Component& operator=(const Component&);
