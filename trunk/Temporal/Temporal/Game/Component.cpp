@@ -6,4 +6,10 @@ namespace Temporal
 	{
 		_entity->handleMessage(message);
 	}
+
+	const void* const Component::sendQueryMessageToOwner(Message& query) const
+	{
+		sendMessageToOwner(query);
+		return query.getParam();
+	}
 }

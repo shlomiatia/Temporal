@@ -8,7 +8,7 @@ namespace Temporal
 	{
 		if(_gravityResponse == EntityStateGravityResponse::DISABLE_GRAVITY)
 		{
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 		}
 	}
 
@@ -39,9 +39,9 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
 			handleGravity(false);
-			_stateMachine.sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &_animation));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &_animation));
 			if(_stopForce)
-				_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
+				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector::Zero));
 		}
 		else if(message.getID() == MessageID::EXIT_STATE)
 		{
@@ -49,13 +49,13 @@ namespace Temporal
 		}
 		else if(_gravityResponse == EntityStateGravityResponse::FALL && isBodyCollisionMessage(message, Direction::ALL, Direction::BOTTOM))
 		{
-			_stateMachine.changeState(EntityStateID::FALL);
+			_stateMachine->changeState(EntityStateID::FALL);
 		}
 		else if(_supportsHang && isSensorMessage(message, SensorID::HANG))
 		{
 			// TODO: Transfer parameters between states
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_stateMachine.changeState(EntityStateID::HANGING, &sensor);
+			_stateMachine->changeState(EntityStateID::HANGING, &sensor);
 		}
 	}
 }

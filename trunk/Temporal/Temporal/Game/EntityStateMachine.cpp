@@ -1,6 +1,7 @@
 #include <Temporal\Base\Base.h>
 #include "EntityStateMachine.h"
 #include "EntityStates.h"
+#include "JumpAngles.h"
 #include <assert.h>
 
 namespace Temporal
@@ -11,26 +12,28 @@ namespace Temporal
 	EntityStateMachine::EntityStateMachine(EntityStateID::Enum initialState)
 		: _currentState(NULL), _drawPositionOverride(Vector::Zero)
 	{
-		_states.push_back(new Stand(*this));
-		_states.push_back(new Fall(*this));
-		_states.push_back(new Walk(*this));
-		_states.push_back(new Turn(*this));
-		_states.push_back(new PrepareToJump(*this));
-		_states.push_back(new JumpStart(*this, toRadians(45), AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(*this, toRadians(60), AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(*this, toRadians(75), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(*this, toRadians(90), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(*this, toRadians(105), AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpUp(*this));
-		_states.push_back(new JumpForward(*this));
-		_states.push_back(new JumpForwardEnd(*this));
-		_states.push_back(new Hanging(*this));
-		_states.push_back(new Hang(*this));
-		_states.push_back(new Drop(*this));
-		_states.push_back(new Climb(*this));
-		_states.push_back(new PrepareToDescend(*this));
-		_states.push_back(new Descend(*this));
+		_states.push_back(new Stand());
+		_states.push_back(new Fall());
+		_states.push_back(new Walk());
+		_states.push_back(new Turn());
+		_states.push_back(new PrepareToJump());
+		_states.push_back(new JumpStart(DEGREES_45, AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(DEGREES_60, AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(DEGREES_75, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpStart(DEGREES_90, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpStart(DEGREES_105, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpUp());
+		_states.push_back(new JumpForward());
+		_states.push_back(new JumpForwardEnd());
+		_states.push_back(new Hanging());
+		_states.push_back(new Hang());
+		_states.push_back(new Drop());
+		_states.push_back(new Climb());
+		_states.push_back(new PrepareToDescend());
+		_states.push_back(new Descend());
 		
+		for(std::vector<EntityState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+			(**i).setStateMachine(this);
 		_currentState = _states[initialState];
 	}
 

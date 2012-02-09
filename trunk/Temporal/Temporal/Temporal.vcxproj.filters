@@ -20,7 +20,6 @@
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Base\Enums.h" />
-    <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
     <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Graphics\Animator.h" />
@@ -37,6 +36,7 @@
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\Position.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
+    <ClInclude Include="Game\JumpAngles.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
