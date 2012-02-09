@@ -29,7 +29,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::DRAW)
 			{
-				VisualLayer::Enum layer = message.getParam<VisualLayer::Enum>();
+				VisualLayer::Enum layer = *(const VisualLayer::Enum* const)message.getParam();
 				if(_layer == layer)
 				{
 					Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
@@ -165,11 +165,11 @@ namespace Temporal
 		// Drop - 2
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(418.5, 58.5, 24, 110), Vector(6, -55)));
-		animation->add(new Sprite(Rect(462.5, 60, 22, 97), Vector(4, -48)));
-		animation->add(new Sprite(Rect(509, 65, 23, 87), Vector(4, -43)));
-		animation->add(new Sprite(Rect(546.5, 69.5, 26, 78), Vector(7, -39)));
-		animation->add(new Sprite(Rect(584.5, 67.5, 26, 82), Vector(9, -41)));
+		animation->add(new Sprite(Rect(418.5, 58.5, 24, 110), Vector(-4, 54)));
+		animation->add(new Sprite(Rect(462.5, 60, 22, 97), Vector(-3, 48)));
+		animation->add(new Sprite(Rect(509, 65, 23, 87), Vector(-3, 43)));
+		animation->add(new Sprite(Rect(546.5, 69.5, 26, 78), Vector(1, 38)));
+		animation->add(new Sprite(Rect(584.5, 67.5, 26, 82), Vector(7, 40)));
 		// FallStart - 3
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
@@ -283,6 +283,7 @@ namespace Temporal
 		animation->add(new Sprite(Rect(475.5, 860, 56, 103), Vector(-21, 51)));
 		animation->add(new Sprite(Rect(539, 859.5, 57, 102), Vector(-22, 50)));
 		animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-23, 49)));
+
 #pragma endregion Crap
 
 		// TODO: Central resources container
@@ -323,6 +324,7 @@ namespace Temporal
 		World::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 262.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 48.0f), Vector(256.0f, 64.0f), spritesheet, true));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
 		
@@ -366,7 +368,7 @@ namespace Temporal
 
 		Message message(MessageID::GET_POSITION);
 		World::get().get(0).handleMessage(message);
-		const Vector position = message.getParam<Vector>();
+		const Vector& position = *(const Vector* const)message.getParam();
 		//Graphics::get().drawLine(position, Input::get().mouse(), _rayCastSuccessful ? Color::Green : Color::Red);
 	}
 

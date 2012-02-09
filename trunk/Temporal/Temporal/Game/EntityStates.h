@@ -169,12 +169,12 @@ namespace Temporal
 		bool _platformFound;
 	};
 
-	class Climbe : public EntityState
+	class Climb : public EntityState
 	{
 	public:
-		Climbe(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMBE)) {};
+		Climb(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMB)) {};
 
-		virtual const char* getName(void) const { return "Climbe"; }
+		virtual const char* getName(void) const { return "Climb"; }
 	protected:
 		virtual void handleMessage(Message& message);
 	};
@@ -199,7 +199,7 @@ namespace Temporal
 	class Descend : public EntityState
 	{
 	public:
-		Descend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::CLIMBE, true)){};
+		Descend(EntityStateMachine& stateMachine) : EntityState(stateMachine, EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::CLIMB, true)){};
 
 		virtual const char* getName(void) const { return "Descend"; }
 	protected:

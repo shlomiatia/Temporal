@@ -13,7 +13,7 @@ namespace Temporal
 
 	Rect Body::getBounds(void) const
 	{
-		const Vector& position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
+		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
 		return Rect(position, _size);
 	}
 
@@ -25,8 +25,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
-			const Rect bounds(getBounds());
-			message.setOutParam(bounds);
+			Rect* outParam = (Rect* const)message.getParam();
+			*outParam = getBounds();
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{

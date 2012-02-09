@@ -16,15 +16,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_GROUP_ID)
 		{
-			_spriteGroupID = message.getParam<int>();
+			_spriteGroupID = *(const int* const)message.getParam();
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_ID)
 		{
-			_spriteID = message.getParam<int>();
+			_spriteID = *(const int* const)message.getParam();
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = message.getParam<VisualLayer::Enum>();
+			VisualLayer::Enum layer = *(const VisualLayer::Enum* const)message.getParam();
 			if(_layer == layer)
 				draw();			
 		}
@@ -32,19 +32,19 @@ namespace Temporal
 	
 	void Renderer::draw(void) const
 	{
-		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		Vector position(Vector::Zero);
+		Vector position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
-		Message getOrientation(MessageID::GET_ORIENTATION);
-		sendMessageToOwner(getOrientation);
+			position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
 
-		// TODO: Find a solution for output message parameters SLOTH!
-		Orientation::Enum orientation = getOrientation.isNullParam() ? spritesheetOrientation : getOrientation.getParam<Orientation::Enum>();
-		if(orientation == Orientation::NONE)
+		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
+		const Orientation::Enum* const entityOrientation = (const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation;
+		if(entityOrientation == NULL || *entityOrientation == Orientation::NONE)
 			orientation = spritesheetOrientation;
+		else
+			orientation = *entityOrientation;
 		
 		bool mirrored = orientation != spritesheetOrientation;
 		const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);

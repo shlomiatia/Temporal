@@ -7,7 +7,8 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			reset(message.getParam<ResetAnimationParams>());
+			const ResetAnimationParams& resetAnimationParams = *(const ResetAnimationParams* const)message.getParam();
+			reset(resetAnimationParams);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -33,7 +34,7 @@ namespace Temporal
 
 	const SpriteGroup& Animator::getSpriteGroup(void) const
 	{
-		const SpriteGroup& spriteGroup = sendQueryMessageToOwner<SpriteGroup>(Message(MessageID::GET_SPRITE_GROUP));
+		const SpriteGroup& spriteGroup = *(const SpriteGroup* const)sendQueryMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
 		return spriteGroup;
 	}
 

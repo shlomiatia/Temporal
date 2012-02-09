@@ -90,13 +90,20 @@ namespace Temporal
 
 	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, const Color& color) const
 	{
-		float textureWidth = texture.getSize().getWidth();
-		float textureHeight = texture.getSize().getHeight();
+		const Vector& textureSize = texture.getSize();
+		float textureWidth = textureSize.getWidth();
+		float textureHeight = textureSize.getHeight();
 
-		const float textureX0 = (!mirrored ? texturePart.getGraphicsLeft() : texturePart.getGraphicsRight()) / textureWidth;
-		const float textureX1 = (!mirrored ? texturePart.getGraphicsRight() : texturePart.getGraphicsLeft()) / textureWidth;
-		const float textureTop = (texturePart.getGraphicsTop()) / textureHeight;
-		const float textureBottom = (texturePart.getGraphicsBottom()) / textureHeight;
+		// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
+		float imageLeft = texturePart.getLeft();
+		float imageRight = texturePart.getRight() + 1.0f;
+		float imageTop = texturePart.getBottom();
+		float imageBottom = texturePart.getTop() + 1.0f;
+
+		const float textureX0 = (!mirrored ? imageLeft : imageRight) / textureWidth;
+		const float textureX1 = (!mirrored ? imageRight : imageLeft) / textureWidth;
+		const float textureTop = imageTop / textureHeight;
+		const float textureBottom = imageBottom / textureHeight;
 
 		glBindTexture(GL_TEXTURE_2D, texture.getID());
 

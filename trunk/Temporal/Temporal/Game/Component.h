@@ -20,12 +20,10 @@ namespace Temporal
 		virtual void handleMessage(Message& message) = 0;
 		void sendMessageToOwner(Message& message) const;
 
-		// TODO: Remove all templates SLOTH!
-		template <class T>
-		const T& sendQueryMessageToOwner(Message& query) const
+		const void* const sendQueryMessageToOwner(Message& query) const
 		{
 			sendMessageToOwner(query);
-			return query.getParam<T>();
+			return query.getParam();
 		}
 
 	private:
