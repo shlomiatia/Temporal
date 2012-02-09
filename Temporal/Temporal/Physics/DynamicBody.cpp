@@ -48,7 +48,7 @@ namespace Temporal
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
 	{
-		Orientation::Enum orientation = sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return orientation;
 	}
 
@@ -66,9 +66,9 @@ namespace Temporal
 
 	void DynamicBody::applyForce(void)
 	{
-		Vector position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
-		position += _force;
-		sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
+		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
+		Vector newPosition = position + _force;
+		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
 	void DynamicBody::add(Sensor* const sensor)
@@ -85,7 +85,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_SENSOR_SIZE)
 		{
-			SensorID::Enum sensorID = message.getParam<SensorID::Enum>();
+			SensorID::Enum sensorID = *(const SensorID::Enum* const)message.getParam();
 			const Vector& size = _sensors[sensorID]->getSize();
 			message.setParam(&size);
 		}
@@ -95,21 +95,19 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_FORCE)
 		{
-			const Vector& force = message.getParam<Vector>();
+			const Vector& force = *(const Vector* const)message.getParam();
 			_force = Vector(force.getX() * getOrientation(), force.getY()); 
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
-			_gravityEnabled = message.getParam<bool>();
+			_gravityEnabled = *(const bool* const)message.getParam();
 		}
 		else if(message.getID() == MessageID::RAY_CAST)
 		{
-			RayCastParams param = message.getParam<RayCastParams>();
+			RayCastParams& param = *(RayCastParams* const)message.getParam();
 			const Vector& target = param.getTarget();
 			bool rayCastSuccessful = rayCast(target);
 			param.setResult(rayCastSuccessful);
-			message.setOutParam(param);
-
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -208,7 +206,7 @@ namespace Temporal
 
 	bool DynamicBody::rayCast(const Vector& destination) const
 	{
-		const Vector& position = sendQueryMessageToOwner<Vector>(Message(MessageID::GET_POSITION));
+		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
 		float x0 = position.getX();
 		float y0 = position.getY();
 		float x1 = destination.getX();

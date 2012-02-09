@@ -10,7 +10,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = message.getParam<Vector>();
+			_position = *(const Vector* const)message.getParam();
 		}
 	}
 }

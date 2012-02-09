@@ -26,7 +26,6 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_stateMachine.resetDrawPositionOverride();
 			_isDescending = false;
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -38,7 +37,8 @@ namespace Temporal
 		{
 			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
 			{
-				_stateMachine.changeState(EntityStateID::PREPARE_TO_DESCEND, &message.getParam<Sensor>());
+				const Sensor& sensor = *(const Sensor* const)message.getParam();
+				_stateMachine.changeState(EntityStateID::PREPARE_TO_DESCEND, &sensor);
 			}
 			else if(isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
 			{
@@ -104,7 +104,7 @@ namespace Temporal
 
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_jumpStartState = message.getParam<EntityStateID::Enum>();
+			_jumpStartState = *(const EntityStateID::Enum* const)message.getParam();
 		}
 		else if(isSensorMessage(message, SensorID::JUMP))
 		{
@@ -120,13 +120,13 @@ namespace Temporal
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
 		// TODO: Transfer sensor message param with entity id, and query everything
-		const Sensor& sensor = message.getParam<Sensor>();
+		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body& sensorOwner = sensor.getOwner();
 		const Body* const sensedBody = sensor.getSensedBody();
 		SensorID::Enum hangSensorID = SensorID::HANG;
-		const Vector& hangSensorSize = _stateMachine.sendQueryMessageToOwner<Vector>(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
+		const Vector& hangSensorSize = *(const Vector* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
 		float hangSensorWidth = hangSensorSize.getWidth();
-		Orientation::Enum orientation = _stateMachine.sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
 		float front = sensorOwner.getBounds().getSide(orientation);
 		float x = (target - front) * orientation;
@@ -141,7 +141,7 @@ namespace Temporal
 		{
 			const float F = _stateMachine.JUMP_FORCE;
 			float max = 0.0f;
-			float G = _stateMachine.sendQueryMessageToOwner<float>(Message(MessageID::GET_GRAVITY));
+			float G = *(const float* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_GRAVITY));
 			for(int i = 0; i < ANGLES_SIZE; ++i)
 			{
 				/* x = Time*Force*cos(Angle)
@@ -172,11 +172,14 @@ namespace Temporal
 		EntityState::handleMessage(message);
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_platformFound = message.getParam<bool>();
+			_platformFound = *(const bool* const)message.getParam();
 		}
 		else if(message.getID() == MessageID::ANIMATION_ENDED)
 		{	
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(_stateMachine.JUMP_FORCE*cos(_angle), _stateMachine.JUMP_FORCE*sin(_angle))));
+			float jumpForceX = _stateMachine.JUMP_FORCE * cos(_angle);
+			float jumpForceY = _stateMachine.JUMP_FORCE * sin(_angle);
+			Vector jumpForce(jumpForceX, jumpForceY);
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpForce));
 			_stateMachine.changeState(_jumpState);
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
@@ -200,7 +203,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			const Vector& force = _stateMachine.sendQueryMessageToOwner<Vector>(Message(MessageID::GET_FORCE));
+			const Vector& force = *(const Vector* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_FORCE));
 			if(force.getY() <= 0.0f)
 				_stateMachine.changeState(EntityStateID::STAND);
 		}
@@ -231,16 +234,9 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
 			// TODO: Sensor params
-			const Sensor& sensor = message.getParam<Sensor>();
+			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_person = &sensor.getOwner();
 			_platform = sensor.getSensedBody();
-
-			const Rect& platformBounds = _platform->getBounds();
-			float platformTop = platformBounds.getTop();
-			const Rect& personBounds = _person->getBounds();
-			float personCenterX = personBounds.getCenterX();
-			Vector drawPosition(personCenterX, platformTop);
-			_stateMachine.setDrawPositionOverride(drawPosition);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -252,6 +248,7 @@ namespace Temporal
 		}
 	}
 
+	// TODO: Maybe need to divide it like prepare to desecend
 	void Hanging::update(void)
 	{
 		const Rect& personBounds = _person->getBounds();
@@ -260,11 +257,16 @@ namespace Temporal
 		float entityTop = personBounds.getTop();
 		float moveY = platformTop - entityTop;
 
-		Orientation::Enum orientation = _stateMachine.sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		float platformEdge = platformBounds.getOppositeSide(orientation);
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
-		_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(moveX, moveY)));
+		Vector move(moveX, moveY);
+		_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &move));
+
+		float personCenterX = personBounds.getCenterX();
+		Vector drawPosition(personCenterX, platformTop);
+		_stateMachine.setDrawPositionOverride(drawPosition);
 	}
 
 	void Hang::handleMessage(Message& message)
@@ -276,7 +278,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{	
-			_stateMachine.changeState(EntityStateID::CLIMBE);
+			_stateMachine.changeState(EntityStateID::CLIMB);
 		}
 	}
 
@@ -290,9 +292,11 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_stateMachine.resetDrawPositionOverride();
-
 			_platformFound = false;
+		}
+		else if(message.getID() == MessageID::EXIT_STATE)
+		{
+			_stateMachine.resetDrawPositionOverride();
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -303,16 +307,20 @@ namespace Temporal
 		}
 	}
 
-	void Climbe::handleMessage(Message& message)
+	void Climb::handleMessage(Message& message)
 	{
 		EntityState::handleMessage(message);
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			const Vector& size = _stateMachine.sendQueryMessageToOwner<Vector>(Message(MessageID::GET_SIZE));
-			float forceX = 1.0f;
-			float forceY = size.getHeight() - 1.0f;
-			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));
-			
+			const Vector& size = *(const Vector* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_SIZE));
+			float climbForceX = 1.0f;
+			float climbForceY = size.getHeight() - 1.0f;
+			Vector climbForce(climbForceX, climbForceY);
+			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &climbForce));
+		}
+		else if(message.getID() == MessageID::EXIT_STATE)
+		{
+			_stateMachine.resetDrawPositionOverride();
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -330,7 +338,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
 			// TODO: Sensor params
-			const Sensor& sensor = message.getParam<Sensor>();
+			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_person = &sensor.getOwner();
 			_platform = sensor.getSensedBody();
 		}
@@ -342,7 +350,7 @@ namespace Temporal
 
 	void PrepareToDescend::update(void)
 	{
-		Orientation::Enum orientation = _stateMachine.sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Rect& personBounds = _person->getBounds();
 		const Rect& platformBounds = _platform->getBounds();
 		float platformEdge = platformBounds.getOppositeSide(orientation) + 1.0f * orientation;
@@ -368,7 +376,7 @@ namespace Temporal
 		EntityState::handleMessage(message);
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			const Vector& size = _stateMachine.sendQueryMessageToOwner<Vector>(Message(MessageID::GET_SIZE));
+			const Vector& size = *(const Vector* const)_stateMachine.sendQueryMessageToOwner(Message(MessageID::GET_SIZE));
 			float forceX = -1.0f;
 			float forceY = -(size.getHeight() - 1.0f);
 			_stateMachine.sendMessageToOwner(Message(MessageID::SET_FORCE, &Vector(forceX, forceY)));

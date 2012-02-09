@@ -72,7 +72,7 @@ namespace Temporal
 			JUMP_UP_START,
 			JUMP_UP,
 			HANG,
-			CLIMBE,
+			CLIMB,
 			JUMP_FORWARD_START,
 			JUMP_FORWARD,
 			JUMP_FORWARD_END,
@@ -113,7 +113,7 @@ namespace Temporal
 			HANGING,
 			HANG,
 			DROP,
-			CLIMBE,
+			CLIMB,
 			PREPARE_TO_DESCEND,
 			DESCEND
 		};

@@ -27,7 +27,7 @@ namespace Temporal
 		_states.push_back(new Hanging(*this));
 		_states.push_back(new Hang(*this));
 		_states.push_back(new Drop(*this));
-		_states.push_back(new Climbe(*this));
+		_states.push_back(new Climb(*this));
 		_states.push_back(new PrepareToDescend(*this));
 		_states.push_back(new Descend(*this));
 		
@@ -54,16 +54,16 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::GET_DRAW_POSITION)
 		{
+			Vector* outParam = (Vector* const)message.getParam();
 			if(_drawPositionOverride != Vector::Zero)
 			{
-				message.setOutParam(_drawPositionOverride);
+				*outParam = _drawPositionOverride;
 			}
 			else
 			{
 				Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
 				sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
-				Vector drawPosition(bounds.getCenterX(), bounds.getBottom());
-				message.setOutParam(drawPosition);
+				*outParam = Vector(bounds.getCenterX(), bounds.getBottom());
 			}
 		}
 		else

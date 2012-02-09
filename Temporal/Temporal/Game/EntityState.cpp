@@ -16,7 +16,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			Direction::Enum direction = message.getParam<Direction::Enum>();
+			Direction::Enum direction = *(const Direction::Enum* const)message.getParam();
 			if(match(direction, positive, negative))
 				return true;
 		}
@@ -27,7 +27,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{
-			const Sensor& sensor = message.getParam<Sensor>();
+			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			if(sensor.getID() == sensorID)
 				return true;
 		}
@@ -54,7 +54,8 @@ namespace Temporal
 		else if(_supportsHang && isSensorMessage(message, SensorID::HANG))
 		{
 			// TODO: Transfer parameters between states
-			_stateMachine.changeState(EntityStateID::HANGING, &message.getParam<Sensor>());
+			const Sensor& sensor = *(const Sensor* const)message.getParam();
+			_stateMachine.changeState(EntityStateID::HANGING, &sensor);
 		}
 	}
 }

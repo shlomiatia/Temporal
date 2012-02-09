@@ -17,7 +17,7 @@ namespace Temporal
 			}
 			if(Input::get().isLeft() || Input::get().isRight())
 			{
-				Orientation::Enum orientation = sendQueryMessageToOwner<Orientation::Enum>(Message(MessageID::GET_ORIENTATION));
+				Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 				if((Input::get().isLeft() && orientation == Orientation::LEFT) || (Input::get().isRight() && orientation == Orientation::RIGHT))
 					sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 				else
