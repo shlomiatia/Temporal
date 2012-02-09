@@ -85,10 +85,10 @@ namespace Temporal
 
 	void setColor(const Color& color)
 	{
-		glColor4f(color.getR(), color.getG(), color.getB(), 1.0f);
+		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, float rotation) const
+	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, const Color& color) const
 	{
 		float textureWidth = texture.getSize().getWidth();
 		float textureHeight = texture.getSize().getHeight();
@@ -100,12 +100,12 @@ namespace Temporal
 
 		glBindTexture(GL_TEXTURE_2D, texture.getID());
 
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		setColor(color);
 
 		glPushMatrix();
 		{	
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
-			glRotatef(rotation, 0.0, 0.0, 1.0f);
+			//glRotatef(rotation, 0.0, 0.0, 1.0f);
 
 			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(),
 										 -texturePart.getOffsetX(), texturePart.getOffsetY(),

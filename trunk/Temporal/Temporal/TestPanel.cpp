@@ -316,15 +316,15 @@ namespace Temporal
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(1024.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 112.0f), Vector(256.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 112.0f), Vector(256.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 128.0f), spritesheet));
-		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 120.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
+		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 48.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 112.0f), Vector(128.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
 		
 		texture = Texture::load("c:\\bg.png");
 		spritesheet = new SpriteSheet(texture, Orientation::NONE);

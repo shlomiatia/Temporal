@@ -3,12 +3,13 @@
 
 namespace Temporal
 {
-	Color::Color(float r, float g, float b)
-		: _r(r), _g(g), _b(b)
+	Color::Color(float r, float g, float b, float a)
+		: _r(r), _g(g), _b(b), _a(a)
 	{
 		assert(r >= 0.0f); assert(r <= 1.0f);
 		assert(g >= 0.0f); assert(g <= 1.0f);
 		assert(b >= 0.0f); assert(b <= 1.0f);
+		assert(a >= 0.0f); assert(a <= 1.0f);
 	}
 
 	const Color Color::Red(1.0f, 0.0f, 0.0f);
