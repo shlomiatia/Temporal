@@ -293,7 +293,7 @@ namespace Temporal
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
 		addSensors(*dynamicBody);
-		EntityStateMachine* stateMachine = new EntityStateMachine(EntityStateID::STAND);
+		EntityStateMachine* stateMachine = new EntityStateMachine();
 		Animator* animator(new Animator());
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
@@ -318,8 +318,8 @@ namespace Temporal
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(1024.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128), Vector(256.0f, 16.0f), spritesheet));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
@@ -327,7 +327,7 @@ namespace Temporal
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 136.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 262.0f), Vector(256.0f, 16.0f), spritesheet));
 		World::get().add(CreatePlatformFromCenter(Vector(512.0f, 48.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 128.0f), spritesheet));
+		World::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
 		
 		texture = Texture::load("c:\\bg.png");
 		spritesheet = new SpriteSheet(texture, Orientation::NONE);

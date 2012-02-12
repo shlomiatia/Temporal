@@ -3,14 +3,12 @@
 #include "EntityState.h"
 #include <Temporal/Physics/Body.h>
 
-// TODO: Order the mother fuckers states SLOTH!
-
 namespace Temporal
 {
 	class Stand : public EntityState
 	{
 	public:
-		Stand(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)) ,_isDescending(false) {};
+		Stand(void) : _isDescending(false) {};
 
 		virtual const char* getName(void) const { return "Stand"; }
 
@@ -24,7 +22,7 @@ namespace Temporal
 	class Fall : public EntityState
 	{
 	public:
-		Fall(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::FALL)) {};
+		Fall(void) {};
 
 		virtual const char* getName(void) const { return "Fall"; }
 
@@ -35,7 +33,7 @@ namespace Temporal
 	class Walk : public EntityState
 	{
 	public:
-		Walk(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::WALK, false, true)), _stillWalking(false) {};
+		Walk(void) : _stillWalking(false) {};
 
 		virtual const char* getName(void) const { return "Walk"; }
 
@@ -49,7 +47,7 @@ namespace Temporal
 	class Turn : public EntityState
 	{
 	public:
-		Turn(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::TURN)) {};
+		Turn(void) {};
 
 		virtual const char* getName(void) const { return "Turn"; }
 
@@ -57,11 +55,10 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-
 	class PrepareToJump : public EntityState
 	{
 	public:
-		PrepareToJump(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::STAND)) {};
+		PrepareToJump(void) {};
 
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
@@ -80,7 +77,7 @@ namespace Temporal
 	{
 	public:
 		JumpStart(float angle, AnimationID::Enum animation, EntityStateID::Enum jumpState) : 
-		  EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(animation)), _angle(angle), _jumpState(jumpState), _platformFound(false) {};
+		  _angle(angle), _animation(animation), _jumpState(jumpState), _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
@@ -89,6 +86,7 @@ namespace Temporal
 
 	private:
 		float _angle;
+		AnimationID::Enum _animation;
 		EntityStateID::Enum _jumpState;
 		bool _platformFound;
 	};
@@ -96,7 +94,7 @@ namespace Temporal
 	class JumpUp : public EntityState
 	{
 	public:
-		JumpUp(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::JUMP_UP))  {};
+		JumpUp(void) {};
 
 		virtual const char* getName(void) const { return "JumpUp"; }
 
@@ -107,7 +105,7 @@ namespace Temporal
 	class JumpForward : public EntityState
 	{
 	public:
-		JumpForward(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, true, false, ResetAnimationParams(AnimationID::JUMP_FORWARD))  {};
+		JumpForward(void) {};
 
 		virtual const char* getName(void) const { return "JumpForward"; }
 
@@ -118,7 +116,7 @@ namespace Temporal
 	class JumpForwardEnd : public EntityState
 	{
 	public:
-		JumpForwardEnd(void) : EntityState(EntityStateGravityResponse::FALL, false, true, ResetAnimationParams(AnimationID::JUMP_FORWARD_END))  {};
+		JumpForwardEnd(void) {};
 
 		virtual const char* getName(void) const { return "JumpForwardEnd"; }
 
@@ -129,7 +127,7 @@ namespace Temporal
 	class Hanging : public EntityState
 	{
 	public:
-		Hanging(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG_FORWARD, true)), _person(NULL), _platform(NULL) {};
+		Hanging(void) : _person(NULL), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
@@ -146,7 +144,7 @@ namespace Temporal
 	class Hang : public EntityState
 	{
 	public:
-		Hang(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::HANG)) {};
+		Hang(void) {};
 
 		virtual const char* getName(void) const { return "Hang"; }
 
@@ -157,7 +155,7 @@ namespace Temporal
 	class Drop : public EntityState
 	{
 	public:
-		Drop(void) : EntityState(EntityStateGravityResponse::KEEP_STATE, false, true, ResetAnimationParams(AnimationID::DROP)), _platformFound(false) {};
+		Drop(void) : _platformFound(false) {};
 
 		virtual const char* getName(void) const { return "Drop"; }
 
@@ -171,7 +169,7 @@ namespace Temporal
 	class Climb : public EntityState
 	{
 	public:
-		Climb(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, false, ResetAnimationParams(AnimationID::CLIMB)) {};
+		Climb(void) {};
 
 		virtual const char* getName(void) const { return "Climb"; }
 	protected:
@@ -181,7 +179,7 @@ namespace Temporal
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(void) : EntityState(EntityStateGravityResponse::FALL, false, false, ResetAnimationParams(AnimationID::STAND)), _person(NULL), _platform(NULL) {};
+		PrepareToDescend(void) : _person(NULL), _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
@@ -198,7 +196,7 @@ namespace Temporal
 	class Descend : public EntityState
 	{
 	public:
-		Descend(void) : EntityState(EntityStateGravityResponse::DISABLE_GRAVITY, false, true, ResetAnimationParams(AnimationID::CLIMB, true)){};
+		Descend(void) {};
 
 		virtual const char* getName(void) const { return "Descend"; }
 	protected:

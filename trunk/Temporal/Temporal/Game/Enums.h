@@ -119,16 +119,6 @@ namespace Temporal
 		};
 	}
 
-	namespace EntityStateGravityResponse
-	{
-		enum Enum
-		{
-			DISABLE_GRAVITY,
-			KEEP_STATE,
-			FALL
-		};
-	}
-
 	namespace VisualLayer
 	{
 		enum Enum
