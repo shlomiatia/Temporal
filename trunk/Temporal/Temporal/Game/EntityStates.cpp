@@ -131,14 +131,15 @@ namespace Temporal
 	{
 		// TODO: Transfer sensor message param with entity id, and query everything
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
-		const Body& sensorOwner = sensor.getOwner();
 		const Body* const sensedBody = sensor.getSensedBody();
 		SensorID::Enum hangSensorID = SensorID::HANG;
 		const Vector& hangSensorSize = *(const Vector* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
 		float hangSensorWidth = hangSensorSize.getWidth();
 		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
-		float front = sensorOwner.getBounds().getSide(orientation);
+		float front = personBounds.getSide(orientation);
 		float x = (target - front) * orientation;
 		bool platformFound = false;
 
@@ -278,7 +279,8 @@ namespace Temporal
 
 	void Hanging::update(void)
 	{
-		const Rect& personBounds = _person->getBounds();
+		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Rect& platformBounds = _platform->getBounds();
 		float platformTop = platformBounds.getTop();
 		float entityTop = personBounds.getTop();
@@ -306,7 +308,6 @@ namespace Temporal
 		{
 			// TODO: Sensor params
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_person = &sensor.getOwner();
 			_platform = sensor.getSensedBody();
 
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG_FORWARD, true)));
@@ -358,7 +359,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_platformFound)
-				_stateMachine->changeState(EntityStateID::STAND);
+				_stateMachine->changeState(EntityStateID::FALL);
 			else
 				_platformFound = false;
 		}
@@ -395,7 +396,8 @@ namespace Temporal
 	void PrepareToDescend::update(void)
 	{
 		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Rect& personBounds = _person->getBounds();
+		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Rect& platformBounds = _platform->getBounds();
 		float platformEdge = platformBounds.getOppositeSide(orientation) + 1.0f * orientation;
 		float entityFront = personBounds.getSide(orientation);
@@ -421,7 +423,6 @@ namespace Temporal
 		{
 			// TODO: Sensor params
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_person = &sensor.getOwner();
 			_platform = sensor.getSensedBody();
 
 			bool gravityEnabled = false;

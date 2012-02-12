@@ -61,7 +61,7 @@ namespace Temporal
 
 	static bool _rayCastSuccessful = false;
 
-	void addSensors(DynamicBody& body)
+	void addSensors(Entity& entity, DynamicBody& body)
 	{
 		// Jump Sensor
 		/* y = Time*(Force-Time*Gravity)
@@ -92,15 +92,17 @@ namespace Temporal
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(SensorID::JUMP, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
-		
+		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
+		entity.add(sensor);
+
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
 		sensorSize = Vector(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(SensorID::HANG, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		entity.add(sensor);
 
 		float edgeSensorWidth = playerWidth * 2.0f;
 
@@ -109,14 +111,16 @@ namespace Temporal
 		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(SensorID::BACK_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		entity.add(sensor);
 
 		// Front edge sensor
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
 		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(SensorID::FRONT_EDGE, body, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		entity.add(sensor);
 	}
 
 	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet, bool cover = false) 
@@ -292,17 +296,16 @@ namespace Temporal
 		EntityOrientation* orientation(new EntityOrientation(Orientation::LEFT));
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
-		addSensors(*dynamicBody);
 		EntityStateMachine* stateMachine = new EntityStateMachine();
 		Animator* animator(new Animator());
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
 		Entity* entity = new Entity();
-		
 		entity->add(position);
 		entity->add(orientation);
 		entity->add(controller);
 		entity->add(dynamicBody);
+		addSensors(*entity, *dynamicBody);
 		entity->add(stateMachine);
 		entity->add(animator);
 		entity->add(renderer);
@@ -365,7 +368,7 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			World::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		//World::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		World::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
 
 		Message message(MessageID::GET_POSITION);
 		World::get().get(0).handleMessage(message);

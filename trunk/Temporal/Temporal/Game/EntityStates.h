@@ -127,7 +127,7 @@ namespace Temporal
 	class Hanging : public EntityState
 	{
 	public:
-		Hanging(void) : _person(NULL), _platform(NULL) {};
+		Hanging(void) : _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
@@ -135,7 +135,6 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
-		const Body* _person;
 		const Body* _platform;
 
 		void update(void);
@@ -179,7 +178,7 @@ namespace Temporal
 	class PrepareToDescend : public EntityState
 	{
 	public:
-		PrepareToDescend(void) : _person(NULL), _platform(NULL) {};
+		PrepareToDescend(void) : _platform(NULL) {};
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
@@ -187,7 +186,6 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
-		const Body* _person;
 		const Body* _platform;
 
 		void update(void);

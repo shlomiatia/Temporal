@@ -46,6 +46,7 @@
     <ClInclude Include="Game\EntityStateMachine.h" />
     <ClInclude Include="Game\EntityStates.h" />
     <ClInclude Include="Physics\StaticBody.h" />
+    <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="TestPanel.h" />
   </ItemGroup>
   <ItemGroup>
