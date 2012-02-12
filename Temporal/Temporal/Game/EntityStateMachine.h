@@ -17,15 +17,13 @@ namespace Temporal
 		static const float WALK_FORCE;
 		static const float JUMP_FORCE;
 
-		// TODO: Where to get initial state SLOTH!
-		EntityStateMachine(EntityStateID::Enum initialState);
+		EntityStateMachine(void);
 		~EntityStateMachine(void);
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::STATE_MACHINE; }
 		void resetDrawPositionOverride(void) { _drawPositionOverride = Vector::Zero; }
 		void setDrawPositionOverride(Vector val) { _drawPositionOverride = val; }
 
-		// TODO: Change state with a message SLOTH!
 		void changeState(EntityStateID::Enum state, const void* const param = NULL);
 
 		virtual void handleMessage(Message& message);

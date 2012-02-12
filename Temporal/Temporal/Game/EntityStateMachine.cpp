@@ -9,7 +9,7 @@ namespace Temporal
 	const float EntityStateMachine::WALK_FORCE(2.0f);
 	const float EntityStateMachine::JUMP_FORCE(15.0f);
 
-	EntityStateMachine::EntityStateMachine(EntityStateID::Enum initialState)
+	EntityStateMachine::EntityStateMachine(void)
 		: _currentState(NULL), _drawPositionOverride(Vector::Zero)
 	{
 		_states.push_back(new Stand());
@@ -34,7 +34,7 @@ namespace Temporal
 		
 		for(std::vector<EntityState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
-		_currentState = _states[initialState];
+		_currentState = _states[EntityStateID::STAND];
 	}
 
 	EntityStateMachine::~EntityStateMachine(void)
@@ -47,7 +47,7 @@ namespace Temporal
 	{
 		if(_currentState != NULL)
 		{
-			_currentState->handleMessage(Message(MessageID::EXIT_STATE));
+			_currentState->handleMessage(Message(MessageID::EXIT_STATE, &stateType));
 		}
 		_currentState = _states[stateType];
 		_currentState->handleMessage(Message(MessageID::ENTER_STATE, param));

@@ -11,14 +11,13 @@ namespace Temporal
 	class EntityState
 	{
 	public:
-		EntityState(EntityStateGravityResponse::Enum gravityResponse, bool supportsHang, bool stopForce, const ResetAnimationParams& animation)
-			: _gravityResponse(gravityResponse), _supportsHang(supportsHang), _stopForce(stopForce), _animation(animation) {}
+		EntityState(void) {};
 		virtual ~EntityState(void) {};
 
 		void setStateMachine(EntityStateMachine* stateMachine) { _stateMachine = stateMachine; }
 
 		virtual const char* getName(void) const = 0;
-		virtual void handleMessage(Message& message);
+		virtual void handleMessage(Message& message) = 0;
 
 	protected:
 		EntityStateMachine* _stateMachine;
@@ -27,12 +26,6 @@ namespace Temporal
 		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
 
 	private:
-		const EntityStateGravityResponse::Enum _gravityResponse;
-		const bool _supportsHang;
-		const bool _stopForce;
-		const ResetAnimationParams _animation;
-
-		void handleGravity(bool gravityEnabled) const;
 
 		EntityState(const EntityState&);
 		EntityState& operator=(const EntityState&);
