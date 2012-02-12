@@ -11,6 +11,7 @@ namespace Temporal
 			ORIENTATION,
 			DYNAMIC_BODY,
 			STATIC_BODY,
+			SENSOR,
 			STATE_MACHINE,
 			ANIMATOR,
 			RENDERER,

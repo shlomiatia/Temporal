@@ -37,6 +37,7 @@
     <ClInclude Include="Game\Position.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Game\JumpAngles.h" />
+    <ClInclude Include="Physics\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

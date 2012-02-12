@@ -1,5 +1,6 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
+#include "Utils.h"
 #include <Temporal/Game/MessageParams.h>
 #include <Temporal/Game/World.h>
 #include <Temporal/Graphics/Graphics.h>
@@ -10,27 +11,6 @@ namespace Temporal
 	const float DynamicBody::GRAVITY(1.0f);
 	const float DynamicBody::MAX_GRAVITY(20.0f);
 
-	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Rect& boundsB)
-	{
-		Direction::Enum collision(Direction::NONE);
-
-		if(boundsA.intersectsInclusive(boundsB))
-		{
-			float frontA = boundsA.getSide(orientationA);
-			float frontB = boundsB.getSide(orientationA);
-			float backA = boundsA.getOppositeSide(orientationA);
-			float backB = boundsB.getOppositeSide(orientationA);
-			bool overlapsX = boundsA.getLeft() < boundsB.getRight() && boundsA.getRight() > boundsB.getLeft();
-			bool overlapsY = boundsA.getBottom() < boundsB.getTop() && boundsA.getTop() > boundsB.getBottom();
-			if(boundsA.getTop() >= boundsB.getTop() && overlapsX) collision = collision | Direction::BOTTOM;
-			if(boundsA.getBottom() <= boundsB.getBottom() && overlapsX) collision = collision | Direction::TOP;
-			if((frontA - frontB) * orientationA >= 0 && overlapsY) collision = collision | Direction::BACK;
-			if((backB - backA) * orientationA >= 0 && overlapsY) collision = collision | Direction::FRONT;
-		}
-
-		return collision;
-	}
-
 	float correctCollisionInAxis(float force, float minDynamic, float maxDynamic, float minStatic, float maxStatic)
 	{
 		if(force > 0 && maxDynamic <= minStatic)
@@ -38,12 +18,6 @@ namespace Temporal
 		else if(force < 0 && minDynamic >= maxStatic)
 			force = std::max(force, maxStatic - minDynamic);
 		return force;
-	}
-
-	DynamicBody::~DynamicBody(void) 
-	{ 
-		for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
-			delete *i;
 	}
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
@@ -71,23 +45,12 @@ namespace Temporal
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
-	void DynamicBody::add(Sensor* const sensor)
-	{
-		_sensors.push_back(sensor);
-	}
-
 	void DynamicBody::handleMessage(Message& message)
 	{
 		Body::handleMessage(message);
 		if(message.getID() == MessageID::GET_FORCE)
 		{
 			message.setParam(&_force);
-		}
-		else if(message.getID() == MessageID::GET_SENSOR_SIZE)
-		{
-			SensorID::Enum sensorID = *(const SensorID::Enum* const)message.getParam();
-			const Vector& size = _sensors[sensorID]->getSize();
-			message.setParam(&size);
 		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
@@ -113,20 +76,12 @@ namespace Temporal
 		{
 			update();
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
-		{
-			for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
-			{
-				const Sensor& sensor = **i;
-				Graphics::get().drawRect(sensor.getBounds(), sensor.getSensedBody() != NULL ? Color::Green : Color::Red);
-			}
-		}
 	}
 
 	void DynamicBody::update(void)
 	{
-		applyGravity();
 		ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
+		applyGravity();
 		while(iterator.next())
 		{
 			StaticBody& staticBody = (StaticBody&)iterator.current();
@@ -140,39 +95,7 @@ namespace Temporal
 			StaticBody& staticBody = (StaticBody&)iterator.current();
 			detectCollision(staticBody);
 		}
-
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
-		for(std::vector<Sensor* const>::iterator i = _sensors.begin(); i != _sensors.end(); ++i)
-		{
-			Sensor& sensor = **i;
-			sensor.setSensedBody(NULL);
-			const Rect& sensorBounds = sensor.getBounds();
-			iterator.reset();
-			while(iterator.next())
-			{
-				StaticBody& staticBody = (StaticBody&)iterator.current();
-				if(!staticBody.isCover())
-				{
-					Orientation::Enum sensorOwnerOrientation = sensor.getOwner().getOrientation();
-					const Rect& staticBodyBounds = staticBody.getBounds();
-					Direction::Enum collision = calculateCollision(sensorBounds, sensorOwnerOrientation, staticBodyBounds);
-					if(match(collision, sensor.getPositive(), sensor.getNegative()))
-					{
-						sensor.setSensedBody(&staticBody);
-					}
-					else if(collision != Direction::NONE)
-					{
-						sensor.setSensedBody(NULL);
-						break;
-					}
-				}
-			}
-			const Body* const body = sensor.getSensedBody();
-			if(body != NULL)
-			{
-				sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &sensor));
-			}
-		}
 	}
 
 	void DynamicBody::correctCollision(const StaticBody& staticBody)

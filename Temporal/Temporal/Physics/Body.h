@@ -16,10 +16,9 @@ namespace Temporal
 
 		virtual void handleMessage(Message& message);
 
-	protected:
+	private:
 		Vector _size;
 
-	private:
 		Body(const Body&);
 		Body& operator=(const Body&);
 	};

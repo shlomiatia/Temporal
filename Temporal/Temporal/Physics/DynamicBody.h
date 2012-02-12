@@ -16,14 +16,12 @@ namespace Temporal
 		static const float MAX_GRAVITY;
 
 		DynamicBody(const Vector& size) : Body(size), _force(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
-		virtual ~DynamicBody(void);
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
 		Orientation::Enum getOrientation(void) const;
 
 		void applyForce(void);
 		void applyGravity(void);
-		void add(Sensor* const sensor);
 
 		virtual void handleMessage(Message& message);
 		void update(void);
@@ -36,6 +34,5 @@ namespace Temporal
 		Vector _force;
 		bool _gravityEnabled;
 		Direction::Enum _collision;
-		std::vector<Sensor* const> _sensors;
 	};
 }
