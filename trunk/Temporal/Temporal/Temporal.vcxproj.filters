@@ -38,6 +38,7 @@
     <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Game\JumpAngles.h" />
     <ClInclude Include="Physics\Utils.h" />
+    <ClInclude Include="Graphics\ViewManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -67,5 +68,6 @@
     <ClCompile Include="Game\World.cpp" />
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
+    <ClCompile Include="Graphics\ViewManager.cpp" />
   </ItemGroup>
 </Project>

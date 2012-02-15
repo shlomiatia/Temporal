@@ -14,7 +14,7 @@ namespace Temporal
 	{
 	public:
 		// TODO: Where to put movement constants
-		static const float WALK_FORCE;
+		static const float WALK_SPEED_PER_SECOND;
 		static const float JUMP_FORCE;
 
 		EntityStateMachine(void);

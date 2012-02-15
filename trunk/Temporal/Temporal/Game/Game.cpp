@@ -5,6 +5,8 @@
 
 namespace Temporal
 {
+	const float Game::FRAME_PERIOD_IN_MILLIS(1000.0f / /*FPS*/ 60.0f);
+
 	void Game::setPanel(Panel* panel)
 	{
 		_nextPanel = panel;
@@ -14,9 +16,7 @@ namespace Temporal
 	{
 		_running = true;
 
-		unsigned int before = Thread::ticks();
-		unsigned int after;
-		int sleep;
+		unsigned long lastFrameTick = Thread::ticks();
 
 		while (isRunning())
 		{
@@ -37,22 +37,19 @@ namespace Temporal
 			{
 				if (_panel != NULL)
 				{
-					_panel->update();
+					unsigned long currFrameTick = Thread::ticks();
+					if((currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS > 5.0f)
+						lastFrameTick = currFrameTick - 5.0f * FRAME_PERIOD_IN_MILLIS;
+					while(lastFrameTick + FRAME_PERIOD_IN_MILLIS <= currFrameTick )
+					{
+						_panel->update(FRAME_PERIOD_IN_MILLIS);
+						lastFrameTick += FRAME_PERIOD_IN_MILLIS;
+					}
+					
 					Graphics::get().prepareForDrawing();
 					_panel->draw();
 					Graphics::get().finishDrawing();
 				}
-
-				after = Thread::ticks();
-				sleep = FRAME_DELAY - (after - before);
-
-				if (sleep > 0)
-				{
-					Thread::sleep(sleep);
-					after += sleep;
-				}
-
-				before = after;
 			}
 		}
 		_panel->dispose();

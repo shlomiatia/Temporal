@@ -14,7 +14,7 @@ namespace Temporal
 		void add(const Sprite* const sprite);
 
 		// TODO: Maybe use sprite iterator instead
-		const Sprite& get(unsigned int spriteID) const;
+		const Sprite& get(int spriteID) const;
 		int getSize(void) const;
 	private:
 		std::vector<const Sprite* const> _sprites;

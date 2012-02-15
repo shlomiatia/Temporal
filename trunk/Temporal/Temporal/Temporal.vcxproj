@@ -21,6 +21,7 @@
     <ClInclude Include="Game\Message.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Game\World.h" />
+    <ClInclude Include="Graphics\ViewManager.h" />
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\MessageParams.h" />
     <ClInclude Include="Game\Position.h" />
@@ -58,6 +59,7 @@
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Game\World.cpp" />
+    <ClCompile Include="Graphics\ViewManager.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Graphics\Animator.cpp" />

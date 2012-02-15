@@ -12,26 +12,26 @@ namespace Temporal
 	class DynamicBody : public Body
 	{
 	public:
-		static const float GRAVITY;
-		static const float MAX_GRAVITY;
+		static const float GRAVITY_PER_SECOND;
+		static const float MAX_GRAVITY_PER_SECOND;
 
-		DynamicBody(const Vector& size) : Body(size), _force(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
+		DynamicBody(const Vector& size) : Body(size), _velocity(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
 		Orientation::Enum getOrientation(void) const;
 
-		void applyForce(void);
-		void applyGravity(void);
+		void applyGravity(float interpolation);
+		void applyMovement(const Vector& movement) const;
 
 		virtual void handleMessage(Message& message);
-		void update(void);
+		void update(float framePeriodInMillis);
 		bool rayCast(const Vector& destination) const;
 
 		void correctCollision(const StaticBody& staticBody);
 		void detectCollision(const StaticBody& staticBody);
 
 	private:
-		Vector _force;
+		Vector _velocity;
 		bool _gravityEnabled;
 		Direction::Enum _collision;
 	};

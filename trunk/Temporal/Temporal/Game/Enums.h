@@ -7,6 +7,7 @@ namespace Temporal
 		enum Enum
 		{
 			INPUT_CONTROLLER,
+			AI_CONTROLLER,
 			POSITION,
 			ORIENTATION,
 			DYNAMIC_BODY,
@@ -41,10 +42,8 @@ namespace Temporal
 			
 			GET_SIZE,
 			GET_SENSOR_SIZE,
-			GET_GRAVITY,
 			SET_GRAVITY_ENABLED,
-			GET_FORCE,
-			SET_FORCE,
+			SET_MOVEMENT,
 			RAY_CAST,
 			BODY_COLLISION,
 			SENSOR_COLLISION,
@@ -111,6 +110,7 @@ namespace Temporal
 			JUMP_UP,
 			JUMP_FORWARD,
 			JUMP_FORWARD_END,
+			PREPARE_TO_HANG,
 			HANGING,
 			HANG,
 			DROP,

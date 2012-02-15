@@ -12,7 +12,7 @@ namespace Temporal
 		TestPanel(void) {}
 
 		void init(void);
-		void update(void);
+		void update(float framePeriodInMillis);
 		void draw(void);
 		void dispose(void);
 	};
