@@ -22,7 +22,7 @@ namespace Temporal
 		void prepareForDrawing(void) const;
 		void finishDrawing(void) const;
 
-		Vector setTranslation(const Vector& translation) { _translation = translation; }
+		void setTranslation(const Vector& translation) { _translation = translation; }
 
 		void validate(void) const;
 

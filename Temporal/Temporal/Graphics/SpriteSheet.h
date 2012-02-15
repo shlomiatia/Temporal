@@ -16,7 +16,7 @@ namespace Temporal
 
 		const Texture& getTexture(void) const { return *_texture; }
 		Orientation::Enum getOrientation(void) const { return _orientation; }
-		const SpriteGroup& get(unsigned int spriteGroupID) const;
+		const SpriteGroup& get(int spriteGroupID) const;
 	private:
 		const Texture* const _texture;
 		const Orientation::Enum _orientation;

@@ -3,12 +3,12 @@
 
 namespace Temporal
 {
-	void Thread::sleep(unsigned long millis)
+	void Thread::sleep(unsigned int millis)
 	{
 		SDL_Delay(millis);
 	}
 
-	long Thread::ticks(void)
+	unsigned long Thread::ticks(void)
 	{
 		return SDL_GetTicks();
 	}

@@ -22,7 +22,7 @@ namespace Temporal
 		void stop(void) { _running = false;	}
 
 	private:
-		static const int FRAME_DELAY = 1000 / /*FPS*/ 60;
+		static const float FRAME_PERIOD_IN_MILLIS;
 
 		bool _running;
 		bool _paused;

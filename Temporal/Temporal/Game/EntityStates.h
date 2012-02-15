@@ -77,7 +77,7 @@ namespace Temporal
 	{
 	public:
 		JumpStart(float angle, AnimationID::Enum animation, EntityStateID::Enum jumpState) : 
-		  _angle(angle), _animation(animation), _jumpState(jumpState), _platformFound(false) {};
+		  _angle(angle), _animation(animation), _jumpState(jumpState), _platformFound(false), _animationEnded(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
@@ -89,6 +89,7 @@ namespace Temporal
 		AnimationID::Enum _animation;
 		EntityStateID::Enum _jumpState;
 		bool _platformFound;
+		bool _animationEnded;
 	};
 
 	class JumpUp : public EntityState
@@ -124,12 +125,12 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class Hanging : public EntityState
+	class PrepareToHang : public EntityState
 	{
 	public:
-		Hanging(void) : _platform(NULL) {};
+		PrepareToHang(void) : _platform(NULL) {};
 
-		virtual const char* getName(void) const { return "Hanging"; }
+		virtual const char* getName(void) const { return "PrepareToHang"; }
 
 	protected:
 		virtual void handleMessage(Message& message);
@@ -138,6 +139,17 @@ namespace Temporal
 		const Body* _platform;
 
 		void update(void);
+	};
+
+	class Hanging : public EntityState
+	{
+	public:
+		Hanging(void){};
+
+		virtual const char* getName(void) const { return "Hanging"; }
+
+	protected:
+		virtual void handleMessage(Message& message);
 	};
 
 	class Hang : public EntityState

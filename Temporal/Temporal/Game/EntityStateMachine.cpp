@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	const float EntityStateMachine::WALK_FORCE(2.0f);
+	const float EntityStateMachine::WALK_SPEED_PER_SECOND(120.0f);
 	const float EntityStateMachine::JUMP_FORCE(15.0f);
 
 	EntityStateMachine::EntityStateMachine(void)
@@ -25,6 +25,7 @@ namespace Temporal
 		_states.push_back(new JumpUp());
 		_states.push_back(new JumpForward());
 		_states.push_back(new JumpForwardEnd());
+		_states.push_back(new PrepareToHang());
 		_states.push_back(new Hanging());
 		_states.push_back(new Hang());
 		_states.push_back(new Drop());

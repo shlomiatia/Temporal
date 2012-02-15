@@ -8,8 +8,8 @@
 
 namespace Temporal
 {
-	const float DynamicBody::GRAVITY(1.0f);
-	const float DynamicBody::MAX_GRAVITY(20.0f);
+	const float DynamicBody::GRAVITY_PER_SECOND(60.0f);
+	const float DynamicBody::MAX_GRAVITY_PER_SECOND(1200.0f);
 
 	float correctCollisionInAxis(float force, float minDynamic, float maxDynamic, float minStatic, float maxStatic)
 	{
@@ -26,40 +26,34 @@ namespace Temporal
 		return orientation;
 	}
 
-	void DynamicBody::applyGravity(void)
+	void DynamicBody::applyGravity(float interpolation)
 	{
 		if(_gravityEnabled)
 		{
-			float y = _force.getY();
-			y -= GRAVITY;
-			if(y < -MAX_GRAVITY)
-				y = -MAX_GRAVITY;
-			_force.setY(y);
+			float gravity = GRAVITY_PER_SECOND * interpolation;
+			float maxGravity = MAX_GRAVITY_PER_SECOND * interpolation;
+			float y = _velocity.getY();
+			y -= gravity;
+			if(y < -maxGravity)
+				y = -maxGravity;
+			_velocity.setY(y);
 		}
 	}
 
-	void DynamicBody::applyForce(void)
+	void DynamicBody::applyMovement(const Vector& movement) const
 	{
 		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
-		Vector newPosition = position + _force;
+		Vector newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
 	void DynamicBody::handleMessage(Message& message)
 	{
 		Body::handleMessage(message);
-		if(message.getID() == MessageID::GET_FORCE)
+		if(message.getID() == MessageID::SET_MOVEMENT)
 		{
-			message.setParam(&_force);
-		}
-		else if(message.getID() == MessageID::GET_GRAVITY)
-		{
-			message.setParam(&GRAVITY);
-		}
-		else if(message.getID() == MessageID::SET_FORCE)
-		{
-			const Vector& force = *(const Vector* const)message.getParam();
-			_force = Vector(force.getX() * getOrientation(), force.getY()); 
+			const Vector& param = *(const Vector* const)message.getParam();
+			_velocity = Vector(param.getX() * getOrientation(), param.getY());
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
@@ -74,26 +68,32 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			update();
+			float framePeriodInMillis = *(const float* const)message.getParam();
+			update(framePeriodInMillis);
 		}
 	}
 
-	void DynamicBody::update(void)
+	void DynamicBody::update(float framePeriodInMillis)
 	{
 		ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
-		applyGravity();
+		float interpolation = framePeriodInMillis / 1000.0f;
+		applyGravity(interpolation);
 		while(iterator.next())
 		{
 			StaticBody& staticBody = (StaticBody&)iterator.current();
 			correctCollision(staticBody);
 		}
-		applyForce();
+		applyMovement(_velocity);
 		_collision = Direction::NONE;
 		iterator.reset();
 		while(iterator.next())
 		{
 			StaticBody& staticBody = (StaticBody&)iterator.current();
 			detectCollision(staticBody);
+		}
+		if((_collision & Direction::BOTTOM) || (!_gravityEnabled))
+		{
+			_velocity = Vector::Zero;
 		}
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
@@ -102,16 +102,16 @@ namespace Temporal
 	{
 		const Rect& staticBodyBounds(staticBody.getBounds());
 		const Rect& dynamicBodyBounds(getBounds());
-		const Rect& futureBounds = dynamicBodyBounds + _force;
+		const Rect& futureBounds = dynamicBodyBounds + _velocity;
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
 			// TODO: Correct smallest axis
 			// TODO: Gradual test
-			float x = correctCollisionInAxis(_force.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
-			float y = correctCollisionInAxis(_force.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
-			_force.setX(x);
-			_force.setY(y);
+			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
+			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
+			_velocity.setX(x);
+			_velocity.setY(y);
 		}
 	}
 
