@@ -12,17 +12,20 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			update();
+			float framePeriodInMillis = *(const float* const)message.getParam();
+			update(framePeriodInMillis);
 		}
 	}
 
-	void Animator::update(void)
+	void Animator::update(float framePeriodInMillis)
 	{
 		const SpriteGroup& spriteGroup = getSpriteGroup();
 		int framesCount = spriteGroup.getSize();
-		bool animationEnded = _update == UPDATES_PER_FRAME - 1 && (!_rewind ? _frameID == framesCount - 1 : _frameID == 0);
-		_update = (_update + 1) % UPDATES_PER_FRAME;
-		if(_update == 0 && (!animationEnded || _repeat))
+		_time += framePeriodInMillis;
+		bool framePassed = _time > FRAME_PERIOD;
+		if(framePassed) _time = 0;
+		bool animationEnded = framePassed && (!_rewind ? _frameID == framesCount - 1 : _frameID == 0);
+		if(framePassed && (!animationEnded || _repeat))
 		{
 			int modifier = _rewind ? -1 : 1;
 			_frameID = (framesCount + _frameID + modifier) % framesCount;
@@ -40,7 +43,7 @@ namespace Temporal
 
 	void Animator::reset(const ResetAnimationParams& resetAnimationParams)
 	{
-		_update = 0;
+		_time = 0.0f;
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
 		int animationID = resetAnimationParams.getAnimationID();

@@ -87,10 +87,6 @@ namespace Temporal
 			_stillWalking = true;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
 		}
-		else if(message.getID() == MessageID::EXIT_STATE)
-		{
-			EntityStateID::Enum newState = *(const EntityStateID::Enum* const)message.getParam();
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_stillWalking)
@@ -99,11 +95,9 @@ namespace Temporal
 			}
 			else
 			{
-				float framePeriodInMillis = *(const float* const)message.getParam();
-				float interpolation = framePeriodInMillis / 1000.0f;
 				// TODO: Move to enter state when there will be walk start state
-				float walkSpeed = _stateMachine->WALK_SPEED_PER_SECOND * interpolation;
-				_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &Vector(walkSpeed, 0.0f)));
+				Vector force(_stateMachine->WALK_SPEED_PER_SECOND, 0.0f);
+				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &force));
 				_stillWalking = false;
 			}
 		}
@@ -222,7 +216,7 @@ namespace Temporal
 				Vector jumpVector(jumpForceX, jumpForceY);
 
 				// TODO: Move to jump states for clarity
-				_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &jumpVector));
+				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
 				_stateMachine->changeState(_jumpState);
 			}
 		}
@@ -290,7 +284,7 @@ namespace Temporal
 		Vector movement(movementX, movementY);
 		if(movement != Vector::Zero)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &movement));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &movement));
 		}
 		else
 		{
@@ -389,7 +383,7 @@ namespace Temporal
 			Vector climbForce(climbForceX, climbForceY);
 
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &climbForce));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &climbForce));
 		}
 		else if(message.getID() == MessageID::EXIT_STATE)
 		{
@@ -410,7 +404,7 @@ namespace Temporal
 		float moveX = (platformEdge - entityFront) * orientation;
 		if(moveX != 0.0f)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &Vector(moveX, 0.0f)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(moveX, 0.0f)));
 		}
 		else
 		{
@@ -447,7 +441,7 @@ namespace Temporal
 			float forceX = -1.0f;
 			float forceY = -(size.getHeight() - 1.0f);
 
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_MOVEMENT, &Vector(forceX, forceY)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(forceX, forceY)));
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));
 		}
 		else if(message.getID() == MessageID::ANIMATION_ENDED)
