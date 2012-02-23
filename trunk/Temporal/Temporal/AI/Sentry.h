@@ -62,7 +62,11 @@ namespace Temporal
 			return states;
 		}
 
-		Sentry(void) : AIStateMachine(getStates(), SentryStates::SEARCH) {}
+		Sentry(void) : AIStateMachine(getStates()) {}
+
+		virtual int getInitialState(void) const { return SentryStates::SEARCH; }
+
+		virtual void handleMessage(Message& message);
 	};
 }
 

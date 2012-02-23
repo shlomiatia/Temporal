@@ -291,7 +291,7 @@ namespace Temporal
 			float platformTop = platformBounds.getTop();
 			float personCenterX = personBounds.getCenterX();
 			Vector drawPosition(personCenterX, platformTop);
-			_stateMachine->setDrawPositionOverride(drawPosition);
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::HANGING);
 		}
 	}
@@ -358,7 +358,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::EXIT_STATE)
 		{
-			_stateMachine->resetDrawPositionOverride();
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -387,7 +387,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::EXIT_STATE)
 		{
-			_stateMachine->resetDrawPositionOverride();
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
 			bool gravityEnabled = true;
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 		}
@@ -411,7 +411,7 @@ namespace Temporal
 			float personCenterX = personBounds.getCenterX();
 			float platformTop = platformBounds.getTop();
 			Vector drawPosition(personCenterX, platformTop);
-			_stateMachine->setDrawPositionOverride(drawPosition);
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::DESCEND);
 		}
 	}

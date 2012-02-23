@@ -171,8 +171,8 @@ namespace Temporal
 				err += dx;
 				y0 += sy * STEP;
 			}
-			// TODO: Investigate SLOTH!
-			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
+			//Graphics::get().drawRect(Rect(x0, y0, 2.0f, 2.0f), Color::Cyan);
+			if((x1 - x0) * sx <= STEP && (y1 - y0) * sy <= STEP)
 				return true;
 			ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
 			while(iterator.next())

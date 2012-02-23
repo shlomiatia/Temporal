@@ -9,7 +9,7 @@ namespace Temporal
 	const float ActionStateMachine::JUMP_FORCE_PER_SECOND(1000.0f);
 
 	ActionStateMachine::ActionStateMachine(void)
-		: _currentState(NULL), _drawPositionOverride(Vector::Zero)
+		: _currentState(NULL)
 	{
 		_states.push_back(new Stand());
 		_states.push_back(new Fall());
@@ -34,9 +34,6 @@ namespace Temporal
 		
 		for(std::vector<ActionState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
-
-		// TODO: Use change state SLOTH!
-		_currentState = _states[ActionStateID::STAND];
 	}
 
 	ActionStateMachine::~ActionStateMachine(void)
@@ -57,20 +54,9 @@ namespace Temporal
 
 	void ActionStateMachine::handleMessage(Message& message)
 	{
-		// TODO: Move from here SLOTH!
-		if(message.getID() == MessageID::GET_DRAW_POSITION)
+		if(message.getID() == MessageID::ENTITY_CREATED)
 		{
-			Vector* outParam = (Vector* const)message.getParam();
-			if(_drawPositionOverride != Vector::Zero)
-			{
-				*outParam = _drawPositionOverride;
-			}
-			else
-			{
-				Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
-				sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
-				*outParam = Vector(bounds.getCenterX(), bounds.getBottom());
-			}
+			changeState(ActionStateID::STAND);
 		}
 		else
 		{

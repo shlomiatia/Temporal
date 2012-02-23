@@ -17,6 +17,7 @@
     <ClInclude Include="Base\Base.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\Enums.h" />
+    <ClInclude Include="Game\DrawPosition.h" />
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Game\Component.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="Base\Vector.cpp" />
     <ClCompile Include="Game\Component.cpp" />
+    <ClCompile Include="Game\DrawPosition.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Game\World.cpp" />
