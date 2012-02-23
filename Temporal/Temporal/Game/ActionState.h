@@ -1,33 +1,33 @@
 #pragma once
 
-namespace Temporal { class EntityStateMachine; }
+namespace Temporal { class ActionStateMachine; }
 
 #include "Message.h"
-#include "EntityStateMachine.h"
+#include "ActionStateMachine.h"
 #include "MessageParams.h"
 
 namespace Temporal
 {
-	class EntityState
+	class ActionState
 	{
 	public:
-		EntityState(void) {};
-		virtual ~EntityState(void) {};
+		ActionState(void) {};
+		virtual ~ActionState(void) {};
 
-		void setStateMachine(EntityStateMachine* stateMachine) { _stateMachine = stateMachine; }
+		void setStateMachine(ActionStateMachine* stateMachine) { _stateMachine = stateMachine; }
 
 		virtual const char* getName(void) const = 0;
 		virtual void handleMessage(Message& message) = 0;
 
 	protected:
-		EntityStateMachine* _stateMachine;
+		ActionStateMachine* _stateMachine;
 
 		bool isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative = Direction::NONE) const;
 		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
 
 	private:
 
-		EntityState(const EntityState&);
-		EntityState& operator=(const EntityState&);
+		ActionState(const ActionState&);
+		ActionState& operator=(const ActionState&);
 	};
 }

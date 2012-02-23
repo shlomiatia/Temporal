@@ -1,11 +1,11 @@
 #pragma once
 
-#include "EntityState.h"
+#include "ActionState.h"
 #include <Temporal/Physics/Body.h>
 
 namespace Temporal
 {
-	class Stand : public EntityState
+	class Stand : public ActionState
 	{
 	public:
 		Stand(void) : _isDescending(false) {};
@@ -19,7 +19,7 @@ namespace Temporal
 		bool _isDescending;
 	};
 
-	class Fall : public EntityState
+	class Fall : public ActionState
 	{
 	public:
 		Fall(void) {};
@@ -30,7 +30,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class Walk : public EntityState
+	class Walk : public ActionState
 	{
 	public:
 		Walk(void) : _stillWalking(false) {};
@@ -44,7 +44,7 @@ namespace Temporal
 		bool _stillWalking;
 	};
 
-	class Turn : public EntityState
+	class Turn : public ActionState
 	{
 	public:
 		Turn(void) {};
@@ -55,7 +55,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class PrepareToJump : public EntityState
+	class PrepareToJump : public ActionState
 	{
 	public:
 		PrepareToJump(void) {};
@@ -66,17 +66,17 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
-		static const EntityStateID::Enum JUMP_ANGLES_START_STATES[];
+		static const ActionStateID::Enum JUMP_ANGLES_START_STATES[];
 
-		EntityStateID::Enum _jumpStartState;
+		ActionStateID::Enum _jumpStartState;
 
 		void handleJumpSensor(Message &message);
 	};
 
-	class JumpStart : public EntityState
+	class JumpStart : public ActionState
 	{
 	public:
-		JumpStart(float angle, AnimationID::Enum animation, EntityStateID::Enum jumpState) : 
+		JumpStart(float angle, AnimationID::Enum animation, ActionStateID::Enum jumpState) : 
 		  _angle(angle), _animation(animation), _jumpState(jumpState), _platformFound(false), _animationEnded(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
@@ -87,12 +87,12 @@ namespace Temporal
 	private:
 		float _angle;
 		AnimationID::Enum _animation;
-		EntityStateID::Enum _jumpState;
+		ActionStateID::Enum _jumpState;
 		bool _platformFound;
 		bool _animationEnded;
 	};
 
-	class JumpUp : public EntityState
+	class JumpUp : public ActionState
 	{
 	public:
 		JumpUp(void) {};
@@ -103,7 +103,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class JumpForward : public EntityState
+	class JumpForward : public ActionState
 	{
 	public:
 		JumpForward(void) {};
@@ -114,7 +114,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class JumpForwardEnd : public EntityState
+	class JumpForwardEnd : public ActionState
 	{
 	public:
 		JumpForwardEnd(void) {};
@@ -125,7 +125,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class PrepareToHang : public EntityState
+	class PrepareToHang : public ActionState
 	{
 	public:
 		PrepareToHang(void) : _platform(NULL) {};
@@ -141,7 +141,7 @@ namespace Temporal
 		void update(void);
 	};
 
-	class Hanging : public EntityState
+	class Hanging : public ActionState
 	{
 	public:
 		Hanging(void){};
@@ -152,7 +152,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class Hang : public EntityState
+	class Hang : public ActionState
 	{
 	public:
 		Hang(void) {};
@@ -163,7 +163,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class Drop : public EntityState
+	class Drop : public ActionState
 	{
 	public:
 		Drop(void) : _platformFound(false) {};
@@ -177,7 +177,7 @@ namespace Temporal
 		bool _platformFound;
 	};
 
-	class Climb : public EntityState
+	class Climb : public ActionState
 	{
 	public:
 		Climb(void) {};
@@ -187,7 +187,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class PrepareToDescend : public EntityState
+	class PrepareToDescend : public ActionState
 	{
 	public:
 		PrepareToDescend(void) : _platform(NULL) {};
@@ -203,7 +203,7 @@ namespace Temporal
 		void update(void);
 	};
 
-	class Descend : public EntityState
+	class Descend : public ActionState
 	{
 	public:
 		Descend(void) {};

@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI\AIState.h" />
+    <ClInclude Include="AI\AIStateMachine.h" />
+    <ClInclude Include="AI\Sentry.h" />
     <ClInclude Include="Base\Base.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\Enums.h" />
@@ -43,14 +46,16 @@
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Game\EntityState.h" />
-    <ClInclude Include="Game\EntityStateMachine.h" />
-    <ClInclude Include="Game\EntityStates.h" />
+    <ClInclude Include="Game\ActionState.h" />
+    <ClInclude Include="Game\ActionStateMachine.h" />
+    <ClInclude Include="Game\ActionStates.h" />
     <ClInclude Include="Physics\StaticBody.h" />
     <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="TestPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI\AIStateMachine.cpp" />
+    <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Base\Color.cpp" />
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
@@ -75,9 +80,9 @@
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Game\EntityState.cpp" />
-    <ClCompile Include="Game\EntityStateMachine.cpp" />
-    <ClCompile Include="Game\EntityStates.cpp" />
+    <ClCompile Include="Game\ActionState.cpp" />
+    <ClCompile Include="Game\ActionStateMachine.cpp" />
+    <ClCompile Include="Game\ActionStates.cpp" />
     <ClCompile Include="TestPanel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

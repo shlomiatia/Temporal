@@ -13,9 +13,10 @@
 #include <Temporal/Graphics/ViewManager.h>
 #include <Temporal/Game/Position.h>
 #include <Temporal/Game/EntityOrientation.h>
-#include <Temporal/Game/EntityStateMachine.h>
+#include <Temporal/Game/ActionStateMachine.h>
 #include <Temporal/Game/World.h>
 #include <Temporal/Game/JumpAngles.h>
+#include <Temporal/AI/Sentry.h>
 #include <math.h>
 
 namespace Temporal
@@ -60,8 +61,6 @@ namespace Temporal
 		VisualLayer::Enum _layer;
 	};
 
-	static bool _rayCastSuccessful = false;
-
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
 		// Jump Sensor
@@ -81,7 +80,7 @@ namespace Temporal
 		 * Sum = (2*(sin(45)*F)/G)*(2*cos(45)*F)/2
 		 * Sum = (2*sin(45)*cos(45)*F^2)/G
 		 */
-		const float F = 15.0f; //TODO:EntityStateMachine::JUMP_FORCE;
+		const float F = 15.0f; //TODO:ActionStateMachine::JUMP_FORCE;
 		const float G = 1.0f; // TODO: DynamicBody::GRAVITY;
 		const float A = DEGREES_45;
 		float playerWidth = body.getSize().getWidth();
@@ -304,7 +303,7 @@ namespace Temporal
 		EntityOrientation* orientation(new EntityOrientation(Orientation::LEFT));
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
-		EntityStateMachine* stateMachine = new EntityStateMachine();
+		ActionStateMachine* stateMachine = new ActionStateMachine();
 		Animator* animator(new Animator(66.0f));
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
@@ -316,6 +315,20 @@ namespace Temporal
 		addSensors(*entity, *dynamicBody);
 		entity->add(stateMachine);
 		entity->add(animator);
+		entity->add(renderer);
+		World::get().add(entity);
+
+		position = new Position(Vector(200.0f, 70.f));
+		orientation = new EntityOrientation(Orientation::RIGHT);
+		Sentry* sentry = new Sentry();
+		renderer = new Renderer(*spritesheet, VisualLayer::NPC);
+		dynamicBody = new DynamicBody(Vector(20.0f, 80.0f));
+
+		entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(sentry);
+		entity->add(dynamicBody);
 		entity->add(renderer);
 		World::get().add(entity);
 		
@@ -363,15 +376,7 @@ namespace Temporal
 		}
 		World::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
-		const Vector& mouse = Input::get().mouse();
-		RayCastParams params(mouse);
-		Message message(MessageID::RAY_CAST, &params);
-		World::get().get(0).handleMessage(message);
-		_rayCastSuccessful = params.getResult();
-
-		Message getPosition(MessageID::GET_POSITION);
-		World::get().get(0).handleMessage(getPosition);
-		const Vector& position = *(const Vector* const)getPosition.getParam();
+		const Vector& position = *(const Vector* const)World::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));
 		ViewManager::get().setCameraCenter(position);
 	}
 
@@ -382,11 +387,6 @@ namespace Temporal
 			World::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		World::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-
-		Message message(MessageID::GET_POSITION);
-		World::get().get(0).handleMessage(message);
-		const Vector& position = *(const Vector* const)message.getParam();
-		//Graphics::get().drawLine(position, Input::get().mouse(), _rayCastSuccessful ? Color::Green : Color::Red);
 	}
 
 	void TestPanel::dispose(void)

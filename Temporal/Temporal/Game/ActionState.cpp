@@ -1,10 +1,10 @@
 #include <Temporal\Base\Base.h>
-#include "EntityState.h"
+#include "ActionState.h"
 #include <Temporal/Physics/Sensor.h>
 
 namespace Temporal
 {
-	bool EntityState::isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative) const
+	bool ActionState::isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative) const
 	{
 		if(message.getID() == MessageID::BODY_COLLISION)
 		{
@@ -15,7 +15,7 @@ namespace Temporal
 		return false;
 	}
 
-	bool EntityState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
+	bool ActionState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{

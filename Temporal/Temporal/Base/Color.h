@@ -22,9 +22,9 @@ namespace Temporal
 		float getA(void) const { return _a; }
 		
 	private:
-		const float _r;
-		const float _g;
-		const float _b;
-		const float _a;
+		float _r;
+		float _g;
+		float _b;
+		float _a;
 	};
 }

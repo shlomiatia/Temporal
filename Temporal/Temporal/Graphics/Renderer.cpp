@@ -22,6 +22,10 @@ namespace Temporal
 		{
 			_spriteID = *(const int* const)message.getParam();
 		}
+		else if(message.getID() == MessageID::SET_COLOR)
+		{
+			_color = *(const Color* const)message.getParam();
+		}
 		else if(message.getID() == MessageID::DRAW)
 		{
 			VisualLayer::Enum layer = *(const VisualLayer::Enum* const)message.getParam();
@@ -54,6 +58,6 @@ namespace Temporal
 
 		Vector screenLocation(screenLocationX, screenLocationY);
 
-		Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored);
+		Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
 	}
 }

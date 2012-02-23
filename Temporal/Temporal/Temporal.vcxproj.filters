@@ -15,8 +15,6 @@
     <ClInclude Include="DebugInfo.h" />
     <ClInclude Include="Physics\Body.h" />
     <ClInclude Include="Physics\Sensor.h" />
-    <ClInclude Include="Game\EntityState.h" />
-    <ClInclude Include="Game\EntityStates.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Base\Enums.h" />
@@ -28,7 +26,6 @@
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Component.h" />
     <ClInclude Include="Game\Message.h" />
-    <ClInclude Include="Game\EntityStateMachine.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Game\MessageParams.h" />
     <ClInclude Include="Physics\StaticBody.h" />
@@ -39,6 +36,12 @@
     <ClInclude Include="Game\JumpAngles.h" />
     <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
+    <ClInclude Include="Game\ActionState.h" />
+    <ClInclude Include="Game\ActionStateMachine.h" />
+    <ClInclude Include="Game\ActionStates.h" />
+    <ClInclude Include="AI\AIState.h" />
+    <ClInclude Include="AI\AIStateMachine.h" />
+    <ClInclude Include="AI\Sentry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -52,14 +55,11 @@
     <ClCompile Include="DebugInfo.cpp" />
     <ClCompile Include="Physics\Body.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
-    <ClCompile Include="Game\EntityState.cpp" />
-    <ClCompile Include="Game\EntityStates.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Graphics\Animator.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
-    <ClCompile Include="Game\EntityStateMachine.cpp" />
     <ClCompile Include="Graphics\SpriteGroup.cpp" />
     <ClCompile Include="Graphics\SpriteSheet.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
@@ -69,5 +69,10 @@
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
+    <ClCompile Include="Game\ActionState.cpp" />
+    <ClCompile Include="Game\ActionStateMachine.cpp" />
+    <ClCompile Include="Game\ActionStates.cpp" />
+    <ClCompile Include="AI\AIStateMachine.cpp" />
+    <ClCompile Include="AI\Sentry.cpp" />
   </ItemGroup>
 </Project>

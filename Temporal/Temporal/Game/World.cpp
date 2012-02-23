@@ -24,6 +24,17 @@ namespace Temporal
 			(**i).handleMessage(message);
 	}
 
+	void World::sendMessageToEntity(int id, Message& message)
+	{
+		_entities[id]->handleMessage(message);
+	}
+
+	const void* const World::sendQueryMessageToEntity(int id, Message& query)
+	{
+		sendMessageToEntity(id, query);
+		return query.getParam();
+	}
+
 	void ComponentOfTypeIteraor::reset(void)
 	{
 		_iterator = World::get()._entities.begin();

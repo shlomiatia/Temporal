@@ -19,9 +19,12 @@ namespace Temporal
 		void dispose(void);
 
 		void add(Entity* const entity);
-		Entity& get(int i) { return *_entities[i]; }
+
+		// TODO: Constness
 		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Enum type);
 		void sendMessageToAllEntities(Message& message);
+		void sendMessageToEntity(int id, Message& message);
+		const void* const sendQueryMessageToEntity(int id, Message& message);
 	private:
 		std::vector<Entity* const> _entities;
 
