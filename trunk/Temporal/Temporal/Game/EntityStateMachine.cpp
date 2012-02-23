@@ -7,7 +7,7 @@
 namespace Temporal
 {
 	const float EntityStateMachine::WALK_SPEED_PER_SECOND(120.0f);
-	const float EntityStateMachine::JUMP_FORCE(15.0f);
+	const float EntityStateMachine::JUMP_FORCE(1000.0f);
 
 	EntityStateMachine::EntityStateMachine(void)
 		: _currentState(NULL), _drawPositionOverride(Vector::Zero)

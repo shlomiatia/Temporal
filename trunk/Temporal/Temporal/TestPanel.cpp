@@ -305,7 +305,7 @@ namespace Temporal
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
 		EntityStateMachine* stateMachine = new EntityStateMachine();
-		Animator* animator(new Animator());
+		Animator* animator(new Animator(66.0f));
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
 		Entity* entity = new Entity();

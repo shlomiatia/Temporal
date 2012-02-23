@@ -9,20 +9,20 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(void) : _rewind(false), _repeat(false), _frameID(0), _update(0) {}
+		Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false), _frameID(0), _time(0) {}
 		
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
 		virtual void handleMessage(Message& message);
-		void update(void);
+		void update(float framePeriodInMillis);
 	private:
-		// TODO: Use time instad
-		static const int UPDATES_PER_FRAME = 4;
+
+		const float FRAME_PERIOD;
 
 		bool _rewind;
 		bool _repeat;
 		int _frameID;
-		int _update;
+		float _time;
 
 		void reset(const ResetAnimationParams& resetAnimationParams);
 		const SpriteGroup& getSpriteGroup(void) const;
