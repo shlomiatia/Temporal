@@ -64,30 +64,31 @@ namespace Temporal
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
 		// Jump Sensor
-		/* y = Time*(Force-Time*Gravity)
-		 * Sum = N*(A1+AN)/2
+		/* v = F - G*T
+		 * m = F*T - (G*T^2)/2 
 		 *
-		 * 0 = T*(F-T*G)
-		 * T*F - G*T^2 = 0
-		 * T*F = G*T^2
-		 * F = T*G
+		 * 0 = F - G*T
+		 * G*T = F
 		 * T = F/G
 		 *
-		 * Sum = F/G(F-G+0)/2
-		 * Sum = F*(F-G)/2*G
+		 * y = F*(F/G) - (G*(F/G)^2)/2
+		 * y = (F^2)/G - (G*F^2)/(2*G^2)
+		 * y = (F^2)/G - (F^2)/(2*G)
+		 * y = (2*F^2 - F^2)/(2*G)
+		 * y = (F^2)/(2*G)
 		 *
-		 * T = (sin(45)*F)/G
-		 * Sum = (2*(sin(45)*F)/G)*(2*cos(45)*F)/2
-		 * Sum = (2*sin(45)*cos(45)*F^2)/G
+		 * x = F*T
+		 * x = F*(F/G)
+		 * x = (F^2)/G
 		 */
-		const float F = 15.0f; //TODO:ActionStateMachine::JUMP_FORCE;
-		const float G = 1.0f; // TODO: DynamicBody::GRAVITY;
+		const float F = ActionStateMachine::JUMP_FORCE_PER_SECOND;
+		const float G = DynamicBody::GRAVITY;
 		const float A = DEGREES_45;
 		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
 		float playerHeight = body.getSize().getHeight();
-		float jumpSensorWidth = sin(A)*cos(A)*pow(F, 2)/G + jumpSensorBackOffset; 
-		float jumpSensorHeight = (F*(F-G))/(2*G);
+		float jumpSensorWidth = pow(cos(A)*F, 2.0f) / (G) + jumpSensorBackOffset; 
+		float jumpSensorHeight = pow(F, 2.0f) / (2*G);
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);

@@ -142,21 +142,21 @@ namespace Temporal
 		else
 		{
 			float max = 0.0f;
-			const float F = 15.0f;//TODO:_stateMachine->JUMP_FORCE;
-			const float G = 1.0f; //TODO:*(const float* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_GRAVITY));
+			const float F = _stateMachine->JUMP_FORCE_PER_SECOND;
+			const float G = *(const float* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_GRAVITY));
 			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
 			{
-				/* x = Time*Force*cos(Angle)
-				* y = Time*(-Gravity*Time+Force*sin(Angle))
-				* 
-				* T = x/(F*cos(A)) // Isolate T
-				* y = (-(G*x/F*cos(A)+x/F*cos(A))*(F*sin(A)) // Place T 
-				* y = (-G*x^2/F*cos(A) + F*sin(A)*x)/F*cos(A) // Multiply
-				* y = (-G*x^2 + F^2*sin(A)*cos(A)*x)/(F*cos(A))/F*cos(A) // Multiply with common denominator
-				* y = (-G*x^2 + F^2*sin(A)*cos(A)*x)/(F*cos(A))^2
-				*/
+				/* x = T*F*cos(A)
+				 * y = T*F*sin(A) - (G*T^2)/2
+				 *
+				 * T = x/(F*cos(A))
+				 * y = (x/(F*cos(A))*F*sin(A) - (G*(x/(F*cos(A)))^2)/2
+				 * y = (x*sin(A))/(cos(A)) - (G*x^2)/(2*F^2*cos(A)^2)
+				 * y = (2*F^2*x*sin(A)*cos(A) - G*x^2)/(2*F^2*cos(A)^2)
+				 * y = x*(2*F^2*sin(A)*cos(A) - G*x)/(2*F^2*cos(A)^2)
+				 */
 				float A = JUMP_ANGLES[i];
-				float y = (-G*pow(x, 2) + pow(F, 2)*sin(A)*cos(A)*x)/pow(F*cos(A), 2);
+				float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
 				if(max < y)
 				{
 					max = y;

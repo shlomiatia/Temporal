@@ -20,7 +20,7 @@ namespace Temporal
 
 		void add(Entity* const entity);
 
-		// TODO: Constness
+		// TODO: Constness SLOTH!
 		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Enum type);
 		void sendMessageToAllEntities(Message& message);
 		void sendMessageToEntity(int id, Message& message);

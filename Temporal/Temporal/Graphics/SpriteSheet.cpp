@@ -16,7 +16,7 @@ namespace Temporal
 
 	const SpriteGroup& SpriteSheet::get(int spriteGroupID) const
 	{
-		assert(spriteGroupID <_spriteGroups.size());
+		assert(spriteGroupID < (int)_spriteGroups.size());
 		return *_spriteGroups[spriteGroupID];
 	}
 }

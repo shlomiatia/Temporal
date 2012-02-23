@@ -16,7 +16,7 @@ namespace Temporal
 	{
 		_running = true;
 
-		unsigned long lastFrameTick = Thread::ticks();
+		float lastFrameTick = (float)Thread::ticks();
 
 		while (isRunning())
 		{
@@ -37,7 +37,7 @@ namespace Temporal
 			{
 				if (_panel != NULL)
 				{
-					unsigned long currFrameTick = Thread::ticks();
+					float currFrameTick = (float)Thread::ticks();
 					if((currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS > 5.0f)
 						lastFrameTick = currFrameTick - 5.0f * FRAME_PERIOD_IN_MILLIS;
 					while(lastFrameTick + FRAME_PERIOD_IN_MILLIS <= currFrameTick )

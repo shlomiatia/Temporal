@@ -35,7 +35,7 @@ namespace Temporal
 		for(std::vector<ActionState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
 
-		// TODO: Use change state
+		// TODO: Use change state SLOTH!
 		_currentState = _states[ActionStateID::STAND];
 	}
 
@@ -57,7 +57,7 @@ namespace Temporal
 
 	void ActionStateMachine::handleMessage(Message& message)
 	{
-		// TODO: Shit
+		// TODO: Move from here SLOTH!
 		if(message.getID() == MessageID::GET_DRAW_POSITION)
 		{
 			Vector* outParam = (Vector* const)message.getParam();
