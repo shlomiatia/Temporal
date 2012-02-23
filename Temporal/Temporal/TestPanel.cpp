@@ -13,6 +13,7 @@
 #include <Temporal/Graphics/ViewManager.h>
 #include <Temporal/Game/Position.h>
 #include <Temporal/Game/EntityOrientation.h>
+#include <Temporal/Game/DrawPosition.h>
 #include <Temporal/Game/ActionStateMachine.h>
 #include <Temporal/Game/World.h>
 #include <Temporal/Game/JumpAngles.h>
@@ -21,6 +22,7 @@
 
 namespace Temporal
 {
+	#pragma region Helper Methods
 	class AreaRenderer : public Component
 	{
 	public: 
@@ -147,6 +149,7 @@ namespace Temporal
 		Vector center(bottomLeft.getX() + (size.getWidth() - 1.0f) / 2.0f, bottomLeft.getY() + (size.getHeight() - 1.0f) / 2.0f);
 		return CreatePlatformFromCenter(center, size, spritesheet, cover);
 	}
+#pragma endregion Helper Methods
 
 	void TestPanel::init(void)
 	{
@@ -159,7 +162,7 @@ namespace Temporal
 		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
 		SpriteGroup* animation;
 		
-#pragma region Crap
+		#pragma region Crap
 		// Stand - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
@@ -299,11 +302,14 @@ namespace Temporal
 
 #pragma endregion Crap
 
+		const float ENTITY_HEIGHT = 80.0f;
+
 		// TODO: Central resources container
 		Position* position(new Position(Vector(512.0f, 768.0f)));
 		EntityOrientation* orientation(new EntityOrientation(Orientation::LEFT));
+		DrawPosition* drawPosition(new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f)));
 		InputController* controller(new InputController());
-		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, 80.0f)));
+		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, ENTITY_HEIGHT)));
 		ActionStateMachine* stateMachine = new ActionStateMachine();
 		Animator* animator(new Animator(66.0f));
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
@@ -311,6 +317,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(orientation);
+		entity->add(drawPosition);
 		entity->add(controller);
 		entity->add(dynamicBody);
 		addSensors(*entity, *dynamicBody);
@@ -321,17 +328,21 @@ namespace Temporal
 
 		position = new Position(Vector(200.0f, 70.f));
 		orientation = new EntityOrientation(Orientation::RIGHT);
+		drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
 		renderer = new Renderer(*spritesheet, VisualLayer::NPC);
-		dynamicBody = new DynamicBody(Vector(20.0f, 80.0f));
+		dynamicBody = new DynamicBody(Vector(20.0f, ENTITY_HEIGHT));
 
 		entity = new Entity();
 		entity->add(position);
 		entity->add(orientation);
+		entity->add(drawPosition);
 		entity->add(sentry);
 		entity->add(dynamicBody);
 		entity->add(renderer);
 		World::get().add(entity);
+		bool b = false;
+		entity->handleMessage(Message(MessageID::SET_GRAVITY_ENABLED, &b));
 		
 		texture = Texture::load("c:\\tile.png");
 		spritesheet = new SpriteSheet(texture, Orientation::NONE);
@@ -375,6 +386,7 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
+		World::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
 		World::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
 		const Vector& position = *(const Vector* const)World::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));

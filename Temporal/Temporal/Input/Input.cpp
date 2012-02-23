@@ -12,10 +12,10 @@ namespace Temporal
 			{
 				_quit = true;
 			}
-			else if (event.type == SDL_MOUSEMOTION)
+			else if (event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				_mouse.setX(event.motion.x);
-				_mouse.setY(768.0f - event.motion.y);
+				_mouse.setX(event.button.x);
+				_mouse.setY(768.0f - event.button.y);
 				break;
 			}
 			else if ((event.type == SDL_KEYDOWN) || (event.type == SDL_KEYUP))

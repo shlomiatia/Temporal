@@ -1,6 +1,7 @@
 #include "Sentry.h"
 #include <Temporal/Game/MessageParams.h>
 #include <Temporal/Game/World.h>
+#include <Temporal/Graphics/Graphics.h>
 
 namespace Temporal
 {
@@ -60,6 +61,22 @@ namespace Temporal
 		{
 			if(!haveLineOfSight())
 				_stateMachine->changeState(SentryStates::SEARCH);
+		}
+	}
+
+	void Sentry::handleMessage(Message& message)
+	{
+		AIStateMachine::handleMessage(message);
+
+		if(message.getID() == MessageID::DEBUG_DRAW)
+		{
+			/*const Vector& sentryPosition = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
+			const Vector& targetPosition = *(const Vector* const)World::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));
+
+			RayCastParams params(targetPosition);
+			Message message(MessageID::RAY_CAST, &params);
+			sendMessageToOwner(message);
+			//Graphics::get().drawLine(sentryPosition, targetPosition);*/
 		}
 	}
 }

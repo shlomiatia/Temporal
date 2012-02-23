@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	AIStateMachine::AIStateMachine(std::vector<AIState*> states, int initialState)
+	AIStateMachine::AIStateMachine(std::vector<AIState*> states)
 		: _states(states), _currentState(NULL)
 	{
 		for(std::vector<AIState*>::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -27,9 +27,13 @@ namespace Temporal
 
 	void AIStateMachine::handleMessage(Message& message)
 	{
-		// TODO: Game start event SLOTH!
-		if(_currentState == NULL)
-			changeState(0);
-		_currentState->handleMessage(message);
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			changeState(getInitialState());
+		}
+		else
+		{
+			_currentState->handleMessage(message);
+		}
 	}
 }

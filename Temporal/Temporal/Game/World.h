@@ -20,11 +20,10 @@ namespace Temporal
 
 		void add(Entity* const entity);
 
-		// TODO: Constness SLOTH!
-		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Enum type);
-		void sendMessageToAllEntities(Message& message);
-		void sendMessageToEntity(int id, Message& message);
-		const void* const sendQueryMessageToEntity(int id, Message& message);
+		ComponentOfTypeIteraor getComponentOfTypeIteraor(ComponentType::Enum type) const;
+		void sendMessageToAllEntities(Message& message) const;
+		void sendMessageToEntity(int id, Message& message) const;
+		const void* const sendQueryMessageToEntity(int id, Message& message) const;
 	private:
 		std::vector<Entity* const> _entities;
 

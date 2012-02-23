@@ -21,8 +21,6 @@ namespace Temporal
 		~ActionStateMachine(void);
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ACTION_STATE_MACHINE; }
-		void resetDrawPositionOverride(void) { _drawPositionOverride = Vector::Zero; }
-		void setDrawPositionOverride(Vector val) { _drawPositionOverride = val; }
 
 		void changeState(ActionStateID::Enum state, const void* const param = NULL);
 
@@ -30,7 +28,6 @@ namespace Temporal
 	private:
 		std::vector<ActionState*> _states;
 		ActionState* _currentState;
-		Vector _drawPositionOverride;
 		
 		ActionStateMachine(const ActionStateMachine&);
 		ActionStateMachine& operator=(const ActionStateMachine&);

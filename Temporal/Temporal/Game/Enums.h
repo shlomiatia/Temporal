@@ -10,6 +10,7 @@ namespace Temporal
 			AI_CONTROLLER,
 			POSITION,
 			ORIENTATION,
+			DRAW_POSITION,
 			DYNAMIC_BODY,
 			STATIC_BODY,
 			SENSOR,
@@ -24,6 +25,8 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			ENTITY_CREATED,
+
 			UPDATE,
 			DRAW,
 			DEBUG_DRAW,
@@ -32,8 +35,9 @@ namespace Temporal
 			SET_POSITION,
 			GET_ORIENTATION,
 			FLIP_ORIENTATION,
-			GET_DRAW_POSITION,
 			GET_BOUNDS,
+			GET_DRAW_POSITION,
+			SET_DRAW_POSITION_OVERRIDE,
 
 			ACTION_UP,
 			ACTION_DOWN,
