@@ -1,15 +1,14 @@
 #include <Temporal\Base\Base.h>
-#include "EntityStateMachine.h"
-#include "EntityStates.h"
+#include "ActionStateMachine.h"
+#include "ActionStates.h"
 #include "JumpAngles.h"
-#include <assert.h>
 
 namespace Temporal
 {
-	const float EntityStateMachine::WALK_SPEED_PER_SECOND(120.0f);
-	const float EntityStateMachine::JUMP_FORCE(1000.0f);
+	const float ActionStateMachine::WALK_FORCE_PER_SECOND(120.0f);
+	const float ActionStateMachine::JUMP_FORCE_PER_SECOND(1000.0f);
 
-	EntityStateMachine::EntityStateMachine(void)
+	ActionStateMachine::ActionStateMachine(void)
 		: _currentState(NULL), _drawPositionOverride(Vector::Zero)
 	{
 		_states.push_back(new Stand());
@@ -17,11 +16,11 @@ namespace Temporal
 		_states.push_back(new Walk());
 		_states.push_back(new Turn());
 		_states.push_back(new PrepareToJump());
-		_states.push_back(new JumpStart(DEGREES_45, AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(DEGREES_60, AnimationID::JUMP_FORWARD_START, EntityStateID::JUMP_FORWARD));
-		_states.push_back(new JumpStart(DEGREES_75, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(DEGREES_90, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
-		_states.push_back(new JumpStart(DEGREES_105, AnimationID::JUMP_UP_START, EntityStateID::JUMP_UP));
+		_states.push_back(new JumpStart(DEGREES_45, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(DEGREES_60, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		_states.push_back(new JumpStart(DEGREES_75, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		_states.push_back(new JumpStart(DEGREES_90, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		_states.push_back(new JumpStart(DEGREES_105, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
 		_states.push_back(new JumpUp());
 		_states.push_back(new JumpForward());
 		_states.push_back(new JumpForwardEnd());
@@ -33,29 +32,32 @@ namespace Temporal
 		_states.push_back(new PrepareToDescend());
 		_states.push_back(new Descend());
 		
-		for(std::vector<EntityState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+		for(std::vector<ActionState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
-		_currentState = _states[EntityStateID::STAND];
+
+		// TODO: Use change state
+		_currentState = _states[ActionStateID::STAND];
 	}
 
-	EntityStateMachine::~EntityStateMachine(void)
+	ActionStateMachine::~ActionStateMachine(void)
 	{
-		for(std::vector<EntityState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+		for(std::vector<ActionState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			delete *i;
 	}
 
-	void EntityStateMachine::changeState(EntityStateID::Enum stateType, const void* const param)
+	void ActionStateMachine::changeState(ActionStateID::Enum stateType, const void* const param)
 	{
 		if(_currentState != NULL)
 		{
-			_currentState->handleMessage(Message(MessageID::EXIT_STATE, &stateType));
+			_currentState->handleMessage(Message(MessageID::EXIT_STATE));
 		}
 		_currentState = _states[stateType];
 		_currentState->handleMessage(Message(MessageID::ENTER_STATE, param));
 	}
 
-	void EntityStateMachine::handleMessage(Message& message)
+	void ActionStateMachine::handleMessage(Message& message)
 	{
+		// TODO: Shit
 		if(message.getID() == MessageID::GET_DRAW_POSITION)
 		{
 			Vector* outParam = (Vector* const)message.getParam();

@@ -22,7 +22,7 @@ namespace Temporal
 	class RayCastParams
 	{
 	public:
-		RayCastParams(Vector target) : _target(target) {}
+		RayCastParams(Vector target) : _target(target), _result(false) {}
 
 		const Vector& getTarget(void) const { return _target; }
 		bool getResult(void) const { return _result; }

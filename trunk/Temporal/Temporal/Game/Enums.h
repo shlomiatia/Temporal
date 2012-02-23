@@ -13,7 +13,7 @@ namespace Temporal
 			DYNAMIC_BODY,
 			STATIC_BODY,
 			SENSOR,
-			STATE_MACHINE,
+			ACTION_STATE_MACHINE,
 			ANIMATOR,
 			RENDERER,
 
@@ -56,6 +56,7 @@ namespace Temporal
 			GET_SPRITE,
 			SET_SPRITE_GROUP_ID,
 			SET_SPRITE_ID,
+			SET_COLOR,
 			RESET_ANIMATION,
 			ANIMATION_ENDED
 		};
@@ -94,7 +95,7 @@ namespace Temporal
 		};
 	}
 
-	namespace EntityStateID
+	namespace ActionStateID
 	{
 		enum Enum
 		{
