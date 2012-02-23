@@ -9,6 +9,7 @@ namespace Temporal { class ActionState; }
 
 namespace Temporal
 {
+	// TODO: Extract similar data for state machines SLOTH!
 	class ActionStateMachine : public Component
 	{
 	public:

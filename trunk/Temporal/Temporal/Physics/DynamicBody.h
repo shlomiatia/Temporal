@@ -12,7 +12,7 @@ namespace Temporal
 	class DynamicBody : public Body
 	{
 	public:
-		static const float GRAVITY_PER_SECOND;
+		static const float GRAVITY;
 
 		DynamicBody(const Vector& size) : Body(size), _movement(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE), _isImpulse(false) {}
 

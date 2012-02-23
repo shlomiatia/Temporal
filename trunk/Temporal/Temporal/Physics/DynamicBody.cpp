@@ -8,7 +8,7 @@
 
 namespace Temporal
 {
-	const float DynamicBody::GRAVITY_PER_SECOND(5000.0f);
+	const float DynamicBody::GRAVITY(5000.0f);
 
 	float correctCollisionInAxis(float force, float minDynamic, float maxDynamic, float minStatic, float maxStatic)
 	{
@@ -57,6 +57,10 @@ namespace Temporal
 			bool rayCastSuccessful = rayCast(target);
 			param.setResult(rayCastSuccessful);
 		}
+		else if(message.getID() == MessageID::GET_GRAVITY)
+		{
+			message.setParam(&GRAVITY);
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriodInMillis = *(const float* const)message.getParam();
@@ -82,7 +86,7 @@ namespace Temporal
 		}
 		if(_gravityEnabled)
 		{
-			float gravity = 0.5f * GRAVITY_PER_SECOND * pow(interpolation, 2.0f);
+			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
 			float y = velocity.getY();
 			y -= gravity;
 			velocity.setY(y);
@@ -94,7 +98,7 @@ namespace Temporal
 		}
 		applyMovement(velocity);
 		if(_gravityEnabled)
-			_movement -= Vector(0.0f, GRAVITY_PER_SECOND * interpolation);
+			_movement -= Vector(0.0f, GRAVITY * interpolation);
 
 		_collision = Direction::NONE;
 		iterator.reset();
@@ -167,7 +171,7 @@ namespace Temporal
 				err += dx;
 				y0 += sy * STEP;
 			}
-			// TODO: Investigate
+			// TODO: Investigate SLOTH!
 			if((x1 - x0) * sx <= 1.0f && (y1 - y0) * sy <= 1.0f)
 				return true;
 			ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);

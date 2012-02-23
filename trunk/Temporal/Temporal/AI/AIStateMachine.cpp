@@ -27,6 +27,7 @@ namespace Temporal
 
 	void AIStateMachine::handleMessage(Message& message)
 	{
+		// TODO: Game start event SLOTH!
 		if(_currentState == NULL)
 			changeState(0);
 		_currentState->handleMessage(message);
