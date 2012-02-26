@@ -1,10 +1,66 @@
 #pragma once
 
-#include "ActionState.h"
+#include <Temporal/Game/StateMachineComponent.h>
 #include <Temporal/Physics/Body.h>
 
 namespace Temporal
 {
+	// TODO: Where to put movement constants
+	static const float WALK_FORCE_PER_SECOND = 120.0f;
+	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
+
+	namespace ActionStateID
+	{
+		enum Enum
+		{
+			STAND,
+			FALL,
+			WALK,
+			TURN,
+			PREPARE_TO_JUMP,
+			JUMP_START_45,
+			JUMP_START_60,
+			JUMP_START_75,
+			JUMP_START_90,
+			JUMP_START_105,
+			JUMP_UP,
+			JUMP_FORWARD,
+			JUMP_FORWARD_END,
+			PREPARE_TO_HANG,
+			HANGING,
+			HANG,
+			DROP,
+			CLIMB,
+			PREPARE_TO_DESCEND,
+			DESCEND
+		};
+	}
+
+	class ActionController : public StateMachineComponent
+	{
+	public:
+		ActionController(void) : StateMachineComponent(getStates()) {}
+		virtual ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
+
+	protected:
+		virtual int getInitialState(void) const { return ActionStateID::STAND; }
+
+	private:
+		std::vector<ComponentState*> getStates() const;
+	};
+
+	class ActionState : public ComponentState
+	{
+	public:
+		virtual ~ActionState(void) {};
+
+		virtual const char* getName(void) const = 0;
+
+	protected:
+		bool isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative = Direction::NONE) const;
+		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
+	};
+
 	class Stand : public ActionState
 	{
 	public:

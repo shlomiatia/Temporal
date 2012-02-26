@@ -66,7 +66,7 @@ namespace Temporal
 
 	void Sentry::handleMessage(Message& message)
 	{
-		AIStateMachine::handleMessage(message);
+		StateMachineComponent::handleMessage(message);
 
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
@@ -79,4 +79,14 @@ namespace Temporal
 			//Graphics::get().drawLine(sentryPosition, targetPosition);*/
 		}
 	}
+
+	std::vector<ComponentState*> Sentry::getStates() const
+	{
+		std::vector<ComponentState*> states;
+		states.push_back(new Search());
+		states.push_back(new Acquire());
+		states.push_back(new See());
+		return states;
+	}
+
 }

@@ -14,7 +14,7 @@
 #include <Temporal/Game/Position.h>
 #include <Temporal/Game/EntityOrientation.h>
 #include <Temporal/Game/DrawPosition.h>
-#include <Temporal/Game/ActionStateMachine.h>
+#include <Temporal/Game/ActionController.h>
 #include <Temporal/Game/World.h>
 #include <Temporal/Game/JumpAngles.h>
 #include <Temporal/AI/Sentry.h>
@@ -83,7 +83,7 @@ namespace Temporal
 		 * x = F*(F/G)
 		 * x = (F^2)/G
 		 */
-		const float F = ActionStateMachine::JUMP_FORCE_PER_SECOND;
+		const float F = JUMP_FORCE_PER_SECOND;
 		const float G = DynamicBody::GRAVITY;
 		const float A = DEGREES_45;
 		float playerWidth = body.getSize().getWidth();
@@ -310,7 +310,7 @@ namespace Temporal
 		DrawPosition* drawPosition(new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f)));
 		InputController* controller(new InputController());
 		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, ENTITY_HEIGHT)));
-		ActionStateMachine* stateMachine = new ActionStateMachine();
+		ActionController* actionController = new ActionController();
 		Animator* animator(new Animator(66.0f));
 		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
 		
@@ -321,7 +321,7 @@ namespace Temporal
 		entity->add(controller);
 		entity->add(dynamicBody);
 		addSensors(*entity, *dynamicBody);
-		entity->add(stateMachine);
+		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
 		World::get().add(entity);

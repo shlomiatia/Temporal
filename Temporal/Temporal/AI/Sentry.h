@@ -1,7 +1,6 @@
 #pragma once
 
-#include "AIStateMachine.h"
-#include "AIState.h"
+#include <Temporal/Game/StateMachineComponent.h>
 
 namespace Temporal
 {
@@ -15,7 +14,7 @@ namespace Temporal
 		};
 	}
 
-	class SentryState : public AIState
+	class SentryState : public ComponentState
 	{
 	public:
 		virtual ~SentryState(void) {};
@@ -49,24 +48,19 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 
-	class Sentry : public AIStateMachine
+	class Sentry : public StateMachineComponent
 	{
 	public:
+		Sentry(void) : StateMachineComponent(getStates()) {}
 
-		std::vector<AIState*> getStates() const
-		{
-			std::vector<AIState*> states;
-			states.push_back(new Search());
-			states.push_back(new Acquire());
-			states.push_back(new See());
-			return states;
-		}
+		virtual ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		virtual void handleMessage(Message& message);
 
-		Sentry(void) : AIStateMachine(getStates()) {}
-
+	protected:
 		virtual int getInitialState(void) const { return SentryStates::SEARCH; }
 
-		virtual void handleMessage(Message& message);
+	private:
+		std::vector<ComponentState*> getStates() const;
 	};
 }
 
