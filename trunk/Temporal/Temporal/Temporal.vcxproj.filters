@@ -36,13 +36,10 @@
     <ClInclude Include="Game\JumpAngles.h" />
     <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
-    <ClInclude Include="Game\ActionState.h" />
-    <ClInclude Include="Game\ActionStateMachine.h" />
-    <ClInclude Include="Game\ActionStates.h" />
-    <ClInclude Include="AI\AIState.h" />
-    <ClInclude Include="AI\AIStateMachine.h" />
     <ClInclude Include="AI\Sentry.h" />
     <ClInclude Include="Game\DrawPosition.h" />
+    <ClInclude Include="Game\StateMachineComponent.h" />
+    <ClInclude Include="Game\ActionController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -70,11 +67,9 @@
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
-    <ClCompile Include="Game\ActionState.cpp" />
-    <ClCompile Include="Game\ActionStateMachine.cpp" />
-    <ClCompile Include="Game\ActionStates.cpp" />
-    <ClCompile Include="AI\AIStateMachine.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Game\DrawPosition.cpp" />
+    <ClCompile Include="Game\StateMachineComponent.cpp" />
+    <ClCompile Include="Game\ActionController.cpp" />
   </ItemGroup>
 </Project>

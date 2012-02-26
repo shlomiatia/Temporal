@@ -1,10 +1,59 @@
-#include "ActionStates.h"
+#include "ActionController.h"
 #include "JumpAngles.h"
-#include <math.h>
+#include "MessageParams.h"
 #include <Temporal/Physics/Sensor.h>
+#include <math.h>
 
 namespace Temporal
 {
+	std::vector<ComponentState*> ActionController::getStates() const
+	{
+		std::vector<ComponentState*> states;
+		states.push_back(new Stand());
+		states.push_back(new Fall());
+		states.push_back(new Walk());
+		states.push_back(new Turn());
+		states.push_back(new PrepareToJump());
+		states.push_back(new JumpStart(DEGREES_45, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		states.push_back(new JumpStart(DEGREES_60, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		states.push_back(new JumpStart(DEGREES_75, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpStart(DEGREES_90, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpStart(DEGREES_105, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpUp());
+		states.push_back(new JumpForward());
+		states.push_back(new JumpForwardEnd());
+		states.push_back(new PrepareToHang());
+		states.push_back(new Hanging());
+		states.push_back(new Hang());
+		states.push_back(new Drop());
+		states.push_back(new Climb());
+		states.push_back(new PrepareToDescend());
+		states.push_back(new Descend());
+		return states;
+	}
+
+	bool ActionState::isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative) const
+	{
+		if(message.getID() == MessageID::BODY_COLLISION)
+		{
+			Direction::Enum direction = *(const Direction::Enum* const)message.getParam();
+			if(match(direction, positive, negative))
+				return true;
+		}
+		return false;
+	}
+
+	bool ActionState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
+	{
+		if(message.getID() == MessageID::SENSOR_COLLISION)
+		{
+			const Sensor& sensor = *(const Sensor* const)message.getParam();
+			if(sensor.getID() == sensorID)
+				return true;
+		}
+		return NULL;
+	}
+
 	void Stand::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD)
@@ -96,7 +145,7 @@ namespace Temporal
 			else
 			{
 				// TODO: Move to enter state when there will be walk start state
-				Vector force(_stateMachine->WALK_FORCE_PER_SECOND, 0.0f);
+				Vector force(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &force));
 				_stillWalking = false;
 			}
@@ -142,7 +191,7 @@ namespace Temporal
 		else
 		{
 			float max = 0.0f;
-			const float F = _stateMachine->JUMP_FORCE_PER_SECOND;
+			const float F = JUMP_FORCE_PER_SECOND;
 			const float G = *(const float* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_GRAVITY));
 			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
 			{
@@ -211,8 +260,8 @@ namespace Temporal
 		{
 			if(_animationEnded)
 			{
-				float jumpForceX = _stateMachine->JUMP_FORCE_PER_SECOND * cos(_angle);
-				float jumpForceY = _stateMachine->JUMP_FORCE_PER_SECOND * sin(_angle);
+				float jumpForceX = JUMP_FORCE_PER_SECOND * cos(_angle);
+				float jumpForceY = JUMP_FORCE_PER_SECOND * sin(_angle);
 				Vector jumpVector(jumpForceX, jumpForceY);
 
 				// TODO: Move to jump states for clarity
