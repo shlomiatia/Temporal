@@ -2,6 +2,7 @@
 
 namespace Temporal
 {
+	// TODO: Move to math file
 	static const float PI = 3.14159265358979f;
 
 	inline float toRadians(float angle) { return angle * PI / 180; }

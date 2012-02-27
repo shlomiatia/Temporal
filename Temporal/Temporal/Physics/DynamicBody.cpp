@@ -2,7 +2,7 @@
 #include "StaticBody.h"
 #include "Utils.h"
 #include <Temporal/Game/MessageParams.h>
-#include <Temporal/Game/World.h>
+#include <Temporal/Game/QueryManager.h>
 #include <Temporal/Graphics/Graphics.h>
 #include <algorithm>
 
@@ -50,13 +50,6 @@ namespace Temporal
 		{
 			_gravityEnabled = *(const bool* const)message.getParam();
 		}
-		else if(message.getID() == MessageID::RAY_CAST)
-		{
-			RayCastParams& param = *(RayCastParams* const)message.getParam();
-			const Vector& target = param.getTarget();
-			bool rayCastSuccessful = rayCast(target);
-			param.setResult(rayCastSuccessful);
-		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
 			message.setParam(&GRAVITY);
@@ -70,7 +63,7 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriodInMillis)
 	{
-		ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
+		ComponentOfTypeIteraor iterator = QueryManager::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
 		float interpolation = framePeriodInMillis / 1000.0f;
 
 		Vector velocity(Vector::Zero);
@@ -140,48 +133,6 @@ namespace Temporal
 			const Rect& staticBodyBounds = staticBody.getBounds();
 			Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
 			_collision = _collision | collision;
-		}
-	}
-
-	bool DynamicBody::rayCast(const Vector& destination) const
-	{
-		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
-		float x0 = position.getX();
-		float y0 = position.getY();
-		float x1 = destination.getX();
-		float y1 = destination.getY();
-		const float STEP = 10.0f;
-
-		float dx = abs(x1-x0);
-		float dy = abs(y1 - y0);
-		float sx = x0 < x1 ? 1.0f : -1.0f;
-		float sy = y0 < y1 ? 1.0f : -1.0f;
-		float err = dx - dy;
-		float e2;
-		while(true)
-		{
-			e2 = 2.0f * err;
-			if(e2 > -dy)
-			{
-				err -= dy;
-				x0 += sx * STEP;
-			}
-			if(e2 < dx)
-			{
-				err += dx;
-				y0 += sy * STEP;
-			}
-			//Graphics::get().drawRect(Rect(x0, y0, 2.0f, 2.0f), Color::Cyan);
-			if((x1 - x0) * sx <= STEP && (y1 - y0) * sy <= STEP)
-				return true;
-			ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
-			while(iterator.next())
-			{
-				StaticBody& staticBody = (StaticBody&)iterator.current();
-				Rect staticBodyBounds = staticBody.getBounds();
-				if(staticBodyBounds.contains(x0, y0))
-					return false;
-			}
 		}
 	}
 }

@@ -14,6 +14,7 @@ namespace Temporal
 			DYNAMIC_BODY,
 			STATIC_BODY,
 			SENSOR,
+			SIGHT,
 			ACTION_CONTROLLER,
 			ANIMATOR,
 			RENDERER,
@@ -21,6 +22,7 @@ namespace Temporal
 			OTHER
 		};
 	}
+
 	namespace MessageID
 	{
 		enum Enum
@@ -50,9 +52,9 @@ namespace Temporal
 			SET_GRAVITY_ENABLED,
 			SET_FORCE,
 			SET_IMPULSE,
-			RAY_CAST,
 			BODY_COLLISION,
 			SENSOR_COLLISION,
+			LINE_OF_SIGHT,
 
 			ENTER_STATE,
 			EXIT_STATE,
@@ -64,28 +66,6 @@ namespace Temporal
 			SET_COLOR,
 			RESET_ANIMATION,
 			ANIMATION_ENDED
-		};
-	}
-
-	namespace AnimationID
-	{
-		enum Enum
-		{
-			STAND,
-			TURN,
-			DROP,
-			FALL_START,
-			FALL,
-			JUMP_UP_START,
-			JUMP_UP,
-			HANG,
-			CLIMB,
-			JUMP_FORWARD_START,
-			JUMP_FORWARD,
-			JUMP_FORWARD_END,
-			WALK,
-			HANG_FORWARD,
-			HANG_BACKWARD,
 		};
 	}
 

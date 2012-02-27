@@ -23,7 +23,6 @@ namespace Temporal
 
 		virtual void handleMessage(Message& message);
 		void update(float framePeriodInMillis);
-		bool rayCast(const Vector& destination) const;
 
 		void correctCollision(const StaticBody& staticBody, Vector& velocity);
 		void detectCollision(const StaticBody& staticBody);
