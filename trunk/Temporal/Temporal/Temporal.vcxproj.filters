@@ -29,7 +29,6 @@
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Game\MessageParams.h" />
     <ClInclude Include="Physics\StaticBody.h" />
-    <ClInclude Include="Game\World.h" />
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\Position.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
@@ -40,6 +39,9 @@
     <ClInclude Include="Game\DrawPosition.h" />
     <ClInclude Include="Game\StateMachineComponent.h" />
     <ClInclude Include="Game\ActionController.h" />
+    <ClInclude Include="AI\Camera.h" />
+    <ClInclude Include="Game\QueryManager.h" />
+    <ClInclude Include="Physics\Sight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -63,7 +65,6 @@
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
-    <ClCompile Include="Game\World.cpp" />
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
@@ -71,5 +72,9 @@
     <ClCompile Include="Game\DrawPosition.cpp" />
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\ActionController.cpp" />
+    <ClCompile Include="AI\Camera.cpp" />
+    <ClCompile Include="Game\QueryManager.cpp" />
+    <ClCompile Include="Physics\Utils.cpp" />
+    <ClCompile Include="Physics\Sight.cpp" />
   </ItemGroup>
 </Project>

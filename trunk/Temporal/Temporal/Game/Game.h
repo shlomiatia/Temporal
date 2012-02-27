@@ -23,6 +23,7 @@ namespace Temporal
 
 	private:
 		static const float FRAME_PERIOD_IN_MILLIS;
+		static const float MAX_FRAMES_SKIP;
 
 		bool _running;
 		bool _paused;

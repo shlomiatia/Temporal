@@ -12,9 +12,8 @@ namespace Temporal
 		Message(MessageID::Enum id, const void* const param = NULL) : _id(id), _param(param) {}
 
 		MessageID::Enum getID(void) const { return _id; }
-		void setParam(const void* const param) { _param = param; }
-
 		const void* const getParam(void) const { return _param; }
+		void setParam(const void* const param) { _param = param; }
 
 	private:
 		MessageID::Enum _id;

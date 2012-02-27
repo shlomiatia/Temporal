@@ -1,6 +1,6 @@
 #include "Sensor.h"
 #include "Utils.h"
-#include <Temporal/Game/World.h>
+#include <Temporal/Game/QueryManager.h>
 #include <Temporal/Graphics/Graphics.h>
 
 namespace Temporal
@@ -20,7 +20,7 @@ namespace Temporal
 		_sensedBody = NULL;
 		Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Rect& sensorBounds = getBounds();
-		ComponentOfTypeIteraor iterator = World::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
+		ComponentOfTypeIteraor iterator = QueryManager::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
 		while(iterator.next())
 		{
 			StaticBody& staticBody = (StaticBody&)iterator.current();

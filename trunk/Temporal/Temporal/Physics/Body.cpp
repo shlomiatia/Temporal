@@ -17,7 +17,7 @@ namespace Temporal
 		return Rect(position, _size);
 	}
 
-	void Body::handleMessage( Message& message )
+	void Body::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_SIZE)
 		{

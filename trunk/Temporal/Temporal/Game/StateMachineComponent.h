@@ -6,7 +6,6 @@
 
 namespace Temporal
 {
-	class ComponentState;
 	class StateMachineComponent;
 
 	class ComponentState

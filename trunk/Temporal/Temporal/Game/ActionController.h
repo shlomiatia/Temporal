@@ -9,6 +9,28 @@ namespace Temporal
 	static const float WALK_FORCE_PER_SECOND = 120.0f;
 	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
 
+	namespace AnimationID
+	{
+		enum Enum
+		{
+			STAND,
+			TURN,
+			DROP,
+			FALL_START,
+			FALL,
+			JUMP_UP_START,
+			JUMP_UP,
+			HANG,
+			CLIMB,
+			JUMP_FORWARD_START,
+			JUMP_FORWARD,
+			JUMP_FORWARD_END,
+			WALK,
+			HANG_FORWARD,
+			HANG_BACKWARD,
+		};
+	}
+
 	namespace ActionStateID
 	{
 		enum Enum
