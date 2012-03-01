@@ -151,6 +151,138 @@ namespace Temporal
 		Vector center(bottomLeft.getX() + (size.getWidth() - 1.0f) / 2.0f, bottomLeft.getY() + (size.getHeight() - 1.0f) / 2.0f);
 		return CreatePlatformFromCenter(center, size, spritesheet, cover);
 	}
+
+#pragma endregion
+	#pragma region Creation Methods
+
+	static const float ENTITY_WIDTH = 10.0f;
+	static const float ENTITY_HEIGHT = 80.0f;
+
+	void CreatePlayer(SpriteSheet* spritesheet)
+	{
+		// TODO: Central resources container
+		Position* position = new Position(Vector(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		InputController* controller = new InputController();
+		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		ActionController* actionController = new ActionController();
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(controller);
+		entity->add(dynamicBody);
+		addSensors(*entity, *dynamicBody);
+		entity->add(actionController);
+		entity->add(animator);
+		entity->add(renderer);
+		QueryManager::get().add(entity);
+	}
+
+	void CreateSentry(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Vector(200.0f, 50.f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		Sentry* sentry = new Sentry();
+		Sight* sight = new Sight(toRadians(45.0f), toRadians(-45.0f));
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(sentry);
+		entity->add(sight);
+		entity->add(renderer);
+		QueryManager::get().add(entity);
+	}
+
+	void CreateCamera()
+	{
+		Position* position = new Position(Vector(200.0f, 120.f));
+		const Texture* texture = Texture::load("c:\\camera.png");
+		Camera* camera = new Camera();
+		Sight* sight = new Sight(toRadians(0.0f), toRadians(-45.0f));
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		SpriteGroup* animation;
+
+#pragma region Camera Animation
+		// Search - 0
+		animation = new SpriteGroup();
+		spritesheet->add(animation);
+		animation->add(new Sprite(Rect(19, 19, 25, 33), Vector(4, 16)));
+		// See - 1
+		animation = new SpriteGroup();
+		spritesheet->add(animation);
+		animation->add(new Sprite(Rect(19, 59, 25, 33), Vector(4, 16)));
+		// Turn - 2
+		animation = new SpriteGroup();
+		spritesheet->add(animation);
+		animation->add(new Sprite(Rect(50.5, 19.5, 18, 34), Vector(1, 16)));
+		animation->add(new Sprite(Rect(76, 19.5, 13, 34), Vector(1, 16)));
+		animation->add(new Sprite(Rect(98, 19.5, 13, 34), Vector(0, 16)));
+		
+#pragma endregion
+
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(camera);
+		entity->add(sight);
+		entity->add(animator);
+		entity->add(renderer);
+		QueryManager::get().add(entity);
+	}
+
+	void CreatePlatforms()
+	{
+		const Texture* texture = Texture::load("c:\\tile.png");
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
+		SpriteGroup* animation = new SpriteGroup();
+		spritesheet->add(animation);
+		const Vector TILE_SIZE(32.0f, 32.0f);
+		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
+
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(1009.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
+		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
+		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
+	}
+
+	void CreateBackground()
+	{
+		const Texture* texture = Texture::load("c:\\bg.png");
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
+		SpriteGroup* animation = new SpriteGroup();
+		spritesheet->add(animation);
+		animation->add(new Sprite(Rect(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
+
+		Position* position = new Position(texture->getSize() / 2.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(renderer);
+		QueryManager::get().add(entity);
+	}
 #pragma endregion
 
 	void TestPanel::init(void)
@@ -163,7 +295,7 @@ namespace Temporal
 		const Texture* texture = Texture::load("c:\\pop.png");
 		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
 		SpriteGroup* animation;
-		
+
 		#pragma region Player Animations
 		// Stand - 0
 		animation = new SpriteGroup();
@@ -304,116 +436,12 @@ namespace Temporal
 
 #pragma endregion
 
-		const float ENTITY_HEIGHT = 80.0f;
-
-		// TODO: Central resources container
-		Position* position(new Position(Vector(512.0f, 768.0f)));
-		EntityOrientation* orientation(new EntityOrientation(Orientation::LEFT));
-		DrawPosition* drawPosition(new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f)));
-		InputController* controller(new InputController());
-		DynamicBody* dynamicBody(new DynamicBody(Vector(20.0f, ENTITY_HEIGHT)));
-		ActionController* actionController = new ActionController();
-		Animator* animator(new Animator(66.0f));
-		Renderer* renderer(new Renderer(*spritesheet, VisualLayer::PC));
-		
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(drawPosition);
-		entity->add(controller);
-		entity->add(dynamicBody);
-		addSensors(*entity, *dynamicBody);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		QueryManager::get().add(entity);
-
-		position = new Position(Vector(200.0f, 70.f));
-		orientation = new EntityOrientation(Orientation::RIGHT);
-		drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
-		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(toRadians(45.0f), toRadians(-45.0f));
-		renderer = new Renderer(*spritesheet, VisualLayer::NPC);
-		dynamicBody = new DynamicBody(Vector(20.0f, ENTITY_HEIGHT));
-
-		entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(drawPosition);
-		entity->add(sentry);
-		entity->add(sight);
-		entity->add(renderer);
-		QueryManager::get().add(entity);
-		
-		position = new Position(Vector(200.0f, 128.f));
-		texture = Texture::load("c:\\camera.png");
-		spritesheet = new SpriteSheet(texture, Orientation::LEFT);
-		orientation = new EntityOrientation(Orientation::LEFT);
-
-		#pragma region Camera Animation
-		// Search - 0
-		animation = new SpriteGroup();
-		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(19, 19, 25, 33), Vector(4, 16)));
-		// See - 1
-		animation = new SpriteGroup();
-		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(19, 59, 25, 33), Vector(4, 16)));
-		// Turn - 2
-		animation = new SpriteGroup();
-		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(50.5, 19.5, 18, 34), Vector(1, 16)));
-		animation->add(new Sprite(Rect(76, 19.5, 13, 34), Vector(1, 16)));
-		animation->add(new Sprite(Rect(98, 19.5, 13, 34), Vector(0, 16)));
-		animator = new Animator(66.0f);
-		renderer = new Renderer(*spritesheet, VisualLayer::NPC);
-		#pragma endregion
-
-		sight = new Sight(toRadians(0.0f), toRadians(-45.0f));
-		Camera* camera = new Camera();
-
-		entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(camera);
-		entity->add(sight);
-		entity->add(animator);
-		entity->add(renderer);
-		QueryManager::get().add(entity);
-
-		texture = Texture::load("c:\\tile.png");
-		spritesheet = new SpriteSheet(texture, Orientation::NONE);
-		animation = new SpriteGroup();
-		spritesheet->add(animation);
-		const Vector TILE_SIZE(32.0f, 32.0f);
-		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
-
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(1009.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 0.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
-		
-		texture = Texture::load("c:\\bg.png");
-		spritesheet = new SpriteSheet(texture, Orientation::NONE);
-		animation = new SpriteGroup();
-		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
-
-		position = new Position(texture->getSize() / 2.0f);
-		renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND);
-		entity = new Entity();
-		entity->add(position);
-		entity->add(renderer);
-		QueryManager::get().add(entity);
+		CreatePlayer(spritesheet);
+		//for(int i = 0; i< 10; ++i)
+		CreateSentry(spritesheet);
+		CreateCamera();
+		CreatePlatforms();
+		CreateBackground();
 	}
 
 	void TestPanel::update(float framePeriodInMillis)
@@ -423,7 +451,7 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		QueryManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
+		//QueryManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
 		QueryManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
 		const Vector& position = *(const Vector* const)QueryManager::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));

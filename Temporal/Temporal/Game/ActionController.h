@@ -58,6 +58,7 @@ namespace Temporal
 		};
 	}
 
+	// TODO: Divide according to capabilities
 	class ActionController : public StateMachineComponent
 	{
 	public:
