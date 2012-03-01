@@ -24,6 +24,8 @@
 
 namespace Temporal
 {
+	StaticBodiesIndex* _staticBodiesIndex;
+
 	#pragma region Helper Methods
 	class AreaRenderer : public Component
 	{
@@ -137,6 +139,7 @@ namespace Temporal
 		entity->add(position);
 		entity->add(staticBody);
 		entity->add(renderer);
+		_staticBodiesIndex->add(staticBody);
 		return entity;
 	}
 
@@ -165,7 +168,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT), *_staticBodiesIndex);
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -189,7 +192,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(toRadians(45.0f), toRadians(-45.0f));
+		Sight* sight = new Sight(toRadians(45.0f), toRadians(-45.0f), *_staticBodiesIndex);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 
 		Entity* entity = new Entity();
@@ -207,7 +210,7 @@ namespace Temporal
 		Position* position = new Position(Vector(200.0f, 120.f));
 		const Texture* texture = Texture::load("c:\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(toRadians(0.0f), toRadians(-45.0f));
+		Sight* sight = new Sight(toRadians(0.0f), toRadians(-45.0f), *_staticBodiesIndex);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
@@ -287,9 +290,11 @@ namespace Temporal
 
 	void TestPanel::init(void)
 	{
-		Vector screenSize = Vector(1024.0f, 768.0f);
+		Vector screenSize = Vector(800.0f, 600.0f);
 		ViewManager::get().init(screenSize, 768.0f);
-		ViewManager::get().setLevelBounds(Vector(1024.0f, 1536.0f));
+		Vector worldSize(1024.0f, 1536.0f);
+		ViewManager::get().setLevelBounds(worldSize);
+		_staticBodiesIndex = new StaticBodiesIndex(worldSize, 32.0f);
 		DebugInfo::get().setShowingFPS(true);
 
 		const Texture* texture = Texture::load("c:\\pop.png");
@@ -437,7 +442,6 @@ namespace Temporal
 #pragma endregion
 
 		CreatePlayer(spritesheet);
-		//for(int i = 0; i< 10; ++i)
 		CreateSentry(spritesheet);
 		CreateCamera();
 		CreatePlatforms();
@@ -465,6 +469,8 @@ namespace Temporal
 			QueryManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+
+		_staticBodiesIndex->draw();
 	}
 
 	void TestPanel::dispose(void)

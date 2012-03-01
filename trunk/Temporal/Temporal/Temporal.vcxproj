@@ -49,6 +49,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Game\ActionController.h" />
     <ClInclude Include="Physics\Sight.h" />
+    <ClInclude Include="Physics\StaticBodiesIndex.h" />
     <ClInclude Include="Physics\StaticBody.h" />
     <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="TestPanel.h" />
@@ -84,6 +85,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game\ActionController.cpp" />
     <ClCompile Include="Physics\Sight.cpp" />
+    <ClCompile Include="Physics\StaticBodiesIndex.cpp" />
     <ClCompile Include="Physics\Utils.cpp" />
     <ClCompile Include="TestPanel.cpp" />
   </ItemGroup>

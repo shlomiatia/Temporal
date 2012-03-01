@@ -54,45 +54,60 @@ namespace Temporal
 
 	bool Sight::rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const
 	{
-		static const float STEP = 10.0f;
+		float x1 = source.getX();
+		float y1 = source.getY();
+		float x2 = destination.getX();
+		float y2 = destination.getY();
+		
+		int i = _staticBodiesIndex.getIndex(x1);
+		int j = _staticBodiesIndex.getIndex(y1);
 
-		float x0 = source.getX();
-		float y0 = source.getY();
-		float x1 = destination.getX();
-		float y1 = destination.getY();
+		// Determine end grid cell coordinates (iend, jend)
+		int iend = _staticBodiesIndex.getIndex(x2);
+		int jend = _staticBodiesIndex.getIndex(y2);
 
-		float dx = abs(x1-x0);
-		float dy = abs(y1 - y0);
-		float sx = x0 < x1 ? 1.0f : -1.0f;
-		float sy = y0 < y1 ? 1.0f : -1.0f;
-		float err = dx - dy;
-		float e2;
-		while(true)
+		// Determine in which primary direction to step
+		int di = ((x1 < x2) ? 1 : ((x1 > x2) ? -1 : 0));
+		int dj = ((y1 < y2) ? 1 : ((y1 > y2) ? -1 : 0));
+
+		const float tileSize = _staticBodiesIndex.getTileSize();
+
+		// Determine tx and ty, the values of t at which the directed segment
+		// (x1,y1)-(x2,y2) crosses the first horizontal and vertical cell
+		// boundaries, respectively. Min(tx, ty) indicates how far one can
+		// travel along the segment and still remain in the current cell
+		float minx = tileSize * floor(x1/tileSize), maxx = minx + tileSize;
+		float tx = ((x1 < x2) ? (x1 - minx) : (maxx - x1)) / abs(x2 - x1);
+		float miny = tileSize * floor(y1/tileSize), maxy = miny + tileSize;
+		float ty = ((y1 < y2) ? (y1 - miny) : (maxy - y1)) / abs(y2 - y1);
+
+		// Determine deltax/deltay, how far (in units of t) one must step
+		// along the directed line segment for the horizontal/vertical
+		// movement (respectively) to equal the width/height of a cell
+		float deltatx = tileSize / abs(x2 - x1);
+		float deltaty = tileSize / abs(y2 - y1);
+
+		// Main loop. Visits cells until last cell reached
+		for (;;) 
 		{
-			e2 = 2.0f * err;
-			if(e2 > -dy)
-			{
-				err -= dy;
-				x0 += sx * STEP;
+			std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(i, j);
+			Graphics::get().drawRect(Rect(i * _staticBodiesIndex.getTileSize(), j * _staticBodiesIndex.getTileSize(), 2.0f, 2.0f));
+			if(staticBodies != NULL)
+				return false;
+			if (tx <= ty) 
+			{ // tx smallest, step in x
+				if (i == iend) break;
+				tx += deltatx;
+				i += di;
 			}
-			if(e2 < dx)
-			{
-				err += dx;
-				y0 += sy * STEP;
-			}
-			if(drawDebugInfo)
-				Graphics::get().drawRect(Rect(x0, y0, 2.0f, 2.0f));
-			if((x1 - x0) * sx <= STEP && (y1 - y0) * sy <= STEP)
-				return true;
-			ComponentOfTypeIteraor iterator = QueryManager::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
-			while(iterator.next())
-			{
-				StaticBody& staticBody = (StaticBody&)iterator.current();
-				Rect staticBodyBounds = staticBody.getBounds();
-				if(staticBodyBounds.contains(x0, y0))
-					return false;
+			else
+			{ // ty smallest, step in y
+				if (j == jend) break;
+				ty += deltaty;
+				j += dj;
 			}
 		}
+		return true;
 	}
 
 }

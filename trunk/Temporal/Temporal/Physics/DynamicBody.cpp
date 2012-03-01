@@ -2,7 +2,6 @@
 #include "StaticBody.h"
 #include "Utils.h"
 #include <Temporal/Game/MessageParams.h>
-#include <Temporal/Game/QueryManager.h>
 #include <Temporal/Graphics/Graphics.h>
 #include <algorithm>
 
@@ -63,7 +62,6 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriodInMillis)
 	{
-		ComponentOfTypeIteraor iterator = QueryManager::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
 		float interpolation = framePeriodInMillis / 1000.0f;
 
 		Vector velocity(Vector::Zero);
@@ -84,22 +82,40 @@ namespace Temporal
 			y -= gravity;
 			velocity.setY(y);
 		}
-		while(iterator.next())
-		{
-			StaticBody& staticBody = (StaticBody&)iterator.current();
-			correctCollision(staticBody, velocity);
-		}
+		Rect bounds = getBounds() + velocity;
+		int leftIndex = _staticBodiesIndex.getIndex(bounds.getLeft());
+		int rightIndex = _staticBodiesIndex.getIndex(bounds.getRight());
+		int topIndex = _staticBodiesIndex.getIndex(bounds.getTop());
+		int bottomIndex = _staticBodiesIndex.getIndex(bounds.getBottom());
+
+		// TODO: Validate
+
+		for(int xIndex = leftIndex; xIndex <= rightIndex; ++xIndex)
+			for(int yIndex = bottomIndex; yIndex <= topIndex; ++yIndex)
+			{
+				std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(xIndex, yIndex);
+				if(staticBodies != NULL)
+					for(unsigned int i = 0; i < staticBodies->size(); ++i)
+						correctCollision(*(*staticBodies)[i], velocity);
+			}
 		applyMovement(velocity);
 		if(_gravityEnabled)
 			_movement -= Vector(0.0f, GRAVITY * interpolation);
 
+		bounds = getBounds();
+		leftIndex = _staticBodiesIndex.getIndex(bounds.getLeft());
+		rightIndex = _staticBodiesIndex.getIndex(bounds.getRight());
+		topIndex = _staticBodiesIndex.getIndex(bounds.getTop());
+		bottomIndex = _staticBodiesIndex.getIndex(bounds.getBottom());
 		_collision = Direction::NONE;
-		iterator.reset();
-		while(iterator.next())
-		{
-			StaticBody& staticBody = (StaticBody&)iterator.current();
-			detectCollision(staticBody);
-		}
+		for(int xIndex = leftIndex; xIndex <= rightIndex; ++xIndex)
+			for(int yIndex = bottomIndex; yIndex <= topIndex; ++yIndex)
+			{
+				std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(xIndex, yIndex);
+				if(staticBodies != NULL)
+					for(unsigned int i = 0; i < staticBodies->size(); ++i)
+						detectCollision(*(*staticBodies)[i]);
+			}
 		if(_collision & Direction::BOTTOM)
 		{
 			_movement = Vector::Zero;

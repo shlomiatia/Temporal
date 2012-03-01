@@ -5,6 +5,7 @@ namespace Temporal { class Sensor; }
 #include <Temporal\Base\Base.h>
 #include "StaticBody.h"
 #include "Sensor.h"
+#include "StaticBodiesIndex.h"
 #include <vector>
 
 namespace Temporal
@@ -14,7 +15,7 @@ namespace Temporal
 	public:
 		static const float GRAVITY;
 
-		DynamicBody(const Vector& size) : Body(size), _movement(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE), _isImpulse(false) {}
+		DynamicBody(const Vector& size, const StaticBodiesIndex& staticBodiesIndex) : Body(size), _staticBodiesIndex(staticBodiesIndex), _movement(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE), _isImpulse(false) {}
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
 		Orientation::Enum getOrientation(void) const;
@@ -32,5 +33,6 @@ namespace Temporal
 		bool _isImpulse;
 		bool _gravityEnabled;
 		Direction::Enum _collision;
+		const StaticBodiesIndex& _staticBodiesIndex;
 	};
 }

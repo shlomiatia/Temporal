@@ -42,6 +42,7 @@
     <ClInclude Include="AI\Camera.h" />
     <ClInclude Include="Game\QueryManager.h" />
     <ClInclude Include="Physics\Sight.h" />
+    <ClInclude Include="Physics\StaticBodiesIndex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -76,5 +77,6 @@
     <ClCompile Include="Game\QueryManager.cpp" />
     <ClCompile Include="Physics\Utils.cpp" />
     <ClCompile Include="Physics\Sight.cpp" />
+    <ClCompile Include="Physics\StaticBodiesIndex.cpp" />
   </ItemGroup>
 </Project>
