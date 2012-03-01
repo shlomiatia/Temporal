@@ -1,8 +1,8 @@
 #pragma once
-
-#include <vector>
+#include <Temporal\Base\Base.h>
 #include <Temporal\Game\Game.h>
-#include <Temporal\Game\Entity.h>
+#include <Temporal\Physics\StaticBodiesIndex.h>
+#include <Temporal\Graphics\SpriteSheet.h>
 
 namespace Temporal
 {
