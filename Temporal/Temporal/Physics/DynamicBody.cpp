@@ -21,13 +21,13 @@ namespace Temporal
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
 	{
-		Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return orientation;
 	}
 
 	void DynamicBody::applyMovement(const Vector& movement) const
 	{
-		const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
+		const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Vector newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
@@ -38,13 +38,13 @@ namespace Temporal
 		if(message.getID() == MessageID::SET_FORCE)
 		{
 			const Vector& param = *(const Vector* const)message.getParam();
-			_movement = Vector(param.getX() * getOrientation(), param.getY());
+			_force = Vector(param.getX() * getOrientation(), param.getY());
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
 			const Vector& param = *(const Vector* const)message.getParam();
-			_movement = Vector(param.getX() * getOrientation(), param.getY());
-			_isImpulse = true;
+			_impulse = Vector(param.getX() * getOrientation(), param.getY());
+			_force = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
@@ -61,46 +61,10 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Functions
 	void DynamicBody::update(float framePeriodInMillis)
 	{
-		float interpolation = framePeriodInMillis / 1000.0f;
-
-		_velocity = Vector::Zero;
-
-		// TODO: Separate to an impulse vector
-		if(!_isImpulse)
-		{
-			_velocity = _movement * interpolation;
-		}
-		else
-		{
-			_velocity = _movement;
-			_isImpulse = false;
-			_movement = Vector::Zero;
-		}
-		if(_gravityEnabled)
-		{
-			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
-			float y = _velocity.getY();
-			y -= gravity;
-			_velocity.setY(y);
-		}
-		Rect bounds = getBounds() + _velocity;
-		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, correctCollision);
-		applyMovement(_velocity);
-		if(_gravityEnabled)
-			_movement -= Vector(0.0f, GRAVITY * interpolation);
-		
-		bounds = getBounds();
-		_collision = Direction::NONE;
-		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, detectCollision);
-
-		if(_collision & Direction::BOTTOM)
-		{
-			_movement = Vector::Zero;
-		}
-		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
+		determineVelocity(framePeriodInMillis);
+		handleCollisions();
 	}
 
 	void DynamicBody::correctCollision(const StaticBody& staticBody)
@@ -143,4 +107,46 @@ namespace Temporal
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		dynamicBody->detectCollision(staticBody);
 	}
+
+	void DynamicBody::determineVelocity(float framePeriodInMillis)
+	{
+		float interpolation = framePeriodInMillis / 1000.0f;
+		_velocity = Vector::Zero;
+
+		if(_impulse == Vector::Zero)
+		{
+			_velocity = _force * interpolation;
+		}
+		else
+		{
+			_velocity = _impulse;
+			_impulse = Vector::Zero;
+		}
+		if(_gravityEnabled)
+		{
+			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
+			float y = _velocity.getY();
+			y -= gravity;
+			_velocity.setY(y);
+			_force -= Vector(0.0f, GRAVITY * interpolation);
+		}	
+	}
+
+	void DynamicBody::handleCollisions(void)
+	{
+		Rect bounds = getBounds() + _velocity;
+		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, correctCollision);
+
+		applyMovement(_velocity);
+
+		bounds = getBounds();
+		_collision = Direction::NONE;
+		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, detectCollision);
+		if(_collision & Direction::BOTTOM)
+		{
+			_force = Vector::Zero;
+		}
+		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
+	}
+
 }

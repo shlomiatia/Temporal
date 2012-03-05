@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	// TODO: Who're you watching?
+	// TODO: Ask for sight instead of getting it
 	class Sight : public Component
 	{
 	public:
@@ -19,9 +19,11 @@ namespace Temporal
 		const float _lowerAngle;
 
 		void checkLineOfSight(bool drawDebugInfo = false) const;
+		void drawLineOfSight(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
+
 		bool rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const;
 
-		// TODO: Remove copy constructor/validate virtual destructors
+		// TODO: Remove copy constructor/validate virtual destructors/constness/order/names SLOTH!
 		Sight(const Sight&);
 		Sight& operator=(const Sight&);
 	};

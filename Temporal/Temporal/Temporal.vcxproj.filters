@@ -32,7 +32,6 @@
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\Position.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
-    <ClInclude Include="Game\JumpAngles.h" />
     <ClInclude Include="Physics\Utils.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
     <ClInclude Include="AI\Sentry.h" />
@@ -43,6 +42,7 @@
     <ClInclude Include="Game\QueryManager.h" />
     <ClInclude Include="Physics\Sight.h" />
     <ClInclude Include="Physics\StaticBodiesIndex.h" />
+    <ClInclude Include="Base\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

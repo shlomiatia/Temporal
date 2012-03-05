@@ -3,13 +3,13 @@
 
 namespace Temporal
 {
-	// TODO: Move to static bodies
+	// TODO: Move to static bodies SLOTH
 	void StaticBodiesIndex::draw(void) const
 	{
 		for(int i = 0; i < _gridWidth; ++i)
 			for(int j = 0; j < _gridHeight; ++j)
 				if(get(i, j) != NULL)
-					Graphics::get().drawRect(Rect(getTileCenter(i, j), Vector(_tileSize, _tileSize)), Color(0.0f, 1.0f, 0.0f, 0.2f));
+					Graphics::get().drawRect(Rect(getTileCenter(i, j), Vector(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
 	}
 
 	void StaticBodiesIndex::init(const Vector& worldSize, float tileSize)
@@ -29,7 +29,6 @@ namespace Temporal
 		StaticBodiesIndex* staticBodiesIndex = (StaticBodiesIndex*)caller;
 		StaticBody* staticBody = (StaticBody*)data;
 
-		// TODO: Merge functions
 		int index = staticBodiesIndex->getIndex(i, j);
 		std::vector<StaticBody*>* tile = staticBodiesIndex->_grid[index];
 		if(tile == NULL)
@@ -48,7 +47,6 @@ namespace Temporal
 
 	std::vector<StaticBody*>* StaticBodiesIndex::get(int x, int y) const
 	{
-		// TODO: Validate;
 		int index = getIndex(x, y);
 		if(index < 0 || index >= getGridSize())
 			return NULL;
@@ -62,8 +60,6 @@ namespace Temporal
 		int rightIndex = getAxisIndex(rect.getRight());
 		int topIndex = getAxisIndex(rect.getTop());
 		int bottomIndex = getAxisIndex(rect.getBottom());
-
-		// TODO: Validate
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{

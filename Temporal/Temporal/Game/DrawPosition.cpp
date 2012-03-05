@@ -13,7 +13,7 @@ namespace Temporal
 			}
 			else
 			{
-				const Vector& position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
+				const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 				*outParam = position + _offset;
 			}
 		}

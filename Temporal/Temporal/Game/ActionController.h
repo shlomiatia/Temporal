@@ -145,6 +145,8 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
+		static const int JUMP_ANGLES_SIZE;
+		static const float JUMP_ANGLES[];
 		static const ActionStateID::Enum JUMP_ANGLES_START_STATES[];
 
 		ActionStateID::Enum _jumpStartState;

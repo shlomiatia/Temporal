@@ -1,6 +1,6 @@
 #include "ActionController.h"
-#include "JumpAngles.h"
 #include "MessageParams.h"
+#include <Temporal/Base/Base.h>
 #include <Temporal/Physics/Sensor.h>
 #include <math.h>
 
@@ -14,11 +14,11 @@ namespace Temporal
 		states.push_back(new Walk());
 		states.push_back(new Turn());
 		states.push_back(new PrepareToJump());
-		states.push_back(new JumpStart(DEGREES_45, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
-		states.push_back(new JumpStart(DEGREES_60, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
-		states.push_back(new JumpStart(DEGREES_75, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
-		states.push_back(new JumpStart(DEGREES_90, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
-		states.push_back(new JumpStart(DEGREES_105, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpStart(ANGLE_45_IN_RADIANS, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		states.push_back(new JumpStart(ANGLE_60_IN_RADIANS, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
+		states.push_back(new JumpStart(ANGLE_75_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpStart(ANGLE_90_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
+		states.push_back(new JumpStart(ANGLE_105_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
 		states.push_back(new JumpUp());
 		states.push_back(new JumpForward());
 		states.push_back(new JumpForwardEnd());
@@ -165,6 +165,8 @@ namespace Temporal
 		}
 	}
 
+	const int PrepareToJump::JUMP_ANGLES_SIZE = 4;
+	const float PrepareToJump::JUMP_ANGLES[] = { ANGLE_45_IN_RADIANS, ANGLE_60_IN_RADIANS, ANGLE_75_IN_RADIANS, ANGLE_105_IN_RADIANS };
 	const ActionStateID::Enum PrepareToJump::JUMP_ANGLES_START_STATES[] = { ActionStateID::JUMP_START_45, ActionStateID::JUMP_START_60, ActionStateID::JUMP_START_75, ActionStateID::JUMP_START_105 };
 
 	void PrepareToJump::handleJumpSensor(Message &message)
@@ -173,9 +175,9 @@ namespace Temporal
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body* const sensedBody = sensor.getSensedBody();
 		SensorID::Enum hangSensorID = SensorID::HANG;
-		const Vector& hangSensorSize = *(const Vector* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
+		const Vector& hangSensorSize = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
 		float hangSensorWidth = hangSensorSize.getWidth();
-		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
@@ -192,7 +194,9 @@ namespace Temporal
 		{
 			float max = 0.0f;
 			const float F = JUMP_FORCE_PER_SECOND;
-			const float G = *(const float* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_GRAVITY));
+			const float G = *(const float* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
+
+			// TODO: Include hang sensor in calculations
 			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
 			{
 				/* x = T*F*cos(A)
@@ -206,6 +210,8 @@ namespace Temporal
 				 */
 				float A = JUMP_ANGLES[i];
 				float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
+
+				// TODO: Take min of highers then platform
 				if(max < y)
 				{
 					max = y;
@@ -243,7 +249,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			if(_angle != DEGREES_45 && !_platformFound)
+			if(_angle != ANGLE_45_IN_RADIANS && !_platformFound)
 				_stateMachine->changeState(ActionStateID::JUMP_START_45, &_platformFound);
 		}
 		else if(message.getID() == MessageID::ACTION_BACKWARD)
@@ -326,7 +332,7 @@ namespace Temporal
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
-		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		float platformEdge = platformBounds.getOppositeSide(orientation);
 		float entityFront = personBounds.getSide(orientation);
 		float movementX = (platformEdge - entityFront) * orientation;
@@ -425,7 +431,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			const Vector& size = *(const Vector* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_SIZE));
+			const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 			float climbForceX = 1.0f;
 			float climbForceY = size.getHeight() - 1.0f;
 			Vector climbForce(climbForceX, climbForceY);
@@ -443,7 +449,7 @@ namespace Temporal
 
 	void PrepareToDescend::update(void)
 	{
-		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Rect& platformBounds = _platform->getBounds();
@@ -485,7 +491,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			const Vector& size = *(const Vector* const)_stateMachine->sendQueryMessageToOwner(Message(MessageID::GET_SIZE));
+			const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 			float forceX = -1.0f;
 			float forceY = -(size.getHeight() - 1.0f);
 

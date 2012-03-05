@@ -37,7 +37,7 @@ namespace Temporal
 
 	const SpriteGroup& Animator::getSpriteGroup(void) const
 	{
-		const SpriteGroup& spriteGroup = *(const SpriteGroup* const)sendQueryMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
+		const SpriteGroup& spriteGroup = *(const SpriteGroup* const)sendMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
 		return spriteGroup;
 	}
 
