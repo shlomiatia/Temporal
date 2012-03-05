@@ -18,8 +18,7 @@ namespace Temporal
 		virtual ComponentType::Enum getType(void) const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
-		void sendMessageToOwner(Message& message) const;
-		const void* const sendQueryMessageToOwner(Message& query) const;
+		const void* const sendMessageToOwner(Message& message) const;
 
 	private:
 		const Entity* _entity;

@@ -17,7 +17,6 @@
 #include <Temporal/Game/DrawPosition.h>
 #include <Temporal/Game/ActionController.h>
 #include <Temporal/Game/QueryManager.h>
-#include <Temporal/Game/JumpAngles.h>
 #include <Temporal/AI/Sentry.h>
 #include <Temporal/AI/Camera.h>
 #include <math.h>
@@ -67,6 +66,7 @@ namespace Temporal
 
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
+		// TODO: Include hang sensor
 		// Jump Sensor
 		/* v = F - G*T
 		 * m = F*T - (G*T^2)/2 
@@ -87,7 +87,7 @@ namespace Temporal
 		 */
 		const float F = JUMP_FORCE_PER_SECOND;
 		const float G = DynamicBody::GRAVITY;
-		const float A = DEGREES_45;
+		const float A = ANGLE_45_IN_RADIANS;
 		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
 		float playerHeight = body.getSize().getHeight();
@@ -190,7 +190,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(toRadians(45.0f), toRadians(-45.0f));
+		Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 
 		Entity* entity = new Entity();
@@ -208,7 +208,7 @@ namespace Temporal
 		Position* position = new Position(Vector(200.0f, 120.f));
 		const Texture* texture = Texture::load("c:\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(toRadians(0.0f), toRadians(-45.0f));
+		Sight* sight = new Sight(-ANGLE_15_IN_RADIANS, -ANGLE_45_IN_RADIANS);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
@@ -456,7 +456,7 @@ namespace Temporal
 		//QueryManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
 		QueryManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
-		const Vector& position = *(const Vector* const)QueryManager::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& position = *(const Vector* const)QueryManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		ViewManager::get().setCameraCenter(position);
 	}
 
@@ -466,7 +466,8 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			QueryManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		//QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		//StaticBodiesIndex::get().draw();
 	}
 
 	void TestPanel::dispose(void)

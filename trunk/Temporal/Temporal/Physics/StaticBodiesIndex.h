@@ -7,7 +7,6 @@
 
 namespace Temporal
 {
-	// TODO: Name and methods
 	class StaticBodiesIndex
 	{
 	public:
@@ -23,7 +22,6 @@ namespace Temporal
 		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
 		Vector getTileCenter(int i, int j) const { return  Vector(getTileAxisCenter(i), getTileAxisCenter(j)); }
 		
-		// TODO: Const stuff
 		void add(StaticBody* staticBody);
 		std::vector<StaticBody*>* get(int x, int y) const;
 		void iterateTiles(const Rect& rect, void* caller, void* data, void(*handleTile)(void* caller, void* data, int i, int j)) const;

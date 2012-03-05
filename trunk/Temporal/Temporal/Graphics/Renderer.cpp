@@ -40,10 +40,10 @@ namespace Temporal
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
+			position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
 		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Orientation::Enum* const entityOrientation = (const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Orientation::Enum* const entityOrientation = (const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Orientation::Enum orientation;
 		if(entityOrientation == NULL || *entityOrientation == Orientation::NONE)
 			orientation = spritesheetOrientation;

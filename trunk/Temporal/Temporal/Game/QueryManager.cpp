@@ -20,14 +20,9 @@ namespace Temporal
 			(**i).handleMessage(message);
 	}
 
-	void QueryManager::sendMessageToEntity(int id, Message& message) const
+	const void* const QueryManager::sendMessageToEntity(int id, Message& message) const
 	{
 		_entities[id]->handleMessage(message);
-	}
-
-	const void* const QueryManager::sendQueryMessageToEntity(int id, Message& query) const
-	{
-		sendMessageToEntity(id, query);
-		return query.getParam();
+		return message.getParam();
 	}
 }

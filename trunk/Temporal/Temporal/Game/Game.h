@@ -19,6 +19,7 @@ namespace Temporal
 		bool isPaused(void) const { return (_paused); }
 
 		void run(void);
+
 		void stop(void) { _running = false;	}
 
 	private:
@@ -29,6 +30,10 @@ namespace Temporal
 		bool _paused;
 		Panel* _panel;
 		Panel* _nextPanel;
+
+		void handlePanelsSwitch();
+		void update(float& lastFrameTick);
+		void draw(void);
 
 		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL) {}
 		~Game(void);

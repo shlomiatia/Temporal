@@ -21,29 +21,20 @@ namespace Temporal
 
 	void Sight::checkLineOfSight(bool drawDebugInfo) const
 	{
-		static const float SIGHT_ANGLE_LENGTH = 100.0f;
+		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		// TODO: Who're you watching?
+		const Vector& targetPosition = *(const Vector* const)QueryManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
-		const Vector& sourcePosition = *(const Vector* const)sendQueryMessageToOwner(Message(MessageID::GET_POSITION));
-		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Vector& targetPosition = *(const Vector* const)QueryManager::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));
-
-		// TODO: Check me
 		if(drawDebugInfo)
-		{
-			float targetX = sourcePosition.getX() + SIGHT_ANGLE_LENGTH * sourceOrientation;
+			drawLineOfSight(sourcePosition, sourceOrientation);
 
-			float lowerAngleSlope = tan(_lowerAngle * sourceOrientation);
-			float lowerAngleTargetY = lowerAngleSlope * targetX - lowerAngleSlope * sourcePosition.getX() + sourcePosition.getY();
-			Graphics::get().drawLine(sourcePosition, Vector(targetX, lowerAngleTargetY));
-			float upperAngleSlope = tan(_upperAngle * sourceOrientation);
-			float upperAngleTargetY = upperAngleSlope * targetX - upperAngleSlope * sourcePosition.getX() + sourcePosition.getY();
-			Graphics::get().drawLine(sourcePosition, Vector(targetX, upperAngleTargetY));
-		}
-		
-
+		// Check orientation
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
 			return;
 
+		// Check field of view
+		// TODO: Test against top and bottom
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
 		if(angle < _lowerAngle * sourceOrientation || angle > _upperAngle * sourceOrientation)
@@ -89,15 +80,18 @@ namespace Temporal
 		float deltatx = tileSize / abs(x2 - x1);
 		float deltaty = tileSize / abs(y2 - y1);
 
+		bool isSuccessful = true;
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
-			std::vector<StaticBody*>* staticBodies = StaticBodiesIndex::get().get(i, j);
 
-			// TODO: Debug draw
-			Graphics::get().drawRect(Rect(i * StaticBodiesIndex::get().getTileSize(), j * StaticBodiesIndex::get().getTileSize(), 2.0f, 2.0f));
+			// TODO: Compare with specific line
+			std::vector<StaticBody*>* staticBodies = StaticBodiesIndex::get().get(i, j);
 			if(staticBodies != NULL)
-				return false;
+			{
+				isSuccessful = false;
+				break;
+			}
 			if (tx <= ty) 
 			{ // tx smallest, step in x
 				if (i == iend) break;
@@ -111,7 +105,24 @@ namespace Temporal
 				j += dj;
 			}
 		}
-		return true;
+		if(drawDebugInfo)
+			Graphics::get().drawLine(source, StaticBodiesIndex::get().getTileCenter(i, j), isSuccessful ? Color::Green : Color::Red);
+		return isSuccessful;
 	}
 
+	void drawLineOfSightLine(float angle, Orientation::Enum sourceOrientation, float targetX, const Vector &sourcePosition)
+	{
+		float angleSlope = tan(angle * sourceOrientation);
+		float angleTargetY = angleSlope * targetX - angleSlope * sourcePosition.getX() + sourcePosition.getY();
+		Graphics::get().drawLine(sourcePosition, Vector(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
+	}
+
+	void Sight::drawLineOfSight(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const
+	{
+		static const float SIGHT_ANGLE_LENGTH = 1024.0f;
+		float targetX = sourcePosition.getX() + SIGHT_ANGLE_LENGTH * sourceOrientation;
+
+		drawLineOfSightLine(_lowerAngle, sourceOrientation, targetX, sourcePosition);
+		drawLineOfSightLine(_upperAngle, sourceOrientation, targetX, sourcePosition);
+	}
 }

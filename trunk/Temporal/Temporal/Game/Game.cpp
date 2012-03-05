@@ -13,7 +13,6 @@ namespace Temporal
 		_nextPanel = panel;
 	}
 
-	// TODO: Functions
 	void Game::run(void)
 	{
 		_running = true;
@@ -22,36 +21,15 @@ namespace Temporal
 
 		while (isRunning())
 		{
-			if (_nextPanel != NULL)
-			{
-				if(_panel != NULL)
-				{
-					_panel->dispose();
-					delete _panel;
-				}
-
-				_nextPanel->init();
-				_panel = _nextPanel;
-				_nextPanel = NULL;
-			}
+			handlePanelsSwitch();
 
 			if (!isPaused())
 			{
 				if (_panel != NULL)
 				{
-					float currFrameTick = (float)Thread::ticks();
-					float framesToSkip = (currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS;
-					if(framesToSkip > MAX_FRAMES_SKIP)
-						lastFrameTick = currFrameTick - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;
-					while(lastFrameTick + FRAME_PERIOD_IN_MILLIS <= currFrameTick )
-					{
-						_panel->update(FRAME_PERIOD_IN_MILLIS);
-						lastFrameTick += FRAME_PERIOD_IN_MILLIS;
-					}
-					
-					Graphics::get().prepareForDrawing();
-					_panel->draw();
-					Graphics::get().finishDrawing();
+					update(lastFrameTick);
+					draw();
+
 				}
 			}
 		}
@@ -65,5 +43,41 @@ namespace Temporal
 		{
 			Thread::sleep(100);
 		}
+	}
+
+	void Game::handlePanelsSwitch()
+	{
+		if (_nextPanel != NULL)
+		{
+			if(_panel != NULL)
+			{
+				_panel->dispose();
+				delete _panel;
+			}
+
+			_nextPanel->init();
+			_panel = _nextPanel;
+			_nextPanel = NULL;
+		}
+	}
+
+	void Game::update(float& lastFrameTick)
+	{
+		float currFrameTick = (float)Thread::ticks();
+		float framesToSkip = (currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS;
+		if(framesToSkip > MAX_FRAMES_SKIP)
+			lastFrameTick = currFrameTick - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;
+		while(lastFrameTick + FRAME_PERIOD_IN_MILLIS <= currFrameTick )
+		{
+			_panel->update(FRAME_PERIOD_IN_MILLIS);
+			lastFrameTick += FRAME_PERIOD_IN_MILLIS;
+		}
+	}
+
+	void Game::draw(void)
+	{
+		Graphics::get().prepareForDrawing();
+		_panel->draw();
+		Graphics::get().finishDrawing();
 	}
 }

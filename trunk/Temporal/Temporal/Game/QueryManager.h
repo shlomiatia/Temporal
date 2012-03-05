@@ -20,10 +20,8 @@ namespace Temporal
 
 		void add(Entity* const entity);
 
-		// TODO: Change to getters
 		void sendMessageToAllEntities(Message& message) const;
-		void sendMessageToEntity(int id, Message& message) const;
-		const void* const sendQueryMessageToEntity(int id, Message& message) const;
+		const void* const sendMessageToEntity(int id, Message& message) const;
 	private:
 		std::vector<Entity* const> _entities;
 
