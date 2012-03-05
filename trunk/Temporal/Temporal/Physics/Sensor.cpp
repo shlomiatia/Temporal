@@ -48,7 +48,7 @@ namespace Temporal
 		}
 	}
 
-	void Sensor::sense(const StaticBody& staticBody)
+	bool Sensor::sense(const StaticBody& staticBody)
 	{
 		Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Rect& sensorBounds = getBounds();
@@ -62,15 +62,16 @@ namespace Temporal
 			}
 			else if(collision != Direction::NONE)
 			{
-				// TODO: Stop loop SLOTH!
 				_sensedBody = NULL;
+				return false;
 			}
 		}
+		return true;
 	}
 
-	void Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
+	bool Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
 	{
 		Sensor* sensor = (Sensor*)caller;
-		sensor->sense(staticBody);
+		return sensor->sense(staticBody);
 	}
 }

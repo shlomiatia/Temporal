@@ -96,16 +96,18 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
+	bool DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		dynamicBody->correctCollision(staticBody);
+		return true;
 	}
 
-	void DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
+	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		dynamicBody->detectCollision(staticBody);
+		return true;
 	}
 
 	void DynamicBody::determineVelocity(float framePeriodInMillis)
@@ -142,10 +144,12 @@ namespace Temporal
 		bounds = getBounds();
 		_collision = Direction::NONE;
 		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, detectCollision);
-		if(_collision & Direction::BOTTOM)
-		{
-			_force = Vector::Zero;
-		}
+
+		// TODO: Broder help me!!!
+		if(_velocity.getY() == 0.0f)
+			_force.setY(0.0f);
+		if(_collision & Direction::BOTTOM ||  _velocity.getX() == 0.0f)
+			_force.setX(0.0f);
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 

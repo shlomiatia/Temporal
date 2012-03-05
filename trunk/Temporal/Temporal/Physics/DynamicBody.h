@@ -8,7 +8,6 @@ namespace Temporal { class Sensor; }
 #include "StaticBodiesIndex.h"
 #include <vector>
 
-// TODO: Fix 2 jump bugs in physics (stuck in platform & float while jumping beneath platform) SLOTH!
 namespace Temporal
 {
 	class DynamicBody : public Body
@@ -36,7 +35,7 @@ namespace Temporal
 		void handleCollisions(void);
 		void correctCollision(const StaticBody& staticBody);
 		void detectCollision(const StaticBody& staticBody);
-		static void correctCollision(void* caller, void* data, const StaticBody& staticBody);
-		static void detectCollision(void* caller, void* data, const StaticBody& staticBody);
+		static bool correctCollision(void* caller, void* data, const StaticBody& staticBody);
+		static bool detectCollision(void* caller, void* data, const StaticBody& staticBody);
 	};
 }

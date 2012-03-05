@@ -294,6 +294,7 @@ namespace Temporal
 		}
 	}
 
+	static float _crap = 0.0f;
 	void JumpForward::handleMessage(Message& message)
 	{
 		if (isSensorMessage(message, SensorID::HANG))
@@ -307,7 +308,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
+			_crap = 0.0f;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::JUMP_FORWARD)));
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			float f = *(const float* const)message.getParam();
+			_crap += f;
+			if(_crap > 500.0f)
+				_crap = 0;
 		}
 	}
 
