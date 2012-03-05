@@ -1,5 +1,6 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
+#include "StaticBodiesIndex.h"
 #include "Utils.h"
 #include <Temporal/Game/MessageParams.h>
 #include <Temporal/Graphics/Graphics.h>
@@ -60,62 +61,41 @@ namespace Temporal
 		}
 	}
 
+	// TODO: Functions
 	void DynamicBody::update(float framePeriodInMillis)
 	{
 		float interpolation = framePeriodInMillis / 1000.0f;
 
-		Vector velocity(Vector::Zero);
+		_velocity = Vector::Zero;
+
+		// TODO: Separate to an impulse vector
 		if(!_isImpulse)
 		{
-			velocity = _movement * interpolation;
+			_velocity = _movement * interpolation;
 		}
 		else
 		{
-			velocity = _movement;
+			_velocity = _movement;
 			_isImpulse = false;
 			_movement = Vector::Zero;
 		}
 		if(_gravityEnabled)
 		{
 			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
-			float y = velocity.getY();
+			float y = _velocity.getY();
 			y -= gravity;
-			velocity.setY(y);
+			_velocity.setY(y);
 		}
-		Rect bounds = getBounds() + velocity;
-		int leftIndex = _staticBodiesIndex.getIndex(bounds.getLeft());
-		int rightIndex = _staticBodiesIndex.getIndex(bounds.getRight());
-		int topIndex = _staticBodiesIndex.getIndex(bounds.getTop());
-		int bottomIndex = _staticBodiesIndex.getIndex(bounds.getBottom());
-
-		// TODO: Validate
-
-		for(int xIndex = leftIndex; xIndex <= rightIndex; ++xIndex)
-			for(int yIndex = bottomIndex; yIndex <= topIndex; ++yIndex)
-			{
-				std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(xIndex, yIndex);
-				if(staticBodies != NULL)
-					for(unsigned int i = 0; i < staticBodies->size(); ++i)
-						correctCollision(*(*staticBodies)[i], velocity);
-			}
-		applyMovement(velocity);
+		Rect bounds = getBounds() + _velocity;
+		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, correctCollision);
+		applyMovement(_velocity);
 		if(_gravityEnabled)
 			_movement -= Vector(0.0f, GRAVITY * interpolation);
-
+		
 		bounds = getBounds();
-		leftIndex = _staticBodiesIndex.getIndex(bounds.getLeft());
-		rightIndex = _staticBodiesIndex.getIndex(bounds.getRight());
-		topIndex = _staticBodiesIndex.getIndex(bounds.getTop());
-		bottomIndex = _staticBodiesIndex.getIndex(bounds.getBottom());
 		_collision = Direction::NONE;
-		for(int xIndex = leftIndex; xIndex <= rightIndex; ++xIndex)
-			for(int yIndex = bottomIndex; yIndex <= topIndex; ++yIndex)
-			{
-				std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(xIndex, yIndex);
-				if(staticBodies != NULL)
-					for(unsigned int i = 0; i < staticBodies->size(); ++i)
-						detectCollision(*(*staticBodies)[i]);
-			}
+		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, detectCollision);
+
 		if(_collision & Direction::BOTTOM)
 		{
 			_movement = Vector::Zero;
@@ -123,20 +103,20 @@ namespace Temporal
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 
-	void DynamicBody::correctCollision(const StaticBody& staticBody, Vector& velocity)
+	void DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
 		const Rect& staticBodyBounds(staticBody.getBounds());
 		const Rect& dynamicBodyBounds(getBounds());
-		const Rect& futureBounds = dynamicBodyBounds + velocity;
+		const Rect& futureBounds = dynamicBodyBounds + _velocity;
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
 			// TODO: Correct smallest axis
 			// TODO: Gradual test
-			float x = correctCollisionInAxis(velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
-			float y = correctCollisionInAxis(velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
-			velocity.setX(x);
-			velocity.setY(y);
+			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
+			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
+			_velocity.setX(x);
+			_velocity.setY(y);
 		}
 	}
 
@@ -150,5 +130,17 @@ namespace Temporal
 			Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
 			_collision = _collision | collision;
 		}
+	}
+
+	void DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
+	{
+		DynamicBody* dynamicBody = (DynamicBody*)caller;
+		dynamicBody->correctCollision(staticBody);
+	}
+
+	void DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
+	{
+		DynamicBody* dynamicBody = (DynamicBody*)caller;
+		dynamicBody->detectCollision(staticBody);
 	}
 }

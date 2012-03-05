@@ -3,6 +3,7 @@
 namespace Temporal
 {
 	// TODO: Move to math file
+	// TODO: Always use radians
 	static const float PI = 3.14159265358979f;
 
 	inline float toRadians(float angle) { return angle * PI / 180; }
@@ -14,6 +15,7 @@ namespace Temporal
 	static const float DEGREES_90 = toRadians(90.0f);
 	static const float DEGREES_105 = toRadians(105.0);
 
+	// TODO: Move to constants components or something
 	static const float JUMP_ANGLES_SIZE = 4;
 	static const float JUMP_ANGLES[] = { DEGREES_45, DEGREES_60, DEGREES_75, DEGREES_105 };
 }

@@ -1,5 +1,6 @@
 #include "Sight.h"
 #include "StaticBody.h"
+#include "StaticBodiesIndex.h"
 #include <Temporal/Game/QueryManager.h>
 #include <Temporal/Graphics/Graphics.h>
 #include <math.h>
@@ -26,6 +27,7 @@ namespace Temporal
 		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Vector& targetPosition = *(const Vector* const)QueryManager::get().sendQueryMessageToEntity(0, Message(MessageID::GET_POSITION));
 
+		// TODO: Check me
 		if(drawDebugInfo)
 		{
 			float targetX = sourcePosition.getX() + SIGHT_ANGLE_LENGTH * sourceOrientation;
@@ -59,18 +61,18 @@ namespace Temporal
 		float x2 = destination.getX();
 		float y2 = destination.getY();
 		
-		int i = _staticBodiesIndex.getIndex(x1);
-		int j = _staticBodiesIndex.getIndex(y1);
+		int i = StaticBodiesIndex::get().getAxisIndex(x1);
+		int j = StaticBodiesIndex::get().getAxisIndex(y1);
 
 		// Determine end grid cell coordinates (iend, jend)
-		int iend = _staticBodiesIndex.getIndex(x2);
-		int jend = _staticBodiesIndex.getIndex(y2);
+		int iend = StaticBodiesIndex::get().getAxisIndex(x2);
+		int jend = StaticBodiesIndex::get().getAxisIndex(y2);
 
 		// Determine in which primary direction to step
 		int di = ((x1 < x2) ? 1 : ((x1 > x2) ? -1 : 0));
 		int dj = ((y1 < y2) ? 1 : ((y1 > y2) ? -1 : 0));
 
-		const float tileSize = _staticBodiesIndex.getTileSize();
+		const float tileSize = StaticBodiesIndex::get().getTileSize();
 
 		// Determine tx and ty, the values of t at which the directed segment
 		// (x1,y1)-(x2,y2) crosses the first horizontal and vertical cell
@@ -88,10 +90,12 @@ namespace Temporal
 		float deltaty = tileSize / abs(y2 - y1);
 
 		// Main loop. Visits cells until last cell reached
-		for (;;) 
+		while(true)
 		{
-			std::vector<StaticBody*>* staticBodies = _staticBodiesIndex.get(i, j);
-			Graphics::get().drawRect(Rect(i * _staticBodiesIndex.getTileSize(), j * _staticBodiesIndex.getTileSize(), 2.0f, 2.0f));
+			std::vector<StaticBody*>* staticBodies = StaticBodiesIndex::get().get(i, j);
+
+			// TODO: Debug draw
+			Graphics::get().drawRect(Rect(i * StaticBodiesIndex::get().getTileSize(), j * StaticBodiesIndex::get().getTileSize(), 2.0f, 2.0f));
 			if(staticBodies != NULL)
 				return false;
 			if (tx <= ty) 

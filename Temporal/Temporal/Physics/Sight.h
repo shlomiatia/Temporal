@@ -9,7 +9,7 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float upperAngle, float lowerAngle, const StaticBodiesIndex& staticBodiesIndex) : _upperAngle(upperAngle), _lowerAngle(lowerAngle), _staticBodiesIndex(staticBodiesIndex) {};
+		Sight(float upperAngle, float lowerAngle) : _upperAngle(upperAngle), _lowerAngle(lowerAngle) {};
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
 		virtual void handleMessage(Message& message);
@@ -17,8 +17,6 @@ namespace Temporal
 	private:
 		const float _upperAngle;
 		const float _lowerAngle;
-
-		const StaticBodiesIndex& _staticBodiesIndex;
 
 		void checkLineOfSight(bool drawDebugInfo = false) const;
 		bool rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const;
