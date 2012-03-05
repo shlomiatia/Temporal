@@ -13,6 +13,7 @@ namespace Temporal
 		_nextPanel = panel;
 	}
 
+	// TODO: Functions
 	void Game::run(void)
 	{
 		_running = true;
@@ -39,7 +40,8 @@ namespace Temporal
 				if (_panel != NULL)
 				{
 					float currFrameTick = (float)Thread::ticks();
-					if((currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS > MAX_FRAMES_SKIP)
+					float framesToSkip = (currFrameTick - lastFrameTick) / FRAME_PERIOD_IN_MILLIS;
+					if(framesToSkip > MAX_FRAMES_SKIP)
 						lastFrameTick = currFrameTick - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;
 					while(lastFrameTick + FRAME_PERIOD_IN_MILLIS <= currFrameTick )
 					{

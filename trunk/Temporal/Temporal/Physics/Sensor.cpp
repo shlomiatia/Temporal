@@ -1,5 +1,6 @@
 #include "Sensor.h"
 #include "Utils.h"
+#include "StaticBodiesIndex.h"
 #include <Temporal/Game/QueryManager.h>
 #include <Temporal/Graphics/Graphics.h>
 
@@ -18,27 +19,9 @@ namespace Temporal
 	void Sensor::update(void)
 	{
 		_sensedBody = NULL;
-		Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Rect& sensorBounds = getBounds();
-		ComponentOfTypeIteraor iterator = QueryManager::get().getComponentOfTypeIteraor(ComponentType::STATIC_BODY);
-		while(iterator.next())
-		{
-			StaticBody& staticBody = (StaticBody&)iterator.current();
-			if(!staticBody.isCover())
-			{
-				const Rect& staticBodyBounds = staticBody.getBounds();
-				Direction::Enum collision = calculateCollision(sensorBounds, orientation, staticBodyBounds);
-				if(match(collision, _positive, _negative))
-				{
-					_sensedBody = &staticBody;
-				}
-				else if(collision != Direction::NONE)
-				{
-					_sensedBody = NULL;
-					break;
-				}
-			}
-		}
+		
+		Rect bounds = getBounds();
+		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, sense);
 		if(_sensedBody != NULL)
 		{
 			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, this));
@@ -63,5 +46,31 @@ namespace Temporal
 		{
 			Graphics::get().drawRect(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
 		}
+	}
+
+	void Sensor::sense(const StaticBody& staticBody)
+	{
+		Orientation::Enum orientation = *(const Orientation::Enum* const)sendQueryMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Rect& sensorBounds = getBounds();
+		if(!staticBody.isCover())
+		{
+			const Rect& staticBodyBounds = staticBody.getBounds();
+			Direction::Enum collision = calculateCollision(sensorBounds, orientation, staticBodyBounds);
+			if(match(collision, _positive, _negative))
+			{
+				_sensedBody = &staticBody;
+			}
+			else if(collision != Direction::NONE)
+			{
+				// TODO: Stop loop
+				_sensedBody = NULL;
+			}
+		}
+	}
+
+	void Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
+	{
+		Sensor* sensor = (Sensor*)caller;
+		sensor->sense(staticBody);
 	}
 }

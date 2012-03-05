@@ -7,7 +7,6 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
-	
 		void Search::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::ENTER_STATE)

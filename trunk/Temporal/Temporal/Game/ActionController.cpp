@@ -337,7 +337,6 @@ namespace Temporal
 		}
 		else
 		{
-			float platformTop = platformBounds.getTop();
 			float personCenterX = personBounds.getCenterX();
 			Vector drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
