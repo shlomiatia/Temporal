@@ -24,8 +24,8 @@ namespace Temporal
 		
 		void add(StaticBody* staticBody);
 		std::vector<StaticBody*>* get(int x, int y) const;
-		void iterateTiles(const Rect& rect, void* caller, void* data, void(*handleTile)(void* caller, void* data, int i, int j)) const;
-		void iterateTiles(const Rect& rect, void* caller, void* data, void(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
+		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int i, int j)) const;
+		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
 
 		void draw(void) const;
 
@@ -39,8 +39,8 @@ namespace Temporal
 		int getIndex(int i, int j) const { return i * _gridWidth + j; }
 		int getGridSize(void) const { return _gridWidth * _gridHeight; }
 
-		static void iterateStaticBodies(void* caller, void* data, int i, int j);
-		static void add(void* caller, void* data, int i, int j);
+		static bool iterateStaticBodies(void* caller, void* data, int i, int j);
+		static bool add(void* caller, void* data, int i, int j);
 
 		StaticBodiesIndex(void) {};
 		StaticBodiesIndex(const StaticBodiesIndex&);

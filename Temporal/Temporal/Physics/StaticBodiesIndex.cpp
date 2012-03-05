@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	// TODO: Move to static bodies SLOTH
+	// TODO: Move to static bodies
 	void StaticBodiesIndex::draw(void) const
 	{
 		for(int i = 0; i < _gridWidth; ++i)
@@ -24,7 +24,7 @@ namespace Temporal
 			_grid[i] = NULL;
 	}
 
-	void StaticBodiesIndex::add(void* caller, void* data, int i, int j)
+	bool StaticBodiesIndex::add(void* caller, void* data, int i, int j)
 	{
 		StaticBodiesIndex* staticBodiesIndex = (StaticBodiesIndex*)caller;
 		StaticBody* staticBody = (StaticBody*)data;
@@ -37,6 +37,7 @@ namespace Temporal
 			staticBodiesIndex->_grid[index] = tile;
 		}
 		tile->push_back(staticBody);
+		return true;
 	}
 
 	void StaticBodiesIndex::add(StaticBody* staticBody)
@@ -54,7 +55,7 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	void StaticBodiesIndex::iterateTiles(const Rect& rect, void* caller, void* data, void(*handleTile)(void* caller, void* data, int i, int j)) const
+	void StaticBodiesIndex::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int i, int j)) const
 	{
 		int leftIndex = getAxisIndex(rect.getLeft());
 		int rightIndex = getAxisIndex(rect.getRight());
@@ -65,7 +66,8 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				handleTile(caller, data, i, j);
+				if(!handleTile(caller, data, i, j))
+					return;
 			}
 		}
 	}
@@ -74,10 +76,10 @@ namespace Temporal
 	{
 		void* caller;
 		void* data;
-		void(*handleStaticBody)(void* caller, void* data, const StaticBody& staticBody);
+		bool(*handleStaticBody)(void* caller, void* data, const StaticBody& staticBody);
 	};
 
-	void StaticBodiesIndex::iterateStaticBodies(void* caller, void* data, int i, int j)
+	bool StaticBodiesIndex::iterateStaticBodies(void* caller, void* data, int i, int j)
 	{
 		StaticBodiesIndex* staticBodiesIndex = (StaticBodiesIndex*)caller;
 		IterateStaticBodiesHelper* helper = (IterateStaticBodiesHelper*)data;
@@ -88,12 +90,14 @@ namespace Temporal
 			for(unsigned int index = 0; index < staticBodies->size(); ++index)
 			{
 				const StaticBody& staticBody = *(*staticBodies)[index];
-				helper->handleStaticBody(helper->caller, helper->data, staticBody);
+				if(!helper->handleStaticBody(helper->caller, helper->data, staticBody))
+					return false;
 			}
 		}
+		return true;
 	}
 
-	void StaticBodiesIndex::iterateTiles(const Rect& rect, void* caller, void* data, void(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
+	void StaticBodiesIndex::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
 	{
 		IterateStaticBodiesHelper helper;
 		helper.caller = caller; 

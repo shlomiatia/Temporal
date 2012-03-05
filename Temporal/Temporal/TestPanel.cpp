@@ -466,7 +466,7 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			QueryManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		//QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
 		//StaticBodiesIndex::get().draw();
 	}
 
