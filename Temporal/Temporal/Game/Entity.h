@@ -13,7 +13,6 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		Entity(void) {}
 		~Entity(void);
 
 		void add(Component* const component);

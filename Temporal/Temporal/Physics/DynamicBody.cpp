@@ -1,6 +1,6 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
-#include "StaticBodiesIndex.h"
+#include "Grid.h"
 #include "Utils.h"
 #include <Temporal/Game/MessageParams.h>
 #include <Temporal/Graphics/Graphics.h>
@@ -25,10 +25,10 @@ namespace Temporal
 		return orientation;
 	}
 
-	void DynamicBody::applyMovement(const Vector& movement) const
+	void DynamicBody::applyVelocity(void) const
 	{
 		const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Vector newPosition = position + movement;
+		Vector newPosition = position + _velocity;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
@@ -75,8 +75,8 @@ namespace Temporal
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
-			// TODO: Correct smallest axis
-			// TODO: Gradual test
+			// TODO: Correct smallest axis SLOTH!
+			// TODO: Gradual test SLOTH!
 			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
 			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
 			_velocity.setX(x);
@@ -137,15 +137,15 @@ namespace Temporal
 	void DynamicBody::handleCollisions(void)
 	{
 		Rect bounds = getBounds() + _velocity;
-		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, correctCollision);
+		Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 
-		applyMovement(_velocity);
+		applyVelocity();
 
 		bounds = getBounds();
 		_collision = Direction::NONE;
-		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, detectCollision);
+		Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
 
-		// TODO: Broder help me!!!
+		// TODO: Broder help me!!! SLOTH!
 		if(_velocity.getY() == 0.0f)
 			_force.setY(0.0f);
 		if(_collision & Direction::BOTTOM ||  _velocity.getX() == 0.0f)

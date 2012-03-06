@@ -17,10 +17,7 @@ namespace Temporal
 		const Vector& getSize(void) const { return _size; }
 		Rect getBounds(void) const;
 		const Body* const getSensedBody(void) const { return _sensedBody; }
-		void update(void);
-
-		bool sense(const StaticBody &staticBody);
-
+		
 		virtual void handleMessage(Message& message);
 		virtual ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
 
@@ -32,9 +29,8 @@ namespace Temporal
 		Direction::Enum _negative;
 		const Body* _sensedBody;
 
+		void update(void);
+		bool sense(const StaticBody &staticBody);
 		static bool sense(void* caller, void* data, const StaticBody& staticBody);
-		
-		Sensor(const Sensor&);
-		Sensor& operator=(const Sensor&);
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <Temporal\Base\Base.h>
 #include <Temporal\Game\Game.h>
-#include <Temporal\Physics\StaticBodiesIndex.h>
+#include <Temporal\Physics\Grid.h>
 #include <Temporal\Graphics\SpriteSheet.h>
 
 namespace Temporal
@@ -9,11 +9,9 @@ namespace Temporal
 	class TestPanel : public Panel
 	{
 	public:
-		TestPanel(void) {}
-
 		void init(void);
 		void update(float framePeriodInMillis);
-		void draw(void);
+		void draw(void) const;
 		void dispose(void);
 	};
 }

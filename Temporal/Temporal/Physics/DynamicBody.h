@@ -5,7 +5,7 @@ namespace Temporal { class Sensor; }
 #include <Temporal\Base\Base.h>
 #include "StaticBody.h"
 #include "Sensor.h"
-#include "StaticBodiesIndex.h"
+#include "Grid.h"
 #include <vector>
 
 namespace Temporal
@@ -30,7 +30,7 @@ namespace Temporal
 		Direction::Enum _collision;
 
 		void update(float framePeriodInMillis);
-		void applyMovement(const Vector& movement) const;
+		void applyVelocity() const;
 		void determineVelocity(float framePeriodInMillis);
 		void handleCollisions(void);
 		void correctCollision(const StaticBody& staticBody);

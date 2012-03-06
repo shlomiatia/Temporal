@@ -20,8 +20,5 @@ namespace Temporal
 		int _spriteID;
 		VisualLayer::Enum _layer;
 		Color _color;
-
-		Renderer(const Renderer&);
-		Renderer& operator=(const Renderer&);
 	};
 }

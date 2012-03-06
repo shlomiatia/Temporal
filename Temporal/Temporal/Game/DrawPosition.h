@@ -15,8 +15,5 @@ namespace Temporal
 	private:
 		Vector _offset;
 		Vector _override;
-
-		DrawPosition(const DrawPosition&);
-		DrawPosition& operator=(const DrawPosition&);
 	};
 }

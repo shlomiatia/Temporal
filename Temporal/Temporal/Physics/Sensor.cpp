@@ -1,7 +1,7 @@
 #include "Sensor.h"
 #include "Utils.h"
-#include "StaticBodiesIndex.h"
-#include <Temporal/Game/QueryManager.h>
+#include "Grid.h"
+#include <Temporal/Game/EntitiesManager.h>
 #include <Temporal/Graphics/Graphics.h>
 
 namespace Temporal
@@ -21,7 +21,7 @@ namespace Temporal
 		_sensedBody = NULL;
 		
 		Rect bounds = getBounds();
-		StaticBodiesIndex::get().iterateTiles(bounds, this, NULL, sense);
+		Grid::get().iterateTiles(bounds, this, NULL, sense);
 		if(_sensedBody != NULL)
 		{
 			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, this));

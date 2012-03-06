@@ -4,7 +4,8 @@
 
 namespace Temporal
 {
-	// TODO: Separate camera & resolution logics
+	// TODO: Make this a component as well
+	// TODO: Separate camera & resolution logics SLOTH!
 	class ViewManager
 	{
 	public:

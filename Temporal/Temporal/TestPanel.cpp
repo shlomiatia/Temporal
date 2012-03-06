@@ -16,7 +16,7 @@
 #include <Temporal/Game/EntityOrientation.h>
 #include <Temporal/Game/DrawPosition.h>
 #include <Temporal/Game/ActionController.h>
-#include <Temporal/Game/QueryManager.h>
+#include <Temporal/Game/EntitiesManager.h>
 #include <Temporal/AI/Sentry.h>
 #include <Temporal/AI/Camera.h>
 #include <math.h>
@@ -66,7 +66,7 @@ namespace Temporal
 
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
-		// TODO: Include hang sensor
+		// TODO: Include hang sensor SLOTH!
 		// Jump Sensor
 		/* v = F - G*T
 		 * m = F*T - (G*T^2)/2 
@@ -137,7 +137,7 @@ namespace Temporal
 		entity->add(position);
 		entity->add(staticBody);
 		entity->add(renderer);
-		StaticBodiesIndex::get().add(staticBody);
+		Grid::get().add(staticBody);
 		return entity;
 	}
 
@@ -181,7 +181,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		QueryManager::get().add(entity);
+		EntitiesManager::get().add(entity);
 	}
 
 	void CreateSentry(SpriteSheet* spritesheet)
@@ -200,7 +200,7 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		QueryManager::get().add(entity);
+		EntitiesManager::get().add(entity);
 	}
 
 	void CreateCamera()
@@ -241,7 +241,7 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		QueryManager::get().add(entity);
+		EntitiesManager::get().add(entity);
 	}
 
 	void CreatePlatforms()
@@ -253,19 +253,19 @@ namespace Temporal
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(1009.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
-		QueryManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		QueryManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(1009.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
+		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
 	}
 
 	void CreateBackground()
@@ -282,7 +282,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(renderer);
-		QueryManager::get().add(entity);
+		EntitiesManager::get().add(entity);
 	}
 #pragma endregion
 
@@ -292,7 +292,7 @@ namespace Temporal
 		ViewManager::get().init(screenSize, 768.0f);
 		Vector worldSize(1024.0f, 1536.0f);
 		ViewManager::get().setLevelBounds(worldSize);
-		StaticBodiesIndex::get().init(worldSize, 32.0f);
+		Grid::get().init(worldSize, 32.0f);
 		DebugInfo::get().setShowingFPS(true);
 
 		const Texture* texture = Texture::load("c:\\pop.png");
@@ -453,26 +453,27 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		//QueryManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
-		QueryManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
+		//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
-		const Vector& position = *(const Vector* const)QueryManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		ViewManager::get().setCameraCenter(position);
 	}
 
-	void TestPanel::draw(void)
+	void TestPanel::draw(void) const
 	{
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
-			QueryManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		QueryManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-		//StaticBodiesIndex::get().draw();
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		//Grid::get().draw();
 	}
 
 	void TestPanel::dispose(void)
 	{
-		QueryManager::get().dispose();
+		EntitiesManager::get().dispose();
 		Graphics::get().dispose();
+		Grid::get().dispose();
 	}
 }

@@ -1,7 +1,7 @@
 #include "Sight.h"
 #include "StaticBody.h"
-#include "StaticBodiesIndex.h"
-#include <Temporal/Game/QueryManager.h>
+#include "Grid.h"
+#include <Temporal/Game/EntitiesManager.h>
 #include <Temporal/Graphics/Graphics.h>
 #include <math.h>
 
@@ -23,8 +23,8 @@ namespace Temporal
 	{
 		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		// TODO: Who're you watching?
-		const Vector& targetPosition = *(const Vector* const)QueryManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		// TODO: Who're you watching? SLOTH!
+		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		if(drawDebugInfo)
 			drawLineOfSight(sourcePosition, sourceOrientation);
@@ -34,7 +34,8 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Test against top and bottom
+		// TODO: Test against top and bottom SLOTH!
+		// TODO: Eyes SLOTH!
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
 		if(angle < _lowerAngle * sourceOrientation || angle > _upperAngle * sourceOrientation)
@@ -52,18 +53,18 @@ namespace Temporal
 		float x2 = destination.getX();
 		float y2 = destination.getY();
 		
-		int i = StaticBodiesIndex::get().getAxisIndex(x1);
-		int j = StaticBodiesIndex::get().getAxisIndex(y1);
+		int i = Grid::get().getAxisIndex(x1);
+		int j = Grid::get().getAxisIndex(y1);
 
 		// Determine end grid cell coordinates (iend, jend)
-		int iend = StaticBodiesIndex::get().getAxisIndex(x2);
-		int jend = StaticBodiesIndex::get().getAxisIndex(y2);
+		int iend = Grid::get().getAxisIndex(x2);
+		int jend = Grid::get().getAxisIndex(y2);
 
 		// Determine in which primary direction to step
 		int di = ((x1 < x2) ? 1 : ((x1 > x2) ? -1 : 0));
 		int dj = ((y1 < y2) ? 1 : ((y1 > y2) ? -1 : 0));
 
-		const float tileSize = StaticBodiesIndex::get().getTileSize();
+		const float tileSize = Grid::get().getTileSize();
 
 		// Determine tx and ty, the values of t at which the directed segment
 		// (x1,y1)-(x2,y2) crosses the first horizontal and vertical cell
@@ -85,8 +86,8 @@ namespace Temporal
 		while(true)
 		{
 
-			// TODO: Compare with specific line
-			std::vector<StaticBody*>* staticBodies = StaticBodiesIndex::get().get(i, j);
+			// TODO: Compare with specific line SLOTH!
+			std::vector<StaticBody*>* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{
 				isSuccessful = false;
@@ -106,7 +107,7 @@ namespace Temporal
 			}
 		}
 		if(drawDebugInfo)
-			Graphics::get().drawLine(source, StaticBodiesIndex::get().getTileCenter(i, j), isSuccessful ? Color::Green : Color::Red);
+			Graphics::get().drawLine(source, Grid::get().getTileCenter(i, j), isSuccessful ? Color::Green : Color::Red);
 		return isSuccessful;
 	}
 

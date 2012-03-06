@@ -14,8 +14,5 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	private:
 		Vector _position;
-
-		Position(const Position&);
-		Position& operator=(const Position&);
 	};
 }

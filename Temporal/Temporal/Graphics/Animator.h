@@ -26,8 +26,5 @@ namespace Temporal
 
 		void reset(const ResetAnimationParams& resetAnimationParams);
 		const SpriteGroup& getSpriteGroup(void) const;
-
-		Animator(const Animator&);
-		Animator& operator=(const Animator&);
 	};
 }
