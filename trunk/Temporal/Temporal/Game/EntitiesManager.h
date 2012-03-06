@@ -7,12 +7,12 @@ namespace Temporal
 {
 	class ComponentOfTypeIteraor;
 
-	class QueryManager
+	class EntitiesManager
 	{
 	public:
-		static QueryManager& get(void)
+		static EntitiesManager& get(void)
 		{
-			static QueryManager instance;
+			static EntitiesManager instance;
 			return instance;
 		}
 
@@ -25,8 +25,8 @@ namespace Temporal
 	private:
 		std::vector<Entity* const> _entities;
 
-		QueryManager(void) {}
-		QueryManager(const QueryManager&);
-		QueryManager& operator=(const QueryManager&);
+		EntitiesManager(void) {}
+		EntitiesManager(const EntitiesManager&);
+		EntitiesManager& operator=(const EntitiesManager&);
 	};
 }

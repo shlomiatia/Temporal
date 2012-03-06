@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Temporal/Game/Component.h>
-#include "StaticBodiesIndex.h"
+#include "Grid.h"
 
 namespace Temporal
 {
-	// TODO: Ask for sight instead of getting it
+	// TODO: Ask for sight instead of getting it SLOTH!
 	class Sight : public Component
 	{
 	public:
@@ -22,9 +22,5 @@ namespace Temporal
 		void drawLineOfSight(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
 
 		bool rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const;
-
-		// TODO: Remove copy constructor/validate virtual destructors/constness/order/names SLOTH!
-		Sight(const Sight&);
-		Sight& operator=(const Sight&);
 	};
 }

@@ -12,9 +12,5 @@ namespace Temporal
 		virtual ComponentType::Enum getType(void) const { return ComponentType::INPUT_CONTROLLER; }
 
 		virtual void handleMessage(Message& message);
-
-	private:
-		InputController(const InputController&);
-		InputController& operator=(const InputController&);
 	};
 }

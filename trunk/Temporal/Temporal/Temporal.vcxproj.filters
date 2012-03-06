@@ -39,10 +39,10 @@
     <ClInclude Include="Game\StateMachineComponent.h" />
     <ClInclude Include="Game\ActionController.h" />
     <ClInclude Include="AI\Camera.h" />
-    <ClInclude Include="Game\QueryManager.h" />
     <ClInclude Include="Physics\Sight.h" />
-    <ClInclude Include="Physics\StaticBodiesIndex.h" />
     <ClInclude Include="Base\Math.h" />
+    <ClInclude Include="Physics\Grid.h" />
+    <ClInclude Include="Game\EntitiesManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -74,9 +74,9 @@
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\ActionController.cpp" />
     <ClCompile Include="AI\Camera.cpp" />
-    <ClCompile Include="Game\QueryManager.cpp" />
     <ClCompile Include="Physics\Utils.cpp" />
     <ClCompile Include="Physics\Sight.cpp" />
-    <ClCompile Include="Physics\StaticBodiesIndex.cpp" />
+    <ClCompile Include="Physics\Grid.cpp" />
+    <ClCompile Include="Game\EntitiesManager.cpp" />
   </ItemGroup>
 </Project>

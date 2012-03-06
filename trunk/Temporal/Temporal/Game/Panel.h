@@ -7,7 +7,7 @@ namespace Temporal
 	public:
 		virtual void init(void) = 0;
 		virtual void update(float framePeriodInMillis) = 0;
-		virtual void draw(void) = 0;
+		virtual void draw(void) const = 0;
 		virtual void dispose(void) = 0;
 
 		Panel(void) {};

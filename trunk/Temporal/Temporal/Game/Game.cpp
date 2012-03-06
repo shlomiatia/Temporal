@@ -74,7 +74,7 @@ namespace Temporal
 		}
 	}
 
-	void Game::draw(void)
+	void Game::draw(void) const
 	{
 		Graphics::get().prepareForDrawing();
 		_panel->draw();

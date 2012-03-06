@@ -33,7 +33,7 @@ namespace Temporal
 
 		void handlePanelsSwitch();
 		void update(float& lastFrameTick);
-		void draw(void);
+		void draw(void) const;
 
 		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL) {}
 		~Game(void);

@@ -132,7 +132,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Consider querying controller directly for walk
+			// TODO: Consider querying controller directly
 			_stillWalking = true;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
 		}
@@ -171,7 +171,7 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
-		// TODO: Transfer sensor message param with entity id, and query everything
+		// TODO: Transfer sensor message param with entity id, and query everything SLOTH!
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body* const sensedBody = sensor.getSensedBody();
 		SensorID::Enum hangSensorID = SensorID::HANG;
@@ -196,7 +196,7 @@ namespace Temporal
 			const float F = JUMP_FORCE_PER_SECOND;
 			const float G = *(const float* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
-			// TODO: Include hang sensor in calculations
+			// TODO: Include hang sensor in calculations SLOTH!
 			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
 			{
 				/* x = T*F*cos(A)
@@ -211,7 +211,7 @@ namespace Temporal
 				float A = JUMP_ANGLES[i];
 				float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
 
-				// TODO: Take min of highers then platform
+				// TODO: Take min of highers then platform SLOTH
 				if(max < y)
 				{
 					max = y;
@@ -363,7 +363,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Sensor params
+			// TODO: Sensor params SLOTH!
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_platform = sensor.getSensedBody();
 
@@ -483,7 +483,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Sensor params
+			// TODO: Sensor params SLOTH!
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_platform = sensor.getSensedBody();
 

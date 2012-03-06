@@ -58,7 +58,7 @@ namespace Temporal
 		};
 	}
 
-	// TODO: Divide according to capabilities
+	// TODO: Divide according to capabilities. Scripted States
 	class ActionController : public StateMachineComponent
 	{
 	public:

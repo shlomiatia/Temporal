@@ -15,8 +15,5 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	private:
 		Orientation::Enum _orientation;
-
-		EntityOrientation(const EntityOrientation&);
-		EntityOrientation& operator=(const EntityOrientation&);
 	};
 }
