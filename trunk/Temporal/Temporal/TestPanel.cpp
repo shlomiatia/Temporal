@@ -41,14 +41,16 @@ namespace Temporal
 					Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
 					sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
 					const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
-
-					for(float x = bounds.getLeft(); x <= bounds.getRight(); x += 31.0f)
+					const Texture& texture = _spritesheet.getTexture();
+					float textureWidth = texture.getSize().getWidth();
+					float textureHeight = texture.getSize().getWidth();
+					for(float x = bounds.getLeft(); x <= bounds.getRight(); x += (textureWidth - 1.0f))
 					{
-						if(bounds.getWidth() < 32.0f)
+						if(bounds.getWidth() < textureWidth)
 							x = bounds.getCenterX();
-						for(float y = bounds.getBottom(); y <= bounds.getTop(); y += 31.0f)
+						for(float y = bounds.getBottom(); y <= bounds.getTop(); y += (textureHeight - 1.0f))
 						{
-							if(bounds.getHeight() < 32.0f)
+							if(bounds.getHeight() < textureHeight)
 								y = bounds.getCenterY();
 							Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), Vector(x, y), false);
 						}

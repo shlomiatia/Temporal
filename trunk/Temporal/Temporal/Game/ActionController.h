@@ -137,7 +137,7 @@ namespace Temporal
 	class PrepareToJump : public ActionState
 	{
 	public:
-		PrepareToJump(void) {};
+		PrepareToJump(void) : _jumpStartState(ActionStateID::JUMP_START_45) {};
 
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
