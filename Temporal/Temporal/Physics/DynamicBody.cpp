@@ -98,14 +98,14 @@ namespace Temporal
 
 	bool DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
-		DynamicBody* dynamicBody = (DynamicBody*)caller;
+		DynamicBody* const dynamicBody = (DynamicBody* const)caller;
 		dynamicBody->correctCollision(staticBody);
 		return true;
 	}
 
 	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
-		DynamicBody* dynamicBody = (DynamicBody*)caller;
+		DynamicBody* const dynamicBody = (DynamicBody* const)caller;
 		dynamicBody->detectCollision(staticBody);
 		return true;
 	}

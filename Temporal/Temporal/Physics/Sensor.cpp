@@ -71,7 +71,7 @@ namespace Temporal
 
 	bool Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
 	{
-		Sensor* sensor = (Sensor*)caller;
-		return sensor->sense(staticBody);
+		Sensor& sensor = *(Sensor* const)caller;
+		return sensor.sense(staticBody);
 	}
 }

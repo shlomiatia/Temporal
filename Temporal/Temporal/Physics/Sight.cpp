@@ -87,7 +87,7 @@ namespace Temporal
 		{
 
 			// TODO: Compare with specific line SLOTH!
-			std::vector<StaticBody*>* staticBodies = Grid::get().getTile(i, j);
+			std::vector<const StaticBody* const>* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{
 				isSuccessful = false;
