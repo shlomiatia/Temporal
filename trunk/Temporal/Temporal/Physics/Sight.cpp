@@ -19,6 +19,7 @@ namespace Temporal
 		}
 	}
 
+	// TODO: Separate draw info
 	void Sight::checkLineOfSight(bool drawDebugInfo) const
 	{
 		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
@@ -38,7 +39,9 @@ namespace Temporal
 		// TODO: Eyes SLOTH!
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
-		if(angle < _lowerAngle * sourceOrientation || angle > _upperAngle * sourceOrientation)
+
+		if ((_upperAngle * sourceOrientation - angle) * sourceOrientation < 0.0f ||
+			(_lowerAngle * sourceOrientation - angle) * sourceOrientation > 0.0f)
 			return;
 
 		bool rayCastSuccessful = rayCast(sourcePosition, targetPosition, drawDebugInfo);

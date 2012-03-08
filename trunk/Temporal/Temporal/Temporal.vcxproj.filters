@@ -43,6 +43,7 @@
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Physics\Grid.h" />
     <ClInclude Include="Game\EntitiesManager.h" />
+    <ClInclude Include="AI\Patrol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -78,5 +79,6 @@
     <ClCompile Include="Physics\Sight.cpp" />
     <ClCompile Include="Physics\Grid.cpp" />
     <ClCompile Include="Game\EntitiesManager.cpp" />
+    <ClCompile Include="AI\Patrol.cpp" />
   </ItemGroup>
 </Project>
