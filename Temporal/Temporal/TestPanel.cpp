@@ -19,6 +19,7 @@
 #include <Temporal/Game/EntitiesManager.h>
 #include <Temporal/AI/Sentry.h>
 #include <Temporal/AI/Camera.h>
+#include <Temporal/AI/Patrol.h>
 #include <math.h>
 
 namespace Temporal
@@ -201,6 +202,32 @@ namespace Temporal
 		entity->add(drawPosition);
 		entity->add(sentry);
 		entity->add(sight);
+		entity->add(renderer);
+		EntitiesManager::get().add(entity);
+	}
+
+	void CreatePatrol(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Vector(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		Patrol* patrol = new Patrol();
+		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		ActionController* actionController = new ActionController();
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+		Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(patrol);
+		entity->add(dynamicBody);
+		entity->add(sight);
+		addSensors(*entity, *dynamicBody);
+		entity->add(actionController);
+		entity->add(animator);
 		entity->add(renderer);
 		EntitiesManager::get().add(entity);
 	}
@@ -443,6 +470,7 @@ namespace Temporal
 
 		CreatePlayer(spritesheet);
 		CreateSentry(spritesheet);
+		CreatePatrol(spritesheet);
 		CreateCamera();
 		CreatePlatforms();
 		CreateBackground();
