@@ -31,8 +31,8 @@ namespace Temporal
 		Panel* _panel;
 		Panel* _nextPanel;
 
-		void handlePanelsSwitch();
-		void update(float& lastFrameTick);
+		void handlePanelsSwitch(void);
+		void update(float& lastFrameMillis);
 		void draw(void) const;
 
 		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL) {}

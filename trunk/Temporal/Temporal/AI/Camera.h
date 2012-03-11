@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Temporal/Game/StateMachineComponent.h>
+#include <Temporal\Base\Base.h>
+#include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
 {
@@ -17,14 +18,12 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			Search(void) : _elapsedTimeInMillis(0.0f) {}
-
 			virtual void handleMessage(Message& message);
 
 		private:
 			static const float SEARCH_TIME_FOR_SIDE_IN_MILLIS;
 
-			float _elapsedTimeInMillis;
+			Timer _timer;
 		};
 
 		class See : public ComponentState
@@ -52,14 +51,14 @@ namespace Temporal
 		class Acquire : public ComponentState
 		{
 		public:
-			Acquire(void) : _elapsedTimeInMillis(0.0f), _blinking(false), _haveLineOfSight(false) {}
+			Acquire(void) : _blinking(false), _haveLineOfSight(false) {}
 
 			virtual void handleMessage(Message& message);
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
 			
-			float _elapsedTimeInMillis;
+			Timer _timer;
 			bool _blinking;
 			bool _haveLineOfSight;
 		};

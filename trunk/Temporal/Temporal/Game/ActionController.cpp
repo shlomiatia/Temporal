@@ -171,7 +171,7 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
-		// TODO: Transfer sensor message param with entity id, and query everything SLOTH!
+		// TODO: Transfer sensor message param with entity id, and query everything
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body* const sensedBody = sensor.getSensedBody();
 		SensorID::Enum hangSensorID = SensorID::HANG;
@@ -196,7 +196,7 @@ namespace Temporal
 			const float F = JUMP_FORCE_PER_SECOND;
 			const float G = *(const float* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
-			// TODO: Include hang sensor in calculations SLOTH!
+			// TODO: Include hang sensor in calculations SLOTH
 			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
 			{
 				/* x = T*F*cos(A)
@@ -363,7 +363,6 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Sensor params SLOTH!
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_platform = sensor.getSensedBody();
 
@@ -483,7 +482,6 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Sensor params SLOTH!
 			const Sensor& sensor = *(const Sensor* const)message.getParam();
 			_platform = sensor.getSensedBody();
 

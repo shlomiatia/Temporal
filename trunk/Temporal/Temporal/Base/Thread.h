@@ -6,7 +6,7 @@ namespace Temporal
 	{
 	public:
 		static void sleep(unsigned int millis);
-		static unsigned long ticks(void);
+		static unsigned long getElapsedTimeInMillis(void);
 	private:
 		Thread(void) {}
 		Thread(const Thread&);
