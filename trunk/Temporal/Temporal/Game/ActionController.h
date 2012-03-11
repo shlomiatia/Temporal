@@ -42,17 +42,12 @@ namespace Temporal
 			PREPARE_TO_JUMP,
 
 			// TODO: One instance with params? SLOTH
-			JUMP_START_45,
-			JUMP_START_60,
-			JUMP_START_75,
-			JUMP_START_90,
-			JUMP_START_105,
-			JUMP_UP,
-			JUMP_FORWARD,
-			JUMP_FORWARD_END,
-			PREPARE_TO_HANG,
+			JUMP_START,
+			JUMP,
+			JUMP_END,
 
 			// TODO: Gradual hang & descend
+			PREPARE_TO_HANG,
 			HANGING,
 			HANG,
 			DROP,
@@ -62,18 +57,84 @@ namespace Temporal
 		};
 	}
 
+	class JumpInfo
+	{
+	public:
+		JumpInfo(float angle, AnimationID::Enum startAnimation, AnimationID::Enum jumpAnimation, AnimationID::Enum endAnimation)
+			: _angle(angle), _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
+
+		float getAngle(void) const { return _angle; }
+		AnimationID::Enum getStartAnimation(void) const { return _startAnimation; }
+		AnimationID::Enum getJumpAnimation(void) const { return _jumpAnimation; }
+		AnimationID::Enum getEndAnimation(void) const { return _endAnimation; }
+
+		bool operator==(const JumpInfo& other) const { return getAngle() == other.getAngle(); }
+		bool operator!=(const JumpInfo& other) const { return !(*this == other); }
+
+	private:
+		float _angle;
+		AnimationID::Enum _startAnimation;
+		AnimationID::Enum _jumpAnimation;
+		AnimationID::Enum _endAnimation;
+
+		JumpInfo(const JumpInfo&);
+		JumpInfo& operator=(const JumpInfo&);
+	};
+
+	class JumpInfoProvider
+	{
+	public:
+		static const JumpInfoProvider& get(void)
+		{
+			static JumpInfoProvider instance;
+			return instance;
+		}
+
+		const std::vector<const JumpInfo* const>& getData(void) const { return _data; }
+		const JumpInfo* const getFarthest(void) const { return _data[0]; }
+		const JumpInfo* const getHighest(void) const { return _data[3]; }
+		
+	private:
+		std::vector<const JumpInfo*const > _data;
+
+		JumpInfoProvider(void);
+		~JumpInfoProvider(void);
+		JumpInfoProvider(const JumpInfoProvider&);
+		JumpInfoProvider& operator=(const JumpInfoProvider&);
+	};
+
+	class JumpHelper
+	{
+	public:
+		JumpHelper(void) : _info(NULL), _ledgeDirected(false) {}
+
+		const JumpInfo& getInfo(void) const { return *_info; }
+		void setInfo(const JumpInfo* info) { _info = info; }
+		bool isLedgeDirected(void) const { return _ledgeDirected; }
+		void setLedgeDirected(bool ledgeDirected) { _ledgeDirected = ledgeDirected; }
+	private:
+		const JumpInfo* _info;
+		bool _ledgeDirected;
+
+		JumpHelper(const JumpHelper&);
+		JumpHelper& operator=(const JumpHelper&);
+	};
+
 	// TODO: Divide according to capabilities. Scripted States
 	class ActionController : public StateMachineComponent
 	{
 	public:
 		ActionController(void) : StateMachineComponent(getStates()) {}
+
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
+		JumpHelper& getJumpHelper(void) { return _jumpHelper; }
 
 	protected:
 		virtual int getInitialState(void) const { return ActionStateID::STAND; }
 
 	private:
 		std::vector<ComponentState*> getStates() const;
+		JumpHelper _jumpHelper;
 	};
 
 	class ActionState : public ComponentState
@@ -141,28 +202,19 @@ namespace Temporal
 	class PrepareToJump : public ActionState
 	{
 	public:
-		PrepareToJump(void) : _jumpStartState(ActionStateID::JUMP_START_45) {};
-
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
 	protected:
 		virtual void handleMessage(Message& message);
 
 	private:
-		static const int JUMP_ANGLES_SIZE;
-		static const float JUMP_ANGLES[];
-		static const ActionStateID::Enum JUMP_ANGLES_START_STATES[];
-
-		ActionStateID::Enum _jumpStartState;
-
 		void handleJumpSensor(Message &message);
 	};
 
 	class JumpStart : public ActionState
 	{
 	public:
-		JumpStart(float angle, AnimationID::Enum animation, ActionStateID::Enum jumpState) : 
-		  _angle(angle), _animation(animation), _jumpState(jumpState), _platformFound(false), _animationEnded(false) {};
+		JumpStart(void) : _animationEnded(false) {};
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
@@ -170,41 +222,26 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
-		float _angle;
-		AnimationID::Enum _animation;
-		ActionStateID::Enum _jumpState;
-		bool _platformFound;
 		bool _animationEnded;
 	};
 
-	class JumpUp : public ActionState
+	class Jump : public ActionState
 	{
 	public:
-		JumpUp(void) {};
+		Jump(void) {};
 
-		virtual const char* getName(void) const { return "JumpUp"; }
+		virtual const char* getName(void) const { return "Jump"; }
 
 	protected:
 		virtual void handleMessage(Message& message);
 	};
 
-	class JumpForward : public ActionState
+	class JumpEnd : public ActionState
 	{
 	public:
-		JumpForward(void) {};
+		JumpEnd(void) {};
 
-		virtual const char* getName(void) const { return "JumpForward"; }
-
-	protected:
-		virtual void handleMessage(Message& message);
-	};
-
-	class JumpForwardEnd : public ActionState
-	{
-	public:
-		JumpForwardEnd(void) {};
-
-		virtual const char* getName(void) const { return "JumpForwardEnd"; }
+		virtual const char* getName(void) const { return "JumpEnd"; }
 
 	protected:
 		virtual void handleMessage(Message& message);

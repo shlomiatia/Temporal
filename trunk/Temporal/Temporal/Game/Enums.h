@@ -48,7 +48,6 @@ namespace Temporal
 			
 			GET_GRAVITY,
 			GET_SIZE,
-			GET_SENSOR_SIZE,
 			SET_GRAVITY_ENABLED,
 			SET_FORCE,
 			SET_IMPULSE,

@@ -69,7 +69,6 @@ namespace Temporal
 
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
-		// TODO: Include hang sensor SLOTH
 		// Jump Sensor
 		/* v = F - G*T
 		 * m = F*T - (G*T^2)/2 

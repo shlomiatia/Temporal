@@ -6,6 +6,21 @@
 
 namespace Temporal
 {
+	JumpInfoProvider::JumpInfoProvider(void)
+	{
+		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, AnimationID::JUMP_FORWARD_START, AnimationID::JUMP_FORWARD, AnimationID::JUMP_FORWARD_END));
+		_data.push_back(new JumpInfo(ANGLE_60_IN_RADIANS, AnimationID::JUMP_FORWARD_START, AnimationID::JUMP_FORWARD, AnimationID::JUMP_FORWARD_END));
+		_data.push_back(new JumpInfo(ANGLE_75_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
+		_data.push_back(new JumpInfo(ANGLE_90_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
+		_data.push_back(new JumpInfo(ANGLE_105_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
+	}
+
+	JumpInfoProvider::~JumpInfoProvider(void)
+	{
+		for(unsigned int i = 0; i < _data.size(); ++i)
+			delete _data[i];
+	}
+
 	std::vector<ComponentState*> ActionController::getStates() const
 	{
 		std::vector<ComponentState*> states;
@@ -14,14 +29,9 @@ namespace Temporal
 		states.push_back(new Walk());
 		states.push_back(new Turn());
 		states.push_back(new PrepareToJump());
-		states.push_back(new JumpStart(ANGLE_45_IN_RADIANS, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
-		states.push_back(new JumpStart(ANGLE_60_IN_RADIANS, AnimationID::JUMP_FORWARD_START, ActionStateID::JUMP_FORWARD));
-		states.push_back(new JumpStart(ANGLE_75_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
-		states.push_back(new JumpStart(ANGLE_90_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
-		states.push_back(new JumpStart(ANGLE_105_IN_RADIANS, AnimationID::JUMP_UP_START, ActionStateID::JUMP_UP));
-		states.push_back(new JumpUp());
-		states.push_back(new JumpForward());
-		states.push_back(new JumpForwardEnd());
+		states.push_back(new JumpStart());
+		states.push_back(new Jump());
+		states.push_back(new JumpEnd());
 		states.push_back(new PrepareToHang());
 		states.push_back(new Hanging());
 		states.push_back(new Hang());
@@ -66,8 +76,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{
-			ActionStateID::Enum defaultJumpStartState = ActionStateID::JUMP_START_90;
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP, &defaultJumpStartState);
+			((ActionController* const)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getHighest());
+			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
 		}
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
@@ -119,8 +129,8 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			ActionStateID::Enum defaultJumpStartState = ActionStateID::JUMP_START_45;
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP, &defaultJumpStartState);
+			((ActionController* const)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
@@ -165,63 +175,46 @@ namespace Temporal
 		}
 	}
 
-	const int PrepareToJump::JUMP_ANGLES_SIZE = 4;
-	const float PrepareToJump::JUMP_ANGLES[] = { ANGLE_45_IN_RADIANS, ANGLE_60_IN_RADIANS, ANGLE_75_IN_RADIANS, ANGLE_105_IN_RADIANS };
-	const ActionStateID::Enum PrepareToJump::JUMP_ANGLES_START_STATES[] = { ActionStateID::JUMP_START_45, ActionStateID::JUMP_START_60, ActionStateID::JUMP_START_75, ActionStateID::JUMP_START_105 };
-
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
 		// TODO: Transfer sensor message param with entity id, and query everything
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body* const sensedBody = sensor.getSensedBody();
-		SensorID::Enum hangSensorID = SensorID::HANG;
-		const Vector& hangSensorSize = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SENSOR_SIZE, &hangSensorID));
-		float hangSensorWidth = hangSensorSize.getWidth();
 		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
 		float front = personBounds.getSide(orientation);
 		float x = (target - front) * orientation;
-		bool platformFound = false;
+		JumpHelper& jumpHelper = ((ActionController* const)_stateMachine)->getJumpHelper();
 
-		if(x >= 0 && x < hangSensorWidth - 1.0f)
-		{
-			_jumpStartState = ActionStateID::JUMP_START_90;
-			platformFound = true;
-		}
-		else
-		{
-			float max = 0.0f;
-			const float F = JUMP_FORCE_PER_SECOND;
-			const float G = *(const float* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
+		float max = 0.0f;
+		const float F = JUMP_FORCE_PER_SECOND;
+		const float G = *(const float* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
-			// TODO: Include hang sensor in calculations SLOTH
-			for(int i = 0; i < JUMP_ANGLES_SIZE; ++i)
+		const std::vector<const JumpInfo* const>& data = JumpInfoProvider::get().getData();
+		for(unsigned int i = 0; i < data.size(); ++i)
+		{
+			/* x = T*F*cos(A)
+				* y = T*F*sin(A) - (G*T^2)/2
+				*
+				* T = x/(F*cos(A))
+				* y = (x/(F*cos(A))*F*sin(A) - (G*(x/(F*cos(A)))^2)/2
+				* y = (x*sin(A))/(cos(A)) - (G*x^2)/(2*F^2*cos(A)^2)
+				* y = (2*F^2*x*sin(A)*cos(A) - G*x^2)/(2*F^2*cos(A)^2)
+				* y = x*(2*F^2*sin(A)*cos(A) - G*x)/(2*F^2*cos(A)^2)
+				*/
+			const JumpInfo* const jumpInfo = data[i];
+			float A = jumpInfo->getAngle();
+			float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
+
+			if(max < y)
 			{
-				/* x = T*F*cos(A)
-				 * y = T*F*sin(A) - (G*T^2)/2
-				 *
-				 * T = x/(F*cos(A))
-				 * y = (x/(F*cos(A))*F*sin(A) - (G*(x/(F*cos(A)))^2)/2
-				 * y = (x*sin(A))/(cos(A)) - (G*x^2)/(2*F^2*cos(A)^2)
-				 * y = (2*F^2*x*sin(A)*cos(A) - G*x^2)/(2*F^2*cos(A)^2)
-				 * y = x*(2*F^2*sin(A)*cos(A) - G*x)/(2*F^2*cos(A)^2)
-				 */
-				float A = JUMP_ANGLES[i];
-				float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
-
-				// TODO: Take min of highers then platform SLOTH
-				if(max < y)
-				{
-					max = y;
-					_jumpStartState = JUMP_ANGLES_START_STATES[i];
-					platformFound = true;
-				}
+				max = y;
+				jumpHelper.setInfo(jumpInfo);
+				jumpHelper.setLedgeDirected(true);
 			}
 		}
-
-		_stateMachine->changeState(_jumpStartState, &platformFound);
 	}
 
 	void PrepareToJump::handleMessage(Message& message)
@@ -232,12 +225,11 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_jumpStartState = *(const ActionStateID::Enum* const)message.getParam();
+			((ActionController* const)_stateMachine)->getJumpHelper().setLedgeDirected(false);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			bool platformFound = false;
-			_stateMachine->changeState(_jumpStartState, &platformFound);
+			_stateMachine->changeState(ActionStateID::JUMP_START);
 		}
 	}
 
@@ -249,8 +241,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			if(_angle != ANGLE_45_IN_RADIANS && !_platformFound)
-				_stateMachine->changeState(ActionStateID::JUMP_START_45, &_platformFound);
+			JumpHelper& jumpHelper = ((ActionController* const)_stateMachine)->getJumpHelper();
+			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected())
+			{
+				jumpHelper.setInfo(JumpInfoProvider::get().getFarthest());
+				_stateMachine->changeState(ActionStateID::JUMP_START);
+			}
 		}
 		else if(message.getID() == MessageID::ACTION_BACKWARD)
 		{
@@ -259,25 +255,19 @@ namespace Temporal
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
 			_animationEnded = false;
-			_platformFound = *(const bool* const)message.getParam();
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(_animation)));
+			AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(_animationEnded)
 			{
-				float jumpForceX = JUMP_FORCE_PER_SECOND * cos(_angle);
-				float jumpForceY = JUMP_FORCE_PER_SECOND * sin(_angle);
-				Vector jumpVector(jumpForceX, jumpForceY);
-
-				// TODO: Move to jump states for clarity
-				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
-				_stateMachine->changeState(_jumpState);
+				_stateMachine->changeState(ActionStateID::JUMP);
 			}
 		}
 	}
 
-	void JumpUp::handleMessage(Message& message)
+	void Jump::handleMessage(Message& message)
 	{
 		if (isSensorMessage(message, SensorID::HANG))
 		{
@@ -286,41 +276,22 @@ namespace Temporal
 		}
 		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
 		{
-			_stateMachine->changeState(ActionStateID::STAND);
+			_stateMachine->changeState(ActionStateID::JUMP_END);
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::JUMP_UP)));
+			const JumpInfo& jumpInfo = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo();
+			float angle = jumpInfo.getAngle();
+			float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
+			float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
+			Vector jumpVector(jumpForceX, jumpForceY);
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
+			AnimationID::Enum animation = jumpInfo.getJumpAnimation();
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 		}
 	}
 
-	static float _crap = 0.0f;
-	void JumpForward::handleMessage(Message& message)
-	{
-		if (isSensorMessage(message, SensorID::HANG))
-		{
-			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG, &sensor);
-		}
-		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
-		{
-			_stateMachine->changeState(ActionStateID::JUMP_FORWARD_END);
-		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_crap = 0.0f;
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::JUMP_FORWARD)));
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			float f = *(const float* const)message.getParam();
-			_crap += f;
-			if(_crap > 500.0f)
-				_crap = 0;
-		}
-	}
-
-	void JumpForwardEnd::handleMessage(Message& message)
+	void JumpEnd::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
@@ -328,7 +299,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::JUMP_FORWARD_END)));
+			AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 		}
 	}
 
