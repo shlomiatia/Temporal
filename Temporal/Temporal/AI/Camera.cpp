@@ -11,7 +11,7 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::ENTER_STATE)
 			{
-				_elapsedTimeInMillis = 0.0f;
+				_timer.reset();
 				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
 			}
 			else if(message.getID() == MessageID::LINE_OF_SIGHT)
@@ -21,8 +21,8 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				float framePeriodInMillis = *(const float* const)message.getParam();
-				_elapsedTimeInMillis += framePeriodInMillis;
-				if(_elapsedTimeInMillis >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
+				_timer.update(framePeriodInMillis);
+				if(_timer.getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
 					_stateMachine->changeState(CameraStates::TURN);
 			}
 		}
@@ -87,18 +87,18 @@ namespace Temporal
 			else if(message.getID() == MessageID::ENTER_STATE)
 			{
 				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
-				_elapsedTimeInMillis = 0.0f;
+				_timer.reset();
 				_blinking = false;
 				_haveLineOfSight = true;
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				float framePeriodInMillis = *(const float* const)message.getParam();
-				_elapsedTimeInMillis += framePeriodInMillis;
+				_timer.update(framePeriodInMillis);
 
 				if(!_haveLineOfSight)
 					_stateMachine->changeState(CameraStates::SEARCH);
-				else if(_elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
+				else if(_timer.getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
 					_stateMachine->changeState(CameraStates::SEE);
 				_haveLineOfSight = false;
 			}

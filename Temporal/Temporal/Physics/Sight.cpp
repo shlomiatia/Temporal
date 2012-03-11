@@ -19,12 +19,12 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Separate draw info
+	// TODO: Separate draw info SLOTH
 	void Sight::checkLineOfSight(bool drawDebugInfo) const
 	{
 		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		// TODO: Who're you watching? SLOTH!
+		// TODO: Who're you watching?
 		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		if(drawDebugInfo)
@@ -35,8 +35,8 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Test against top and bottom SLOTH!
-		// TODO: Eyes SLOTH!
+		// TODO: Test against top and bottom
+		// TODO: Eyes
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
 
@@ -89,7 +89,7 @@ namespace Temporal
 		while(true)
 		{
 
-			// TODO: Compare with specific line SLOTH!
+			// TODO: Compare with specific line
 			std::vector<const StaticBody* const>* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{

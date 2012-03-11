@@ -6,7 +6,6 @@ namespace Temporal
 {
 	namespace PatrolStates
 	{
-		// TODO: Sensor params SLOTH!
 		bool isSensorMessage(Message& message, SensorID::Enum sensorID)
 		{
 			if(message.getID() == MessageID::SENSOR_COLLISION)
@@ -59,7 +58,7 @@ namespace Temporal
 				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 			}
 			// TODO: Maybe treat action controller
-			else if(message.getID() == MessageID::ANIMATION_ENDED)
+			else if(message.getID() == MessageID::FLIP_ORIENTATION)
 			{
 				_stateMachine->changeState(PatrolStates::WALK);
 			}
@@ -71,7 +70,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ENTER_STATE)
 			{
-				_elapsedTimeInMillis = 0.0f;
+				_timer.reset();
 			}
 			else if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -80,9 +79,9 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				float framePeriodInMillis = *(const float* const)message.getParam();
-				_elapsedTimeInMillis += framePeriodInMillis;
+				_timer.update(framePeriodInMillis);
 
-				if(_elapsedTimeInMillis >= WAIT_TIME_IN_MILLIS)
+				if(_timer.getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)
 				{
 					_stateMachine->changeState(PatrolStates::TURN);
 				}

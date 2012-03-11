@@ -26,7 +26,7 @@ namespace Temporal
 			if(message.getID() == MessageID::ENTER_STATE)
 			{
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, &Color::Yellow));
-				_elapsedTimeInMillis = 0.0f;
+				_timer.reset();
 				_haveLineOfSight = true;
 			}
 			else if(message.getID() == MessageID::LINE_OF_SIGHT)
@@ -36,10 +36,10 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				float framePeriodInMillis = *(const float* const)message.getParam();
-				_elapsedTimeInMillis += framePeriodInMillis;
+				_timer.update(framePeriodInMillis);
 				if(!_haveLineOfSight)
 					_stateMachine->changeState(SentryStates::SEARCH);
-				else if(_elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
+				else if(_timer.getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
 					_stateMachine->changeState(SentryStates::SEE);
 				_haveLineOfSight = false;
 			}

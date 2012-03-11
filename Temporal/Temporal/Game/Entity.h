@@ -9,7 +9,7 @@ namespace Temporal { class Component; }
 
 namespace Temporal
 {
-	// TODO: ID & component order
+	// TODO: ID & component order SLOTH
 	class Entity
 	{
 	public:

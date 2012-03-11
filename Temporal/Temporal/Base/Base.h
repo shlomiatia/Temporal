@@ -8,3 +8,4 @@
 #include "Vector.h"
 #include "Rect.h"
 #include "Thread.h"
+#include "Timer.h"

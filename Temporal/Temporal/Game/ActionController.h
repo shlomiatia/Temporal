@@ -40,6 +40,8 @@ namespace Temporal
 			WALK,
 			TURN,
 			PREPARE_TO_JUMP,
+
+			// TODO: One instance with params? SLOTH
 			JUMP_START_45,
 			JUMP_START_60,
 			JUMP_START_75,
@@ -49,6 +51,8 @@ namespace Temporal
 			JUMP_FORWARD,
 			JUMP_FORWARD_END,
 			PREPARE_TO_HANG,
+
+			// TODO: Gradual hang & descend
 			HANGING,
 			HANG,
 			DROP,

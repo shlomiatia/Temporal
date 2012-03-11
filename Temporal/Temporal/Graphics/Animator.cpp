@@ -17,13 +17,14 @@ namespace Temporal
 		}
 	}
 
+	// TODO: Maybe reset every animation change
 	void Animator::update(float framePeriodInMillis)
 	{
 		const SpriteGroup& spriteGroup = getSpriteGroup();
 		int framesCount = spriteGroup.getSize();
-		_time += framePeriodInMillis;
-		bool framePassed = _time > FRAME_PERIOD;
-		if(framePassed) _time = 0;
+		_timer.update(framePeriodInMillis);
+		bool framePassed = _timer.getElapsedTimeInMillis() > FRAME_PERIOD;
+		if(framePassed) _timer.reset();
 		bool animationEnded = framePassed && (!_rewind ? _frameID == framesCount - 1 : _frameID == 0);
 		if(framePassed && (!animationEnded || _repeat))
 		{
@@ -43,7 +44,7 @@ namespace Temporal
 
 	void Animator::reset(const ResetAnimationParams& resetAnimationParams)
 	{
-		_time = 0.0f;
+		_timer.reset();
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
 		int animationID = resetAnimationParams.getAnimationID();

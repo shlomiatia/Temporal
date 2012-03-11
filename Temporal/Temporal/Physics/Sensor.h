@@ -2,11 +2,13 @@
 
 namespace Temporal { class DynamicBody; }
 
+// TODO: Check includes SLOTH
 #include <Temporal\Base\Base.h>
 #include "DynamicBody.h"
 
 namespace Temporal
 {
+	// TODO: Enable / Disable
 	class Sensor : public Component
 	{
 	public:

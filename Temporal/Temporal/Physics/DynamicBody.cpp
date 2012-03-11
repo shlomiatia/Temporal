@@ -75,8 +75,8 @@ namespace Temporal
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
-			// TODO: Correct smallest axis SLOTH!
-			// TODO: Gradual test SLOTH!
+			// TODO: Correct smallest axis
+			// TODO: Gradual test
 			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
 			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
 			_velocity.setX(x);

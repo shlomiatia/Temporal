@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Temporal/Game/StateMachineComponent.h>
+#include <Temporal\Base\Base.h>
+#include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
 {
@@ -45,14 +46,12 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
-			Wait(void) : _elapsedTimeInMillis(0.0f) {}
-
 			virtual void handleMessage(Message& message);
 
 		private:
 			static const float WAIT_TIME_IN_MILLIS;
 
-			float _elapsedTimeInMillis;
+			Timer _timer;
 		};
 	}
 
