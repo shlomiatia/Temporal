@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <vector>
-#include <Temporal\Base\Base.h>
+
 #include "StaticBody.h"
 
 namespace Temporal

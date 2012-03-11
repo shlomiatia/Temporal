@@ -3,7 +3,7 @@
 namespace Temporal { class DynamicBody; }
 
 // TODO: Check includes SLOTH
-#include <Temporal\Base\Base.h>
+
 #include "DynamicBody.h"
 
 namespace Temporal

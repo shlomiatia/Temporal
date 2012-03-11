@@ -1,11 +1,11 @@
 #pragma  once
 
-#include <Temporal\Base\Base.h>
+#include <Temporal\Base\Vector.h>
 
 namespace Temporal
 {
 	// TODO: Make this a component as well
-	// TODO: Separate camera & resolution logics SLOTH!
+	// TODO: Separate camera & resolution logics
 	class ViewManager
 	{
 	public:

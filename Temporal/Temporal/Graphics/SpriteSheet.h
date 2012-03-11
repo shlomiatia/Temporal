@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <Temporal\Base\Base.h>
+
 #include "Texture.h"
 #include "SpriteGroup.h"
 

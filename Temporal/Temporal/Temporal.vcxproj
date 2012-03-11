@@ -14,7 +14,6 @@
     <ClInclude Include="AI\Camera.h" />
     <ClInclude Include="AI\Patrol.h" />
     <ClInclude Include="AI\Sentry.h" />
-    <ClInclude Include="Base\Base.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\Enums.h" />
     <ClInclude Include="Base\Math.h" />

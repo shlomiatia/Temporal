@@ -1,7 +1,7 @@
 #include "Sentry.h"
-#include <Temporal/Game/MessageParams.h>
-#include <Temporal/Game/EntitiesManager.h>
-#include <Temporal/Graphics/Graphics.h>
+#include <Temporal\Game\MessageParams.h>
+#include <Temporal\Game\EntitiesManager.h>
+#include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
 {

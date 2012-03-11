@@ -1,8 +1,8 @@
 #pragma once
 
-#include <assert.h>
-#include <Temporal\Base\Base.h>
 #include "Enums.h"
+#include <assert.h>
+#include <stdio.h>
 
 namespace Temporal
 {

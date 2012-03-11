@@ -2,7 +2,7 @@
 
 namespace Temporal { class Sensor; }
 
-#include <Temporal\Base\Base.h>
+
 #include "StaticBody.h"
 #include "Sensor.h"
 #include "Grid.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <Temporal\Base\Base.h>
+
 #include "Sprite.h"
 
 namespace Temporal

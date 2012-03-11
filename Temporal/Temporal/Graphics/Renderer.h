@@ -1,4 +1,5 @@
 #pragma once
+#include <Temporal\Base\Color.h>
 #include <Temporal\Game\Component.h>
 #include "SpriteSheet.h"
 

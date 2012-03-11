@@ -1,8 +1,8 @@
 #include "Sight.h"
 #include "StaticBody.h"
 #include "Grid.h"
-#include <Temporal/Game/EntitiesManager.h>
-#include <Temporal/Graphics/Graphics.h>
+#include <Temporal\Game\EntitiesManager.h>
+#include <Temporal\Graphics\Graphics.h>
 #include <math.h>
 
 namespace Temporal

@@ -1,5 +1,6 @@
 #pragma once
-#include <Temporal\Base\Base.h>
+
+#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\Component.h>
 #include <Temporal\Game\MessageParams.h>
 #include "SpriteGroup.h"

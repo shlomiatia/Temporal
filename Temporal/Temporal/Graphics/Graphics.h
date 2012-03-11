@@ -1,5 +1,8 @@
 #pragma once
-#include <Temporal\Base\Base.h>
+
+#include <Temporal\Base\Color.h>
+#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\Rect.h>
 #include "Texture.h"
 
 namespace Temporal

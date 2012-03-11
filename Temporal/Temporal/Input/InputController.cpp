@@ -1,5 +1,6 @@
 #include "InputController.h"
 #include "Input.h"
+#include <Temporal\Base\Enums.h>
 
 namespace Temporal
 {

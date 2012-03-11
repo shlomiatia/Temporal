@@ -1,5 +1,7 @@
 #pragma once
-#include <Temporal\Base\Base.h>
+
+#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\Rect.h>
 
 namespace Temporal
 {

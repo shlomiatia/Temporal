@@ -1,7 +1,8 @@
 #include "ActionController.h"
 #include "MessageParams.h"
-#include <Temporal/Base/Base.h>
-#include <Temporal/Physics/Sensor.h>
+
+#include <Temporal\Base\Math.h>
+#include <Temporal\Physics\Sensor.h>
 #include <math.h>
 
 namespace Temporal

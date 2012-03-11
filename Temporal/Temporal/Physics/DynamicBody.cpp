@@ -2,8 +2,8 @@
 #include "StaticBody.h"
 #include "Grid.h"
 #include "Utils.h"
-#include <Temporal/Game/MessageParams.h>
-#include <Temporal/Graphics/Graphics.h>
+#include <Temporal\Game\MessageParams.h>
+#include <Temporal\Graphics\Graphics.h>
 #include <algorithm>
 
 namespace Temporal

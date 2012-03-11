@@ -1,6 +1,7 @@
 #pragma once
-#include <Temporal\Base\Base.h>
+
 #include "Panel.h"
+#include <stdio.h>
 
 namespace Temporal
 {
