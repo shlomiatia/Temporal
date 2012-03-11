@@ -15,20 +15,19 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			checkLineOfSight(true);
+			drawDebugInfo();
 		}
 	}
 
-	// TODO: Separate draw info SLOTH
-	void Sight::checkLineOfSight(bool drawDebugInfo) const
+	void Sight::checkLineOfSight(void)
 	{
+		_pointOfIntersection = Vector::Zero;
+		_isSeeing = false;
 		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		// TODO: Who're you watching?
 		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
-		if(drawDebugInfo)
-			drawLineOfSight(sourcePosition, sourceOrientation);
 
 		// Check orientation
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
@@ -44,12 +43,13 @@ namespace Temporal
 			(_lowerAngle * sourceOrientation - angle) * sourceOrientation > 0.0f)
 			return;
 
-		bool rayCastSuccessful = rayCast(sourcePosition, targetPosition, drawDebugInfo);
-		if(rayCastSuccessful && !drawDebugInfo)
+		_isSeeing = rayCast(sourcePosition, targetPosition);
+		
+		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));
 	}
 
-	bool Sight::rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const
+	bool Sight::rayCast(const Vector& source, const Vector& destination)
 	{
 		float x1 = source.getX();
 		float y1 = source.getY();
@@ -109,24 +109,35 @@ namespace Temporal
 				j += dj;
 			}
 		}
-		if(drawDebugInfo)
-			Graphics::get().drawLine(source, Grid::get().getTileCenter(i, j), isSuccessful ? Color::Green : Color::Red);
+		_pointOfIntersection = Grid::get().getTileCenter(i, j);
+			
 		return isSuccessful;
 	}
 
-	void drawLineOfSightLine(float angle, Orientation::Enum sourceOrientation, float targetX, const Vector &sourcePosition)
+	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Vector &sourcePosition)
 	{
 		float angleSlope = tan(angle * sourceOrientation);
 		float angleTargetY = angleSlope * targetX - angleSlope * sourcePosition.getX() + sourcePosition.getY();
 		Graphics::get().drawLine(sourcePosition, Vector(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
-	void Sight::drawLineOfSight(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const
+	void Sight::drawFieldOfView(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const
 	{
-		static const float SIGHT_ANGLE_LENGTH = 1024.0f;
-		float targetX = sourcePosition.getX() + SIGHT_ANGLE_LENGTH * sourceOrientation;
+		static const float SIGHT_BEAM_LENGTH = 1024.0f;
+		float targetX = sourcePosition.getX() + SIGHT_BEAM_LENGTH * sourceOrientation;
 
-		drawLineOfSightLine(_lowerAngle, sourceOrientation, targetX, sourcePosition);
-		drawLineOfSightLine(_upperAngle, sourceOrientation, targetX, sourcePosition);
+		drawFieldOfViewBeam(_lowerAngle, sourceOrientation, targetX, sourcePosition);
+		drawFieldOfViewBeam(_upperAngle, sourceOrientation, targetX, sourcePosition);
+	}
+
+	void Sight::drawDebugInfo(void) const
+	{
+		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+
+		drawFieldOfView(sourcePosition, sourceOrientation);
+		if(_pointOfIntersection != Vector::Zero)
+			Graphics::get().drawLine(sourcePosition, _pointOfIntersection, _isSeeing ? Color::Green : Color::Red);
 	}
 }
