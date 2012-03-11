@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	// TODO: Move to static bodies SLOTH!
+	// TODO: Do when debug drawing
 	void Grid::draw(void) const
 	{
 		for(int i = 0; i < _gridWidth; ++i)

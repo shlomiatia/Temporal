@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Temporal/Game/StateMachineComponent.h>
-#include <Temporal/Physics/Body.h>
+#include <Temporal\Game\StateMachineComponent.h>
+#include <Temporal\Physics\Body.h>
 
 namespace Temporal
 {
@@ -41,7 +41,6 @@ namespace Temporal
 			TURN,
 			PREPARE_TO_JUMP,
 
-			// TODO: One instance with params? SLOTH
 			JUMP_START,
 			JUMP,
 			JUMP_END,

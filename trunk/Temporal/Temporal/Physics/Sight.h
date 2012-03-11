@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Temporal/Game/Component.h>
+#include <Temporal\Game\Component.h>
 #include "Grid.h"
 
 namespace Temporal

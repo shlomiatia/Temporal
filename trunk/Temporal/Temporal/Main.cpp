@@ -1,7 +1,7 @@
-#include <SDL.h>
-#include <Temporal\Game\Game.h>
 #include "Main.h"
 #include "TestPanel.h"
+#include <Temporal\Game\Game.h>
+#include <SDL.h>
 
 using namespace Temporal;
 

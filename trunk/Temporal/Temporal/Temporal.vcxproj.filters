@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="Base\Color.h" />
-    <ClInclude Include="Base\Base.h" />
     <ClInclude Include="Base\Vector.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Graphics\Graphics.h" />

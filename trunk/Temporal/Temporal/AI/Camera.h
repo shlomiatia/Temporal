@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Temporal\Base\Base.h>
+#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal

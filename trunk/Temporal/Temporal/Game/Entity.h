@@ -3,13 +3,13 @@
 namespace Temporal { class Component; }
 
 #include <vector>
-#include <Temporal\Base\Base.h>
+
 #include "Message.h"
 #include "Component.h"
 
 namespace Temporal
 {
-	// TODO: ID & component order SLOTH
+	// TODO: ID & component order
 	class Entity
 	{
 	public:

@@ -1,5 +1,6 @@
 #include "DebugInfo.h"
-#include <Temporal\Base\Base.h>
+
+#include <Temporal\Base\Thread.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <sstream>
 

@@ -1,6 +1,6 @@
 #include "Game.h"
 
-#include <Temporal\Base\Base.h>
+#include <Temporal\Base\Thread.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
