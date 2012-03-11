@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Temporal\Base\Vector.h>
 #include <Temporal\Game\Component.h>
 #include "Grid.h"
 
@@ -9,7 +10,7 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float upperAngle, float lowerAngle) : _upperAngle(upperAngle), _lowerAngle(lowerAngle) {};
+		Sight(float upperAngle, float lowerAngle) : _upperAngle(upperAngle), _lowerAngle(lowerAngle), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
 		virtual void handleMessage(Message& message);
@@ -18,9 +19,13 @@ namespace Temporal
 		const float _upperAngle;
 		const float _lowerAngle;
 
-		void checkLineOfSight(bool drawDebugInfo = false) const;
-		void drawLineOfSight(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
+		Vector _pointOfIntersection;
+		bool _isSeeing;
 
-		bool rayCast(const Vector& source, const Vector& destination, bool drawDebugInfo) const;
+		void checkLineOfSight(void);
+		void drawFieldOfView(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
+		void drawDebugInfo(void) const;
+
+		bool rayCast(const Vector& source, const Vector& destination);
 	};
 }
