@@ -30,15 +30,7 @@ namespace Temporal
 
 	void Sensor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::GET_SENSOR_SIZE)
-		{
-			SensorID::Enum sensorID = *(const SensorID::Enum* const)message.getParam();
-			if(sensorID == _id)
-			{
-				message.setParam(&_size);
-			}
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			update();
 		}
