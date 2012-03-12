@@ -1,12 +1,13 @@
 #pragma once
 
+#include <Temporal\Base\Enums.h>
 #include <vector>
-
-#include "Texture.h"
-#include "SpriteGroup.h"
 
 namespace Temporal
 {
+	class Texture;
+	class SpriteGroup;
+
 	class SpriteSheet
 	{
 	public:

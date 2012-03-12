@@ -1,7 +1,8 @@
 #include "Sensor.h"
 #include "Utils.h"
 #include "Grid.h"
-#include <Temporal\Game\EntitiesManager.h>
+#include "StaticBody.h"
+#include <Temporal\Game\Message.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal

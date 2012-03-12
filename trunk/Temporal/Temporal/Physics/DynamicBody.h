@@ -1,15 +1,12 @@
 #pragma once
 
-namespace Temporal { class Sensor; }
-
-
-#include "StaticBody.h"
-#include "Sensor.h"
-#include "Grid.h"
+#include "Body.h"
 #include <vector>
 
 namespace Temporal
 {
+	class StaticBody;
+
 	class DynamicBody : public Body
 	{
 	public:

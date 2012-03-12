@@ -1,10 +1,8 @@
 #pragma once
 
-#include <Temporal\Game\Game.h>
-#include <Temporal\Physics\Grid.h>
-#include <Temporal\Graphics\SpriteSheet.h>
+#include <Temporal\Game\Panel.h>
 
-// TODO: Architecture
+// TODO: Architecture SLOTH
 namespace Temporal
 {
 	class TestPanel : public Panel

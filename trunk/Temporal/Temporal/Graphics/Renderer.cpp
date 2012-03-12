@@ -1,6 +1,9 @@
 #include "Renderer.h"
 #include "Graphics.h"
-#include <assert.h>
+#include "Sprite.h"
+#include "SpriteGroup.h"
+#include "SpriteSheet.h"
+#include <Temporal\Game\Message.h>
 
 namespace Temporal
 {

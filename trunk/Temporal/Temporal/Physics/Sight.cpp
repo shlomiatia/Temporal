@@ -1,9 +1,8 @@
 #include "Sight.h"
-#include "StaticBody.h"
 #include "Grid.h"
+#include <Temporal\Game\Message.h>
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Graphics\Graphics.h>
-#include <math.h>
 
 namespace Temporal
 {
@@ -25,7 +24,7 @@ namespace Temporal
 		_isSeeing = false;
 		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		// TODO: Who're you watching?
+		// TODO: Who're you watching? ENTITIES
 		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 
@@ -34,8 +33,8 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Test against top and bottom
-		// TODO: Eyes
+		// TODO: Test against top and bottom PHYSICS
+		// TODO: Eyes GRAPHICS
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
 
@@ -89,7 +88,7 @@ namespace Temporal
 		while(true)
 		{
 
-			// TODO: Compare with specific line
+			// TODO: Compare with specific line PHYSICS
 			std::vector<const StaticBody* const>* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{

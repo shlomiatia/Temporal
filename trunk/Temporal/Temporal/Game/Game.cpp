@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "Panel.h"
 #include <Temporal\Base\Thread.h>
 #include <Temporal\Graphics\Graphics.h>
 

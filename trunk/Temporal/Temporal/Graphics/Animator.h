@@ -2,11 +2,12 @@
 
 #include <Temporal\Base\Timer.h>
 #include <Temporal\Game\Component.h>
-#include <Temporal\Game\MessageParams.h>
-#include "SpriteGroup.h"
 
 namespace Temporal
 {
+	class ResetAnimationParams;
+	class SpriteGroup;
+
 	class Animator : public Component
 	{
 	public:

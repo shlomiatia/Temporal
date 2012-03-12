@@ -1,5 +1,7 @@
 #include "Animator.h"
-#include "Sprite.h"
+#include "SpriteGroup.h"
+#include <Temporal\Game\Message.h>
+#include <Temporal\Game\MessageParams.h>
 
 namespace Temporal
 {
@@ -17,7 +19,7 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Maybe reset every animation change
+	// TODO: Maybe reset every animation change SLOTH
 	void Animator::update(float framePeriodInMillis)
 	{
 		const SpriteGroup& spriteGroup = getSpriteGroup();

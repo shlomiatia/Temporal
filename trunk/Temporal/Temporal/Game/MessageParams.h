@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Temporal\Game\Enums.h>
-
 namespace Temporal
 {
 	class ResetAnimationParams

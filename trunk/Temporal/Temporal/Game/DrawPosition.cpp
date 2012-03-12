@@ -1,7 +1,9 @@
 #include "DrawPosition.h"
+#include <Temporal\Game\Message.h>
 
 namespace Temporal
 {
+	// TODO: Sprite named positions
 	void DrawPosition::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_DRAW_POSITION)

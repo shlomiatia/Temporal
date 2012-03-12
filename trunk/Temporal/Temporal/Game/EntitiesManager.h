@@ -1,11 +1,11 @@
 #pragma once
 
 #include <vector>
-#include "Entity.h"
 
 namespace Temporal
 {
-	class ComponentOfTypeIteraor;
+	class Entity;
+	class Message;
 
 	class EntitiesManager
 	{
@@ -18,7 +18,7 @@ namespace Temporal
 
 		void dispose(void);
 
-		void add(Entity* const entity);
+		void add(Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
 		const void* const sendMessageToEntity(int id, Message& message) const;

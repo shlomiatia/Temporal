@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include "Message.h"
+#include "Component.h"
 
 namespace Temporal
 {

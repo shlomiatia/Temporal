@@ -1,4 +1,5 @@
 #include "Position.h"
+#include <Temporal\Game\Message.h>
 
 namespace Temporal
 {

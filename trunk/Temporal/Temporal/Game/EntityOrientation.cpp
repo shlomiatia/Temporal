@@ -1,4 +1,5 @@
 #include "EntityOrientation.h"
+#include <Temporal\Game\Message.h>
 
 namespace Temporal
 {

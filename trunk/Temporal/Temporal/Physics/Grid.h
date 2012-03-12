@@ -1,13 +1,14 @@
 #pragma once
 
-#include <math.h>
+#include <Temporal\Base\Vector.h>
 #include <vector>
-
-#include "StaticBody.h"
 
 namespace Temporal
 {
-	// TODO: Make this a component as well
+	class Rect;
+	class StaticBody;
+
+	// TODO: Make this a component as well SLOTH
 	class Grid
 	{
 	public:

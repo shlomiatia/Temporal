@@ -1,9 +1,10 @@
 #include "ActionController.h"
+#include "Message.h"
 #include "MessageParams.h"
 
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
-#include <math.h>
+#include <Temporal\Physics\Body.h>
 
 namespace Temporal
 {
@@ -93,7 +94,7 @@ namespace Temporal
 		{
 			_isDescending = false;	
 		}
-		// TODO: Consider creating new state for descending, or querying controller directly
+		// TODO: Consider creating new state for descending, or querying controller directly INPUT
 		if(_isDescending)
 		{
 			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
@@ -143,7 +144,6 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)
 		{
-			// TODO: Consider querying controller directly
 			_stillWalking = true;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
 		}
@@ -155,7 +155,7 @@ namespace Temporal
 			}
 			else
 			{
-				// TODO: Move to enter state when there will be walk start state
+				// TODO: Move to enter state when there will be walk start state SLOTH!
 				Vector force(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &force));
 				_stillWalking = false;
@@ -178,7 +178,7 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
-		// TODO: Transfer sensor message param with entity id, and query everything
+		// TODO: Transfer sensor message param with entity id, and query everything ENTITIES
 		const Sensor& sensor = *(const Sensor* const)message.getParam();
 		const Body* const sensedBody = sensor.getSensedBody();
 		Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -380,7 +380,7 @@ namespace Temporal
 	{
 		if(isSensorMessage(message, SensorID::HANG))
 		{
-			// TODO: Query sensor
+			// TODO: Query sensor PHYSICS
 			_platformFound = true;
 		}
 		else if(message.getID() == MessageID::ENTER_STATE)

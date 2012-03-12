@@ -57,7 +57,6 @@ namespace Temporal
 			{
 				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 			}
-			// TODO: Maybe treat action controller
 			else if(message.getID() == MessageID::FLIP_ORIENTATION)
 			{
 				_stateMachine->changeState(PatrolStates::WALK);

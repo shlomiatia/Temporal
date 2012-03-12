@@ -2,11 +2,12 @@
 
 #include <Temporal\Base\Color.h>
 #include <Temporal\Base\Vector.h>
-#include <Temporal\Base\Rect.h>
-#include "Texture.h"
 
 namespace Temporal
 {
+	class Rect;
+	class Texture;
+
 	class Graphics
 	{
 	public:

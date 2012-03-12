@@ -2,8 +2,7 @@
 #include "StaticBody.h"
 #include "Grid.h"
 #include "Utils.h"
-#include <Temporal\Game\MessageParams.h>
-#include <Temporal\Graphics\Graphics.h>
+#include <Temporal\Game\Message.h>
 #include <algorithm>
 
 namespace Temporal
@@ -75,8 +74,8 @@ namespace Temporal
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
-			// TODO: Correct smallest axis
-			// TODO: Gradual test
+			// TODO: Correct smallest axis PHYSICS
+			// TODO: Gradual test PHYSICS
 			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
 			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
 			_velocity.setX(x);

@@ -1,13 +1,13 @@
 #pragma once
 
-namespace Temporal { class Entity; }
-
 #include "Enums.h"
-#include "Message.h"
-#include "Entity.h"
+#include <stdio.h>
 
 namespace Temporal
 {
+	class Entity;
+	class Message;
+
 	class Component
 	{
 	public:

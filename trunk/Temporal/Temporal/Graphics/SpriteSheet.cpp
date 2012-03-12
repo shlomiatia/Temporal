@@ -1,4 +1,5 @@
 #include "SpriteSheet.h"
+#include "SpriteGroup.h"
 #include <assert.h>
 
 namespace Temporal

@@ -6,21 +6,28 @@
 #include <Temporal\Input\InputController.h>
 #include <Temporal\Physics\StaticBody.h>
 #include <Temporal\Physics\DynamicBody.h>
+#include <Temporal\Physics\Sensor.h>
 #include <Temporal\Physics\Sight.h>
+#include <Temporal\Physics\Grid.h>
+#include <Temporal\Graphics\Texture.h>
+#include <Temporal\Graphics\Sprite.h>
+#include <Temporal\Graphics\SpriteGroup.h>
 #include <Temporal\Graphics\SpriteSheet.h>
 #include <Temporal\Graphics\Renderer.h>
 #include <Temporal\Graphics\Animator.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <Temporal\Graphics\ViewManager.h>
+#include <Temporal\Game\Message.h>
+#include <Temporal\Game\Entity.h>
 #include <Temporal\Game\Position.h>
 #include <Temporal\Game\EntityOrientation.h>
 #include <Temporal\Game\DrawPosition.h>
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
+#include <Temporal\Game\Game.h>
 #include <Temporal\AI\Sentry.h>
 #include <Temporal\AI\Camera.h>
 #include <Temporal\AI\Patrol.h>
-#include <math.h>
 
 namespace Temporal
 {
@@ -163,7 +170,7 @@ namespace Temporal
 
 	void CreatePlayer(SpriteSheet* spritesheet)
 	{
-		// TODO: Central resources container
+		// TODO: Central resources container FILES
 		Position* position = new Position(Vector(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
@@ -482,7 +489,6 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_POSITION, &Input::get().mouse()));
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
 		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
@@ -496,7 +502,6 @@ namespace Temporal
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-		//Grid::get().draw();
 	}
 
 	void TestPanel::dispose(void)

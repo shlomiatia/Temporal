@@ -1,9 +1,10 @@
 #include "Grid.h"
+#include "StaticBody.h"
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
 {
-	// TODO: Do when debug drawing
+	// TODO: Do when debug drawing SLOTH
 	void Grid::draw(void) const
 	{
 		for(int i = 0; i < _gridWidth; ++i)

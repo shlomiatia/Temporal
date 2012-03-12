@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	// TODO: Take update time from central location
+	// TODO: Take update time from central location SLOTH!
 	class Timer
 	{
 	public:
