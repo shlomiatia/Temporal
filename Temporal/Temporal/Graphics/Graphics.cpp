@@ -1,7 +1,8 @@
 #include "Graphics.h"
+#include "Texture.h"
+#include <Temporal\Base\Rect.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include <cstdlib>
 
 namespace Temporal
 {

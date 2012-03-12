@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageParams.h>
 
 namespace Temporal

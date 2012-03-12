@@ -1,4 +1,5 @@
 #include "Body.h"
+#include <Temporal\Game\Message.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <assert.h>
 

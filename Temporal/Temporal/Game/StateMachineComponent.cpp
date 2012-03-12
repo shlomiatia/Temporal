@@ -1,4 +1,5 @@
 #include "StateMachineComponent.h"
+#include "Message.h"
 
 namespace Temporal
 {

@@ -1,11 +1,12 @@
 #pragma once
-
+// TODO: Replace pragma once with include guard
+#include <Temporal\Base\Enums.h>
 #include <Temporal\Game\StateMachineComponent.h>
-#include <Temporal\Physics\Body.h>
 
 namespace Temporal
 {
-	// TODO: Where to put movement constants
+	class Body;
+
 	static const float WALK_FORCE_PER_SECOND = 120.0f;
 	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
 
@@ -45,7 +46,7 @@ namespace Temporal
 			JUMP,
 			JUMP_END,
 
-			// TODO: Gradual hang & descend
+			// TODO: Gradual hang & descend PHYSICS
 			PREPARE_TO_HANG,
 			HANGING,
 			HANG,
@@ -119,7 +120,7 @@ namespace Temporal
 		JumpHelper& operator=(const JumpHelper&);
 	};
 
-	// TODO: Divide according to capabilities. Scripted States
+	// TODO: Divide according to capabilities. Scripted States FILES
 	class ActionController : public StateMachineComponent
 	{
 	public:

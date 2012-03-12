@@ -1,12 +1,12 @@
 #pragma once
 
+#include <Temporal\Base\Enums.h>
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Game\Component.h>
-#include "Grid.h"
 
 namespace Temporal
 {
-	// TODO: Ask for sight instead of getting it
+	// TODO: Ask for sight instead of getting it SLOTH
 	class Sight : public Component
 	{
 	public:

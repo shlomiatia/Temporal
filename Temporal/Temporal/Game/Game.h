@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Panel.h"
 #include <stdio.h>
 
 namespace Temporal
 {
+	class Panel;
+
 	class Game
 	{
 	public:

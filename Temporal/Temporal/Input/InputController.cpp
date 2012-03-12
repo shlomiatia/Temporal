@@ -1,6 +1,7 @@
 #include "InputController.h"
 #include "Input.h"
 #include <Temporal\Base\Enums.h>
+#include <Temporal\Game\Message.h>
 
 namespace Temporal
 {

@@ -1,4 +1,6 @@
 #include "EntitiesManager.h"
+#include "Entity.h"
+#include "Message.h"
 
 namespace Temporal
 {
@@ -8,7 +10,7 @@ namespace Temporal
 			delete *i;
 	}
 
-	void EntitiesManager::add(Entity* const entity)
+	void EntitiesManager::add(Entity* entity)
 	{
 		_entities.push_back(entity);
 		entity->handleMessage(Message(MessageID::ENTITY_CREATED));

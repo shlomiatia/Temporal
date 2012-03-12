@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Component.h"
-#include "Message.h"
 #include <vector>
 
 namespace Temporal
 {
+	class Message;
 	class StateMachineComponent;
 
 	class ComponentState

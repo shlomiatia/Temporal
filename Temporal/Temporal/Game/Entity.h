@@ -1,15 +1,14 @@
 #pragma once
 
-namespace Temporal { class Component; }
-
+#include "Enums.h"
 #include <vector>
-
-#include "Message.h"
-#include "Component.h"
 
 namespace Temporal
 {
-	// TODO: ID & component order
+	class Component;
+	class Message;
+
+	// TODO: ID & component order ENTITIES
 	class Entity
 	{
 	public:

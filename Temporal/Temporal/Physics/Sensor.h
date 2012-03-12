@@ -1,12 +1,16 @@
 #pragma once
 
-namespace Temporal { class DynamicBody; }
-
-#include "DynamicBody.h"
+#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\Rect.h>
+#include <Temporal\Game\Component.h>
 
 namespace Temporal
 {
-	// TODO: Enable / Disable
+	class Body;
+	class StaticBody;
+
+	// TODO: Enable / Disable PHYSICS
 	class Sensor : public Component
 	{
 	public:
