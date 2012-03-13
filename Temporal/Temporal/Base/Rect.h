@@ -43,6 +43,7 @@ namespace Temporal
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
 		bool contains(const Vector& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
 	private:
+		// TODO: Is it really needed?
 		Vector _center;
 		Vector _size;
 	};
