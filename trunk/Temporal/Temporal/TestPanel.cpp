@@ -25,6 +25,7 @@
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Game\Game.h>
+#include <Temporal\AI\NavigationGraph.h>
 #include <Temporal\AI\Sentry.h>
 #include <Temporal\AI\Camera.h>
 #include <Temporal\AI\Patrol.h>
@@ -137,8 +138,11 @@ namespace Temporal
 		entity.add(sensor);
 	}
 
+	std::vector<const Rect> _crap;
 	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet, bool cover = false) 
 	{
+		if(!cover)
+			_crap.push_back(Rect(center, size));
 		Position* position = new Position(center);
 		StaticBody* staticBody = new StaticBody(size, cover);
 		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
@@ -162,10 +166,10 @@ namespace Temporal
 		return CreatePlatformFromCenter(center, size, spritesheet, cover);
 	}
 
-#pragma endregion
+	#pragma endregion
 	#pragma region Creation Methods
 
-	static const float ENTITY_WIDTH = 10.0f;
+	static const float ENTITY_WIDTH = 20.0f;
 	static const float ENTITY_HEIGHT = 80.0f;
 
 	void CreatePlayer(SpriteSheet* spritesheet)
@@ -279,6 +283,7 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
+	NavigationGraph* _crappy;
 	void CreatePlatforms()
 	{
 		const Texture* texture = Texture::load("c:\\tile.png");
@@ -301,6 +306,8 @@ namespace Temporal
 		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
 		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
 		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
+		_crappy = new NavigationGraph(_crap);
+
 	}
 
 	void CreateBackground()
@@ -502,6 +509,7 @@ namespace Temporal
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+		_crappy->draw();
 	}
 
 	void TestPanel::dispose(void)
