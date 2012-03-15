@@ -45,6 +45,7 @@
     <ClInclude Include="AI\Patrol.h" />
     <ClInclude Include="Base\Timer.h" />
     <ClInclude Include="AI\NavigationGraph.h" />
+    <ClInclude Include="AI\Pathfinder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -82,5 +83,6 @@
     <ClCompile Include="Game\EntitiesManager.cpp" />
     <ClCompile Include="AI\Patrol.cpp" />
     <ClCompile Include="AI\NavigationGraph.cpp" />
+    <ClCompile Include="AI\Pathfinder.cpp" />
   </ItemGroup>
 </Project>

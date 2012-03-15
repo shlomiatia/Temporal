@@ -31,7 +31,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().drawRect(getBounds());
+			//Graphics::get().drawRect(getBounds());
 		}
 	}
 
