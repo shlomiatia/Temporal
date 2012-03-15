@@ -37,7 +37,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().drawRect(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
+			//Graphics::get().drawRect(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
 		}
 	}
 

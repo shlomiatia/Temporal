@@ -26,6 +26,7 @@
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Game\Game.h>
 #include <Temporal\AI\NavigationGraph.h>
+#include <Temporal\AI\Pathfinder.h>
 #include <Temporal\AI\Sentry.h>
 #include <Temporal\AI\Camera.h>
 #include <Temporal\AI\Patrol.h>
@@ -283,7 +284,6 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	NavigationGraph* _crappy;
 	void CreatePlatforms()
 	{
 		const Texture* texture = Texture::load("c:\\tile.png");
@@ -306,8 +306,7 @@ namespace Temporal
 		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
 		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
 		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
-		_crappy = new NavigationGraph(_crap);
-
+		NavigationGraph::get().init(_crap);
 	}
 
 	void CreateBackground()
@@ -509,7 +508,26 @@ namespace Temporal
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-		_crappy->draw();
+		NavigationGraph::get().draw();
+		const Vector& position1 = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& position2 = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::GET_POSITION));
+		const NavigationNode* start = NavigationGraph::get().getNodeByPosition(position1);
+		const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(position2);
+		if(start != NULL && goal != NULL)
+		{
+			const std::vector<const NavigationEdge* const>* result = Pathfinder::get().findPath(start, goal);
+			if(result != NULL)
+			{
+				const NavigationNode* current = start;
+				for(unsigned int i = 0; i < result->size(); ++i)
+				{
+					const NavigationEdge& edge = *((*result)[i]);
+					const NavigationNode& next = edge.getTarget();
+					Graphics::get().drawLine(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
+					current = &next;
+				}
+			}
+		}
 	}
 
 	void TestPanel::dispose(void)
