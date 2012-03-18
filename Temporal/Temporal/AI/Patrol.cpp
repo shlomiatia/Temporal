@@ -88,7 +88,7 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Patrol::getStates() const
+	std::vector<ComponentState*> Patrol::getStates(void) const
 	{
 		std::vector<ComponentState*> states;
 		using namespace PatrolStates;

@@ -28,6 +28,7 @@ namespace Temporal
 		enum Enum
 		{
 			ENTITY_CREATED,
+			ENTITY_DESTROYED,
 
 			UPDATE,
 			DRAW,
@@ -64,7 +65,11 @@ namespace Temporal
 			SET_SPRITE_ID,
 			SET_COLOR,
 			RESET_ANIMATION,
-			ANIMATION_ENDED
+			ANIMATION_ENDED,
+
+			SET_NAVIGATION_DESTINATION,
+			STOP_NAVIGATION,
+
 		};
 	}
 
@@ -92,5 +97,30 @@ namespace Temporal
 
 		static const int FARTHEST = BACKGROUND;
 		static const int NEAREST = NPC;
+	}
+
+	namespace ActionStateID
+	{
+		enum Enum
+		{
+			STAND,
+			FALL,
+			WALK,
+			TURN,
+			PREPARE_TO_JUMP,
+
+			JUMP_START,
+			JUMP,
+			JUMP_END,
+
+			// TODO: Gradual hang & descend PHYSICS
+			PREPARE_TO_HANG,
+			HANGING,
+			HANG,
+			DROP,
+			CLIMB,
+			PREPARE_TO_DESCEND,
+			DESCEND
+		};
 	}
 }

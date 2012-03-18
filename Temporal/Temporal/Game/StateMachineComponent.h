@@ -41,6 +41,7 @@ namespace Temporal
 	private:
 		std::vector<ComponentState*> _states;
 		ComponentState* _currentState;
+		int _currentID;
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);

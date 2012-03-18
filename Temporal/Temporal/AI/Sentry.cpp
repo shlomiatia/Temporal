@@ -64,7 +64,7 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Sentry::getStates() const
+	std::vector<ComponentState*> Sentry::getStates(void) const
 	{
 		std::vector<ComponentState*> states;
 		using namespace SentryStates;

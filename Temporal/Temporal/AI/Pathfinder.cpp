@@ -16,7 +16,7 @@ namespace Temporal
 		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
 	}
 
-	const std::vector<const NavigationEdge* const>* buildPath(const PathNode& pathNode)
+	std::vector<const NavigationEdge* const>* buildPath(const PathNode& pathNode)
 	{
 		std::vector<const NavigationEdge* const>* result = new std::vector<const NavigationEdge* const>();
 
@@ -66,7 +66,7 @@ namespace Temporal
 		where.insert(smaller, what);
 	}
 
-	const std::vector<const NavigationEdge* const>* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
+	std::vector<const NavigationEdge* const>* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
 	{
 		assert(start);
 		assert(goal);

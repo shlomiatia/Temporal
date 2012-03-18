@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="AI\Camera.h" />
     <ClInclude Include="AI\NavigationGraph.h" />
+    <ClInclude Include="AI\Navigator.h" />
     <ClInclude Include="AI\Pathfinder.h" />
     <ClInclude Include="AI\Patrol.h" />
     <ClInclude Include="AI\Sentry.h" />
@@ -60,6 +61,7 @@
   <ItemGroup>
     <ClCompile Include="AI\Camera.cpp" />
     <ClCompile Include="AI\NavigationGraph.cpp" />
+    <ClCompile Include="AI\Navigator.cpp" />
     <ClCompile Include="AI\Pathfinder.cpp" />
     <ClCompile Include="AI\Patrol.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />

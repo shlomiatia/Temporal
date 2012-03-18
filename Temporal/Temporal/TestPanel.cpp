@@ -26,7 +26,7 @@
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Game\Game.h>
 #include <Temporal\AI\NavigationGraph.h>
-#include <Temporal\AI\Pathfinder.h>
+#include <Temporal\AI\Navigator.h>
 #include <Temporal\AI\Sentry.h>
 #include <Temporal\AI\Camera.h>
 #include <Temporal\AI\Patrol.h>
@@ -198,6 +198,32 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
+	void CreateChaser(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Vector(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		Navigator* navigator = new Navigator();
+		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		ActionController* actionController = new ActionController();
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+		//Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(navigator);
+		entity->add(dynamicBody);
+//		entity->add(sight);
+		addSensors(*entity, *dynamicBody);
+		entity->add(actionController);
+		entity->add(animator);
+		entity->add(renderer);
+		EntitiesManager::get().add(entity);
+	}
+
 	void CreateSentry(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Vector(200.0f, 50.f));
@@ -253,7 +279,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
 
-#pragma region Camera Animation
+		#pragma region Camera Animation
 		// Search - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
@@ -325,7 +351,7 @@ namespace Temporal
 		entity->add(renderer);
 		EntitiesManager::get().add(entity);
 	}
-#pragma endregion
+	#pragma endregion
 
 	void TestPanel::init(void)
 	{
@@ -481,6 +507,7 @@ namespace Temporal
 #pragma endregion
 
 		CreatePlayer(spritesheet);
+		CreateChaser(spritesheet);
 		CreateSentry(spritesheet);
 		CreatePatrol(spritesheet);
 		CreateCamera();
@@ -491,13 +518,16 @@ namespace Temporal
 	void TestPanel::update(float framePeriodInMillis)
 	{
 		Input::get().update();
-		if(Input::get().isQuit())
-		{
-			Game::get().stop();
-		}
+		
+		
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 
 		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		if(Input::get().isQuit())
+		{
+			EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
+			//Game::get().stop();
+		}
 		ViewManager::get().setCameraCenter(position);
 	}
 
@@ -509,25 +539,6 @@ namespace Temporal
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
 		NavigationGraph::get().draw();
-		const Vector& position1 = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
-		const Vector& position2 = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::GET_POSITION));
-		const NavigationNode* start = NavigationGraph::get().getNodeByPosition(position1);
-		const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(position2);
-		if(start != NULL && goal != NULL)
-		{
-			const std::vector<const NavigationEdge* const>* result = Pathfinder::get().findPath(start, goal);
-			if(result != NULL)
-			{
-				const NavigationNode* current = start;
-				for(unsigned int i = 0; i < result->size(); ++i)
-				{
-					const NavigationEdge& edge = *((*result)[i]);
-					const NavigationNode& next = edge.getTarget();
-					Graphics::get().drawLine(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
-					current = &next;
-				}
-			}
-		}
 	}
 
 	void TestPanel::dispose(void)

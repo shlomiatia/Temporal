@@ -32,31 +32,6 @@ namespace Temporal
 		};
 	}
 
-	namespace ActionStateID
-	{
-		enum Enum
-		{
-			STAND,
-			FALL,
-			WALK,
-			TURN,
-			PREPARE_TO_JUMP,
-
-			JUMP_START,
-			JUMP,
-			JUMP_END,
-
-			// TODO: Gradual hang & descend PHYSICS
-			PREPARE_TO_HANG,
-			HANGING,
-			HANG,
-			DROP,
-			CLIMB,
-			PREPARE_TO_DESCEND,
-			DESCEND
-		};
-	}
-
 	class JumpInfo
 	{
 	public:

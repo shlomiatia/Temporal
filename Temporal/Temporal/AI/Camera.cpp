@@ -106,7 +106,7 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Camera::getStates() const
+	std::vector<ComponentState*> Camera::getStates(void) const
 	{
 		std::vector<ComponentState*> states;
 		using namespace CameraStates;
