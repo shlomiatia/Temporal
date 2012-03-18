@@ -42,7 +42,7 @@ namespace Temporal
 			return instance;
 		}
 
-		const std::vector<const NavigationEdge* const>* findPath(const NavigationNode* start, const NavigationNode* goal) const;
+		std::vector<const NavigationEdge* const>* findPath(const NavigationNode* start, const NavigationNode* goal) const;
 	private:
 		Pathfinder(void) {}
 		Pathfinder(const Pathfinder&);
