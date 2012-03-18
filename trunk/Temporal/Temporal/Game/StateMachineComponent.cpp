@@ -20,7 +20,6 @@ namespace Temporal
 	{
 		if(_currentState != NULL)
 		{
-			// TODO: Enter
 			_currentState->exit();
 			sendMessageToOwner(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
@@ -36,7 +35,7 @@ namespace Temporal
 		{
 			changeState(getInitialState());
 		}
-		// TODO: Argggh!
+		// TODO: Argggh! SLOTH
 		else if(_currentState != NULL)
 		{
 			_currentState->handleMessage(message);

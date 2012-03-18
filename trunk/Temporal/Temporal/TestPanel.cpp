@@ -519,16 +519,17 @@ namespace Temporal
 	{
 		Input::get().update();
 		
-		
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-
 		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		
+		EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
+		ViewManager::get().setCameraCenter(position);
+
 		if(Input::get().isQuit())
 		{
-			EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
-			//Game::get().stop();
+			
+			Game::get().stop();
 		}
-		ViewManager::get().setCameraCenter(position);
 	}
 
 	void TestPanel::draw(void) const

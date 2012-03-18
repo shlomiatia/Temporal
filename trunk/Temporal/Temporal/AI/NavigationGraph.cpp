@@ -7,7 +7,7 @@ namespace Temporal
 	const float NavigationGraph::MAX_JUMP_UP_DISTANCE = 150.0f;
 	const float NavigationGraph::MAX_JUMP_FORWARD_DISTANCE = 300.0f;
 
-	// TODO: Consider transition type, direction change, actual side etc.
+	// TODO: Consider transition type AI
 	float NavigationEdge::calculateCost(const NavigationNode& source)
 	{
 		const Rect& sourceArea = source.getArea();
@@ -97,8 +97,9 @@ namespace Temporal
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
 
-			// TODO: Handle areas intersection
+			// TODO: Handle areas intersection PHYISICS
 
+			// TODO: Give up, use std... SLOTH
 			// Create nodes from areas
 			for(unsigned int j = 0; j < areas.size(); ++j)
 			{
@@ -117,11 +118,11 @@ namespace Temporal
 		const Rect& area2 = node2.getArea();
 		float verticalDistance = area1.getTop() - area2.getTop();
 
-		// TODO: Check bigger area?
+		// TODO: Check bigger area? PHYSICS
 		const Rect& fallArea = createRect(x, area2.getBottom(), 1.0f, verticalDistance);
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
-			// TODO: Set source in addEdge?
+			// TODO: Set source in addEdge? SLOTH!
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, NavigationEdgeType::FALL));
 			if(verticalDistance <= MAX_JUMP_UP_DISTANCE)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP));
@@ -135,8 +136,8 @@ namespace Temporal
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 		if(horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
 		{
-			// TODO: Handle height difference
-			// TODO: Check bigger area?
+			// TODO: Handle height difference SLOTH
+			// TODO: Check bigger area? PHYSICS
 			Rect jumpArea = createRect(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
@@ -158,7 +159,7 @@ namespace Temporal
 				NavigationNode& node2 = *_nodes[j];
 				const Rect& area2 = node2.getArea();
 				// check fall/jump up
-				// TODO: leap & descend
+				// TODO: leap & descend AI
 				if(area1.getTop() > area2.getTop() && area1.getLeft() <= area2.getRight() && area1.getRight() >= area2.getLeft())
 				{
 					if(area1.getLeft() >= area2.getLeft())

@@ -63,7 +63,7 @@ namespace Temporal
 				}
 				else
 				{
-					// TODO: Narrow this
+					// TODO: Narrow this SLOTH
 					Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 					if((distance < 0 && orientation == Orientation::LEFT) || (distance > 0 && orientation == Orientation::RIGHT))
 						_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
@@ -124,6 +124,7 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
+				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	// TODO: Sprite named positions
+	// TODO: Sprite named positions PHYSICS
 	void DrawPosition::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_DRAW_POSITION)
