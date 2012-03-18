@@ -29,6 +29,7 @@ namespace Temporal
 		public:
 			See(void) : _haveLineOfSight(false) {}
 
+			virtual void enter(const void* param);
 			virtual void handleMessage(Message& message);
 
 		private:
@@ -40,12 +41,14 @@ namespace Temporal
 		public:
 			Turn(void) {}
 
+			virtual void enter(const void* param);
 			virtual void handleMessage(Message& message);
 		};
 
 		class Wait : public ComponentState
 		{
 		public:
+			virtual void enter(const void* param);
 			virtual void handleMessage(Message& message);
 
 		private:

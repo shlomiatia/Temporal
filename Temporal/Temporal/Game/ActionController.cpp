@@ -66,6 +66,12 @@ namespace Temporal
 		return NULL;
 	}
 
+	void Stand::enter(const void* param)
+	{
+		_isDescending = false;
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::STAND)));
+	}
+
 	void Stand::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD)
@@ -84,11 +90,6 @@ namespace Temporal
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
 			_isDescending = true;
-		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_isDescending = false;
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::STAND)));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -109,6 +110,12 @@ namespace Temporal
 		}
 	}
 
+	void Fall::enter(const void* param)
+	{
+		// Not setting force because we want to continue the momentum
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::FALL)));
+	}
+
 	void Fall::handleMessage(Message& message)
 	{
 		if (isSensorMessage(message, SensorID::HANG))
@@ -120,11 +127,12 @@ namespace Temporal
 		{
 			_stateMachine->changeState(ActionStateID::STAND);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			// Not setting force because we want to continue the momentum
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::FALL)));
-		}
+	}
+
+	void Walk::enter(const void* param)
+	{
+		_stillWalking = true;
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
 	}
 
 	void Walk::handleMessage(Message& message)
@@ -142,11 +150,6 @@ namespace Temporal
 		{
 			_stateMachine->changeState(ActionStateID::FALL);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_stillWalking = true;
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_stillWalking)
@@ -163,16 +166,17 @@ namespace Temporal
 		}
 	}
 
+	void Turn::enter(const void* param)
+	{
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::TURN)));
+	}
+
 	void Turn::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
 			_stateMachine->changeState(ActionStateID::STAND);
-		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::TURN)));
 		}
 	}
 
@@ -218,20 +222,28 @@ namespace Temporal
 		}
 	}
 
+	void PrepareToJump::enter(const void* param)
+	{
+		((ActionController* const)_stateMachine)->getJumpHelper().setLedgeDirected(false);
+	}
+
 	void PrepareToJump::handleMessage(Message& message)
 	{
 		if(isSensorMessage(message, SensorID::JUMP))
 		{
 			handleJumpSensor(message);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			((ActionController* const)_stateMachine)->getJumpHelper().setLedgeDirected(false);
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			_stateMachine->changeState(ActionStateID::JUMP_START);
 		}
+	}
+
+	void JumpStart::enter(const void* param)
+	{
+		_animationEnded = false;
+		AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void JumpStart::handleMessage(Message& message)
@@ -253,12 +265,6 @@ namespace Temporal
 		{
 			_stateMachine->changeState(ActionStateID::TURN);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_animationEnded = false;
-			AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(_animationEnded)
@@ -266,6 +272,18 @@ namespace Temporal
 				_stateMachine->changeState(ActionStateID::JUMP);
 			}
 		}
+	}
+
+	void Jump::enter(const void* param)
+	{
+		const JumpInfo& jumpInfo = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo();
+		float angle = jumpInfo.getAngle();
+		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
+		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
+		Vector jumpVector(jumpForceX, jumpForceY);
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
+		AnimationID::Enum animation = jumpInfo.getJumpAnimation();
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void Jump::handleMessage(Message& message)
@@ -279,17 +297,12 @@ namespace Temporal
 		{
 			_stateMachine->changeState(ActionStateID::JUMP_END);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			const JumpInfo& jumpInfo = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo();
-			float angle = jumpInfo.getAngle();
-			float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
-			float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
-			Vector jumpVector(jumpForceX, jumpForceY);
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
-			AnimationID::Enum animation = jumpInfo.getJumpAnimation();
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
-		}
+	}
+
+	void JumpEnd::enter(const void* param)
+	{
+		AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void JumpEnd::handleMessage(Message& message)
@@ -297,11 +310,6 @@ namespace Temporal
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
 			_stateMachine->changeState(ActionStateID::STAND);
-		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			AnimationID::Enum animation = ((ActionController* const)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 		}
 	}
 
@@ -332,20 +340,26 @@ namespace Temporal
 		}
 	}
 
+	void PrepareToHang::enter(const void* param)
+	{
+		const Sensor& sensor = *(const Sensor* const)param;
+		_platform = sensor.getSensedBody();
+
+		bool gravityEnabled = false;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+	}
+
 	void PrepareToHang::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTER_STATE)
-		{
-			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_platform = sensor.getSensedBody();
-
-			bool gravityEnabled = false;
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			update();
 		}
+	}
+
+	void Hanging::enter(const void* param)
+	{
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG_BACKWARD, true)));	
 	}
 
 	void Hanging::handleMessage(Message& message)
@@ -354,10 +368,11 @@ namespace Temporal
 		{
 			_stateMachine->changeState(ActionStateID::HANG);
 		}
-		if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG_BACKWARD, true)));	
-		}
+	}
+
+	void Hang::enter(const void* param)
+	{
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG)));
 	}
 
 	void Hang::handleMessage(Message& message)
@@ -370,10 +385,20 @@ namespace Temporal
 		{	
 			_stateMachine->changeState(ActionStateID::CLIMB);
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG)));
-		}
+	}
+
+	void Drop::enter(const void* param)
+	{
+		_platformFound = false;
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::DROP)));
+
+		bool gravityEnabled = true;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+	}
+
+	void Drop::exit(void)
+	{
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
 	}
 
 	void Drop::handleMessage(Message& message)
@@ -383,19 +408,7 @@ namespace Temporal
 			// TODO: Query sensor PHYSICS
 			_platformFound = true;
 		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			_platformFound = false;
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::DROP)));
-
-			bool gravityEnabled = true;
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-		}
-		else if(message.getID() == MessageID::EXIT_STATE)
-		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_platformFound)
 				_stateMachine->changeState(ActionStateID::FALL);
@@ -404,27 +417,29 @@ namespace Temporal
 		}
 	}
 
+	void Climb::enter(const void* param)
+	{
+		const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
+		float climbForceX = 1.0f;
+		float climbForceY = size.getHeight() - 1.0f;
+		Vector climbForce(climbForceX, climbForceY);
+
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &climbForce));
+	}
+
+	void Climb::exit(void)
+	{
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
+		bool gravityEnabled = true;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+	}
+
 	void Climb::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
 			_stateMachine->changeState(ActionStateID::STAND);
-		}
-		else if(message.getID() == MessageID::ENTER_STATE)
-		{
-			const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
-			float climbForceX = 1.0f;
-			float climbForceY = size.getHeight() - 1.0f;
-			Vector climbForce(climbForceX, climbForceY);
-
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &climbForce));
-		}
-		else if(message.getID() == MessageID::EXIT_STATE)
-		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &Vector::Zero));
-			bool gravityEnabled = true;
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 		}
 	}
 
@@ -451,34 +466,36 @@ namespace Temporal
 		}
 	}
 
+	void PrepareToDescend::enter(const void* param)
+	{
+		const Sensor& sensor = *(const Sensor* const)param;
+		_platform = sensor.getSensedBody();
+
+		bool gravityEnabled = false;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+	}
+
 	void PrepareToDescend::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTER_STATE)
-		{
-			const Sensor& sensor = *(const Sensor* const)message.getParam();
-			_platform = sensor.getSensedBody();
-
-			bool gravityEnabled = false;
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			update();
 		}
 	}
 
+	void Descend::enter(const void* param)
+	{
+		const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
+		float forceX = -1.0f;
+		float forceY = -(size.getHeight() - 1.0f);
+
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(forceX, forceY)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));
+	}
+
 	void Descend::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTER_STATE)
-		{
-			const Vector& size = *(const Vector* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
-			float forceX = -1.0f;
-			float forceY = -(size.getHeight() - 1.0f);
-
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(forceX, forceY)));
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));
-		}
-		else if(message.getID() == MessageID::ANIMATION_ENDED)
+		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
 			_stateMachine->changeState(ActionStateID::HANG);
 		}

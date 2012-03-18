@@ -101,7 +101,7 @@ namespace Temporal
 
 		void Fall::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::EXIT_STATE)
+			if(message.getID() == MessageID::STATE_EXITED)
 			{
 				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
 				if(state == ActionStateID::FALL)
@@ -115,7 +115,7 @@ namespace Temporal
 
 		void Jump::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::EXIT_STATE)
+			if(message.getID() == MessageID::STATE_EXITED)
 			{
 				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
 				if(state == ActionStateID::CLIMB || state == ActionStateID::JUMP_END)
