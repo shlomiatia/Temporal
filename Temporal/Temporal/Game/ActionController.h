@@ -1,5 +1,5 @@
 #pragma once
-// TODO: Replace pragma once with include guard
+// TODO: Replace pragma once with include guard SLOTH
 #include <Temporal\Base\Enums.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
@@ -233,6 +233,7 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
+		// TODO: Hang state SLOTH
 		const Body* _platform;
 
 		void update(void);

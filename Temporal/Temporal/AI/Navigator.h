@@ -6,6 +6,7 @@
 
 namespace Temporal
 {
+	// TODO: Fault tolerance, jump without hang, drop, fix huristics so it will take into account several edges AI (turn, position)
 	namespace NavigatorStates
 	{
 		enum Enum

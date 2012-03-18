@@ -85,7 +85,7 @@ namespace Temporal
 			const NavigationNode& navigationNode = pathNode.getNavigationNode();
 
 			// Reached goal
-			// TODO: Delete
+			// TODO: Delete SLOTH
 			if (&navigationNode == goal)
 				return buildPath(pathNode);
 			
@@ -113,7 +113,7 @@ namespace Temporal
 				{
 					pathNeighbour = new PathNode(navigationNeighbour, *goal);
 				}
-				// If current edge is worse from another, don't bother
+				// If current edge is worse then another, don't bother
 				else if(tentativeCostFromStart >= pathNeighbour->getCostFromStart())
 				{
 					continue;

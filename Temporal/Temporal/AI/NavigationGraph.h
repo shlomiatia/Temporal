@@ -18,6 +18,7 @@ namespace Temporal
 
 	class NavigationEdge;
 
+	// TODO: Need to make it wider SLOTH
 	class NavigationNode
 	{
 	public:
@@ -29,6 +30,7 @@ namespace Temporal
 
 	private:
 		const Rect _area;
+		// TODO: Fix this freaking const stuff
 		std::vector<const NavigationEdge* const> _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -77,7 +79,7 @@ namespace Temporal
 	private:
 		static const Vector MIN_AREA_SIZE;
 
-		// TODO: Use actual jump values?
+		// TODO: Use actual jump values? Unify SLOTH
 		static const float MAX_JUMP_UP_DISTANCE;
 		static const float MAX_JUMP_FORWARD_DISTANCE;
 
