@@ -33,13 +33,14 @@ namespace Temporal
 			}
 		}
 
+		void See::enter(const void* param)
+		{
+			_haveLineOfSight = true;
+		}
+
 		void See::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_haveLineOfSight = true;
-			}
-			else if(message.getID() == MessageID::LINE_OF_SIGHT)
+			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_haveLineOfSight = true;
 			}
@@ -51,27 +52,31 @@ namespace Temporal
 			}
 		}
 
+		void Turn::enter(const void* param)
+		{
+			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+		}
+
 		void Turn::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::ENTER_STATE)
+			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
-			}
-			else if(message.getID() == MessageID::FLIP_ORIENTATION)
-			{
-				_stateMachine->changeState(PatrolStates::WALK);
+				const ActionStateID::Enum& actionID = *(const ActionStateID::Enum* const)message.getParam();
+				if(actionID == ActionStateID::TURN)
+					_stateMachine->changeState(PatrolStates::WALK);
 			}
 		}
 
 		const float Wait::WAIT_TIME_IN_MILLIS(5000.0f);
 
+		void Wait::enter(const void* param)
+		{
+			_timer.reset();
+		}
+
 		void Wait::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_timer.reset();
-			}
-			else if(message.getID() == MessageID::LINE_OF_SIGHT)
+			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_stateMachine->changeState(PatrolStates::SEE);
 			}

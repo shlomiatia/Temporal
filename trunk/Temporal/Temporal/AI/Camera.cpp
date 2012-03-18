@@ -8,14 +8,15 @@ namespace Temporal
 	{
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
+		void Search::enter(const void* param)
+		{
+			_timer.reset();
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
+		}
+
 		void Search::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_timer.reset();
-				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
-			}
-			else if(message.getID() == MessageID::LINE_OF_SIGHT)
+			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_stateMachine->changeState(CameraStates::ACQUIRE);
 			}
@@ -28,14 +29,15 @@ namespace Temporal
 			}
 		}
 
+		void See::enter(const void* param)
+		{
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
+			_haveLineOfSight = false;
+		}
+
 		void See::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
-				_haveLineOfSight = false;
-			}
-			else if(message.getID() == MessageID::LINE_OF_SIGHT)
+			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_haveLineOfSight = true;
 			}
@@ -45,6 +47,12 @@ namespace Temporal
 					_stateMachine->changeState(CameraStates::SEARCH);
 				_haveLineOfSight = false;
 			}
+		}
+
+		void Turn::enter(const void* param)
+		{
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN)));
+			_hasTurned = false;
 		}
 
 		void Turn::handleMessage(Message& message)
@@ -62,14 +70,17 @@ namespace Temporal
 					_hasTurned = true;
 				}
 			}
-			else if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN)));
-				_hasTurned = false;
-			}
 		}
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
+
+		void Acquire::enter(const void* param)
+		{
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
+			_timer.reset();
+			_blinking = false;
+			_haveLineOfSight = true;
+		}
 
 		void Acquire::handleMessage(Message& message)
 		{
@@ -83,13 +94,6 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_haveLineOfSight = true;
-			}
-			else if(message.getID() == MessageID::ENTER_STATE)
-			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
-				_timer.reset();
-				_blinking = false;
 				_haveLineOfSight = true;
 			}
 			else if(message.getID() == MessageID::UPDATE)

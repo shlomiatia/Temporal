@@ -4,7 +4,7 @@
 namespace Temporal
 {
 	StateMachineComponent::StateMachineComponent(std::vector<ComponentState*> states)
-		: _states(states), _currentState(NULL), _currentID(0)
+		: _states(states), _currentState(NULL), _currentStateID(0)
 	{
 		for(std::vector<ComponentState*>::iterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
@@ -16,16 +16,18 @@ namespace Temporal
 			delete *i;
 	}
 
-	void StateMachineComponent::changeState(int state, const void* const param)
+	void StateMachineComponent::changeState(int stateID, const void* const param)
 	{
 		if(_currentState != NULL)
 		{
 			// TODO: Enter
-			sendMessageToOwner(Message(MessageID::EXIT_STATE, &_currentID));
+			_currentState->exit();
+			sendMessageToOwner(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
-		_currentState = _states[state];
-		_currentID = state;
-		sendMessageToOwner(Message(MessageID::ENTER_STATE, param));
+		_currentState = _states[stateID];
+		_currentStateID = stateID;
+		_currentState->enter(param);
+		sendMessageToOwner(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
 
 	void StateMachineComponent::handleMessage(Message& message)

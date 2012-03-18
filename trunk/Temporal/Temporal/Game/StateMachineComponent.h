@@ -16,6 +16,8 @@ namespace Temporal
 
 		void setStateMachine(StateMachineComponent* stateMachine) { _stateMachine = stateMachine; }
 
+		virtual void enter(const void* param = NULL) {}
+		virtual void exit(void) {}
 		virtual void handleMessage(Message& message) = 0;
 
 	protected:
@@ -32,7 +34,7 @@ namespace Temporal
 		StateMachineComponent(std::vector<ComponentState*> states);
 		virtual ~StateMachineComponent(void);
 
-		void changeState(int ComponentState, const void* const param = NULL);
+		void changeState(int stateID, const void* const param = NULL);
 		virtual void handleMessage(Message& message);
 
 	protected:
@@ -41,7 +43,7 @@ namespace Temporal
 	private:
 		std::vector<ComponentState*> _states;
 		ComponentState* _currentState;
-		int _currentID;
+		int _currentStateID;
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);

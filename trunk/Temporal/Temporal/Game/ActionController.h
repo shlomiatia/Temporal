@@ -131,7 +131,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Stand"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -145,7 +145,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Fall"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -156,7 +156,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Walk"; }
 
-	protected:
+		virtual void enter(const void* param);		
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -170,7 +170,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Turn"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -179,7 +179,7 @@ namespace Temporal
 	public:
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -193,7 +193,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -207,7 +207,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Jump"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -218,7 +218,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpEnd"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -229,7 +229,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToHang"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -245,7 +245,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -256,7 +256,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hang"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -267,7 +267,8 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Drop"; }
 
-	protected:
+		virtual void enter(const void* param);
+		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -280,7 +281,9 @@ namespace Temporal
 		Climb(void) {};
 
 		virtual const char* getName(void) const { return "Climb"; }
-	protected:
+	
+		virtual void enter(const void* param);
+		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -291,7 +294,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
-	protected:
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -306,7 +309,8 @@ namespace Temporal
 		Descend(void) {};
 
 		virtual const char* getName(void) const { return "Descend"; }
-	protected:
+
+		virtual void enter(const void* param);
 		virtual void handleMessage(Message& message);
 	};
 }
