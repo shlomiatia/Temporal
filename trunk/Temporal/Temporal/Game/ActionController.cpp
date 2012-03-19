@@ -144,6 +144,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
+			// TODO: Query input INPUT
 			_stillWalking = true;
 		}
 		else if(isBodyCollisionMessage(message, Direction::ALL, Direction::BOTTOM))
@@ -158,7 +159,6 @@ namespace Temporal
 			}
 			else
 			{
-				// TODO: Move to enter state when there will be walk start state SLOTH!
 				Vector force(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &force));
 				_stillWalking = false;

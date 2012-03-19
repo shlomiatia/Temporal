@@ -14,7 +14,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			//drawDebugInfo();
+			drawDebugInfo();
 		}
 	}
 

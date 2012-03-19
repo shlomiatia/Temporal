@@ -522,12 +522,11 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		
-		EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
-		ViewManager::get().setCameraCenter(position);
-
+		ViewManager::get().update();
+		
 		if(Input::get().isQuit())
 		{
-			
+			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
 			Game::get().stop();
 		}
 	}
@@ -537,9 +536,15 @@ namespace Temporal
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+		bool debugDraw = false;
 
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-		NavigationGraph::get().draw();
+		// TODO: Classify debug draw SLOTH
+		if(debugDraw)
+		{
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
+			Grid::get().draw();
+			NavigationGraph::get().draw();
+		}
 	}
 
 	void TestPanel::dispose(void)
@@ -547,5 +552,6 @@ namespace Temporal
 		EntitiesManager::get().dispose();
 		Graphics::get().dispose();
 		Grid::get().dispose();
+		NavigationGraph::get().dispose();
 	}
 }

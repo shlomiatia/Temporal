@@ -19,21 +19,18 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Maybe reset every animation change SLOTH
 	void Animator::update(float framePeriodInMillis)
 	{
 		const SpriteGroup& spriteGroup = getSpriteGroup();
 		int framesCount = spriteGroup.getSize();
 		_timer.update(framePeriodInMillis);
-		bool framePassed = _timer.getElapsedTimeInMillis() > FRAME_PERIOD;
-		if(framePassed) _timer.reset();
-		bool animationEnded = framePassed && (!_rewind ? _frameID == framesCount - 1 : _frameID == 0);
-		if(framePassed && (!animationEnded || _repeat))
-		{
-			int modifier = _rewind ? -1 : 1;
-			_frameID = (framesCount + _frameID + modifier) % framesCount;
-			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &_frameID));
-		}
+		int framesPassed = (int)(_timer.getElapsedTimeInMillis() / FRAME_PERIOD);
+		int framesDelta = framesPassed % framesCount;
+		int initialFrame = getInitialFrame();
+		int frameID = initialFrame + (_rewind ? -1 : 1) * framesDelta;
+		if(framesPassed < framesCount  || _repeat)
+			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &frameID));
+		bool animationEnded = frameID == initialFrame && framesPassed > 0;
 		if(animationEnded)
 			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
 	}
@@ -51,8 +48,13 @@ namespace Temporal
 		_repeat = resetAnimationParams.getRepeat();
 		int animationID = resetAnimationParams.getAnimationID();
 		sendMessageToOwner(Message(MessageID::SET_SPRITE_GROUP_ID, &animationID));
+		int initialFrame = getInitialFrame();
+		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &initialFrame));
+	}
+
+	int Animator::getInitialFrame(void) const
+	{
 		const SpriteGroup& spriteGroup = getSpriteGroup();
-		_frameID = !_rewind ? 0 : spriteGroup.getSize() - 1;
-		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &_frameID));
+		return !_rewind ? 0 : spriteGroup.getSize() - 1;
 	}
 }

@@ -11,7 +11,7 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false), _frameID(0) {}
+		Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false) {}
 		
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
@@ -23,8 +23,9 @@ namespace Temporal
 
 		bool _rewind;
 		bool _repeat;
-		int _frameID;
 		Timer _timer;
+
+		int getInitialFrame(void) const;
 
 		void reset(const ResetAnimationParams& resetAnimationParams);
 		const SpriteGroup& getSpriteGroup(void) const;

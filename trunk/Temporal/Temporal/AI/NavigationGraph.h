@@ -9,20 +9,22 @@ namespace Temporal
 {
 	namespace NavigationEdgeType
 	{
+		// TODO: Use string for this ENTITIES
 		enum Enum
 		{
 			FALL,
 			JUMP,
+			DESCEND
 		};
 	}
 
 	class NavigationEdge;
 
-	// TODO: Need to make it wider SLOTH
 	class NavigationNode
 	{
 	public:
 		NavigationNode(const Rect& area) : _area(area) {}
+		~NavigationNode(void);
 
 		const Rect& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
@@ -30,7 +32,7 @@ namespace Temporal
 
 	private:
 		const Rect _area;
-		// TODO: Fix this freaking const stuff
+		// TODO: Fix this freaking const stuff SLOTH
 		std::vector<const NavigationEdge* const> _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -73,6 +75,7 @@ namespace Temporal
 		}
 
 		void init(std::vector<const Rect>& platforms);
+		void dispose(void);
 		const NavigationNode* getNodeByPosition(const Vector& position) const;
 		void draw(void) const;
 
@@ -82,6 +85,7 @@ namespace Temporal
 		// TODO: Use actual jump values? Unify SLOTH
 		static const float MAX_JUMP_UP_DISTANCE;
 		static const float MAX_JUMP_FORWARD_DISTANCE;
+		static const float MIN_FALL_DISTANCE;
 
 		std::vector<NavigationNode* const> _nodes; 
 

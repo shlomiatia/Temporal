@@ -6,7 +6,6 @@
 
 namespace Temporal
 {
-	// TODO: Ask for sight instead of getting it SLOTH
 	class Sight : public Component
 	{
 	public:

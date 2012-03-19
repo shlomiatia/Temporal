@@ -1,5 +1,7 @@
 #include "ViewManager.h"
 #include "Graphics.h"
+#include <Temporal\Game\Message.h>
+#include <Temporal\Game\EntitiesManager.h>
 
 namespace Temporal
 {
@@ -16,8 +18,10 @@ namespace Temporal
 		Graphics::get().init(resolution, _cameraSize, fullScreen);
 	}
 
-	void ViewManager::setCameraCenter(const Vector& position)
+	void ViewManager::update(void) const
 	{
+		// TODO: Who're you chasing ENTITIES
+		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		float cameraWidth = _cameraSize.getWidth();
 		float cameraHeight = _cameraSize.getHeight();
 		float levelWidth = _levelBounds.getWidth();

@@ -3,6 +3,7 @@
 #include <Temporal\Game\Panel.h>
 
 // TODO: Architecture SLOTH
+// TODO: Separate common panel SLOTH
 namespace Temporal
 {
 	class TestPanel : public Panel

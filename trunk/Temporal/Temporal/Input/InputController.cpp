@@ -2,6 +2,7 @@
 #include "Input.h"
 #include <Temporal\Base\Enums.h>
 #include <Temporal\Game\Message.h>
+#include <Temporal\Game\MessageUtils.h>
 
 namespace Temporal
 {
@@ -17,13 +18,13 @@ namespace Temporal
 			{
 				sendMessageToOwner(Message(MessageID::ACTION_DOWN));
 			}
-			if(Input::get().isLeft() || Input::get().isRight())
+			if(Input::get().isLeft())
 			{
-				Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-				if((Input::get().isLeft() && orientation == Orientation::LEFT) || (Input::get().isRight() && orientation == Orientation::RIGHT))
-					sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
-				else
-					sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+				sendDirectionAction(*this, Orientation::LEFT);
+			}
+			if(Input::get().isRight())
+			{
+				sendDirectionAction(*this, Orientation::RIGHT);
 			}
 		}
 	}

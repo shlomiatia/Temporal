@@ -14,7 +14,6 @@ namespace Temporal
 
 		void add(const Sprite* const sprite);
 
-		// TODO: Maybe use sprite iterator instead SLOTH
 		const Sprite& get(int spriteID) const;
 		int getSize(void) const;
 	private:
