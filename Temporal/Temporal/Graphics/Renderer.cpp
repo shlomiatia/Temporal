@@ -11,27 +11,27 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::GET_SPRITE_GROUP)
 		{
-			message.setParam(&_spritesheet.get(_spriteGroupID));
+			message.setParam((void*)&_spritesheet.get(_spriteGroupID));
 		}
 		else if(message.getID() == MessageID::GET_SPRITE)
 		{
-			message.setParam(&_spritesheet.get(_spriteGroupID).get(_spriteID));
+			message.setParam((void*)&_spritesheet.get(_spriteGroupID).get(_spriteID));
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_GROUP_ID)
 		{
-			_spriteGroupID = *(const int* const)message.getParam();
+			_spriteGroupID = *(int*)message.getParam();
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_ID)
 		{
-			_spriteID = *(const int* const)message.getParam();
+			_spriteID = *(int*)message.getParam();
 		}
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
-			_color = *(const Color* const)message.getParam();
+			_color = *(Color*)message.getParam();
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = *(const VisualLayer::Enum* const)message.getParam();
+			VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
 			if(_layer == layer)
 				draw();			
 		}
@@ -43,10 +43,10 @@ namespace Temporal
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
 		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Orientation::Enum* const entityOrientation = (const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Orientation::Enum* entityOrientation = (const Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Orientation::Enum orientation;
 		if(entityOrientation == NULL || *entityOrientation == Orientation::NONE)
 			orientation = spritesheetOrientation;

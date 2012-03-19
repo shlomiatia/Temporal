@@ -65,12 +65,12 @@ namespace Temporal
 			return instance;
 		}
 
-		const std::vector<const JumpInfo* const>& getData(void) const { return _data; }
-		const JumpInfo* const getFarthest(void) const { return _data[0]; }
-		const JumpInfo* const getHighest(void) const { return _data[3]; }
+		const std::vector<const JumpInfo*>& getData(void) const { return _data; }
+		const JumpInfo* getFarthest(void) const { return _data[0]; }
+		const JumpInfo* getHighest(void) const { return _data[3]; }
 		
 	private:
-		std::vector<const JumpInfo*const > _data;
+		std::vector<const JumpInfo*> _data;
 
 		JumpInfoProvider(void);
 		~JumpInfoProvider(void);
@@ -131,7 +131,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Stand"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -145,7 +145,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Fall"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -156,7 +156,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Walk"; }
 
-		virtual void enter(const void* param);		
+		virtual void enter(void* param);		
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -170,7 +170,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Turn"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -179,7 +179,7 @@ namespace Temporal
 	public:
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -193,7 +193,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -207,7 +207,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Jump"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -218,7 +218,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpEnd"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -229,7 +229,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToHang"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -246,7 +246,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -257,7 +257,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hang"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -268,7 +268,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Drop"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 
@@ -283,7 +283,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Climb"; }
 	
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 	};
@@ -295,7 +295,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -311,7 +311,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Descend"; }
 
-		virtual void enter(const void* param);
+		virtual void enter(void* param);
 		virtual void handleMessage(Message& message);
 	};
 }

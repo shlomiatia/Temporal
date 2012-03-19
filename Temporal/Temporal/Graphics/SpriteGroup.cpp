@@ -5,11 +5,11 @@ namespace Temporal
 {
 	SpriteGroup::~SpriteGroup(void)
 	{
-		for(std::vector<const Sprite* const>::iterator i = _sprites.begin(); i != _sprites.end(); ++i)
+		for(std::vector<const Sprite*>::iterator i = _sprites.begin(); i != _sprites.end(); ++i)
 			delete *i;
 	}
 
-	void SpriteGroup::add(const Sprite* const sprite)
+	void SpriteGroup::add(const Sprite* sprite)
 	{
 		_sprites.push_back(sprite);
 	}

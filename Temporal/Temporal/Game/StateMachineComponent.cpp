@@ -16,7 +16,7 @@ namespace Temporal
 			delete *i;
 	}
 
-	void StateMachineComponent::changeState(int stateID, const void* const param)
+	void StateMachineComponent::changeState(int stateID, void* param)
 	{
 		if(_currentState != NULL)
 		{

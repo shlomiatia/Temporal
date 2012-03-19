@@ -16,9 +16,9 @@ namespace Temporal
 		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
 	}
 
-	std::vector<const NavigationEdge* const>* buildPath(const PathNode& pathNode)
+	std::vector<const NavigationEdge*>* buildPath(const PathNode& pathNode)
 	{
-		std::vector<const NavigationEdge* const>* result = new std::vector<const NavigationEdge* const>();
+		std::vector<const NavigationEdge*>* result = new std::vector<const NavigationEdge*>();
 
 		const PathNode* current = &pathNode;
 		while(current->getEdge() != NULL)
@@ -29,7 +29,7 @@ namespace Temporal
 		return result;
 	}
 
-	PathNode* find(std::vector<PathNode* const>& where, const NavigationNode* what)
+	PathNode* find(std::vector<PathNode*>& where, const NavigationNode* what)
 	{
 		for(unsigned int i = 0; i < where.size(); ++i)
 		{
@@ -42,9 +42,9 @@ namespace Temporal
 		return NULL;
 	}
 
-	void remove(std::vector<PathNode* const>& where, const PathNode* what)
+	void remove(std::vector<PathNode*>& where, const PathNode* what)
 	{
-		for(std::vector<PathNode* const>::iterator i = where.begin(); i != where.end(); ++i)
+		for(std::vector<PathNode*>::iterator i = where.begin(); i != where.end(); ++i)
 		{
 			PathNode* current = *i;
 			if(current == what)
@@ -55,9 +55,9 @@ namespace Temporal
 		}
 	}
 
-	void add(std::vector<PathNode* const>& where, PathNode* what)
+	void add(std::vector<PathNode*>& where, PathNode* what)
 	{
-		std::vector<PathNode* const>::iterator smaller;
+		std::vector<PathNode*>::iterator smaller;
 		for(smaller = where.begin(); smaller != where.end(); ++smaller)
 		{
 			if((**smaller).getEstaminedPathCost() < what->getEstaminedPathCost())
@@ -66,13 +66,13 @@ namespace Temporal
 		where.insert(smaller, what);
 	}
 
-	void deleteCollection(std::vector<PathNode* const>& collection)
+	void deleteCollection(std::vector<PathNode*>& collection)
 	{
-		for(std::vector<PathNode* const>::iterator i = collection.begin(); i != collection.end(); ++i)
+		for(std::vector<PathNode*>::iterator i = collection.begin(); i != collection.end(); ++i)
 			delete *i;
 	}
 
-	std::vector<const NavigationEdge* const>* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
+	std::vector<const NavigationEdge*>* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
 	{
 		assert(start);
 		assert(goal);
@@ -80,8 +80,8 @@ namespace Temporal
 		if (start == goal)
 			return NULL;
 
-		std::vector<PathNode* const> open;
-		std::vector<PathNode* const> closed;
+		std::vector<PathNode*> open;
+		std::vector<PathNode*> closed;
 		open.push_back(new PathNode(*start, *goal));
 		// Check all open nodes
 		while (!open.empty())
@@ -92,7 +92,7 @@ namespace Temporal
 			// Reached goal
 			if (&navigationNode == goal)
 			{
-				std::vector<const NavigationEdge* const>* result = buildPath(pathNode);
+				std::vector<const NavigationEdge*>* result = buildPath(pathNode);
 				deleteCollection(open);
 				deleteCollection(closed);
 				return result;
@@ -103,7 +103,7 @@ namespace Temporal
 			closed.push_back(&pathNode);
 
 			// Explore all neighbours
-			const std::vector<const NavigationEdge* const>& edges = navigationNode.getEdges();
+			const std::vector<const NavigationEdge*>& edges = navigationNode.getEdges();
 			for(unsigned int i = 0; i < edges.size(); ++i)
 			{
 				const NavigationEdge& edge = *edges[i];

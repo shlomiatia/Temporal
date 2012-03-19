@@ -14,11 +14,11 @@ namespace Temporal
 	public:
 		~Entity(void);
 
-		void add(Component* const component);
-		Component* const getByType(ComponentType::Enum type) const;
+		void add(Component* component);
+		Component* getByType(ComponentType::Enum type) const;
 		void handleMessage(Message& message) const;
 
 	private:
-		std::vector<Component* const> _components;
+		std::vector<Component*> _components;
 	};
 }

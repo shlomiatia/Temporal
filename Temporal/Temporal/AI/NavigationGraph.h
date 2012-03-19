@@ -28,12 +28,11 @@ namespace Temporal
 
 		const Rect& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
-		const std::vector<const NavigationEdge* const>& getEdges(void) const { return _edges; }
+		const std::vector<const NavigationEdge*>& getEdges(void) const { return _edges; }
 
 	private:
 		const Rect _area;
-		// TODO: Fix this freaking const stuff SLOTH
-		std::vector<const NavigationEdge* const> _edges;
+		std::vector<const NavigationEdge*> _edges;
 
 		NavigationNode(const NavigationNode&);
 		NavigationNode& operator=(const NavigationNode&);
@@ -87,7 +86,7 @@ namespace Temporal
 		static const float MAX_JUMP_FORWARD_DISTANCE;
 		static const float MIN_FALL_DISTANCE;
 
-		std::vector<NavigationNode* const> _nodes; 
+		std::vector<NavigationNode*> _nodes; 
 
 		void createNodes(std::vector<const Rect>& platforms);
 		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, std::vector<const Rect>& platforms);

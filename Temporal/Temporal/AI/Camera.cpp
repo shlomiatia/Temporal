@@ -8,7 +8,7 @@ namespace Temporal
 	{
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
-		void Search::enter(const void* param)
+		void Search::enter(void* param)
 		{
 			_timer.reset();
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
@@ -22,14 +22,14 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(const float* const)message.getParam();
+				float framePeriodInMillis = *(float*)message.getParam();
 				_timer.update(framePeriodInMillis);
 				if(_timer.getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
 					_stateMachine->changeState(CameraStates::TURN);
 			}
 		}
 
-		void See::enter(const void* param)
+		void See::enter(void* param)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
 			_haveLineOfSight = false;
@@ -49,7 +49,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(const void* param)
+		void Turn::enter(void* param)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN)));
 			_hasTurned = false;
@@ -74,7 +74,7 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(const void* param)
+		void Acquire::enter(void* param)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
 			_timer.reset();
@@ -98,7 +98,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(const float* const)message.getParam();
+				float framePeriodInMillis = *(float*)message.getParam();
 				_timer.update(framePeriodInMillis);
 
 				if(!_haveLineOfSight)

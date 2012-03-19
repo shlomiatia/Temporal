@@ -6,9 +6,9 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
-		void Search::enter(const void* param)
+		void Search::enter(void* param)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, &Color::Red));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Red));
 		}
 
 		void Search::handleMessage(Message& message)
@@ -21,9 +21,9 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(const void* param)
+		void Acquire::enter(void* param)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, &Color::Yellow));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Yellow));
 			_timer.reset();
 			_haveLineOfSight = true;
 		}
@@ -36,7 +36,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(const float* const)message.getParam();
+				float framePeriodInMillis = *(float*)message.getParam();
 				_timer.update(framePeriodInMillis);
 				if(!_haveLineOfSight)
 					_stateMachine->changeState(SentryStates::SEARCH);
@@ -46,9 +46,9 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(const void* param)
+		void See::enter(void* param)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, &Color::Green));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Green));
 			_haveLineOfSight = false;
 		}
 

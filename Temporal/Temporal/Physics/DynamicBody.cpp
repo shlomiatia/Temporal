@@ -20,13 +20,13 @@ namespace Temporal
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
 	{
-		Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return orientation;
 	}
 
 	void DynamicBody::applyVelocity(void) const
 	{
-		const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Vector newPosition = position + _velocity;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
@@ -36,26 +36,26 @@ namespace Temporal
 		Body::handleMessage(message);
 		if(message.getID() == MessageID::SET_FORCE)
 		{
-			const Vector& param = *(const Vector* const)message.getParam();
+			const Vector& param = *(Vector*)message.getParam();
 			_force = Vector(param.getX() * getOrientation(), param.getY());
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
-			const Vector& param = *(const Vector* const)message.getParam();
+			const Vector& param = *(Vector*)message.getParam();
 			_impulse = Vector(param.getX() * getOrientation(), param.getY());
 			_force = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
-			_gravityEnabled = *(const bool* const)message.getParam();
+			_gravityEnabled = *(bool*)message.getParam();
 		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
-			message.setParam(&GRAVITY);
+			message.setParam((void*)&GRAVITY);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(const float* const)message.getParam();
+			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
 		}
 	}
@@ -97,14 +97,14 @@ namespace Temporal
 
 	bool DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
-		DynamicBody* const dynamicBody = (DynamicBody* const)caller;
+		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		dynamicBody->correctCollision(staticBody);
 		return true;
 	}
 
 	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
-		DynamicBody* const dynamicBody = (DynamicBody* const)caller;
+		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		dynamicBody->detectCollision(staticBody);
 		return true;
 	}

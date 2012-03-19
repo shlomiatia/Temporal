@@ -22,10 +22,10 @@ namespace Temporal
 	{
 		_pointOfIntersection = Vector::Zero;
 		_isSeeing = false;
-		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Vector& sourcePosition = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		// TODO: Who're you watching? ENTITIES
-		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& targetPosition = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 
 		// Check orientation
@@ -89,7 +89,7 @@ namespace Temporal
 		{
 
 			// TODO: Compare with specific line PHYSICS
-			std::vector<const StaticBody* const>* staticBodies = Grid::get().getTile(i, j);
+			std::vector<const StaticBody*>* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{
 				isSuccessful = false;
@@ -131,9 +131,9 @@ namespace Temporal
 
 	void Sight::drawDebugInfo(void) const
 	{
-		const Vector& sourcePosition = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Orientation::Enum sourceOrientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Vector& targetPosition = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& sourcePosition = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Vector& targetPosition = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
 		if(_pointOfIntersection != Vector::Zero)

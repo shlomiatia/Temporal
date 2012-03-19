@@ -17,7 +17,7 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			virtual void enter(const void* param);
+			virtual void enter(void* param);
 			virtual void handleMessage(Message& message);
 		};
 
@@ -26,7 +26,7 @@ namespace Temporal
 		public:
 			Acquire(void) : _haveLineOfSight(false) {}
 
-			virtual void enter(const void* param);
+			virtual void enter(void* param);
 			virtual void handleMessage(Message& message);
 
 		private:
@@ -41,7 +41,7 @@ namespace Temporal
 		public:
 			See(void) : _haveLineOfSight(false) {}
 
-			virtual void enter(const void* param);
+			virtual void enter(void* param);
 			virtual void handleMessage(Message& message);
 
 		private:

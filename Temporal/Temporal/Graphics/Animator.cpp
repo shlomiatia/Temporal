@@ -9,12 +9,12 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			const ResetAnimationParams& resetAnimationParams = *(const ResetAnimationParams* const)message.getParam();
+			const ResetAnimationParams& resetAnimationParams = *(ResetAnimationParams*)message.getParam();
 			reset(resetAnimationParams);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(const float* const)message.getParam();
+			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
 		}
 	}
@@ -37,7 +37,7 @@ namespace Temporal
 
 	const SpriteGroup& Animator::getSpriteGroup(void) const
 	{
-		const SpriteGroup& spriteGroup = *(const SpriteGroup* const)sendMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
+		const SpriteGroup& spriteGroup = *(SpriteGroup*)sendMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
 		return spriteGroup;
 	}
 

@@ -20,7 +20,7 @@ namespace Temporal
 		SensorID::Enum getID() const { return _id; }
 		const Vector& getSize(void) const { return _size; }
 		Rect getBounds(void) const;
-		const Body* const getSensedBody(void) const { return _sensedBody; }
+		const Body* getSensedBody(void) const { return _sensedBody; }
 		
 		virtual void handleMessage(Message& message);
 		virtual ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }

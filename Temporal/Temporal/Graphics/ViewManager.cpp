@@ -21,7 +21,7 @@ namespace Temporal
 	void ViewManager::update(void) const
 	{
 		// TODO: Who're you chasing ENTITIES
-		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& position = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		float cameraWidth = _cameraSize.getWidth();
 		float cameraHeight = _cameraSize.getHeight();
 		float levelWidth = _levelBounds.getWidth();
