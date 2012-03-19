@@ -12,16 +12,16 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const Vector* goalPosition = (const Vector* const)message.getParam();
+				const Vector* goalPosition = (const Vector*)message.getParam();
 				Navigator& navigator = *(Navigator*)_stateMachine;
 
 				// TODO: Whor'e you chasing ENTITIES
-				const Vector& startPosition = *(const Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Vector& startPosition = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				const NavigationNode* start = NavigationGraph::get().getNodeByPosition(startPosition);
 				const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(*goalPosition);
 				if(start != NULL && goal != NULL)
 				{
-					std::vector<const NavigationEdge* const>* path = Pathfinder::get().findPath(start, goal);
+					std::vector<const NavigationEdge*>* path = Pathfinder::get().findPath(start, goal);
 					navigator.setDestination(goalPosition);
 					navigator.setPath(path);
 					_stateMachine->changeState(NavigatorStates::WALK);
@@ -35,10 +35,10 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Vector& position = *(const Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Vector& position = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				float sourceX = position.getX();
 				const Navigator& navigator = *((const Navigator*)_stateMachine);
-				std::vector<const NavigationEdge* const>* path = navigator.getPath();
+				std::vector<const NavigationEdge*>* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
 				if(path == NULL)
@@ -49,7 +49,7 @@ namespace Temporal
 				}
 				else
 				{
-					const NavigationEdge* const edge = (*path)[0];
+					const NavigationEdge* edge = (*path)[0];
 					targetX = edge->getX();
 					reachedTargetPlatform = false;
 				}
@@ -64,7 +64,7 @@ namespace Temporal
 				}
 				else
 				{
-					Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+					Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 					if(distance < 0)
 						sendDirectionAction(*_stateMachine, Orientation::LEFT);
 					else
@@ -78,9 +78,9 @@ namespace Temporal
 			if(message.getID() == MessageID::UPDATE)
 			{
 				Navigator* navigator = (Navigator*)_stateMachine;
-				std::vector<const NavigationEdge* const>* path = navigator->getPath();
-				const NavigationEdge* const edge = (*path)[0];
-				Orientation::Enum currentOrientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+				std::vector<const NavigationEdge*>* path = navigator->getPath();
+				const NavigationEdge* edge = (*path)[0];
+				Orientation::Enum currentOrientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 				Orientation::Enum targetOrientation = edge->getOrientation();
 				if(currentOrientation != targetOrientation)
 				{
@@ -105,7 +105,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
+				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::FALL)
 					_stateMachine->changeState(NavigatorStates::WALK);
 			}
@@ -119,7 +119,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
+				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::CLIMB || state == ActionStateID::JUMP_END)
 					_stateMachine->changeState(NavigatorStates::WALK);
 			}
@@ -134,7 +134,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
+				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::DROP)
 					_stateMachine->changeState(NavigatorStates::WALK);
 			}
@@ -163,7 +163,7 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 			const NavigationNode* current = NavigationGraph::get().getNodeByPosition(position);
 
 			if(current != NULL && getPath() != NULL)

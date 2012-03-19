@@ -45,7 +45,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::DRAW)
 			{
-				VisualLayer::Enum layer = *(const VisualLayer::Enum* const)message.getParam();
+				VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
 				if(_layer == layer)
 				{
 					Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
@@ -520,7 +520,7 @@ namespace Temporal
 		Input::get().update();
 		
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-		const Vector& position = *(const Vector* const)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Vector& position = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		
 		ViewManager::get().update();
 		
@@ -536,14 +536,14 @@ namespace Temporal
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
-		bool debugDraw = false;
 
 		// TODO: Classify debug draw SLOTH
+		bool debugDraw = true;
 		if(debugDraw)
 		{
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-			Grid::get().draw();
-			NavigationGraph::get().draw();
+			//Grid::get().draw();
+			//NavigationGraph::get().draw();
 		}
 	}
 

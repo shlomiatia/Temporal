@@ -9,8 +9,8 @@ namespace Temporal
 {
 	Rect Sensor::getBounds(void) const
 	{
-		const Vector& position = *(const Vector* const)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return Rect(position.getX() + _offset.getX() * orientation,
 					position.getY() + _offset.getY(),
 					_size.getWidth(),
@@ -43,7 +43,7 @@ namespace Temporal
 
 	bool Sensor::sense(const StaticBody& staticBody)
 	{
-		Orientation::Enum orientation = *(const Orientation::Enum* const)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Rect& sensorBounds = getBounds();
 		if(!staticBody.isCover())
 		{
@@ -64,7 +64,7 @@ namespace Temporal
 
 	bool Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
 	{
-		Sensor& sensor = *(Sensor* const)caller;
+		Sensor& sensor = *(Sensor*)caller;
 		return sensor.sense(staticBody);
 	}
 }

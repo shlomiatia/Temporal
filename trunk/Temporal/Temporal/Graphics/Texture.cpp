@@ -7,7 +7,7 @@
 
 namespace Temporal
 {
-	const Texture* const Texture::load(const char* path)
+	const Texture* Texture::load(const char* path)
 	{
 		SDL_Surface* image(IMG_Load(path));
 		if (!image)
@@ -46,7 +46,7 @@ namespace Temporal
 
 		glTexImage2D(GL_TEXTURE_2D, 0, image->format->BytesPerPixel, image->w, image->h, 0, texture_format, GL_UNSIGNED_BYTE, image->pixels);
 		Vector size((float)image->w, (float)image->h);
-		const Texture* const result(new Texture(id, size));
+		const Texture* result(new Texture(id, size));
 
 		Graphics::get().validate();
 		SDL_FreeSurface(image);

@@ -10,7 +10,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SENSOR_COLLISION)
 			{
-				const Sensor& sensor = *(const Sensor* const)message.getParam();
+				const Sensor& sensor = *(Sensor*)message.getParam();
 				if(sensor.getID() == sensorID)
 					return true;
 			}
@@ -33,7 +33,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(const void* param)
+		void See::enter(void* param)
 		{
 			_haveLineOfSight = true;
 		}
@@ -52,7 +52,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(const void* param)
+		void Turn::enter(void* param)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 		}
@@ -61,7 +61,7 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const ActionStateID::Enum& actionID = *(const ActionStateID::Enum* const)message.getParam();
+				const ActionStateID::Enum& actionID = *(ActionStateID::Enum*)message.getParam();
 				if(actionID == ActionStateID::TURN)
 					_stateMachine->changeState(PatrolStates::WALK);
 			}
@@ -69,7 +69,7 @@ namespace Temporal
 
 		const float Wait::WAIT_TIME_IN_MILLIS(5000.0f);
 
-		void Wait::enter(const void* param)
+		void Wait::enter(void* param)
 		{
 			_timer.reset();
 		}
@@ -82,7 +82,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(const float* const)message.getParam();
+				float framePeriodInMillis = *(float*)message.getParam();
 				_timer.update(framePeriodInMillis);
 
 				if(_timer.getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)

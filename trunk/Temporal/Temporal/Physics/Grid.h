@@ -23,16 +23,16 @@ namespace Temporal
 		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
 		float getTileSize(void) const { return _tileSize; }
 		Vector getTileCenter(int i, int j) const { return  Vector(getTileAxisCenter(i), getTileAxisCenter(j)); }
-		std::vector<const StaticBody* const>* getTile(int x, int y) const;
+		std::vector<const StaticBody*>* getTile(int x, int y) const;
 
-		void add(const StaticBody* const staticBody);
+		void add(const StaticBody* staticBody);
 		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int i, int j)) const;
 		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
 
 		void draw(void) const;
 
 	private:
-		std::vector<const StaticBody* const>** _grid;
+		std::vector<const StaticBody*>** _grid;
 		float _tileSize;
 		int _gridWidth;
 		int _gridHeight;

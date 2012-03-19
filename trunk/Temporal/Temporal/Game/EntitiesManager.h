@@ -21,9 +21,9 @@ namespace Temporal
 		void add(Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
-		const void* const sendMessageToEntity(int id, Message& message) const;
+		void* sendMessageToEntity(int id, Message& message) const;
 	private:
-		std::vector<Entity* const> _entities;
+		std::vector<Entity*> _entities;
 
 		EntitiesManager(void) {}
 		EntitiesManager(const EntitiesManager&);

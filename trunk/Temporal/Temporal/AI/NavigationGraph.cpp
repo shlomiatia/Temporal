@@ -10,7 +10,7 @@ namespace Temporal
 
 	NavigationNode::~NavigationNode(void)
 	{
-		for(std::vector<const NavigationEdge* const>::iterator i = _edges.begin(); i != _edges.end(); ++i)
+		for(std::vector<const NavigationEdge*>::iterator i = _edges.begin(); i != _edges.end(); ++i)
 		{
 			delete *i;
 		}
@@ -187,7 +187,7 @@ namespace Temporal
 		}
 
 		// Remove nodes without edges
-		for(std::vector<NavigationNode* const>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for(std::vector<NavigationNode*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
 			if(node.getEdges().size() == 0)
@@ -199,7 +199,7 @@ namespace Temporal
 	{
 		for(unsigned int i = 0; i < _nodes.size(); ++i)
 		{
-			const NavigationNode* const node = _nodes[i];
+			const NavigationNode* node = _nodes[i];
 			if(node->getArea().contains(position))
 				return node;
 		}
@@ -214,7 +214,7 @@ namespace Temporal
 
 	void NavigationGraph::dispose(void)
 	{
-		for(std::vector<NavigationNode* const>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for(std::vector<NavigationNode*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			delete *i;
 		}
@@ -226,7 +226,7 @@ namespace Temporal
 		{
 			const NavigationNode& node = *_nodes[i];
 			Graphics::get().drawRect(node.getArea(), Color::Yellow);
-			const std::vector<const NavigationEdge* const>& edges = node.getEdges();
+			const std::vector<const NavigationEdge*>& edges = node.getEdges();
 			for(unsigned int j = 0; j < edges.size(); ++j)
 			{
 				const NavigationEdge& edge = *edges[j];

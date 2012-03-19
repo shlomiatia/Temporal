@@ -7,7 +7,7 @@ namespace Temporal
 	class Texture
 	{
 	public:
-		static const Texture* const load(const char* path);
+		static const Texture* load(const char* path);
 		~Texture();
 
 		unsigned int getID(void) const { return _id; }

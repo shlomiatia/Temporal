@@ -11,7 +11,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = *(const Vector* const)message.getParam();
+			_position = *(Vector*)message.getParam();
 		}
 	}
 }
