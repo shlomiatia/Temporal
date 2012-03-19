@@ -4,9 +4,13 @@
 
 namespace Temporal
 {
+	static float getOffset(float size) { return (size - 1.0f) / 2.0f; }
+
 	class Rect
 	{
 	public:
+		
+
 		Rect(float centerX, float centerY, float getWidth, float getHeight);
 		Rect(const Vector& center, const Vector& size);
 
@@ -16,8 +20,8 @@ namespace Temporal
 		float getCenterX(void) const { return getCenter().getX(); }
 		float getCenterY(void) const { return getCenter().getY(); }
 
-		float getOffsetX(void) const { return (getWidth() - 1.0f) / 2.0f; }
-		float getOffsetY(void) const { return (getHeight() - 1.0f) / 2.0f; }
+		float getOffsetX(void) const { return getOffset(getWidth()); }
+		float getOffsetY(void) const { return getOffset(getHeight()); }
 
 		float getBottom(void) const { return getCenterY() - getOffsetY(); }
 		float getLeft(void) const {	return getCenterX() - getOffsetX(); }
@@ -43,11 +47,13 @@ namespace Temporal
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
 		bool contains(const Vector& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
 	private:
-		// TODO: Is it really needed? SLOTH
 		Vector _center;
 		Vector _size;
 	};
 
+	inline Rect RectLB(float left, float bottom, float width, float height) { return Rect(left + getOffset(width), bottom + getOffset(height), width, height); }
+	inline Rect RectCB(float centerX, float bottom, float width, float height) { return Rect(centerX, bottom + getOffset(height), width, height); }
+	inline Rect RectLC(float left, float centerY, float width, float height) { return Rect(left + getOffset(width), centerY, width, height); }
 	inline Rect operator+(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() + vec, rect.getSize())); }
 	inline Rect operator-(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() - vec, rect.getSize())); }
 }
