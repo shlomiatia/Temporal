@@ -30,22 +30,17 @@ namespace Temporal
 		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
 	}
 
-	Rect createRect(float left, float bottom, float width, float height)
-	{
-		return Rect(left + (width - 1.0f) / 2.0f, bottom + (height - 1.0f) / 2.0f, width, height);
-	}
-
 	void cutAreaLeft(const Rect& platform, const Rect& area, std::vector<const Rect>& areas, std::vector<const Rect>::iterator& iterator)
 	{
 		float width = area.getRight() - platform.getRight() + 1.0f;
-		const Rect nodeAfterCut = createRect(platform.getRight(), area.getBottom(), width, area.getHeight());
+		const Rect nodeAfterCut = RectLB(platform.getRight(), area.getBottom(), width, area.getHeight());
 		iterator = areas.insert(iterator, nodeAfterCut);
 	}
 
 	void cutAreaRight(const Rect& platform, const Rect& area, std::vector<const Rect>& areas, std::vector<const Rect>::iterator& iterator)
 	{
 		float width = platform.getLeft() - area.getLeft() + 1.0f;
-		const Rect nodeAfterCut = createRect(area.getLeft(), area.getBottom(), width, area.getHeight());
+		const Rect nodeAfterCut = RectLB(area.getLeft(), area.getBottom(), width, area.getHeight());
 		iterator = areas.insert(iterator, nodeAfterCut);
 	}
 
@@ -104,7 +99,7 @@ namespace Temporal
 			if(platform.getWidth() < MIN_AREA_SIZE.getWidth())
 				continue;
 
-			const Rect area = createRect(platform.getLeft() - MIN_FALL_DISTANCE, platform.getTop(), platform.getWidth() + 2 * MIN_FALL_DISTANCE, MIN_AREA_SIZE.getHeight());
+			const Rect area = RectLB(platform.getLeft() - MIN_FALL_DISTANCE, platform.getTop(), platform.getWidth() + 2 * MIN_FALL_DISTANCE, MIN_AREA_SIZE.getHeight());
 			std::vector<const Rect> areas;
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
@@ -130,7 +125,7 @@ namespace Temporal
 		const Rect& area2 = node2.getArea();
 		float verticalDistance = area1.getTop() - area2.getTop();
 
-		const Rect& fallArea = createRect(x, area2.getBottom(), 1.0f, verticalDistance);
+		const Rect& fallArea = RectLB(x, area2.getBottom(), 1.0f, verticalDistance);
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
@@ -150,7 +145,7 @@ namespace Temporal
 		// TODO: Support directed jump at jump forward PHYSICS
 		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
 		{
-			Rect jumpArea = createRect(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
+			Rect jumpArea = RectLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP));

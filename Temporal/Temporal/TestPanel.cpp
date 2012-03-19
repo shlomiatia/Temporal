@@ -140,8 +140,10 @@ namespace Temporal
 	}
 
 	std::vector<const Rect> _crap;
-	Entity* CreatePlatformFromCenter(const Vector& center, const Vector& size, SpriteSheet* spritesheet, bool cover = false) 
+	Entity* CreatePlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
 	{
+		const Vector& center = platform.getCenter();
+		const Vector& size = platform.getSize();
 		if(!cover)
 			_crap.push_back(Rect(center, size));
 		Position* position = new Position(center);
@@ -153,18 +155,6 @@ namespace Temporal
 		entity->add(renderer);
 		Grid::get().add(staticBody);
 		return entity;
-	}
-
-	Entity* CreatePlatformFromBottomCenter(const Vector& bottomCenter, const Vector&  size, SpriteSheet* spritesheet, bool cover = false)
-	{
-		Vector center(bottomCenter.getX(), bottomCenter.getY() + (size.getHeight() - 1.0f) / 2.0f);
-		return CreatePlatformFromCenter(center, size, spritesheet, cover);
-	}
-
-	Entity* CreatePlatformFromBottomLeft(const Vector& bottomLeft, const Vector&  size, SpriteSheet* spritesheet, bool cover = false)
-	{
-		Vector center(bottomLeft.getX() + (size.getWidth() - 1.0f) / 2.0f, bottomLeft.getY() + (size.getHeight() - 1.0f) / 2.0f);
-		return CreatePlatformFromCenter(center, size, spritesheet, cover);
 	}
 
 	#pragma endregion
@@ -319,19 +309,19 @@ namespace Temporal
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(1024.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(1009.0f, 0.0f), Vector(16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(768.0f, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(0.0f, 256.0f), Vector(128.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(112.0f, 256.0f), Vector(16.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(128, 0.0f), Vector(16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 128.0f), Vector(256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 256.0f), Vector(256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatformFromBottomCenter(Vector(512.0f, 16.0f), Vector(256.0f, 64.0f), spritesheet, true));
-		EntitiesManager::get().add(CreatePlatformFromBottomLeft(Vector(896.0f, 128.0f), Vector(128.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 0.0f, 1024.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 0.0f, 16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(1009.0f, 0.0f, 16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(768.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(768.0f, 0.0f, 16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 256.0f, 128.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(112.0f, 256.0f, 16.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectLB(128, 0.0f, 16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 256.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
+		EntitiesManager::get().add(CreatePlatform(RectLB(896.0f, 128.0f, 128.0f, 144.0f), spritesheet));
 		NavigationGraph::get().init(_crap);
 	}
 
