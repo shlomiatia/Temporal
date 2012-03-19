@@ -29,6 +29,7 @@
     <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Game\StateMachineComponent.h" />
     <ClInclude Include="Game\EntitiesManager.h" />
+    <ClInclude Include="Game\MessageUtils.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\MessageParams.h" />
@@ -55,7 +56,7 @@
     <ClInclude Include="Physics\Sight.h" />
     <ClInclude Include="Physics\Grid.h" />
     <ClInclude Include="Physics\StaticBody.h" />
-    <ClInclude Include="Physics\Utils.h" />
+    <ClInclude Include="Physics\PhysicsUtils.h" />
     <ClInclude Include="TestPanel.h" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,7 @@
     <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\EntitiesManager.cpp" />
+    <ClCompile Include="Game\MessageUtils.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
     <ClCompile Include="Game\Position.cpp" />
@@ -94,7 +96,7 @@
     <ClCompile Include="Game\ActionController.cpp" />
     <ClCompile Include="Physics\Sight.cpp" />
     <ClCompile Include="Physics\Grid.cpp" />
-    <ClCompile Include="Physics\Utils.cpp" />
+    <ClCompile Include="Physics\PhysicsUtils.cpp" />
     <ClCompile Include="TestPanel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

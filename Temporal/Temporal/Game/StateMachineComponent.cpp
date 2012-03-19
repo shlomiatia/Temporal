@@ -35,7 +35,7 @@ namespace Temporal
 		{
 			changeState(getInitialState());
 		}
-		// TODO: Argggh! SLOTH
+		// Protect against events that occur before the inital state is set
 		else if(_currentState != NULL)
 		{
 			_currentState->handleMessage(message);

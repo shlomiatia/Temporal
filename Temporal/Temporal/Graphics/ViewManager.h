@@ -4,8 +4,6 @@
 
 namespace Temporal
 {
-	// TODO: Make this a component as well SLOTH
-	// TODO: Separate camera & resolution logics SLOTH
 	class ViewManager
 	{
 	public:
@@ -19,7 +17,7 @@ namespace Temporal
 
 		void init(const Vector& resolution, float logicalHeight, bool fullScreen = false);
 		void setVideoMode(const Vector& resolution, bool fullScreen = false);
-		void setCameraCenter(const Vector& position);
+		void update(void) const;
 	private:
 		Vector _levelBounds;
 		Vector _cameraSize;

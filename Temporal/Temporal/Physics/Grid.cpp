@@ -4,7 +4,6 @@
 
 namespace Temporal
 {
-	// TODO: Do when debug drawing SLOTH
 	void Grid::draw(void) const
 	{
 		for(int i = 0; i < _gridWidth; ++i)

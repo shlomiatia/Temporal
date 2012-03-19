@@ -8,7 +8,6 @@ namespace Temporal
 	class Rect;
 	class StaticBody;
 
-	// TODO: Make this a component as well SLOTH
 	class Grid
 	{
 	public:

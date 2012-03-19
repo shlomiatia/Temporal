@@ -1,5 +1,6 @@
 #include "Navigator.h"
 #include <Temporal\Game\Message.h>
+#include <Temporal\Game\MessageUtils.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <math.h>
 
@@ -63,12 +64,11 @@ namespace Temporal
 				}
 				else
 				{
-					// TODO: Narrow this SLOTH
 					Orientation::Enum orientation = *(const Orientation::Enum* const)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-					if((distance < 0 && orientation == Orientation::LEFT) || (distance > 0 && orientation == Orientation::RIGHT))
-						_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+					if(distance < 0)
+						sendDirectionAction(*_stateMachine, Orientation::LEFT);
 					else
-						_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+						sendDirectionAction(*_stateMachine, Orientation::RIGHT);
 				}
 			}
 		}
@@ -94,7 +94,9 @@ namespace Temporal
 					if(edge->getType() == NavigationEdgeType::FALL)
 						_stateMachine->changeState(NavigatorStates::FALL);
 					else if(edge->getType() == NavigationEdgeType::JUMP)
-					_stateMachine->changeState(NavigatorStates::JUMP);
+						_stateMachine->changeState(NavigatorStates::JUMP);
+					else if(edge->getType() == NavigationEdgeType::DESCEND)
+						_stateMachine->changeState(NavigatorStates::DESCEND);
 				}
 			}
 		}
@@ -127,6 +129,20 @@ namespace Temporal
 				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 			}
 		}
+
+		void Descend::handleMessage(Message& message)
+		{
+			if(message.getID() == MessageID::STATE_EXITED)
+			{
+				const ActionStateID::Enum& state = *(const ActionStateID::Enum* const)message.getParam();
+				if(state == ActionStateID::DROP)
+					_stateMachine->changeState(NavigatorStates::WALK);
+			}
+			else if(message.getID() == MessageID::UPDATE)
+			{
+				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_DOWN));
+			}
+		}
 	}
 
 	std::vector<ComponentState*> Navigator::getStates(void) const
@@ -138,6 +154,7 @@ namespace Temporal
 		states.push_back(new Turn());
 		states.push_back(new Fall());
 		states.push_back(new Jump());
+		states.push_back(new Descend());
 		return states;
 	}
 

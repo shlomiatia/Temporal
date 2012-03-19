@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	// TODO: Fault tolerance, jump without hang, drop, fix huristics so it will take into account several edges AI (turn, position)
+	// TODO: Fault tolerance, jump without hang, drop, fix huristics so it will take into account several edges (turn, position) AI
 	namespace NavigatorStates
 	{
 		enum Enum
@@ -15,7 +15,8 @@ namespace Temporal
 			WALK,
 			TURN,
 			FALL,
-			JUMP
+			JUMP,
+			DESCEND
 		};
 
 
@@ -58,6 +59,14 @@ namespace Temporal
 		{
 		public:
 			Jump(void) {}
+
+			virtual void handleMessage(Message& message);
+		};
+
+		class Descend : public ComponentState
+		{
+		public:
+			Descend(void) {}
 
 			virtual void handleMessage(Message& message);
 		};

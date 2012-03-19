@@ -66,6 +66,12 @@ namespace Temporal
 		where.insert(smaller, what);
 	}
 
+	void deleteCollection(std::vector<PathNode* const>& collection)
+	{
+		for(std::vector<PathNode* const>::iterator i = collection.begin(); i != collection.end(); ++i)
+			delete *i;
+	}
+
 	std::vector<const NavigationEdge* const>* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
 	{
 		assert(start);
@@ -77,7 +83,6 @@ namespace Temporal
 		std::vector<PathNode* const> open;
 		std::vector<PathNode* const> closed;
 		open.push_back(new PathNode(*start, *goal));
-
 		// Check all open nodes
 		while (!open.empty())
 		{
@@ -85,9 +90,13 @@ namespace Temporal
 			const NavigationNode& navigationNode = pathNode.getNavigationNode();
 
 			// Reached goal
-			// TODO: Delete SLOTH
 			if (&navigationNode == goal)
-				return buildPath(pathNode);
+			{
+				std::vector<const NavigationEdge* const>* result = buildPath(pathNode);
+				deleteCollection(open);
+				deleteCollection(closed);
+				return result;
+			}
 			
 			// Move from open to back
 			open.pop_back();
@@ -129,6 +138,8 @@ namespace Temporal
 				add(open, pathNeighbour);
 			}
 		}
+		deleteCollection(open);
+		deleteCollection(closed);
 		return NULL;
 	}
 }

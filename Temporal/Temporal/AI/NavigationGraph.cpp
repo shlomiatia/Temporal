@@ -6,6 +6,15 @@ namespace Temporal
 	const Vector NavigationGraph::MIN_AREA_SIZE = Vector(32.0f, 100.0f);
 	const float NavigationGraph::MAX_JUMP_UP_DISTANCE = 150.0f;
 	const float NavigationGraph::MAX_JUMP_FORWARD_DISTANCE = 300.0f;
+	const float NavigationGraph::MIN_FALL_DISTANCE = 16.0f;
+
+	NavigationNode::~NavigationNode(void)
+	{
+		for(std::vector<const NavigationEdge* const>::iterator i = _edges.begin(); i != _edges.end(); ++i)
+		{
+			delete *i;
+		}
+	}
 
 	// TODO: Consider transition type AI
 	float NavigationEdge::calculateCost(const NavigationNode& source)
@@ -92,7 +101,10 @@ namespace Temporal
 		{
 			// Create area from platform
 			const Rect& platform = platforms[i];
-			const Rect area = createRect(platform.getLeft(), platform.getTop(), platform.getWidth(), MIN_AREA_SIZE.getHeight());
+			if(platform.getWidth() < MIN_AREA_SIZE.getWidth())
+				continue;
+
+			const Rect area = createRect(platform.getLeft() - MIN_FALL_DISTANCE, platform.getTop(), platform.getWidth() + 2 * MIN_FALL_DISTANCE, MIN_AREA_SIZE.getHeight());
 			std::vector<const Rect> areas;
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
@@ -118,12 +130,12 @@ namespace Temporal
 		const Rect& area2 = node2.getArea();
 		float verticalDistance = area1.getTop() - area2.getTop();
 
-		// TODO: Check bigger area? PHYSICS
 		const Rect& fallArea = createRect(x, area2.getBottom(), 1.0f, verticalDistance);
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
-			// TODO: Set source in addEdge? SLOTH!
-			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, NavigationEdgeType::FALL));
+			float distance = (area2.getSide(orientation) - x) * orientation;
+			NavigationEdgeType::Enum type = distance < MIN_FALL_DISTANCE ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
+			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 			if(verticalDistance <= MAX_JUMP_UP_DISTANCE)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP));
 		}
@@ -134,10 +146,10 @@ namespace Temporal
 		const Rect& area1 = node1.getArea();
 		const Rect& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
-		if(horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
+
+		// TODO: Support directed jump at jump forward PHYSICS
+		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
 		{
-			// TODO: Handle height difference SLOTH
-			// TODO: Check bigger area? PHYSICS
 			Rect jumpArea = createRect(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
@@ -159,7 +171,6 @@ namespace Temporal
 				NavigationNode& node2 = *_nodes[j];
 				const Rect& area2 = node2.getArea();
 				// check fall/jump up
-				// TODO: leap & descend AI
 				if(area1.getTop() > area2.getTop() && area1.getLeft() <= area2.getRight() && area1.getRight() >= area2.getLeft())
 				{
 					if(area1.getLeft() >= area2.getLeft())
@@ -168,7 +179,7 @@ namespace Temporal
 						checkVerticalEdges(node1, node2, area1.getRight(), Orientation::RIGHT, platforms);
 				}
 				// check jump forward
-				else if(area1.getTop() == area2.getTop() && area1.getRight() < area2.getLeft())
+				else if(area1.getRight() < area2.getLeft())
 				{
 					checkHorizontalEdges(node1, node2, platforms);
 				}
@@ -201,6 +212,14 @@ namespace Temporal
 		createEdges(platforms);
 	}
 
+	void NavigationGraph::dispose(void)
+	{
+		for(std::vector<NavigationNode* const>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+
 	void NavigationGraph::draw(void) const
 	{
 		for(unsigned int i = 0; i < _nodes.size(); ++i)
@@ -213,7 +232,7 @@ namespace Temporal
 				const NavigationEdge& edge = *edges[j];
 				const Rect& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
-				float x2 = edge.getType() == NavigationEdgeType::FALL ? x1 : area2.getOppositeSide(edge.getOrientation());
+				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = node.getArea().getBottom();
 				float y2 = area2.getBottom();
 				Graphics::get().drawLine(Vector(x1, y1), Vector(x2, y2), Color(1.0f, 0.5f, 0.0f));
