@@ -16,7 +16,7 @@ namespace Temporal
 			delete *i;
 	}
 
-	void StateMachineComponent::changeState(int stateID, void* param)
+	void StateMachineComponent::changeState(int stateID)
 	{
 		if(_currentState != NULL)
 		{
@@ -25,7 +25,7 @@ namespace Temporal
 		}
 		_currentState = _states[stateID];
 		_currentStateID = stateID;
-		_currentState->enter(param);
+		_currentState->enter();
 		sendMessageToOwner(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
 

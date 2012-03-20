@@ -2,11 +2,12 @@
 #define ACTIONCONTROLLER_H
 
 #include <Temporal\Base\BaseEnums.h>
+#include <Temporal\Base\Rect.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
 {
-	class Body;
+	class Sensor;
 
 	static const float WALK_FORCE_PER_SECOND = 120.0f;
 	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
@@ -96,6 +97,20 @@ namespace Temporal
 		JumpHelper& operator=(const JumpHelper&);
 	};
 
+	class HangDescendHelper
+	{
+	public:
+		HangDescendHelper(void) : _platform(Rect(Vector::Zero, Vector(1.0f, 1.0f))) {}
+
+		void setPlatformFromSensor(const Sensor& sensor);
+		const Rect& getPlatform(void) const { return _platform; }
+	private:
+		Rect _platform;
+
+		HangDescendHelper(const HangDescendHelper&);
+		HangDescendHelper& operator=(const HangDescendHelper&);
+	};
+
 	// TODO: Divide according to capabilities. Scripted States FILES
 	class ActionController : public StateMachineComponent
 	{
@@ -104,13 +119,16 @@ namespace Temporal
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper(void) { return _jumpHelper; }
+		HangDescendHelper& getHangDescendHelper(void) { return _hangDescendHelper; }
 
 	protected:
 		virtual int getInitialState(void) const { return ActionStateID::STAND; }
 
 	private:
-		std::vector<ComponentState*> getStates() const;
 		JumpHelper _jumpHelper;
+		HangDescendHelper _hangDescendHelper;
+
+		std::vector<ComponentState*> getStates() const;
 	};
 
 	class ActionState : public ComponentState
@@ -132,7 +150,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Stand"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -146,7 +164,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Fall"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -157,7 +175,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Walk"; }
 
-		virtual void enter(void* param);		
+		virtual void enter(void);		
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -171,7 +189,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Turn"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -180,7 +198,7 @@ namespace Temporal
 	public:
 		virtual const char* getName(void) const { return "PrepareToJump"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -194,7 +212,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpStart"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 
 	private:
@@ -208,7 +226,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Jump"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -219,7 +237,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "JumpEnd"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -230,12 +248,12 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToHang"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 
 	private:
 		// TODO: Hang state SLOTH
-		const Body* _platform;
+		const Rect* _platform;
 
 		void update(void);
 	};
@@ -247,7 +265,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hanging"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -258,7 +276,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Hang"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 
@@ -269,7 +287,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Drop"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 
@@ -284,7 +302,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Climb"; }
 	
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void exit(void);
 		virtual void handleMessage(Message& message);
 	};
@@ -296,11 +314,11 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "PrepareToDescend"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 
 	private:
-		const Body* _platform;
+		const Rect* _platform;
 
 		void update(void);
 	};
@@ -312,7 +330,7 @@ namespace Temporal
 
 		virtual const char* getName(void) const { return "Descend"; }
 
-		virtual void enter(void* param);
+		virtual void enter(void);
 		virtual void handleMessage(Message& message);
 	};
 }

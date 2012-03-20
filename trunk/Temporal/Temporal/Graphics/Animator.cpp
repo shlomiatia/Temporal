@@ -31,7 +31,7 @@ namespace Temporal
 		if(framesPassed < framesCount  || _repeat)
 			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &frameID));
 		bool animationEnded = frameID == initialFrame && framesPassed > 0;
-		if(animationEnded)
+		if(!_repeat && animationEnded)
 			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
 	}
 

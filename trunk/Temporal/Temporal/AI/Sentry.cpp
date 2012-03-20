@@ -6,7 +6,7 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
-		void Search::enter(void* param)
+		void Search::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Red));
 		}
@@ -21,7 +21,7 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(void* param)
+		void Acquire::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Yellow));
 			_timer.reset();
@@ -46,7 +46,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void* param)
+		void See::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Green));
 			_haveLineOfSight = false;
