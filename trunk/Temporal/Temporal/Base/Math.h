@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MATH_H
+#define MATH_H
 
 namespace Temporal
 {
@@ -12,3 +13,4 @@ namespace Temporal
 	static const float ANGLE_90_IN_RADIANS = PI / 2.0f; // 90 = 6 * PI / 12 = PI / 2
 	static const float ANGLE_105_IN_RADIANS = 7.0f * PI / 12.0f; // 105 = 7 * PI / 12
 }
+#endif

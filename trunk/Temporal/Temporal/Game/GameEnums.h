@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_ENUMS_H
+#define GAME_ENUMS_H
 
 namespace Temporal
 {
@@ -124,3 +125,4 @@ namespace Temporal
 		};
 	}
 }
+#endif

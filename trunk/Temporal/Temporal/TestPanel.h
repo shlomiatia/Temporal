@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TESTPANEL_H
+#define TESTPANEL_H
 
 #include <Temporal\Game\Panel.h>
 
@@ -16,3 +17,4 @@ namespace Temporal
 	};
 }
 
+#endif

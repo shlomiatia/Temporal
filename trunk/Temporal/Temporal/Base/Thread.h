@@ -1,4 +1,5 @@
-#pragma once
+#ifndef THREAD_H
+#define THREAD_H
 
 namespace Temporal
 {
@@ -13,3 +14,4 @@ namespace Temporal
 		Thread& operator=(const Thread&);
 	};
 }
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SPRITE_H
+#define SPRITE_H
 
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Base\Rect.h>
@@ -21,3 +22,4 @@ namespace Temporal
 		Sprite& operator=(const Sprite&);
 	};
 }
+#endif

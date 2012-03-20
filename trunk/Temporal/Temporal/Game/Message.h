@@ -1,6 +1,7 @@
-#pragma once
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
-#include "Enums.h"
+#include "GameEnums.h"
 #include <stdio.h>
 
 namespace Temporal
@@ -22,3 +23,4 @@ namespace Temporal
 		Message& operator=(const Message&);
 	};
 }
+#endif

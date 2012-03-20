@@ -1,6 +1,7 @@
-#pragma once
+#ifndef ENTITYORIENTATION_H
+#define ENTITYORIENTATION_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include "Component.h"
 
 namespace Temporal
@@ -17,3 +18,4 @@ namespace Temporal
 		Orientation::Enum _orientation;
 	};
 }
+#endif

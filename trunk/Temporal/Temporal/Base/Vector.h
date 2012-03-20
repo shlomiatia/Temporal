@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VECTOR_H
+#define VECTOR_H
 
 namespace Temporal
 {
@@ -66,3 +67,4 @@ namespace Temporal
 	inline Vector operator*(const Vector& vector, float scalar) { return Vector(vector.getX() * scalar, vector.getY() * scalar); }
 	inline Vector operator/(const Vector& vector, float scalar) { return vector * (1.0f / scalar); }
 }
+#endif

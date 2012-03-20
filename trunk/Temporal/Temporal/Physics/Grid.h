@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRID_H
+#define GRID_H
 
 #include <Temporal\Base\Vector.h>
 #include <vector>
@@ -50,3 +51,5 @@ namespace Temporal
 	};
 }
 
+
+#endif

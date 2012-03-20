@@ -1,3 +1,5 @@
+#ifndef VIEWMANAGER_H
+#define VIEWMANAGER_H
 #pragma  once
 
 #include <Temporal\Base\Vector.h>
@@ -27,3 +29,5 @@ namespace Temporal
 		ViewManager& operator=(const ViewManager&);
 	};
 }
+
+#endif

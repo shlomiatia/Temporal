@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASE_ENUMS_H
+#define BASE_ENUMS_H
 
 namespace Temporal
 {
@@ -30,3 +31,4 @@ namespace Temporal
 		inline bool match(Direction::Enum direction, Direction::Enum positive, Direction::Enum negative) { return match(direction, positive) && !(direction & negative); }
 	}	
 }
+#endif

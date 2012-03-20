@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 
 #include <stdio.h>
 
@@ -43,3 +44,4 @@ namespace Temporal
 		Game& operator=(const Game&);
 	};
 }
+#endif

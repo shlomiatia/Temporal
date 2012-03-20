@@ -1,6 +1,7 @@
-#pragma once
+#ifndef SPRITESHEET_H
+#define SPRITESHEET_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include <vector>
 
 namespace Temporal
@@ -27,3 +28,4 @@ namespace Temporal
 		SpriteSheet& operator=(const SpriteSheet&);
 	};
 }
+#endif

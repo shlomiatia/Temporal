@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RENDERER_H
+#define RENDERER_H
 #include <Temporal\Base\Color.h>
 #include <Temporal\Game\Component.h>
 
@@ -24,3 +25,4 @@ namespace Temporal
 		Color _color;
 	};
 }
+#endif

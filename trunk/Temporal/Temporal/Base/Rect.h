@@ -1,5 +1,6 @@
-#pragma once
-#include "Enums.h"
+#ifndef RECT_H
+#define RECT_H
+#include "BaseEnums.h"
 #include "Vector.h"
 
 namespace Temporal
@@ -57,3 +58,4 @@ namespace Temporal
 	inline Rect operator+(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() + vec, rect.getSize())); }
 	inline Rect operator-(const Rect& rect, const Vector& vec) { return (Rect(rect.getCenter() - vec, rect.getSize())); }
 }
+#endif

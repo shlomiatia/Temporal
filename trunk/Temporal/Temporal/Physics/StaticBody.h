@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STATICBODY_H
+#define STATICBODY_H
 
 #include "Body.h"
 
@@ -16,3 +17,4 @@ namespace Temporal
 		bool _cover;
 	};
 }
+#endif

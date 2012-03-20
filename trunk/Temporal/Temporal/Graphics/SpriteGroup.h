@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SPRITEGROUP_H
+#define SPRITEGROUP_H
 
 #include <vector>
 
@@ -23,3 +24,4 @@ namespace Temporal
 		SpriteGroup& operator=(const SpriteGroup&);
 	};
 }
+#endif

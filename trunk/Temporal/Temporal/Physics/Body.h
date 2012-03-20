@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BODY_H
+#define BODY_H
 
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Base\Rect.h>
@@ -21,3 +22,5 @@ namespace Temporal
 	};
 }
 
+
+#endif

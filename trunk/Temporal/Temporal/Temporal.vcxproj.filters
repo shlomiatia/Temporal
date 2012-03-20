@@ -16,9 +16,7 @@
     <ClInclude Include="Physics\Sensor.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
-    <ClInclude Include="Base\Enums.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
-    <ClInclude Include="Game\Enums.h" />
     <ClInclude Include="Graphics\Animator.h" />
     <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Graphics\SpriteGroup.h" />
@@ -48,6 +46,8 @@
     <ClInclude Include="AI\Navigator.h" />
     <ClInclude Include="Physics\PhysicsUtils.h" />
     <ClInclude Include="Game\MessageUtils.h" />
+    <ClInclude Include="Base\BaseEnums.h" />
+    <ClInclude Include="Game\GameEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DRAWPOSITION_H
+#define DRAWPOSITION_H
 
 #include "Component.h"
 #include <Temporal\Base\Vector.h>
@@ -17,3 +18,4 @@ namespace Temporal
 		Vector _override;
 	};
 }
+#endif

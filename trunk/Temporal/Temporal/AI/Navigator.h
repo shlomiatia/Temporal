@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NAVIGATOR_H
+#define NAVIGATOR_H
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Game\StateMachineComponent.h>
 #include "Pathfinder.h"
@@ -95,3 +96,4 @@ namespace Temporal
 		std::vector<ComponentState*> getStates(void) const;
 	};
 }
+#endif

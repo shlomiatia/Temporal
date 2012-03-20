@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENTITIESMANAGER_H
+#define ENTITIESMANAGER_H
 
 #include <vector>
 
@@ -30,3 +31,4 @@ namespace Temporal
 		EntitiesManager& operator=(const EntitiesManager&);
 	};
 }
+#endif

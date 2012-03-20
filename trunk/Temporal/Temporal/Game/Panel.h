@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PANEL_H
+#define PANEL_H
 
 namespace Temporal
 {
@@ -17,3 +18,5 @@ namespace Temporal
 		Panel& operator=(const Panel&);
 	};
 }
+
+#endif
