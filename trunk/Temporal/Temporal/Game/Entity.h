@@ -16,8 +16,8 @@ namespace Temporal
 		~Entity(void);
 
 		void add(Component* component);
-		Component* getByType(ComponentType::Enum type) const;
-		void handleMessage(Message& message) const;
+		bool have(ComponentType::Enum type) const;
+		void* handleMessage(Message& message) const;
 
 	private:
 		std::vector<Component*> _components;

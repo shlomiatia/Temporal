@@ -1,6 +1,7 @@
 #ifndef ENTITIESMANAGER_H
 #define ENTITIESMANAGER_H
 
+#include "GameEnums.h"
 #include <vector>
 
 namespace Temporal
@@ -23,6 +24,7 @@ namespace Temporal
 
 		void sendMessageToAllEntities(Message& message) const;
 		void* sendMessageToEntity(int id, Message& message) const;
+		void iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data));
 	private:
 		std::vector<Entity*> _entities;
 

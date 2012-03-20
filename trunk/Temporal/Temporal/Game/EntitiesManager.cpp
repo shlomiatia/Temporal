@@ -24,7 +24,16 @@ namespace Temporal
 
 	void* EntitiesManager::sendMessageToEntity(int id, Message& message) const
 	{
-		_entities[id]->handleMessage(message);
-		return message.getParam();
+		return _entities[id]->handleMessage(message);
+	}
+
+	void EntitiesManager::iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data))
+	{
+		for(std::vector<Entity*>::const_iterator i = _entities.begin(); i != _entities.end(); ++i)
+		{
+			const Entity& entity = **i;
+			if(entity.have(componentType))
+				handleEntity(**i, data);
+		}
 	}
 }

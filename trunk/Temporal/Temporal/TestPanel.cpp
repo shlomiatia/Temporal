@@ -139,13 +139,10 @@ namespace Temporal
 		entity.add(sensor);
 	}
 
-	std::vector<const Rect> _crap;
 	Entity* CreatePlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
 	{
 		const Vector& center = platform.getCenter();
 		const Vector& size = platform.getSize();
-		if(!cover)
-			_crap.push_back(Rect(center, size));
 		Position* position = new Position(center);
 		StaticBody* staticBody = new StaticBody(size, cover);
 		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
@@ -262,7 +259,7 @@ namespace Temporal
 	void CreateCamera()
 	{
 		Position* position = new Position(Vector(200.0f, 120.f));
-		const Texture* texture = Texture::load("c:\\camera.png");
+		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(-ANGLE_15_IN_RADIANS, -ANGLE_45_IN_RADIANS);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
@@ -302,7 +299,7 @@ namespace Temporal
 
 	void CreatePlatforms()
 	{
-		const Texture* texture = Texture::load("c:\\tile.png");
+		const Texture* texture = Texture::load("c:\\stuff\\tile.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(animation);
@@ -322,12 +319,11 @@ namespace Temporal
 		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 256.0f, 256.0f, 16.0f), spritesheet));
 		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
 		EntitiesManager::get().add(CreatePlatform(RectLB(896.0f, 128.0f, 128.0f, 144.0f), spritesheet));
-		NavigationGraph::get().init(_crap);
 	}
 
 	void CreateBackground()
 	{
-		const Texture* texture = Texture::load("c:\\bg.png");
+		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(animation);
@@ -347,12 +343,12 @@ namespace Temporal
 	{
 		Vector screenSize = Vector(1024.0f, 768.0f);
 		ViewManager::get().init(screenSize, 768.0f);
-		Vector worldSize(1024.0f, 1536.0f);
-		ViewManager::get().setLevelBounds(worldSize);
+		Vector worldSize(screenSize);
+		ViewManager::get().setLevelBounds(screenSize);
 		Grid::get().init(worldSize, 32.0f);
 		DebugInfo::get().setShowingFPS(true);
 
-		const Texture* texture = Texture::load("c:\\pop.png");
+		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
 		SpriteGroup* animation;
 
@@ -503,6 +499,8 @@ namespace Temporal
 		CreateCamera();
 		CreatePlatforms();
 		CreateBackground();
+
+		NavigationGraph::get().init();
 	}
 
 	void TestPanel::update(float framePeriodInMillis)
@@ -528,7 +526,7 @@ namespace Temporal
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		// TODO: Classify debug draw SLOTH
-		bool debugDraw = true;
+		bool debugDraw = false;
 		if(debugDraw)
 		{
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));

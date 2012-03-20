@@ -1,4 +1,7 @@
 #include "NavigationGraph.h"
+#include <Temporal\Game\Message.h>
+#include <Temporal\Game\Entity.h>
+#include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
@@ -201,8 +204,22 @@ namespace Temporal
 		return NULL;
 	}
 
-	void NavigationGraph::init(std::vector<const Rect>& platforms)
+	void addPlatform(const Entity& entity, void* data) 
 	{
+		bool isCover = *(bool*)entity.handleMessage(Message(MessageID::IS_COVER));
+		if(!isCover)
+		{
+			std::vector<const Rect>& platforms = *((std::vector<const Rect>*)data);
+			Rect platform(Vector::Zero, Vector(1.0f, 1.0f));
+			entity.handleMessage(Message(MessageID::GET_BOUNDS, &platform));
+			platforms.push_back(platform);
+		}
+	}
+
+	void NavigationGraph::init(void)
+	{
+		std::vector<const Rect> platforms;
+		EntitiesManager::get().iterateEntities(ComponentType::STATIC_BODY, &platforms, &addPlatform);
 		createNodes(platforms);
 		createEdges(platforms);
 	}
