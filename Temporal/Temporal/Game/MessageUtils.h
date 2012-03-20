@@ -1,6 +1,7 @@
-#pragma once
+#ifndef MESSAGEUTILS_H
+#define MESSAGEUTILS_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 
 namespace Temporal
 {
@@ -8,3 +9,4 @@ namespace Temporal
 
 	void sendDirectionAction(const Component& component, Orientation::Enum direction);
 }
+#endif

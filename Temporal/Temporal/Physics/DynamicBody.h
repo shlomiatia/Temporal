@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DYNAMICBODY_H
+#define DYNAMICBODY_H
 
 #include "Body.h"
 #include <vector>
@@ -36,3 +37,4 @@ namespace Temporal
 		static bool detectCollision(void* caller, void* data, const StaticBody& staticBody);
 	};
 }
+#endif

@@ -1,6 +1,7 @@
-#pragma once
+#ifndef SIGHT_H
+#define SIGHT_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Game\Component.h>
 
@@ -28,3 +29,4 @@ namespace Temporal
 		bool rayCast(const Vector& source, const Vector& destination);
 	};
 }
+#endif

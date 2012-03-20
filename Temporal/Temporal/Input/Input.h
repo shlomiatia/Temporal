@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INPUT_H
+#define INPUT_H
 
 #include <Temporal\Base\Vector.h>
 
@@ -36,3 +37,4 @@ namespace Temporal
 		Input& operator=(const Input&);
 	};
 }
+#endif

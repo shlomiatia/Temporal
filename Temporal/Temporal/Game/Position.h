@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POSITION_H
+#define POSITION_H
 
 #include <Temporal\Base\Vector.h>
 #include "Component.h"
@@ -16,3 +17,4 @@ namespace Temporal
 		Vector _position;
 	};
 }
+#endif

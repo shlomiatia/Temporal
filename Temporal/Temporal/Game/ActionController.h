@@ -1,6 +1,7 @@
-#pragma once
-// TODO: Replace pragma once with include guard SLOTH
-#include <Temporal\Base\Enums.h>
+#ifndef ACTIONCONTROLLER_H
+#define ACTIONCONTROLLER_H
+
+#include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
@@ -315,3 +316,5 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 }
+
+#endif

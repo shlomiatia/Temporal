@@ -1,6 +1,7 @@
-#pragma once
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
-#include "Enums.h"
+#include "GameEnums.h"
 #include <stdio.h>
 
 namespace Temporal
@@ -27,3 +28,4 @@ namespace Temporal
 		Component& operator=(const Component&);
 	};
 }
+#endif

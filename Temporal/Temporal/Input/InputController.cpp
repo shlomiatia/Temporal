@@ -1,6 +1,6 @@
 #include "InputController.h"
 #include "Input.h"
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageUtils.h>
 

@@ -1,6 +1,7 @@
-#pragma once
+#ifndef NAVIGATIONGRAPH_H
+#define NAVIGATIONGRAPH_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Base\Rect.h>
 #include <vector>
@@ -98,3 +99,4 @@ namespace Temporal
 		NavigationGraph& operator=(const NavigationGraph&);
 	};
 }
+#endif

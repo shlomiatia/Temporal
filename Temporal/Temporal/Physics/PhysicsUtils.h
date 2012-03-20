@@ -1,6 +1,7 @@
-#pragma once
+#ifndef PHYSICSUTILS_H
+#define PHYSICSUTILS_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 
 namespace Temporal
 {
@@ -8,3 +9,4 @@ namespace Temporal
 
 	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Rect& boundsB);
 }
+#endif

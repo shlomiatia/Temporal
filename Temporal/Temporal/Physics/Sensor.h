@@ -1,6 +1,7 @@
-#pragma once
+#ifndef SENSOR_H
+#define SENSOR_H
 
-#include <Temporal\Base\Enums.h>
+#include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Vector.h>
 #include <Temporal\Base\Rect.h>
 #include <Temporal\Game\Component.h>
@@ -38,3 +39,5 @@ namespace Temporal
 		static bool sense(void* caller, void* data, const StaticBody& staticBody);
 	};
 }
+
+#endif

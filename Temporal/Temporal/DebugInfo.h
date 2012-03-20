@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DEBUGINFO_H
+#define DEBUGINFO_H
 
 namespace Temporal
 {
@@ -23,3 +24,4 @@ namespace Temporal
 		DebugInfo& operator=(const DebugInfo&);
 	};
 }
+#endif

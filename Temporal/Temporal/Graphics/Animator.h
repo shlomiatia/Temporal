@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATOR_H
+#define ANIMATOR_H
 
 #include <Temporal\Base\Timer.h>
 #include <Temporal\Game\Component.h>
@@ -31,3 +32,4 @@ namespace Temporal
 		const SpriteGroup& getSpriteGroup(void) const;
 	};
 }
+#endif

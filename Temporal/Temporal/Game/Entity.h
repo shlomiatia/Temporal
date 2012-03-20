@@ -1,6 +1,7 @@
-#pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
 
-#include "Enums.h"
+#include "GameEnums.h"
 #include <vector>
 
 namespace Temporal
@@ -22,3 +23,5 @@ namespace Temporal
 		std::vector<Component*> _components;
 	};
 }
+
+#endif

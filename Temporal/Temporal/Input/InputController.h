@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INPUTCONTROLLER_H
+#define INPUTCONTROLLER_H
 
 #include <Temporal\Game\Component.h>
 
@@ -14,3 +15,5 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 	};
 }
+
+#endif

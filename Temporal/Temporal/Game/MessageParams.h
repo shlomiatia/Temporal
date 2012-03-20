@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MESSAGEPARAMS_H
+#define MESSAGEPARAMS_H
 
 namespace Temporal
 {
@@ -20,3 +21,4 @@ namespace Temporal
 		ResetAnimationParams& operator=(const ResetAnimationParams&);
 	};
 }
+#endif

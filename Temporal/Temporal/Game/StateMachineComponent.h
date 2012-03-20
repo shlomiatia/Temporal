@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STATEMACHINECOMPONENT_H
+#define STATEMACHINECOMPONENT_H
 
 #include "Component.h"
 #include <vector>
@@ -49,3 +50,5 @@ namespace Temporal
 		StateMachineComponent& operator=(const StateMachineComponent&);
 	};
 }
+
+#endif
