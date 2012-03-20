@@ -11,7 +11,6 @@
     <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="TestPanel.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="DebugInfo.h" />
     <ClInclude Include="Physics\Body.h" />
     <ClInclude Include="Physics\Sensor.h" />
     <ClInclude Include="Graphics\Texture.h" />
@@ -48,6 +47,8 @@
     <ClInclude Include="Game\MessageUtils.h" />
     <ClInclude Include="Base\BaseEnums.h" />
     <ClInclude Include="Game\GameEnums.h" />
+    <ClInclude Include="Game\BasePanel.h" />
+    <ClInclude Include="Game\DebugInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -58,7 +59,6 @@
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="TestPanel.cpp" />
     <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="DebugInfo.cpp" />
     <ClCompile Include="Physics\Body.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
@@ -89,5 +89,7 @@
     <ClCompile Include="Physics\PhysicsUtils.cpp" />
     <ClCompile Include="Game\MessageUtils.cpp" />
     <ClCompile Include="Physics\StaticBody.cpp" />
+    <ClCompile Include="Game\BasePanel.cpp" />
+    <ClCompile Include="Game\DebugInfo.cpp" />
   </ItemGroup>
 </Project>

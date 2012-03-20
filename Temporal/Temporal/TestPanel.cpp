@@ -1,35 +1,32 @@
 #include "TestPanel.h"
-#include "DebugInfo.h"
 
+#include <Temporal\Base\Vector.h>
 #include <Temporal\Base\Math.h>
-#include <Temporal\Input\Input.h>
-#include <Temporal\Input\InputController.h>
-#include <Temporal\Physics\StaticBody.h>
-#include <Temporal\Physics\DynamicBody.h>
-#include <Temporal\Physics\Sensor.h>
-#include <Temporal\Physics\Sight.h>
-#include <Temporal\Physics\Grid.h>
-#include <Temporal\Graphics\Texture.h>
-#include <Temporal\Graphics\Sprite.h>
-#include <Temporal\Graphics\SpriteGroup.h>
-#include <Temporal\Graphics\SpriteSheet.h>
-#include <Temporal\Graphics\Renderer.h>
-#include <Temporal\Graphics\Animator.h>
-#include <Temporal\Graphics\Graphics.h>
-#include <Temporal\Graphics\ViewManager.h>
 #include <Temporal\Game\Message.h>
+#include <Temporal\Game\Component.h>
 #include <Temporal\Game\Entity.h>
 #include <Temporal\Game\Position.h>
 #include <Temporal\Game\EntityOrientation.h>
 #include <Temporal\Game\DrawPosition.h>
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
-#include <Temporal\Game\Game.h>
-#include <Temporal\AI\NavigationGraph.h>
+#include <Temporal\Physics\StaticBody.h>
+#include <Temporal\Physics\DynamicBody.h>
+#include <Temporal\Physics\Grid.h>
+#include <Temporal\Physics\Sensor.h>
+#include <Temporal\Physics\Sight.h>
+#include <Temporal\Input\InputController.h>
+#include <Temporal\Graphics\SpriteSheet.h>
+#include <Temporal\Graphics\SpriteGroup.h>
+#include <Temporal\Graphics\Sprite.h>
+#include <Temporal\Graphics\Texture.h>
+#include <Temporal\Graphics\Graphics.h>
+#include <Temporal\Graphics\Animator.h>
+#include <Temporal\Graphics\Renderer.h>
 #include <Temporal\AI\Navigator.h>
 #include <Temporal\AI\Sentry.h>
-#include <Temporal\AI\Camera.h>
 #include <Temporal\AI\Patrol.h>
+#include <Temporal\AI\Camera.h>
 
 namespace Temporal
 {
@@ -139,28 +136,13 @@ namespace Temporal
 		entity.add(sensor);
 	}
 
-	Entity* CreatePlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
-	{
-		const Vector& center = platform.getCenter();
-		const Vector& size = platform.getSize();
-		Position* position = new Position(center);
-		StaticBody* staticBody = new StaticBody(size, cover);
-		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(staticBody);
-		entity->add(renderer);
-		Grid::get().add(staticBody);
-		return entity;
-	}
-
 	#pragma endregion
 	#pragma region Creation Methods
 
 	static const float ENTITY_WIDTH = 20.0f;
 	static const float ENTITY_HEIGHT = 80.0f;
 
-	void CreatePlayer(SpriteSheet* spritesheet)
+	void createPlayer(SpriteSheet* spritesheet)
 	{
 		// TODO: Central resources container FILES
 		Position* position = new Position(Vector(512.0f, 768.0f));
@@ -185,7 +167,7 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	void CreateChaser(SpriteSheet* spritesheet)
+	void createChaser(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Vector(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
@@ -211,7 +193,7 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	void CreateSentry(SpriteSheet* spritesheet)
+	void createSentry(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Vector(200.0f, 50.f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
@@ -230,7 +212,7 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	void CreatePatrol(SpriteSheet* spritesheet)
+	void createPatrol(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Vector(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
@@ -256,7 +238,7 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	void CreateCamera()
+	void createCamera()
 	{
 		Position* position = new Position(Vector(200.0f, 120.f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
@@ -297,7 +279,22 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	void CreatePlatforms()
+	Entity* createPlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
+	{
+		const Vector& center = platform.getCenter();
+		const Vector& size = platform.getSize();
+		Position* position = new Position(center);
+		StaticBody* staticBody = new StaticBody(size, cover);
+		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(staticBody);
+		entity->add(renderer);
+		Grid::get().add(staticBody);
+		return entity;
+	}
+
+	void createPlatforms()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\tile.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
@@ -306,22 +303,22 @@ namespace Temporal
 		const Vector TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 0.0f, 1024.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 0.0f, 16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(1009.0f, 0.0f, 16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(768.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(768.0f, 0.0f, 16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(0.0f, 256.0f, 128.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(112.0f, 256.0f, 16.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectLB(128, 0.0f, 16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 256.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(CreatePlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
-		EntitiesManager::get().add(CreatePlatform(RectLB(896.0f, 128.0f, 128.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 0.0f, 1024.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 0.0f, 16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(1009.0f, 0.0f, 16.0f, 768.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(768.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(768.0f, 0.0f, 16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 256.0f, 128.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(112.0f, 256.0f, 16.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectLB(128, 0.0f, 16.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 128.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 256.0f, 256.0f, 16.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
+		EntitiesManager::get().add(createPlatform(RectLB(896.0f, 128.0f, 128.0f, 144.0f), spritesheet));
 	}
 
-	void CreateBackground()
+	void createBackground()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
@@ -339,15 +336,8 @@ namespace Temporal
 	}
 	#pragma endregion
 
-	void TestPanel::init(void)
+	void TestPanel::createEntities(void)
 	{
-		Vector screenSize = Vector(1024.0f, 768.0f);
-		ViewManager::get().init(screenSize, 768.0f);
-		Vector worldSize(screenSize);
-		ViewManager::get().setLevelBounds(screenSize);
-		Grid::get().init(worldSize, 32.0f);
-		DebugInfo::get().setShowingFPS(true);
-
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
 		SpriteGroup* animation;
@@ -492,54 +482,12 @@ namespace Temporal
 
 #pragma endregion
 
-		CreatePlayer(spritesheet);
-		CreateChaser(spritesheet);
-		CreateSentry(spritesheet);
-		CreatePatrol(spritesheet);
-		CreateCamera();
-		CreatePlatforms();
-		CreateBackground();
-
-		NavigationGraph::get().init();
-	}
-
-	void TestPanel::update(float framePeriodInMillis)
-	{
-		Input::get().update();
-		
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-		const Vector& position = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
-		
-		ViewManager::get().update();
-		
-		if(Input::get().isQuit())
-		{
-			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
-			Game::get().stop();
-		}
-	}
-
-	void TestPanel::draw(void) const
-	{
-		DebugInfo::get().draw();
-		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
-
-		// TODO: Classify debug draw SLOTH
-		bool debugDraw = false;
-		if(debugDraw)
-		{
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-			//Grid::get().draw();
-			//NavigationGraph::get().draw();
-		}
-	}
-
-	void TestPanel::dispose(void)
-	{
-		EntitiesManager::get().dispose();
-		Graphics::get().dispose();
-		Grid::get().dispose();
-		NavigationGraph::get().dispose();
+		createPlayer(spritesheet);
+		createChaser(spritesheet);
+		createSentry(spritesheet);
+		createPatrol(spritesheet);
+		createCamera();
+		createPlatforms();
+		createBackground();
 	}
 }

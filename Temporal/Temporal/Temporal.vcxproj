@@ -21,6 +21,7 @@
     <ClInclude Include="Base\BaseEnums.h" />
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Base\Timer.h" />
+    <ClInclude Include="Game\BasePanel.h" />
     <ClInclude Include="Game\DrawPosition.h" />
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\GameEnums.h" />
@@ -42,7 +43,7 @@
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
     <ClInclude Include="Physics\Body.h" />
-    <ClInclude Include="DebugInfo.h" />
+    <ClInclude Include="Game\DebugInfo.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="Base\Vector.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="Base\Vector.cpp" />
+    <ClCompile Include="Game\BasePanel.cpp" />
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Game\DrawPosition.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
@@ -87,7 +89,7 @@
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Physics\Body.cpp" />
-    <ClCompile Include="DebugInfo.cpp" />
+    <ClCompile Include="Game\DebugInfo.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />

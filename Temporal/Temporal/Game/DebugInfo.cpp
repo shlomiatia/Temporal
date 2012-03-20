@@ -8,7 +8,6 @@ namespace Temporal
 {
 	void DebugInfo::draw(void) const
 	{
-		
 		if (isShowingFPS())
 		{
 			std::ostringstream title;
@@ -18,7 +17,6 @@ namespace Temporal
 			static int sampleIndex = 0;
 			static int lastTick = 0;
 			static int newSample = 0;
-
 
 			if (lastTick == 0)
 			{
@@ -39,8 +37,5 @@ namespace Temporal
 			lastTick = Thread::getElapsedTimeInMillis();
 			Graphics::get().setTitle(title.str().c_str());
 		}
-
-
-		
 	}
 }
