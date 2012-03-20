@@ -21,6 +21,9 @@ namespace Temporal
 
 	class NavigationEdge;
 
+	typedef std::vector<const NavigationEdge*> NavigationEdgeCollection;
+	typedef NavigationEdgeCollection::const_iterator NavigationEdgeIterator;
+
 	class NavigationNode
 	{
 	public:
@@ -29,11 +32,11 @@ namespace Temporal
 
 		const Rect& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
-		const std::vector<const NavigationEdge*>& getEdges(void) const { return _edges; }
+		const NavigationEdgeCollection& getEdges(void) const { return _edges; }
 
 	private:
 		const Rect _area;
-		std::vector<const NavigationEdge*> _edges;
+		NavigationEdgeCollection _edges;
 
 		NavigationNode(const NavigationNode&);
 		NavigationNode& operator=(const NavigationNode&);
@@ -65,6 +68,11 @@ namespace Temporal
 		NavigationEdge& operator=(const NavigationEdge&);
 	};
 
+	typedef std::vector<NavigationNode*> NavigationNodeCollection;
+	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
+	typedef std::vector<const Rect> RectCollection;
+	typedef RectCollection::const_iterator RectIterator;
+
 	class NavigationGraph
 	{
 	public:
@@ -87,12 +95,12 @@ namespace Temporal
 		static const float MAX_JUMP_FORWARD_DISTANCE;
 		static const float MIN_FALL_DISTANCE;
 
-		std::vector<NavigationNode*> _nodes; 
+		NavigationNodeCollection _nodes; 
 
-		void createNodes(std::vector<const Rect>& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, std::vector<const Rect>& platforms);
-		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, std::vector<const Rect>& platforms);
-		void createEdges(std::vector<const Rect>& platforms);
+		void createNodes(RectCollection& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, RectCollection& platforms);
+		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, RectCollection& platforms);
+		void createEdges(RectCollection& platforms);
 
 		NavigationGraph(void) {}
 		NavigationGraph(const NavigationGraph&);

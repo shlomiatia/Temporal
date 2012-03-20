@@ -9,6 +9,9 @@ namespace Temporal
 	class Rect;
 	class StaticBody;
 
+	typedef std::vector<const StaticBody*> StaticBodyCollection;
+	typedef StaticBodyCollection::const_iterator StaticBodyIterator;
+
 	class Grid
 	{
 	public:
@@ -24,7 +27,7 @@ namespace Temporal
 		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
 		float getTileSize(void) const { return _tileSize; }
 		Vector getTileCenter(int i, int j) const { return  Vector(getTileAxisCenter(i), getTileAxisCenter(j)); }
-		std::vector<const StaticBody*>* getTile(int i, int j) const;
+		StaticBodyCollection* getTile(int i, int j) const;
 
 		void add(const StaticBody* staticBody);
 		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;
@@ -33,7 +36,7 @@ namespace Temporal
 		void draw(void) const;
 
 	private:
-		std::vector<const StaticBody*>** _grid;
+		StaticBodyCollection** _grid;
 		float _tileSize;
 		int _gridWidth;
 		int _gridHeight;
@@ -41,7 +44,7 @@ namespace Temporal
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize(void) const { return _gridWidth * _gridHeight; }
-		std::vector<const StaticBody*>* getTile(int index) const;
+		StaticBodyCollection* getTile(int index) const;
 
 		static bool iterateStaticBodies(void* caller, void* data, int index);
 		static bool add(void* caller, void* data, int index);
@@ -51,6 +54,5 @@ namespace Temporal
 		Grid& operator=(const Grid&);
 	};
 }
-
 
 #endif

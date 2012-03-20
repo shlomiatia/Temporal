@@ -62,7 +62,7 @@ namespace Temporal
 
 	private:
 
-		std::vector<ComponentState*> getStates(void) const;
+		StateCollection getStates(void) const;
 	};
 }
 

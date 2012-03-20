@@ -6,7 +6,7 @@ namespace Temporal
 {
 	void EntitiesManager::dispose(void)
 	{
-		for(std::vector<Entity*>::iterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete *i;
 	}
 
@@ -18,7 +18,7 @@ namespace Temporal
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message) const
 	{
-		for(std::vector<Entity*>::const_iterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			(**i).handleMessage(message);
 	}
 
@@ -29,7 +29,7 @@ namespace Temporal
 
 	void EntitiesManager::iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data))
 	{
-		for(std::vector<Entity*>::const_iterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 		{
 			const Entity& entity = **i;
 			if(entity.have(componentType))

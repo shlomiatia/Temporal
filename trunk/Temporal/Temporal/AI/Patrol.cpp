@@ -93,9 +93,9 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Patrol::getStates(void) const
+	StateCollection Patrol::getStates(void) const
 	{
-		std::vector<ComponentState*> states;
+		StateCollection states;
 		using namespace PatrolStates;
 		states.push_back(new Walk());
 		states.push_back(new See());

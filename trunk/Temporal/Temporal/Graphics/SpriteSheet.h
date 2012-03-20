@@ -4,10 +4,14 @@
 #include <Temporal\Base\BaseEnums.h>
 #include <vector>
 
+// TODO: Put sprite ,sheet, group in one file SLOTH
 namespace Temporal
 {
 	class Texture;
 	class SpriteGroup;
+
+	typedef std::vector<const SpriteGroup*> SpriteGroupCollection;
+	typedef SpriteGroupCollection::const_iterator SpriteGroupIterator;
 
 	class SpriteSheet
 	{
@@ -22,7 +26,7 @@ namespace Temporal
 	private:
 		const Texture* _texture;
 		const Orientation::Enum _orientation;
-		std::vector<const SpriteGroup*> _spriteGroups;
+		SpriteGroupCollection _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

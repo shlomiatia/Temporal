@@ -9,6 +9,9 @@ namespace Temporal
 	class Component;
 	class Message;
 
+	typedef std::vector<Component*> ComponentCollection;
+	typedef ComponentCollection::const_iterator ComponentIterator;
+
 	// TODO: ID & component order ENTITIES
 	class Entity
 	{
@@ -20,7 +23,7 @@ namespace Temporal
 		void* handleMessage(Message& message) const;
 
 	private:
-		std::vector<Component*> _components;
+		ComponentCollection _components;
 	};
 }
 

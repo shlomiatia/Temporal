@@ -80,7 +80,7 @@ namespace Temporal
 		virtual int getInitialState(void) const { return CameraStates::SEARCH; }
 
 	private:
-		std::vector<ComponentState*> getStates(void) const;
+		StateCollection getStates(void) const;
 	};
 }
 

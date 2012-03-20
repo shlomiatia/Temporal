@@ -82,8 +82,8 @@ namespace Temporal
 
 		const Vector& getDestination(void) const { return *_destination; }
 		void setDestination(const Vector* destination) { _destination = destination; }
-		std::vector<const NavigationEdge*>* getPath(void) const { return _path; }
-		void setPath(std::vector<const NavigationEdge*>* path) { _path = path; }
+		NavigationEdgeCollection* getPath(void) const { return _path; }
+		void setPath(NavigationEdgeCollection* path) { _path = path; }
 		virtual void handleMessage(Message& message);
 
 	protected:
@@ -91,9 +91,9 @@ namespace Temporal
 
 	private:
 		const Vector* _destination;
-		std::vector<const NavigationEdge*>* _path;
+		NavigationEdgeCollection* _path;
 
-		std::vector<ComponentState*> getStates(void) const;
+		StateCollection getStates(void) const;
 	};
 }
 #endif

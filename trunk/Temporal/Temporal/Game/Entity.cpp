@@ -6,7 +6,7 @@ namespace Temporal
 {
 	Entity::~Entity(void)
 	{
-		for(std::vector<Component*>::iterator i = _components.begin(); i != _components.end(); ++i)
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 			delete *i;
 	}
 
@@ -18,7 +18,7 @@ namespace Temporal
 
 	bool Entity::have(ComponentType::Enum type) const
 	{
-		for(std::vector<Component*>::const_iterator i = _components.begin(); i != _components.end(); ++i)
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 			if((**i).getType() == type)
 				return true;
 		return false;
@@ -26,7 +26,7 @@ namespace Temporal
 
 	void* Entity::handleMessage(Message& message) const
 	{
-		for(std::vector<Component*>::const_iterator i = _components.begin(); i != _components.end(); ++i)
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 			(**i).handleMessage(message);
 		return message.getParam();
 	}

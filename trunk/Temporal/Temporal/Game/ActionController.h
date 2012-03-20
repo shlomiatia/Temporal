@@ -58,6 +58,9 @@ namespace Temporal
 		JumpInfo& operator=(const JumpInfo&);
 	};
 
+	typedef std::vector<const JumpInfo*> JumpInfoCollection;
+	typedef JumpInfoCollection::const_iterator JumpInfoIterator;
+
 	class JumpInfoProvider
 	{
 	public:
@@ -67,12 +70,12 @@ namespace Temporal
 			return instance;
 		}
 
-		const std::vector<const JumpInfo*>& getData(void) const { return _data; }
+		const JumpInfoCollection& getData(void) const { return _data; }
 		const JumpInfo* getFarthest(void) const { return _data[0]; }
 		const JumpInfo* getHighest(void) const { return _data[3]; }
 		
 	private:
-		std::vector<const JumpInfo*> _data;
+		JumpInfoCollection _data;
 
 		JumpInfoProvider(void);
 		~JumpInfoProvider(void);
@@ -128,7 +131,7 @@ namespace Temporal
 		JumpHelper _jumpHelper;
 		HangDescendHelper _hangDescendHelper;
 
-		std::vector<ComponentState*> getStates() const;
+		StateCollection getStates() const;
 	};
 
 	class ActionState : public ComponentState
@@ -252,7 +255,6 @@ namespace Temporal
 		virtual void handleMessage(Message& message);
 
 	private:
-		// TODO: Hang state SLOTH
 		const Rect* _platform;
 
 		void update(void);

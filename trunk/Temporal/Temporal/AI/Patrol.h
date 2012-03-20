@@ -70,7 +70,7 @@ namespace Temporal
 		virtual int getInitialState(void) const { return PatrolStates::WALK; }
 
 	private:
-		std::vector<ComponentState*> getStates(void) const;
+		StateCollection getStates(void) const;
 	};
 }
 

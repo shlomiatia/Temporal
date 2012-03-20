@@ -3,16 +3,16 @@
 
 namespace Temporal
 {
-	StateMachineComponent::StateMachineComponent(std::vector<ComponentState*> states)
+	StateMachineComponent::StateMachineComponent(StateCollection states)
 		: _states(states), _currentState(NULL), _currentStateID(0)
 	{
-		for(std::vector<ComponentState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			(**i).setStateMachine(this);
 	}
 
 	StateMachineComponent::~StateMachineComponent(void)
 	{
-		for(std::vector<ComponentState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			delete *i;
 	}
 

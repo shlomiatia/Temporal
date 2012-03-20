@@ -21,7 +21,7 @@ namespace Temporal
 				const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(*goalPosition);
 				if(start != NULL && goal != NULL)
 				{
-					std::vector<const NavigationEdge*>* path = Pathfinder::get().findPath(start, goal);
+					NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
 					navigator.setDestination(goalPosition);
 					navigator.setPath(path);
 					_stateMachine->changeState(NavigatorStates::WALK);
@@ -38,7 +38,7 @@ namespace Temporal
 				const Vector& position = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				float sourceX = position.getX();
 				const Navigator& navigator = *((const Navigator*)_stateMachine);
-				std::vector<const NavigationEdge*>* path = navigator.getPath();
+				NavigationEdgeCollection* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
 				if(path == NULL)
@@ -78,7 +78,7 @@ namespace Temporal
 			if(message.getID() == MessageID::UPDATE)
 			{
 				Navigator* navigator = (Navigator*)_stateMachine;
-				std::vector<const NavigationEdge*>* path = navigator->getPath();
+				NavigationEdgeCollection* path = navigator->getPath();
 				const NavigationEdge* edge = (*path)[0];
 				Orientation::Enum currentOrientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 				Orientation::Enum targetOrientation = edge->getOrientation();
@@ -145,9 +145,9 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Navigator::getStates(void) const
+	StateCollection Navigator::getStates(void) const
 	{
-		std::vector<ComponentState*> states;
+		StateCollection states;
 		using namespace NavigatorStates;
 		states.push_back(new Wait());
 		states.push_back(new Walk());
@@ -165,12 +165,12 @@ namespace Temporal
 		{
 			const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 			const NavigationNode* current = NavigationGraph::get().getNodeByPosition(position);
-
-			if(current != NULL && getPath() != NULL)
+			NavigationEdgeCollection* path = getPath();
+			if(current != NULL && path != NULL)
 			{	
-				for(unsigned int i = 0; i < getPath()->size(); ++i)
+				for(NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
 				{
-					const NavigationEdge& edge = *((*getPath())[i]);
+					const NavigationEdge& edge = **i;
 					const NavigationNode& next = edge.getTarget();
 					Graphics::get().drawLine(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
 					current = &next;
