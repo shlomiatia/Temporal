@@ -1,19 +1,15 @@
 #ifndef TESTPANEL_H
 #define TESTPANEL_H
 
-#include <Temporal\Game\Panel.h>
+#include <Temporal\Game\BasePanel.h>
 
-// TODO: Architecture SLOTH
 // TODO: Separate common panel SLOTH
 namespace Temporal
 {
-	class TestPanel : public Panel
+	class TestPanel : public BasePanel
 	{
 	public:
-		void init(void);
-		void update(float framePeriodInMillis);
-		void draw(void) const;
-		void dispose(void);
+		void createEntities(void);
 	};
 }
 
