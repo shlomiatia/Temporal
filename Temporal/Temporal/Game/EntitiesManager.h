@@ -9,6 +9,9 @@ namespace Temporal
 	class Entity;
 	class Message;
 
+	typedef std::vector<Entity*> EntityCollection;
+	typedef EntityCollection::const_iterator EntityIterator;
+
 	class EntitiesManager
 	{
 	public:
@@ -26,7 +29,7 @@ namespace Temporal
 		void* sendMessageToEntity(int id, Message& message) const;
 		void iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data));
 	private:
-		std::vector<Entity*> _entities;
+		EntityCollection _entities;
 
 		EntitiesManager(void) {}
 		EntitiesManager(const EntitiesManager&);

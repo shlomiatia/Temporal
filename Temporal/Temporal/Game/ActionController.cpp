@@ -19,8 +19,8 @@ namespace Temporal
 
 	JumpInfoProvider::~JumpInfoProvider(void)
 	{
-		for(unsigned int i = 0; i < _data.size(); ++i)
-			delete _data[i];
+		for(JumpInfoIterator i = _data.begin(); i != _data.end(); ++i)
+			delete *i;
 	}
 
 	void HangDescendHelper::setPlatformFromSensor(const Sensor& sensor)
@@ -28,9 +28,9 @@ namespace Temporal
 		_platform = sensor.getSensedBody()->getBounds();
 	}
 
-	std::vector<ComponentState*> ActionController::getStates() const
+	StateCollection ActionController::getStates() const
 	{
-		std::vector<ComponentState*> states;
+		StateCollection states;
 		states.push_back(new Stand());
 		states.push_back(new Fall());
 		states.push_back(new Walk());
@@ -204,8 +204,8 @@ namespace Temporal
 		const float F = JUMP_FORCE_PER_SECOND;
 		const float G = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
-		const std::vector<const JumpInfo*>& data = JumpInfoProvider::get().getData();
-		for(unsigned int i = 0; i < data.size(); ++i)
+		const JumpInfoCollection& data = JumpInfoProvider::get().getData();
+		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
 		{
 			/* x = T*F*cos(A)
 				* y = T*F*sin(A) - (G*T^2)/2
@@ -216,7 +216,7 @@ namespace Temporal
 				* y = (2*F^2*x*sin(A)*cos(A) - G*x^2)/(2*F^2*cos(A)^2)
 				* y = x*(2*F^2*sin(A)*cos(A) - G*x)/(2*F^2*cos(A)^2)
 				*/
-			const JumpInfo* jumpInfo = data[i];
+			const JumpInfo* jumpInfo = *i;
 			float A = jumpInfo->getAngle();
 			float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
 

@@ -6,7 +6,7 @@ namespace Temporal
 {
 	SpriteGroup::~SpriteGroup(void)
 	{
-		for(std::vector<const Sprite*>::iterator i = _sprites.begin(); i != _sprites.end(); ++i)
+		for(SpriteIterator i = _sprites.begin(); i != _sprites.end(); ++i)
 			delete *i;
 	}
 

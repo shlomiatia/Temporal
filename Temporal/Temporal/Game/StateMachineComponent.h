@@ -29,10 +29,13 @@ namespace Temporal
 		ComponentState& operator=(const ComponentState&);
 	};
 
+	typedef std::vector<ComponentState*> StateCollection;
+	typedef StateCollection::const_iterator StateIterator;
+
 	class StateMachineComponent : public Component
 	{
 	public:
-		StateMachineComponent(std::vector<ComponentState*> states);
+		StateMachineComponent(StateCollection states);
 		virtual ~StateMachineComponent(void);
 
 		void changeState(int stateID);
@@ -42,7 +45,7 @@ namespace Temporal
 		virtual int getInitialState(void) const = 0;
 
 	private:
-		std::vector<ComponentState*> _states;
+		StateCollection _states;
 		ComponentState* _currentState;
 		int _currentStateID;
 

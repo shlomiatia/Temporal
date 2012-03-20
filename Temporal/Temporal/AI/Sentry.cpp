@@ -67,9 +67,9 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Sentry::getStates(void) const
+	StateCollection Sentry::getStates(void) const
 	{
-		std::vector<ComponentState*> states;
+		StateCollection states;
 		using namespace SentryStates;
 		states.push_back(new Search());
 		states.push_back(new Acquire());

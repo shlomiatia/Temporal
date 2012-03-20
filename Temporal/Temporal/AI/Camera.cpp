@@ -110,9 +110,9 @@ namespace Temporal
 		}
 	}
 
-	std::vector<ComponentState*> Camera::getStates(void) const
+	StateCollection Camera::getStates(void) const
 	{
-		std::vector<ComponentState*> states;
+		StateCollection states;
 		using namespace CameraStates;
 		states.push_back(new Search());
 		states.push_back(new See());

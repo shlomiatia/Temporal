@@ -6,7 +6,7 @@ namespace Temporal
 {
 	SpriteSheet::~SpriteSheet(void)
 	{
-		for(std::vector<const SpriteGroup*>::iterator i = _spriteGroups.begin(); i != _spriteGroups.end(); ++i)
+		for(SpriteGroupIterator i = _spriteGroups.begin(); i != _spriteGroups.end(); ++i)
 			delete *i;
 	}
 

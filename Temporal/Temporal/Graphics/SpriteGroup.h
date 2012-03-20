@@ -7,6 +7,9 @@ namespace Temporal
 {
 	class Sprite;
 
+	typedef std::vector<const Sprite*> SpriteCollection;
+	typedef SpriteCollection::const_iterator SpriteIterator;
+
 	class SpriteGroup
 	{
 	public:
@@ -18,7 +21,7 @@ namespace Temporal
 		const Sprite& get(int spriteID) const;
 		int getSize(void) const;
 	private:
-		std::vector<const Sprite*> _sprites;
+		SpriteCollection _sprites;
 
 		SpriteGroup(const SpriteGroup&);
 		SpriteGroup& operator=(const SpriteGroup&);
