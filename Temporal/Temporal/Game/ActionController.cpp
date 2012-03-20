@@ -23,6 +23,11 @@ namespace Temporal
 			delete _data[i];
 	}
 
+	void HangDescendHelper::setPlatformFromSensor(const Sensor& sensor)
+	{
+		_platform = sensor.getSensedBody()->getBounds();
+	}
+
 	std::vector<ComponentState*> ActionController::getStates() const
 	{
 		std::vector<ComponentState*> states;
@@ -66,7 +71,7 @@ namespace Temporal
 		return NULL;
 	}
 
-	void Stand::enter(void* param)
+	void Stand::enter(void)
 	{
 		_isDescending = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::STAND)));
@@ -101,7 +106,8 @@ namespace Temporal
 			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
 			{
 				const Sensor& sensor = *(Sensor*)message.getParam();
-				_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND, (void*)&sensor);
+				((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+				_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
 			}
 			else if(isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
 			{
@@ -110,7 +116,7 @@ namespace Temporal
 		}
 	}
 
-	void Fall::enter(void* param)
+	void Fall::enter(void)
 	{
 		// Not setting force because we want to continue the momentum
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::FALL)));
@@ -121,7 +127,8 @@ namespace Temporal
 		if (isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG, (void*)&sensor);
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
 		{
@@ -129,7 +136,7 @@ namespace Temporal
 		}
 	}
 
-	void Walk::enter(void* param)
+	void Walk::enter(void)
 	{
 		_stillWalking = true;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
@@ -166,7 +173,7 @@ namespace Temporal
 		}
 	}
 
-	void Turn::enter(void* param)
+	void Turn::enter(void)
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::TURN)));
 	}
@@ -222,7 +229,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToJump::enter(void* param)
+	void PrepareToJump::enter(void)
 	{
 		((ActionController*)_stateMachine)->getJumpHelper().setLedgeDirected(false);
 	}
@@ -239,7 +246,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpStart::enter(void* param)
+	void JumpStart::enter(void)
 	{
 		_animationEnded = false;
 		AnimationID::Enum animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
@@ -274,7 +281,7 @@ namespace Temporal
 		}
 	}
 
-	void Jump::enter(void* param)
+	void Jump::enter(void)
 	{
 		const JumpInfo& jumpInfo = ((ActionController*)_stateMachine)->getJumpHelper().getInfo();
 		float angle = jumpInfo.getAngle();
@@ -291,7 +298,8 @@ namespace Temporal
 		if (isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG, (void*)&sensor);
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
 		{
@@ -299,7 +307,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpEnd::enter(void* param)
+	void JumpEnd::enter(void)
 	{
 		AnimationID::Enum animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
@@ -317,13 +325,12 @@ namespace Temporal
 	{
 		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		const Rect& platformBounds = _platform->getBounds();
-		float platformTop = platformBounds.getTop();
+		float platformTop = _platform->getTop();
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		float platformEdge = platformBounds.getOppositeSide(orientation);
+		float platformEdge = _platform->getOppositeSide(orientation);
 		float entityFront = personBounds.getSide(orientation);
 		float movementX = (platformEdge - entityFront) * orientation;
 		Vector movement(movementX, movementY);
@@ -340,10 +347,9 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToHang::enter(void* param)
+	void PrepareToHang::enter(void)
 	{
-		const Sensor& sensor = *(Sensor*)param;
-		_platform = sensor.getSensedBody();
+		_platform = &((ActionController*)_stateMachine)->getHangDescendHelper().getPlatform();
 
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
@@ -357,7 +363,7 @@ namespace Temporal
 		}
 	}
 
-	void Hanging::enter(void* param)
+	void Hanging::enter(void)
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG_BACKWARD, true)));	
 	}
@@ -370,7 +376,7 @@ namespace Temporal
 		}
 	}
 
-	void Hang::enter(void* param)
+	void Hang::enter(void)
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG)));
 	}
@@ -387,7 +393,7 @@ namespace Temporal
 		}
 	}
 
-	void Drop::enter(void* param)
+	void Drop::enter(void)
 	{
 		_platformFound = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::DROP)));
@@ -417,7 +423,7 @@ namespace Temporal
 		}
 	}
 
-	void Climb::enter(void* param)
+	void Climb::enter(void)
 	{
 		const Vector& size = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float climbForceX = 1.0f;
@@ -448,8 +454,7 @@ namespace Temporal
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		const Rect& platformBounds = _platform->getBounds();
-		float platformEdge = platformBounds.getOppositeSide(orientation) + 1.0f * orientation;
+		float platformEdge = _platform->getOppositeSide(orientation) + 1.0f * orientation;
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
 		if(moveX != 0.0f)
@@ -459,17 +464,16 @@ namespace Temporal
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
-			float platformTop = platformBounds.getTop();
+			float platformTop = _platform->getTop();
 			Vector drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::DESCEND);
 		}
 	}
 
-	void PrepareToDescend::enter(void* param)
+	void PrepareToDescend::enter(void)
 	{
-		const Sensor& sensor = *(Sensor*)param;
-		_platform = sensor.getSensedBody();
+		_platform = &((ActionController*)_stateMachine)->getHangDescendHelper().getPlatform();
 
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
@@ -483,7 +487,7 @@ namespace Temporal
 		}
 	}
 
-	void Descend::enter(void* param)
+	void Descend::enter(void)
 	{
 		const Vector& size = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float forceX = -1.0f;

@@ -8,7 +8,7 @@ namespace Temporal
 	{
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
-		void Search::enter(void* param)
+		void Search::enter(void)
 		{
 			_timer.reset();
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
@@ -29,7 +29,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void* param)
+		void See::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
 			_haveLineOfSight = false;
@@ -49,7 +49,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(void* param)
+		void Turn::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN)));
 			_hasTurned = false;
@@ -74,7 +74,7 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(void* param)
+		void Acquire::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
 			_timer.reset();

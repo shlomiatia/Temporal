@@ -33,7 +33,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void* param)
+		void See::enter(void)
 		{
 			_haveLineOfSight = true;
 		}
@@ -52,7 +52,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(void* param)
+		void Turn::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 		}
@@ -69,7 +69,7 @@ namespace Temporal
 
 		const float Wait::WAIT_TIME_IN_MILLIS(5000.0f);
 
-		void Wait::enter(void* param)
+		void Wait::enter(void)
 		{
 			_timer.reset();
 		}
