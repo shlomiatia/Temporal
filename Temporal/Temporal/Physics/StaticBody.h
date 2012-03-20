@@ -12,6 +12,7 @@ namespace Temporal
 
 		bool isCover(void) const { return _cover; }
 		virtual ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
+		virtual void handleMessage(Message& message);
 
 	private:
 		bool _cover;

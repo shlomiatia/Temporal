@@ -88,5 +88,6 @@
     <ClCompile Include="AI\Navigator.cpp" />
     <ClCompile Include="Physics\PhysicsUtils.cpp" />
     <ClCompile Include="Game\MessageUtils.cpp" />
+    <ClCompile Include="Physics\StaticBody.cpp" />
   </ItemGroup>
 </Project>

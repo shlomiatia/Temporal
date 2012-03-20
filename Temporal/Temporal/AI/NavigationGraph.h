@@ -74,7 +74,7 @@ namespace Temporal
 			return instance;
 		}
 
-		void init(std::vector<const Rect>& platforms);
+		void init(void);
 		void dispose(void);
 		const NavigationNode* getNodeByPosition(const Vector& position) const;
 		void draw(void) const;

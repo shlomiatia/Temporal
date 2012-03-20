@@ -97,6 +97,7 @@
     <ClCompile Include="Physics\Sight.cpp" />
     <ClCompile Include="Physics\Grid.cpp" />
     <ClCompile Include="Physics\PhysicsUtils.cpp" />
+    <ClCompile Include="Physics\StaticBody.cpp" />
     <ClCompile Include="TestPanel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

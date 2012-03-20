@@ -16,17 +16,18 @@ namespace Temporal
 		_components.push_back(component);
 	}
 
-	Component* Entity::getByType(ComponentType::Enum type) const
+	bool Entity::have(ComponentType::Enum type) const
 	{
 		for(std::vector<Component*>::const_iterator i = _components.begin(); i != _components.end(); ++i)
 			if((**i).getType() == type)
-				return *i;
-		return NULL;
+				return true;
+		return false;
 	}
 
-	void Entity::handleMessage(Message& message) const
+	void* Entity::handleMessage(Message& message) const
 	{
 		for(std::vector<Component*>::const_iterator i = _components.begin(); i != _components.end(); ++i)
 			(**i).handleMessage(message);
+		return message.getParam();
 	}
 }

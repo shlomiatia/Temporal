@@ -32,13 +32,12 @@ namespace Temporal
 				delete _grid[i];
 	}
 
-	bool Grid::add(void* caller, void* data, int i, int j)
+	bool Grid::add(void* caller, void* data, int index)
 	{
 		Grid* grid = (Grid*)caller;
 		const StaticBody* staticBody = (StaticBody*)data;
 
-		int index = grid->getIndex(i, j);
-		std::vector<const StaticBody*>* tile = grid->_grid[index];
+		std::vector<const StaticBody*>* tile = grid->getTile(index);
 		if(tile == NULL)
 		{
 			tile = new std::vector<const StaticBody*>();
@@ -54,16 +53,21 @@ namespace Temporal
 		iterateTiles(bounds, this, (void*)staticBody, add);
 	}
 
-	std::vector<const StaticBody*>* Grid::getTile(int x, int y) const
+	std::vector<const StaticBody*>* Grid::getTile(int i, int j) const
 	{
-		int index = getIndex(x, y);
+		int index = getIndex(i, j);
+		return getTile(index);
+	}
+
+	std::vector<const StaticBody*>* Grid::getTile(int index) const
+	{
 		if(index < 0 || index >= getSize())
 			return NULL;
 		else
 			return _grid[index];
 	}
 
-	void Grid::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int i, int j)) const
+	void Grid::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const
 	{
 		int leftIndex = getAxisIndex(rect.getLeft());
 		int rightIndex = getAxisIndex(rect.getRight());
@@ -74,7 +78,8 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				if(!handleTile(caller, data, i, j))
+				int index = getIndex(i, j);
+				if(!handleTile(caller, data, index))
 					return;
 			}
 		}
@@ -87,12 +92,12 @@ namespace Temporal
 		bool(*handleStaticBody)(void* caller, void* data, const StaticBody& staticBody);
 	};
 
-	bool Grid::iterateStaticBodies(void* caller, void* data, int i, int j)
+	bool Grid::iterateStaticBodies(void* caller, void* data, int index)
 	{
 		const Grid& grid = *(Grid*)caller;
 		IterateStaticBodiesHelper* helper = (IterateStaticBodiesHelper*)data;
 
-		std::vector<const StaticBody*>* staticBodies = grid.getTile(i, j);
+		std::vector<const StaticBody*>* staticBodies = grid.getTile(index);
 		if(staticBodies != NULL)
 		{
 			for(unsigned int index = 0; index < staticBodies->size(); ++index)
