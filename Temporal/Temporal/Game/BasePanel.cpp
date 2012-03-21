@@ -20,7 +20,7 @@ namespace Temporal
 		ViewManager::get().init(screenSize, 768.0f);
 		Vector worldSize(screenSize);
 		ViewManager::get().setLevelBounds(screenSize);
-		Grid::get().init(worldSize, 32.0f);
+		Grid::get().init(worldSize, 128.0f);
 		DebugInfo::get().setShowingFPS(true);
 
 		createEntities();
@@ -51,13 +51,13 @@ namespace Temporal
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
 		// TODO: Classify debug draw SLOTH
-		bool debugDraw = false;
+		bool debugDraw = true;
 		if(debugDraw)
 		{
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));
-			//Grid::get().draw();
-			//NavigationGraph::get().draw();
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));	
 		}
+		Grid::get().draw();
+		//NavigationGraph::get().draw();
 	}
 
 	void BasePanel::dispose(void)

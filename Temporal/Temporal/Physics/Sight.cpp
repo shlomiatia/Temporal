@@ -1,5 +1,6 @@
 #include "Sight.h"
 #include "Grid.h"
+#include "StaticBody.h"
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Graphics\Graphics.h>
@@ -29,12 +30,14 @@ namespace Temporal
 
 
 		// Check orientation
+		// TODO: Think about me SLOTH
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
 			return;
 
 		// Check field of view
 		// TODO: Test against top and bottom PHYSICS
 		// TODO: Eyes GRAPHICS
+		// TODO: Put me in segment SLOTH
 		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
 		float angle = atan(slope);
 
@@ -42,14 +45,17 @@ namespace Temporal
 			(_lowerAngle * sourceOrientation - angle) * sourceOrientation > 0.0f)
 			return;
 
-		_isSeeing = rayCast(sourcePosition, targetPosition);
+		DirectedSegment directedSegment(sourcePosition, targetPosition);
+		_isSeeing = directedSegmentCast(directedSegment);
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));
 	}
 
-	bool Sight::rayCast(const Vector& source, const Vector& destination)
+	bool Sight::directedSegmentCast(const DirectedSegment& directedSegment)
 	{
+		const Vector& source = directedSegment.getOrigin();
+		const Vector& destination = directedSegment.getTarget();
 		float x1 = source.getX();
 		float y1 = source.getY();
 		float x2 = destination.getX();
@@ -72,10 +78,10 @@ namespace Temporal
 		// (x1,y1)-(x2,y2) crosses the first horizontal and vertical cell
 		// boundaries, respectively. Min(tx, ty) indicates how far one can
 		// travel along the segment and still remain in the current cell
-		float minx = tileSize * floor(x1/tileSize), maxx = minx + tileSize;
-		float tx = ((x1 < x2) ? (x1 - minx) : (maxx - x1)) / abs(x2 - x1);
-		float miny = tileSize * floor(y1/tileSize), maxy = miny + tileSize;
-		float ty = ((y1 < y2) ? (y1 - miny) : (maxy - y1)) / abs(y2 - y1);
+		float minx = tileSize * floorf(x1/tileSize), maxx = minx + tileSize;
+		float tx = ((x1 > x2) ? (x1 - minx) : (maxx - x1)) / abs(x2 - x1);
+		float miny = tileSize * floorf(y1/tileSize), maxy = miny + tileSize;
+		float ty = ((y1 > y2) ? (y1 - miny) : (maxy - y1)) / abs(y2 - y1);
 
 		// Determine deltax/deltay, how far (in units of t) one must step
 		// along the directed line segment for the horizontal/vertical
@@ -83,7 +89,7 @@ namespace Temporal
 		float deltatx = tileSize / abs(x2 - x1);
 		float deltaty = tileSize / abs(y2 - y1);
 
-		bool isSuccessful = true;
+		_pointOfIntersection = destination;
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
@@ -92,8 +98,15 @@ namespace Temporal
 			StaticBodyCollection* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{
-				isSuccessful = false;
-				break;
+				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
+				{
+					const StaticBody& body = **iterator;
+					if(body.getBounds().intersects(directedSegment, _pointOfIntersection))
+					{
+						return false;
+					}
+				}
+				
 			}
 			if (tx <= ty) 
 			{ // tx smallest, step in x
@@ -108,9 +121,8 @@ namespace Temporal
 				j += dj;
 			}
 		}
-		_pointOfIntersection = Grid::get().getTileCenter(i, j);
 			
-		return isSuccessful;
+		return true;
 	}
 
 	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Vector &sourcePosition)

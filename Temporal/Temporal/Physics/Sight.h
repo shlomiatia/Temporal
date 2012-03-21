@@ -3,6 +3,7 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Vector.h>
+#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
@@ -26,7 +27,7 @@ namespace Temporal
 		void drawFieldOfView(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
 		void drawDebugInfo(void) const;
 
-		bool rayCast(const Vector& source, const Vector& destination);
+		bool directedSegmentCast(const DirectedSegment& ray);
 	};
 }
 #endif

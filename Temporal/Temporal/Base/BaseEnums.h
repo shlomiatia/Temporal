@@ -25,10 +25,21 @@ namespace Temporal
 			BACK = 8,
 			ALL = 15,
 		};
+		// TODO: WTF did I do here? SLOTH
 		inline Direction::Enum operator|(Direction::Enum a, Direction::Enum b) { return (Direction::Enum)((int)a | (int)b); }
 		inline Direction::Enum operator&(Direction::Enum a, Direction::Enum b) { return (Direction::Enum)((int)a & (int)b); }
 		inline bool match(Direction::Enum direction, Direction::Enum positive) { return positive == Direction::ALL || (direction & positive) == positive; }
 		inline bool match(Direction::Enum direction, Direction::Enum positive, Direction::Enum negative) { return match(direction, positive) && !(direction & negative); }
 	}	
+
+	namespace Axis
+	{
+		enum Enum
+		{
+			X,
+			Y
+		};
+	}
+	inline void operator++(Axis::Enum& value, int) { value = (Axis::Enum)(value + 1); }
 }
 #endif

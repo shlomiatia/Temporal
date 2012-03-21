@@ -1,5 +1,6 @@
 #include "Rect.h"
 #include <assert.h>
+#include <algorithm>
 
 namespace Temporal
 {
@@ -14,5 +15,41 @@ namespace Temporal
 	{
 		assert(getSize().getWidth() > 0);
 		assert(getSize().getHeight() > 0);
+	}
+
+	bool Rect::intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const
+	{
+		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
+		float tmax = directedSegment.getLength(); // set to max distance ray can travel (for segment)
+		Vector origin = directedSegment.getOrigin();
+		Vector vector = directedSegment.getVector();
+		tmax = vector.getLength();
+		vector = vector.getNormalized();	
+
+		// For all three slabs
+		for (Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) {
+			float originAxis = origin.getAxis(axis);
+			float vectorAxis = vector.getAxis(axis);
+			Vector rectAxis = getAxis(axis);
+			if (vectorAxis == 0) {
+				// Ray is parallel to slab. No hit if origin not within slab
+				if (originAxis < rectAxis.getMin() || originAxis > rectAxis.getMax()) 
+					return false;
+			} else {
+				// Compute intersection t value of ray with near and far plane of slab
+				float ood = 1.0f / vectorAxis;
+				float t1 = (rectAxis.getMin() - originAxis) * ood;
+				float t2 = (rectAxis.getMax() - originAxis) * ood;
+				// Make t1 be intersection with near plane, t2 with far plane
+				if (t1 > t2) std::swap(t1, t2);
+				// Compute the intersection of slab intersection intervals
+				if (t1 > tmin) tmin = t1;
+				if (t2 < tmax) tmax = t2;
+				// Exit with no collision as soon as slab intersection becomes empty
+				if (tmin > tmax) return false;
+			}
+		}
+		pointOfIntersection = origin + vector * tmin;
+		return true;
 	}
 }
