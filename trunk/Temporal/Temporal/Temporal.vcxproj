@@ -70,6 +70,7 @@
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Base\Color.cpp" />
     <ClCompile Include="Base\Rect.cpp" />
+    <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="Base\Vector.cpp" />
     <ClCompile Include="Game\BasePanel.cpp" />

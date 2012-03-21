@@ -4,27 +4,33 @@
 
 namespace Temporal
 {
+	const Rect Rect::Empty(Vector::Zero, Vector::Zero);
+
 	Rect::Rect(float centerX, float centerY, float getWidth, float getHeight)
-				: _center(centerX, centerY), _size(getWidth, getHeight)
+		: _center(centerX, centerY), _size(getWidth, getHeight)
 	{
-		assert(getSize().getWidth() > 0);
-		assert(getSize().getHeight() > 0);
+		validate();
 	}
+
 	Rect::Rect(const Vector& center, const Vector& size)
-				: _center(center), _size(size)
+		: _center(center), _size(size)
 	{
-		assert(getSize().getWidth() > 0);
-		assert(getSize().getHeight() > 0);
+		validate();
+	}
+
+	void Rect::validate(void) const
+	{
+		assert(getSize().getWidth() >= 0);
+		assert(getSize().getHeight() >= 0);
 	}
 
 	bool Rect::intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
-		float tmax = directedSegment.getLength(); // set to max distance ray can travel (for segment)
 		Vector origin = directedSegment.getOrigin();
 		Vector vector = directedSegment.getVector();
-		tmax = vector.getLength();
-		vector = vector.getNormalized();	
+		float tmax = vector.getLength();
+		vector = vector.normalize();	
 
 		// For all three slabs
 		for (Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) {

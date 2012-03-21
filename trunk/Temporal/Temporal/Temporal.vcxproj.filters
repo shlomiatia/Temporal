@@ -92,5 +92,6 @@
     <ClCompile Include="Physics\StaticBody.cpp" />
     <ClCompile Include="Game\BasePanel.cpp" />
     <ClCompile Include="Game\DebugInfo.cpp" />
+    <ClCompile Include="Base\Segment.cpp" />
   </ItemGroup>
 </Project>

@@ -71,16 +71,33 @@ namespace Temporal
 	{
 		const Rect& staticBodyBounds(staticBody.getBounds());
 		const Rect& dynamicBodyBounds(getBounds());
-		const Rect& futureBounds = dynamicBodyBounds + _velocity;
+		const Rect& futureBounds = dynamicBodyBounds.move(_velocity);
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
+			// TODO: Try to eliminate intersects BS PHYSICS
 			// TODO: Correct smallest axis PHYSICS
 			// TODO: Gradual test PHYSICS
-			float x = correctCollisionInAxis(_velocity.getX(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight(), staticBodyBounds.getLeft(), staticBodyBounds.getRight());
-			float y = correctCollisionInAxis(_velocity.getY(), dynamicBodyBounds.getBottom(), dynamicBodyBounds.getTop(), staticBodyBounds.getBottom(), staticBodyBounds.getTop());
-			_velocity.setX(x);
-			_velocity.setY(y);
+			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
+			{
+				Vector dynamicAxisRange = dynamicBodyBounds.getAxis(axis);
+				float dynamicAxisMin = dynamicAxisRange.getMin();
+				float dynamicAxisMax = dynamicAxisRange.getMax();
+				Vector staticAxisRange = staticBodyBounds.getAxis(axis);
+				float staticAxisMin = staticAxisRange.getMin();
+				float staticAxisMax = staticAxisRange.getMax();
+				float axisVelocity = _velocity.getAxis(axis);
+				if(axisVelocity > 0 && dynamicAxisMax <= staticAxisMin)
+				{
+					float corrected = std::min(axisVelocity, staticAxisMin - dynamicAxisMax);
+					_velocity.setAxis(axis, corrected);
+				}
+				else if(axisVelocity < 0 && dynamicAxisMin >= staticAxisMax)
+				{
+					float corrected = std::max(axisVelocity, staticAxisMax - dynamicAxisMin);
+					_velocity.setAxis(axis, corrected);
+				}
+			}
 		}
 	}
 
@@ -136,7 +153,7 @@ namespace Temporal
 
 	void DynamicBody::handleCollisions(void)
 	{
-		Rect bounds = getBounds() + _velocity;
+		Rect bounds = getBounds().move(_velocity);
 		Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 
 		applyVelocity();

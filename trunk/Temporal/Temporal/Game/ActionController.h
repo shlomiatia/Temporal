@@ -103,7 +103,7 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _platform(Rect(Vector::Zero, Vector(1.0f, 1.0f))) {}
+		HangDescendHelper(void) : _platform(Rect::Empty) {}
 
 		void setPlatformFromSensor(const Sensor& sensor);
 		const Rect& getPlatform(void) const { return _platform; }

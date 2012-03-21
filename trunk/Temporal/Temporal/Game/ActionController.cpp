@@ -193,7 +193,7 @@ namespace Temporal
 		const Sensor& sensor = *(Sensor*)message.getParam();
 		const Body* sensedBody = sensor.getSensedBody();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		Rect personBounds(Rect::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
 		float front = personBounds.getSide(orientation);
@@ -323,7 +323,7 @@ namespace Temporal
 
 	void PrepareToHang::update(void)
 	{
-		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		Rect personBounds(Rect::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float platformTop = _platform->getTop();
 		float entityTop = personBounds.getTop();
@@ -452,7 +452,7 @@ namespace Temporal
 	void PrepareToDescend::update(void)
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rect personBounds(Vector::Zero, Vector(1.0f, 1.0f));
+		Rect personBounds(Rect::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float platformEdge = _platform->getOppositeSide(orientation) + 1.0f * orientation;
 		float entityFront = personBounds.getSide(orientation);
