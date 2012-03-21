@@ -220,7 +220,7 @@ namespace Temporal
 		if(!isCover)
 		{
 			RectCollection& platforms = *((RectCollection*)data);
-			Rect platform(Vector::Zero, Vector(1.0f, 1.0f));
+			Rect platform(Rect::Empty);
 			entity.handleMessage(Message(MessageID::GET_BOUNDS, &platform));
 			platforms.push_back(platform);
 		}

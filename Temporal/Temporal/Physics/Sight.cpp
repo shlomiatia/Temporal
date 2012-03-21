@@ -37,15 +37,14 @@ namespace Temporal
 		// Check field of view
 		// TODO: Test against top and bottom PHYSICS
 		// TODO: Eyes GRAPHICS
-		// TODO: Put me in segment SLOTH
-		float slope = (targetPosition.getY() - sourcePosition.getY()) / (targetPosition.getX() - sourcePosition.getX());
-		float angle = atan(slope);
+		DirectedSegment directedSegment(sourcePosition, targetPosition);
+		float angle = directedSegment.getAngle();
 
 		if ((_upperAngle * sourceOrientation - angle) * sourceOrientation < 0.0f ||
 			(_lowerAngle * sourceOrientation - angle) * sourceOrientation > 0.0f)
 			return;
 
-		DirectedSegment directedSegment(sourcePosition, targetPosition);
+		
 		_isSeeing = directedSegmentCast(directedSegment);
 		
 		if(_isSeeing)

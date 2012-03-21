@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	//TODO: Divide SLOTH
+	// TODO: Divide SLOTH
 	class Vector
 	{
 	public:
@@ -14,24 +14,28 @@ namespace Temporal
 
 		Vector(float x, float y) : _x(x), _y(y) {}
 
+		// Point, Vector
 		float getX(void) const { return (_x); }
 		void setX(float x) { _x = x; }
 		float getY(void) const { return (_y); }
 		void setY(float y) { _y = y; }
 
+		// Size
 		float getWidth(void) const { return (_x); }
 		void setWidth(float width) { _x = width; }
 		float getHeight(void) const { return (_y); }
 		void setHeight(float height) { _y = height; }
 
+		// Range
 		float getMin(void) const { return (_x); }
 		void setMin(float min) { _x = min; }
 		float getMax(void) const { return (_y); }
 		void setMax(float max) { _y = max; }
 
 		float getLength(void) const { return sqrt(pow(getX(), 2.0f) + pow(getY(), 2.0f)); }
-		Vector getNormalized(void) const { return Vector(getX() / getLength(), getY() / getLength()); }
+		Vector normalize(void) const { return Vector(getX() / getLength(), getY() / getLength()); }
 		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? getX() : getY(); }
+		void setAxis(Axis::Enum axis, float value) { if(axis == Axis::X) setX(value); else setY(value); }
 
 		Vector operator-(void) const { return Vector(-getX(), -getY()); }
 		bool operator==(const Vector& vector) const { return ((getX() == vector.getX()) && (getY() == vector.getY())); }
