@@ -1,8 +1,12 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "BaseEnums.h"
+#include <math.h>
+
 namespace Temporal
 {
+	//TODO: Divide SLOTH
 	class Vector
 	{
 	public:
@@ -19,6 +23,15 @@ namespace Temporal
 		void setWidth(float width) { _x = width; }
 		float getHeight(void) const { return (_y); }
 		void setHeight(float height) { _y = height; }
+
+		float getMin(void) const { return (_x); }
+		void setMin(float min) { _x = min; }
+		float getMax(void) const { return (_y); }
+		void setMax(float max) { _y = max; }
+
+		float getLength(void) const { return sqrt(pow(getX(), 2.0f) + pow(getY(), 2.0f)); }
+		Vector getNormalized(void) const { return Vector(getX() / getLength(), getY() / getLength()); }
+		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? getX() : getY(); }
 
 		Vector operator-(void) const { return Vector(-getX(), -getY()); }
 		bool operator==(const Vector& vector) const { return ((getX() == vector.getX()) && (getY() == vector.getY())); }

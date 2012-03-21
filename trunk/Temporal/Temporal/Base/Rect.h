@@ -2,16 +2,16 @@
 #define RECT_H
 #include "BaseEnums.h"
 #include "Vector.h"
+#include "Segment.h"
 
 namespace Temporal
 {
 	static float getOffset(float size) { return (size - 1.0f) / 2.0f; }
 
+	// TODO: Enlarge, move
 	class Rect
 	{
 	public:
-		
-
 		Rect(float centerX, float centerY, float getWidth, float getHeight);
 		Rect(const Vector& center, const Vector& size);
 
@@ -34,6 +34,9 @@ namespace Temporal
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
+		// TODO: Consider get side, cache SLOTH
+		Vector getAxis(Axis::Enum axis) const { return axis == Axis::X ? Vector(getLeft(), getRight()) : Vector(getBottom(), getTop()); }
+
 		Rect& operator+=(const Vector& vec)
 		{
 			_center += vec;
@@ -44,9 +47,13 @@ namespace Temporal
 			_center -= vec;
 			return *this;
 		}
+		// TODO: Try to eliminate me SLOTH
 		bool intersectsInclusive(const Rect& rect) const { return getLeft() <= rect.getRight() && getRight() >= rect.getLeft() && getBottom() <= rect.getTop() && getTop() >= rect.getBottom(); }
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
 		bool contains(const Vector& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
+
+		// TODO: Not here! SLOTH
+		bool intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const;
 	private:
 		Vector _center;
 		Vector _size;

@@ -19,6 +19,7 @@
     <ClInclude Include="AI\Sentry.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\BaseEnums.h" />
+    <ClInclude Include="Base\Segment.h" />
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Base\Timer.h" />
     <ClInclude Include="Game\BasePanel.h" />

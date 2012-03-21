@@ -49,6 +49,7 @@
     <ClInclude Include="Game\GameEnums.h" />
     <ClInclude Include="Game\BasePanel.h" />
     <ClInclude Include="Game\DebugInfo.h" />
+    <ClInclude Include="Base\Segment.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
