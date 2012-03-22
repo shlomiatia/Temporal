@@ -2,7 +2,7 @@
 #define SIGHT_H
 
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Component.h>
 
@@ -20,11 +20,11 @@ namespace Temporal
 		const float _upperAngle;
 		const float _lowerAngle;
 
-		Vector _pointOfIntersection;
+		Point _pointOfIntersection;
 		bool _isSeeing;
 
 		void checkLineOfSight(void);
-		void drawFieldOfView(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const;
+		void drawFieldOfView(const Point& sourcePosition, Orientation::Enum sourceOrientation) const;
 		void drawDebugInfo(void) const;
 
 		bool directedSegmentCast(const DirectedSegment& ray);

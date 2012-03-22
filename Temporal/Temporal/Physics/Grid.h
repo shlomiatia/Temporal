@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <vector>
 
 namespace Temporal
@@ -21,12 +21,12 @@ namespace Temporal
 			return instance;
 		}
 
-		void init(const Vector& worldSize, float tileSize);
+		void init(const Size& worldSize, float tileSize);
 		void dispose(void);
 
 		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
 		float getTileSize(void) const { return _tileSize; }
-		Vector getTileCenter(int i, int j) const { return  Vector(getTileAxisCenter(i), getTileAxisCenter(j)); }
+		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
 		StaticBodyCollection* getTile(int i, int j) const;
 
 		void add(const StaticBody* staticBody);

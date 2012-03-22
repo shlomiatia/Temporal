@@ -2,7 +2,7 @@
 #define SPRITESHEET_H
 
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Rect.h>
 #include <vector>
 

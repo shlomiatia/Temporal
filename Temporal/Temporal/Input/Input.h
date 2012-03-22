@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 
 namespace Temporal
 {
@@ -21,7 +21,7 @@ namespace Temporal
 		bool isUp(void) const { return (_up); }
 		bool isDown(void) const { return (_down); }
 		bool isQuit(void) const { return (_quit); }
-		const Vector& mouse(void) const { return _mouse; }
+		const Point& mouse(void) const { return _mouse; }
 
 	private:
 		bool _left;
@@ -29,9 +29,9 @@ namespace Temporal
 		bool _up;
 		bool _down;
 		bool _quit;
-		Vector _mouse;
+		Point _mouse; // POINT
 
-		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _mouse(Vector::Zero) {}
+		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _mouse(Point::Zero) {}
 		~Input(void) {}
 		Input(const Input&);
 		Input& operator=(const Input&);

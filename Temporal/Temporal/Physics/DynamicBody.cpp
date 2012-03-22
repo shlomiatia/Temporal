@@ -27,8 +27,8 @@ namespace Temporal
 
 	void DynamicBody::applyVelocity(void) const
 	{
-		const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Vector newPosition = position + _velocity;
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Point newPosition = position + _velocity;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
@@ -38,12 +38,12 @@ namespace Temporal
 		if(message.getID() == MessageID::SET_FORCE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			_force = Vector(param.getX() * getOrientation(), param.getY());
+			_force = Vector(param.getVx() * getOrientation(), param.getVy());
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			_impulse = Vector(param.getX() * getOrientation(), param.getY());
+			_impulse = Vector(param.getVx() * getOrientation(), param.getVy());
 			_force = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
@@ -80,10 +80,10 @@ namespace Temporal
 			// TODO: Gradual test PHYSICS
 			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 			{
-				Vector dynamicAxisRange = dynamicBodyBounds.getAxis(axis);
+				Range dynamicAxisRange = dynamicBodyBounds.getAxis(axis);
 				float dynamicAxisMin = dynamicAxisRange.getMin();
 				float dynamicAxisMax = dynamicAxisRange.getMax();
-				Vector staticAxisRange = staticBodyBounds.getAxis(axis);
+				Range staticAxisRange = staticBodyBounds.getAxis(axis);
 				float staticAxisMin = staticAxisRange.getMin();
 				float staticAxisMax = staticAxisRange.getMax();
 				float axisVelocity = _velocity.getAxis(axis);
@@ -144,9 +144,9 @@ namespace Temporal
 		if(_gravityEnabled)
 		{
 			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
-			float y = _velocity.getY();
+			float y = _velocity.getVy();
 			y -= gravity;
-			_velocity.setY(y);
+			_velocity.setVy(y);
 			_force -= Vector(0.0f, GRAVITY * interpolation);
 		}	
 	}
@@ -163,10 +163,10 @@ namespace Temporal
 		Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
 
 		// TODO: Broder help me!!! SLOTH!
-		if(_velocity.getY() == 0.0f)
-			_force.setY(0.0f);
-		if(_collision & Direction::BOTTOM ||  _velocity.getX() == 0.0f)
-			_force.setX(0.0f);
+		if(_velocity.getVy() == 0.0f)
+			_force.setVy(0.0f);
+		if(_collision & Direction::BOTTOM ||  _velocity.getVx() == 0.0f)
+			_force.setVx(0.0f);
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 

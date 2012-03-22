@@ -1,7 +1,7 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include "Component.h"
 
 namespace Temporal
@@ -9,12 +9,12 @@ namespace Temporal
 	class Position : public Component
 	{
 	public:
-		Position(const Vector& position) : _position(position) {}
+		Position(const Point& position) : _position(position) {}
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::POSITION; }
 		virtual void handleMessage(Message& message);
 	private:
-		Vector _position;
+		Point _position;
 	};
 }
 #endif

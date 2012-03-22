@@ -1,7 +1,7 @@
 #ifndef RECT_H
 #define RECT_H
 #include "BaseEnums.h"
-#include "Vector.h"
+#include "NumericPair.h"
 #include "Segment.h"
 
 namespace Temporal
@@ -14,10 +14,10 @@ namespace Temporal
 		static const Rect Empty;
 
 		Rect(float centerX, float centerY, float getWidth, float getHeight);
-		Rect(const Vector& center, const Vector& size);
+		Rect(const Point& center, const Size& size);
 
-		const Vector& getCenter(void) const { return (_center); }
-		const Vector& getSize(void) const { return (_size); }
+		const Point& getCenter(void) const { return (_center); }
+		const Size& getSize(void) const { return (_size); }
 
 		float getCenterX(void) const { return getCenter().getX(); }
 		float getCenterY(void) const { return getCenter().getY(); }
@@ -35,20 +35,20 @@ namespace Temporal
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
-		Vector getAxis(Axis::Enum axis) const { return axis == Axis::X ? Vector(getLeft(), getRight()) : Vector(getBottom(), getTop()); }
+		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
 		Rect move(const Vector& vector) const { return Rect(getCenter() + vector, getSize()); }
 		Rect resize(const Vector& delta) const { return Rect(getCenter(), getSize() + delta); }
 		
 		bool intersectsInclusive(const Rect& rect) const { return getLeft() <= rect.getRight() && getRight() >= rect.getLeft() && getBottom() <= rect.getTop() && getTop() >= rect.getBottom(); }
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
-		bool contains(const Vector& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
+		bool contains(const Point& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
 
 		// TODO: Not here! PHYSICS
-		bool intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const;
+		bool intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const;
 	private:
-		Vector _center;
-		Vector _size;
+		Point _center;
+		Size _size;
 
 		void validate(void) const;
 	};

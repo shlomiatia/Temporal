@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const Rect Rect::Empty(Vector::Zero, Vector::Zero);
+	const Rect Rect::Empty(Point::Zero, Size::Zero);
 
 	Rect::Rect(float centerX, float centerY, float getWidth, float getHeight)
 		: _center(centerX, centerY), _size(getWidth, getHeight)
@@ -12,7 +12,7 @@ namespace Temporal
 		validate();
 	}
 
-	Rect::Rect(const Vector& center, const Vector& size)
+	Rect::Rect(const Point& center, const Size& size)
 		: _center(center), _size(size)
 	{
 		validate();
@@ -24,10 +24,10 @@ namespace Temporal
 		assert(getSize().getHeight() >= 0);
 	}
 
-	bool Rect::intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const
+	bool Rect::intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
-		const Vector& origin = directedSegment.getOrigin();
+		const Point& origin = directedSegment.getOrigin();
 		const Vector& vector = directedSegment.getNormalizedVector();
 		float tmax = directedSegment.getLength();
 
@@ -35,7 +35,7 @@ namespace Temporal
 		for (Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) {
 			float originAxis = origin.getAxis(axis);
 			float vectorAxis = vector.getAxis(axis);
-			Vector rectAxis = getAxis(axis);
+			Range rectAxis = getAxis(axis);
 			if (vectorAxis == 0) {
 				// Ray is parallel to slab. No hit if origin not within slab
 				if (originAxis < rectAxis.getMin() || originAxis > rectAxis.getMax()) 

@@ -4,7 +4,7 @@
 #include "Message.h"
 #include "EntitiesManager.h"
 #include "Game.h"
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Graphics\ViewManager.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <Temporal\Physics\Grid.h>
@@ -16,9 +16,9 @@ namespace Temporal
 {
 	void BasePanel::init(void)
 	{
-		Vector screenSize = Vector(1024.0f, 768.0f);
+		Size screenSize = Size(1024.0f, 768.0f);
 		ViewManager::get().init(screenSize, 768.0f);
-		Vector worldSize(screenSize);
+		Size worldSize = Size(screenSize);
 		ViewManager::get().setLevelBounds(screenSize);
 		Grid::get().init(worldSize, 128.0f);
 		DebugInfo::get().setShowingFPS(true);
@@ -33,7 +33,7 @@ namespace Temporal
 		Input::get().update();
 		
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-		const Vector& position = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		
 		ViewManager::get().update();
 		

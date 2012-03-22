@@ -2,7 +2,7 @@
 #define NAVIGATIONGRAPH_H
 
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Rect.h>
 #include <vector>
 
@@ -84,11 +84,11 @@ namespace Temporal
 
 		void init(void);
 		void dispose(void);
-		const NavigationNode* getNodeByPosition(const Vector& position) const;
+		const NavigationNode* getNodeByPosition(const Point& position) const;
 		void draw(void) const;
 
 	private:
-		static const Vector MIN_AREA_SIZE;
+		static const Size MIN_AREA_SIZE;
 
 		// TODO: Use actual jump values? Unify SLOTH
 		static const float MAX_JUMP_UP_DISTANCE;

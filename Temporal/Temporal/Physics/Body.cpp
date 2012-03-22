@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	Body::Body(const Vector& size)
+	Body::Body(const Size& size)
 		: _size(size)
 	{
 		assert(_size.getWidth() > 0.0f);
@@ -14,7 +14,7 @@ namespace Temporal
 
 	Rect Body::getBounds(void) const
 	{
-		const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		return Rect(position, _size);
 	}
 

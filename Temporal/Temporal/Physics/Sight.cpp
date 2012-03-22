@@ -21,12 +21,12 @@ namespace Temporal
 
 	void Sight::checkLineOfSight(void)
 	{
-		_pointOfIntersection = Vector::Zero;
+		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
-		const Vector& sourcePosition = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		// TODO: Who're you watching? ENTITIES
-		const Vector& targetPosition = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 
 		// Check orientation
@@ -52,8 +52,8 @@ namespace Temporal
 
 	bool Sight::directedSegmentCast(const DirectedSegment& directedSegment)
 	{
-		const Vector& source = directedSegment.getOrigin();
-		const Vector& destination = directedSegment.getTarget();
+		const Point& source = directedSegment.getOrigin();
+		const Point& destination = directedSegment.getTarget();
 		float x1 = source.getX();
 		float y1 = source.getY();
 		float x2 = destination.getX();
@@ -122,14 +122,15 @@ namespace Temporal
 		return true;
 	}
 
-	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Vector &sourcePosition)
+	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Point &sourcePosition)
 	{
+		// TODO:
 		float angleSlope = tan(angle * sourceOrientation);
 		float angleTargetY = angleSlope * targetX - angleSlope * sourcePosition.getX() + sourcePosition.getY();
-		Graphics::get().drawLine(sourcePosition, Vector(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Graphics::get().drawLine(sourcePosition, Point(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
-	void Sight::drawFieldOfView(const Vector &sourcePosition, Orientation::Enum sourceOrientation) const
+	void Sight::drawFieldOfView(const Point &sourcePosition, Orientation::Enum sourceOrientation) const
 	{
 		static const float SIGHT_BEAM_LENGTH = 1024.0f;
 		float targetX = sourcePosition.getX() + SIGHT_BEAM_LENGTH * sourceOrientation;
@@ -140,12 +141,12 @@ namespace Temporal
 
 	void Sight::drawDebugInfo(void) const
 	{
-		const Vector& sourcePosition = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Vector& targetPosition = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
-		if(_pointOfIntersection != Vector::Zero)
+		if(_pointOfIntersection != Point::Zero)
 			Graphics::get().drawLine(sourcePosition, _pointOfIntersection, _isSeeing ? Color::Green : Color::Red);
 	}
 }

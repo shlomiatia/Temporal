@@ -6,7 +6,7 @@ namespace Temporal
 	DirectedSegment::DirectedSegment(float originX, float originY, float targetX, float targetY)
 		: _origin(originX, originY), _target(targetX, targetY), _length(calculateLength()), _normalizedVector(calculateNormalizedVector()), _angle(calculateAngle()) {}
 
-	DirectedSegment::DirectedSegment(const Vector& origin, const Vector& target)
+	DirectedSegment::DirectedSegment(const Point& origin, const Point& target)
 		: _origin(origin), _target(target), _length(calculateLength()), _normalizedVector(calculateNormalizedVector()), _angle(calculateAngle()) {}
 
 	float DirectedSegment::calculateLength(void) const
