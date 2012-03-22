@@ -15,7 +15,6 @@ namespace Temporal
 				const Point* goalPosition = (const Point*)message.getParam();
 				Navigator& navigator = *(Navigator*)_stateMachine;
 
-				// TODO: Whor'e you chasing ENTITIES
 				const Point& startPosition = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				const NavigationNode* start = NavigationGraph::get().getNodeByPosition(startPosition);
 				const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(*goalPosition);
@@ -172,7 +171,7 @@ namespace Temporal
 				{
 					const NavigationEdge& edge = **i;
 					const NavigationNode& next = edge.getTarget();
-					Graphics::get().drawLine(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
+					Graphics::get().drawSegment(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
 					current = &next;
 				}
 			}

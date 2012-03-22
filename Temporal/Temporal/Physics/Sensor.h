@@ -11,7 +11,6 @@ namespace Temporal
 	class Body;
 	class StaticBody;
 
-	// TODO: Enable / Disable PHYSICS
 	class Sensor : public Component
 	{
 	public:

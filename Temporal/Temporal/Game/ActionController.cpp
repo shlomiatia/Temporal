@@ -100,7 +100,6 @@ namespace Temporal
 		{
 			_isDescending = false;	
 		}
-		// TODO: Consider creating new state for descending, or querying controller directly INPUT
 		if(_isDescending)
 		{
 			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
@@ -151,7 +150,6 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			// TODO: Query input INPUT
 			_stillWalking = true;
 		}
 		else if(isBodyCollisionMessage(message, Direction::ALL, Direction::BOTTOM))
@@ -189,7 +187,6 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
-		// TODO: Transfer sensor message param with entity id, and query everything ENTITIES
 		const Sensor& sensor = *(Sensor*)message.getParam();
 		const Body* sensedBody = sensor.getSensedBody();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -411,7 +408,6 @@ namespace Temporal
 	{
 		if(isSensorMessage(message, SensorID::HANG))
 		{
-			// TODO: Query sensor PHYSICS
 			_platformFound = true;
 		}
 		if(message.getID() == MessageID::UPDATE)

@@ -5,6 +5,30 @@
 
 namespace Temporal
 {
+	// TODO: Only use including intersction PHYSICS
+	// TODO: Support multiple shape to shapes intersection tests PHYSICS
+	// TODO: Handle areas intersection in navigation graph PHYISICS
+	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
+	// TODO: Buffer/query current sensors (drop) PHYSICS
+	// TODO: Correct smallest axis PHYSICS
+	// TODO: Gradual force apply PHYSICS
+	// TODO: Enable/Disable sensors PHYSICS
+	// TODO: Test against top, center bottom in sight PHYSICS
+	
+	// TODO: Use hashed string for Entity, components, sensors, messages, states etc. ENTITIES
+	// TODO: Pass static entity id in sensor, instead of the static body itself ENTITIES
+	// TODO: Don't hard code IDs (Sight, View Manager) ENTITIES
+	// TODO: Deal with component order ENTITIES
+
+	// TODO: Consider transition type in navigation edge cost  AI
+	// TODO: Fix huristics:  Take into account position, need for turning, and several edges to the same platform AI
+	// TODO: Fault tolerance in navigator AI
+
+	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
+
+	// TODO: Buffer/query current actions (descend, walk), or create another descending proxy state INPUT
+
+	// TODO: Separate action controller to pluggable modules SCRIPTS
 	class TestPanel : public BasePanel
 	{
 	public:

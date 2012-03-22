@@ -12,7 +12,7 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false) {}
+		explicit Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false) {}
 		
 		virtual ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 

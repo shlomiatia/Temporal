@@ -35,7 +35,7 @@ namespace Temporal
 	class StateMachineComponent : public Component
 	{
 	public:
-		StateMachineComponent(StateCollection states);
+		explicit StateMachineComponent(StateCollection states);
 		virtual ~StateMachineComponent(void);
 
 		void changeState(int stateID);

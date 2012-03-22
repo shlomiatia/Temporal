@@ -164,7 +164,7 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-	void Graphics::drawLine(const Point& p1, const Point& p2, const Color& color) const
+	void Graphics::drawSegment(const Point& p1, const Point& p2, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 

@@ -118,7 +118,7 @@ namespace Temporal
 			JUMP,
 			JUMP_END,
 
-			// TODO: Gradual hang & descend PHYSICS
+			// TODO: Gradual hang & descend SLOTH
 			PREPARE_TO_HANG,
 			HANGING,
 			HANG,

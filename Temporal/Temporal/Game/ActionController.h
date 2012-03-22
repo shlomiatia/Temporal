@@ -114,7 +114,6 @@ namespace Temporal
 		HangDescendHelper& operator=(const HangDescendHelper&);
 	};
 
-	// TODO: Divide according to capabilities. Scripted States FILES
 	class ActionController : public StateMachineComponent
 	{
 	public:

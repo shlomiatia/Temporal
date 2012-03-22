@@ -10,7 +10,7 @@ namespace Temporal
 	class Body : public Component
 	{
 	public:
-		Body(const Size& size);
+		explicit Body(const Size& size);
 
 		const Size& getSize(void) const { return _size; }
 		Rect getBounds(void) const;
