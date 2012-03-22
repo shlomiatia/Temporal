@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	void Graphics::init(const Vector& resolution, const Vector& viewSize, bool fullScreen)
+	void Graphics::init(const Size& resolution, const Size& viewSize, bool fullScreen)
 	{
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
 		{
@@ -16,7 +16,7 @@ namespace Temporal
 
 		setVideoMode(resolution, viewSize, fullScreen);
 	}
-	void Graphics::setVideoMode(const Vector& resolution, const Vector& viewSize, bool fullScreen) const
+	void Graphics::setVideoMode(const Size& resolution, const Size& viewSize, bool fullScreen) const
 	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
@@ -36,7 +36,7 @@ namespace Temporal
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0f, viewSize.getX(), 0.0f, viewSize.getY(), -1.0f, 1.0f);
+		glOrtho(0.0f, viewSize.getWidth(), 0.0f, viewSize.getHeight(), -1.0f, 1.0f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -64,7 +64,7 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
-		glTranslatef(_translation.getX(), _translation.getY(), 0.0f);
+		glTranslatef(_translation.getVx(), _translation.getVy(), 0.0f);
 	}
 
 	void Graphics::finishDrawing(void) const
@@ -89,9 +89,9 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Vector& screenLocation, bool mirrored, const Color& color) const
+	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
 	{
-		const Vector& textureSize = texture.getSize();
+		const Size& textureSize = texture.getSize();
 		float textureWidth = textureSize.getWidth();
 		float textureHeight = textureSize.getHeight();
 
@@ -164,7 +164,7 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-	void Graphics::drawLine(const Vector& p1, const Vector& p2, const Color& color) const
+	void Graphics::drawLine(const Point& p1, const Point& p2, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 

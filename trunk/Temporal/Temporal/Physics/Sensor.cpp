@@ -9,10 +9,10 @@ namespace Temporal
 {
 	Rect Sensor::getBounds(void) const
 	{
-		const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		return Rect(position.getX() + _offset.getX() * orientation,
-					position.getY() + _offset.getY(),
+		return Rect(position.getX() + _offset.getVx() * orientation,
+					position.getY() + _offset.getVy(),
 					_size.getWidth(),
 					_size.getHeight());
 	}

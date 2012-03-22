@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 
 namespace Temporal
 {
@@ -12,12 +12,12 @@ namespace Temporal
 		~Texture();
 
 		unsigned int getID(void) const { return _id; }
-		const Vector& getSize(void) const { return _size; }
+		const Size& getSize(void) const { return _size; }
 	private:
 		const unsigned int _id;
-		const Vector _size;
+		const Size _size; // SIZE
 
-		Texture(unsigned int id, const Vector& size) : _id(id), _size(size) {}
+		Texture(unsigned int id, const Size& size) : _id(id), _size(size) {}
 
 		Texture(const Texture&);
 		Texture& operator=(const Texture&);

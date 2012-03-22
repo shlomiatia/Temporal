@@ -5,13 +5,13 @@
 
 namespace Temporal
 {
-	void ViewManager::init(const Vector& resolution, float logicalHeight, bool fullScreen)
+	void ViewManager::init(const Size& resolution, float logicalHeight, bool fullScreen)
 	{
 		_cameraSize.setHeight(logicalHeight);
 		setVideoMode(resolution, fullScreen);
 	}
 
-	void ViewManager::setVideoMode(const Vector& resolution, bool fullScreen)
+	void ViewManager::setVideoMode(const Size& resolution, bool fullScreen)
 	{
 		float logicalWidth = _cameraSize.getHeight() * resolution.getWidth() / resolution.getHeight();
 		_cameraSize.setWidth(logicalWidth);
@@ -21,7 +21,7 @@ namespace Temporal
 	void ViewManager::update(void) const
 	{
 		// TODO: Who're you chasing ENTITIES
-		const Vector& position = *(Vector*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		float cameraWidth = _cameraSize.getWidth();
 		float cameraHeight = _cameraSize.getHeight();
 		float levelWidth = _levelBounds.getWidth();
@@ -33,7 +33,7 @@ namespace Temporal
 		cameraBottomPosition = cameraBottomPosition + cameraHeight < levelHeight ? cameraBottomPosition :  levelHeight - cameraHeight;
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
 
-		Vector cameraBottomLeftPosition(-cameraLeftPosition, -cameraBottomPosition);
-		Graphics::get().setTranslation(cameraBottomLeftPosition);
+		Vector translation(-cameraLeftPosition, -cameraBottomPosition);
+		Graphics::get().setTranslation(translation);
 	}
 }

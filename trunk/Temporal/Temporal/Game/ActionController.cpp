@@ -341,7 +341,7 @@ namespace Temporal
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
-			Vector drawPosition(personCenterX, platformTop);
+			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::HANGING);
 		}
@@ -404,7 +404,7 @@ namespace Temporal
 
 	void Drop::exit(void)
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Vector::Zero));
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 	}
 
 	void Drop::handleMessage(Message& message)
@@ -425,7 +425,7 @@ namespace Temporal
 
 	void Climb::enter(void)
 	{
-		const Vector& size = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
+		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float climbForceX = 1.0f;
 		float climbForceY = size.getHeight() - 1.0f;
 		Vector climbForce(climbForceX, climbForceY);
@@ -436,7 +436,7 @@ namespace Temporal
 
 	void Climb::exit(void)
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Vector::Zero));
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 		bool gravityEnabled = true;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
@@ -465,7 +465,7 @@ namespace Temporal
 		{
 			float personCenterX = personBounds.getCenterX();
 			float platformTop = _platform->getTop();
-			Vector drawPosition(personCenterX, platformTop);
+			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::DESCEND);
 		}
@@ -489,7 +489,7 @@ namespace Temporal
 
 	void Descend::enter(void)
 	{
-		const Vector& size = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
+		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float forceX = -1.0f;
 		float forceY = -(size.getHeight() - 1.0f);
 

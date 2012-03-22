@@ -37,11 +37,11 @@ namespace Temporal
 	
 	void Renderer::draw(void) const
 	{
-		Vector position = Vector::Zero;
+		Point position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
 		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
 		const Orientation::Enum* entityOrientation = (const Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -54,10 +54,10 @@ namespace Temporal
 		bool mirrored = orientation != spritesheetOrientation;
 		const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
 		const Vector& offset = sprite.getOffset();
-		float screenLocationX = position.getX() - orientation * spritesheetOrientation * offset.getX();
-		float screenLocationY = position.getY() - offset.getY();
+		float screenLocationX = position.getX() - orientation * spritesheetOrientation * offset.getVx();
+		float screenLocationY = position.getY() - offset.getVy();
 
-		Vector screenLocation(screenLocationX, screenLocationY);
+		Point screenLocation(screenLocationX, screenLocationY);
 
 		Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
 	}

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="Base\Color.h" />
-    <ClInclude Include="Base\Vector.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Game\Panel.h" />
@@ -48,11 +47,11 @@
     <ClInclude Include="Game\BasePanel.h" />
     <ClInclude Include="Game\DebugInfo.h" />
     <ClInclude Include="Base\Segment.h" />
+    <ClInclude Include="Base\NumericPair.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Base\Color.cpp" />
-    <ClCompile Include="Base\Vector.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
@@ -90,5 +89,6 @@
     <ClCompile Include="Game\BasePanel.cpp" />
     <ClCompile Include="Game\DebugInfo.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
+    <ClCompile Include="Base\NumericPair.cpp" />
   </ItemGroup>
 </Project>

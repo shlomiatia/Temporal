@@ -1,6 +1,6 @@
 #include "TestPanel.h"
 
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\Component.h>
@@ -43,7 +43,7 @@ namespace Temporal
 				VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
 				if(_layer == layer)
 				{
-					Rect bounds(Vector::Zero, Vector(1.0f, 1.0f));
+					Rect bounds(Rect::Empty);
 					sendMessageToOwner(Message(MessageID::GET_BOUNDS, &bounds));
 					const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
 					const Texture& texture = _spritesheet.getTexture();
@@ -57,7 +57,7 @@ namespace Temporal
 						{
 							if(bounds.getHeight() < textureHeight)
 								y = bounds.getCenterY();
-							Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), Vector(x, y), false);
+							Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), Point(x, y), false);
 						}
 					}
 				}
@@ -102,13 +102,13 @@ namespace Temporal
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
-		Vector sensorSize(jumpSensorWidth, jumpSensorHeight);
+		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
 		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
 		entity.add(sensor);
 
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
-		sensorSize = Vector(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
+		sensorSize = Size(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
 		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
@@ -121,7 +121,7 @@ namespace Temporal
 		sensorOffsetX = -(edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
 		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
+		sensorSize = Size(playerWidth * 2.0f, 2.0f);
 		sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 		entity.add(sensor);
 
@@ -129,7 +129,7 @@ namespace Temporal
 		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
 		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
 		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensorSize = Vector(playerWidth * 2.0f, 2.0f);
+		sensorSize = Size(playerWidth * 2.0f, 2.0f);
 		sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 		entity.add(sensor);
 	}
@@ -143,11 +143,11 @@ namespace Temporal
 	void createPlayer(SpriteSheet* spritesheet)
 	{
 		// TODO: Central resources container FILES
-		Position* position = new Position(Vector(512.0f, 768.0f));
+		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -167,11 +167,11 @@ namespace Temporal
 
 	void createChaser(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Vector(512.0f, 768.0f));
+		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -193,7 +193,7 @@ namespace Temporal
 
 	void createSentry(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Vector(200.0f, 50.f));
+		Position* position = new Position(Point(200.0f, 50.f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
@@ -212,11 +212,11 @@ namespace Temporal
 
 	void createPatrol(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Vector(512.0f, 768.0f));
+		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Patrol* patrol = new Patrol();
-		DynamicBody* dynamicBody = new DynamicBody(Vector(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -238,7 +238,7 @@ namespace Temporal
 
 	void createCamera()
 	{
-		Position* position = new Position(Vector(200.0f, 120.f));
+		Position* position = new Position(Point(200.0f, 120.f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(-ANGLE_15_IN_RADIANS, -ANGLE_45_IN_RADIANS);
@@ -279,8 +279,8 @@ namespace Temporal
 
 	Entity* createPlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
 	{
-		const Vector& center = platform.getCenter();
-		const Vector& size = platform.getSize();
+		const Point& center = platform.getCenter();
+		const Size& size = platform.getSize();
 		Position* position = new Position(center);
 		StaticBody* staticBody = new StaticBody(size, cover);
 		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
@@ -298,7 +298,7 @@ namespace Temporal
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(animation);
-		const Vector TILE_SIZE(32.0f, 32.0f);
+		const Size TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
 		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 0.0f, 1024.0f, 16.0f), spritesheet));

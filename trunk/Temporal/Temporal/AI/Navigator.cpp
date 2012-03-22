@@ -12,11 +12,11 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const Vector* goalPosition = (const Vector*)message.getParam();
+				const Point* goalPosition = (const Point*)message.getParam();
 				Navigator& navigator = *(Navigator*)_stateMachine;
 
 				// TODO: Whor'e you chasing ENTITIES
-				const Vector& startPosition = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Point& startPosition = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				const NavigationNode* start = NavigationGraph::get().getNodeByPosition(startPosition);
 				const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(*goalPosition);
 				if(start != NULL && goal != NULL)
@@ -35,7 +35,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Vector& position = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Point& position = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				float sourceX = position.getX();
 				const Navigator& navigator = *((const Navigator*)_stateMachine);
 				NavigationEdgeCollection* path = navigator.getPath();
@@ -43,7 +43,7 @@ namespace Temporal
 				bool reachedTargetPlatform;
 				if(path == NULL)
 				{
-					const Vector& destination = navigator.getDestination();
+					const Point& destination = navigator.getDestination();
 					targetX = destination.getX();
 					reachedTargetPlatform = true;
 				}
@@ -163,7 +163,7 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			const Vector& position = *(Vector*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 			const NavigationNode* current = NavigationGraph::get().getNodeByPosition(position);
 			NavigationEdgeCollection* path = getPath();
 			if(current != NULL && path != NULL)

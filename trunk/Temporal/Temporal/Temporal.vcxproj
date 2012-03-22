@@ -45,7 +45,7 @@
     <ClInclude Include="Game\DebugInfo.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Base\Thread.h" />
-    <ClInclude Include="Base\Vector.h" />
+    <ClInclude Include="Base\NumericPair.h" />
     <ClInclude Include="Physics\Sensor.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Panel.h" />
@@ -70,7 +70,7 @@
     <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\Thread.cpp" />
-    <ClCompile Include="Base\Vector.cpp" />
+    <ClCompile Include="Base\NumericPair.cpp" />
     <ClCompile Include="Game\BasePanel.cpp" />
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Game\DrawPosition.cpp" />

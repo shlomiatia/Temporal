@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	const Vector NavigationGraph::MIN_AREA_SIZE = Vector(32.0f, 100.0f);
+	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 100.0f);
 	const float NavigationGraph::MAX_JUMP_UP_DISTANCE = 150.0f;
 	const float NavigationGraph::MAX_JUMP_FORWARD_DISTANCE = 300.0f;
 	const float NavigationGraph::MIN_FALL_DISTANCE = 16.0f;
@@ -203,7 +203,7 @@ namespace Temporal
 		}
 	}
 
-	const NavigationNode* NavigationGraph::getNodeByPosition(const Vector& position) const
+	const NavigationNode* NavigationGraph::getNodeByPosition(const Point& position) const
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -257,7 +257,7 @@ namespace Temporal
 				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = node.getArea().getBottom();
 				float y2 = area2.getBottom();
-				Graphics::get().drawLine(Vector(x1, y1), Vector(x2, y2), Color(1.0f, 0.5f, 0.0f));
+				Graphics::get().drawLine(Point(x1, y1), Point(x2, y2), Color(1.0f, 0.5f, 0.0f));
 			}
 		}
 	}

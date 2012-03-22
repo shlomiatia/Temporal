@@ -1,6 +1,6 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-#include <Temporal\Base\Vector.h>
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Game\StateMachineComponent.h>
 #include "Pathfinder.h"
 #include <vector>
@@ -80,8 +80,8 @@ namespace Temporal
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
-		const Vector& getDestination(void) const { return *_destination; }
-		void setDestination(const Vector* destination) { _destination = destination; }
+		const Point& getDestination(void) const { return *_destination; }
+		void setDestination(const Point* destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath(void) const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { _path = path; }
 		virtual void handleMessage(Message& message);
@@ -90,7 +90,7 @@ namespace Temporal
 		virtual int getInitialState(void) const { return NavigatorStates::WAIT; }
 
 	private:
-		const Vector* _destination;
+		const Point* _destination;
 		NavigationEdgeCollection* _path;
 
 		StateCollection getStates(void) const;
