@@ -75,9 +75,6 @@ namespace Temporal
 
 		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
 		{
-			// TODO: Try to eliminate intersects BS PHYSICS
-			// TODO: Correct smallest axis PHYSICS
-			// TODO: Gradual test PHYSICS
 			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 			{
 				Range dynamicAxisRange = dynamicBodyBounds.getAxis(axis);

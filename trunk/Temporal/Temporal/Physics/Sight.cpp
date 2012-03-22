@@ -25,7 +25,6 @@ namespace Temporal
 		_isSeeing = false;
 		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		// TODO: Who're you watching? ENTITIES
 		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 
@@ -34,8 +33,6 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Test against top and bottom PHYSICS
-		// TODO: Eyes GRAPHICS
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
 
@@ -124,10 +121,9 @@ namespace Temporal
 
 	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Point &sourcePosition)
 	{
-		// TODO:
 		float angleSlope = tan(angle * sourceOrientation);
 		float angleTargetY = angleSlope * targetX - angleSlope * sourcePosition.getX() + sourcePosition.getY();
-		Graphics::get().drawLine(sourcePosition, Point(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Graphics::get().drawSegment(sourcePosition, Point(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Point &sourcePosition, Orientation::Enum sourceOrientation) const
@@ -147,6 +143,6 @@ namespace Temporal
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
 		if(_pointOfIntersection != Point::Zero)
-			Graphics::get().drawLine(sourcePosition, _pointOfIntersection, _isSeeing ? Color::Green : Color::Red);
+			Graphics::get().drawSegment(sourcePosition, _pointOfIntersection, _isSeeing ? Color::Green : Color::Red);
 	}
 }

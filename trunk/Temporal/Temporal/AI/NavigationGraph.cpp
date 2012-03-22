@@ -19,7 +19,6 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Consider transition type AI
 	float NavigationEdge::calculateCost(const NavigationNode& source)
 	{
 		const Rect& sourceArea = source.getArea();
@@ -114,8 +113,6 @@ namespace Temporal
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
 
-			// TODO: Handle areas intersection PHYISICS
-
 			// Create nodes from areas
 			for(RectIterator j = areas.begin(); j != areas.end(); ++j)
 			{
@@ -151,7 +148,6 @@ namespace Temporal
 		const Rect& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		// TODO: Support directed jump at jump forward PHYSICS
 		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
 		{
 			Rect jumpArea = RectLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
@@ -257,7 +253,7 @@ namespace Temporal
 				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = node.getArea().getBottom();
 				float y2 = area2.getBottom();
-				Graphics::get().drawLine(Point(x1, y1), Point(x2, y2), Color(1.0f, 0.5f, 0.0f));
+				Graphics::get().drawSegment(Point(x1, y1), Point(x2, y2), Color(1.0f, 0.5f, 0.0f));
 			}
 		}
 	}

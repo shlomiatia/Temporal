@@ -10,7 +10,6 @@ namespace Temporal
 {
 	namespace NavigationEdgeType
 	{
-		// TODO: Use string for this ENTITIES
 		enum Enum
 		{
 			FALL,

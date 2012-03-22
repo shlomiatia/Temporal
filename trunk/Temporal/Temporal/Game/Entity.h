@@ -12,7 +12,6 @@ namespace Temporal
 	typedef std::vector<Component*> ComponentCollection;
 	typedef ComponentCollection::const_iterator ComponentIterator;
 
-	// TODO: ID & component order ENTITIES
 	class Entity
 	{
 	public:

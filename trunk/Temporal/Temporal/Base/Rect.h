@@ -44,7 +44,6 @@ namespace Temporal
 		bool intersectsExclusive(const Rect& rect) const { return getLeft() < rect.getRight() && getRight() > rect.getLeft() && getBottom() < rect.getTop() && getTop() > rect.getBottom(); }
 		bool contains(const Point& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
 
-		// TODO: Not here! PHYSICS
 		bool intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const;
 	private:
 		Point _center;

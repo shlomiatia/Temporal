@@ -4,7 +4,6 @@
 
 namespace Temporal
 {
-	// TODO: Extract segment PHYSICS
 	class DirectedSegment
 	{
 	public:

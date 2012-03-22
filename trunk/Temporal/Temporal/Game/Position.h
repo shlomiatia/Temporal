@@ -9,7 +9,7 @@ namespace Temporal
 	class Position : public Component
 	{
 	public:
-		Position(const Point& position) : _position(position) {}
+		explicit Position(const Point& position) : _position(position) {}
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::POSITION; }
 		virtual void handleMessage(Message& message);

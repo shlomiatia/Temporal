@@ -15,7 +15,7 @@ namespace Temporal
 		static const Color Magenta;
 		static const Color Cyan;
 
-		inline Color(float r, float g, float b, float a = 1.0f);
+		Color(float r, float g, float b, float a = 1.0f);
 
 		float getR(void) const { return _r; }
 		void setR(float r) { _r = r; }

@@ -142,7 +142,6 @@ namespace Temporal
 
 	void createPlayer(SpriteSheet* spritesheet)
 	{
-		// TODO: Central resources container FILES
 		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
