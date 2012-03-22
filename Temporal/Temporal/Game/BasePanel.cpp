@@ -39,7 +39,7 @@ namespace Temporal
 		
 		if(Input::get().isQuit())
 		{
-			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, &position));
+			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&position));
 			Game::get().stop();
 		}
 	}
@@ -50,13 +50,9 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		// TODO: Classify debug draw SLOTH
-		bool debugDraw = true;
-		if(debugDraw)
-		{
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW));	
-		}
-		Grid::get().draw();
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT;
+		EntitiesManager::get().sendMessageToAllComponents(Message(MessageID::DEBUG_DRAW), filter);	
+		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 	}
 

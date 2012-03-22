@@ -8,18 +8,25 @@ namespace Temporal
 	class DirectedSegment
 	{
 	public:
-		DirectedSegment(float originX, float originY, float targetX, float targetY) : _origin(originX, originY), _target(targetX, targetY) {}
-		DirectedSegment(const Vector& origin, const Vector& target) : _origin(origin), _target(target) {}
+		DirectedSegment(float originX, float originY, float targetX, float targetY);
+		DirectedSegment(const Vector& origin, const Vector& target);
 
 		const Vector& getOrigin(void) const { return _origin; }
 		const Vector& getTarget(void) const { return _target; }
-		Vector getVector(void) const { return getTarget() - getOrigin(); }
-		float getLength(void) const;
-		float getAngle(void) const;
+		float getLength(void) const { return _length; }
+		const Vector& getNormalizedVector(void) const { return _normalizedVector; }
+		float getAngle(void) const { return _angle; }
 
 	private:
 		const Vector _origin;
 		const Vector _target;
+		const float _length;
+		const Vector _normalizedVector;
+		const float _angle;
+
+		float calculateLength(void) const;
+		Vector calculateNormalizedVector(void) const;
+		float calculateAngle(void) const;
 	};
 }
 #endif

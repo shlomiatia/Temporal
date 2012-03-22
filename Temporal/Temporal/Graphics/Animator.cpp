@@ -1,5 +1,5 @@
 #include "Animator.h"
-#include "SpriteGroup.h"
+#include "SpriteSheet.h"
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageParams.h>
 

@@ -26,6 +26,7 @@ namespace Temporal
 		void add(Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
+		void sendMessageToAllComponents(Message& message, ComponentType::Enum filter) const;
 		void* sendMessageToEntity(int id, Message& message) const;
 		void iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data));
 	private:

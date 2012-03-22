@@ -18,8 +18,13 @@ namespace Temporal
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message) const
 	{
+		sendMessageToAllComponents(message, ComponentType::ALL);
+	}
+
+	void EntitiesManager::sendMessageToAllComponents(Message& message, ComponentType::Enum filter) const
+	{
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
-			(**i).handleMessage(message);
+			(**i).handleMessage(message, filter);
 	}
 
 	void* EntitiesManager::sendMessageToEntity(int id, Message& message) const

@@ -55,7 +55,7 @@ namespace Temporal
 			for(RectIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
 				const Rect area = *j;
-				if(area.intersectsExclusive(platform))
+				if(area.intersectsInclusive(platform))
 				{
 					j = areas.erase(j);
 					if(platform.getLeft() <= area.getLeft() && platform.getRight() <= area.getRight())
@@ -85,7 +85,7 @@ namespace Temporal
 		for(RectIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			const Rect& platform = *i;
-			if(platform.intersectsExclusive(area))
+			if(platform.intersectsInclusive(area))
 			{
 				return true;
 			}
@@ -105,10 +105,10 @@ namespace Temporal
 				continue;
 
 			// Create area
-			Rect area = RectCB(platform.getCenterX(), platform.getTop(), platform.getWidth(), MIN_AREA_SIZE.getHeight());
+			Rect area = RectCB(platform.getCenterX(), platform.getTop() + 1.0f, platform.getWidth(), MIN_AREA_SIZE.getHeight());
 
 			// Pad it a little
-			area = Rect(area.getCenterX(), area.getCenterY(), area.getWidth() + 2 * MIN_FALL_DISTANCE, area.getHeight());
+			area = area.resize(Vector(2 * MIN_FALL_DISTANCE, 0.0f));
 
 			RectCollection areas;
 			areas.push_back(area);

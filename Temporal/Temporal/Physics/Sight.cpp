@@ -30,7 +30,6 @@ namespace Temporal
 
 
 		// Check orientation
-		// TODO: Think about me SLOTH
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
 			return;
 
@@ -93,7 +92,6 @@ namespace Temporal
 		while(true)
 		{
 
-			// TODO: Compare with specific line PHYSICS
 			StaticBodyCollection* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{

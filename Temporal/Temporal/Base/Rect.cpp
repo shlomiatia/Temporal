@@ -27,10 +27,9 @@ namespace Temporal
 	bool Rect::intersects(const DirectedSegment& directedSegment, Vector& pointOfIntersection) const
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
-		Vector origin = directedSegment.getOrigin();
-		Vector vector = directedSegment.getVector();
-		float tmax = vector.getLength();
-		vector = vector.normalize();	
+		const Vector& origin = directedSegment.getOrigin();
+		const Vector& vector = directedSegment.getNormalizedVector();
+		float tmax = directedSegment.getLength();
 
 		// For all three slabs
 		for (Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) {

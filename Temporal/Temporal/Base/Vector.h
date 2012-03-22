@@ -32,8 +32,6 @@ namespace Temporal
 		float getMax(void) const { return (_y); }
 		void setMax(float max) { _y = max; }
 
-		float getLength(void) const { return sqrt(pow(getX(), 2.0f) + pow(getY(), 2.0f)); }
-		Vector normalize(void) const { return Vector(getX() / getLength(), getY() / getLength()); }
 		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? getX() : getY(); }
 		void setAxis(Axis::Enum axis, float value) { if(axis == Axis::X) setX(value); else setY(value); }
 

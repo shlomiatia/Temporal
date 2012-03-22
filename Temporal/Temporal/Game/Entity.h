@@ -20,7 +20,7 @@ namespace Temporal
 
 		void add(Component* component);
 		bool have(ComponentType::Enum type) const;
-		void* handleMessage(Message& message) const;
+		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
 
 	private:
 		ComponentCollection _components;
