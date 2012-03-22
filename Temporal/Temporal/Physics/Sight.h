@@ -13,8 +13,8 @@ namespace Temporal
 	public:
 		Sight(float upperAngle, float lowerAngle) : _upperAngle(upperAngle), _lowerAngle(lowerAngle), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
-		virtual void handleMessage(Message& message);
+		ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
+		void handleMessage(Message& message);
 
 	private:
 		const float _upperAngle;

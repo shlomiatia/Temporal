@@ -14,9 +14,9 @@ namespace Temporal
 	public:
 		explicit Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false) {}
 		
-		virtual ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
+		ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
-		virtual void handleMessage(Message& message);
+		void handleMessage(Message& message);
 		void update(float framePeriodInMillis);
 
 	private:

@@ -19,8 +19,8 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			static const float SEARCH_TIME_FOR_SIDE_IN_MILLIS;
@@ -33,8 +33,8 @@ namespace Temporal
 		public:
 			See(void) : _haveLineOfSight(false) {}
 
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			bool _haveLineOfSight;
@@ -45,8 +45,8 @@ namespace Temporal
 		public:
 			Turn(void) : _hasTurned(false) {}
 	
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			bool _hasTurned;
@@ -57,8 +57,8 @@ namespace Temporal
 		public:
 			Acquire(void) : _blinking(false), _haveLineOfSight(false) {}
 
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
@@ -74,10 +74,10 @@ namespace Temporal
 	public:
 		Camera(void) : StateMachineComponent(getStates()) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		virtual int getInitialState(void) const { return CameraStates::SEARCH; }
+		int getInitialState(void) const { return CameraStates::SEARCH; }
 
 	private:
 		StateCollection getStates(void) const;

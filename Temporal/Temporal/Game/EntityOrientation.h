@@ -11,9 +11,9 @@ namespace Temporal
 	public:
 		explicit EntityOrientation(Orientation::Enum orientation) : _orientation(orientation) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::ORIENTATION; }
+		ComponentType::Enum getType(void) const { return ComponentType::ORIENTATION; }
 
-		virtual void handleMessage(Message& message);
+		void handleMessage(Message& message);
 	private:
 		Orientation::Enum _orientation;
 	};

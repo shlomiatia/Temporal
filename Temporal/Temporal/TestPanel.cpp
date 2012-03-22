@@ -34,9 +34,9 @@ namespace Temporal
 	public: 
 		AreaRenderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, int spriteGroupID = 0, int spriteID = 0) : _spritesheet(spritesheet), _layer(layer), _spriteGroupID(spriteGroupID), _spriteID(spriteID) {};
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::OTHER; }
+		ComponentType::Enum getType(void) const { return ComponentType::OTHER; }
 
-		virtual void handleMessage(Message& message)
+		void handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::DRAW)
 			{

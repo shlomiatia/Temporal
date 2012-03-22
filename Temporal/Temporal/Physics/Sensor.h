@@ -18,12 +18,10 @@ namespace Temporal
 			: _id(id), _offset(offset), _size(size), _sensedBody(NULL), _positive(positive), _negative(negative) {}
 
 		SensorID::Enum getID() const { return _id; }
-		const Size& getSize(void) const { return _size; }
-		Rect getBounds(void) const;
 		const Body* getSensedBody(void) const { return _sensedBody; }
 		
-		virtual void handleMessage(Message& message);
-		virtual ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
+		void handleMessage(Message& message);
+		ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
 
 	private:
 		const SensorID::Enum _id;
@@ -33,6 +31,7 @@ namespace Temporal
 		const Direction::Enum _negative;
 		const Body* _sensedBody;
 
+		Rect getBounds(void) const;
 		void update(void);
 		bool sense(const StaticBody &staticBody);
 		static bool sense(void* caller, void* data, const StaticBody& staticBody);

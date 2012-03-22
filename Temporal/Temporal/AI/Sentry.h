@@ -18,8 +18,8 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 		};
 
 		class Acquire : public ComponentState
@@ -27,8 +27,8 @@ namespace Temporal
 		public:
 			Acquire(void) : _haveLineOfSight(false) {}
 
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
@@ -42,8 +42,8 @@ namespace Temporal
 		public:
 			See(void) : _haveLineOfSight(false) {}
 
-			virtual void enter(void);
-			virtual void handleMessage(Message& message);
+			void enter(void);
+			void handleMessage(Message& message);
 
 		private:
 			bool _haveLineOfSight;
@@ -55,10 +55,10 @@ namespace Temporal
 	public:
 		Sentry(void) : StateMachineComponent(getStates()) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		virtual int getInitialState(void) const { return SentryStates::SEARCH; }
+		int getInitialState(void) const { return SentryStates::SEARCH; }
 
 	private:
 

@@ -25,7 +25,7 @@ namespace Temporal
 		public:
 			Wait(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 		};
 
 		class Walk : public ComponentState
@@ -33,7 +33,7 @@ namespace Temporal
 		public:
 			Walk(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 
 		private:
 			static const float DISTANCE_FROM_TARGET_TOLERANCE;
@@ -44,7 +44,7 @@ namespace Temporal
 		public:
 			Turn(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 		};
 
 		class Fall : public ComponentState
@@ -52,7 +52,7 @@ namespace Temporal
 		public:
 			Fall(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 		};
 
 		class Jump : public ComponentState
@@ -60,7 +60,7 @@ namespace Temporal
 		public:
 			Jump(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 		};
 
 		class Descend : public ComponentState
@@ -68,7 +68,7 @@ namespace Temporal
 		public:
 			Descend(void) {}
 
-			virtual void handleMessage(Message& message);
+			void handleMessage(Message& message);
 		};
 	}
 
@@ -77,16 +77,16 @@ namespace Temporal
 	public:
 		Navigator(void) : StateMachineComponent(getStates()), _destination(NULL), _path(NULL) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 		const Point& getDestination(void) const { return *_destination; }
 		void setDestination(const Point* destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath(void) const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { _path = path; }
-		virtual void handleMessage(Message& message);
+		void handleMessage(Message& message);
 
 	protected:
-		virtual int getInitialState(void) const { return NavigatorStates::WAIT; }
+		int getInitialState(void) const { return NavigatorStates::WAIT; }
 
 	private:
 		const Point* _destination;
