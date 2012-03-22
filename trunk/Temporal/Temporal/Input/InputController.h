@@ -10,9 +10,9 @@ namespace Temporal
 	public:
 		InputController(void) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::INPUT_CONTROLLER; }
+		ComponentType::Enum getType(void) const { return ComponentType::INPUT_CONTROLLER; }
 
-		virtual void handleMessage(Message& message);
+		void handleMessage(Message& message);
 	};
 }
 

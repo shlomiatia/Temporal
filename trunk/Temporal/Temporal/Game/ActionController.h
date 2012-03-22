@@ -119,12 +119,12 @@ namespace Temporal
 	public:
 		ActionController(void) : StateMachineComponent(getStates()) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
+		ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper(void) { return _jumpHelper; }
 		HangDescendHelper& getHangDescendHelper(void) { return _hangDescendHelper; }
 
 	protected:
-		virtual int getInitialState(void) const { return ActionStateID::STAND; }
+		int getInitialState(void) const { return ActionStateID::STAND; }
 
 	private:
 		JumpHelper _jumpHelper;
@@ -136,7 +136,7 @@ namespace Temporal
 	class ActionState : public ComponentState
 	{
 	public:
-		virtual ~ActionState(void) {};
+		~ActionState(void) {};
 
 		virtual const char* getName(void) const = 0;
 
@@ -150,10 +150,10 @@ namespace Temporal
 	public:
 		Stand(void) : _isDescending(false) {};
 
-		virtual const char* getName(void) const { return "Stand"; }
+		const char* getName(void) const { return "Stand"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 
 	private:
 		bool _isDescending;
@@ -164,10 +164,10 @@ namespace Temporal
 	public:
 		Fall(void) {};
 
-		virtual const char* getName(void) const { return "Fall"; }
+		const char* getName(void) const { return "Fall"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class Walk : public ActionState
@@ -175,10 +175,10 @@ namespace Temporal
 	public:
 		Walk(void) : _stillWalking(false) {};
 
-		virtual const char* getName(void) const { return "Walk"; }
+		const char* getName(void) const { return "Walk"; }
 
-		virtual void enter(void);		
-		virtual void handleMessage(Message& message);
+		void enter(void);		
+		void handleMessage(Message& message);
 
 	private:
 		bool _stillWalking;
@@ -189,19 +189,19 @@ namespace Temporal
 	public:
 		Turn(void) {};
 
-		virtual const char* getName(void) const { return "Turn"; }
+		const char* getName(void) const { return "Turn"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class PrepareToJump : public ActionState
 	{
 	public:
-		virtual const char* getName(void) const { return "PrepareToJump"; }
+		const char* getName(void) const { return "PrepareToJump"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 
 	private:
 		void handleJumpSensor(Message &message);
@@ -212,10 +212,10 @@ namespace Temporal
 	public:
 		JumpStart(void) : _animationEnded(false) {};
 
-		virtual const char* getName(void) const { return "JumpStart"; }
+		const char* getName(void) const { return "JumpStart"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 
 	private:
 		bool _animationEnded;
@@ -226,10 +226,10 @@ namespace Temporal
 	public:
 		Jump(void) {};
 
-		virtual const char* getName(void) const { return "Jump"; }
+		const char* getName(void) const { return "Jump"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class JumpEnd : public ActionState
@@ -237,10 +237,10 @@ namespace Temporal
 	public:
 		JumpEnd(void) {};
 
-		virtual const char* getName(void) const { return "JumpEnd"; }
+		const char* getName(void) const { return "JumpEnd"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class PrepareToHang : public ActionState
@@ -248,10 +248,10 @@ namespace Temporal
 	public:
 		PrepareToHang(void) : _platform(NULL) {};
 
-		virtual const char* getName(void) const { return "PrepareToHang"; }
+		const char* getName(void) const { return "PrepareToHang"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 
 	private:
 		const Rect* _platform;
@@ -264,10 +264,10 @@ namespace Temporal
 	public:
 		Hanging(void){};
 
-		virtual const char* getName(void) const { return "Hanging"; }
+		const char* getName(void) const { return "Hanging"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class Hang : public ActionState
@@ -275,10 +275,10 @@ namespace Temporal
 	public:
 		Hang(void) {};
 
-		virtual const char* getName(void) const { return "Hang"; }
+		const char* getName(void) const { return "Hang"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 
 	class Drop : public ActionState
@@ -286,11 +286,11 @@ namespace Temporal
 	public:
 		Drop(void) : _platformFound(false) {};
 
-		virtual const char* getName(void) const { return "Drop"; }
+		const char* getName(void) const { return "Drop"; }
 
-		virtual void enter(void);
-		virtual void exit(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void exit(void);
+		void handleMessage(Message& message);
 
 	private:
 		bool _platformFound;
@@ -301,11 +301,11 @@ namespace Temporal
 	public:
 		Climb(void) {};
 
-		virtual const char* getName(void) const { return "Climb"; }
+		const char* getName(void) const { return "Climb"; }
 	
-		virtual void enter(void);
-		virtual void exit(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void exit(void);
+		void handleMessage(Message& message);
 	};
 
 	class PrepareToDescend : public ActionState
@@ -313,10 +313,10 @@ namespace Temporal
 	public:
 		PrepareToDescend(void) : _platform(NULL) {};
 
-		virtual const char* getName(void) const { return "PrepareToDescend"; }
+		const char* getName(void) const { return "PrepareToDescend"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 
 	private:
 		const Rect* _platform;
@@ -329,10 +329,10 @@ namespace Temporal
 	public:
 		Descend(void) {};
 
-		virtual const char* getName(void) const { return "Descend"; }
+		const char* getName(void) const { return "Descend"; }
 
-		virtual void enter(void);
-		virtual void handleMessage(Message& message);
+		void enter(void);
+		void handleMessage(Message& message);
 	};
 }
 

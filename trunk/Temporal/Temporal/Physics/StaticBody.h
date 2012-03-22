@@ -11,8 +11,8 @@ namespace Temporal
 		StaticBody(const Size& size, bool cover) : Body(size), _cover(cover) {};
 
 		bool isCover(void) const { return _cover; }
-		virtual ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
-		virtual void handleMessage(Message& message);
+		ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
+		void handleMessage(Message& message);
 
 	private:
 		bool _cover;

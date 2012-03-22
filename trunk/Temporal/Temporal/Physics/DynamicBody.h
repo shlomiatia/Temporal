@@ -15,10 +15,10 @@ namespace Temporal
 
 		explicit DynamicBody(const Size& size) : Body(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}
 
-		virtual ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
+		ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
 		Orientation::Enum getOrientation(void) const;
 
-		virtual void handleMessage(Message& message);
+		void handleMessage(Message& message);
 
 	private:
 		Vector _velocity;

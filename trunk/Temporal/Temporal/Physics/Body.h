@@ -11,6 +11,7 @@ namespace Temporal
 	{
 	public:
 		explicit Body(const Size& size);
+		virtual ~Body(void) {}
 
 		const Size& getSize(void) const { return _size; }
 		Rect getBounds(void) const;
