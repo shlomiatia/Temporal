@@ -35,7 +35,6 @@ namespace Temporal
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
-		// TODO: cache SLOTH
 		Vector getAxis(Axis::Enum axis) const { return axis == Axis::X ? Vector(getLeft(), getRight()) : Vector(getBottom(), getTop()); }
 
 		Rect move(const Vector& vector) const { return Rect(getCenter() + vector, getSize()); }

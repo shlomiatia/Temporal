@@ -7,22 +7,26 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			INPUT_CONTROLLER,
-			AI_CONTROLLER,
-			POSITION,
-			ORIENTATION,
-			DRAW_POSITION,
-			DYNAMIC_BODY,
-			STATIC_BODY,
-			SENSOR,
-			SIGHT,
-			ACTION_CONTROLLER,
-			ANIMATOR,
-			RENDERER,
+			INPUT_CONTROLLER = 1,
+			AI_CONTROLLER = 2,
+			POSITION = 4,
+			ORIENTATION = 8,
+			DRAW_POSITION = 16,
+			DYNAMIC_BODY = 32,
+			STATIC_BODY = 64,
+			SENSOR = 128,
+			SIGHT = 256,
+			ACTION_CONTROLLER = 1024,
+			ANIMATOR = 2048,
+			RENDERER = 4096,
 
-			OTHER
+			OTHER = 8192,
+
+			ALL = 16383
 		};
 	}
+	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return (ComponentType::Enum)((int)a | (int)b); }
+	inline ComponentType::Enum operator&(ComponentType::Enum a, ComponentType::Enum b) { return (ComponentType::Enum)((int)a & (int)b); }
 
 	namespace MessageID
 	{
@@ -71,7 +75,6 @@ namespace Temporal
 
 			SET_NAVIGATION_DESTINATION,
 			STOP_NAVIGATION,
-
 		};
 	}
 
@@ -90,11 +93,11 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			BACKGROUND = 0,
-			STATIC = 1,
-			PC = 2,
-			COVER = 3,
-			NPC = 4
+			BACKGROUND,
+			STATIC,
+			PC,
+			COVER,
+			NPC
 		};
 
 		static const int FARTHEST = BACKGROUND;

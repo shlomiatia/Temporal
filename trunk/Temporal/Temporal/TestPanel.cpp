@@ -17,8 +17,6 @@
 #include <Temporal\Physics\Sight.h>
 #include <Temporal\Input\InputController.h>
 #include <Temporal\Graphics\SpriteSheet.h>
-#include <Temporal\Graphics\SpriteGroup.h>
-#include <Temporal\Graphics\Sprite.h>
 #include <Temporal\Graphics\Texture.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <Temporal\Graphics\Animator.h>

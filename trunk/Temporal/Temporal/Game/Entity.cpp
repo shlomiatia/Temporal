@@ -24,10 +24,15 @@ namespace Temporal
 		return false;
 	}
 
-	void* Entity::handleMessage(Message& message) const
+	void* Entity::handleMessage(Message& message, ComponentType::Enum filter) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
-			(**i).handleMessage(message);
+		{
+			Component& component = **i;
+			ComponentType::Enum type = component.getType();
+			if(type & filter)
+				component.handleMessage(message);
+		}
 		return message.getParam();
 	}
 }

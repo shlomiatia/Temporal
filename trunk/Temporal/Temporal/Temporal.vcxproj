@@ -37,8 +37,6 @@
     <ClInclude Include="Game\MessageParams.h" />
     <ClInclude Include="Game\Position.h" />
     <ClInclude Include="Graphics\Renderer.h" />
-    <ClInclude Include="Graphics\SpriteGroup.h" />
-    <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Graphics\Animator.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Graphics\Texture.h" />
@@ -86,7 +84,6 @@
     <ClCompile Include="Game\Position.cpp" />
     <ClCompile Include="Graphics\Animator.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
-    <ClCompile Include="Graphics\SpriteGroup.cpp" />
     <ClCompile Include="Graphics\SpriteSheet.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
