@@ -10,6 +10,7 @@
 #include <Temporal\Game\DrawPosition.h>
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
+#include <Temporal\Game\MovementUtils.h>
 #include <Temporal\Physics\StaticBody.h>
 #include <Temporal\Physics\DynamicBody.h>
 #include <Temporal\Physics\Grid.h>
@@ -73,32 +74,12 @@ namespace Temporal
 
 	void addSensors(Entity& entity, DynamicBody& body)
 	{
-		// Jump Sensor
-		/* v = F - G*T
-		 * m = F*T - (G*T^2)/2 
-		 *
-		 * 0 = F - G*T
-		 * G*T = F
-		 * T = F/G
-		 *
-		 * y = F*(F/G) - (G*(F/G)^2)/2
-		 * y = (F^2)/G - (G*F^2)/(2*G^2)
-		 * y = (F^2)/G - (F^2)/(2*G)
-		 * y = (2*F^2 - F^2)/(2*G)
-		 * y = (F^2)/(2*G)
-		 *
-		 * x = F*T
-		 * x = F*(F/G)
-		 * x = (F^2)/G
-		 */
-		const float F = JUMP_FORCE_PER_SECOND;
-		const float G = DynamicBody::GRAVITY;
-		const float A = ANGLE_45_IN_RADIANS;
 		float playerWidth = body.getSize().getWidth();
 		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
 		float playerHeight = body.getSize().getHeight();
-		float jumpSensorWidth = pow(cos(A)*F, 2.0f) / (G) + jumpSensorBackOffset; 
-		float jumpSensorHeight = pow(F, 2.0f) / (2*G);
+		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
+		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
+		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
 		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);

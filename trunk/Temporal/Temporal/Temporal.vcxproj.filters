@@ -48,6 +48,7 @@
     <ClInclude Include="Game\DebugInfo.h" />
     <ClInclude Include="Base\Segment.h" />
     <ClInclude Include="Base\NumericPair.h" />
+    <ClInclude Include="Game\MovementUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -90,5 +91,6 @@
     <ClCompile Include="Game\DebugInfo.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\NumericPair.cpp" />
+    <ClCompile Include="Game\MovementUtils.cpp" />
   </ItemGroup>
 </Project>

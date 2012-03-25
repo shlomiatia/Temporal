@@ -6,7 +6,6 @@
 namespace Temporal
 {
 	// TODO: Only use including intersction SLOTH
-	// TODO: Segment => Line. Create from point and angle SLOTH
 	
 	// TODO: Support multiple shape to shapes intersection tests PHYSICS
 	// TODO: Handle areas intersection in navigation graph PHYISICS
@@ -23,6 +22,7 @@ namespace Temporal
 	// TODO: Consider transition type in navigation edge cost  AI
 	// TODO: Fix huristics:  Take into account position, need for turning, and several edges to the same platform AI
 	// TODO: Fault tolerance in navigator AI
+	// TODO: Use entitiy size for stuff. Allow to hang on forward jumps AI
 
 	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
 	// TODO: Gradual hang & descend GRAPHICS

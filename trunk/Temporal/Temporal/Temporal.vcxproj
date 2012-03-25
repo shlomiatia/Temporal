@@ -27,6 +27,7 @@
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\GameEnums.h" />
     <ClInclude Include="Game\Component.h" />
+    <ClInclude Include="Game\MovementUtils.h" />
     <ClInclude Include="Game\Message.h" />
     <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Game\StateMachineComponent.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="Game\DrawPosition.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\EntityOrientation.cpp" />
+    <ClCompile Include="Game\MovementUtils.cpp" />
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\EntitiesManager.cpp" />
     <ClCompile Include="Game\MessageUtils.cpp" />
