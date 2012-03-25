@@ -37,7 +37,7 @@ namespace Temporal
 		float angle = directedSegment.getAngle();
 		if(angle < 0.0f) angle = 2*PI + angle;
 		float sightCenter = sourceOrientation == Orientation::RIGHT ? _sightCenter : PI - _sightCenter;
-		float distance = std::min(abs(sightCenter - angle), abs((sightCenter+2*PI) - angle));
+		float distance = std::min(abs(sightCenter - angle),  abs(2*PI + angle - sightCenter));
 		if(distance > _sightSize / 2.0f) return;
 		
 		_isSeeing = directedSegmentCast(directedSegment);

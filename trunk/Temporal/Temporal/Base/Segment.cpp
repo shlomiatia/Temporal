@@ -23,6 +23,6 @@ namespace Temporal
 	float DirectedSegment::calculateAngle(void) const
 	{
 		Vector vector = getTarget() - getOrigin();
-		return atan2(vector.getVx(), vector.getVy());
+		return atan2(vector.getVy(), vector.getVx());
 	}
 }
