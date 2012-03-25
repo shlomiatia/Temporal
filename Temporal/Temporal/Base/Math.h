@@ -5,6 +5,7 @@ namespace Temporal
 {
 	static const float PI = 3.14159265358979f;
 
+	static const float ANGLE_0_IN_RADIANS = 0.0f;
 	static const float ANGLE_15_IN_RADIANS = PI / 12.0f; // 15 = 1 * PI / 12 
 	static const float ANGLE_30_IN_RADIANS = PI / 6.0f; // 30 = 2 * PI / 12 = PI / 6
 	static const float ANGLE_45_IN_RADIANS = PI / 4.0f; // 45 = 3 * PI / 12 = PI / 4

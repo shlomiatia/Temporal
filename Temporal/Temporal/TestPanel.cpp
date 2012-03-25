@@ -196,7 +196,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 
 		Entity* entity = new Entity();
@@ -219,7 +219,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -240,7 +240,7 @@ namespace Temporal
 		Position* position = new Position(Point(200.0f, 120.f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_15_IN_RADIANS, -ANGLE_45_IN_RADIANS);
+		Sight* sight = new Sight(2*PI-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;

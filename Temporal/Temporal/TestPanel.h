@@ -5,18 +5,15 @@
 
 namespace Temporal
 {
-	// TODO: Gradual hang & descend SLOTH
 	// TODO: Only use including intersction SLOTH
 	// TODO: Segment => Line. Create from point and angle SLOTH
-
+	
 	// TODO: Support multiple shape to shapes intersection tests PHYSICS
 	// TODO: Handle areas intersection in navigation graph PHYISICS
 	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
 	// TODO: Correct smallest axis PHYSICS
 	// TODO: Gradual force apply PHYSICS
-	// TODO: Enable/Disable sensors PHYSICS
-	// TODO: Test against top, center bottom in sight PHYSICS
 	
 	// TODO: Use hashed string for Entity, components, sensors, messages, states etc. ENTITIES
 	// TODO: Pass static entity id in sensor, instead of the static body itself ENTITIES
@@ -28,10 +25,15 @@ namespace Temporal
 	// TODO: Fault tolerance in navigator AI
 
 	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
+	// TODO: Gradual hang & descend GRAPHICS
+	// TODO: Test against top, center bottom in sight GRAPHICS
 
 	// TODO: Buffer/query current actions (descend, walk), or create another descending proxy state INPUT
 
 	// TODO: Separate action controller to pluggable modules SCRIPTS
+
+	// TODO: Enable/Disable Sensors PERFORMACE
+	// TODO: Request sight PERFORMANCE
 	class TestPanel : public BasePanel
 	{
 	public:

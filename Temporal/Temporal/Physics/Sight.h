@@ -11,14 +11,14 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float upperAngle, float lowerAngle) : _upperAngle(upperAngle), _lowerAngle(lowerAngle), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
+		Sight(float sightCenter, float sightSize) : _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
 
 	private:
-		const float _upperAngle;
-		const float _lowerAngle;
+		const float _sightCenter;
+		const float _sightSize;
 
 		Point _pointOfIntersection;
 		bool _isSeeing;
