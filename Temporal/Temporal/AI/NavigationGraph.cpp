@@ -30,6 +30,7 @@ namespace Temporal
 		float y1 = sourceArea.getCenterY();
 		float y2 = targetArea.getCenterY();
 
+		// TODO:
 		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
 	}
 
@@ -107,11 +108,9 @@ namespace Temporal
 			// Create area
 			Rect area = RectCB(platform.getCenterX(), platform.getTop() + 1.0f, platform.getWidth(), MIN_AREA_SIZE.getHeight());
 
-			// TODO: Broder GRAVITY,FORCES,SIZES SLOTH
-			const float HALF_OF_CHARACTER_WIDTH = 10.0f;
-
 			// Pad it a little
-			area = area.resize(Vector(2 * HALF_OF_CHARACTER_WIDTH, 0.0f));
+			// TODO: Broder GRAVITY,FORCES,SIZES MIN_AREA_SIZE maxJumpHeight HANG_SENSOR_SIZE, Navigator Walk
+			area = area.resize(Vector(2 * 10.0f, 0.0f));
 
 			RectCollection areas;
 			areas.push_back(area);

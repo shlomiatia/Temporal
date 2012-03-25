@@ -34,9 +34,6 @@ namespace Temporal
 			Walk(void) {}
 
 			void handleMessage(Message& message);
-
-		private:
-			static const float DISTANCE_FROM_TARGET_TOLERANCE;
 		};
 
 		class Turn : public ComponentState

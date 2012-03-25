@@ -28,8 +28,6 @@ namespace Temporal
 			}
 		}
 
-		const float Walk::DISTANCE_FROM_TARGET_TOLERANCE(10.0f);
-
 		void Walk::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::UPDATE)
@@ -54,7 +52,7 @@ namespace Temporal
 				}
 				
 				float distance = targetX - sourceX;
-				if(abs(distance) <= DISTANCE_FROM_TARGET_TOLERANCE)
+				if(abs(distance) <= 10.0f)
 				{
 					if(reachedTargetPlatform)
 						_stateMachine->changeState(NavigatorStates::WAIT);
