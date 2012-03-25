@@ -1,6 +1,7 @@
 #include "Sight.h"
 #include "Grid.h"
 #include "StaticBody.h"
+#include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Graphics\Graphics.h>
@@ -27,7 +28,6 @@ namespace Temporal
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
-
 		// Check orientation
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
 			return;
@@ -35,11 +35,10 @@ namespace Temporal
 		// Check field of view
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
-
-		if ((_upperAngle * sourceOrientation - angle) * sourceOrientation < 0.0f ||
-			(_lowerAngle * sourceOrientation - angle) * sourceOrientation > 0.0f)
-			return;
-
+		if(angle < 0.0f) angle = 2*PI + angle;
+		float sightCenter = sourceOrientation == Orientation::RIGHT ? _sightCenter : PI - _sightCenter;
+		float distance = std::min(abs(sightCenter - angle), abs((sightCenter+2*PI) - angle));
+		if(distance > _sightSize / 2.0f) return;
 		
 		_isSeeing = directedSegmentCast(directedSegment);
 		
@@ -88,7 +87,6 @@ namespace Temporal
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
-
 			StaticBodyCollection* staticBodies = Grid::get().getTile(i, j);
 			if(staticBodies != NULL)
 			{
@@ -119,20 +117,21 @@ namespace Temporal
 		return true;
 	}
 
-	void drawFieldOfViewBeam(float angle, Orientation::Enum sourceOrientation, float targetX, const Point &sourcePosition)
+	void drawFieldOfViewSegment(float angle, Orientation::Enum sourceOrientation, const Point &sourcePosition)
 	{
-		float angleSlope = tan(angle * sourceOrientation);
-		float angleTargetY = angleSlope * targetX - angleSlope * sourcePosition.getX() + sourcePosition.getY();
-		Graphics::get().drawSegment(sourcePosition, Point(targetX, angleTargetY), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		if(sourceOrientation == Orientation::LEFT)
+			angle = PI - angle;
+		static const float SIGHT_SEGMENT_LENGTH = 512.0f;
+		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
+		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
+		Vector targetPosition = Vector(targetX, targetY);
+		Graphics::get().drawSegment(sourcePosition, targetPosition, Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Point &sourcePosition, Orientation::Enum sourceOrientation) const
 	{
-		static const float SIGHT_BEAM_LENGTH = 1024.0f;
-		float targetX = sourcePosition.getX() + SIGHT_BEAM_LENGTH * sourceOrientation;
-
-		drawFieldOfViewBeam(_lowerAngle, sourceOrientation, targetX, sourcePosition);
-		drawFieldOfViewBeam(_upperAngle, sourceOrientation, targetX, sourcePosition);
+		drawFieldOfViewSegment(_sightCenter + (_sightSize / 2.0f), sourceOrientation, sourcePosition);
+		drawFieldOfViewSegment(_sightCenter - (_sightSize / 2.0f), sourceOrientation, sourcePosition);
 	}
 
 	void Sight::drawDebugInfo(void) const
