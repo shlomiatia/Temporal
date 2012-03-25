@@ -201,6 +201,12 @@ namespace Temporal
 		float max = 0.0f;
 		const float gravity = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
+		if(distance >= 0 && distance < 20.0f)
+		{
+			jumpHelper.setInfo(JumpInfoProvider::get().getHighest());
+			jumpHelper.setLedgeDirected(true);
+			return;
+		}
 		const JumpInfoCollection& data = JumpInfoProvider::get().getData();
 		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
 		{

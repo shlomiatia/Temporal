@@ -33,7 +33,7 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Broder SLOTH
+		// TODO: Broder
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
 		if(angle < 0.0f) angle = 2*PI + angle;
