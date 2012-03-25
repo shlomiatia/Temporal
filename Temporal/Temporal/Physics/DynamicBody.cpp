@@ -159,7 +159,7 @@ namespace Temporal
 		_collision = Direction::NONE;
 		Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
 
-		// TODO: Broder help me!!! SLOTH!
+		// TODO: Broder SLOTH
 		if(_velocity.getVy() == 0.0f)
 			_force.setVy(0.0f);
 		if(_collision & Direction::BOTTOM ||  _velocity.getVx() == 0.0f)

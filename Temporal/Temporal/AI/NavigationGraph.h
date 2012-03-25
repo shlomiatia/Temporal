@@ -89,11 +89,6 @@ namespace Temporal
 	private:
 		static const Size MIN_AREA_SIZE;
 
-		// TODO: Use actual jump values? Unify SLOTH
-		static const float MAX_JUMP_UP_DISTANCE;
-		static const float MAX_JUMP_FORWARD_DISTANCE;
-		static const float MIN_FALL_DISTANCE;
-
 		NavigationNodeCollection _nodes; 
 
 		void createNodes(RectCollection& platforms);

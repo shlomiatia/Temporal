@@ -1,6 +1,7 @@
 #include "ActionController.h"
 #include "Message.h"
 #include "MessageParams.h"
+#include "MovementUtils.h"
 
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
@@ -194,32 +195,20 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = sensedBody->getBounds().getOppositeSide(orientation);
 		float front = personBounds.getSide(orientation);
-		float x = (target - front) * orientation;
+		float distance = (target - front) * orientation;
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
 
 		float max = 0.0f;
-		const float F = JUMP_FORCE_PER_SECOND;
-		const float G = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
+		const float gravity = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
 		const JumpInfoCollection& data = JumpInfoProvider::get().getData();
 		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
 		{
-			/* x = T*F*cos(A)
-				* y = T*F*sin(A) - (G*T^2)/2
-				*
-				* T = x/(F*cos(A))
-				* y = (x/(F*cos(A))*F*sin(A) - (G*(x/(F*cos(A)))^2)/2
-				* y = (x*sin(A))/(cos(A)) - (G*x^2)/(2*F^2*cos(A)^2)
-				* y = (2*F^2*x*sin(A)*cos(A) - G*x^2)/(2*F^2*cos(A)^2)
-				* y = x*(2*F^2*sin(A)*cos(A) - G*x)/(2*F^2*cos(A)^2)
-				*/
 			const JumpInfo* jumpInfo = *i;
-			float A = jumpInfo->getAngle();
-			float y = x*(2.0f*pow(F,2.0f)*sin(A)*cos(A) - G*x)/(2.0f*pow(F,2.0f)*pow(cos(A),2.0f));
-
-			if(max < y)
+			float height = getJumpHeight(jumpInfo->getAngle(), JUMP_FORCE_PER_SECOND, gravity, distance);
+			if(max < height)
 			{
-				max = y;
+				max = height;
 				jumpHelper.setInfo(jumpInfo);
 				jumpHelper.setLedgeDirected(true);
 			}

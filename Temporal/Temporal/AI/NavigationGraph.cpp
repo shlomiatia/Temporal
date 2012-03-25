@@ -1,15 +1,16 @@
 #include "NavigationGraph.h"
+#include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\Entity.h>
 #include <Temporal\Game\EntitiesManager.h>
+#include <Temporal\Game\ActionController.h>
+#include <Temporal\Game\MovementUtils.h>
+#include <Temporal\Physics\DynamicBody.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
 {
 	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 100.0f);
-	const float NavigationGraph::MAX_JUMP_UP_DISTANCE = 150.0f;
-	const float NavigationGraph::MAX_JUMP_FORWARD_DISTANCE = 300.0f;
-	const float NavigationGraph::MIN_FALL_DISTANCE = 16.0f;
 
 	NavigationNode::~NavigationNode(void)
 	{
@@ -106,8 +107,11 @@ namespace Temporal
 			// Create area
 			Rect area = RectCB(platform.getCenterX(), platform.getTop() + 1.0f, platform.getWidth(), MIN_AREA_SIZE.getHeight());
 
+			// TODO: Broder GRAVITY,FORCES,SIZES SLOTH
+			const float HALF_OF_CHARACTER_WIDTH = 10.0f;
+
 			// Pad it a little
-			area = area.resize(Vector(2 * MIN_FALL_DISTANCE, 0.0f));
+			area = area.resize(Vector(2 * HALF_OF_CHARACTER_WIDTH, 0.0f));
 
 			RectCollection areas;
 			areas.push_back(area);
@@ -135,9 +139,11 @@ namespace Temporal
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
-			NavigationEdgeType::Enum type = distance < MIN_FALL_DISTANCE ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
+			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY, verticalDistance);
+			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY) + 80.0f;
+			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
-			if(verticalDistance <= MAX_JUMP_UP_DISTANCE)
+			if(verticalDistance <= maxJumpHeight)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP));
 		}
 	}
@@ -148,7 +154,8 @@ namespace Temporal
 		const Rect& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= MAX_JUMP_FORWARD_DISTANCE)
+		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
+		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= maxJumpForwardDistance)
 		{
 			Rect jumpArea = RectLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))

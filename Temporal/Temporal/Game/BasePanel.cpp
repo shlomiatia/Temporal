@@ -11,7 +11,6 @@
 #include <Temporal\AI\NavigationGraph.h>
 #include <Temporal\Input\Input.h>
 
-
 namespace Temporal
 {
 	void BasePanel::init(void)
@@ -39,8 +38,8 @@ namespace Temporal
 		
 		if(Input::get().isQuit())
 		{
-			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&position));
-			Game::get().stop();
+			EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&position));
+			//Game::get().stop();
 		}
 	}
 
@@ -50,10 +49,10 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT;
+		ComponentType::Enum filter = ComponentType::AI_CONTROLLER | ComponentType::SENSOR;
 		EntitiesManager::get().sendMessageToAllComponents(Message(MessageID::DEBUG_DRAW), filter);	
 		//Grid::get().draw();
-		//NavigationGraph::get().draw();
+		NavigationGraph::get().draw();
 	}
 
 	void BasePanel::dispose(void)
