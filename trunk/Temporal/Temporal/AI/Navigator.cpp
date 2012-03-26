@@ -2,7 +2,6 @@
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageUtils.h>
 #include <Temporal\Graphics\Graphics.h>
-#include <math.h>
 
 namespace Temporal
 {
@@ -52,6 +51,8 @@ namespace Temporal
 				}
 				
 				float distance = targetX - sourceX;
+
+				// TODO: Broder
 				if(abs(distance) <= 10.0f)
 				{
 					if(reachedTargetPlatform)

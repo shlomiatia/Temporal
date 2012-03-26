@@ -11,6 +11,7 @@ namespace Temporal
 	class DynamicBody : public Body
 	{
 	public:
+		// TODO: Broder
 		static const float GRAVITY;
 
 		explicit DynamicBody(const Size& size) : Body(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE) {}

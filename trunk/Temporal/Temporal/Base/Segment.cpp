@@ -3,26 +3,19 @@
 
 namespace Temporal
 {
-	DirectedSegment::DirectedSegment(float originX, float originY, float targetX, float targetY)
-		: _origin(originX, originY), _target(targetX, targetY), _length(calculateLength()), _normalizedVector(calculateNormalizedVector()), _angle(calculateAngle()) {}
-
-	DirectedSegment::DirectedSegment(const Point& origin, const Point& target)
-		: _origin(origin), _target(target), _length(calculateLength()), _normalizedVector(calculateNormalizedVector()), _angle(calculateAngle()) {}
-
-	float DirectedSegment::calculateLength(void) const
+	float Segment::getLength(void) const
 	{
-		return sqrt(pow(getTarget().getX() - getOrigin().getX(), 2.0f) + pow(getTarget().getY() - getOrigin().getY(), 2.0f));
+		return sqrt(pow(getPoint2().getX() - getPoint1().getX(), 2.0f) + pow(getPoint2().getY() - getPoint1().getY(), 2.0f));
 	}
 
-	Vector DirectedSegment::calculateNormalizedVector(void) const
+	float DirectedSegment::getAngle(void) const
 	{
-		Vector vector = getTarget() - getOrigin();
-		return vector / getLength();
-	}
-
-	float DirectedSegment::calculateAngle(void) const
-	{
-		Vector vector = getTarget() - getOrigin();
+		Vector vector = getVector();
 		return atan2(vector.getVy(), vector.getVx());
+	}
+
+	Vector DirectedSegment::getVector(void) const
+	{
+		return getTarget() - getOrigin();
 	}
 }

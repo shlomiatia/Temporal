@@ -34,6 +34,7 @@ namespace Temporal
 
 	// TODO: Enable/Disable Sensors PERFORMACE
 	// TODO: Request sight PERFORMANCE
+	// TODO: Cache ray properties PERFORMANCE
 	class TestPanel : public BasePanel
 	{
 	public:

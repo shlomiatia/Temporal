@@ -10,6 +10,7 @@
 
 namespace Temporal
 {
+	// TODO: Broder
 	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 100.0f);
 
 	NavigationNode::~NavigationNode(void)
@@ -25,13 +26,8 @@ namespace Temporal
 		const Rect& sourceArea = source.getArea();
 		const Rect& targetArea = getTarget().getArea();
 
-		float x1 = sourceArea.getCenterX();
-		float x2 = targetArea.getCenterX();
-		float y1 = sourceArea.getCenterY();
-		float y2 = targetArea.getCenterY();
-
-		// TODO:
-		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
+		Segment segment(sourceArea.getCenter(), targetArea.getCenter());
+		return segment.getLength();
 	}
 
 	void cutAreaLeft(const Rect& platform, const Rect& area, RectCollection& areas, RectIterator& iterator)
@@ -109,7 +105,7 @@ namespace Temporal
 			Rect area = RectCB(platform.getCenterX(), platform.getTop() + 1.0f, platform.getWidth(), MIN_AREA_SIZE.getHeight());
 
 			// Pad it a little
-			// TODO: Broder GRAVITY,FORCES,SIZES MIN_AREA_SIZE maxJumpHeight HANG_SENSOR_SIZE, Navigator Walk
+			// TODO: Broder
 			area = area.resize(Vector(2 * 10.0f, 0.0f));
 
 			RectCollection areas;
@@ -139,6 +135,8 @@ namespace Temporal
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
 			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY, verticalDistance);
+
+			// TODO: Broder
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY) + 80.0f;
 			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));

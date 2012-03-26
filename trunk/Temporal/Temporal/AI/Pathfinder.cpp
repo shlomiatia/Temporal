@@ -11,12 +11,8 @@ namespace Temporal
 		const Rect& sourceArea = getNavigationNode().getArea();
 		const Rect& goalArea = goal.getArea();
 
-		float x1 = sourceArea.getCenterX();
-		float x2 = goalArea.getCenterX();
-		float y1 = sourceArea.getCenterY();
-		float y2 = goalArea.getCenterY();
-
-		return sqrt(pow(x2-x1, 2.0f) + pow(y2-y1, 2.0f));
+		Segment segment(sourceArea.getCenter(), goalArea.getCenter());
+		return segment.getLength();
 	}
 
 	NavigationEdgeCollection* buildPath(const PathNode& pathNode)
