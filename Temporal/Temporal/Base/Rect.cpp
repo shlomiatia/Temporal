@@ -28,7 +28,7 @@ namespace Temporal
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
 		const Point& origin = directedSegment.getOrigin();
-		const Vector& vector = directedSegment.getNormalizedVector();
+		const Vector vector = directedSegment.getVector().normalize();
 		float tmax = directedSegment.getLength();
 
 		// For all three slabs

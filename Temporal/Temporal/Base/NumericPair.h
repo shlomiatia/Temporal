@@ -89,6 +89,9 @@ namespace Temporal
 		void setVx(float n1) { _n1 = n1; }
 		float getVy(void) const { return (_n2); }
 		void setVy(float n2) { _n2 = n2; }
+		float getLength(void) const;
+
+		Vector normalize(void) const;
 	};
 
 	class Size : public NumericPair
