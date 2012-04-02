@@ -8,7 +8,6 @@
 
 namespace Temporal
 {
-	class Body;
 	class StaticBody;
 
 	class Sensor : public Component
@@ -18,7 +17,7 @@ namespace Temporal
 			: _id(id), _offset(offset), _size(size), _sensedBody(NULL), _positive(positive), _negative(negative) {}
 
 		SensorID::Enum getID() const { return _id; }
-		const Body* getSensedBody(void) const { return _sensedBody; }
+		const StaticBody* getSensedBody(void) const { return _sensedBody; }
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
@@ -29,7 +28,7 @@ namespace Temporal
 		const Size _size;
 		const Direction::Enum _positive;
 		const Direction::Enum _negative;
-		const Body* _sensedBody;
+		const StaticBody* _sensedBody;
 
 		Rect getBounds(void) const;
 		void update(void);

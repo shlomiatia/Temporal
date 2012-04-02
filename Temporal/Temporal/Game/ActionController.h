@@ -2,7 +2,7 @@
 #define ACTIONCONTROLLER_H
 
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
@@ -104,12 +104,12 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _platform(Rect::Empty) {}
+		HangDescendHelper(void) : _platform(Segment::Empty) {}
 
 		void setPlatformFromSensor(const Sensor& sensor);
-		const Rect& getPlatform(void) const { return _platform; }
+		const Segment& getPlatform(void) const { return _platform; }
 	private:
-		Rect _platform;
+		Segment _platform;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
@@ -255,7 +255,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	private:
-		const Rect* _platform;
+		const Segment* _platform;
 
 		void update(void);
 	};
@@ -320,7 +320,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	private:
-		const Rect* _platform;
+		const Segment* _platform;
 
 		void update(void);
 	};

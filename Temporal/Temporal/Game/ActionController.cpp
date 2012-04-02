@@ -5,7 +5,7 @@
 
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
-#include <Temporal\Physics\Body.h>
+#include <Temporal\Physics\StaticBody.h>
 
 namespace Temporal
 {
@@ -26,7 +26,8 @@ namespace Temporal
 
 	void HangDescendHelper::setPlatformFromSensor(const Sensor& sensor)
 	{
-		_platform = sensor.getSensedBody()->getBounds();
+		const Segment& segment = sensor.getSensedBody()->getSegment();
+		_platform = segment;
 	}
 
 	StateCollection ActionController::getStates() const
@@ -189,11 +190,11 @@ namespace Temporal
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
 		const Sensor& sensor = *(Sensor*)message.getParam();
-		const Body* sensedBody = sensor.getSensedBody();
+		const Segment& segment = sensor.getSensedBody()->getSegment();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rect personBounds(Rect::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		float target = sensedBody->getBounds().getOppositeSide(orientation);
+		float target = segment.getOppositeSide(orientation);
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
@@ -419,7 +420,7 @@ namespace Temporal
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float climbForceX = 1.0f;
-		float climbForceY = size.getHeight() - 1.0f;
+		float climbForceY = size.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
@@ -483,7 +484,7 @@ namespace Temporal
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float forceX = -1.0f;
-		float forceY = -(size.getHeight() - 1.0f);
+		float forceY = -(size.getHeight());
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(forceX, forceY)));
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));

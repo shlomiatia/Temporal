@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "StaticBody.h"
+#include <Temporal\Base\Rect.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
@@ -49,8 +50,10 @@ namespace Temporal
 
 	void Grid::add(const StaticBody* staticBody)
 	{
-		Rect bounds = staticBody->getBounds();
-		iterateTiles(bounds, this, (void*)staticBody, add);
+		const Segment& segment = staticBody->getSegment();
+		Size size = segment.getPoint1().getX() == segment.getPoint2().getX() ? Size(0.0f, segment.getLength()) : Size(segment.getLength(), 0.0f);
+		Rect temp = Rect(segment.getCenter(), size);
+		iterateTiles(temp, this, (void*)staticBody, add);
 	}
 
 	StaticBodyCollection* Grid::getTile(int i, int j) const

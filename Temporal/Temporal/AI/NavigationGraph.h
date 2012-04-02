@@ -71,6 +71,8 @@ namespace Temporal
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
 	typedef std::vector<const Rect> RectCollection;
 	typedef RectCollection::const_iterator RectIterator;
+	typedef std::vector<const Segment*> SegmentCollection;
+	typedef SegmentCollection::const_iterator SegmentIterator;
 
 	class NavigationGraph
 	{
@@ -91,10 +93,10 @@ namespace Temporal
 
 		NavigationNodeCollection _nodes; 
 
-		void createNodes(RectCollection& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, RectCollection& platforms);
-		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, RectCollection& platforms);
-		void createEdges(RectCollection& platforms);
+		void createNodes(SegmentCollection& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, SegmentCollection& platforms);
+		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, SegmentCollection& platforms);
+		void createEdges(SegmentCollection& platforms);
 
 		NavigationGraph(void) {}
 		NavigationGraph(const NavigationGraph&);

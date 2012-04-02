@@ -38,7 +38,7 @@ namespace Temporal
 		float angle = directedSegment.getAngle();
 		if(angle < 0.0f) angle = 2*PI + angle;
 		float sightCenter = sourceOrientation == Orientation::RIGHT ? _sightCenter : PI - _sightCenter;
-		float distance = std::min(abs(sightCenter - angle),  abs(2*PI + angle - sightCenter));
+		float distance = std::min(abs(sightCenter - angle),  abs(angle - 2*PI - sightCenter));
 		if(distance > _sightSize / 2.0f) return;
 		
 		_isSeeing = directedSegmentCast(directedSegment);
@@ -94,7 +94,7 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
-					if(body.getBounds().intersects(directedSegment, _pointOfIntersection))
+					if(body.getSegment().intersects(directedSegment, _pointOfIntersection))
 					{
 						return false;
 					}

@@ -63,8 +63,10 @@ namespace Temporal
 	};
 
 	inline NumericPair operator+(const NumericPair& numericPair, float scalar) { return NumericPair(numericPair._n1 + scalar, numericPair._n2 + scalar); }
+	inline NumericPair operator+(float scalar, const NumericPair& numericPair) { return numericPair + scalar; }
 	inline NumericPair operator-(const NumericPair& numericPair, float scalar) { return numericPair + -scalar; }
 	inline NumericPair operator*(const NumericPair& numericPair, float scalar) { return NumericPair(numericPair._n1 * scalar, numericPair._n2 * scalar); }
+	inline NumericPair operator*(float scalar, const NumericPair& numericPair) { return numericPair * scalar; }
 	inline NumericPair operator/(const NumericPair& numericPair, float scalar) { return numericPair * (1.0f / scalar); }
 
 	class Point : public NumericPair
@@ -92,6 +94,7 @@ namespace Temporal
 		float getLength(void) const;
 
 		Vector normalize(void) const;
+		float operator*(const Vector& other) const { return getVx() * other.getVx() + getVy() * other.getVy(); }
 	};
 
 	class Size : public NumericPair
