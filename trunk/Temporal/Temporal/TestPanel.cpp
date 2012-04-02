@@ -185,7 +185,7 @@ namespace Temporal
 
 	void createSentry(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(200.0f, 40.f));
+		Position* position = new Position(Point(100.0f, 550.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
@@ -230,7 +230,7 @@ namespace Temporal
 
 	void createCamera()
 	{
-		Position* position = new Position(Point(200.0f, 125.f));
+		Position* position = new Position(Point(512.0f, 255.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(2*PI-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
@@ -291,20 +291,55 @@ namespace Temporal
 		const Size TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		EntitiesManager::get().add(createPlatform(Segment(0.0f, 0.0f, 1023.0f, 0.0f), spritesheet));
+		// Edges
 		EntitiesManager::get().add(createPlatform(Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 0.0f, 1023.0f, 0.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(Segment(1023.0f, 0.0f, 1023, 767.0f), spritesheet));
+
+		// Right lower platform
+		EntitiesManager::get().add(createPlatform(Segment(767.0f, 0.0f, 767.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(Segment(767.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(0.0f, 128.0f, 256.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(767.0f, 0.0f, 767, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(128.0f, 256.0f, 128.0f, 384.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(128, 0.0f, 128.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
-		//EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
+
+		// Right upper platform
 		EntitiesManager::get().add(createPlatform(Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(Segment(896.0f, 256.0f, 1023.0f, 256.0f), spritesheet));
+
+		// Right floater
+		EntitiesManager::get().add(createPlatform(Segment(640.0f, 384.0f, 1023.0f, 384.0f), spritesheet));
+
+		// Right balcony
+		EntitiesManager::get().add(createPlatform(Segment(767.0f, 512.0f, 1023.0f, 512.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(896.0f, 384.0f, 896.0f, 512.0f), spritesheet));
+
+		// Right unreachable
+		EntitiesManager::get().add(createPlatform(Segment(896.0f, 640.0f, 1023.0f, 640.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(896.0f, 640.0f, 896.0f, 767.0f), spritesheet));
+		
+		// Left lower platform
+		EntitiesManager::get().add(createPlatform(Segment(256.0f, 0.0f, 256.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 128.0f, 256.0f, 128.0f), spritesheet));
+
+		// Left upper platform
+		EntitiesManager::get().add(createPlatform(Segment(128.0f, 128.0f, 128.0f, 256.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet));
+
+		// Left floater
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 384.0f, 384.0f, 384.0f), spritesheet));
+
+		// Left balcony
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 512.0f, 256.0f, 512.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(128, 384.0f, 128.0f, 512.0f), spritesheet));
+
+		// Left unrechable
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 640.0f, 128.0f, 640.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(128.0f, 640.0f, 128.0f, 767.0f), spritesheet));
+		
+		// Middle floaters
+		EntitiesManager::get().add(createPlatform(Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
+		
+
+		//EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
 	}
 
 	void createBackground()
@@ -472,9 +507,9 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createChaser(spritesheet);
-		//createSentry(spritesheet);
-		//createPatrol(spritesheet);
+		createChaser(spritesheet);
+		createSentry(spritesheet);
+		createPatrol(spritesheet);
 		createCamera();
 		createPlatforms();
 		createBackground();
