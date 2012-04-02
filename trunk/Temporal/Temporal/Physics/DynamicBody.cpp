@@ -4,19 +4,25 @@
 #include "Grid.h"
 #include "PhysicsUtils.h"
 #include <Temporal\Game\Message.h>
+#include <Temporal\Graphics\Graphics.h>
 #include <algorithm>
+#include <assert.h>
 
 namespace Temporal
 {
 	const float DynamicBody::GRAVITY(5000.0f);
 
-	float correctCollisionInAxis(float force, float minDynamic, float maxDynamic, float minStatic, float maxStatic)
+	DynamicBody::DynamicBody(const Size& size)
+		: _size(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE)
 	{
-		if(force > 0 && maxDynamic <= minStatic)
-			force = std::min(force, minStatic - maxDynamic);
-		else if(force < 0 && minDynamic >= maxStatic)
-			force = std::max(force, maxStatic - minDynamic);
-		return force;
+		assert(_size.getWidth() > 0.0f);
+		assert(_size.getHeight() > 0.0f);
+	}
+
+	Rect DynamicBody::getBounds(void) const
+	{
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		return Rect(position, _size);
 	}
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
@@ -34,8 +40,20 @@ namespace Temporal
 
 	void DynamicBody::handleMessage(Message& message)
 	{
-		Body::handleMessage(message);
-		if(message.getID() == MessageID::SET_FORCE)
+		if(message.getID() == MessageID::GET_SIZE)
+		{
+			message.setParam(&_size);
+		}
+		else if(message.getID() == MessageID::GET_BOUNDS)
+		{
+			Rect* outParam = (Rect*)message.getParam();
+			*outParam = getBounds();
+		}
+		else if(message.getID() == MessageID::DEBUG_DRAW)
+		{
+			Graphics::get().drawRect(getBounds());
+		}
+		else if(message.getID() == MessageID::SET_FORCE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
 			_force = Vector(param.getVx() * getOrientation(), param.getVy());
@@ -67,61 +85,46 @@ namespace Temporal
 		handleCollisions();
 	}
 
-	void DynamicBody::correctCollision(const StaticBody& staticBody)
+	bool DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
-		const Rect& staticBodyBounds(staticBody.getBounds());
+		const Segment& staticBodyBounds(staticBody.getSegment());
 		const Rect& dynamicBodyBounds(getBounds());
-		const Rect& futureBounds = dynamicBodyBounds.move(_velocity);
-
-		if(!staticBody.isCover() && futureBounds.intersectsExclusive(staticBodyBounds))
+		if(!staticBody.isCover() && dynamicBodyBounds.intersects(staticBodyBounds))
 		{
-			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
+			float upCorrection = staticBodyBounds.getTop() - dynamicBodyBounds.getBottom();
+			float downCorrection = staticBodyBounds.getBottom() - dynamicBodyBounds.getTop();
+			float minYCorrection = abs(upCorrection) < abs(downCorrection) ? upCorrection : downCorrection;
+			float rightCorrection = staticBodyBounds.getRight() - dynamicBodyBounds.getLeft();
+			float leftCorrection = staticBodyBounds.getLeft() - dynamicBodyBounds.getRight();
+			float minXCorrection = abs(rightCorrection) < abs(leftCorrection) ? rightCorrection : leftCorrection;
+			Vector correction(Vector::Zero);
+			if(abs(minYCorrection) < abs(minXCorrection))
 			{
-				Range dynamicAxisRange = dynamicBodyBounds.getAxis(axis);
-				float dynamicAxisMin = dynamicAxisRange.getMin();
-				float dynamicAxisMax = dynamicAxisRange.getMax();
-				Range staticAxisRange = staticBodyBounds.getAxis(axis);
-				float staticAxisMin = staticAxisRange.getMin();
-				float staticAxisMax = staticAxisRange.getMax();
-				float axisVelocity = _velocity.getAxis(axis);
-				if(axisVelocity > 0 && dynamicAxisMax <= staticAxisMin)
+				correction.setVy(minYCorrection);
+				_force.setVy(0.0);
+				if(minYCorrection > 0.0f)
 				{
-					float corrected = std::min(axisVelocity, staticAxisMin - dynamicAxisMax);
-					_velocity.setAxis(axis, corrected);
-				}
-				else if(axisVelocity < 0 && dynamicAxisMin >= staticAxisMax)
-				{
-					float corrected = std::max(axisVelocity, staticAxisMax - dynamicAxisMin);
-					_velocity.setAxis(axis, corrected);
+					_collision = Direction::BOTTOM;
+					_force.setVx(0.0f);
 				}
 			}
+			else
+			{
+				correction.setVx(minXCorrection);
+				_force.setVx(0.0);
+			}
+			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			Point newPosition = position + correction;
+			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+			
 		}
-	}
-
-	void DynamicBody::detectCollision(const StaticBody& staticBody)
-	{
-		if(!staticBody.isCover())
-		{
-			const Rect& dynamicBodyBounds = getBounds();
-			Orientation::Enum dynamicBodyOrientation = getOrientation();
-			const Rect& staticBodyBounds = staticBody.getBounds();
-			Direction::Enum collision = calculateCollision(dynamicBodyBounds, dynamicBodyOrientation, staticBodyBounds);
-			_collision = _collision | collision;
-		}
+		return true;
 	}
 
 	bool DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
-		dynamicBody->correctCollision(staticBody);
-		return true;
-	}
-
-	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
-	{
-		DynamicBody* dynamicBody = (DynamicBody*)caller;
-		dynamicBody->detectCollision(staticBody);
-		return true;
+		return dynamicBody->correctCollision(staticBody);
 	}
 
 	void DynamicBody::determineVelocity(float framePeriodInMillis)
@@ -151,19 +154,9 @@ namespace Temporal
 	void DynamicBody::handleCollisions(void)
 	{
 		Rect bounds = getBounds().move(_velocity);
-		Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
-
-		applyVelocity();
-
-		bounds = getBounds();
 		_collision = Direction::NONE;
-		Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
-
-		// TODO: Broder
-		if(_velocity.getVy() == 0.0f)
-			_force.setVy(0.0f);
-		if(_collision & Direction::BOTTOM ||  _velocity.getVx() == 0.0f)
-			_force.setVx(0.0f);
+		applyVelocity();
+		Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 

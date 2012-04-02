@@ -42,7 +42,6 @@
     <ClInclude Include="Graphics\SpriteSheet.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
-    <ClInclude Include="Physics\Body.h" />
     <ClInclude Include="Game\DebugInfo.h" />
     <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Base\Thread.h" />
@@ -89,7 +88,6 @@
     <ClCompile Include="Graphics\SpriteSheet.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
-    <ClCompile Include="Physics\Body.cpp" />
     <ClCompile Include="Game\DebugInfo.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
     <ClCompile Include="Game\Game.cpp" />

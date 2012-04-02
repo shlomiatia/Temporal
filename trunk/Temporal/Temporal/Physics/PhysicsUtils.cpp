@@ -3,11 +3,11 @@
 
 namespace Temporal
 {
-	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Rect& boundsB)
+	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Segment& boundsB)
 	{
 		Direction::Enum collision(Direction::NONE);
 
-		if(boundsA.intersectsInclusive(boundsB))
+		if(boundsA.intersects(boundsB))
 		{
 			float frontA = boundsA.getSide(orientationA);
 			float frontB = boundsB.getSide(orientationA);

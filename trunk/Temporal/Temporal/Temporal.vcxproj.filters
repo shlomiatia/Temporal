@@ -10,7 +10,6 @@
     <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="TestPanel.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="Physics\Body.h" />
     <ClInclude Include="Physics\Sensor.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Graphics\SpriteSheet.h" />
@@ -58,7 +57,6 @@
     <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="TestPanel.cpp" />
     <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="Physics\Body.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Base\Rect.cpp" />

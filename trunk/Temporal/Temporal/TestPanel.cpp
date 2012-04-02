@@ -72,62 +72,74 @@ namespace Temporal
 		VisualLayer::Enum _layer;
 	};
 
-	void addSensors(Entity& entity, DynamicBody& body)
+	static const Size ENTITY_SIZE(20.0f, 80.0f);
+	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 2.0f);
+
+	void addJumpSensor(Entity& entity)
 	{
-		float playerWidth = body.getSize().getWidth();
-		float jumpSensorBackOffset = (playerWidth - 1.0f) / 2.0f;
-		float playerHeight = body.getSize().getHeight();
+		// Jump sensor
+		float jumpSensorBackOffset = (ENTITY_SIZE.getWidth() - 1.0f) / 2.0f;
 		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
 		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
 		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
 		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
-		float sensorOffsetY =  (playerHeight -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
+		float sensorOffsetY =  (ENTITY_SIZE.getHeight() -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
 		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
 		entity.add(sensor);
+	}
 
+	void addHangSensor(Entity& entity)
+	{
 		// Hang Sensor
 		const float HANG_SENSOR_SIZE = 20.0f;
-		sensorSize = Size(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
-		sensorOffsetX = (playerWidth -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
-		sensorOffsetY = (playerHeight -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
-		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		Size sensorSize = Size(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
+		float sensorOffsetX = (ENTITY_SIZE.getWidth() -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
+		float sensorOffsetY = (ENTITY_SIZE.getHeight() -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Sensor* sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 		entity.add(sensor);
+	}
 
-		float edgeSensorWidth = playerWidth * 2.0f;
-
+	void addBackEdgeSensor(Entity& entity)
+	{
 		// Back Edge Sensor
-		sensorOffsetX = -(edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
-		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensorSize = Size(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() -1.0f - (ENTITY_SIZE.getWidth() - 1.0f)) / 2.0f;
+		float sensorOffsetY = -((ENTITY_SIZE.getHeight() - 1.0f) / 2.0f);
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 		entity.add(sensor);
+	}
 
+	void addFrontEdgeSensor(Entity& entity)
+	{
 		// Front edge sensor
-		sensorOffsetX = (edgeSensorWidth -1.0f - (playerWidth - 1.0f)) / 2.0f;
-		sensorOffsetY = -((playerHeight - 1.0f) / 2.0f);
-		sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		sensorSize = Size(playerWidth * 2.0f, 2.0f);
-		sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, sensorSize, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() -1.0f - (ENTITY_SIZE.getWidth() - 1.0f)) / 2.0f;
+		float sensorOffsetY = -((ENTITY_SIZE.getHeight() - 1.0f) / 2.0f);
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 		entity.add(sensor);
+	}
+
+	void addSensors(Entity& entity)
+	{
+		addJumpSensor(entity);
+		addHangSensor(entity);
+		addBackEdgeSensor(entity);
+		addFrontEdgeSensor(entity);
 	}
 
 	#pragma endregion
 	#pragma region Creation Methods
 
-	static const float ENTITY_WIDTH = 20.0f;
-	static const float ENTITY_HEIGHT = 80.0f;
-
 	void createPlayer(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
-		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -138,7 +150,7 @@ namespace Temporal
 		entity->add(drawPosition);
 		entity->add(controller);
 		entity->add(dynamicBody);
-		addSensors(*entity, *dynamicBody);
+		addSensors(*entity);
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
@@ -149,13 +161,13 @@ namespace Temporal
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
-		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		//Sight* sight = new Sight(ANGLE_30_IN_RADIANS, -ANGLE_30_IN_RADIANS);
+		//Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -164,7 +176,7 @@ namespace Temporal
 		entity->add(navigator);
 		entity->add(dynamicBody);
 //		entity->add(sight);
-		addSensors(*entity, *dynamicBody);
+		addSensors(*entity);
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
@@ -173,9 +185,9 @@ namespace Temporal
 
 	void createSentry(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(200.0f, 50.f));
+		Position* position = new Position(Point(200.0f, 40.f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
@@ -194,9 +206,9 @@ namespace Temporal
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_HEIGHT - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Patrol* patrol = new Patrol();
-		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_WIDTH, ENTITY_HEIGHT));
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
@@ -209,7 +221,7 @@ namespace Temporal
 		entity->add(patrol);
 		entity->add(dynamicBody);
 		entity->add(sight);
-		addSensors(*entity, *dynamicBody);
+		addFrontEdgeSensor(*entity);
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
@@ -218,7 +230,7 @@ namespace Temporal
 
 	void createCamera()
 	{
-		Position* position = new Position(Point(200.0f, 120.f));
+		Position* position = new Position(Point(200.0f, 125.f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(2*PI-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
@@ -257,12 +269,10 @@ namespace Temporal
 		EntitiesManager::get().add(entity);
 	}
 
-	Entity* createPlatform(const Rect& platform, SpriteSheet* spritesheet, bool cover = false) 
+	Entity* createPlatform(const Segment& segment, SpriteSheet* spritesheet, bool cover = false) 
 	{
-		const Point& center = platform.getCenter();
-		const Size& size = platform.getSize();
-		Position* position = new Position(center);
-		StaticBody* staticBody = new StaticBody(size, cover);
+		Position* position = new Position(segment.getCenter());
+		StaticBody* staticBody = new StaticBody(segment, cover);
 		AreaRenderer* renderer(new AreaRenderer(*spritesheet, cover ? VisualLayer::COVER : VisualLayer::STATIC));
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -281,19 +291,20 @@ namespace Temporal
 		const Size TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(Rect(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
-		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 0.0f, 1024.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 0.0f, 16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(1009.0f, 0.0f, 16.0f, 768.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(768.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(768.0f, 0.0f, 16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(0.0f, 256.0f, 128.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(112.0f, 256.0f, 16.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectLB(128, 0.0f, 16.0f, 144.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 128.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 256.0f, 256.0f, 16.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
-		EntitiesManager::get().add(createPlatform(RectLB(896.0f, 128.0f, 128.0f, 144.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 0.0f, 1023.0f, 0.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(1023.0f, 0.0f, 1023, 767.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(767.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 128.0f, 256.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(767.0f, 0.0f, 767, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(128.0f, 256.0f, 128.0f, 384.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(128, 0.0f, 128.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
+		//EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
+		EntitiesManager::get().add(createPlatform(Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(896.0f, 256.0f, 1023.0f, 256.0f), spritesheet));
 	}
 
 	void createBackground()
@@ -461,9 +472,9 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createChaser(spritesheet);
-		createSentry(spritesheet);
-		createPatrol(spritesheet);
+		//createChaser(spritesheet);
+		//createSentry(spritesheet);
+		//createPatrol(spritesheet);
 		createCamera();
 		createPlatforms();
 		createBackground();

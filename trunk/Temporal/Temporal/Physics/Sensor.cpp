@@ -47,8 +47,8 @@ namespace Temporal
 		const Rect& sensorBounds = getBounds();
 		if(!staticBody.isCover())
 		{
-			const Rect& staticBodyBounds = staticBody.getBounds();
-			Direction::Enum collision = calculateCollision(sensorBounds, orientation, staticBodyBounds);
+			const Segment& segment = staticBody.getSegment();
+			Direction::Enum collision = calculateCollision(sensorBounds, orientation, segment);
 			if(match(collision, _positive, _negative))
 			{
 				_sensedBody = &staticBody;

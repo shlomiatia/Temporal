@@ -35,6 +35,7 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			UNKNOWN,
 			X,
 			Y
 		};
