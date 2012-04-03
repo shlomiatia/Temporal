@@ -56,7 +56,6 @@
     <ClInclude Include="Physics\Sight.h" />
     <ClInclude Include="Physics\Grid.h" />
     <ClInclude Include="Physics\StaticBody.h" />
-    <ClInclude Include="Physics\PhysicsUtils.h" />
     <ClInclude Include="TestPanel.h" />
   </ItemGroup>
   <ItemGroup>
@@ -97,7 +96,6 @@
     <ClCompile Include="Game\ActionController.cpp" />
     <ClCompile Include="Physics\Sight.cpp" />
     <ClCompile Include="Physics\Grid.cpp" />
-    <ClCompile Include="Physics\PhysicsUtils.cpp" />
     <ClCompile Include="Physics\StaticBody.cpp" />
     <ClCompile Include="TestPanel.cpp" />
   </ItemGroup>

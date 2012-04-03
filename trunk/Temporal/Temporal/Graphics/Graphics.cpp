@@ -115,10 +115,10 @@ namespace Temporal
 			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
 			//glRotatef(rotation, 0.0, 0.0, 1.0f);
 
-			GLfloat screenVertices[] = { -texturePart.getOffsetX(), -texturePart.getOffsetY(),
-										 -texturePart.getOffsetX(), texturePart.getOffsetY(),
-										  texturePart.getOffsetX(), texturePart.getOffsetY(),
-										  texturePart.getOffsetX(), -texturePart.getOffsetY()};
+			GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
+										 -texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+										  texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+										  texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
 
 			GLfloat textureVertices[] = { textureX0, textureBottom,
 										  textureX0, textureTop,
@@ -149,10 +149,10 @@ namespace Temporal
 
 			glTranslatef(rect.getCenterX(), rect.getCenterY(), 0.0f);
 
-			GLfloat vertices[] = {-rect.getOffsetX(), -rect.getOffsetY(),
-								  -rect.getOffsetX(), rect.getOffsetY(),
-								   rect.getOffsetX(), rect.getOffsetY(),
-								   rect.getOffsetX(), -rect.getOffsetY()};
+			GLfloat vertices[] = {-rect.getRadiusVx(), -rect.getRadiusVy(),
+								  -rect.getRadiusVx(), rect.getRadiusVy(),
+								   rect.getRadiusVx(), rect.getRadiusVy(),
+								   rect.getRadiusVx(), -rect.getRadiusVy()};
  
 			glEnableClientState(GL_VERTEX_ARRAY);
  
@@ -164,13 +164,13 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-	void Graphics::drawSegment(const Point& p1, const Point& p2, const Color& color) const
+	void Graphics::drawSegment(const Segment& segment, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		setColor(color);
 
-		GLfloat vertices[] = { p1.getX(), p1.getY(), p2.getX(), p2.getY() };
+		GLfloat vertices[] = { segment.getPoint1().getX(), segment.getPoint1().getY(), segment.getPoint2().getX(), segment.getPoint2().getY() };
 
 		glEnableClientState(GL_VERTEX_ARRAY);
  

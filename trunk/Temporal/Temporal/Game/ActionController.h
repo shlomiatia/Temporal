@@ -9,7 +9,7 @@ namespace Temporal
 {
 	class Sensor;
 
-	// TODO: Broder
+	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 120.0f;
 	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
 

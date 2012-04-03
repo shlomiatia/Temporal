@@ -33,7 +33,7 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Broder
+		// BRODER
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
 		if(angle < 0.0f) angle = 2*PI + angle;
@@ -126,7 +126,7 @@ namespace Temporal
 		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
 		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
 		Vector targetPosition = Vector(targetX, targetY);
-		Graphics::get().drawSegment(sourcePosition, targetPosition, Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Graphics::get().drawSegment(Segment(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Point &sourcePosition, Orientation::Enum sourceOrientation) const
@@ -143,6 +143,6 @@ namespace Temporal
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
 		if(_pointOfIntersection != Point::Zero)
-			Graphics::get().drawSegment(sourcePosition, _pointOfIntersection, _isSeeing ? Color::Green : Color::Red);
+			Graphics::get().drawSegment(Segment(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
 	}
 }

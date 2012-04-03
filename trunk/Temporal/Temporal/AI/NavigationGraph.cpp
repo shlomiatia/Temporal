@@ -10,7 +10,7 @@
 
 namespace Temporal
 {
-	// TODO: Broder
+	// BRODER
 	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 100.0f);
 
 	NavigationNode::~NavigationNode(void)
@@ -105,7 +105,7 @@ namespace Temporal
 			Rect area = RectCB(platform.getCenter().getX(), platform.getTop() + 1.0f, platform.getLength(), MIN_AREA_SIZE.getHeight());
 
 			// Pad it a little
-			// TODO: Broder
+			// BRODER
 			area = area.resize(Vector(2 * 10.0f, 0.0f));
 
 			RectCollection areas;
@@ -136,7 +136,7 @@ namespace Temporal
 			float distance = (area2.getSide(orientation) - x) * orientation;
 			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY, verticalDistance);
 
-			// TODO: Broder
+			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY) + 80.0f;
 			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
@@ -256,7 +256,7 @@ namespace Temporal
 				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = node.getArea().getBottom();
 				float y2 = area2.getBottom();
-				Graphics::get().drawSegment(Point(x1, y1), Point(x2, y2), Color(1.0f, 0.5f, 0.0f));
+				Graphics::get().drawSegment(Segment(Point(x1, y1), Point(x2, y2)), Color(1.0f, 0.5f, 0.0f));
 			}
 		}
 	}

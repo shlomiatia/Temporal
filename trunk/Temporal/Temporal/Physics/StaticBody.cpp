@@ -8,7 +8,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().drawSegment(_segment.getPoint1(), _segment.getPoint2());
+			Graphics::get().drawSegment(_segment);
 		}
 		else if(message.getID() == MessageID::IS_COVER)
 		{

@@ -242,19 +242,18 @@ namespace Temporal
 		// Search - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(19, 19, 25, 33), Vector(4, 16)));
+		animation->add(new Sprite(Rect(19, 19, 24, 32), Vector(4, 16)));
 		// See - 1
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(19, 59, 25, 33), Vector(4, 16)));
+		animation->add(new Sprite(Rect(19, 59, 24, 32), Vector(4, 16)));
 		// Turn - 2
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(50.5, 19.5, 18, 34), Vector(1, 16)));
-		animation->add(new Sprite(Rect(76, 19.5, 13, 34), Vector(1, 16)));
-		animation->add(new Sprite(Rect(98, 19.5, 13, 34), Vector(0, 16)));
-		
-#pragma endregion
+		animation->add(new Sprite(Rect(50.5, 19.5, 17, 33), Vector(2, 16)));
+		animation->add(new Sprite(Rect(76, 19.5, 12, 33), Vector(1, 16)));
+		animation->add(new Sprite(Rect(98, 19.5, 12, 33), Vector(0, 16)));
+		#pragma endregion
 
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
@@ -277,7 +276,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(staticBody);
-		entity->add(renderer);
+		//entity->add(renderer);
 		Grid::get().add(staticBody);
 		return entity;
 	}
@@ -370,148 +369,149 @@ namespace Temporal
 		// Stand - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(26.5, 48, 22, 85), Vector(4, -42)));
+		animation->add(new Sprite(Rect(26.5, 48, 21, 84), Vector(6, -42)));
 		// Turn - 1
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(60.5, 50, 24, 81), Vector(6, -40)));
-		animation->add(new Sprite(Rect(95.5, 50, 26, 81), Vector(6, -40)));
-		animation->add(new Sprite(Rect(134.5, 48, 30, 85), Vector(4, -42)));
-		animation->add(new Sprite(Rect(177, 49.5, 39, 82), Vector(4, -41)));
-		animation->add(new Sprite(Rect(224.5, 50, 44, 81), Vector(-5, -40)));
-		animation->add(new Sprite(Rect(276, 52, 37, 77), Vector(-11, -38)));
-		animation->add(new Sprite(Rect(316.5, 51, 32, 79), Vector(-9, -39)));
-		animation->add(new Sprite(Rect(359, 51.5, 29, 80), Vector(-9, -40)));
+		animation->add(new Sprite(Rect(60.5, 50, 23, 80), Vector(7, -40)));
+		animation->add(new Sprite(Rect(95.5, 50, 25, 80), Vector(8, -40)));
+		animation->add(new Sprite(Rect(134.5, 48, 29, 84), Vector(4, -42)));
+		animation->add(new Sprite(Rect(177, 49.5, 38, 81), Vector(5, -41)));
+		animation->add(new Sprite(Rect(224.5, 50, 43, 80), Vector(-4, -40)));
+		animation->add(new Sprite(Rect(276, 52, 36, 76), Vector(-10, -38)));
+		animation->add(new Sprite(Rect(316.5, 51, 31, 78), Vector(-8, -39)));
+		animation->add(new Sprite(Rect(359, 51.5, 28, 79), Vector(-7, -40)));
 		// Drop - 2
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(418.5, 58.5, 24, 110), Vector(-4, 54)));
-		animation->add(new Sprite(Rect(462.5, 60, 22, 97), Vector(-3, 48)));
-		animation->add(new Sprite(Rect(509, 65, 23, 87), Vector(-3, 43)));
-		animation->add(new Sprite(Rect(546.5, 69.5, 26, 78), Vector(1, 38)));
-		animation->add(new Sprite(Rect(584.5, 67.5, 26, 82), Vector(7, 40)));
+		animation->add(new Sprite(Rect(418.5, 58.5, 23, 109), Vector(-3, 54)));
+		animation->add(new Sprite(Rect(462.5, 60, 21, 96), Vector(0, 48)));
+		animation->add(new Sprite(Rect(509, 65, 22, 86), Vector(3, 43)));
+		animation->add(new Sprite(Rect(546.5, 69.5, 25, 77), Vector(7, 38)));
+		animation->add(new Sprite(Rect(584.5, 67.5, 25, 81), Vector(9, 40)));
 		// FallStart - 3
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(667.5, 71, 72, 77), Vector(3, -38)));
-		animation->add(new Sprite(Rect(737, 68.5, 63, 76), Vector(3, -38)));
-		animation->add(new Sprite(Rect(805.5, 67, 52, 73), Vector(8, -36)));
-		animation->add(new Sprite(Rect(866, 62, 55, 81), Vector(8, -40)));
+		animation->add(new Sprite(Rect(667.5, 71, 71, 76), Vector(3, -38)));
+		animation->add(new Sprite(Rect(737, 68.5, 62, 75), Vector(3, -38)));
+		animation->add(new Sprite(Rect(805.5, 67, 51, 72), Vector(10, -36)));
+		animation->add(new Sprite(Rect(866, 62, 54, 80), Vector(7, -40)));
 		// Fall - 4
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(927, 63, 35, 79), Vector(-2, -39)));
+		animation->add(new Sprite(Rect(927, 63, 34, 78), Vector(-2, -39)));
 		// JumpUpStart - 5
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(30, 193.5, 23, 84), Vector(3, -42)));
-		animation->add(new Sprite(Rect(72.5, 193, 24, 85), Vector(2, -42)));
-		animation->add(new Sprite(Rect(114, 194, 23, 83), Vector(2, -41)));
-		animation->add(new Sprite(Rect(158, 195, 29, 81), Vector(-1, -40)));
-		animation->add(new Sprite(Rect(202, 195, 37, 81), Vector(-5, -40)));
-		animation->add(new Sprite(Rect(245.5, 194.5, 44, 82), Vector(-5, -41)));
-		animation->add(new Sprite(Rect(296, 194.5, 49, 82), Vector(-7, -41)));
-		animation->add(new Sprite(Rect(349.5, 196, 44, 79), Vector(1, -39)));
-		animation->add(new Sprite(Rect(396, 198.5, 33, 74), Vector(6, -37)));
-		animation->add(new Sprite(Rect(438, 198.5, 33, 74), Vector(7, -37)));
-		animation->add(new Sprite(Rect(486, 197.5, 43, 72), Vector(13, -36)));
-		animation->add(new Sprite(Rect(536, 195.5, 35, 76), Vector(11, -38)));
-		animation->add(new Sprite(Rect(582, 187.5, 33, 96), Vector(9, -48)));
+		animation->add(new Sprite(Rect(30, 193.5, 22, 83), Vector(2, -42)));
+		animation->add(new Sprite(Rect(72.5, 193, 23, 84), Vector(2, -42)));
+		animation->add(new Sprite(Rect(114, 194, 22, 82), Vector(2, -41)));
+		animation->add(new Sprite(Rect(158, 195, 28, 80), Vector(-1, -40)));
+		animation->add(new Sprite(Rect(202, 195, 36, 80), Vector(-5, -40)));
+		animation->add(new Sprite(Rect(245.5, 194.5, 43, 81), Vector(-4, -41)));
+		animation->add(new Sprite(Rect(296, 194.5, 48, 81), Vector(-7, -41)));
+		animation->add(new Sprite(Rect(349.5, 196, 43, 78), Vector(1, -39)));
+		animation->add(new Sprite(Rect(396, 198.5, 32, 73), Vector(7, -37)));
+		animation->add(new Sprite(Rect(438, 198.5, 32, 73), Vector(7, -37)));
+		animation->add(new Sprite(Rect(486, 197.5, 42, 71), Vector(13, -36)));
+		animation->add(new Sprite(Rect(536, 195.5, 34, 75), Vector(12, -38)));
+		animation->add(new Sprite(Rect(582, 187.5, 32, 95), Vector(11, -48)));
 		// JumpUp - 6
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(630, 189.5, 33, 104), Vector(9, -52)));
+		animation->add(new Sprite(Rect(630, 189.5, 32, 103), Vector(10, -52)));
 		// Hang - 7
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(717.5, 190.5, 24, 112), Vector(0, 55)));
-		// Climbe - 8
+		animation->add(new Sprite(Rect(717.5, 190.5, 23, 111), Vector(-1, 55)));
+		// Climb - 8
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(24.5, 342, 22, 107), Vector(-4, 53)));
-		animation->add(new Sprite(Rect(67, 348, 25, 89), Vector(-8, 44)));
-		animation->add(new Sprite(Rect(109, 348.5, 27, 90), Vector(-3, 29)));
-		animation->add(new Sprite(Rect(150.5, 346.5, 34, 92), Vector(-2, 20)));
-		animation->add(new Sprite(Rect(200.5, 348.5, 46, 82), Vector(4, 13)));
-		animation->add(new Sprite(Rect(258, 349, 49, 71), Vector(7, 10)));
-		animation->add(new Sprite(Rect(319, 349.5, 47, 60), Vector(6, 3)));
-		animation->add(new Sprite(Rect(385.5, 346, 62, 47), Vector(15, -8)));
-		animation->add(new Sprite(Rect(459.5, 347.5, 60, 42), Vector(20, -10)));
-		animation->add(new Sprite(Rect(528, 346.5, 63, 52), Vector(10, -13)));
-		animation->add(new Sprite(Rect(600, 344.5, 57, 46), Vector(14, -23)));
-		animation->add(new Sprite(Rect(660, 344.5, 53, 48), Vector(19, -24)));
-		animation->add(new Sprite(Rect(727.5, 338.5, 54, 58), Vector(11, -29)));
-		animation->add(new Sprite(Rect(787, 332.5, 53, 64), Vector(17, -32)));
-		animation->add(new Sprite(Rect(843, 330, 51, 69), Vector(19, -34)));
-		animation->add(new Sprite(Rect(896, 324, 31, 79), Vector(4, -39)));
-		animation->add(new Sprite(Rect(937, 324.5, 23, 80), Vector(2, -40)));
+		animation->add(new Sprite(Rect(24.5, 342, 21, 106), Vector(-7, 49)));
+		animation->add(new Sprite(Rect(67, 348, 24, 88), Vector(-9, 40)));
+		animation->add(new Sprite(Rect(109, 348.5, 26, 89), Vector(-5, 28)));
+		animation->add(new Sprite(Rect(150.5, 346.5, 33, 91), Vector(-4, 20)));
+		animation->add(new Sprite(Rect(200.5, 348.5, 45, 81), Vector(5, 13)));
+		animation->add(new Sprite(Rect(258, 349, 48, 70), Vector(7, 10)));
+		animation->add(new Sprite(Rect(319, 349.5, 46, 59), Vector(7, 0)));
+		animation->add(new Sprite(Rect(385.5, 346, 61, 46), Vector(16, -9)));
+		animation->add(new Sprite(Rect(459.5, 347.5, 59, 41), Vector(2, -10)));
+		animation->add(new Sprite(Rect(528, 346.5, 62, 51), Vector(5, -14)));
+		animation->add(new Sprite(Rect(600, 344.5, 56, 45), Vector(14, -23)));
+		animation->add(new Sprite(Rect(660, 344.5, 52, 47), Vector(18, -24)));
+		animation->add(new Sprite(Rect(727.5, 338.5, 53, 57), Vector(11, -29)));
+		animation->add(new Sprite(Rect(787, 332.5, 52, 63), Vector(17, -32)));
+		animation->add(new Sprite(Rect(843, 330, 50, 68), Vector(20, -34)));
+		animation->add(new Sprite(Rect(896, 324, 30, 78), Vector(4, -39)));
+		animation->add(new Sprite(Rect(937, 324.5, 22, 79), Vector(3, -40)));
 		// JumpForwardStart - 9
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(20.5, 502, 26, 85), Vector(5, -42)));
-		animation->add(new Sprite(Rect(59.5, 503, 28, 83), Vector(6, -41)));
-		animation->add(new Sprite(Rect(106, 503, 43, 81), Vector(6, -40)));
-		animation->add(new Sprite(Rect(159.5, 508, 48, 69), Vector(11, -34)));
-		animation->add(new Sprite(Rect(225, 509, 57, 65), Vector(15, -32)));
-		animation->add(new Sprite(Rect(298.5, 507.5, 56, 66), Vector(22, -33)));
-		animation->add(new Sprite(Rect(369, 505, 55, 69), Vector(20, -34)));
+		animation->add(new Sprite(Rect(20.5, 502, 25, 84), Vector(7, -42)));
+		animation->add(new Sprite(Rect(59.5, 503, 27, 82), Vector(8, -41)));
+		animation->add(new Sprite(Rect(106, 503, 42, 80), Vector(6, -40)));
+		animation->add(new Sprite(Rect(159.5, 508, 47, 68), Vector(12, -34)));
+		animation->add(new Sprite(Rect(225, 509, 56, 64), Vector(15, -32)));
+		animation->add(new Sprite(Rect(298.5, 507.5, 55, 65), Vector(20, -33)));
+		animation->add(new Sprite(Rect(369, 505, 54, 68), Vector(22, -34)));
 		// JumpForward - 10
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(449.5, 503, 80, 71), Vector(2, -35)));
-		animation->add(new Sprite(Rect(557.5, 501, 100, 71), Vector(1, -35)));
-		animation->add(new Sprite(Rect(678.5, 507.5, 104, 62), Vector(-1, -31)));
-		animation->add(new Sprite(Rect(788, 506.5, 85, 56), Vector(-4, -28)));
+		animation->add(new Sprite(Rect(449.5, 503, 79, 70), Vector(2, -35)));
+		animation->add(new Sprite(Rect(557.5, 501, 99, 70), Vector(1, -35)));
+		animation->add(new Sprite(Rect(678.5, 507.5, 103, 61), Vector(-3, -31)));
+		animation->add(new Sprite(Rect(788, 506.5, 84, 55), Vector(-2, -28)));
 		// JumpForwardEnd - 11
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(52, 620.5, 59, 56), Vector(-8, -28)));
-		animation->add(new Sprite(Rect(114.5, 621.5, 42, 52), Vector(-4, -26)));
-		animation->add(new Sprite(Rect(189.5, 618, 56, 61), Vector(-13, -30)));
-		animation->add(new Sprite(Rect(248, 613, 45, 71), Vector(-7, -35)));
-		animation->add(new Sprite(Rect(306.5, 609, 36, 81), Vector(-3, -40)));
-		animation->add(new Sprite(Rect(352, 608, 31, 83), Vector(-1, -41)));
+		animation->add(new Sprite(Rect(52, 620.5, 58, 55), Vector(-8, -28)));
+		animation->add(new Sprite(Rect(114.5, 621.5, 41, 51), Vector(-4, -26)));
+		animation->add(new Sprite(Rect(189.5, 618, 55, 60), Vector(3, -30)));
+		animation->add(new Sprite(Rect(248, 613, 44, 70), Vector(-8, -35)));
+		animation->add(new Sprite(Rect(306.5, 609, 35, 80), Vector(-2, -40)));
+		animation->add(new Sprite(Rect(352, 608, 30, 82), Vector(0, -41)));
 		// Walk - 12
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(34, 735.5, 25, 82), Vector(7, -41)));
-		animation->add(new Sprite(Rect(76, 735, 23, 81), Vector(7, -40)));
-		animation->add(new Sprite(Rect(117.5, 736.5, 28, 78), Vector(5, -39)));
-		animation->add(new Sprite(Rect(164.5, 734.5, 42, 78), Vector(0, -39)));
-		animation->add(new Sprite(Rect(226, 734.5, 55, 76), Vector(7, -38)));
-		animation->add(new Sprite(Rect(290, 734, 59, 77), Vector(6, -38)));
-		animation->add(new Sprite(Rect(358.5, 734, 58, 79), Vector(4, -39)));
-		animation->add(new Sprite(Rect(424.5, 735, 54, 77), Vector(2, -38)));
-		animation->add(new Sprite(Rect(487, 734, 51, 79), Vector(-5, -39)));
-		animation->add(new Sprite(Rect(543.5, 733, 42, 81), Vector(-1, -40)));
-		animation->add(new Sprite(Rect(593, 732.5, 27, 82), Vector(0, -41)));
-		animation->add(new Sprite(Rect(634.5, 732, 22, 83), Vector(5, -41)));
+		animation->add(new Sprite(Rect(34, 735.5, 24, 81), Vector(8, -41)));
+		animation->add(new Sprite(Rect(76, 735, 22, 80), Vector(6, -40)));
+		animation->add(new Sprite(Rect(117.5, 736.5, 27, 77), Vector(6, -39)));
+		animation->add(new Sprite(Rect(164.5, 734.5, 41, 77), Vector(0, -39)));
+		animation->add(new Sprite(Rect(226, 734.5, 54, 75), Vector(5, -38)));
+		animation->add(new Sprite(Rect(290, 734, 58, 76), Vector(5, -38)));
+		animation->add(new Sprite(Rect(358.5, 734, 57, 78), Vector(3, -39)));
+		animation->add(new Sprite(Rect(424.5, 735, 53, 76), Vector(0, -38)));
+		animation->add(new Sprite(Rect(487, 734, 50, 78), Vector(-6, -39)));
+		animation->add(new Sprite(Rect(543.5, 733, 41, 80), Vector(-3, -40)));
+		animation->add(new Sprite(Rect(593, 732.5, 26, 81), Vector(0, -41)));
+		animation->add(new Sprite(Rect(634.5, 732, 21, 82), Vector(5, -41)));
 		// HangingForward - 13
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(32.5, 859.5, 30, 112), Vector(1, 55)));
-		animation->add(new Sprite(Rect(91.5, 859.5, 34, 110), Vector(5, 54)));
-		animation->add(new Sprite(Rect(152.5, 863.5, 42, 108), Vector(10, 53)));
-		animation->add(new Sprite(Rect(206, 861.5, 41, 104), Vector(8, 51)));
+		animation->add(new Sprite(Rect(32.5, 859.5, 29, 111), Vector(1, 55)));
+		animation->add(new Sprite(Rect(91.5, 859.5, 33, 109), Vector(6, 54)));
+		animation->add(new Sprite(Rect(152.5, 863.5, 41, 107), Vector(11, 53)));
+		animation->add(new Sprite(Rect(206, 861.5, 40, 103), Vector(9, 51)));
 		// HangingBackwards - 14
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rect(252.5, 864.5, 24, 110), Vector(-6, 54)));
-		animation->add(new Sprite(Rect(295.5, 864, 36, 109), Vector(-14, 54)));
-		animation->add(new Sprite(Rect(348.5, 863, 46, 107), Vector(-18, 53)));
-		animation->add(new Sprite(Rect(408, 860.5, 53, 102), Vector(-21, 50)));
-		animation->add(new Sprite(Rect(475.5, 860, 56, 103), Vector(-21, 51)));
-		animation->add(new Sprite(Rect(539, 859.5, 57, 102), Vector(-22, 50)));
-		animation->add(new Sprite(Rect(611, 858.5, 57, 100), Vector(-23, 49)));
+		animation->add(new Sprite(Rect(252.5, 864.5, 23, 109), Vector(-6, 54)));
+		animation->add(new Sprite(Rect(295.5, 864, 35, 108), Vector(-11, 54)));
+		animation->add(new Sprite(Rect(348.5, 863, 45, 106), Vector(-16, 53)));
+		animation->add(new Sprite(Rect(408, 860.5, 52, 101), Vector(-22, 50)));
+		animation->add(new Sprite(Rect(475.5, 860, 55, 102), Vector(-22, 51)));
+		animation->add(new Sprite(Rect(539, 859.5, 56, 101), Vector(-23, 50)));
+		animation->add(new Sprite(Rect(611, 858.5, 56, 99), Vector(-22, 49)));
+
 
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createChaser(spritesheet);
-		createSentry(spritesheet);
-		createPatrol(spritesheet);
-		createCamera();
+		//createChaser(spritesheet);
+		//createSentry(spritesheet);
+		//createPatrol(spritesheet);
+		//createCamera();
 		createPlatforms();
-		createBackground();
+		//createBackground();
 	}
 }

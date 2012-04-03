@@ -60,7 +60,6 @@ namespace Temporal
 
 	bool Rect::intersects(const Segment& segment) const
 	{
-		Vector rectRadius = getRadius();
 		Point segmentCenter = segment.getCenter();
 		Vector segmentRadius = segment.getRadius();
 		segmentCenter -= getCenter(); // Translate box and segment to origin
@@ -69,14 +68,15 @@ namespace Temporal
 		float segmentCenterY = segmentCenter.getY();
 		float sgementRadiusX = segmentRadius.getVx();
 		float sgementRadiusY = segmentRadius.getVy();
-		float rectRadiusX = rectRadius.getVx();
-		float rectRadiusY = rectRadius.getVy();
+		float rectRadiusX = getRadiusVx();
+		float rectRadiusY = getRadiusVy();
 
 		float absSegmentRadiusX = abs(sgementRadiusX);
 		if (abs(segmentCenterX) > rectRadiusX + absSegmentRadiusX) return false;
 		float absSegmentRadiusY = abs(sgementRadiusY);
 		if (abs(segmentCenterY) > rectRadiusY + absSegmentRadiusY) return false;
 
+		// TODO: Cross product SLOTH
 		// Try cross products of segment direction vector with coordinate axes
 		if (abs(segmentCenterX * sgementRadiusY - segmentCenterY * sgementRadiusX) > rectRadiusX * absSegmentRadiusY + rectRadiusY * absSegmentRadiusX) return false;
 		// No separating axis found; segment must be overlapping AABB

@@ -13,7 +13,7 @@ namespace Temporal
 	class DynamicBody : public Component
 	{
 	public:
-		// TODO: Broder
+		// BRODER
 		static const float GRAVITY;
 
 		explicit DynamicBody(const Size& size);
