@@ -52,7 +52,7 @@ namespace Temporal
 				
 				float distance = targetX - sourceX;
 
-				// TODO: Broder
+				// BRODER
 				if(abs(distance) <= 10.0f)
 				{
 					if(reachedTargetPlatform)
@@ -170,7 +170,8 @@ namespace Temporal
 				{
 					const NavigationEdge& edge = **i;
 					const NavigationNode& next = edge.getTarget();
-					Graphics::get().drawSegment(current->getArea().getCenter(), next.getArea().getCenter(), Color::Cyan);
+					Segment segment = Segment(current->getArea().getCenter(), next.getArea().getCenter());
+					Graphics::get().drawSegment(segment, Color::Cyan);
 					current = &next;
 				}
 			}

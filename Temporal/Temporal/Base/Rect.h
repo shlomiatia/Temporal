@@ -6,8 +6,6 @@
 
 namespace Temporal
 {
-	static float getOffset(float size) { return (size - 1.0f) / 2.0f; }
-
 	class Rect
 	{
 	public:
@@ -22,16 +20,16 @@ namespace Temporal
 		float getCenterX(void) const { return getCenter().getX(); }
 		float getCenterY(void) const { return getCenter().getY(); }
 
-		float getOffsetX(void) const { return getOffset(getWidth()); }
-		float getOffsetY(void) const { return getOffset(getHeight()); }
-		Vector getRadius(void) const { return getSize() / 2.0f; }
-
-		float getBottom(void) const { return getCenterY() - getRadius().getVy(); }
-		float getLeft(void) const {	return getCenterX() - getRadius().getVx(); }
-		float getTop(void) const { return getCenterY() + getRadius().getVy(); }
-		float getRight(void) const { return getCenterX() + getRadius().getVx(); }
+		float getBottom(void) const { return getCenterY() - getRadiusVy(); }
+		float getLeft(void) const {	return getCenterX() - getRadiusVx(); }
+		float getTop(void) const { return getCenterY() + getRadiusVy(); }
+		float getRight(void) const { return getCenterX() + getRadiusVx(); }
 		float getWidth(void) const { return _size.getWidth(); }
 		float getHeight(void) const { return _size.getHeight(); }
+
+		Vector getRadius(void) const { return Vector(getRadiusVx(), getRadiusVy()); }
+		float getRadiusVx(void) const { return getSize().getWidth() / 2.0f; }
+		float getRadiusVy(void) const { return getSize().getHeight() / 2.0f; }
 
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }

@@ -39,7 +39,6 @@
     <ClInclude Include="AI\NavigationGraph.h" />
     <ClInclude Include="AI\Pathfinder.h" />
     <ClInclude Include="AI\Navigator.h" />
-    <ClInclude Include="Physics\PhysicsUtils.h" />
     <ClInclude Include="Game\MessageUtils.h" />
     <ClInclude Include="Base\BaseEnums.h" />
     <ClInclude Include="Game\GameEnums.h" />
@@ -82,7 +81,6 @@
     <ClCompile Include="AI\NavigationGraph.cpp" />
     <ClCompile Include="AI\Pathfinder.cpp" />
     <ClCompile Include="AI\Navigator.cpp" />
-    <ClCompile Include="Physics\PhysicsUtils.cpp" />
     <ClCompile Include="Game\MessageUtils.cpp" />
     <ClCompile Include="Physics\StaticBody.cpp" />
     <ClCompile Include="Game\BasePanel.cpp" />

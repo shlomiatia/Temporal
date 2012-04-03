@@ -2,7 +2,6 @@
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "Grid.h"
-#include "PhysicsUtils.h"
 #include <Temporal\Game\Message.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <algorithm>
@@ -98,7 +97,9 @@ namespace Temporal
 			float leftCorrection = staticBodyBounds.getLeft() - dynamicBodyBounds.getRight();
 			float minXCorrection = abs(rightCorrection) < abs(leftCorrection) ? rightCorrection : leftCorrection;
 			Vector correction(Vector::Zero);
-			if(abs(minYCorrection) < abs(minXCorrection))
+
+			// When falling, we prefer to stay on the platform we landed on rather then be pushed aside BRODER
+			if(abs(minYCorrection) < abs(minXCorrection) || (minYCorrection < 20.0f && minYCorrection > 0.0f))
 			{
 				correction.setVy(minYCorrection);
 				_force.setVy(0.0);
