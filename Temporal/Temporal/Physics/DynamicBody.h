@@ -31,13 +31,13 @@ namespace Temporal
 		Direction::Enum _collision;
 
 		Rect getBounds(void) const;
-
 		Orientation::Enum getOrientation(void) const;
+
 		void update(float framePeriodInMillis);
-		void applyVelocity() const;
 		void determineVelocity(float framePeriodInMillis);
-		void handleCollisions(void);
+		void applyVelocity(void);
 		bool correctCollision(const StaticBody& staticBody);
+
 		static bool correctCollision(void* caller, void* data, const StaticBody& staticBody);
 	};
 }

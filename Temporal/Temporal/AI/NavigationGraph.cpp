@@ -200,6 +200,8 @@ namespace Temporal
 			const NavigationNode& node = **i;
 			if(node.getEdges().size() == 0)
 				i = _nodes.erase(i);
+			if(i == _nodes.end())
+				break;
 		}
 	}
 
@@ -208,7 +210,7 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode* node = *i;
-			if(node->getArea().contains(position))
+			if(node->getArea().intersects(position))
 				return node;
 		}
 		return NULL;

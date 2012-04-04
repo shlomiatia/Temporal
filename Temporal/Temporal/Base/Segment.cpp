@@ -10,6 +10,19 @@ namespace Temporal
 		return sqrt(pow(getPoint2().getX() - getPoint1().getX(), 2.0f) + pow(getPoint2().getY() - getPoint1().getY(), 2.0f));
 	}
 
+	float DirectedSegment::getAngle(void) const
+	{
+		Vector vector = getVector();
+		return atan2(vector.getVy(), vector.getVx());
+	}
+
+	Vector DirectedSegment::getVector(void) const
+	{
+		return getTarget() - getOrigin();
+	}
+
+	// Returns 2 times the signed triangle area. The result is positive if
+	// abc is ccw, negative if abc is cw, zero if abc is degenerate.
 	float signed2DTriArea(Point a, Point b, Point c)
 	{
 		return (a.getX() - c.getX()) * (b.getY() - c.getY()) - (a.getY() - c.getY()) * (b.getX() - c.getX());
@@ -41,31 +54,6 @@ namespace Temporal
 				return true;
 			}
 		}
-		else
-		{
-			Vector vector = Vector(getPoint2() - getPoint1());
-			Vector normal = Vector(-vector.getVy(), vector.getVx());
-			Vector otherVector = Vector(other.getPoint2() - other.getPoint1());
-			Vector otherNormal = Vector(-otherVector.getVy(), otherVector.getVx());
-		
-			float d1 = (normal * (getPoint1() - other.getPoint1())) / (normal * otherVector);
-			if(d1 >= 0.0f && d1 <= 1.0f)
-			{
-				pointOfIntersection = other.getPoint1() + d1 * otherVector;
-				return true;
-			}
-		}
 		return false;
-	}
-
-	float DirectedSegment::getAngle(void) const
-	{
-		Vector vector = getVector();
-		return atan2(vector.getVy(), vector.getVx());
-	}
-
-	Vector DirectedSegment::getVector(void) const
-	{
-		return getTarget() - getOrigin();
 	}
 }

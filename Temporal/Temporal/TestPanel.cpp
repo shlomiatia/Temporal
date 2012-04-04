@@ -337,7 +337,6 @@ namespace Temporal
 		// Middle floaters
 		EntitiesManager::get().add(createPlatform(Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
-		
 
 		//EntitiesManager::get().add(createPlatform(RectCB(512.0f, 16.0f, 256.0f, 64.0f), spritesheet, true));
 	}
@@ -510,8 +509,8 @@ namespace Temporal
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
 		createSentry(spritesheet);
-		//createPatrol(spritesheet);
-		//createCamera();
+		createPatrol(spritesheet);
+		createCamera();
 		createPlatforms();
 		//createBackground();
 	}
