@@ -9,8 +9,6 @@ namespace Temporal
 	// TODO: Handle areas intersection in navigation graph PHYISICS
 	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
-	// TODO: Correct smallest axis PHYSICS
-	// TODO: Gradual force apply PHYSICS
 	
 	// TODO: Use hashed string for Entity, components, sensors, messages, states etc. ENTITIES
 	// TODO: Pass static entity id in sensor, instead of the static body itself ENTITIES
