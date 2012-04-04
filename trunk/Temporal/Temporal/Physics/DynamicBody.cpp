@@ -30,13 +30,6 @@ namespace Temporal
 		return orientation;
 	}
 
-	void DynamicBody::applyVelocity(void) const
-	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Point newPosition = position + _velocity;
-		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-	}
-
 	void DynamicBody::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_SIZE)
@@ -82,7 +75,73 @@ namespace Temporal
 	void DynamicBody::update(float framePeriodInMillis)
 	{
 		determineVelocity(framePeriodInMillis);
-		handleCollisions();
+		applyVelocity();
+	}
+
+	void DynamicBody::determineVelocity(float framePeriodInMillis)
+	{
+		float interpolation = framePeriodInMillis / 1000.0f;
+		_velocity = Vector::Zero;
+
+		if(_impulse == Vector::Zero)
+		{
+			_velocity = _force * interpolation;
+		}
+		else
+		{
+			_velocity = _impulse;
+			_impulse = Vector::Zero;
+		}
+		if(_gravityEnabled)
+		{
+			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
+			float y = _velocity.getVy();
+			y -= gravity;
+			_velocity.setVy(y);
+			_force -= Vector(0.0f, GRAVITY * interpolation);
+		}	
+	}
+
+	void DynamicBody::applyVelocity(void)
+	{
+		_collision = Direction::NONE;
+		const float MAX_SPEED = 9.0f;
+		Vector remainingVlocity = _velocity;
+		while(remainingVlocity != Vector::Zero)
+		{
+			Rect bounds = getBounds();
+			Vector stepVelocity = Vector::Zero;
+			if(remainingVlocity.getVx() > MAX_SPEED && remainingVlocity.getVx() > remainingVlocity.getVy())
+			{
+				float yRelativeToX = remainingVlocity.getVy() * (MAX_SPEED / remainingVlocity.getVx());
+				if(yRelativeToX < MAX_SPEED)
+				{
+					stepVelocity.setVx(MAX_SPEED);
+					stepVelocity.setVy(yRelativeToX);
+				}
+			}
+			else if(remainingVlocity.getVy() > MAX_SPEED)
+			{
+				float xRelativeToY = remainingVlocity.getVx() * (MAX_SPEED / remainingVlocity.getVy());
+				if(xRelativeToY < MAX_SPEED)
+				{
+					stepVelocity.setVy(MAX_SPEED);
+					stepVelocity.setVx(xRelativeToY);
+				}
+			}
+			if(stepVelocity == Vector::Zero || abs(_velocity.getVy()) == 80.0f)
+				stepVelocity = remainingVlocity;
+			remainingVlocity -= stepVelocity;
+			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			Point newPosition = position + stepVelocity;
+			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+			bounds = bounds.move(stepVelocity);
+			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
+			if(_collision != Direction::NONE)
+				break;
+
+		}
+		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
@@ -149,78 +208,4 @@ namespace Temporal
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
 		return dynamicBody->correctCollision(staticBody);
 	}
-
-	void DynamicBody::determineVelocity(float framePeriodInMillis)
-	{
-		float interpolation = framePeriodInMillis / 1000.0f;
-		_velocity = Vector::Zero;
-
-		if(_impulse == Vector::Zero)
-		{
-			_velocity = _force * interpolation;
-		}
-		else
-		{
-			_velocity = _impulse;
-			_impulse = Vector::Zero;
-		}
-		if(_gravityEnabled)
-		{
-			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
-			float y = _velocity.getVy();
-			y -= gravity;
-			_velocity.setVy(y);
-			_force -= Vector(0.0f, GRAVITY * interpolation);
-		}	
-	}
-
-	void DynamicBody::handleCollisions(void)
-	{
-		_collision = Direction::NONE;
-		
-		Vector remainingVlocity = _velocity;
-		while(remainingVlocity != Vector::Zero)
-		{
-			Rect bounds = getBounds();
-			Vector xBasedStepVelocity = Vector::Zero;
-			const float MAX_SPEED = 9.0f;
-			if(remainingVlocity.getVx() > MAX_SPEED)
-			{
-				float yRelativeToX = remainingVlocity.getVy() * (MAX_SPEED / remainingVlocity.getVx());
-				if(yRelativeToX < MAX_SPEED)
-				{
-					xBasedStepVelocity.setVx(MAX_SPEED);
-					xBasedStepVelocity.setVy(yRelativeToX);
-				}
-			}
-			Vector yBasedStepVelocity = Vector::Zero;
-			if(remainingVlocity.getVy() > MAX_SPEED)
-			{
-				float xRelativeToY = remainingVlocity.getVx() * (MAX_SPEED / remainingVlocity.getVy());
-				if(xRelativeToY < MAX_SPEED)
-				{
-					yBasedStepVelocity.setVy(MAX_SPEED);
-					yBasedStepVelocity.setVx(xRelativeToY);
-				}
-			}
-			Vector stepVelocity = xBasedStepVelocity.getLength() > yBasedStepVelocity.getLength() ? xBasedStepVelocity : yBasedStepVelocity;
-			if(stepVelocity == Vector::Zero || abs(_velocity.getVy()) == 80.0f)
-				stepVelocity = remainingVlocity;
-			remainingVlocity -= stepVelocity;
-			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-			Point newPosition = position + stepVelocity;
-			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-			bounds = bounds.move(stepVelocity);
-			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
-			if((_collision & Direction::BOTTOM) == Direction::NONE)
-			{
-				int i = 0;
-			}
-			if(_collision != Direction::NONE)
-				break;
-
-		}
-		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
-	}
-
 }

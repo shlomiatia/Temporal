@@ -11,42 +11,42 @@ namespace Temporal
 	public:
 		static const Rect Empty;
 
-		Rect(float centerX, float centerY, float getWidth, float getHeight);
+		Rect(float centerX, float centerY, float width, float height);
 		Rect(const Point& center, const Size& size);
+		Rect(const Point& center, const Vector& radius);
 
-		const Point& getCenter(void) const { return (_center); }
-		const Size& getSize(void) const { return (_size); }
+		const Point& getCenter(void) const { return _center; }
+		const Vector& getRadius(void) const { return _radius; }
 
 		float getCenterX(void) const { return getCenter().getX(); }
 		float getCenterY(void) const { return getCenter().getY(); }
+
+		float getRadiusVx(void) const { return getRadius().getVx(); }
+		float getRadiusVy(void) const { return getRadius().getVy(); }
 
 		float getBottom(void) const { return getCenterY() - getRadiusVy(); }
 		float getLeft(void) const {	return getCenterX() - getRadiusVx(); }
 		float getTop(void) const { return getCenterY() + getRadiusVy(); }
 		float getRight(void) const { return getCenterX() + getRadiusVx(); }
-		float getWidth(void) const { return _size.getWidth(); }
-		float getHeight(void) const { return _size.getHeight(); }
 
-		Vector getRadius(void) const { return Vector(getRadiusVx(), getRadiusVy()); }
-		float getRadiusVx(void) const { return getSize().getWidth() / 2.0f; }
-		float getRadiusVy(void) const { return getSize().getHeight() / 2.0f; }
+		float getWidth(void) const { return getRadiusVx() * 2.0f; }
+		float getHeight(void) const { return getRadiusVy() * 2.0f; }
 
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
-		Rect move(const Vector& vector) const { return Rect(getCenter() + vector, getSize()); }
-		Rect resize(const Vector& delta) const { return Rect(getCenter(), getSize() + delta); }
+		Rect move(const Vector& vector) const { return Rect(getCenter() + vector, getRadius()); }
+		Rect resize(const Vector& delta) const { return Rect(getCenter(), Vector(getRadius() + delta / 2.0f)); }
 		
-		bool intersects(const Rect& rect) const { return getLeft() <= rect.getRight() && getRight() >= rect.getLeft() && getBottom() <= rect.getTop() && getTop() >= rect.getBottom(); }
-		bool contains(const Point& point) const { return getLeft() <= point.getX() && getRight() >= point.getX() && getBottom() <= point.getY() && getTop() >= point.getY(); }
-
-		bool intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const;
+		bool intersects(const Rect& rect) const;
+		bool intersects(const Point& point) const;
 		bool intersects(const Segment& segment) const;
+		bool intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const;
 	private:
 		Point _center;
-		Size _size;
+		Vector _radius;
 
 		void validate(void) const;
 	};

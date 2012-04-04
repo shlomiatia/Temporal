@@ -13,6 +13,7 @@ namespace Temporal
 
 		Segment(float x1, float y1, float x2, float y2) : _point1(x1, y1), _point2(x2, y2) {};
 		Segment(const Point& p1, const Point& p2) : _point1(p1), _point2(p2) {};
+		// No need for virtual destructor
 
 		const Point& getPoint1(void) const { return _point1; }
 		const Point& getPoint2(void) const { return _point2; }
