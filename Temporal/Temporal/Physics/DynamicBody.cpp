@@ -50,7 +50,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().drawRect(getBounds());
+			Rect bounds = getBounds();
+			Graphics::get().drawRect(bounds);
 		}
 		else if(message.getID() == MessageID::SET_FORCE)
 		{
@@ -97,22 +98,43 @@ namespace Temporal
 			float leftCorrection = staticBodyBounds.getLeft() - dynamicBodyBounds.getRight();
 			float minXCorrection = abs(rightCorrection) < abs(leftCorrection) ? rightCorrection : leftCorrection;
 			Vector correction(Vector::Zero);
-
-			// When falling, we prefer to stay on the platform we landed on rather then be pushed aside BRODER
-			if(abs(minYCorrection) < abs(minXCorrection) || (minYCorrection < 20.0f && minYCorrection > 0.0f))
+			if(abs(minYCorrection) < abs(minXCorrection))
 			{
-				correction.setVy(minYCorrection);
-				_force.setVy(0.0);
-				if(minYCorrection > 0.0f)
+				if(minYCorrection != 0.0f)
 				{
-					_collision = Direction::BOTTOM;
-					_force.setVx(0.0f);
+					correction.setVy(minYCorrection);
+					if(minYCorrection * _velocity.getVy() < 0.0f)
+						_force.setVy(0.0);
+					if(minYCorrection > 0.0f)
+					{
+						_collision = _collision | Direction::BOTTOM;
+
+						// BRODER
+						_force.setVx(0.0f);
+					}
+					else
+					{
+						_collision = _collision | Direction::TOP;
+					}
 				}
 			}
 			else
 			{
-				correction.setVx(minXCorrection);
-				_force.setVx(0.0);
+				if(minXCorrection != 0.0f)
+				{
+					correction.setVx(minXCorrection);
+					if(minXCorrection * _velocity.getVx() < 0.0f)
+						_force.setVx(0.0);
+					Orientation::Enum orientation = getOrientation();
+					if(minXCorrection > 0.0f)
+					{
+						_collision = _collision | (orientation == Orientation::LEFT ? Direction::FRONT : Direction::BACK);
+					}
+					else
+					{
+						_collision = _collision | (orientation == Orientation::RIGHT ? Direction::FRONT : Direction::BACK);
+					}
+				}
 			}
 			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 			Point newPosition = position + correction;
@@ -154,10 +176,50 @@ namespace Temporal
 
 	void DynamicBody::handleCollisions(void)
 	{
-		Rect bounds = getBounds().move(_velocity);
 		_collision = Direction::NONE;
-		applyVelocity();
-		Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
+		
+		Vector remainingVlocity = _velocity;
+		while(remainingVlocity != Vector::Zero)
+		{
+			Rect bounds = getBounds();
+			Vector xBasedStepVelocity = Vector::Zero;
+			const float MAX_SPEED = 9.0f;
+			if(remainingVlocity.getVx() > MAX_SPEED)
+			{
+				float yRelativeToX = remainingVlocity.getVy() * (MAX_SPEED / remainingVlocity.getVx());
+				if(yRelativeToX < MAX_SPEED)
+				{
+					xBasedStepVelocity.setVx(MAX_SPEED);
+					xBasedStepVelocity.setVy(yRelativeToX);
+				}
+			}
+			Vector yBasedStepVelocity = Vector::Zero;
+			if(remainingVlocity.getVy() > MAX_SPEED)
+			{
+				float xRelativeToY = remainingVlocity.getVx() * (MAX_SPEED / remainingVlocity.getVy());
+				if(xRelativeToY < MAX_SPEED)
+				{
+					yBasedStepVelocity.setVy(MAX_SPEED);
+					yBasedStepVelocity.setVx(xRelativeToY);
+				}
+			}
+			Vector stepVelocity = xBasedStepVelocity.getLength() > yBasedStepVelocity.getLength() ? xBasedStepVelocity : yBasedStepVelocity;
+			if(stepVelocity == Vector::Zero || abs(_velocity.getVy()) == 80.0f)
+				stepVelocity = remainingVlocity;
+			remainingVlocity -= stepVelocity;
+			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			Point newPosition = position + stepVelocity;
+			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+			bounds = bounds.move(stepVelocity);
+			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
+			if((_collision & Direction::BOTTOM) == Direction::NONE)
+			{
+				int i = 0;
+			}
+			if(_collision != Direction::NONE)
+				break;
+
+		}
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
 	}
 

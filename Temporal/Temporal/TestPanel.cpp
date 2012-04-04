@@ -78,12 +78,12 @@ namespace Temporal
 	void addJumpSensor(Entity& entity)
 	{
 		// Jump sensor
-		float jumpSensorBackOffset = (ENTITY_SIZE.getWidth() - 1.0f) / 2.0f;
+		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
 		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
 		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
 		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
-		float sensorOffsetX = (jumpSensorWidth - 1.0f) / 2.0f - (jumpSensorBackOffset - 1.0f);
-		float sensorOffsetY =  (ENTITY_SIZE.getHeight() -1.0f + jumpSensorHeight - 1.0f) / 2.0f;
+		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
+		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
 		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
@@ -93,10 +93,11 @@ namespace Temporal
 	void addHangSensor(Entity& entity)
 	{
 		// Hang Sensor
+		float hangSensorBackOffset = ENTITY_SIZE.getWidth() - 1.0f;
 		const float HANG_SENSOR_SIZE = 20.0f;
-		Size sensorSize = Size(HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
-		float sensorOffsetX = (ENTITY_SIZE.getWidth() -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
-		float sensorOffsetY = (ENTITY_SIZE.getHeight() -1.0f + HANG_SENSOR_SIZE - 1.0f) / 2.0f;
+		Size sensorSize = Size(hangSensorBackOffset + HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
+		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
+		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Sensor* sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 		entity.add(sensor);
@@ -105,8 +106,8 @@ namespace Temporal
 	void addBackEdgeSensor(Entity& entity)
 	{
 		// Back Edge Sensor
-		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() -1.0f - (ENTITY_SIZE.getWidth() - 1.0f)) / 2.0f;
-		float sensorOffsetY = -((ENTITY_SIZE.getHeight() - 1.0f) / 2.0f);
+		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
 		entity.add(sensor);
@@ -115,8 +116,8 @@ namespace Temporal
 	void addFrontEdgeSensor(Entity& entity)
 	{
 		// Front edge sensor
-		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() -1.0f - (ENTITY_SIZE.getWidth() - 1.0f)) / 2.0f;
-		float sensorOffsetY = -((ENTITY_SIZE.getHeight() - 1.0f) / 2.0f);
+		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::BACK, Direction::NONE);
 		entity.add(sensor);
@@ -296,8 +297,8 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(Segment(1023.0f, 0.0f, 1023, 767.0f), spritesheet));
 
 		// Right lower platform
-		EntitiesManager::get().add(createPlatform(Segment(767.0f, 0.0f, 767.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(767.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(723.0f, 0.0f, 723.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(723.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
 
 		// Right upper platform
 		EntitiesManager::get().add(createPlatform(Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet));
@@ -315,8 +316,8 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(Segment(896.0f, 640.0f, 896.0f, 767.0f), spritesheet));
 		
 		// Left lower platform
-		EntitiesManager::get().add(createPlatform(Segment(256.0f, 0.0f, 256.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(Segment(0.0f, 128.0f, 256.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(300, 0.0f, 300.0f, 128.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(Segment(0.0f, 128.0f, 300, 128.0f), spritesheet));
 
 		// Left upper platform
 		EntitiesManager::get().add(createPlatform(Segment(128.0f, 128.0f, 128.0f, 256.0f), spritesheet));
@@ -508,7 +509,7 @@ namespace Temporal
 
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
-		//createSentry(spritesheet);
+		createSentry(spritesheet);
 		//createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();
