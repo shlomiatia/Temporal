@@ -3,6 +3,7 @@
 #include "BaseEnums.h"
 #include "NumericPair.h"
 #include "Segment.h"
+#include <stdio.h>
 
 namespace Temporal
 {
@@ -42,8 +43,8 @@ namespace Temporal
 		
 		bool intersects(const Rect& rect) const;
 		bool intersects(const Point& point) const;
-		bool intersects(const Segment& segment) const;
-		bool intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const;
+		bool intersects(const Segment& segment, Vector* correction = NULL) const;
+		bool intersects(const DirectedSegment& directedSegment, Point* pointOfIntersection = NULL) const;
 	private:
 		Point _center;
 		Vector _radius;

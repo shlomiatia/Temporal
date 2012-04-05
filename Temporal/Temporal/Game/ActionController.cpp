@@ -2,7 +2,6 @@
 #include "Message.h"
 #include "MessageParams.h"
 #include "MovementUtils.h"
-
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
 #include <Temporal\Physics\StaticBody.h>
@@ -49,17 +48,6 @@ namespace Temporal
 		states.push_back(new PrepareToDescend());
 		states.push_back(new Descend());
 		return states;
-	}
-
-	bool ActionState::isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative) const
-	{
-		if(message.getID() == MessageID::BODY_COLLISION)
-		{
-			Direction::Enum direction = *(Direction::Enum*)message.getParam();
-			if(match(direction, positive, negative))
-				return true;
-		}
-		return false;
 	}
 
 	bool ActionState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
@@ -131,9 +119,11 @@ namespace Temporal
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
-		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
+		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			_stateMachine->changeState(ActionStateID::STAND);
+			const Vector& collision = *(Vector*)message.getParam();
+			if(collision.getVy() < 0.0f)
+				_stateMachine->changeState(ActionStateID::STAND);
 		}
 	}
 
@@ -154,9 +144,11 @@ namespace Temporal
 		{
 			_stillWalking = true;
 		}
-		else if(isBodyCollisionMessage(message, Direction::ALL, Direction::BOTTOM))
+		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			_stateMachine->changeState(ActionStateID::FALL);
+			const Vector& collision = *(Vector*)message.getParam();
+			if(collision.getVy() >= 0.0f)
+				_stateMachine->changeState(ActionStateID::FALL);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -295,9 +287,11 @@ namespace Temporal
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
-		else if(isBodyCollisionMessage(message, Direction::BOTTOM))
+		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			_stateMachine->changeState(ActionStateID::JUMP_END);
+			const Vector& collision = *(Vector*)message.getParam();
+			if(collision.getVy() < 0.0f)
+				_stateMachine->changeState(ActionStateID::JUMP_END);
 		}
 	}
 

@@ -138,11 +138,11 @@ namespace Temporal
 	{
 	public:
 		~ActionState(void) {};
+		// TODO: Virtual destructor
 
 		virtual const char* getName(void) const = 0;
 
 	protected:
-		bool isBodyCollisionMessage(Message& message, Direction::Enum positive, Direction::Enum negative = Direction::NONE) const;
 		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
 	};
 

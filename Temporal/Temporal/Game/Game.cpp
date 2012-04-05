@@ -6,7 +6,7 @@
 namespace Temporal
 {
 	const float Game::FRAME_PERIOD_IN_MILLIS(1000.0f / /*FPS*/ 60.0f);
-	const float Game::MAX_FRAMES_SKIP(5.0f);
+	const float Game::MAX_FRAMES_SKIP(1.0f);
 
 	void Game::setPanel(Panel* panel)
 	{
@@ -17,7 +17,7 @@ namespace Temporal
 	{
 		_running = true;
 
-		float lastFrameMillis = (float)Thread::getElapsedTimeInMillis();
+		_lastFrameMillis = (float)Thread::getElapsedTimeInMillis();
 
 		while (isRunning())
 		{
@@ -27,7 +27,7 @@ namespace Temporal
 			{
 				if (_panel != NULL)
 				{
-					update(lastFrameMillis);
+					update();
 					draw();
 
 				}
@@ -61,16 +61,16 @@ namespace Temporal
 		}
 	}
 
-	void Game::update(float& lastFrameMillis)
+	void Game::update(void)
 	{
 		float currFrameMillis = (float)Thread::getElapsedTimeInMillis();
-		float framesToSkip = (currFrameMillis - lastFrameMillis) / FRAME_PERIOD_IN_MILLIS;
+		float framesToSkip = (currFrameMillis - _lastFrameMillis) / FRAME_PERIOD_IN_MILLIS - 1.0f;
 		if(framesToSkip > MAX_FRAMES_SKIP)
-			lastFrameMillis = currFrameMillis - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;
-		while(lastFrameMillis + FRAME_PERIOD_IN_MILLIS <= currFrameMillis )
+			_lastFrameMillis = currFrameMillis - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;
+		while(_lastFrameMillis + FRAME_PERIOD_IN_MILLIS <= currFrameMillis )
 		{
 			_panel->update(FRAME_PERIOD_IN_MILLIS);
-			lastFrameMillis += FRAME_PERIOD_IN_MILLIS;
+			_lastFrameMillis += FRAME_PERIOD_IN_MILLIS;
 		}
 	}
 

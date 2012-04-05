@@ -231,7 +231,7 @@ namespace Temporal
 
 	void createCamera()
 	{
-		Position* position = new Position(Point(512.0f, 255.0f));
+		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(2*PI-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
@@ -508,9 +508,9 @@ namespace Temporal
 
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
-		createSentry(spritesheet);
-		createPatrol(spritesheet);
-		createCamera();
+		//createSentry(spritesheet);
+		//createPatrol(spritesheet);
+		//createCamera();
 		createPlatforms();
 		//createBackground();
 	}
