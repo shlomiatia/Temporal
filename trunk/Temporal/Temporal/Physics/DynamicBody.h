@@ -28,11 +28,12 @@ namespace Temporal
 		Vector _force;
 		Vector _impulse;
 		bool _gravityEnabled;
-		Direction::Enum _collision;
+		Vector _collision;
 
 		Rect getBounds(void) const;
 		Orientation::Enum getOrientation(void) const;
 
+		void changePosition(const Vector& offset);
 		void update(float framePeriodInMillis);
 		void determineVelocity(float framePeriodInMillis);
 		void applyVelocity(void);

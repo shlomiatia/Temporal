@@ -48,31 +48,40 @@ namespace Temporal
 		return true;
 	}
 
-	bool Rect::intersects(const Segment& segment) const
+	bool Rect::intersects(const Segment& segment, Vector* correction) const
 	{
 		Point segmentCenter = segment.getCenter();
 		Vector segmentRadius = segment.getRadius();
 		segmentCenter -= getCenter(); // Translate box and segment to origin
 		// Try world coordinate axes as separating axes
-		float segmentCenterX = segmentCenter.getX();
-		float segmentCenterY = segmentCenter.getY();
+
+		Vector minCorrection = Vector(1000.0f, 0.0f);
+		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
+		{
+			float segmentCenterAxis = segmentCenter.getAxis(axis);
+			float penetration = getRadius().getAxis(axis) + segmentRadius.getAxis(axis) - abs(segmentCenterAxis);
+			if (penetration < 0.0f) return false;
+
+			// Hack to prevent plater from falling off edges
+			if(penetration - minCorrection.getLength() < (axis == Axis::X ? 0.0f : 20.0f))
+			{
+				minCorrection = Vector::Zero;
+				minCorrection.setAxis(axis, segmentCenterAxis < 0.0f ? penetration : -penetration);
+			}
+		}
 		float sgementRadiusX = segmentRadius.getVx();
 		float sgementRadiusY = segmentRadius.getVy();
-		float rectRadiusX = getRadiusVx();
-		float rectRadiusY = getRadiusVy();
-
-		float absSegmentRadiusX = abs(sgementRadiusX);
-		if (abs(segmentCenterX) > rectRadiusX + absSegmentRadiusX) return false;
-		float absSegmentRadiusY = abs(sgementRadiusY);
-		if (abs(segmentCenterY) > rectRadiusY + absSegmentRadiusY) return false;
 
 		// Try cross products of segment direction vector with coordinate axes
-		if (abs(segmentCenterX * sgementRadiusY - segmentCenterY * sgementRadiusX) > rectRadiusX * absSegmentRadiusY + rectRadiusY * absSegmentRadiusX) return false;
+		if (abs(segmentCenter.getX() * sgementRadiusY - segmentCenter.getY() * sgementRadiusX) >
+			getRadiusVx() * abs(sgementRadiusY) + getRadiusVy() * abs(sgementRadiusX)) return false;
 		// No separating axis found; segment must be overlapping AABB
+		if(correction != NULL)
+			*correction = minCorrection;
 		return true;
 	}
 
-	bool Rect::intersects(const DirectedSegment& directedSegment, Point& pointOfIntersection) const
+	bool Rect::intersects(const DirectedSegment& directedSegment, Point* pointOfIntersection) const
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
 		const Point& origin = directedSegment.getOrigin();
@@ -106,7 +115,8 @@ namespace Temporal
 				if (tmin > tmax) return false;
 			}
 		}
-		pointOfIntersection = origin + vector * tmin;
+		if(pointOfIntersection != NULL)
+			*pointOfIntersection = origin + vector * tmin;
 		return true;
 	}
 }

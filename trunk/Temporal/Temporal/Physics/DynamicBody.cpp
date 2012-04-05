@@ -12,7 +12,7 @@ namespace Temporal
 	const float DynamicBody::GRAVITY(5000.0f);
 
 	DynamicBody::DynamicBody(const Size& size)
-		: _size(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Direction::NONE)
+		: _size(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Vector::Zero)
 	{
 		assert(_size.getWidth() > 0.0f);
 		assert(_size.getHeight() > 0.0f);
@@ -60,6 +60,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled = *(bool*)message.getParam();
+			_force = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
@@ -70,6 +71,13 @@ namespace Temporal
 			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
 		}
+	}
+
+	void DynamicBody::changePosition(const Vector& offset)
+	{
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Point newPosition = position + offset;
+		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
 	void DynamicBody::update(float framePeriodInMillis)
@@ -90,7 +98,6 @@ namespace Temporal
 		else
 		{
 			_velocity = _impulse;
-			_impulse = Vector::Zero;
 		}
 		if(_gravityEnabled)
 		{
@@ -104,101 +111,59 @@ namespace Temporal
 
 	void DynamicBody::applyVelocity(void)
 	{
-		_collision = Direction::NONE;
-		const float MAX_SPEED = 9.0f;
+		_collision = Vector::Zero;
+
+		// BRODER
+		float maxHorizontalStepSize = _size.getWidth() / 2.0f - 1.0f;
+		float maxVerticalStepSize = _size.getHeight() / 2.0f - 1.0;
+		const float MAX_STEP_SIZE = std::min(maxHorizontalStepSize, maxVerticalStepSize);
 		Vector remainingVlocity = _velocity;
 		while(remainingVlocity != Vector::Zero)
 		{
-			Rect bounds = getBounds();
 			Vector stepVelocity = Vector::Zero;
-			if(remainingVlocity.getVx() > MAX_SPEED && remainingVlocity.getVx() > remainingVlocity.getVy())
+			float movement = remainingVlocity.getLength();
+			if(movement <= MAX_STEP_SIZE || _impulse != Vector::Zero)
 			{
-				float yRelativeToX = remainingVlocity.getVy() * (MAX_SPEED / remainingVlocity.getVx());
-				if(yRelativeToX < MAX_SPEED)
-				{
-					stepVelocity.setVx(MAX_SPEED);
-					stepVelocity.setVy(yRelativeToX);
-				}
-			}
-			else if(remainingVlocity.getVy() > MAX_SPEED)
-			{
-				float xRelativeToY = remainingVlocity.getVx() * (MAX_SPEED / remainingVlocity.getVy());
-				if(xRelativeToY < MAX_SPEED)
-				{
-					stepVelocity.setVy(MAX_SPEED);
-					stepVelocity.setVx(xRelativeToY);
-				}
-			}
-			if(stepVelocity == Vector::Zero || abs(_velocity.getVy()) == 80.0f)
 				stepVelocity = remainingVlocity;
+			}
+			else
+			{
+				float ratio = MAX_STEP_SIZE / movement;
+				stepVelocity.setVx(remainingVlocity.getVx() * ratio);
+				stepVelocity.setVy(remainingVlocity.getVy() * ratio);
+			}
+			
 			remainingVlocity -= stepVelocity;
-			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-			Point newPosition = position + stepVelocity;
-			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-			bounds = bounds.move(stepVelocity);
+			changePosition(stepVelocity);
+
+			Rect bounds = getBounds();
 			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
-			if(_collision != Direction::NONE)
+			if(_collision != Vector::Zero)
 				break;
 
 		}
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
+		_impulse = Vector::Zero;
 	}
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
 		const Segment& staticBodyBounds(staticBody.getSegment());
 		const Rect& dynamicBodyBounds(getBounds());
-		if(!staticBody.isCover() && dynamicBodyBounds.intersects(staticBodyBounds))
+		Vector correction = Vector::Zero;
+		if(!staticBody.isCover() && dynamicBodyBounds.intersects(staticBodyBounds, &correction))
 		{
-			float upCorrection = staticBodyBounds.getTop() - dynamicBodyBounds.getBottom();
-			float downCorrection = staticBodyBounds.getBottom() - dynamicBodyBounds.getTop();
-			float minYCorrection = abs(upCorrection) < abs(downCorrection) ? upCorrection : downCorrection;
-			float rightCorrection = staticBodyBounds.getRight() - dynamicBodyBounds.getLeft();
-			float leftCorrection = staticBodyBounds.getLeft() - dynamicBodyBounds.getRight();
-			float minXCorrection = abs(rightCorrection) < abs(leftCorrection) ? rightCorrection : leftCorrection;
-			Vector correction(Vector::Zero);
-			if(abs(minYCorrection) < abs(minXCorrection))
+			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 			{
-				if(minYCorrection != 0.0f)
+				if(correction.getAxis(axis) * _velocity.getAxis(axis) < 0.0f)
 				{
-					correction.setVy(minYCorrection);
-					if(minYCorrection * _velocity.getVy() < 0.0f)
-						_force.setVy(0.0);
-					if(minYCorrection > 0.0f)
-					{
-						_collision = _collision | Direction::BOTTOM;
-
-						// BRODER
-						_force.setVx(0.0f);
-					}
-					else
-					{
-						_collision = _collision | Direction::TOP;
-					}
+					_force.setAxis(axis, 0.0f);
 				}
 			}
-			else
-			{
-				if(minXCorrection != 0.0f)
-				{
-					correction.setVx(minXCorrection);
-					if(minXCorrection * _velocity.getVx() < 0.0f)
-						_force.setVx(0.0);
-					Orientation::Enum orientation = getOrientation();
-					if(minXCorrection > 0.0f)
-					{
-						_collision = _collision | (orientation == Orientation::LEFT ? Direction::FRONT : Direction::BACK);
-					}
-					else
-					{
-						_collision = _collision | (orientation == Orientation::RIGHT ? Direction::FRONT : Direction::BACK);
-					}
-				}
-			}
-			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-			Point newPosition = position + correction;
-			sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-			
+			if(correction.getVy() > 0.0f)
+				_force.setVx(0.0f);
+			changePosition(correction);
+			_collision -= correction;
 		}
 		return true;
 	}

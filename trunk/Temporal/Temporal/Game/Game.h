@@ -33,12 +33,13 @@ namespace Temporal
 		bool _paused;
 		Panel* _panel;
 		Panel* _nextPanel;
+		float _lastFrameMillis;
 
 		void handlePanelsSwitch(void);
-		void update(float& lastFrameMillis);
+		void update(void);
 		void draw(void) const;
 
-		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL) {}
+		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL), _lastFrameMillis(0.0f) {}
 		~Game(void);
 		Game(const Game&);
 		Game& operator=(const Game&);
