@@ -1,4 +1,7 @@
 #include "NavigationGraph.h"
+#include <Temporal\Base\Shape.h>
+#include <Temporal\Base\Segment.h>
+#include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\Entity.h>
@@ -23,36 +26,36 @@ namespace Temporal
 
 	float NavigationEdge::calculateCost(const NavigationNode& source)
 	{
-		const Rect& sourceArea = source.getArea();
-		const Rect& targetArea = getTarget().getArea();
+		const Rectangle& sourceArea = source.getArea();
+		const Rectangle& targetArea = getTarget().getArea();
 
 		Segment segment(sourceArea.getCenter(), targetArea.getCenter());
 		return segment.getLength();
 	}
 
-	void cutAreaLeft(const Segment& platform, const Rect& area, RectCollection& areas, RectIterator& iterator)
+	void cutAreaLeft(const Shape& platform, const Rectangle& area, RectCollection& areas, RectIterator& iterator)
 	{
 		float width = area.getRight() - platform.getRight();
-		const Rect nodeAfterCut = RectLB(platform.getRight(), area.getBottom(), width, area.getHeight());
+		const Rectangle nodeAfterCut = RectangleLB(platform.getRight(), area.getBottom(), width, area.getHeight());
 		iterator = areas.insert(iterator, nodeAfterCut);
 	}
 
-	void cutAreaRight(const Segment& platform, const Rect& area, RectCollection& areas, RectIterator& iterator)
+	void cutAreaRight(const Shape& platform, const Rectangle& area, RectCollection& areas, RectIterator& iterator)
 	{
 		float width = platform.getLeft() - area.getLeft();
-		const Rect nodeAfterCut = RectLB(area.getLeft(), area.getBottom(), width, area.getHeight());
+		const Rectangle nodeAfterCut = RectangleLB(area.getLeft(), area.getBottom(), width, area.getHeight());
 		iterator = areas.insert(iterator, nodeAfterCut);
 	}
 
-	void cutAreasByPlatforms(RectCollection& areas, SegmentCollection& platforms)
+	void cutAreasByPlatforms(RectCollection& areas, ShapeCollection& platforms)
 	{
-		for(SegmentIterator i = platforms.begin(); i != platforms.end(); ++i)
+		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
-			const Segment& platform = **i;
+			const Shape& platform = **i;
 			for(RectIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
-				const Rect area = *j;
-				if(area.intersects(platform))
+				const Rectangle area = *j;
+				if(intersects(area, platform))
 				{
 					j = areas.erase(j);
 					if(platform.getLeft() <= area.getLeft() && platform.getRight() <= area.getRight())
@@ -77,12 +80,12 @@ namespace Temporal
 		}
 	}
 
-	bool intersectWithPlatform(const Rect& area, SegmentCollection& platforms)
+	bool intersectWithPlatform(const Rectangle& area, ShapeCollection& platforms)
 	{
-		for(SegmentIterator i = platforms.begin(); i != platforms.end(); ++i)
+		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
-			const Segment& platform = **i;
-			if(area.intersects(platform))
+			const Shape& platform = **i;
+			if(intersects(area, platform))
 			{
 				return true;
 			}
@@ -90,19 +93,19 @@ namespace Temporal
 		return false;
 	}
 
-	void NavigationGraph::createNodes(SegmentCollection& platforms)
+	void NavigationGraph::createNodes(ShapeCollection& platforms)
 	{
-		for(SegmentIterator i = platforms.begin(); i != platforms.end(); ++i)
+		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			// Create area from platform
-			const Segment& platform = **i;
+			const Shape& platform = **i;
 
 			// Check min with now also, because we're going to pad it
-			if(platform.getLength() < MIN_AREA_SIZE.getWidth() || platform.getPoint1().getX() == platform.getPoint2().getX())
+			if(platform.getWidth() < MIN_AREA_SIZE.getWidth())
 				continue;
 
 			// Create area
-			Rect area = RectCB(platform.getCenter().getX(), platform.getTop() + 1.0f, platform.getLength(), MIN_AREA_SIZE.getHeight());
+			Rectangle area = RectangleLB(platform.getLeft(), platform.getTop() + 1.0f, platform.getWidth(), MIN_AREA_SIZE.getHeight());
 
 			// Pad it a little
 			// BRODER
@@ -115,7 +118,7 @@ namespace Temporal
 			// Create nodes from areas
 			for(RectIterator j = areas.begin(); j != areas.end(); ++j)
 			{
-				const Rect& area = *j;
+				const Rectangle& area = *j;
 
 				// Check min width
 				if(area.getWidth() >= MIN_AREA_SIZE.getWidth())
@@ -124,13 +127,13 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, SegmentCollection& platforms)
+	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, ShapeCollection& platforms)
 	{
-		const Rect& area1 = node1.getArea();
-		const Rect& area2 = node2.getArea();
+		const Rectangle& area1 = node1.getArea();
+		const Rectangle& area2 = node2.getArea();
 		float verticalDistance = area1.getTop() - area2.getTop();
 
-		const Rect fallArea = RectLB(x, area2.getBottom(), 1.0f, verticalDistance);
+		const Rectangle fallArea = RectangleLB(x, area2.getBottom(), 1.0f, verticalDistance);
  		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
@@ -145,16 +148,16 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, SegmentCollection& platforms)
+	void NavigationGraph::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms)
 	{
-		const Rect& area1 = node1.getArea();
-		const Rect& area2 = node2.getArea();
+		const Rectangle& area1 = node1.getArea();
+		const Rectangle& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
 		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= maxJumpForwardDistance)
 		{
-			Rect jumpArea = RectLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
+			Rectangle jumpArea = RectangleLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP));
@@ -163,20 +166,20 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::createEdges(SegmentCollection& platforms)
+	void NavigationGraph::createEdges(ShapeCollection& platforms)
 	{
 		// Create edges
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			NavigationNode& node1 = **i;
-			const Rect& area1 = node1.getArea();
+			const Rectangle& area1 = node1.getArea();
 			for(NavigationNodeIterator j = _nodes.begin(); j != _nodes.end(); ++j)
 			{
 				NavigationNode& node2 = **j;
 				if(&i == &j)
 					continue;
 
-				const Rect& area2 = node2.getArea();
+				const Rectangle& area2 = node2.getArea();
 
 				// check jump forward
 				if(area1.getRight() < area2.getLeft())
@@ -210,7 +213,7 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode* node = *i;
-			if(node->getArea().intersects(position))
+			if(node->getArea().contains(position))
 				return node;
 		}
 		return NULL;
@@ -221,15 +224,15 @@ namespace Temporal
 		bool isCover = *(bool*)entity.handleMessage(Message(MessageID::IS_COVER));
 		if(!isCover)
 		{
-			SegmentCollection& platforms = *((SegmentCollection*)data);
-			const Segment& platform = *(Segment*)entity.handleMessage(Message(MessageID::GET_BOUNDS));
+			ShapeCollection& platforms = *((ShapeCollection*)data);
+			const Shape& platform = *(Shape*)entity.handleMessage(Message(MessageID::GET_SHAPE));
 			platforms.push_back(&platform);
 		}
 	}
 
 	void NavigationGraph::init(void)
 	{
-		SegmentCollection platforms;
+		ShapeCollection platforms;
 		EntitiesManager::get().iterateEntities(ComponentType::STATIC_BODY, &platforms, &addPlatform);
 		createNodes(platforms);
 		createEdges(platforms);
@@ -248,17 +251,17 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
-			Graphics::get().drawRect(node.getArea(), Color::Yellow);
+			Graphics::get().draw(node.getArea(), Color::Yellow);
 			const NavigationEdgeCollection& edges = node.getEdges();
 			for(NavigationEdgeIterator j = edges.begin(); j != edges.end(); ++j)
 			{
 				const NavigationEdge& edge = **j;
-				const Rect& area2 = edge.getTarget().getArea();
+				const Rectangle& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
 				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = node.getArea().getBottom();
 				float y2 = area2.getBottom();
-				Graphics::get().drawSegment(Segment(Point(x1, y1), Point(x2, y2)), Color(1.0f, 0.5f, 0.0f));
+				Graphics::get().draw(Segment(Point(x1, y1), Point(x2, y2)), Color(1.0f, 0.5f, 0.0f));
 			}
 		}
 	}

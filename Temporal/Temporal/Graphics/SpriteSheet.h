@@ -3,7 +3,7 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Rectangle.h>
 #include <vector>
 
 namespace Temporal
@@ -11,13 +11,13 @@ namespace Temporal
 	class Sprite
 	{
 	public:
-		Sprite(const Rect& bounds, const Vector& offset) 
+		Sprite(const Rectangle& bounds, const Vector& offset) 
 			: _bounds(bounds), _offset(offset) {}
 
-		const Rect& getBounds(void) const { return _bounds; }
+		const Rectangle& getBounds(void) const { return _bounds; }
 		const Vector& getOffset(void) const { return _offset; }
 	private:
-		const Rect _bounds;
+		const Rectangle _bounds;
 		const Vector _offset;
 
 		Sprite(const Sprite&);

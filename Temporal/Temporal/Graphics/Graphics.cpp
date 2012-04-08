@@ -1,6 +1,8 @@
 #include "Graphics.h"
 #include "Texture.h"
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Shape.h>
+#include <Temporal\Base\Segment.h>
+#include <Temporal\Base\Rectangle.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -89,7 +91,7 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::drawTexture(const Texture& texture, const Rect& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
+	void Graphics::draw(const Texture& texture, const Rectangle& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
 	{
 		const Size& textureSize = texture.getSize();
 		float textureWidth = textureSize.getWidth();
@@ -139,7 +141,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::drawRect(const Rect& rect, const Color& color) const
+	void Graphics::draw(const Rectangle& rect, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -164,7 +166,7 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-	void Graphics::drawSegment(const Segment& segment, const Color& color) const
+	void Graphics::draw(const Segment& segment, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -179,5 +181,22 @@ namespace Temporal
 		glDrawArrays(GL_LINES, 0, 2);
  
 		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	void Graphics::draw(const Shape& shape, const Color& color) const
+	{
+		if(shape.getType() == ShapeType::RECTANGLE)
+		{
+			const Rectangle& rect = (const Rectangle&)shape;
+			draw(rect, color);
+		}
+		else if(shape.getType() == ShapeType::SEGMENT)
+		{
+			const Segment& seg = (const Segment&)shape;
+			draw(seg, color);
+		}
+		else
+		{
+			exit(1);
+		}
 	}
 }

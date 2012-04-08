@@ -6,7 +6,8 @@
 
 namespace Temporal
 {
-	class Rect;
+	class Shape;
+	class Rectangle;
 	class Segment;
 	class Texture;
 
@@ -32,9 +33,10 @@ namespace Temporal
 
 		void validate(void) const;
 
-		void drawTexture(const Texture& texture, const Rect& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
-		void drawRect(const Rect& rect, const Color& color = Color::White) const;
-		void drawSegment(const Segment& segment, const Color& color = Color::White) const;
+		void draw(const Texture& texture, const Rectangle& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
+		void draw(const Rectangle& rect, const Color& color = Color::White) const;
+		void draw(const Segment& segment, const Color& color = Color::White) const;
+		void draw(const Shape& shape, const Color& color = Color::White) const;
 
 	private:
 		static const int BIT_DEPTH = 32;

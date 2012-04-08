@@ -3,7 +3,7 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Rectangle.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
@@ -30,7 +30,7 @@ namespace Temporal
 		const Direction::Enum _negative;
 		const StaticBody* _sensedBody;
 
-		Rect getBounds(void) const;
+		Rectangle getBounds(void) const;
 		void update(void);
 		bool sense(const StaticBody &staticBody);
 		static bool sense(void* caller, void* data, const StaticBody& staticBody);

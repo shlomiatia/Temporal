@@ -1,6 +1,7 @@
 #include "Sight.h"
 #include "Grid.h"
 #include "StaticBody.h"
+#include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\EntitiesManager.h>
@@ -94,7 +95,7 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
-					if(body.getSegment().intersects(directedSegment, _pointOfIntersection))
+					if(intersects(directedSegment, body.getShape(), &_pointOfIntersection))
 					{
 						return false;
 					}
@@ -126,7 +127,7 @@ namespace Temporal
 		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
 		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
 		Vector targetPosition = Vector(targetX, targetY);
-		Graphics::get().drawSegment(Segment(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Graphics::get().draw(Segment(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Point &sourcePosition, Orientation::Enum sourceOrientation) const
@@ -143,6 +144,6 @@ namespace Temporal
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
 		if(_pointOfIntersection != Point::Zero)
-			Graphics::get().drawSegment(Segment(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
+			Graphics::get().draw(Segment(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
 	}
 }

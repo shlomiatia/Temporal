@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	class Rect;
+	class Shape;
 	class StaticBody;
 
 	typedef std::vector<const StaticBody*> StaticBodyCollection;
@@ -30,8 +30,8 @@ namespace Temporal
 		StaticBodyCollection* getTile(int i, int j) const;
 
 		void add(const StaticBody* staticBody);
-		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;
-		void iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
+		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;
+		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
 
 		void draw(void) const;
 

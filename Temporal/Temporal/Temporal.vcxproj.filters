@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="Base\Color.h" />
-    <ClInclude Include="Base\Rect.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Game\Panel.h" />
     <ClInclude Include="Game\Game.h" />
@@ -47,6 +46,9 @@
     <ClInclude Include="Base\Segment.h" />
     <ClInclude Include="Base\NumericPair.h" />
     <ClInclude Include="Game\MovementUtils.h" />
+    <ClInclude Include="Base\Shape.h" />
+    <ClInclude Include="Base\Rectangle.h" />
+    <ClInclude Include="Base\ShapeOperations.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -58,7 +60,6 @@
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Physics\Sensor.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
-    <ClCompile Include="Base\Rect.cpp" />
     <ClCompile Include="Physics\DynamicBody.cpp" />
     <ClCompile Include="Graphics\Animator.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
@@ -88,5 +89,7 @@
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\NumericPair.cpp" />
     <ClCompile Include="Game\MovementUtils.cpp" />
+    <ClCompile Include="Base\Rectangle.cpp" />
+    <ClCompile Include="Base\ShapeOperations.cpp" />
   </ItemGroup>
 </Project>

@@ -1,24 +1,26 @@
 #ifndef STATICBODY_H
 #define STATICBODY_H
 
-#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
 {
+	class Shape;
+
 	class StaticBody : public Component
 	{
 	public:
-		StaticBody(const Segment& segment, bool cover) : _segment(segment), _cover(cover) {};
+		StaticBody(Shape* shape, bool cover) : _shape(shape), _cover(cover) {};
+		~StaticBody(void);
 
 		bool isCover(void) const { return _cover; }
-		const Segment& getSegment(void) const { return _segment; }
+		const Shape& getShape(void) const { return *_shape; }
 		ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
 		bool _cover;
-		Segment _segment;
+		Shape* _shape;
 	};
 }
 #endif

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Rectangle.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
@@ -30,7 +30,7 @@ namespace Temporal
 		bool _gravityEnabled;
 		Vector _collision;
 
-		Rect getBounds(void) const;
+		Rectangle getBounds(void) const;
 		Orientation::Enum getOrientation(void) const;
 
 		void changePosition(const Vector& offset);
