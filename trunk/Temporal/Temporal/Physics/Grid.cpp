@@ -1,6 +1,7 @@
 #include "Grid.h"
 #include "StaticBody.h"
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Shape.h>
+#include <Temporal\Base\Rectangle.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
@@ -10,7 +11,7 @@ namespace Temporal
 		for(int i = 0; i < _gridWidth; ++i)
 			for(int j = 0; j < _gridHeight; ++j)
 				if(getTile(i, j) != NULL)
-					Graphics::get().drawRect(Rect(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					Graphics::get().draw(Rectangle(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
 	}
 
 	void Grid::init(const Size& worldSize, float tileSize)
@@ -50,10 +51,8 @@ namespace Temporal
 
 	void Grid::add(const StaticBody* staticBody)
 	{
-		const Segment& segment = staticBody->getSegment();
-		Size size = segment.getPoint1().getX() == segment.getPoint2().getX() ? Size(0.0f, segment.getLength()) : Size(segment.getLength(), 0.0f);
-		Rect temp = Rect(segment.getCenter(), size);
-		iterateTiles(temp, this, (void*)staticBody, add);
+		const Shape& shape = staticBody->getShape();
+		iterateTiles(shape, this, (void*)staticBody, add);
 	}
 
 	StaticBodyCollection* Grid::getTile(int i, int j) const
@@ -70,12 +69,12 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	void Grid::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const
+	void Grid::iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const
 	{
-		int leftIndex = getAxisIndex(rect.getLeft());
-		int rightIndex = getAxisIndex(rect.getRight());
-		int topIndex = getAxisIndex(rect.getTop());
-		int bottomIndex = getAxisIndex(rect.getBottom());
+		int leftIndex = getAxisIndex(shape.getLeft());
+		int rightIndex = getAxisIndex(shape.getRight());
+		int topIndex = getAxisIndex(shape.getTop());
+		int bottomIndex = getAxisIndex(shape.getBottom());
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
@@ -113,12 +112,12 @@ namespace Temporal
 		return true;
 	}
 
-	void Grid::iterateTiles(const Rect& rect, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
+	void Grid::iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
 	{
 		IterateStaticBodiesHelper helper;
 		helper.caller = caller; 
 		helper.data = data;
 		helper.handleStaticBody = handleStaticBody;
-		iterateTiles(rect, (void*)this, &helper, iterateStaticBodies);
+		iterateTiles(shape, (void*)this, &helper, iterateStaticBodies);
 	}
 }

@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "MessageParams.h"
 #include "MovementUtils.h"
+#include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
 #include <Temporal\Physics\StaticBody.h>
@@ -25,8 +26,8 @@ namespace Temporal
 
 	void HangDescendHelper::setPlatformFromSensor(const Sensor& sensor)
 	{
-		const Segment& segment = sensor.getSensedBody()->getSegment();
-		_platform = segment;
+		const Shape& shape = sensor.getSensedBody()->getShape();
+		_platform = &shape;
 	}
 
 	StateCollection ActionController::getStates() const
@@ -182,11 +183,11 @@ namespace Temporal
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
 		const Sensor& sensor = *(Sensor*)message.getParam();
-		const Segment& segment = sensor.getSensedBody()->getSegment();
+		const Shape& shape = sensor.getSensedBody()->getShape();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rect personBounds(Rect::Empty);
+		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		float target = segment.getOppositeSide(orientation);
+		float target = shape.getOppositeSide(orientation);
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
@@ -194,7 +195,7 @@ namespace Temporal
 		float max = 0.0f;
 		const float gravity = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
-		// TODO: Broder
+		// Broder
 		if(distance >= 0 && distance < 20.0f)
 		{
 			jumpHelper.setInfo(JumpInfoProvider::get().getHighest());
@@ -311,7 +312,7 @@ namespace Temporal
 
 	void PrepareToHang::update(void)
 	{
-		Rect personBounds(Rect::Empty);
+		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float platformTop = _platform->getTop();
 		float entityTop = personBounds.getTop();
@@ -439,7 +440,7 @@ namespace Temporal
 	void PrepareToDescend::update(void)
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rect personBounds(Rect::Empty);
+		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float platformEdge = _platform->getOppositeSide(orientation) + 1.0f * orientation;
 		float entityFront = personBounds.getSide(orientation);

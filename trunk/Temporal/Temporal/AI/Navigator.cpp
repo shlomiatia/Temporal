@@ -1,4 +1,5 @@
 #include "Navigator.h"
+#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageUtils.h>
 #include <Temporal\Graphics\Graphics.h>
@@ -171,7 +172,7 @@ namespace Temporal
 					const NavigationEdge& edge = **i;
 					const NavigationNode& next = edge.getTarget();
 					Segment segment = Segment(current->getArea().getCenter(), next.getArea().getCenter());
-					Graphics::get().drawSegment(segment, Color::Cyan);
+					Graphics::get().draw(segment, Color::Cyan);
 					current = &next;
 				}
 			}

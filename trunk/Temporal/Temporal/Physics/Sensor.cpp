@@ -1,16 +1,17 @@
 #include "Sensor.h"
 #include "Grid.h"
 #include "StaticBody.h"
+#include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
 {
-	Direction::Enum calculateCollision(const Rect& boundsA, Orientation::Enum orientationA, const Segment& boundsB)
+	Direction::Enum calculateCollision(const Rectangle& boundsA, Orientation::Enum orientationA, const Shape& boundsB)
 	{
 		Direction::Enum collision(Direction::NONE);
 
-		if(boundsA.intersects(boundsB))
+		if(intersects(boundsA, boundsB))
 		{
 			float frontA = boundsA.getSide(orientationA);
 			float frontB = boundsB.getSide(orientationA);
@@ -27,20 +28,20 @@ namespace Temporal
 		return collision;
 	}
 
-	Rect Sensor::getBounds(void) const
+	Rectangle Sensor::getBounds(void) const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Point center(position.getX() + _offset.getVx() * orientation,
 					 position.getY() + _offset.getVy());
-		return Rect(center, _size);
+		return Rectangle(center, _size);
 	}
 
 	void Sensor::update(void)
 	{
 		_sensedBody = NULL;
 		
-		Rect bounds = getBounds();
+		Rectangle bounds = getBounds();
 		Grid::get().iterateTiles(bounds, this, NULL, sense);
 		if(_sensedBody != NULL)
 		{
@@ -56,18 +57,18 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().drawRect(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
+			Graphics::get().draw(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
 		}
 	}
 
 	bool Sensor::sense(const StaticBody& staticBody)
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Rect& sensorBounds = getBounds();
+		const Rectangle& sensorBounds = getBounds();
 		if(!staticBody.isCover())
 		{
-			const Segment& segment = staticBody.getSegment();
-			Direction::Enum collision = calculateCollision(sensorBounds, orientation, segment);
+			const Shape& shape = staticBody.getShape();
+			Direction::Enum collision = calculateCollision(sensorBounds, orientation, shape);
 			if(match(collision, _positive, _negative))
 			{
 				_sensedBody = &staticBody;

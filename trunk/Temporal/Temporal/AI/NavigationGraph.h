@@ -3,11 +3,14 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rect.h>
+#include <Temporal\Base\Rectangle.h>
 #include <vector>
 
 namespace Temporal
 {
+	class Shape;
+	class NavigationEdge;
+
 	namespace NavigationEdgeType
 	{
 		enum Enum
@@ -18,23 +21,21 @@ namespace Temporal
 		};
 	}
 
-	class NavigationEdge;
-
 	typedef std::vector<const NavigationEdge*> NavigationEdgeCollection;
 	typedef NavigationEdgeCollection::const_iterator NavigationEdgeIterator;
 
 	class NavigationNode
 	{
 	public:
-		NavigationNode(const Rect& area) : _area(area) {}
+		NavigationNode(const Rectangle& area) : _area(area) {}
 		~NavigationNode(void);
 
-		const Rect& getArea(void) const { return _area; }
+		const Rectangle& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
 		const NavigationEdgeCollection& getEdges(void) const { return _edges; }
 
 	private:
-		const Rect _area;
+		const Rectangle _area;
 		NavigationEdgeCollection _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -69,10 +70,10 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeCollection;
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const Rect> RectCollection;
+	typedef std::vector<const Rectangle> RectCollection;
 	typedef RectCollection::const_iterator RectIterator;
-	typedef std::vector<const Segment*> SegmentCollection;
-	typedef SegmentCollection::const_iterator SegmentIterator;
+	typedef std::vector<const Shape*> ShapeCollection;
+	typedef ShapeCollection::const_iterator ShapeIterator;
 
 	class NavigationGraph
 	{
@@ -93,10 +94,10 @@ namespace Temporal
 
 		NavigationNodeCollection _nodes; 
 
-		void createNodes(SegmentCollection& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, SegmentCollection& platforms);
-		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, SegmentCollection& platforms);
-		void createEdges(SegmentCollection& platforms);
+		void createNodes(ShapeCollection& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, ShapeCollection& platforms);
+		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
+		void createEdges(ShapeCollection& platforms);
 
 		NavigationGraph(void) {}
 		NavigationGraph(const NavigationGraph&);

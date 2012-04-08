@@ -2,6 +2,7 @@
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "Grid.h"
+#include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <algorithm>
@@ -18,10 +19,10 @@ namespace Temporal
 		assert(_size.getHeight() > 0.0f);
 	}
 
-	Rect DynamicBody::getBounds(void) const
+	Rectangle DynamicBody::getBounds(void) const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		return Rect(position, _size);
+		return Rectangle(position, _size);
 	}
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
@@ -38,13 +39,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
-			Rect* outParam = (Rect*)message.getParam();
+			Rectangle* outParam = (Rectangle*)message.getParam();
 			*outParam = getBounds();
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Rect bounds = getBounds();
-			Graphics::get().drawRect(bounds);
+			Rectangle bounds = getBounds();
+			Graphics::get().draw(bounds);
 		}
 		else if(message.getID() == MessageID::SET_FORCE)
 		{
@@ -115,7 +116,7 @@ namespace Temporal
 
 		// BRODER
 		float maxHorizontalStepSize = _size.getWidth() / 2.0f - 1.0f;
-		float maxVerticalStepSize = _size.getHeight() / 2.0f - 1.0;
+		float maxVerticalStepSize = _size.getHeight() / 2.0f - 1.0f;
 		const float MAX_STEP_SIZE = std::min(maxHorizontalStepSize, maxVerticalStepSize);
 		Vector remainingVlocity = _velocity;
 		while(remainingVlocity != Vector::Zero)
@@ -136,7 +137,7 @@ namespace Temporal
 			remainingVlocity -= stepVelocity;
 			changePosition(stepVelocity);
 
-			Rect bounds = getBounds();
+			Rectangle bounds = getBounds();
 			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 			if(_collision != Vector::Zero)
 				break;
@@ -148,10 +149,10 @@ namespace Temporal
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
-		const Segment& staticBodyBounds(staticBody.getSegment());
-		const Rect& dynamicBodyBounds(getBounds());
+		const Shape& staticBodyBounds = staticBody.getShape();
+		const Rectangle& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
-		if(!staticBody.isCover() && dynamicBodyBounds.intersects(staticBodyBounds, &correction))
+		if(!staticBody.isCover() && intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
 			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 			{

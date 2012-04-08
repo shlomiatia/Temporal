@@ -59,6 +59,6 @@ namespace Temporal
 
 		Point screenLocation(screenLocationX, screenLocationY);
 
-		Graphics::get().drawTexture(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
+		Graphics::get().draw(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
 	}
 }

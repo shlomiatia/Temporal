@@ -1,4 +1,5 @@
 #include "Pathfinder.h"
+#include <Temporal\Base\Segment.h>
 #include <assert.h>
 
 namespace Temporal
@@ -8,8 +9,8 @@ namespace Temporal
 
 	float PathNode::calculateHeuristicCost(const NavigationNode& goal)
 	{
-		const Rect& sourceArea = getNavigationNode().getArea();
-		const Rect& goalArea = goal.getArea();
+		const Rectangle& sourceArea = getNavigationNode().getArea();
+		const Rectangle& goalArea = goal.getArea();
 
 		Segment segment(sourceArea.getCenter(), goalArea.getCenter());
 		return segment.getLength();

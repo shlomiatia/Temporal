@@ -2,11 +2,11 @@
 #define ACTIONCONTROLLER_H
 
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
 {
+	class Shape;
 	class Sensor;
 
 	// BRODER
@@ -104,12 +104,12 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _platform(Segment::Empty) {}
+		HangDescendHelper(void) : _platform(NULL) {}
 
 		void setPlatformFromSensor(const Sensor& sensor);
-		const Segment& getPlatform(void) const { return _platform; }
+		const Shape& getPlatform(void) const { return *_platform; }
 	private:
-		Segment _platform;
+		const Shape* _platform;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
@@ -255,7 +255,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	private:
-		const Segment* _platform;
+		const Shape* _platform;
 
 		void update(void);
 	};
@@ -320,7 +320,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	private:
-		const Segment* _platform;
+		const Shape* _platform;
 
 		void update(void);
 	};
