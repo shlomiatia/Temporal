@@ -18,8 +18,8 @@ namespace Temporal
 
 		const Point& getPoint1(void) const { return _point1; }
 		const Point& getPoint2(void) const { return _point2; }
-		Point getCenter(void) const { return (getPoint1() + getPoint2()) / 2.0f; }
-		Vector getRadius(void) const { return getPoint2() - getCenter(); }
+		Point getCenter(void) const { return Point(getCenterX(), getCenterY()); }
+		Vector getRadius(void) const { return Vector((getRight() - getLeft()) / 2.0f, (getTop() - getBottom()) / 2.0f); }
 
 		float getLeft(void) const { return getPoint1().getX() < getPoint2().getX() ? getPoint1().getX() : getPoint2().getX(); }
 		float getRight(void) const { return getPoint1().getX() > getPoint2().getX() ? getPoint1().getX() : getPoint2().getX(); }

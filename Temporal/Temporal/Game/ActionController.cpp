@@ -51,7 +51,7 @@ namespace Temporal
 		return states;
 	}
 
-	bool ActionState::isSensorMessage(Message& message, SensorID::Enum sensorID) const
+	bool isSensorMessage(Message& message, SensorID::Enum sensorID)
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{

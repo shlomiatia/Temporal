@@ -507,11 +507,11 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createChaser(spritesheet);
-		createSentry(spritesheet);
-		createPatrol(spritesheet);
-		createCamera();
+		//createChaser(spritesheet);
+		//createSentry(spritesheet);
+		//createPatrol(spritesheet);
+		//createCamera();
 		createPlatforms();
-		//createBackground();
+		createBackground();
 	}
 }

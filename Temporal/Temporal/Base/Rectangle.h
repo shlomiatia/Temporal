@@ -21,9 +21,6 @@ namespace Temporal
 		const Point& getCenter(void) const { return _center; }
 		const Vector& getRadius(void) const { return _radius; }
 
-		float getCenterX(void) const { return getCenter().getX(); }
-		float getCenterY(void) const { return getCenter().getY(); }
-
 		float getRadiusVx(void) const { return getRadius().getVx(); }
 		float getRadiusVy(void) const { return getRadius().getVy(); }
 
@@ -31,9 +28,6 @@ namespace Temporal
 		float getLeft(void) const {	return getCenterX() - getRadiusVx(); }
 		float getTop(void) const { return getCenterY() + getRadiusVy(); }
 		float getRight(void) const { return getCenterX() + getRadiusVx(); }
-
-		float getWidth(void) const { return getRadiusVx() * 2.0f; }
-		float getHeight(void) const { return getRadiusVy() * 2.0f; }
 
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 

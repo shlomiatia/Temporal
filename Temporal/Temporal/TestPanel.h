@@ -5,7 +5,6 @@
 
 namespace Temporal
 {
-	// TODO: Support multiple shape to shapes intersection tests PHYSICS
 	// TODO: Handle areas intersection in navigation graph PHYISICS
 	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
