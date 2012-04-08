@@ -27,8 +27,8 @@ namespace Temporal
 		virtual float getTop(void) const = 0;
 		virtual float getRight(void) const = 0;
 
-		virtual float getCenterX(void) { return (getLeft() + getRight()) / 2.0f; }
-		virtual float getCenterY(void) { return (getBottom() + getTop()) / 2.0f; }
+		virtual float getCenterX(void) const { return (getLeft() + getRight()) / 2.0f; }
+		virtual float getCenterY(void) const { return (getBottom() + getTop()) / 2.0f; }
 
 		virtual float getWidth(void) const { return getRight() - getLeft(); }
 		virtual float getHeight(void) const { return getTop() - getBottom(); }

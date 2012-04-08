@@ -134,7 +134,7 @@ namespace Temporal
 		float verticalDistance = area1.getTop() - area2.getTop();
 
 		const Rectangle fallArea = RectangleLB(x, area2.getBottom(), 1.0f, verticalDistance);
- 		if(!intersectWithPlatform(fallArea, platforms))
+		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
 			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY, verticalDistance);

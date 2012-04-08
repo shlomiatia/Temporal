@@ -134,24 +134,10 @@ namespace Temporal
 		StateCollection getStates() const;
 	};
 
-	class ActionState : public ComponentState
-	{
-	public:
-		~ActionState(void) {};
-		// TODO: Virtual destructor
-
-		virtual const char* getName(void) const = 0;
-
-	protected:
-		bool isSensorMessage(Message& message, SensorID::Enum sensorID) const;
-	};
-
-	class Stand : public ActionState
+	class Stand : public ComponentState
 	{
 	public:
 		Stand(void) : _isDescending(false) {};
-
-		const char* getName(void) const { return "Stand"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
@@ -160,23 +146,19 @@ namespace Temporal
 		bool _isDescending;
 	};
 
-	class Fall : public ActionState
+	class Fall : public ComponentState
 	{
 	public:
 		Fall(void) {};
-
-		const char* getName(void) const { return "Fall"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class Walk : public ActionState
+	class Walk : public ComponentState
 	{
 	public:
 		Walk(void) : _stillWalking(false) {};
-
-		const char* getName(void) const { return "Walk"; }
 
 		void enter(void);		
 		void handleMessage(Message& message);
@@ -185,22 +167,18 @@ namespace Temporal
 		bool _stillWalking;
 	};
 
-	class Turn : public ActionState
+	class Turn : public ComponentState
 	{
 	public:
 		Turn(void) {};
-
-		const char* getName(void) const { return "Turn"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class PrepareToJump : public ActionState
+	class PrepareToJump : public ComponentState
 	{
 	public:
-		const char* getName(void) const { return "PrepareToJump"; }
-
 		void enter(void);
 		void handleMessage(Message& message);
 
@@ -208,12 +186,10 @@ namespace Temporal
 		void handleJumpSensor(Message &message);
 	};
 
-	class JumpStart : public ActionState
+	class JumpStart : public ComponentState
 	{
 	public:
 		JumpStart(void) : _animationEnded(false) {};
-
-		const char* getName(void) const { return "JumpStart"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
@@ -222,34 +198,28 @@ namespace Temporal
 		bool _animationEnded;
 	};
 
-	class Jump : public ActionState
+	class Jump : public ComponentState
 	{
 	public:
 		Jump(void) {};
 
-		const char* getName(void) const { return "Jump"; }
-
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class JumpEnd : public ActionState
+	class JumpEnd : public ComponentState
 	{
 	public:
 		JumpEnd(void) {};
 
-		const char* getName(void) const { return "JumpEnd"; }
-
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class PrepareToHang : public ActionState
+	class PrepareToHang : public ComponentState
 	{
 	public:
 		PrepareToHang(void) : _platform(NULL) {};
-
-		const char* getName(void) const { return "PrepareToHang"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
@@ -260,34 +230,28 @@ namespace Temporal
 		void update(void);
 	};
 
-	class Hanging : public ActionState
+	class Hanging : public ComponentState
 	{
 	public:
 		Hanging(void){};
 
-		const char* getName(void) const { return "Hanging"; }
-
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class Hang : public ActionState
+	class Hang : public ComponentState
 	{
 	public:
 		Hang(void) {};
 
-		const char* getName(void) const { return "Hang"; }
-
 		void enter(void);
 		void handleMessage(Message& message);
 	};
 
-	class Drop : public ActionState
+	class Drop : public ComponentState
 	{
 	public:
 		Drop(void) : _platformFound(false) {};
-
-		const char* getName(void) const { return "Drop"; }
 
 		void enter(void);
 		void exit(void);
@@ -297,24 +261,20 @@ namespace Temporal
 		bool _platformFound;
 	};
 
-	class Climb : public ActionState
+	class Climb : public ComponentState
 	{
 	public:
 		Climb(void) {};
 
-		const char* getName(void) const { return "Climb"; }
-	
 		void enter(void);
 		void exit(void);
 		void handleMessage(Message& message);
 	};
 
-	class PrepareToDescend : public ActionState
+	class PrepareToDescend : public ComponentState
 	{
 	public:
 		PrepareToDescend(void) : _platform(NULL) {};
-
-		const char* getName(void) const { return "PrepareToDescend"; }
 
 		void enter(void);
 		void handleMessage(Message& message);
@@ -325,12 +285,10 @@ namespace Temporal
 		void update(void);
 	};
 
-	class Descend : public ActionState
+	class Descend : public ComponentState
 	{
 	public:
 		Descend(void) {};
-
-		const char* getName(void) const { return "Descend"; }
 
 		void enter(void);
 		void handleMessage(Message& message);

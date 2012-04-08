@@ -114,7 +114,6 @@ namespace Temporal
 	{
 		_collision = Vector::Zero;
 
-		// BRODER
 		float maxHorizontalStepSize = _size.getWidth() / 2.0f - 1.0f;
 		float maxVerticalStepSize = _size.getHeight() / 2.0f - 1.0f;
 		const float MAX_STEP_SIZE = std::min(maxHorizontalStepSize, maxVerticalStepSize);
