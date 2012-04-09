@@ -201,7 +201,7 @@ namespace Temporal
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
 
 		float max = 0.0f;
-		const float gravity = *(float*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
+		const Vector& gravity = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
 
 		// Broder
 		if(distance >= 0 && distance < 20.0f)
@@ -214,7 +214,7 @@ namespace Temporal
 		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
 		{
 			const JumpInfo* jumpInfo = *i;
-			float height = getJumpHeight(jumpInfo->getAngle(), JUMP_FORCE_PER_SECOND, gravity, distance);
+			float height = getJumpHeight(jumpInfo->getAngle(), JUMP_FORCE_PER_SECOND, gravity.getVy(), distance);
 			if(max < height)
 			{
 				max = height;

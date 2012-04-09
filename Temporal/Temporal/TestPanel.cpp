@@ -79,9 +79,9 @@ namespace Temporal
 	{
 		// Jump sensor
 		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
-		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy());
+		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
 		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
-		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy());
+		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
 		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);

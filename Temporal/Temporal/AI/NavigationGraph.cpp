@@ -140,7 +140,7 @@ namespace Temporal
 			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
 
 			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy()) + 80.0f;
+			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy()) + 80.0f;
 			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 			if(verticalDistance <= maxJumpHeight)
