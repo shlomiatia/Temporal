@@ -10,8 +10,8 @@ namespace Temporal
 	class Sensor;
 
 	// BRODER
-	static const float WALK_FORCE_PER_SECOND = 120.0f;
-	static const float JUMP_FORCE_PER_SECOND = 1000.0f;
+	static const float WALK_FORCE_PER_SECOND = 150.0f;
+	static const float JUMP_FORCE_PER_SECOND = 900.0f;
 
 	namespace AnimationID
 	{
@@ -160,7 +160,8 @@ namespace Temporal
 	public:
 		Walk(void) : _stillWalking(false) {};
 
-		void enter(void);		
+		void enter(void);
+		void exit(void);
 		void handleMessage(Message& message);
 
 	private:
@@ -204,6 +205,7 @@ namespace Temporal
 		Jump(void) {};
 
 		void enter(void);
+		void exit(void);
 		void handleMessage(Message& message);
 	};
 

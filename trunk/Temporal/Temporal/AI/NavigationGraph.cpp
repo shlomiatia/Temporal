@@ -137,10 +137,10 @@ namespace Temporal
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			float distance = (area2.getSide(orientation) - x) * orientation;
-			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY, verticalDistance);
+			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
 
 			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY) + 80.0f;
+			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy()) + 80.0f;
 			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 			if(verticalDistance <= maxJumpHeight)
@@ -154,7 +154,7 @@ namespace Temporal
 		const Rectangle& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
+		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy());
 		if(area1.getBottom() == area2.getBottom() && horizontalDistance <= maxJumpForwardDistance)
 		{
 			Rectangle jumpArea = RectangleLB(area1.getRight(), area1.getBottom(), horizontalDistance, 1.0f);

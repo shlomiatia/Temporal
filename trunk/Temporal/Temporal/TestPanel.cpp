@@ -79,9 +79,9 @@ namespace Temporal
 	{
 		// Jump sensor
 		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
-		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
+		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy());
 		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
-		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY);
+		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy());
 		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
@@ -168,7 +168,6 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		//Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -176,7 +175,6 @@ namespace Temporal
 		entity->add(drawPosition);
 		entity->add(navigator);
 		entity->add(dynamicBody);
-//		entity->add(sight);
 		addSensors(*entity);
 		entity->add(actionController);
 		entity->add(animator);
@@ -277,7 +275,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(staticBody);
-		entity->add(renderer);
+		//entity->add(renderer);
 		Grid::get().add(staticBody);
 		return entity;
 	}
@@ -339,6 +337,8 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
 
 		EntitiesManager::get().add(createPlatform(new Rectangle(RectangleLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
+
+		//EntitiesManager::get().add(createPlatform(new Segment(384.0f, 256.0f, 640.0f, 384.0f), spritesheet));
 	}
 
 	void createBackground()
@@ -512,6 +512,6 @@ namespace Temporal
 		//createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();
-		createBackground();
+		//createBackground();
 	}
 }

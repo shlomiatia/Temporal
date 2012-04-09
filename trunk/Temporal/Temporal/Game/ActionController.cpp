@@ -6,6 +6,7 @@
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
 #include <Temporal\Physics\StaticBody.h>
+#include <Temporal\Base\Thread.h>
 
 namespace Temporal
 {
@@ -132,7 +133,16 @@ namespace Temporal
 	{
 		_stillWalking = true;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
+		Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 	}
+
+	void Walk::exit(void)
+	{
+		Vector stop = Vector::Zero;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &stop));
+	}
+
 
 	void Walk::handleMessage(Message& message)
 	{
@@ -159,8 +169,6 @@ namespace Temporal
 			}
 			else
 			{
-				Vector force(WALK_FORCE_PER_SECOND, 0.0f);
-				_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &force));
 				_stillWalking = false;
 			}
 		}
@@ -274,10 +282,16 @@ namespace Temporal
 		float angle = jumpInfo.getAngle();
 		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
 		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
-		Vector jumpVector(jumpForceX, jumpForceY);
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_FORCE, &jumpVector));
+		Vector jumpVector = Vector(jumpForceX, jumpForceY);
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		AnimationID::Enum animation = jumpInfo.getJumpAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+	}
+
+	void Jump::exit(void)
+	{
+		Vector stop = Vector::Zero;
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &stop));
 	}
 
 	void Jump::handleMessage(Message& message)
@@ -293,6 +307,10 @@ namespace Temporal
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() < 0.0f)
 				_stateMachine->changeState(ActionStateID::JUMP_END);
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+		//	Thread::sleep(100);
 		}
 	}
 
@@ -325,7 +343,7 @@ namespace Temporal
 		Vector movement(movementX, movementY);
 		if(movement != Vector::Zero)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &movement));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
 		}
 		else
 		{
@@ -419,7 +437,7 @@ namespace Temporal
 		Vector climbForce(climbForceX, climbForceY);
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &climbForce));
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
 	void Climb::exit(void)
@@ -447,7 +465,7 @@ namespace Temporal
 		float moveX = (platformEdge - entityFront) * orientation;
 		if(moveX != 0.0f)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(moveX, 0.0f)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(moveX, 0.0f)));
 		}
 		else
 		{
@@ -481,7 +499,7 @@ namespace Temporal
 		float forceX = -1.0f;
 		float forceY = -(size.getHeight());
 
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_IMPULSE, &Vector(forceX, forceY)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));
 	}
 

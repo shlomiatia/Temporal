@@ -14,7 +14,7 @@ namespace Temporal
 	{
 	public:
 		// BRODER
-		static const float GRAVITY;
+		static const Vector GRAVITY;
 
 		explicit DynamicBody(const Size& size);
 
@@ -24,9 +24,8 @@ namespace Temporal
 
 	private:
 		Size _size;
+		Vector _absoluteImpulse;
 		Vector _velocity;
-		Vector _force;
-		Vector _impulse;
 		bool _gravityEnabled;
 		Vector _collision;
 
@@ -35,8 +34,6 @@ namespace Temporal
 
 		void changePosition(const Vector& offset);
 		void update(float framePeriodInMillis);
-		void determineVelocity(float framePeriodInMillis);
-		void applyVelocity(void);
 		bool correctCollision(const StaticBody& staticBody);
 
 		static bool correctCollision(void* caller, void* data, const StaticBody& staticBody);
