@@ -10,10 +10,10 @@
 
 namespace Temporal
 {
-	const float DynamicBody::GRAVITY(5000.0f);
+	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
 
 	DynamicBody::DynamicBody(const Size& size)
-		: _size(size), _velocity(Vector::Zero), _force(Vector::Zero), _impulse(Vector::Zero), _gravityEnabled(true), _collision(Vector::Zero)
+		: _size(size), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _collision(Vector::Zero)
 	{
 		assert(_size.getWidth() > 0.0f);
 		assert(_size.getHeight() > 0.0f);
@@ -47,21 +47,25 @@ namespace Temporal
 			Rectangle bounds = getBounds();
 			Graphics::get().draw(bounds);
 		}
-		else if(message.getID() == MessageID::SET_FORCE)
+		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			_force = Vector(param.getVx() * getOrientation(), param.getVy());
+			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			if(timeBasedImpulse == Vector::Zero)
+				_velocity = Vector::Zero;
+			else
+				_velocity += timeBasedImpulse;
 		}
-		else if(message.getID() == MessageID::SET_IMPULSE)
+		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			_impulse = Vector(param.getVx() * getOrientation(), param.getVy());
-			_force = Vector::Zero;
+			_absoluteImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			//_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled = *(bool*)message.getParam();
-			_force = Vector::Zero;
+			//_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
@@ -83,67 +87,45 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriodInMillis)
 	{
-		determineVelocity(framePeriodInMillis);
-		applyVelocity();
-	}
-
-	void DynamicBody::determineVelocity(float framePeriodInMillis)
-	{
 		float interpolation = framePeriodInMillis / 1000.0f;
-		_velocity = Vector::Zero;
-
-		if(_impulse == Vector::Zero)
-		{
-			_velocity = _force * interpolation;
-		}
-		else
-		{
-			_velocity = _impulse;
-		}
+		Vector movement = _velocity * interpolation + _absoluteImpulse;
 		if(_gravityEnabled)
 		{
-			float gravity = 0.5f * GRAVITY * pow(interpolation, 2.0f);
-			float y = _velocity.getVy();
-			y -= gravity;
-			_velocity.setVy(y);
-			_force -= Vector(0.0f, GRAVITY * interpolation);
-		}	
-	}
-
-	void DynamicBody::applyVelocity(void)
-	{
-		_collision = Vector::Zero;
-
+			movement += (GRAVITY * pow(interpolation, 2.0f)) / 2.0f;
+			_velocity += GRAVITY * interpolation;
+		}
 		float maxHorizontalStepSize = _size.getWidth() / 2.0f - 1.0f;
 		float maxVerticalStepSize = _size.getHeight() / 2.0f - 1.0f;
 		const float MAX_STEP_SIZE = std::min(maxHorizontalStepSize, maxVerticalStepSize);
-		Vector remainingVlocity = _velocity;
-		while(remainingVlocity != Vector::Zero)
+		_collision = Vector::Zero;
+		while(movement != Vector::Zero)
 		{
-			Vector stepVelocity = Vector::Zero;
-			float movement = remainingVlocity.getLength();
-			if(movement <= MAX_STEP_SIZE || _impulse != Vector::Zero)
+			Vector stepMovement = Vector::Zero;
+			float movementAmount = movement.getLength();
+			if(movementAmount <= MAX_STEP_SIZE || _absoluteImpulse != Vector::Zero)
 			{
-				stepVelocity = remainingVlocity;
+				stepMovement = movement;
 			}
 			else
 			{
-				float ratio = MAX_STEP_SIZE / movement;
-				stepVelocity.setVx(remainingVlocity.getVx() * ratio);
-				stepVelocity.setVy(remainingVlocity.getVy() * ratio);
+				float ratio = MAX_STEP_SIZE / movementAmount;
+				stepMovement.setVx(movement.getVx() * ratio);
+				stepMovement.setVy(movement.getVy() * ratio);
 			}
 			
-			remainingVlocity -= stepVelocity;
-			changePosition(stepVelocity);
+			movement -= stepMovement;
+			changePosition(stepMovement);
 
 			Rectangle bounds = getBounds();
 			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 			if(_collision != Vector::Zero)
 				break;
-
 		}
+		
+		if(_collision.getVy() == 0.0f)
+			int i = 0;
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
-		_impulse = Vector::Zero;
+		_absoluteImpulse = Vector::Zero;
 	}
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
@@ -157,11 +139,9 @@ namespace Temporal
 			{
 				if(correction.getAxis(axis) * _velocity.getAxis(axis) < 0.0f)
 				{
-					_force.setAxis(axis, 0.0f);
+					_velocity.setAxis(axis, 0.0f);
 				}
 			}
-			if(correction.getVy() > 0.0f)
-				_force.setVx(0.0f);
 			changePosition(correction);
 			_collision -= correction;
 		}
