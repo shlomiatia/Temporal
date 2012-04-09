@@ -60,12 +60,12 @@ namespace Temporal
 		{
 			const Vector& param = *(Vector*)message.getParam();
 			_absoluteImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
-			//_velocity = Vector::Zero;
+			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled = *(bool*)message.getParam();
-			//_velocity = Vector::Zero;
+			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::GET_GRAVITY)
 		{
