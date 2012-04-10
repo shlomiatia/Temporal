@@ -26,10 +26,10 @@ namespace Temporal
 		float levelWidth = _levelBounds.getWidth();
 		float levelHeight = _levelBounds.getHeight();
 		float cameraLeftPosition = position.getX() -  cameraWidth/ 2.0f;
-		cameraLeftPosition = cameraLeftPosition + cameraWidth < levelWidth ? cameraLeftPosition : -cameraWidth;
+		cameraLeftPosition = cameraLeftPosition + cameraWidth < levelWidth ? cameraLeftPosition : (levelWidth-cameraWidth);
 		cameraLeftPosition = cameraLeftPosition < 0.0f ? 0.0f : cameraLeftPosition;
 		float cameraBottomPosition = position.getY() - cameraHeight / 2.0f;
-		cameraBottomPosition = cameraBottomPosition + cameraHeight < levelHeight ? cameraBottomPosition :  levelHeight - cameraHeight;
+		cameraBottomPosition = cameraBottomPosition + cameraHeight < levelHeight ? cameraBottomPosition :  (levelHeight - cameraHeight);
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
 
 		Vector translation(-cameraLeftPosition, -cameraBottomPosition);
