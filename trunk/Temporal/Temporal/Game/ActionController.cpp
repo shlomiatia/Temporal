@@ -92,19 +92,17 @@ namespace Temporal
 		{
 			_isDescending = false;	
 		}
-		if(_isDescending)
+		else if(_isDescending && isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
 		{
-			if(isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
-			{
-				const Sensor& sensor = *(Sensor*)message.getParam();
-				((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
-				_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
-			}
-			else if(isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
-			{
-				_stateMachine->changeState(ActionStateID::TURN);
-			}
+			const Sensor& sensor = *(Sensor*)message.getParam();
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
 		}
+		else if(_isDescending && isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
+		{
+			_stateMachine->changeState(ActionStateID::TURN);
+		}
+
 	}
 
 	void Fall::enter(void)
@@ -132,17 +130,13 @@ namespace Temporal
 	void Walk::enter(void)
 	{
 		_stillWalking = true;
+		_noFloor = false;
+		_noFloorTimer.reset();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
-		Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 	}
 
-	void Walk::exit(void)
-	{
-		Vector stop = Vector::Zero;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &stop));
-	}
-
+	// BRODER
+	const float Walk::NO_FLOOR_TIME_TO_FALL_IN_MILLIS = 50.0f;
 
 	void Walk::handleMessage(Message& message)
 	{
@@ -159,16 +153,31 @@ namespace Temporal
 		{
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() >= 0.0f)
-				_stateMachine->changeState(ActionStateID::FALL);
+				_noFloor = true;
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(!_stillWalking)
+			float framePeriodInMillis = *(float*)message.getParam();
+			
+			if(_noFloor)
+				_noFloorTimer.update(framePeriodInMillis);
+			else
+				_noFloorTimer.reset();
+			_noFloor = false;
+
+			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. Therefore we only fall when some time has passed
+			if(_noFloorTimer.getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
+			{
+				_stateMachine->changeState(ActionStateID::FALL);
+			}
+			else if(!_stillWalking)
 			{
 				_stateMachine->changeState(ActionStateID::STAND);
 			}
 			else
 			{
+				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
+				_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 				_stillWalking = false;
 			}
 		}
@@ -286,12 +295,6 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		AnimationID::Enum animation = jumpInfo.getJumpAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
-	}
-
-	void Jump::exit(void)
-	{
-		Vector stop = Vector::Zero;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &stop));
 	}
 
 	void Jump::handleMessage(Message& message)

@@ -17,8 +17,8 @@ namespace Temporal
 	{
 		Size screenSize = Size(1024.0f, 768.0f);
 		ViewManager::get().init(screenSize, 768.0f);
-		Size worldSize = Size(screenSize);
-		ViewManager::get().setLevelBounds(screenSize);
+		Size worldSize = Size(screenSize.getWidth() * 2.0f, screenSize.getHeight());
+		ViewManager::get().setLevelBounds(worldSize);
 		Grid::get().init(worldSize, 128.0f);
 		DebugInfo::get().setShowingFPS(true);
 
@@ -32,12 +32,12 @@ namespace Temporal
 		Input::get().update();
 		
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 		
 		ViewManager::get().update();
 		
 		if(Input::get().isQuit())
 		{
+			//const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 			//EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&position));
 			Game::get().stop();
 		}

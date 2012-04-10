@@ -40,19 +40,15 @@ namespace Temporal
 			float penetration = rect.getRadius().getAxis(axis) + segmentRadius.getAxis(axis) - abs(segmentCenterAxis);
 			if (penetration < 0.0f) return false;
 
-			// Hack to prevent player from falling off edges
-			if(penetration - minCorrection.getLength() < 0.0f)
+			if(penetration < minCorrection.getLength())
 			{
 				minCorrection = Vector::Zero;
 				minCorrection.setAxis(axis, segmentCenterAxis < 0.0f ? penetration : -penetration);
 			}
 		}
-		float segmentRadiusX = segmentRadius.getVx();
-		float segmentRadiusY = segmentRadius.getVy();
 
-		// Try cross products of segment direction vector with coordinate axes
-
-		Vector normal = Vector(segmentRadiusY, -segmentRadiusX) / segmentRadius.getLength();
+		Vector vector = seg.getPoint2() - seg.getPoint1();
+		Vector normal = Vector(vector.getVy(), -vector.getVx()) / vector.getLength();
 
 		float point = Vector(seg.getCenter()) * normal;
 		float val = Vector(rect.getLeft(), rect.getBottom()) * normal;
@@ -68,11 +64,11 @@ namespace Temporal
 		min = std::min(min, val);
 		max = std::max(max, val);
 		if(min > point || max < point) return false;
-		float correction1 = max - point;
-		float correction2 = point - min;
-		float test = std::min(correction1, correction2);
-		if(test < minCorrection.getLength())
-			minCorrection = -(test * normal);
+		float penetration1 = max - point;
+		float penetration2 = point - min;
+		float minPenetration = std::min(penetration1, penetration2);
+		if(minPenetration < minCorrection.getLength())
+			minCorrection = -(minPenetration * normal);
 		
 		// No separating axis found; segment must be overlapping AABB
 		if(correction != NULL)

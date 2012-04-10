@@ -23,11 +23,14 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	private:
+		const float MAX_MOVEMENT_STEP_SIZE;
+		
 		Size _size;
-		Vector _absoluteImpulse;
 		Vector _velocity;
+		Vector _absoluteImpulse;
 		bool _gravityEnabled;
 		Vector _collision;
+		Vector _groundVector;
 
 		Rectangle getBounds(void) const;
 		Orientation::Enum getOrientation(void) const;

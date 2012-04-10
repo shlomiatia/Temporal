@@ -2,6 +2,7 @@
 #define ACTIONCONTROLLER_H
 
 #include <Temporal\Base\BaseEnums.h>
+#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
@@ -158,14 +159,17 @@ namespace Temporal
 	class Walk : public ComponentState
 	{
 	public:
-		Walk(void) : _stillWalking(false) {};
+		Walk(void) : _stillWalking(false), _noFloor(false) {};
 
 		void enter(void);
-		void exit(void);
 		void handleMessage(Message& message);
 
 	private:
+		static const float NO_FLOOR_TIME_TO_FALL_IN_MILLIS;
+
 		bool _stillWalking;
+		bool _noFloor;
+		Timer _noFloorTimer;
 	};
 
 	class Turn : public ComponentState
@@ -205,7 +209,6 @@ namespace Temporal
 		Jump(void) {};
 
 		void enter(void);
-		void exit(void);
 		void handleMessage(Message& message);
 	};
 
