@@ -62,6 +62,13 @@ namespace Temporal
 		return NULL;
 	}
 
+	bool canJumpForward(StateMachineComponent* component)
+	{
+		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
+		Orientation::Enum orientation = *(Orientation::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		return orientation * groundVector.getVy() <= 0.0f || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
+	}
+
 	void Stand::enter(void)
 	{
 		_isDescending = false;
@@ -141,8 +148,11 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
+			if(canJumpForward(_stateMachine))
+			{
+				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+				_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
+			}
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
@@ -268,7 +278,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
 			JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
-			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected())
+			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
 			{
 				jumpHelper.setInfo(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(ActionStateID::JUMP_START);

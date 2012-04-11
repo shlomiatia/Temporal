@@ -51,6 +51,10 @@ namespace Temporal
 			Rectangle* outParam = (Rectangle*)message.getParam();
 			*outParam = getBounds();
 		}
+		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
+		{
+			message.setParam(&_groundVector);
+		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			Rectangle bounds = getBounds();
@@ -164,7 +168,9 @@ namespace Temporal
 		{
 			const Segment& segment = (Segment&)staticBodyBounds;
 
-			Vector platformVector = segment.getPoint2() - segment.getPoint1();
+			Vector platformVector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
+																  segment.getPoint2() - segment.getPoint1() :
+																  segment.getPoint1() - segment.getPoint2();
 			float absAngle = abs(platformVector.getAngle());
 
 			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS ||absAngle >= ANGLE_135_IN_RADIANS;
