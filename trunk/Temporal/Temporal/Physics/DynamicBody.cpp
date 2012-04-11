@@ -2,6 +2,7 @@
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "Grid.h"
+#include <Temporal\Base\Math.h>
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Game\Message.h>
@@ -59,13 +60,10 @@ namespace Temporal
 		{
 			const Vector& param = *(Vector*)message.getParam();
 			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
-			if(timeBasedImpulse == Vector::Zero)
-				_velocity = Vector::Zero;
-			else
-			{
-				_velocity.setVx(0.0f);
-				_velocity += timeBasedImpulse;
-			}
+
+			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
+			_velocity.setVx(0.0f);
+			_velocity += timeBasedImpulse;
 		}
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
@@ -100,13 +98,20 @@ namespace Temporal
 	{
 		float interpolation = framePeriodInMillis / 1000.0f;
 
-		// Only one of this components should be non zero
-		Vector movement = _velocity * interpolation + _absoluteImpulse;
-
-		// If moving horizontally on the ground, we adjust to movement according to the ground vector
-		if(movement.getVy() == 0.0f && movement.getVx() != 0.0f && _groundVector != Vector::Zero && _absoluteImpulse == Vector::Zero)
+		Vector movement = Vector::Zero;
+		if(_absoluteImpulse != Vector::Zero)
 		{
-			movement = _groundVector * movement.getLength();
+			movement = _absoluteImpulse;
+		}
+		else
+		{
+			movement = _velocity * interpolation;
+
+			// If moving horizontally on the ground, we adjust to movement according to the ground vector
+			if(movement.getVy() == 0.0f && movement.getVx() != 0.0f && _groundVector != Vector::Zero)
+			{
+				movement = (movement.getVx() > 0.0f ? 1.0f : -1.0f) * _groundVector * movement.getLength();
+			}
 		}
 		// Apply gravity if needed
 		if(_gravityEnabled)
@@ -118,7 +123,7 @@ namespace Temporal
 		_collision = Vector::Zero;
 		_groundVector = Vector::Zero;
 
-		// If the movement is to big, we'll divide it to smaller chuncks
+		// If the movement is too big, we'll divide it to smaller chuncks
 		while(movement != Vector::Zero)
 		{
 			Vector stepMovement = Vector::Zero;
@@ -129,6 +134,7 @@ namespace Temporal
 			{
 				stepMovement = movement;
 			}
+			// Calculate step movement
 			else
 			{
 				float ratio = MAX_MOVEMENT_STEP_SIZE / movementAmount;
@@ -138,7 +144,6 @@ namespace Temporal
 			
 			movement -= stepMovement;
 			changePosition(stepMovement);
-
 			Rectangle bounds = getBounds();
 			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
 			if(_collision != Vector::Zero)
@@ -159,10 +164,14 @@ namespace Temporal
 		{
 			const Segment& segment = (Segment&)staticBodyBounds;
 
-			// If got collision from below, Calculate ground vector
-			if(correction.getVy() >= 0.0f && segment.getPoint1().getX() != segment.getPoint2().getX())
+			Vector platformVector = segment.getPoint2() - segment.getPoint1();
+			float absAngle = abs(platformVector.getAngle());
+
+			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS ||absAngle >= ANGLE_135_IN_RADIANS;
+
+			// If got collision from below, calculate ground vector. Only do this for moderate slopes
+			if(correction.getVy() >= 0.0f && isModerateSlope)
 			{
-				Vector platformVector = getOrientation() == Orientation::RIGHT ? segment.getPoint2() - segment.getPoint1() : segment.getPoint1() - segment.getPoint2();
 				platformVector = platformVector.normalize();
 				if(_groundVector == Vector::Zero)
 					_groundVector = platformVector;
@@ -170,14 +179,23 @@ namespace Temporal
 					_groundVector = (_groundVector + platformVector) / 2.0f;
 			}
 
+			//BRODER
+			bool isOnPlatformTopSide =  (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
+										 dynamicBodyBounds.getRight() >= segment.getRight()) &&
+										 dynamicBodyBounds.getBottom() + 20.0f >= segment.getTop();
+
+			// Affect velocity on moderate slopes, and on steep slopes/walls where we're just entering them from above
+			bool affectVelocity = isModerateSlope || isOnPlatformTopSide;
+
 			// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-			if(abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f)
+			if(affectVelocity && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
 			{	
 				float x1 = segment.getPoint1().getX();
 				float x2 = segment.getPoint2().getX();
 				float y1 = segment.getPoint1().getY();
 				float y2 = segment.getPoint2().getY();
 				float y = 0.0f;
+
 				// Wall - take top
 				if(x1 == x2)
 				{
@@ -194,20 +212,15 @@ namespace Temporal
 				float yCorrection = y - dynamicBodyBounds.getBottom();
 
 				// BRODER
-				correction = Vector(0, yCorrection);
+				if(yCorrection < 20.0f)
+					correction = Vector(0, yCorrection);
 			}
-			// Stop the actor where the correction was applied
-			for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
-			{
-				if(correction.getAxis(axis) * _velocity.getAxis(axis) < 0.0f)
-				{
-					_velocity.setAxis(axis, 0.0f);
-				}
-			}
-
-			// Do not accumalte velocity if on a floor
-			if(correction.getVy() >= 0.0f)
+			// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
+			if(affectVelocity && (correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
 				_velocity.setVx(0.0f);
+			if(affectVelocity && correction.getVy() * _velocity.getVy() < 0.0f)
+				_velocity.setVy(0.0f);
+
 			changePosition(correction);
 			_collision -= correction;
 		}

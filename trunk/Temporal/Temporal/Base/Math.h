@@ -13,5 +13,10 @@ namespace Temporal
 	static const float ANGLE_75_IN_RADIANS = 5.0f * PI / 12.0f; // 75 = 5 * PI / 12
 	static const float ANGLE_90_IN_RADIANS = PI / 2.0f; // 90 = 6 * PI / 12 = PI / 2
 	static const float ANGLE_105_IN_RADIANS = 7.0f * PI / 12.0f; // 105 = 7 * PI / 12
+	static const float ANGLE_120_IN_RADIANS = 2.0f * PI / 3.0f; // 120 = 8 * PI / 12 = 2 * PI / 3
+	static const float ANGLE_135_IN_RADIANS = 3.0f * PI / 4.0f; // 120 = 9 * PI / 12 = 3 * PI / 4
+	static const float ANGLE_150_IN_RADIANS = 5.0f * PI / 6.0f; // 120 = 10 * PI / 12 = 5 * PI / 6
+	static const float ANGLE_165_IN_RADIANS = 11.0f * PI / 12.0f; // 120 = 11 * PI / 12 = 2 * PI /3
+	static const float ANGLE_180_IN_RADIANS = PI; // 120 = 12 * PI / 12 = PI
 }
 #endif

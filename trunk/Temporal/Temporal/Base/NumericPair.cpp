@@ -10,6 +10,11 @@ namespace Temporal
 		return sqrt(pow(getVx(), 2.0f) + pow(getVy(), 2.0f));
 	}
 
+	float Vector::getAngle(void) const
+	{
+		return atan2(getVy(), getVx());
+	}
+
 	Vector Vector::normalize(void) const
 	{
 		return *this / getLength();
