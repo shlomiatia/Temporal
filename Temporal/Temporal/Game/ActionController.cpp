@@ -6,7 +6,6 @@
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
 #include <Temporal\Physics\StaticBody.h>
-#include <Temporal\Base\Thread.h>
 
 namespace Temporal
 {
@@ -165,7 +164,8 @@ namespace Temporal
 				_noFloorTimer.reset();
 			_noFloor = false;
 
-			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. Therefore we only fall when some time has passed
+			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. 
+			// Therefore we only fall when some time has passed
 			if(_noFloorTimer.getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
 			{
 				_stateMachine->changeState(ActionStateID::FALL);
@@ -176,6 +176,8 @@ namespace Temporal
 			}
 			else
 			{
+				// We need to apply this every update because the ground has infinite restitution. 
+				// Also, if we're in the midair (explained how it can happen in the previous comment), this will maintain a steady speed
 				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 				_stillWalking = false;
@@ -310,10 +312,6 @@ namespace Temporal
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() < 0.0f)
 				_stateMachine->changeState(ActionStateID::JUMP_END);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-		//	Thread::sleep(100);
 		}
 	}
 

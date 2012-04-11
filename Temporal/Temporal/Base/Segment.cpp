@@ -13,7 +13,7 @@ namespace Temporal
 	float DirectedSegment::getAngle(void) const
 	{
 		Vector vector = getVector();
-		return atan2(vector.getVy(), vector.getVx());
+		return vector.getAngle();
 	}
 
 	Vector DirectedSegment::getVector(void) const
