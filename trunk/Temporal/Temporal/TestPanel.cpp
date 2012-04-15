@@ -86,7 +86,7 @@ namespace Temporal
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE));
+		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -99,7 +99,7 @@ namespace Temporal
 		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		Sensor* sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -109,7 +109,7 @@ namespace Temporal
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::FRONT, Direction::NONE);
+		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -119,7 +119,7 @@ namespace Temporal
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, Direction::BOTTOM | Direction::BACK, Direction::NONE);
+		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -355,7 +355,7 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(1888.0f, 192.0f, 1920.0f, 192.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1920.0f, 192.0f, 1984.0f, 0.0f), spritesheet));
 
-		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 192.0f, 1152.0f, 192.0f), spritesheet));
+		//EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 192.0f, 1152.0f, 192.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1152.0f, 192.0f, 1280.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1280.0f, 256.0f, 1344.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1344.0f, 256.0f, 1472.0f, 192.0f), spritesheet));
