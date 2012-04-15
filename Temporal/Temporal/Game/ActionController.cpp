@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "MessageParams.h"
 #include "MovementUtils.h"
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Physics\Sensor.h>
@@ -24,10 +25,9 @@ namespace Temporal
 			delete *i;
 	}
 
-	void HangDescendHelper::setPlatformFromSensor(const Sensor& sensor)
+	void HangDescendHelper::setPointFromSensor(const Sensor& sensor)
 	{
-		const Shape& shape = sensor.getSensedBody()->getShape();
-		_platform = &shape;
+		_point = sensor.getPoint();
 	}
 
 	StateCollection ActionController::getStates() const
@@ -101,7 +101,7 @@ namespace Temporal
 		else if(_isDescending && isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
 		}
 		else if(_isDescending && isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
@@ -122,7 +122,7 @@ namespace Temporal
 		if (isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
@@ -212,11 +212,11 @@ namespace Temporal
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
 		const Sensor& sensor = *(Sensor*)message.getParam();
-		const Shape& shape = sensor.getSensedBody()->getShape();
+		const Point* point = sensor.getPoint();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		float target = shape.getOppositeSide(orientation);
+		float target = point->getX();
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
@@ -314,7 +314,7 @@ namespace Temporal
 		if (isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPlatformFromSensor(sensor);
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
@@ -343,12 +343,13 @@ namespace Temporal
 	{
 		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		float platformTop = _platform->getTop();
+		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
+		float platformTop = point.getY();
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		float platformEdge = _platform->getOppositeSide(orientation);
+		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float movementX = (platformEdge - entityFront) * orientation;
 		Vector movement(movementX, movementY);
@@ -367,8 +368,6 @@ namespace Temporal
 
 	void PrepareToHang::enter(void)
 	{
-		_platform = &((ActionController*)_stateMachine)->getHangDescendHelper().getPlatform();
-
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
@@ -471,7 +470,8 @@ namespace Temporal
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
-		float platformEdge = _platform->getOppositeSide(orientation) + 1.0f * orientation;
+		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
+		float platformEdge = point.getX() + 1.0f * orientation;
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
 		if(moveX != 0.0f)
@@ -481,7 +481,7 @@ namespace Temporal
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
-			float platformTop = _platform->getTop();
+			float platformTop = point.getY();
 			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(ActionStateID::DESCEND);
@@ -490,8 +490,6 @@ namespace Temporal
 
 	void PrepareToDescend::enter(void)
 	{
-		_platform = &((ActionController*)_stateMachine)->getHangDescendHelper().getPlatform();
-
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}

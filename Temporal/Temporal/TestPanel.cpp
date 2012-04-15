@@ -343,27 +343,40 @@ namespace Temporal
 		// Cover
 		EntitiesManager::get().add(createPlatform(new Rectangle(RectangleLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
 
-		// Pyramid
+		// 15
 		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 0.0f, 1280.0f, 64.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1280.0f, 64.0f, 1344.0f, 64.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1344.0f, 64.0f, 1536.0f, 0.0f), spritesheet));
+
+		// 45
 		EntitiesManager::get().add(createPlatform(new Segment(1600.0f, 0.0f, 1664.0f, 64.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1664.0f, 64.0f, 1728.0f, 64.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1728.0f, 64.0f, 1792.0f, 0.0f), spritesheet));
 
+		// 75
 		EntitiesManager::get().add(createPlatform(new Segment(1824.0f, 0.0f, 1888.0f, 192.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1888.0f, 192.0f, 1920.0f, 192.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1920.0f, 192.0f, 1984.0f, 0.0f), spritesheet));
 
-		//EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 192.0f, 1152.0f, 192.0f), spritesheet));
+		// 30
 		EntitiesManager::get().add(createPlatform(new Segment(1152.0f, 192.0f, 1280.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1280.0f, 256.0f, 1344.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1344.0f, 256.0f, 1472.0f, 192.0f), spritesheet));
+
 		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 192.0f, 1536.0f, 192.0f), spritesheet));
+
+		// 60
 		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 192.0f, 1600.0f, 320.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1600.0f, 320.0f, 1664.0f, 320.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1664.0f, 320.0f, 1728.0f, 192.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1728.0f, 192.0f, 1792.0f, 192.0f), spritesheet));
+
+		//EntitiesManager::get().add(createPlatform(new Segment(1728.0f, 192.0f, 1792.0f, 192.0f), spritesheet));
+
+		// 45 Ledge
+		EntitiesManager::get().add(createPlatform(new Segment(1024, 512.0f, 1152.0f, 384.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1152.0f, 640.0f, 1280.0f, 512.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1344.0f, 640.0f, 1472.0f, 512.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1344.0f, 640.0f, 1472.0f, 640.0f), spritesheet));
 
 	}
 
