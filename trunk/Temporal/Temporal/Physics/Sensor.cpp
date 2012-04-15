@@ -21,11 +21,11 @@ namespace Temporal
 
 	void Sensor::update(void)
 	{
-		_sensedBody = NULL;
+		_point = NULL;
 		
 		Rectangle bounds = getBounds();
 		Grid::get().iterateTiles(bounds, this, NULL, sense);
-		if(_sensedBody != NULL)
+		if(_point != NULL)
 		{
 			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, this));
 		}
@@ -39,7 +39,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(getBounds(), getSensedBody() != NULL ? Color::Green : Color::Red);
+			Graphics::get().draw(getBounds(), getPoint() != NULL ? Color::Green : Color::Red);
 		}
 	}
 
@@ -78,16 +78,15 @@ namespace Temporal
 					if(distance <= _rangeSize / 2.0f)
 					{
 						isSensing = true;
-						
 					}
 				}
 				if(isSensing)
 				{
-					_sensedBody = &staticBody;
+					_point = sensorBounds.contains(segment.getPoint1()) ? &(segment.getPoint1()) : &(segment.getPoint2());
 				}
 				else
 				{
-					_sensedBody = NULL;
+					_point = NULL;
 					return false;
 				}
 			}

@@ -7,7 +7,7 @@
 
 namespace Temporal
 {
-	class Shape;
+	class Point;
 	class Sensor;
 
 	// BRODER
@@ -105,12 +105,12 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _platform(NULL) {}
+		HangDescendHelper(void) : _point(NULL) {}
 
-		void setPlatformFromSensor(const Sensor& sensor);
-		const Shape& getPlatform(void) const { return *_platform; }
+		void setPointFromSensor(const Sensor& sensor);
+		const Point& getPoint(void) const { return *_point; }
 	private:
-		const Shape* _platform;
+		const Point* _point;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
@@ -224,14 +224,12 @@ namespace Temporal
 	class PrepareToHang : public ComponentState
 	{
 	public:
-		PrepareToHang(void) : _platform(NULL) {};
+		PrepareToHang(void) {};
 
 		void enter(void);
 		void handleMessage(Message& message);
 
 	private:
-		const Shape* _platform;
-
 		void update(void);
 	};
 
@@ -279,14 +277,12 @@ namespace Temporal
 	class PrepareToDescend : public ComponentState
 	{
 	public:
-		PrepareToDescend(void) : _platform(NULL) {};
+		PrepareToDescend(void) {};
 
 		void enter(void);
 		void handleMessage(Message& message);
 
 	private:
-		const Shape* _platform;
-
 		void update(void);
 	};
 
