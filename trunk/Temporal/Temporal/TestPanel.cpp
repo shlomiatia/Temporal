@@ -382,12 +382,13 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(1664.0f, 512.0f, 1728.0f, 384.0f), spritesheet));
 
 		// Platforms
-		EntitiesManager::get().add(createPlatform(new Segment(1983.0f, 384.0f, 2047.0f, 384.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1855.0f, 384.0f, 2047.0f, 384.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 512.0f, 1983.0f, 512.0f), spritesheet));
 
 		// V
 		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet));
 		
 
 		// Platforms
