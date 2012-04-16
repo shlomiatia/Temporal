@@ -222,10 +222,20 @@ namespace Temporal
 					correction = Vector(0, yCorrection);
 			}
 			// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
-			if(affectVelocity && (correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
-				_velocity.setVx(0.0f);
-			if(affectVelocity && correction.getVy() * _velocity.getVy() < 0.0f)
-				_velocity.setVy(0.0f);
+			if(affectVelocity)
+			{
+				if((correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
+					_velocity.setVx(0.0f);
+				if(correction.getVy() * _velocity.getVy() < 0.0f)
+					_velocity.setVy(0.0f);
+			}
+			else if(!isModerateSlope && absAngle != ANGLE_90_IN_RADIANS && _velocity != Vector::Zero)
+			{
+				if(platformVector.getVy() > 0.0f) platformVector = -platformVector;
+
+				// BRODER
+				_velocity = platformVector.normalize() * 500.0f;
+			}
 
 			changePosition(correction);
 			_collision -= correction;
