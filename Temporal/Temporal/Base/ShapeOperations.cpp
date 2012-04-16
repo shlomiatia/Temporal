@@ -47,8 +47,15 @@ namespace Temporal
 			}
 		}
 
+		// y = mx + b;
+		// b = y - mx;
+		float m =  (seg.getPoint2().getY() - seg.getPoint1().getY()) / (seg.getPoint2().getX() - seg.getPoint1().getX());
+		float b = seg.getPoint1().getY() - m * seg.getPoint1().getX();
+		float y = m * rect.getCenterX() + b;
+
 		Vector vector = seg.getPoint2() - seg.getPoint1();
-		Vector normal = Vector(vector.getVy(), -vector.getVx()) / vector.getLength();
+
+		Vector normal = y <= rect.getCenterY() ? Vector(vector.getVy(), -vector.getVx()) / vector.getLength() : Vector(-vector.getVy(), vector.getVx()) / vector.getLength();
 
 		float point = Vector(seg.getCenter()) * normal;
 		float val = Vector(rect.getLeft(), rect.getBottom()) * normal;

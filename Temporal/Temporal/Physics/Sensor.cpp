@@ -57,16 +57,27 @@ namespace Temporal
 				const Segment& segment = (const Segment&)shape;
 
 				// Then check if contain one of the edges
-				if(sensorBounds.contains(segment.getPoint1()) || sensorBounds.contains(segment.getPoint2()))
+				
+				const Point* point = NULL;
+				if(sensorBounds.contains(segment.getPoint1()))
+					point = &(segment.getPoint1());
+				else if(sensorBounds.contains(segment.getPoint2()))
+					point = &(segment.getPoint2());
+				if(point != NULL)
 				{
+					// TODO: X equals
 					Vector vector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
 																  segment.getPoint2() - segment.getPoint1() :
 																  segment.getPoint1() - segment.getPoint2();
-					float angle = vector.getAngle();
-
+					
 					// Modify the angle according to relative position
-					if(sensorBounds.getTop() >= shape.getTop()) angle = -angle;
-					if(sensorBounds.getRight() >= shape.getRight()) angle = PI - angle;
+
+					if((vector.getVx() == 0.0f && shape.getTop() == point->getY()) ||
+					   (vector.getVx() != 0.0f && shape.getRight() == point->getX())) 
+					{
+					   vector = -vector;
+					}
+					float angle = vector.getAngle();
 					Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
 					// Flip the range if looking backwards
@@ -82,7 +93,7 @@ namespace Temporal
 				}
 				if(isSensing)
 				{
-					_point = sensorBounds.contains(segment.getPoint1()) ? &(segment.getPoint1()) : &(segment.getPoint2());
+					_point = point;
 				}
 				else
 				{
