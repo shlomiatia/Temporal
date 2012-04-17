@@ -73,7 +73,7 @@ namespace Temporal
 	};
 
 	static const Size ENTITY_SIZE(20.0f, 80.0f);
-	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 2.0f);
+	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
 
 	void addJumpSensor(Entity& entity)
 	{
@@ -107,7 +107,7 @@ namespace Temporal
 	{
 		// Back Edge Sensor
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
@@ -117,7 +117,7 @@ namespace Temporal
 	{
 		// Front edge sensor
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f);
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);

@@ -30,11 +30,12 @@ namespace Temporal
 		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		// Check orientation
+		// TODO: Same sign
 		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
 			return;
 
 		// Check field of view
-		// BRODER
+		// TODO: Maybe can be simplified
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
 		if(angle < 0.0f) angle = 2*PI + angle;

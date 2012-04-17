@@ -47,35 +47,39 @@ namespace Temporal
 			}
 		}
 
-		// y = mx + b;
-		// b = y - mx;
-		float m =  (seg.getPoint2().getY() - seg.getPoint1().getY()) / (seg.getPoint2().getX() - seg.getPoint1().getX());
-		float b = seg.getPoint1().getY() - m * seg.getPoint1().getX();
-		float y = m * rect.getCenterX() + b;
+		// TODO : Point on line
+		if(seg.getPoint1().getX() != seg.getPoint2().getX())
+		{
+			float m =  (seg.getPoint2().getY() - seg.getPoint1().getY()) / (seg.getPoint2().getX() - seg.getPoint1().getX());
+			float b = seg.getPoint1().getY() - m * seg.getPoint1().getX();
+			float y = m * rect.getCenterX() + b;
 
-		Vector vector = seg.getPoint2() - seg.getPoint1();
+			Vector vector = seg.getPoint2() - seg.getPoint1();
 
-		Vector normal = y <= rect.getCenterY() ? Vector(vector.getVy(), -vector.getVx()) / vector.getLength() : Vector(-vector.getVy(), vector.getVx()) / vector.getLength();
+			// TODO: Left/Right normal
+			Vector normal = y <= rect.getCenterY() ? Vector(vector.getVy(), -vector.getVx()) / vector.getLength() : Vector(-vector.getVy(), vector.getVx()) / vector.getLength();
 
-		float point = Vector(seg.getCenter()) * normal;
-		float val = Vector(rect.getLeft(), rect.getBottom()) * normal;
-		float min = val;
-		float max = val;
-		val = Vector(rect.getLeft(), rect.getTop()) * normal;
-		min = std::min(min, val);
-		max = std::max(max, val);
-		val = Vector(rect.getRight(), rect.getBottom()) * normal;
-		min = std::min(min, val);
-		max = std::max(max, val);
-		val = Vector(rect.getRight(), rect.getTop()) * normal;
-		min = std::min(min, val);
-		max = std::max(max, val);
-		if(min > point || max < point) return false;
-		float penetration1 = max - point;
-		float penetration2 = point - min;
-		float minPenetration = std::min(penetration1, penetration2);
-		if(minPenetration < minCorrection.getLength())
-			minCorrection = -(minPenetration * normal);
+			// TODO: Book
+			float point = Vector(seg.getCenter()) * normal;
+			float val = Vector(rect.getLeft(), rect.getBottom()) * normal;
+			float min = val;
+			float max = val;
+			val = Vector(rect.getLeft(), rect.getTop()) * normal;
+			min = std::min(min, val);
+			max = std::max(max, val);
+			val = Vector(rect.getRight(), rect.getBottom()) * normal;
+			min = std::min(min, val);
+			max = std::max(max, val);
+			val = Vector(rect.getRight(), rect.getTop()) * normal;
+			min = std::min(min, val);
+			max = std::max(max, val);
+			if(min > point || max < point) return false;
+			float penetration1 = max - point;
+			float penetration2 = point - min;
+			float minPenetration = std::min(penetration1, penetration2);
+			if(minPenetration < minCorrection.getLength())
+				minCorrection = -(minPenetration * normal);
+		}
 		
 		// No separating axis found; segment must be overlapping AABB
 		if(correction != NULL)
@@ -135,6 +139,7 @@ namespace Temporal
 		float a1 = signed2DTriArea(dirSeg.getPoint1(), dirSeg.getPoint2(), seg.getPoint2()); // Compute winding of abd (+ or -)
 		float a2 = signed2DTriArea(dirSeg.getPoint1(), dirSeg.getPoint2(), seg.getPoint1()); // To intersect, must have sign opposite of a1
 		// If c and d are on different sides of ab, areas have different signs
+		// TODO: Same sign
 		if (a1 * a2 < 0.0f) 
 		{
 			// Compute signs for a and b with respect to segment cd
