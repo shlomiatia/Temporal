@@ -561,7 +561,7 @@ namespace Temporal
 
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
-		//createSentry(spritesheet);
+		createSentry(spritesheet);
 		//createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();

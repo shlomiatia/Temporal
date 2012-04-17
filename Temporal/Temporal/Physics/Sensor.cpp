@@ -65,10 +65,7 @@ namespace Temporal
 				if(point != NULL)
 				{
 					// TODO: Unify with sight
-					// TODO: X equals
-					Vector vector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
-																  segment.getPoint2() - segment.getPoint1() :
-																  segment.getPoint1() - segment.getPoint2();
+					Vector vector = segment.getNaturalVector();
 					
 					// Modify the angle according to relative position
 					if((vector.getVx() == 0.0f && shape.getTop() == point->getY()) ||

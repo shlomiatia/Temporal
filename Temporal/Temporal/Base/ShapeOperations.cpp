@@ -2,6 +2,7 @@
 
 #include "Rectangle.h"
 #include "Segment.h"
+#include "Math.h"
 #include <math.h>
 #include <algorithm>
 
@@ -47,17 +48,13 @@ namespace Temporal
 			}
 		}
 
-		// TODO : Point on line
 		if(seg.getPoint1().getX() != seg.getPoint2().getX())
 		{
-			float m =  (seg.getPoint2().getY() - seg.getPoint1().getY()) / (seg.getPoint2().getX() - seg.getPoint1().getX());
-			float b = seg.getPoint1().getY() - m * seg.getPoint1().getX();
-			float y = m * rect.getCenterX() + b;
+			float y = seg.getY(rect.getCenterX());
 
-			Vector vector = seg.getPoint2() - seg.getPoint1();
+			Vector vector = seg.getNaturalVector().normalize();
 
-			// TODO: Left/Right normal
-			Vector normal = y <= rect.getCenterY() ? Vector(vector.getVy(), -vector.getVx()) / vector.getLength() : Vector(-vector.getVy(), vector.getVx()) / vector.getLength();
+			Vector normal = y <= rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
 
 			// TODO: Book
 			float point = Vector(seg.getCenter()) * normal;
@@ -136,19 +133,18 @@ namespace Temporal
 	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection)
 	{
 		// Sign of areas correspond to which side of ab points c and d are
-		float a1 = signed2DTriArea(dirSeg.getPoint1(), dirSeg.getPoint2(), seg.getPoint2()); // Compute winding of abd (+ or -)
-		float a2 = signed2DTriArea(dirSeg.getPoint1(), dirSeg.getPoint2(), seg.getPoint1()); // To intersect, must have sign opposite of a1
+		float a1 = signed2DTriArea(dirSeg.getOrigin(), dirSeg.getTarget(), seg.getPoint2()); // Compute winding of abd (+ or -)
+		float a2 = signed2DTriArea(dirSeg.getOrigin(), dirSeg.getTarget(), seg.getPoint1()); // To intersect, must have sign opposite of a1
 		// If c and d are on different sides of ab, areas have different signs
-		// TODO: Same sign
-		if (a1 * a2 < 0.0f) 
+		if (differentSign(a1, a2))
 		{
 			// Compute signs for a and b with respect to segment cd
-			float a3 = signed2DTriArea(seg.getPoint1(), seg.getPoint2(), dirSeg.getPoint1()); // Compute winding of cda (+ or -)
+			float a3 = signed2DTriArea(seg.getPoint1(), seg.getPoint2(), dirSeg.getOrigin()); // Compute winding of cda (+ or -)
 			// Since area isant a1 - a2 = a3 - a4, or a4 = a3 + a2 - a1
 			// float a4 = Signed2DTriArea(c, d, b); // Must have opposite sign of a3
 			float a4 = a3 + a2 - a1;
 			// Points a and b on different sides of cd if areas have different signs
-			if (a3 * a4 < 0.0f) 
+			if (differentSign(a3, a4)) 
 			{
 				// Segments intersect. Find intersection point along L(t) = a + t * (b - a).
 				// Given height h1 of an over cd and height h2 of b over cd,
@@ -157,7 +153,7 @@ namespace Temporal
 				// of cd) cancels out.
 				float t = a3 / (a3 - a4);
 				if(pointOfIntersection != NULL)
-					*pointOfIntersection = dirSeg.getPoint1() + t * (dirSeg.getPoint2() - dirSeg.getPoint1());
+					*pointOfIntersection = dirSeg.getOrigin() + t * (dirSeg.getTarget() - dirSeg.getOrigin());
 				return true;
 			}
 		}

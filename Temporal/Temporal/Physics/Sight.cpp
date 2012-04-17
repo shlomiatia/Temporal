@@ -30,8 +30,7 @@ namespace Temporal
 		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		// Check orientation
-		// TODO: Same sign
-		if((targetPosition.getX() - sourcePosition.getX()) * sourceOrientation < 0.0f)
+		if(differentSign(targetPosition.getX() - sourcePosition.getX(), sourceOrientation))
 			return;
 
 		// Check field of view
