@@ -64,7 +64,6 @@ namespace Temporal
 					point = &(segment.getPoint2());
 				if(point != NULL)
 				{
-					// TODO: Unify with sight
 					Vector vector = segment.getNaturalVector();
 					
 					// Modify the angle according to relative position
@@ -77,11 +76,10 @@ namespace Temporal
 					Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
 					// Flip the range if looking backwards
-					float rangeCenter = orientation == Orientation::RIGHT ? _rangeCenter : PI - _rangeCenter;
+					float rangeCenter = orientation == Orientation::RIGHT ? _rangeCenter : mirroredAngle( _rangeCenter);
 
 					// Check distance
-					float clockwiseDistance = abs(rangeCenter - angle);
-					float distance = std::min(clockwiseDistance,  abs(2*PI - clockwiseDistance));
+					float distance = minAnglesDistance(rangeCenter, angle);
 					if(distance <= _rangeSize / 2.0f)
 					{
 						isSensing = true;

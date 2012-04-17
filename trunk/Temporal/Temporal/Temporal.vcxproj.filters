@@ -91,5 +91,6 @@
     <ClCompile Include="Game\MovementUtils.cpp" />
     <ClCompile Include="Base\Rectangle.cpp" />
     <ClCompile Include="Base\ShapeOperations.cpp" />
+    <ClCompile Include="Base\Math.cpp" />
   </ItemGroup>
 </Project>

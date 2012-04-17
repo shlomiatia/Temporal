@@ -34,13 +34,10 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		// TODO: Maybe can be simplified
 		DirectedSegment directedSegment(sourcePosition, targetPosition);
 		float angle = directedSegment.getAngle();
-		if(angle < 0.0f) angle = 2*PI + angle;
-		float sightCenter = sourceOrientation == Orientation::RIGHT ? _sightCenter : PI - _sightCenter;
-		float clockwiseDistance = abs(sightCenter - angle);
-		float distance = std::min(clockwiseDistance,  2*PI - clockwiseDistance);
+		float sightCenter = sourceOrientation == Orientation::RIGHT ? _sightCenter : mirroredAngle(_sightCenter);
+		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
 		_isSeeing = directedSegmentCast(directedSegment);

@@ -68,6 +68,7 @@
     <ClCompile Include="AI\Patrol.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Base\Color.cpp" />
+    <ClCompile Include="Base\Math.cpp" />
     <ClCompile Include="Base\Rectangle.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\ShapeOperations.cpp" />

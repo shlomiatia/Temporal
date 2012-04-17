@@ -93,6 +93,8 @@ namespace Temporal
 		void setVy(float n2) { _n2 = n2; }
 
 		float getLength(void) const;
+
+		// Angle is between -180 to 180 (-PI to PI)
 		float getAngle(void) const;
 		Vector normalize(void) const;
 		Vector getRightNormal(void) const { return Vector(-getVy(), getVx()); }

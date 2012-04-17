@@ -21,5 +21,11 @@ namespace Temporal
 
 	inline bool sameSign(float a, float b) { return (a < 0.0f && b < 0.0f) || (a > 0.0f && b > 0.0f); }
 	inline bool differentSign(float a, float b) { return (a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f); }
+
+	// Works for -PI to PI
+	float mirroredAngle(float angle);
+
+	// Works for -2*PI  to 2*PI
+	float minAnglesDistance(float angle1, float angle2);
 }
 #endif
