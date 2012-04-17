@@ -91,17 +91,17 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::changePosition(const Vector& offset)
+	void DynamicBody::update(float framePeriodInMillis)
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Point newPosition = position + offset;
-		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+		Vector movement = determineMovement(framePeriodInMillis);
+		executeMovement(movement);
 	}
 
-	void DynamicBody::update(float framePeriodInMillis)
+	Vector DynamicBody::determineMovement(float framePeriodInMillis)
 	{
 		float interpolation = framePeriodInMillis / 1000.0f;
 
+		// TODO: Determine movement
 		Vector movement = Vector::Zero;
 		if(_absoluteImpulse != Vector::Zero)
 		{
@@ -114,7 +114,7 @@ namespace Temporal
 			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
 			if(movement.getVy() == 0.0f && movement.getVx() != 0.0f && _groundVector != Vector::Zero)
 			{
-				movement = (movement.getVx() > 0.0f ? 1.0f : -1.0f) * _groundVector * movement.getLength();
+				movement = (movement.getVx() > 0.0f ? _groundVector : -_groundVector) * movement.getLength();
 			}
 		}
 		// Apply gravity if needed
@@ -123,11 +123,15 @@ namespace Temporal
 			movement += (GRAVITY * pow(interpolation, 2.0f)) / 2.0f;
 			_velocity += GRAVITY * interpolation;
 		}
-		
+		return movement;
+	}
+
+	void DynamicBody::executeMovement(Vector movement)
+	{
 		_collision = Vector::Zero;
 		_groundVector = Vector::Zero;
 
-		// If the movement is too big, we'll divide it to smaller chuncks
+		// If the movement is too big, we'll divide it to smaller steps
 		while(movement != Vector::Zero)
 		{
 			Vector stepMovement = Vector::Zero;
@@ -149,7 +153,7 @@ namespace Temporal
 			movement -= stepMovement;
 			changePosition(stepMovement);
 			Rectangle bounds = getBounds();
-			Grid::get().iterateTiles(bounds, this, NULL, correctCollision);
+			Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
 			if(_collision != Vector::Zero)
 				break;
 		}
@@ -159,95 +163,117 @@ namespace Temporal
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	bool DynamicBody::correctCollision(const StaticBody& staticBody)
+	bool DynamicBody::detectCollision(const StaticBody& staticBody)
 	{
 		const Shape& staticBodyBounds = staticBody.getShape();
 		const Rectangle& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
 		if(!staticBody.isCover() && intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
-			const Segment& segment = (Segment&)staticBodyBounds;
-
-			Vector platformVector = segment.getNaturalVector();
-			float absAngle = abs(platformVector.getAngle());
-
-			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS;
-
-			// If got collision from below, calculate ground vector. Only do this for moderate slopes
-			if(correction.getVy() >= 0.0f && isModerateSlope)
-			{
-				platformVector = platformVector.normalize();
-				if(_groundVector == Vector::Zero)
-					_groundVector = platformVector;
-				else
-					_groundVector = (_groundVector + platformVector) / 2.0f;
-			}
-
-			//BRODER
-			bool isOnPlatformTopSide =  (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
-										 dynamicBodyBounds.getRight() >= segment.getRight()) &&
-										 dynamicBodyBounds.getBottom() + 20.0f >= segment.getTop();
-
-			// Prevent x movement on moderate slopes, and on steep slopes/walls when they're on platform edges
-			bool preventXMovement = isModerateSlope || isOnPlatformTopSide;
-
-			// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-			// TODO: Sigma
-			if(preventXMovement && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
-			{	
-				float y = 0.0f;
-
-				// Wall or flat floor - Take top
-				if(isOnPlatformTopSide)
-				{
-					y = segment.getTop();
-				}
-				// Slopped floor - take y where the actor stand
-				else
-				{
-					float x1 = segment.getPoint1().getX();
-					float x2 = segment.getPoint2().getX();
-					float y1 = segment.getPoint1().getY();
-					float y2 = segment.getPoint2().getY();
-					float m =  (y2 - y1) / (x2 - x1);
-					float b = y1 - m * x1;
-					float x = m > 0 ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
-					y = m * x + b;
-				}
-				float yCorrection = y - dynamicBodyBounds.getBottom();
-
-				// BRODER
-				if(yCorrection < 20.0f)
-					correction = Vector(0, yCorrection);
-			}
-			// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
-			if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
-				_velocity.setVx(0.0f);
-			if(differentSign(correction.getVy(), _velocity.getVy()))
-				_velocity.setVy(0.0f);
-
-			bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&
-								dynamicBodyBounds.getLeft() < segment.getRight() &&
-								dynamicBodyBounds.getBottom() + 20.0f <= segment.getTop() &&
-								dynamicBodyBounds.getBottom() >= segment.getBottom();
-			// Slide on steep slopes
-			if(!isModerateSlope && absAngle != ANGLE_90_IN_RADIANS && isOnPlatform)
-			{
-				if(platformVector.getVy() > 0.0f) platformVector = -platformVector;
-
-				// BRODER
-				_velocity = platformVector.normalize() * 500.0f;
-			}
-
-			changePosition(correction);
-			_collision -= correction;
+			correctCollision(dynamicBodyBounds, staticBodyBounds, correction);
 		}
 		return true;
 	}
 
-	bool DynamicBody::correctCollision(void* caller, void* data, const StaticBody& staticBody)
+	void DynamicBody::correctCollision(const Rectangle& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction)
+	{
+		const Segment& segment = (Segment&)staticBodyBounds;
+		Vector platformVector = segment.getNaturalVector().normalize();
+		float absAngle = abs(platformVector.getAngle());
+		bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS;
+
+		modifyCorrection(dynamicBodyBounds, segment, correction, isModerateSlope);
+		bool isSteepSlope = !isModerateSlope && absAngle != ANGLE_90_IN_RADIANS;
+		modifyVelocity(dynamicBodyBounds, segment, correction, platformVector, isSteepSlope);
+
+		// If got collision from below, calculate ground vector. Only do this for moderate slopes
+		if(correction.getVy() >= 0.0f && isModerateSlope)
+		{
+			if(_groundVector == Vector::Zero)
+				_groundVector = platformVector;
+			else
+				_groundVector = (_groundVector + platformVector) / 2.0f;
+		}
+
+		changePosition(correction);
+		_collision -= correction;
+	}
+
+	void DynamicBody::modifyCorrection(const Rectangle& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
+	{
+		// BRODER
+		bool isOnPlatformTopSide =  (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
+									 dynamicBodyBounds.getRight() >= segment.getRight()) &&
+									 dynamicBodyBounds.getBottom() + 20.0f >= segment.getTop();
+
+		// Prevent x movement on moderate slopes, and on steep slopes/walls when they're on platform edges
+		bool canModifyCorrection = isModerateSlope || isOnPlatformTopSide;
+
+		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
+		// TODO: Sigma
+		if(canModifyCorrection && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
+		{	
+			float y = 0.0f;
+
+			// Wall or flat floor - Take top
+			if(isOnPlatformTopSide)
+			{
+				y = segment.getTop();
+			}
+			// Slopped floor - take y where the actor stand
+			else
+			{
+				float x1 = segment.getPoint1().getX();
+				float x2 = segment.getPoint2().getX();
+				float y1 = segment.getPoint1().getY();
+				float y2 = segment.getPoint2().getY();
+				float m =  (y2 - y1) / (x2 - x1);
+				float b = y1 - m * x1;
+				float x = m > 0 ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
+				y = m * x + b;
+			}
+			float yCorrection = y - dynamicBodyBounds.getBottom();
+
+			// BRODER
+			if(yCorrection < 20.0f)
+				correction = Vector(0, yCorrection);
+		}
+	}
+
+	void DynamicBody::modifyVelocity(const Rectangle& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
+	{
+		// TODO: Modify velocity
+		// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
+		if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
+			_velocity.setVx(0.0f);
+		if(differentSign(correction.getVy(), _velocity.getVy()))
+			_velocity.setVy(0.0f);
+
+		// BRODER
+		bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&
+							dynamicBodyBounds.getLeft() < segment.getRight() &&
+							dynamicBodyBounds.getBottom() + 20.0f <= segment.getTop() &&
+							dynamicBodyBounds.getBottom() >= segment.getBottom();
+		// Slide on steep slopes
+		if(isSteepSlope && isOnPlatform)
+		{
+			Vector directedPlatformVector = platformVector.getVy() > 0.0f ? -platformVector : platformVector;
+
+			// BRODER
+			_velocity = directedPlatformVector * 500.0f;
+		}
+	}
+
+	void DynamicBody::changePosition(const Vector& offset)
+	{
+		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Point newPosition = position + offset;
+		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+	}
+
+	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
-		return dynamicBody->correctCollision(staticBody);
+		return dynamicBody->detectCollision(staticBody);
 	}
 }

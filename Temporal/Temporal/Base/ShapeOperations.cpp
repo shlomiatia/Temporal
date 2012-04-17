@@ -10,14 +10,16 @@ namespace Temporal
 {
 	bool intersects(const Rectangle& rect1, const Rectangle& rect2, Vector* correction)
 	{
-		Vector minCorrection = Vector(1000.0f, 0.0f);
+		bool isFirst = true;
+		Vector minCorrection = Vector::Zero;
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
 		{
 			float delta = rect2.getCenter().getAxis(axis) - rect1.getCenter().getAxis(axis);
 			float penetration = rect1.getRadius().getAxis(axis) + rect2.getRadius().getAxis(axis) - abs(delta);
 			if(penetration < 0.0f) return false;
-			if(penetration < minCorrection.getLength())
+			if(isFirst || penetration < minCorrection.getLength())
 			{
+				isFirst = false;
 				minCorrection = Vector::Zero;
 				minCorrection.setAxis(axis, delta < 0.0f ? penetration : -penetration);
 			}
@@ -34,15 +36,17 @@ namespace Temporal
 		segmentCenter -= rect.getCenter(); // Translate box and segment to origin
 		// Try world coordinate axes as separating axes
 
-		Vector minCorrection = Vector(1000.0f, 0.0f);
+		bool isFirst = true;
+		Vector minCorrection = Vector::Zero;
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 		{
 			float segmentCenterAxis = segmentCenter.getAxis(axis);
 			float penetration = rect.getRadius().getAxis(axis) + segmentRadius.getAxis(axis) - abs(segmentCenterAxis);
 			if (penetration < 0.0f) return false;
 
-			if(penetration < minCorrection.getLength())
+			if(isFirst || penetration < minCorrection.getLength())
 			{
+				isFirst = false;
 				minCorrection = Vector::Zero;
 				minCorrection.setAxis(axis, segmentCenterAxis < 0.0f ? penetration : -penetration);
 			}
@@ -177,11 +181,13 @@ namespace Temporal
 			}
 			else
 			{
+				// ERROR
 				exit(1);
 			}
 		}
 		else
 		{
+			// ERROR
 			exit(1);
 		}
 	}
@@ -200,6 +206,7 @@ namespace Temporal
 		}
 		else
 		{
+			// ERROR
 			exit(1);
 		}
 	}
