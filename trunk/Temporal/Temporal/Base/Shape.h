@@ -10,8 +10,7 @@ namespace Temporal
 		enum Enum
 		{
 			RECTANGLE,
-			SEGMENT,
-			DIRECTED_SEGMENT
+			SEGMENT
 		};
 	}
 

@@ -161,7 +161,6 @@ namespace Temporal
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
-		// TODO: Clean up
 		const Shape& staticBodyBounds = staticBody.getShape();
 		const Rectangle& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
@@ -169,10 +168,7 @@ namespace Temporal
 		{
 			const Segment& segment = (Segment&)staticBodyBounds;
 
-			// TODO: Do something about it
-			Vector platformVector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
-																  segment.getPoint2() - segment.getPoint1() :
-																  segment.getPoint1() - segment.getPoint2();
+			Vector platformVector = segment.getNaturalVector();
 			float absAngle = abs(platformVector.getAngle());
 
 			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS;
@@ -225,10 +221,9 @@ namespace Temporal
 					correction = Vector(0, yCorrection);
 			}
 			// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
-			// TODO: Same sign
-			if((correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
+			if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
 				_velocity.setVx(0.0f);
-			if(correction.getVy() * _velocity.getVy() < 0.0f)
+			if(differentSign(correction.getVy(), _velocity.getVy()))
 				_velocity.setVy(0.0f);
 
 			bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&

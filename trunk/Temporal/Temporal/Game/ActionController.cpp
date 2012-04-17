@@ -67,8 +67,7 @@ namespace Temporal
 		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
 		Orientation::Enum orientation = *(Orientation::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
-		// TODO: Same sign
-		return orientation * groundVector.getVy() <= 0.0f || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
+		return !sameSign(orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
 	void Stand::enter(void)
