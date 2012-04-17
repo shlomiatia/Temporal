@@ -232,7 +232,7 @@ namespace Temporal
 		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(2*PI-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
@@ -562,8 +562,8 @@ namespace Temporal
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
 		createSentry(spritesheet);
-		//createPatrol(spritesheet);
-		//createCamera();
+		createPatrol(spritesheet);
+		createCamera();
 		createPlatforms();
 		//createBackground();
 	}
