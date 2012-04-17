@@ -8,6 +8,7 @@
 
 namespace Temporal
 {
+	class Segment;
 	class StaticBody;
 
 	class DynamicBody : public Component
@@ -35,11 +36,16 @@ namespace Temporal
 		Rectangle getBounds(void) const;
 		Orientation::Enum getOrientation(void) const;
 
-		void changePosition(const Vector& offset);
 		void update(float framePeriodInMillis);
-		bool correctCollision(const StaticBody& staticBody);
+		Vector determineMovement(float framePeriodInMillis);
+		void executeMovement(Vector movement);
+		bool detectCollision(const StaticBody& staticBody);
+		void correctCollision(const Rectangle& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction);
+		void modifyCorrection(const Rectangle& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
+		void modifyVelocity(const Rectangle& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
+		void changePosition(const Vector& offset);
 
-		static bool correctCollision(void* caller, void* data, const StaticBody& staticBody);
+		static bool detectCollision(void* caller, void* data, const StaticBody& staticBody);
 	};
 }
 #endif
