@@ -57,7 +57,6 @@ namespace Temporal
 				const Segment& segment = (const Segment&)shape;
 
 				// Then check if contain one of the edges
-				
 				const Point* point = NULL;
 				if(sensorBounds.contains(segment.getPoint1()))
 					point = &(segment.getPoint1());
@@ -65,13 +64,13 @@ namespace Temporal
 					point = &(segment.getPoint2());
 				if(point != NULL)
 				{
+					// TODO: Unify with sight
 					// TODO: X equals
 					Vector vector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
 																  segment.getPoint2() - segment.getPoint1() :
 																  segment.getPoint1() - segment.getPoint2();
 					
 					// Modify the angle according to relative position
-
 					if((vector.getVx() == 0.0f && shape.getTop() == point->getY()) ||
 					   (vector.getVx() != 0.0f && shape.getRight() == point->getX())) 
 					{
@@ -85,7 +84,7 @@ namespace Temporal
 
 					// Check distance
 					float clockwiseDistance = abs(rangeCenter - angle);
-					float distance = std::min(clockwiseDistance,  2*PI - clockwiseDistance);
+					float distance = std::min(clockwiseDistance,  abs(2*PI - clockwiseDistance));
 					if(distance <= _rangeSize / 2.0f)
 					{
 						isSensing = true;

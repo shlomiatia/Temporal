@@ -111,7 +111,7 @@ namespace Temporal
 		{
 			movement = _velocity * interpolation;
 
-			// If moving horizontally on the ground, we adjust to movement according to the ground vector
+			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
 			if(movement.getVy() == 0.0f && movement.getVx() != 0.0f && _groundVector != Vector::Zero)
 			{
 				movement = (movement.getVx() > 0.0f ? 1.0f : -1.0f) * _groundVector * movement.getLength();
@@ -161,6 +161,7 @@ namespace Temporal
 
 	bool DynamicBody::correctCollision(const StaticBody& staticBody)
 	{
+		// TODO: Clean up
 		const Shape& staticBodyBounds = staticBody.getShape();
 		const Rectangle& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
@@ -168,12 +169,13 @@ namespace Temporal
 		{
 			const Segment& segment = (Segment&)staticBodyBounds;
 
+			// TODO: Do something about it
 			Vector platformVector = segment.getPoint1().getX() <= segment.getPoint2().getX() ? 
 																  segment.getPoint2() - segment.getPoint1() :
 																  segment.getPoint1() - segment.getPoint2();
 			float absAngle = abs(platformVector.getAngle());
 
-			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS ||absAngle >= ANGLE_135_IN_RADIANS;
+			bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS;
 
 			// If got collision from below, calculate ground vector. Only do this for moderate slopes
 			if(correction.getVy() >= 0.0f && isModerateSlope)
@@ -190,26 +192,27 @@ namespace Temporal
 										 dynamicBodyBounds.getRight() >= segment.getRight()) &&
 										 dynamicBodyBounds.getBottom() + 20.0f >= segment.getTop();
 
-			// Affect velocity on moderate slopes, and on steep slopes/walls where we're just entering them from above
-			bool affectVelocity = isModerateSlope || isOnPlatformTopSide;
+			// Prevent x movement on moderate slopes, and on steep slopes/walls when they're on platform edges
+			bool preventXMovement = isModerateSlope || isOnPlatformTopSide;
 
 			// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-			if(affectVelocity && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
+			// TODO: Sigma
+			if(preventXMovement && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
 			{	
-				float x1 = segment.getPoint1().getX();
-				float x2 = segment.getPoint2().getX();
-				float y1 = segment.getPoint1().getY();
-				float y2 = segment.getPoint2().getY();
 				float y = 0.0f;
 
-				// Wall - take top
-				if(x1 == x2)
+				// Wall or flat floor - Take top
+				if(isOnPlatformTopSide)
 				{
-					y = std::max(y1, y2);
+					y = segment.getTop();
 				}
-				// Floor - take y where the actor stand
+				// Slopped floor - take y where the actor stand
 				else
 				{
+					float x1 = segment.getPoint1().getX();
+					float x2 = segment.getPoint2().getX();
+					float y1 = segment.getPoint1().getY();
+					float y2 = segment.getPoint2().getY();
 					float m =  (y2 - y1) / (x2 - x1);
 					float b = y1 - m * x1;
 					float x = m > 0 ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
@@ -222,14 +225,18 @@ namespace Temporal
 					correction = Vector(0, yCorrection);
 			}
 			// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
-			if(affectVelocity)
-			{
-				if((correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
-					_velocity.setVx(0.0f);
-				if(correction.getVy() * _velocity.getVy() < 0.0f)
-					_velocity.setVy(0.0f);
-			}
-			else if(!isModerateSlope && absAngle != ANGLE_90_IN_RADIANS && _velocity != Vector::Zero)
+			// TODO: Same sign
+			if((correction.getVx() * _velocity.getVx() < 0.0f || correction.getVy() >= 0.0f))
+				_velocity.setVx(0.0f);
+			if(correction.getVy() * _velocity.getVy() < 0.0f)
+				_velocity.setVy(0.0f);
+
+			bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&
+								dynamicBodyBounds.getLeft() < segment.getRight() &&
+								dynamicBodyBounds.getBottom() + 20.0f <= segment.getTop() &&
+								dynamicBodyBounds.getBottom() >= segment.getBottom();
+			// Slide on steep slopes
+			if(!isModerateSlope && absAngle != ANGLE_90_IN_RADIANS && isOnPlatform)
 			{
 				if(platformVector.getVy() > 0.0f) platformVector = -platformVector;
 

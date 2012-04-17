@@ -66,6 +66,8 @@ namespace Temporal
 	{
 		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
 		Orientation::Enum orientation = *(Orientation::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+
+		// TODO: Same sign
 		return orientation * groundVector.getVy() <= 0.0f || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
@@ -471,12 +473,14 @@ namespace Temporal
 		Rectangle personBounds(Rectangle::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
-		float platformEdge = point.getX() + 1.0f * orientation;
+		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
-		if(moveX != 0.0f)
+		float moveY = point.getY() - personBounds.getBottom();
+		Vector movement = Vector(moveX, moveY);
+		if(movement != Vector::Zero)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(moveX, 0.0f)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
 		}
 		else
 		{
@@ -505,7 +509,7 @@ namespace Temporal
 	void Descend::enter(void)
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
-		float forceX = -1.0f;
+		float forceX = 0.0f;
 		float forceY = -(size.getHeight());
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
