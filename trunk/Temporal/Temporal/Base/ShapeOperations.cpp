@@ -52,36 +52,18 @@ namespace Temporal
 			}
 		}
 
-		if(seg.getPoint1().getX() != seg.getPoint2().getX())
-		{
-			float y = seg.getY(rect.getCenterX());
+		float y = seg.getY(rect.getCenterX());
+		Vector vector = seg.getNaturalVector().normalize();
+		Vector normal = y > rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
 
-			Vector vector = seg.getNaturalVector().normalize();
+		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
+		Vector absNormal = Vector(abs(normal.getVx() + EPSILON), abs(normal.getVy() + EPSILON));
+		float absRectRadiusProjection = rect.getRadius() * absNormal;
+		float penetration = absRectRadiusProjection - absSegCenterProjection;
+		if(penetration < 0.0f) return false;
+		if(penetration < minCorrection.getLength())
+			minCorrection = penetration * normal;
 
-			Vector normal = y <= rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
-
-			// TODO: Book
-			float point = Vector(seg.getCenter()) * normal;
-			float val = Vector(rect.getLeft(), rect.getBottom()) * normal;
-			float min = val;
-			float max = val;
-			val = Vector(rect.getLeft(), rect.getTop()) * normal;
-			min = std::min(min, val);
-			max = std::max(max, val);
-			val = Vector(rect.getRight(), rect.getBottom()) * normal;
-			min = std::min(min, val);
-			max = std::max(max, val);
-			val = Vector(rect.getRight(), rect.getTop()) * normal;
-			min = std::min(min, val);
-			max = std::max(max, val);
-			if(min > point || max < point) return false;
-			float penetration1 = max - point;
-			float penetration2 = point - min;
-			float minPenetration = std::min(penetration1, penetration2);
-			if(minPenetration < minCorrection.getLength())
-				minCorrection = -(minPenetration * normal);
-		}
-		
 		// No separating axis found; segment must be overlapping AABB
 		if(correction != NULL)
 			*correction = minCorrection;
@@ -101,7 +83,7 @@ namespace Temporal
 			float originAxis = origin.getAxis(axis);
 			float vectorAxis = vector.getAxis(axis);
 			Range rectAxis = rect.getAxis(axis);
-			if (vectorAxis == 0) 
+			if (abs(vectorAxis) < EPSILON) 
 			{
 				// Ray is parallel to slab. No hit if origin not within slab
 				if (originAxis < rectAxis.getMin() || originAxis > rectAxis.getMax()) 

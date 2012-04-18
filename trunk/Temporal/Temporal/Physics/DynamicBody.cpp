@@ -211,7 +211,7 @@ namespace Temporal
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
 		// TODO: Sigma
-		if(canModifyCorrection && abs(_velocity.getVx()) <= 0.1f && correction.getVx() != 0.0f) 
+		if(canModifyCorrection && abs(_velocity.getVx()) < EPSILON && correction.getVx() != 0.0f) 
 		{	
 			float y = 0.0f;
 
