@@ -136,7 +136,7 @@ namespace Temporal
 
 	void createPlayer(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(512.0f, 768.0f));
+		Position* position = new Position(Point(1512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
@@ -561,9 +561,9 @@ namespace Temporal
 
 		createPlayer(spritesheet);
 		//createChaser(spritesheet);
-		createSentry(spritesheet);
+		//createSentry(spritesheet);
 		createPatrol(spritesheet);
-		createCamera();
+		//createCamera();
 		createPlatforms();
 		//createBackground();
 	}
