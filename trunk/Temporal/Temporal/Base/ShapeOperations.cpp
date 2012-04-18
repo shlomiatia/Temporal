@@ -57,10 +57,10 @@ namespace Temporal
 		Vector normal = y > rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
 
 		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
-		Vector absNormal = Vector(abs(normal.getVx() + EPSILON), abs(normal.getVy() + EPSILON));
+		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
 		float absRectRadiusProjection = rect.getRadius() * absNormal;
 		float penetration = absRectRadiusProjection - absSegCenterProjection;
-		if(penetration < 0.0f) return false;
+		if(penetration < -EPSILON) return false;
 		if(penetration < minCorrection.getLength())
 			minCorrection = penetration * normal;
 
