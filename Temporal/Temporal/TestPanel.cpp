@@ -1,7 +1,7 @@
 #include "TestPanel.h"
 
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rectangle.h>
+#include <Temporal\Base\AABB.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\Component.h>
@@ -136,7 +136,7 @@ namespace Temporal
 
 	void createPlayer(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(1512.0f, 768.0f));
+		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
@@ -160,7 +160,7 @@ namespace Temporal
 
 	void createChaser(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(512.0f, 768.0f));
+		Position* position = new Position(Point(1512.0f, 68.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
@@ -241,17 +241,17 @@ namespace Temporal
 		// Search - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(19, 19, 24, 32), Vector(4, 16)));
+		animation->add(new Sprite(AABB(19, 19, 24, 32), Vector(4, 16)));
 		// See - 1
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(19, 59, 24, 32), Vector(4, 16)));
+		animation->add(new Sprite(AABB(19, 59, 24, 32), Vector(4, 16)));
 		// Turn - 2
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(50.5, 19.5, 17, 33), Vector(2, 16)));
-		animation->add(new Sprite(Rectangle(76, 19.5, 12, 33), Vector(1, 16)));
-		animation->add(new Sprite(Rectangle(98, 19.5, 12, 33), Vector(0, 16)));
+		animation->add(new Sprite(AABB(50.5, 19.5, 17, 33), Vector(2, 16)));
+		animation->add(new Sprite(AABB(76, 19.5, 12, 33), Vector(1, 16)));
+		animation->add(new Sprite(AABB(98, 19.5, 12, 33), Vector(0, 16)));
 		#pragma endregion
 
 		Animator* animator = new Animator(66.0f);
@@ -287,7 +287,7 @@ namespace Temporal
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(animation);
 		const Size TILE_SIZE(32.0f, 32.0f);
-		animation->add(new Sprite(Rectangle(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
+		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
 		// Edges
 		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet));
@@ -297,7 +297,7 @@ namespace Temporal
 		// Screen Splitter
 		EntitiesManager::get().add(createPlatform(new Segment(1023.0f, 0.0f, 1023.0f, 256.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1023.0f, 384.0f, 1023.0f, 767.0f), spritesheet));
-
+		
 		// Right lower platform
 		EntitiesManager::get().add(createPlatform(new Segment(723.0f, 0.0f, 723.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(723.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
@@ -341,7 +341,7 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
 
 		// Cover
-		EntitiesManager::get().add(createPlatform(new Rectangle(RectangleLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
+		EntitiesManager::get().add(createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
 
 		// 30
 		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet));
@@ -389,9 +389,6 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet));
-		
-
-		// Platforms
 	}
 
 	void createBackground()
@@ -400,7 +397,7 @@ namespace Temporal
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
+		animation->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
 
 		Position* position = new Position(texture->getSize() / 2.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND);
@@ -422,147 +419,147 @@ namespace Temporal
 		// Stand - 0
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(26.5, 48, 21, 84), Vector(6, -42)));
+		animation->add(new Sprite(AABB(26.5, 48, 21, 84), Vector(6, -42)));
 		// Turn - 1
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(60.5, 50, 23, 80), Vector(7, -40)));
-		animation->add(new Sprite(Rectangle(95.5, 50, 25, 80), Vector(8, -40)));
-		animation->add(new Sprite(Rectangle(134.5, 48, 29, 84), Vector(4, -42)));
-		animation->add(new Sprite(Rectangle(177, 49.5, 38, 81), Vector(5, -41)));
-		animation->add(new Sprite(Rectangle(224.5, 50, 43, 80), Vector(-4, -40)));
-		animation->add(new Sprite(Rectangle(276, 52, 36, 76), Vector(-10, -38)));
-		animation->add(new Sprite(Rectangle(316.5, 51, 31, 78), Vector(-8, -39)));
-		animation->add(new Sprite(Rectangle(359, 51.5, 28, 79), Vector(-7, -40)));
+		animation->add(new Sprite(AABB(60.5, 50, 23, 80), Vector(7, -40)));
+		animation->add(new Sprite(AABB(95.5, 50, 25, 80), Vector(8, -40)));
+		animation->add(new Sprite(AABB(134.5, 48, 29, 84), Vector(4, -42)));
+		animation->add(new Sprite(AABB(177, 49.5, 38, 81), Vector(5, -41)));
+		animation->add(new Sprite(AABB(224.5, 50, 43, 80), Vector(-4, -40)));
+		animation->add(new Sprite(AABB(276, 52, 36, 76), Vector(-10, -38)));
+		animation->add(new Sprite(AABB(316.5, 51, 31, 78), Vector(-8, -39)));
+		animation->add(new Sprite(AABB(359, 51.5, 28, 79), Vector(-7, -40)));
 		// Drop - 2
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(418.5, 58.5, 23, 109), Vector(-3, 54)));
-		animation->add(new Sprite(Rectangle(462.5, 60, 21, 96), Vector(0, 48)));
-		animation->add(new Sprite(Rectangle(509, 65, 22, 86), Vector(3, 43)));
-		animation->add(new Sprite(Rectangle(546.5, 69.5, 25, 77), Vector(7, 38)));
-		animation->add(new Sprite(Rectangle(584.5, 67.5, 25, 81), Vector(9, 40)));
+		animation->add(new Sprite(AABB(418.5, 58.5, 23, 109), Vector(-3, 54)));
+		animation->add(new Sprite(AABB(462.5, 60, 21, 96), Vector(0, 48)));
+		animation->add(new Sprite(AABB(509, 65, 22, 86), Vector(3, 43)));
+		animation->add(new Sprite(AABB(546.5, 69.5, 25, 77), Vector(7, 38)));
+		animation->add(new Sprite(AABB(584.5, 67.5, 25, 81), Vector(9, 40)));
 		// FallStart - 3
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(667.5, 71, 71, 76), Vector(3, -38)));
-		animation->add(new Sprite(Rectangle(737, 68.5, 62, 75), Vector(3, -38)));
-		animation->add(new Sprite(Rectangle(805.5, 67, 51, 72), Vector(10, -36)));
-		animation->add(new Sprite(Rectangle(866, 62, 54, 80), Vector(7, -40)));
+		animation->add(new Sprite(AABB(667.5, 71, 71, 76), Vector(3, -38)));
+		animation->add(new Sprite(AABB(737, 68.5, 62, 75), Vector(3, -38)));
+		animation->add(new Sprite(AABB(805.5, 67, 51, 72), Vector(10, -36)));
+		animation->add(new Sprite(AABB(866, 62, 54, 80), Vector(7, -40)));
 		// Fall - 4
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(927, 63, 34, 78), Vector(-2, -39)));
+		animation->add(new Sprite(AABB(927, 63, 34, 78), Vector(-2, -39)));
 		// JumpUpStart - 5
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(30, 193.5, 22, 83), Vector(2, -42)));
-		animation->add(new Sprite(Rectangle(72.5, 193, 23, 84), Vector(2, -42)));
-		animation->add(new Sprite(Rectangle(114, 194, 22, 82), Vector(2, -41)));
-		animation->add(new Sprite(Rectangle(158, 195, 28, 80), Vector(-1, -40)));
-		animation->add(new Sprite(Rectangle(202, 195, 36, 80), Vector(-5, -40)));
-		animation->add(new Sprite(Rectangle(245.5, 194.5, 43, 81), Vector(-4, -41)));
-		animation->add(new Sprite(Rectangle(296, 194.5, 48, 81), Vector(-7, -41)));
-		animation->add(new Sprite(Rectangle(349.5, 196, 43, 78), Vector(1, -39)));
-		animation->add(new Sprite(Rectangle(396, 198.5, 32, 73), Vector(7, -37)));
-		animation->add(new Sprite(Rectangle(438, 198.5, 32, 73), Vector(7, -37)));
-		animation->add(new Sprite(Rectangle(486, 197.5, 42, 71), Vector(13, -36)));
-		animation->add(new Sprite(Rectangle(536, 195.5, 34, 75), Vector(12, -38)));
-		animation->add(new Sprite(Rectangle(582, 187.5, 32, 95), Vector(11, -48)));
+		animation->add(new Sprite(AABB(30, 193.5, 22, 83), Vector(2, -42)));
+		animation->add(new Sprite(AABB(72.5, 193, 23, 84), Vector(2, -42)));
+		animation->add(new Sprite(AABB(114, 194, 22, 82), Vector(2, -41)));
+		animation->add(new Sprite(AABB(158, 195, 28, 80), Vector(-1, -40)));
+		animation->add(new Sprite(AABB(202, 195, 36, 80), Vector(-5, -40)));
+		animation->add(new Sprite(AABB(245.5, 194.5, 43, 81), Vector(-4, -41)));
+		animation->add(new Sprite(AABB(296, 194.5, 48, 81), Vector(-7, -41)));
+		animation->add(new Sprite(AABB(349.5, 196, 43, 78), Vector(1, -39)));
+		animation->add(new Sprite(AABB(396, 198.5, 32, 73), Vector(7, -37)));
+		animation->add(new Sprite(AABB(438, 198.5, 32, 73), Vector(7, -37)));
+		animation->add(new Sprite(AABB(486, 197.5, 42, 71), Vector(13, -36)));
+		animation->add(new Sprite(AABB(536, 195.5, 34, 75), Vector(12, -38)));
+		animation->add(new Sprite(AABB(582, 187.5, 32, 95), Vector(11, -48)));
 		// JumpUp - 6
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(630, 189.5, 32, 103), Vector(10, -52)));
+		animation->add(new Sprite(AABB(630, 189.5, 32, 103), Vector(10, -52)));
 		// Hang - 7
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(717.5, 190.5, 23, 111), Vector(-1, 55)));
+		animation->add(new Sprite(AABB(717.5, 190.5, 23, 111), Vector(-1, 55)));
 		// Climb - 8
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(24.5, 342, 21, 106), Vector(-7, 49)));
-		animation->add(new Sprite(Rectangle(67, 348, 24, 88), Vector(-9, 40)));
-		animation->add(new Sprite(Rectangle(109, 348.5, 26, 89), Vector(-5, 28)));
-		animation->add(new Sprite(Rectangle(150.5, 346.5, 33, 91), Vector(-4, 20)));
-		animation->add(new Sprite(Rectangle(200.5, 348.5, 45, 81), Vector(5, 13)));
-		animation->add(new Sprite(Rectangle(258, 349, 48, 70), Vector(7, 10)));
-		animation->add(new Sprite(Rectangle(319, 349.5, 46, 59), Vector(7, 0)));
-		animation->add(new Sprite(Rectangle(385.5, 346, 61, 46), Vector(16, -9)));
-		animation->add(new Sprite(Rectangle(459.5, 347.5, 59, 41), Vector(2, -10)));
-		animation->add(new Sprite(Rectangle(528, 346.5, 62, 51), Vector(5, -14)));
-		animation->add(new Sprite(Rectangle(600, 344.5, 56, 45), Vector(14, -23)));
-		animation->add(new Sprite(Rectangle(660, 344.5, 52, 47), Vector(18, -24)));
-		animation->add(new Sprite(Rectangle(727.5, 338.5, 53, 57), Vector(11, -29)));
-		animation->add(new Sprite(Rectangle(787, 332.5, 52, 63), Vector(17, -32)));
-		animation->add(new Sprite(Rectangle(843, 330, 50, 68), Vector(20, -34)));
-		animation->add(new Sprite(Rectangle(896, 324, 30, 78), Vector(4, -39)));
-		animation->add(new Sprite(Rectangle(937, 324.5, 22, 79), Vector(3, -40)));
+		animation->add(new Sprite(AABB(24.5, 342, 21, 106), Vector(-7, 49)));
+		animation->add(new Sprite(AABB(67, 348, 24, 88), Vector(-9, 40)));
+		animation->add(new Sprite(AABB(109, 348.5, 26, 89), Vector(-5, 28)));
+		animation->add(new Sprite(AABB(150.5, 346.5, 33, 91), Vector(-4, 20)));
+		animation->add(new Sprite(AABB(200.5, 348.5, 45, 81), Vector(5, 13)));
+		animation->add(new Sprite(AABB(258, 349, 48, 70), Vector(7, 10)));
+		animation->add(new Sprite(AABB(319, 349.5, 46, 59), Vector(7, 0)));
+		animation->add(new Sprite(AABB(385.5, 346, 61, 46), Vector(16, -9)));
+		animation->add(new Sprite(AABB(459.5, 347.5, 59, 41), Vector(2, -10)));
+		animation->add(new Sprite(AABB(528, 346.5, 62, 51), Vector(5, -14)));
+		animation->add(new Sprite(AABB(600, 344.5, 56, 45), Vector(14, -23)));
+		animation->add(new Sprite(AABB(660, 344.5, 52, 47), Vector(18, -24)));
+		animation->add(new Sprite(AABB(727.5, 338.5, 53, 57), Vector(11, -29)));
+		animation->add(new Sprite(AABB(787, 332.5, 52, 63), Vector(17, -32)));
+		animation->add(new Sprite(AABB(843, 330, 50, 68), Vector(20, -34)));
+		animation->add(new Sprite(AABB(896, 324, 30, 78), Vector(4, -39)));
+		animation->add(new Sprite(AABB(937, 324.5, 22, 79), Vector(3, -40)));
 		// JumpForwardStart - 9
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(20.5, 502, 25, 84), Vector(7, -42)));
-		animation->add(new Sprite(Rectangle(59.5, 503, 27, 82), Vector(8, -41)));
-		animation->add(new Sprite(Rectangle(106, 503, 42, 80), Vector(6, -40)));
-		animation->add(new Sprite(Rectangle(159.5, 508, 47, 68), Vector(12, -34)));
-		animation->add(new Sprite(Rectangle(225, 509, 56, 64), Vector(15, -32)));
-		animation->add(new Sprite(Rectangle(298.5, 507.5, 55, 65), Vector(20, -33)));
-		animation->add(new Sprite(Rectangle(369, 505, 54, 68), Vector(22, -34)));
+		animation->add(new Sprite(AABB(20.5, 502, 25, 84), Vector(7, -42)));
+		animation->add(new Sprite(AABB(59.5, 503, 27, 82), Vector(8, -41)));
+		animation->add(new Sprite(AABB(106, 503, 42, 80), Vector(6, -40)));
+		animation->add(new Sprite(AABB(159.5, 508, 47, 68), Vector(12, -34)));
+		animation->add(new Sprite(AABB(225, 509, 56, 64), Vector(15, -32)));
+		animation->add(new Sprite(AABB(298.5, 507.5, 55, 65), Vector(20, -33)));
+		animation->add(new Sprite(AABB(369, 505, 54, 68), Vector(22, -34)));
 		// JumpForward - 10
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(449.5, 503, 79, 70), Vector(2, -35)));
-		animation->add(new Sprite(Rectangle(557.5, 501, 99, 70), Vector(1, -35)));
-		animation->add(new Sprite(Rectangle(678.5, 507.5, 103, 61), Vector(-3, -31)));
-		animation->add(new Sprite(Rectangle(788, 506.5, 84, 55), Vector(-2, -28)));
+		animation->add(new Sprite(AABB(449.5, 503, 79, 70), Vector(2, -35)));
+		animation->add(new Sprite(AABB(557.5, 501, 99, 70), Vector(1, -35)));
+		animation->add(new Sprite(AABB(678.5, 507.5, 103, 61), Vector(-3, -31)));
+		animation->add(new Sprite(AABB(788, 506.5, 84, 55), Vector(-2, -28)));
 		// JumpForwardEnd - 11
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(52, 620.5, 58, 55), Vector(-8, -28)));
-		animation->add(new Sprite(Rectangle(114.5, 621.5, 41, 51), Vector(-4, -26)));
-		animation->add(new Sprite(Rectangle(189.5, 618, 55, 60), Vector(3, -30)));
-		animation->add(new Sprite(Rectangle(248, 613, 44, 70), Vector(-8, -35)));
-		animation->add(new Sprite(Rectangle(306.5, 609, 35, 80), Vector(-2, -40)));
-		animation->add(new Sprite(Rectangle(352, 608, 30, 82), Vector(0, -41)));
+		animation->add(new Sprite(AABB(52, 620.5, 58, 55), Vector(-8, -28)));
+		animation->add(new Sprite(AABB(114.5, 621.5, 41, 51), Vector(-4, -26)));
+		animation->add(new Sprite(AABB(189.5, 618, 55, 60), Vector(3, -30)));
+		animation->add(new Sprite(AABB(248, 613, 44, 70), Vector(-8, -35)));
+		animation->add(new Sprite(AABB(306.5, 609, 35, 80), Vector(-2, -40)));
+		animation->add(new Sprite(AABB(352, 608, 30, 82), Vector(0, -41)));
 		// Walk - 12
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(34, 735.5, 24, 81), Vector(8, -41)));
-		animation->add(new Sprite(Rectangle(76, 735, 22, 80), Vector(6, -40)));
-		animation->add(new Sprite(Rectangle(117.5, 736.5, 27, 77), Vector(6, -39)));
-		animation->add(new Sprite(Rectangle(164.5, 734.5, 41, 77), Vector(0, -39)));
-		animation->add(new Sprite(Rectangle(226, 734.5, 54, 75), Vector(5, -38)));
-		animation->add(new Sprite(Rectangle(290, 734, 58, 76), Vector(5, -38)));
-		animation->add(new Sprite(Rectangle(358.5, 734, 57, 78), Vector(3, -39)));
-		animation->add(new Sprite(Rectangle(424.5, 735, 53, 76), Vector(0, -38)));
-		animation->add(new Sprite(Rectangle(487, 734, 50, 78), Vector(-6, -39)));
-		animation->add(new Sprite(Rectangle(543.5, 733, 41, 80), Vector(-3, -40)));
-		animation->add(new Sprite(Rectangle(593, 732.5, 26, 81), Vector(0, -41)));
-		animation->add(new Sprite(Rectangle(634.5, 732, 21, 82), Vector(5, -41)));
+		animation->add(new Sprite(AABB(34, 735.5, 24, 81), Vector(8, -41)));
+		animation->add(new Sprite(AABB(76, 735, 22, 80), Vector(6, -40)));
+		animation->add(new Sprite(AABB(117.5, 736.5, 27, 77), Vector(6, -39)));
+		animation->add(new Sprite(AABB(164.5, 734.5, 41, 77), Vector(0, -39)));
+		animation->add(new Sprite(AABB(226, 734.5, 54, 75), Vector(5, -38)));
+		animation->add(new Sprite(AABB(290, 734, 58, 76), Vector(5, -38)));
+		animation->add(new Sprite(AABB(358.5, 734, 57, 78), Vector(3, -39)));
+		animation->add(new Sprite(AABB(424.5, 735, 53, 76), Vector(0, -38)));
+		animation->add(new Sprite(AABB(487, 734, 50, 78), Vector(-6, -39)));
+		animation->add(new Sprite(AABB(543.5, 733, 41, 80), Vector(-3, -40)));
+		animation->add(new Sprite(AABB(593, 732.5, 26, 81), Vector(0, -41)));
+		animation->add(new Sprite(AABB(634.5, 732, 21, 82), Vector(5, -41)));
 		// HangingForward - 13
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(32.5, 859.5, 29, 111), Vector(1, 55)));
-		animation->add(new Sprite(Rectangle(91.5, 859.5, 33, 109), Vector(6, 54)));
-		animation->add(new Sprite(Rectangle(152.5, 863.5, 41, 107), Vector(11, 53)));
-		animation->add(new Sprite(Rectangle(206, 861.5, 40, 103), Vector(9, 51)));
+		animation->add(new Sprite(AABB(32.5, 859.5, 29, 111), Vector(1, 55)));
+		animation->add(new Sprite(AABB(91.5, 859.5, 33, 109), Vector(6, 54)));
+		animation->add(new Sprite(AABB(152.5, 863.5, 41, 107), Vector(11, 53)));
+		animation->add(new Sprite(AABB(206, 861.5, 40, 103), Vector(9, 51)));
 		// HangingBackwards - 14
 		animation = new SpriteGroup();
 		spritesheet->add(animation);
-		animation->add(new Sprite(Rectangle(252.5, 864.5, 23, 109), Vector(-6, 54)));
-		animation->add(new Sprite(Rectangle(295.5, 864, 35, 108), Vector(-11, 54)));
-		animation->add(new Sprite(Rectangle(348.5, 863, 45, 106), Vector(-16, 53)));
-		animation->add(new Sprite(Rectangle(408, 860.5, 52, 101), Vector(-22, 50)));
-		animation->add(new Sprite(Rectangle(475.5, 860, 55, 102), Vector(-22, 51)));
-		animation->add(new Sprite(Rectangle(539, 859.5, 56, 101), Vector(-23, 50)));
-		animation->add(new Sprite(Rectangle(611, 858.5, 56, 99), Vector(-22, 49)));
+		animation->add(new Sprite(AABB(252.5, 864.5, 23, 109), Vector(-6, 54)));
+		animation->add(new Sprite(AABB(295.5, 864, 35, 108), Vector(-11, 54)));
+		animation->add(new Sprite(AABB(348.5, 863, 45, 106), Vector(-16, 53)));
+		animation->add(new Sprite(AABB(408, 860.5, 52, 101), Vector(-22, 50)));
+		animation->add(new Sprite(AABB(475.5, 860, 55, 102), Vector(-22, 51)));
+		animation->add(new Sprite(AABB(539, 859.5, 56, 101), Vector(-23, 50)));
+		animation->add(new Sprite(AABB(611, 858.5, 56, 99), Vector(-22, 49)));
 
 
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createChaser(spritesheet);
+		createChaser(spritesheet);
 		//createSentry(spritesheet);
-		createPatrol(spritesheet);
+		//createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();
 		//createBackground();

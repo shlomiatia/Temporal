@@ -3,18 +3,19 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rectangle.h>
+#include <Temporal\Base\AABB.h>
+#include <Temporal\Base\SlopedArea.h>
 #include <vector>
 
 namespace Temporal
 {
-	class Shape;
 	class NavigationEdge;
 
 	namespace NavigationEdgeType
 	{
 		enum Enum
 		{
+			WALK,
 			FALL,
 			JUMP,
 			DESCEND
@@ -27,15 +28,15 @@ namespace Temporal
 	class NavigationNode
 	{
 	public:
-		NavigationNode(const Rectangle& area) : _area(area) {}
+		NavigationNode(const SlopedArea& area) : _area(area) {}
 		~NavigationNode(void);
 
-		const Rectangle& getArea(void) const { return _area; }
+		const SlopedArea& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
 		const NavigationEdgeCollection& getEdges(void) const { return _edges; }
 
 	private:
-		const Rectangle _area;
+		const SlopedArea _area;
 		NavigationEdgeCollection _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -70,8 +71,8 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeCollection;
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const Rectangle> RectCollection;
-	typedef RectCollection::const_iterator RectIterator;
+	typedef std::vector<const SlopedArea> SlopedAreaCollection;
+	typedef SlopedAreaCollection::const_iterator SlopedAreaIterator;
 	typedef std::vector<const Shape*> ShapeCollection;
 	typedef ShapeCollection::const_iterator ShapeIterator;
 
@@ -86,7 +87,7 @@ namespace Temporal
 
 		void init(void);
 		void dispose(void);
-		const NavigationNode* getNodeByPosition(const Point& position) const;
+		const NavigationNode* getNodeByAABB(const AABB& aabb) const;
 		void draw(void) const;
 
 	private:

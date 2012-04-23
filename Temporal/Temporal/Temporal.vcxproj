@@ -23,6 +23,7 @@
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Base\Shape.h" />
     <ClInclude Include="Base\ShapeOperations.h" />
+    <ClInclude Include="Base\SlopedArea.h" />
     <ClInclude Include="Base\Timer.h" />
     <ClInclude Include="Game\BasePanel.h" />
     <ClInclude Include="Game\DrawPosition.h" />
@@ -45,7 +46,7 @@
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Physics\DynamicBody.h" />
     <ClInclude Include="Game\DebugInfo.h" />
-    <ClInclude Include="Base\Rectangle.h" />
+    <ClInclude Include="Base\AABB.h" />
     <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="Base\NumericPair.h" />
     <ClInclude Include="Physics\Sensor.h" />
@@ -69,7 +70,7 @@
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Base\Color.cpp" />
     <ClCompile Include="Base\Math.cpp" />
-    <ClCompile Include="Base\Rectangle.cpp" />
+    <ClCompile Include="Base\AABB.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\ShapeOperations.cpp" />
     <ClCompile Include="Base\Thread.cpp" />

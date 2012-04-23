@@ -1,6 +1,6 @@
 #include "ShapeOperations.h"
 
-#include "Rectangle.h"
+#include "AABB.h"
 #include "Segment.h"
 #include "Math.h"
 #include <math.h>
@@ -8,7 +8,7 @@
 
 namespace Temporal
 {
-	bool intersects(const Rectangle& rect1, const Rectangle& rect2, Vector* correction)
+	bool intersects(const AABB& rect1, const AABB& rect2, Vector* correction)
 	{
 		bool isFirst = true;
 		Vector minCorrection = Vector::Zero;
@@ -29,7 +29,7 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const Rectangle& rect, const Segment& seg, Vector* correction)
+	bool intersects(const AABB& rect, const Segment& seg, Vector* correction)
 	{
 		Point segmentCenter = seg.getCenter();
 		Vector segmentRadius = seg.getRadius();
@@ -57,6 +57,9 @@ namespace Temporal
 		Vector normal = y > rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
 
 		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
+
+		// To find max projection of rectangle unto the segment vector, we need to test -rx,-ry;-rx,ry;rx,-ry;rx,ry multiply nx*ny. 
+		// The max projection is obtained when all elements are positive, so we multiply rx,ry to abs(nx),abs(ny)
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
 		float absRectRadiusProjection = rect.getRadius() * absNormal;
 		float penetration = absRectRadiusProjection - absSegCenterProjection;
@@ -70,7 +73,7 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const DirectedSegment& seg, const Rectangle& rect, Point* pointOfIntersection)
+	bool intersects(const DirectedSegment& seg, const AABB& rect, Point* pointOfIntersection)
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
 		const Point& origin = seg.getOrigin();
@@ -109,37 +112,44 @@ namespace Temporal
 		return true;
 	}
 
-		// Returns 2 times the signed triangle area. The result is positive if
-	// abc is ccw, negative if abc is cw, zero if abc is degenerate.
-	float signed2DTriArea(Point a, Point b, Point c)
-	{
-		return (a.getX() - c.getX()) * (b.getY() - c.getY()) - (a.getY() - c.getY()) * (b.getX() - c.getX());
-	}
 
 	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection)
 	{
-		// Sign of areas correspond to which side of ab points c and d are
-		float a1 = signed2DTriArea(dirSeg.getOrigin(), dirSeg.getTarget(), seg.getPoint2()); // Compute winding of abd (+ or -)
-		float a2 = signed2DTriArea(dirSeg.getOrigin(), dirSeg.getTarget(), seg.getPoint1()); // To intersect, must have sign opposite of a1
-		// If c and d are on different sides of ab, areas have different signs
-		if (differentSign(a1, a2))
+		Vector dirSegVec = dirSeg.getVector();
+		Vector segVec = seg.getPoint2() - seg.getPoint1();
+		Vector segNormal = segVec.getLeftNormal();
+		float denominator = segNormal * dirSegVec;
+		Vector difference = seg.getPoint1() - dirSeg.getOrigin();
+		Vector dirSegNormal = dirSegVec.getLeftNormal();
+		float numerator2 = (dirSegNormal * difference);
+		if(denominator == 0)
 		{
-			// Compute signs for a and b with respect to segment cd
-			float a3 = signed2DTriArea(seg.getPoint1(), seg.getPoint2(), dirSeg.getOrigin()); // Compute winding of cda (+ or -)
-			// Since area isant a1 - a2 = a3 - a4, or a4 = a3 + a2 - a1
-			// float a4 = Signed2DTriArea(c, d, b); // Must have opposite sign of a3
-			float a4 = a3 + a2 - a1;
-			// Points a and b on different sides of cd if areas have different signs
-			if (differentSign(a3, a4)) 
+			if(numerator2 == 0 && abs(dirSeg.getCenterX() - seg.getCenterX()) <= dirSeg.getRadius().getVx() + seg.getRadius().getVx())
 			{
-				// Segments intersect. Find intersection point along L(t) = a + t * (b - a).
-				// Given height h1 of an over cd and height h2 of b over cd,
-				// t = h1 / (h1 - h2) = (b*h1/2) / (b*h1/2 - b*h2/2) = a3 / (a3 - a4),
-				// where b (the base of the triangles cda and cdb, i.e., the length
-				// of cd) cancels out.
-				float t = a3 / (a3 - a4);
 				if(pointOfIntersection != NULL)
-					*pointOfIntersection = dirSeg.getOrigin() + t * (dirSeg.getTarget() - dirSeg.getOrigin());
+				{
+					Vector vector1 = seg.getPoint1() - dirSeg.getOrigin();
+					Vector vector2 = seg.getPoint2() - dirSeg.getOrigin();
+					if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
+					{
+						*pointOfIntersection = dirSeg.getOrigin();
+					}
+					else
+					{
+						*pointOfIntersection = vector1.getLength() < vector2.getLength() ? seg.getPoint1() : seg.getPoint2();
+					}
+				}
+				return true;
+			}
+		}
+		else
+		{
+			float length1 = (segNormal * difference) / denominator;
+			float length2 = numerator2 / denominator;
+			if(length1 >= 0.0f && length1 <= 1.0f && length2 >= 0.0f && length2 <= 1.0f)
+			{
+				if(pointOfIntersection != NULL)
+					*pointOfIntersection = dirSeg.getOrigin() + length1 * dirSegVec;
 				return true;
 			}
 		}
@@ -148,12 +158,12 @@ namespace Temporal
 
 	bool intersects(const Shape& shape1, const Shape& shape2, Vector* correction)
 	{
-		if(shape1.getType() == ShapeType::RECTANGLE)
+		if(shape1.getType() == ShapeType::AABB)
 		{
-			const Rectangle& rect1 = (const Rectangle&)shape1;
-			if(shape2.getType() == ShapeType::RECTANGLE)
+			const AABB& rect1 = (const AABB&)shape1;
+			if(shape2.getType() == ShapeType::AABB)
 			{
-				const Rectangle& rect2 = (const Rectangle&)shape2;
+				const AABB& rect2 = (const AABB&)shape2;
 				return intersects(rect1, rect2, correction);
 			}
 			else if(shape2.getType() == ShapeType::SEGMENT)
@@ -167,18 +177,36 @@ namespace Temporal
 				exit(1);
 			}
 		}
+		else if(shape2.getType() == ShapeType::SEGMENT)
+		{
+			const Segment& seg1 = (const Segment&)shape1;
+			if(shape2.getType() == ShapeType::AABB)
+			{
+				const AABB& rect2 = (const AABB&)shape2;
+				return intersects(rect2, seg1, correction);
+			}
+			else if(shape2.getType() == ShapeType::SEGMENT)
+			{
+				const Segment& seg2 = (const Segment&)shape2;
+				return intersects(DirectedSegment(seg1.getPoint1(), seg1.getPoint2()), seg2);
+			}
+			else
+			{
+				// ERROR
+				exit(1);
+			}
+		}
 		else
 		{
-			// ERROR
 			exit(1);
 		}
 	}
 
 	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection)
 	{
-		if(shape.getType() == ShapeType::RECTANGLE)
+		if(shape.getType() == ShapeType::AABB)
 		{
-			const Rectangle& rect = (const Rectangle&)shape;
+			const AABB& rect = (const AABB&)shape;
 			return intersects(seg, rect, pointOfIntersection);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)

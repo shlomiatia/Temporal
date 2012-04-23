@@ -39,7 +39,7 @@ namespace Temporal
 		Point _point2;
 	};
 
-	class DirectedSegment : private Segment
+	class DirectedSegment : public Segment
 	{
 	public:
 		DirectedSegment(float originX, float originY, float targetX, float targetY) : Segment(originX, originY, targetX, targetY) {};
@@ -48,7 +48,6 @@ namespace Temporal
 		const Point& getOrigin(void) const { return getPoint1(); }
 		const Point& getTarget(void) const { return getPoint2(); }
 		
-		float getLength(void) const { return Segment::getLength(); }
 		Vector getVector(void) const;
 		float getAngle(void) const;
 	};

@@ -2,7 +2,8 @@
 #include "Texture.h"
 #include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Segment.h>
-#include <Temporal\Base\Rectangle.h>
+#include <Temporal\Base\AABB.h>
+#include <Temporal\Base\SlopedArea.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -91,7 +92,7 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::draw(const Texture& texture, const Rectangle& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
+	void Graphics::draw(const Texture& texture, const AABB& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
 	{
 		const Size& textureSize = texture.getSize();
 		float textureWidth = textureSize.getWidth();
@@ -141,7 +142,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const Rectangle& rect, const Color& color) const
+	void Graphics::draw(const AABB& rect, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -166,6 +167,37 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
+
+	void Graphics::draw(const SlopedArea& slopedArea, const Color& color) const
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glPushMatrix();
+		{
+			setColor(color);
+
+			glTranslatef(slopedArea.getCenterX(), slopedArea.getCenterY(), 0.0f);
+
+			Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
+			Vector plusRadius = slopedArea.getSlopedRadius() + yRadius;
+			Vector minusRadius = slopedArea.getSlopedRadius() - yRadius;
+
+			GLfloat vertices[] = {-plusRadius.getVx(), -plusRadius.getVy(),
+								  -minusRadius.getVx(), -minusRadius.getVy(),
+								   plusRadius.getVx(), plusRadius.getVy(),
+								   minusRadius.getVx(), minusRadius.getVy()};
+ 
+			glEnableClientState(GL_VERTEX_ARRAY);
+ 
+			glVertexPointer(2, GL_FLOAT, 0, vertices);
+ 
+			glDrawArrays(GL_LINE_LOOP, 0, 4);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
+		}
+		glPopMatrix();
+	}
+
 	void Graphics::draw(const Segment& segment, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -182,11 +214,12 @@ namespace Temporal
  
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
+
 	void Graphics::draw(const Shape& shape, const Color& color) const
 	{
-		if(shape.getType() == ShapeType::RECTANGLE)
+		if(shape.getType() == ShapeType::AABB)
 		{
-			const Rectangle& rect = (const Rectangle&)shape;
+			const AABB& rect = (const AABB&)shape;
 			draw(rect, color);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
