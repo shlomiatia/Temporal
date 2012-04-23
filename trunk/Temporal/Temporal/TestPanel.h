@@ -9,7 +9,6 @@ namespace Temporal
 	// ASSUMPTION: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUMPTION: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Handle areas intersection in navigation graph PHYISICS
 	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
 	

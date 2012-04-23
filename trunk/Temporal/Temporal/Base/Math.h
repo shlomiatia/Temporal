@@ -28,5 +28,9 @@ namespace Temporal
 
 	// Works for -2*PI  to 2*PI
 	float minAnglesDistance(float angle1, float angle2);
+
+	bool isModerateAngle(float angle);
+	bool isRightAngle(float angle);
+	inline bool isSteepAngle(float angle) { return !isModerateAngle(angle) && !isRightAngle(angle); }
 }
 #endif

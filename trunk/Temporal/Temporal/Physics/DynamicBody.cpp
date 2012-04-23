@@ -28,10 +28,10 @@ namespace Temporal
 		assert(_size.getHeight() > 0.0f);
 	}
 
-	Rectangle DynamicBody::getBounds(void) const
+	AABB DynamicBody::getBounds(void) const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		return Rectangle(position, _size);
+		return AABB(position, _size);
 	}
 
 	Orientation::Enum DynamicBody::getOrientation(void) const
@@ -48,7 +48,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
-			Rectangle* outParam = (Rectangle*)message.getParam();
+			AABB* outParam = (AABB*)message.getParam();
 			*outParam = getBounds();
 		}
 		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
@@ -57,7 +57,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Rectangle bounds = getBounds();
+			AABB bounds = getBounds();
 			Graphics::get().draw(bounds);
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
@@ -152,7 +152,7 @@ namespace Temporal
 			
 			movement -= stepMovement;
 			changePosition(stepMovement);
-			Rectangle bounds = getBounds();
+			AABB bounds = getBounds();
 			Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
 			if(_collision != Vector::Zero)
 				break;
@@ -166,7 +166,7 @@ namespace Temporal
 	bool DynamicBody::detectCollision(const StaticBody& staticBody)
 	{
 		const Shape& staticBodyBounds = staticBody.getShape();
-		const Rectangle& dynamicBodyBounds = getBounds();
+		const AABB& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
 		if(!staticBody.isCover() && intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
@@ -175,15 +175,15 @@ namespace Temporal
 		return true;
 	}
 
-	void DynamicBody::correctCollision(const Rectangle& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction)
+	void DynamicBody::correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction)
 	{
 		const Segment& segment = (Segment&)staticBodyBounds;
 		Vector platformVector = segment.getNaturalVector().normalize();
-		float absAngle = abs(platformVector.getAngle());
-		bool isModerateSlope = absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS;
+		float angle = platformVector.getAngle();
+		bool isModerateSlope = isModerateAngle(angle);
 
 		modifyCorrection(dynamicBodyBounds, segment, correction, isModerateSlope);
-		bool isSteepSlope = !isModerateSlope && absAngle != ANGLE_90_IN_RADIANS;
+		bool isSteepSlope = isSteepAngle(angle);
 		modifyVelocity(dynamicBodyBounds, segment, correction, platformVector, isSteepSlope);
 
 		// If got collision from below, calculate ground vector. Only do this for moderate slopes
@@ -199,7 +199,7 @@ namespace Temporal
 		_collision -= correction;
 	}
 
-	void DynamicBody::modifyCorrection(const Rectangle& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
+	void DynamicBody::modifyCorrection(const AABB& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
 	{
 		// BRODER
 		bool isOnPlatformTopSide =  (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
@@ -240,7 +240,7 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::modifyVelocity(const Rectangle& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
+	void DynamicBody::modifyVelocity(const AABB& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
 	{
 		// TODO: Modify velocity
 		// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor

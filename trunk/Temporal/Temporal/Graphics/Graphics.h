@@ -7,8 +7,9 @@
 namespace Temporal
 {
 	class Shape;
-	class Rectangle;
+	class AABB;
 	class Segment;
+	class SlopedArea;
 	class Texture;
 
 	class Graphics
@@ -33,8 +34,9 @@ namespace Temporal
 
 		void validate(void) const;
 
-		void draw(const Texture& texture, const Rectangle& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
-		void draw(const Rectangle& rect, const Color& color = Color::White) const;
+		void draw(const Texture& texture, const AABB& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
+		void draw(const AABB& rect, const Color& color = Color::White) const;
+		void draw(const SlopedArea& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;
 		void draw(const Shape& shape, const Color& color = Color::White) const;
 

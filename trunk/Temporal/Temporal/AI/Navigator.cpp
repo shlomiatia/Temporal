@@ -12,12 +12,14 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const Point* goalPosition = (const Point*)message.getParam();
+				const Point& goalPoint = *(const Point*)message.getParam();
+				AABB goalPosition = AABB(goalPoint, Size(1.0f, 1.0f));
 				Navigator& navigator = *(Navigator*)_stateMachine;
 
-				const Point& startPosition = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
-				const NavigationNode* start = NavigationGraph::get().getNodeByPosition(startPosition);
-				const NavigationNode* goal = NavigationGraph::get().getNodeByPosition(*goalPosition);
+				AABB startPosition = AABB::Empty;
+				_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
+				const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
+				const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
 				if(start != NULL && goal != NULL)
 				{
 					NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
@@ -40,8 +42,8 @@ namespace Temporal
 				bool reachedTargetPlatform;
 				if(path == NULL)
 				{
-					const Point& destination = navigator.getDestination();
-					targetX = destination.getX();
+					const AABB& destination = navigator.getDestination();
+					targetX = destination.getCenterX();
 					reachedTargetPlatform = true;
 				}
 				else
@@ -96,6 +98,8 @@ namespace Temporal
 						_stateMachine->changeState(NavigatorStates::JUMP);
 					else if(edge->getType() == NavigationEdgeType::DESCEND)
 						_stateMachine->changeState(NavigatorStates::DESCEND);
+					else if(edge->getType() == NavigationEdgeType::WALK)
+						_stateMachine->changeState(NavigatorStates::WALK);
 				}
 			}
 		}
@@ -162,8 +166,9 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-			const NavigationNode* current = NavigationGraph::get().getNodeByPosition(position);
+			AABB position = AABB::Empty;
+			sendMessageToOwner(Message(MessageID::GET_BOUNDS, &position));
+			const NavigationNode* current = NavigationGraph::get().getNodeByAABB(position);
 			NavigationEdgeCollection* path = getPath();
 			if(current != NULL && path != NULL)
 			{	

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Rectangle.h>
+#include <Temporal\Base\AABB.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
@@ -33,16 +33,16 @@ namespace Temporal
 		Vector _collision;
 		Vector _groundVector;
 
-		Rectangle getBounds(void) const;
+		AABB getBounds(void) const;
 		Orientation::Enum getOrientation(void) const;
 
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);
 		void executeMovement(Vector movement);
 		bool detectCollision(const StaticBody& staticBody);
-		void correctCollision(const Rectangle& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction);
-		void modifyCorrection(const Rectangle& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
-		void modifyVelocity(const Rectangle& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
+		void correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction);
+		void modifyCorrection(const AABB& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
+		void modifyVelocity(const AABB& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
 		void changePosition(const Vector& offset);
 
 		static bool detectCollision(void* caller, void* data, const StaticBody& staticBody);

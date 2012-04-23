@@ -1,22 +1,21 @@
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef AABB_H
+#define AABB_H
 #include "BaseEnums.h"
 #include "NumericPair.h"
 #include "Shape.h"
-#include <stdio.h>
 
 namespace Temporal
 {
-	class Rectangle : public Shape
+	class AABB : public Shape
 	{
 	public:
-		static const Rectangle Empty;
+		static const AABB Empty;
 
-		Rectangle(float centerX, float centerY, float width, float height);
-		Rectangle(const Point& center, const Size& size);
-		Rectangle(const Point& center, const Vector& radius);
+		AABB(float centerX, float centerY, float width, float height);
+		AABB(const Point& center, const Size& size);
+		AABB(const Point& center, const Vector& radius);
 
-		ShapeType::Enum getType(void) const { return ShapeType::RECTANGLE; }
+		ShapeType::Enum getType(void) const { return ShapeType::AABB; }
 
 		const Point& getCenter(void) const { return _center; }
 		const Vector& getRadius(void) const { return _radius; }
@@ -37,8 +36,8 @@ namespace Temporal
 
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
-		Rectangle move(const Vector& vector) const { return Rectangle(getCenter() + vector, getRadius()); }
-		Rectangle resize(const Vector& delta) const { return Rectangle(getCenter(), Vector(getRadius() + delta / 2.0f)); }
+		AABB move(const Vector& vector) const { return AABB(getCenter() + vector, getRadius()); }
+		AABB resize(const Vector& delta) const { return AABB(getCenter(), Vector(getRadius() + delta / 2.0f)); }
 		
 		bool contains(const Point& point) const;
 	private:
@@ -48,8 +47,8 @@ namespace Temporal
 		void validate(void) const;
 	};
 
-	inline Rectangle RectangleLB(float left, float bottom, float width, float height) { return Rectangle(left + width / 2.0f, bottom + height / 2.0f, width, height); }
-	inline Rectangle RectangleCB(float centerX, float bottom, float width, float height) { return Rectangle(centerX, bottom + height / 2.0f, width, height); }
-	inline Rectangle RectangleLC(float left, float centerY, float width, float height) { return Rectangle(left + width / 2.0f, centerY, width, height); }
+	inline AABB AABBLB(float left, float bottom, float width, float height) { return AABB(left + width / 2.0f, bottom + height / 2.0f, width, height); }
+	inline AABB AABBCB(float centerX, float bottom, float width, float height) { return AABB(centerX, bottom + height / 2.0f, width, height); }
+	inline AABB AABBLC(float left, float centerY, float width, float height) { return AABB(left + width / 2.0f, centerY, width, height); }
 }
 #endif

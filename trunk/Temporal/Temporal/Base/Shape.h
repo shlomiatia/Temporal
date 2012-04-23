@@ -9,7 +9,7 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			RECTANGLE,
+			AABB,
 			SEGMENT
 		};
 	}

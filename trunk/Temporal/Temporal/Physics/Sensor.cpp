@@ -10,20 +10,20 @@
 
 namespace Temporal
 {
-	Rectangle Sensor::getBounds(void) const
+	AABB Sensor::getBounds(void) const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Point center(position.getX() + _offset.getVx() * orientation,
 					 position.getY() + _offset.getVy());
-		return Rectangle(center, _size);
+		return AABB(center, _size);
 	}
 
 	void Sensor::update(void)
 	{
 		_point = NULL;
 		
-		Rectangle bounds = getBounds();
+		AABB bounds = getBounds();
 		Grid::get().iterateTiles(bounds, this, NULL, sense);
 		if(_point != NULL)
 		{
@@ -45,7 +45,7 @@ namespace Temporal
 
 	bool Sensor::sense(const StaticBody& staticBody)
 	{
-		const Rectangle& sensorBounds = getBounds();
+		const AABB& sensorBounds = getBounds();
 		if(!staticBody.isCover())
 		{
 			const Shape& shape = staticBody.getShape();

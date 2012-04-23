@@ -67,7 +67,7 @@ namespace Temporal
 		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
 		Orientation::Enum orientation = *(Orientation::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
-		return !sameSign(orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
+		return !sameSign((float)orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
 	void Stand::enter(void)
@@ -215,7 +215,7 @@ namespace Temporal
 		const Sensor& sensor = *(Sensor*)message.getParam();
 		const Point* point = sensor.getPoint();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rectangle personBounds(Rectangle::Empty);
+		AABB personBounds(AABB::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = point->getX();
 		float front = personBounds.getSide(orientation);
@@ -342,7 +342,7 @@ namespace Temporal
 
 	void PrepareToHang::update(void)
 	{
-		Rectangle personBounds(Rectangle::Empty);
+		AABB personBounds(AABB::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
@@ -469,7 +469,7 @@ namespace Temporal
 	void PrepareToDescend::update(void)
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Rectangle personBounds(Rectangle::Empty);
+		AABB personBounds(AABB::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();

@@ -47,8 +47,9 @@
     <ClInclude Include="Base\NumericPair.h" />
     <ClInclude Include="Game\MovementUtils.h" />
     <ClInclude Include="Base\Shape.h" />
-    <ClInclude Include="Base\Rectangle.h" />
     <ClInclude Include="Base\ShapeOperations.h" />
+    <ClInclude Include="Base\AABB.h" />
+    <ClInclude Include="Base\SlopedArea.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -89,8 +90,8 @@
     <ClCompile Include="Base\Segment.cpp" />
     <ClCompile Include="Base\NumericPair.cpp" />
     <ClCompile Include="Game\MovementUtils.cpp" />
-    <ClCompile Include="Base\Rectangle.cpp" />
     <ClCompile Include="Base\ShapeOperations.cpp" />
     <ClCompile Include="Base\Math.cpp" />
+    <ClCompile Include="Base\AABB.cpp" />
   </ItemGroup>
 </Project>

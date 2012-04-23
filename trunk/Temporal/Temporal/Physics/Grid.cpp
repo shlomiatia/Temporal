@@ -1,7 +1,7 @@
 #include "Grid.h"
 #include "StaticBody.h"
 #include <Temporal\Base\Shape.h>
-#include <Temporal\Base\Rectangle.h>
+#include <Temporal\Base\AABB.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
@@ -11,7 +11,7 @@ namespace Temporal
 		for(int i = 0; i < _gridWidth; ++i)
 			for(int j = 0; j < _gridHeight; ++j)
 				if(getTile(i, j) != NULL)
-					Graphics::get().draw(Rectangle(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
 	}
 
 	void Grid::init(const Size& worldSize, float tileSize)

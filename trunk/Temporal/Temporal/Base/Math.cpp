@@ -24,4 +24,15 @@ namespace Temporal
 		float counterClockwiseDistance = abs(2*PI - clockwiseDistance);
 		return std::min(clockwiseDistance,  counterClockwiseDistance);
 	}
+
+	bool isModerateAngle(float angle)
+	{
+		float absAngle = abs(angle);
+		return absAngle <= ANGLE_45_IN_RADIANS || absAngle >= ANGLE_135_IN_RADIANS; 
+	}
+
+	bool isRightAngle(float angle)
+	{
+		return abs(angle) == ANGLE_90_IN_RADIANS;
+	}
 }
