@@ -9,8 +9,8 @@ namespace Temporal
 
 	float PathNode::calculateHeuristicCost(const NavigationNode& goal)
 	{
-		const SlopedArea& sourceArea = getNavigationNode().getArea();
-		const SlopedArea& goalArea = goal.getArea();
+		const YABP& sourceArea = getNavigationNode().getArea();
+		const YABP& goalArea = goal.getArea();
 
 		Segment segment(sourceArea.getCenter(), goalArea.getCenter());
 		return segment.getLength();

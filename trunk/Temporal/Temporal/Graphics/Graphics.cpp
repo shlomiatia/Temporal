@@ -3,7 +3,7 @@
 #include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Base\AABB.h>
-#include <Temporal\Base\SlopedArea.h>
+#include <Temporal\Base\YABP.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -168,7 +168,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const SlopedArea& slopedArea, const Color& color) const
+	void Graphics::draw(const YABP& slopedArea, const Color& color) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 

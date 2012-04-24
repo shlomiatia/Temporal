@@ -9,7 +9,7 @@ namespace Temporal
 	class Shape;
 	class AABB;
 	class Segment;
-	class SlopedArea;
+	class YABP;
 	class Texture;
 
 	class Graphics
@@ -36,7 +36,7 @@ namespace Temporal
 
 		void draw(const Texture& texture, const AABB& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
-		void draw(const SlopedArea& slopedArea, const Color& color = Color::White) const;
+		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;
 		void draw(const Shape& shape, const Color& color = Color::White) const;
 
