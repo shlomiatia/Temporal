@@ -23,7 +23,7 @@
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Base\Shape.h" />
     <ClInclude Include="Base\ShapeOperations.h" />
-    <ClInclude Include="Base\SlopedArea.h" />
+    <ClInclude Include="Base\YABP.h" />
     <ClInclude Include="Base\Timer.h" />
     <ClInclude Include="Game\BasePanel.h" />
     <ClInclude Include="Game\DrawPosition.h" />

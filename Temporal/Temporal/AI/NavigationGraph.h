@@ -4,7 +4,7 @@
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
-#include <Temporal\Base\SlopedArea.h>
+#include <Temporal\Base\YABP.h>
 #include <vector>
 
 namespace Temporal
@@ -28,15 +28,15 @@ namespace Temporal
 	class NavigationNode
 	{
 	public:
-		NavigationNode(const SlopedArea& area) : _area(area) {}
+		NavigationNode(const YABP& area) : _area(area) {}
 		~NavigationNode(void);
 
-		const SlopedArea& getArea(void) const { return _area; }
+		const YABP& getArea(void) const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
 		const NavigationEdgeCollection& getEdges(void) const { return _edges; }
 
 	private:
-		const SlopedArea _area;
+		const YABP _area;
 		NavigationEdgeCollection _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -71,8 +71,8 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeCollection;
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const SlopedArea> SlopedAreaCollection;
-	typedef SlopedAreaCollection::const_iterator SlopedAreaIterator;
+	typedef std::vector<const YABP> YABPCollection;
+	typedef YABPCollection::const_iterator YABPIterator;
 	typedef std::vector<const Shape*> ShapeCollection;
 	typedef ShapeCollection::const_iterator ShapeIterator;
 

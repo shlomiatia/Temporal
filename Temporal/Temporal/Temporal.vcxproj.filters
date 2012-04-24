@@ -49,7 +49,7 @@
     <ClInclude Include="Base\Shape.h" />
     <ClInclude Include="Base\ShapeOperations.h" />
     <ClInclude Include="Base\AABB.h" />
-    <ClInclude Include="Base\SlopedArea.h" />
+    <ClInclude Include="Base\YABP.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
