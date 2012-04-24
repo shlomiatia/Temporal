@@ -62,7 +62,7 @@ namespace Temporal
 		if(slopedArea.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
 
 		// TODO: Axis
-		Vector normal = slopedArea.getSlopedRadius().normalize().getLeftNormal();
+		Vector normal = slopedArea.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
 		Point slopedAreaPointMin = slopedArea.getCenter() + yRadius;
 		Point slopedAreaPointMax = slopedArea.getCenter() - yRadius;
@@ -74,7 +74,7 @@ namespace Temporal
 		   (segmentProjection1 > slopedAreaProjectionMax && segmentProjection2 > slopedAreaProjectionMax))
 		   return false;
 
-		normal = segRadius.normalize().getLeftNormal();
+		normal = segRadius.normalize().getRightNormal();
 		float point = normal * segment.getCenter();
 		Vector yabpRadius = slopedArea.getSlopedRadius() + yRadius;
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
@@ -87,7 +87,7 @@ namespace Temporal
 	
 	bool slopeAxisOverlapps(const YABP& slopedArea1, const YABP& slopedArea2)
 	{
-		Vector normal = slopedArea1.getSlopedRadius().normalize().getLeftNormal();
+		Vector normal = slopedArea1.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius1 = Vector(0.0f, slopedArea1.getYRadius());
 		Point yabpMinPoint1 = slopedArea1.getCenter() + yRadius1;
 		Point yabpMaxPoint1 = slopedArea1.getCenter() - yRadius1;
@@ -126,7 +126,7 @@ namespace Temporal
 		if(slopedArea.getSlopedRadiusVy() + slopedArea.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
 
 		// TODO: Axis
-		Vector normal = slopedArea.getSlopedRadius().normalize().getLeftNormal();
+		Vector normal = slopedArea.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
 		Point slopedAreaPointMin = slopedArea.getCenter() + yRadius;
 		Point slopedAreaPointMax = slopedArea.getCenter() - yRadius;
