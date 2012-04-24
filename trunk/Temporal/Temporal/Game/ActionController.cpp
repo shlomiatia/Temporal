@@ -120,11 +120,19 @@ namespace Temporal
 
 	void Fall::handleMessage(Message& message)
 	{
-		if (isSensorMessage(message, SensorID::HANG))
+		if(message.getID() == MessageID::ACTION_UP)
+		{
+			_wantToHang = true;
+		}
+		else if (_wantToHang && isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			_wantToHang = false;
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
@@ -152,7 +160,7 @@ namespace Temporal
 			if(canJumpForward(_stateMachine))
 			{
 				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
+				_stateMachine->changeState(ActionStateID::JUMP_START);
 			}
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
@@ -253,7 +261,12 @@ namespace Temporal
 
 	void PrepareToJump::handleMessage(Message& message)
 	{
-		if(isSensorMessage(message, SensorID::JUMP))
+		if(message.getID() == MessageID::ACTION_FORWARD)
+		{
+			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+			_stateMachine->changeState(ActionStateID::JUMP_START);
+		}
+		else if(isSensorMessage(message, SensorID::JUMP))
 		{
 			handleJumpSensor(message);
 		}
@@ -312,11 +325,19 @@ namespace Temporal
 
 	void Jump::handleMessage(Message& message)
 	{
-		if (isSensorMessage(message, SensorID::HANG))
+		if(message.getID() == MessageID::ACTION_UP)
+		{
+			_wantToHang = true;
+		}
+		else if (_wantToHang && isSensorMessage(message, SensorID::HANG))
 		{
 			const Sensor& sensor = *(Sensor*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			_wantToHang = false;
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{

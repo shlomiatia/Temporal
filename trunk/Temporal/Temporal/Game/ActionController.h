@@ -150,10 +150,13 @@ namespace Temporal
 	class Fall : public ComponentState
 	{
 	public:
-		Fall(void) {};
+		Fall(void) : _wantToHang(false) {};
 
 		void enter(void);
 		void handleMessage(Message& message);
+		
+	private:
+		bool _wantToHang;
 	};
 
 	class Walk : public ComponentState
@@ -206,10 +209,13 @@ namespace Temporal
 	class Jump : public ComponentState
 	{
 	public:
-		Jump(void) {};
+		Jump(void) : _wantToHang(false) {};
 
 		void enter(void);
 		void handleMessage(Message& message);
+
+	private:
+		bool _wantToHang;
 	};
 
 	class JumpEnd : public ComponentState
