@@ -54,7 +54,7 @@ namespace Temporal
 
 		float y = seg.getY(rect.getCenterX());
 		Vector vector = seg.getNaturalVector().normalize();
-		Vector normal = y > rect.getCenterY() ? vector.getLeftNormal() : vector.getRightNormal();
+		Vector normal = y > rect.getCenterY() ? vector.getRightNormal() : vector.getLeftNormal();
 
 		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
 
@@ -117,10 +117,10 @@ namespace Temporal
 	{
 		Vector dirSegVec = dirSeg.getVector();
 		Vector segVec = seg.getPoint2() - seg.getPoint1();
-		Vector segNormal = segVec.getLeftNormal();
+		Vector segNormal = segVec.getRightNormal();
 		float denominator = segNormal * dirSegVec;
 		Vector difference = seg.getPoint1() - dirSeg.getOrigin();
-		Vector dirSegNormal = dirSegVec.getLeftNormal();
+		Vector dirSegNormal = dirSegVec.getRightNormal();
 		float numerator2 = (dirSegNormal * difference);
 		if(denominator == 0)
 		{

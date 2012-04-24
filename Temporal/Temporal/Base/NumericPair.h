@@ -97,8 +97,8 @@ namespace Temporal
 		// Angle is between -180 to 180 (-PI to PI)
 		float getAngle(void) const;
 		Vector normalize(void) const;
-		Vector getRightNormal(void) const { return Vector(-getVy(), getVx()); }
-		Vector getLeftNormal(void) const { return Vector(getVy(), -getVx()); }
+		Vector getLeftNormal(void) const { return Vector(-getVy(), getVx()); }
+		Vector getRightNormal(void) const { return Vector(getVy(), -getVx()); }
 
 		float operator*(const Vector& other) const { return getVx() * other.getVx() + getVy() * other.getVy(); }
 	};
