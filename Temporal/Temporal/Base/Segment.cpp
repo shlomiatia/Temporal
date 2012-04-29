@@ -3,18 +3,20 @@
 
 namespace Temporal
 {
-	const Segment Segment::Empty(Point::Zero, Point::Zero);
+	const Segment Segment::Empty(Point::Zero, Vector(Vector::Zero));
 
 	float Segment::getLength(void) const
 	{
-		return sqrt(pow(getPoint2().getX() - getPoint1().getX(), 2.0f) + pow(getPoint2().getY() - getPoint1().getY(), 2.0f));
+		return getRadius().getLength() * 2.0f;
 	}
 
-	float Segment::getY(float x) const
+	float Segment::get(Axis::Enum axis, float otherAxisValue) const
 	{
-		float m =  (getPoint2().getY() - getPoint1().getY()) / (getPoint2().getX() - getPoint1().getX());
-		float b = getPoint1().getY() - m * getPoint1().getX();
-		return m * x + b;
+		Vector normalizedRadius = getRadius().normalize();
+		Axis::Enum otherAxis = Axis::opposite(axis);
+		float length = (otherAxisValue - getCenter().getAxis(otherAxis)) / normalizedRadius.getAxis(otherAxis);
+		float value = getCenter().getAxis(axis) + normalizedRadius.getAxis(axis) * length;
+		return value;
 	}
 
 	float DirectedSegment::getAngle(void) const
@@ -25,6 +27,6 @@ namespace Temporal
 
 	Vector DirectedSegment::getVector(void) const
 	{
-		return getTarget() - getOrigin();
+		return getRadius() * 2.0f;
 	}
 }

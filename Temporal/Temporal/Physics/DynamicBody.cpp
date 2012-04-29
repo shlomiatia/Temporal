@@ -223,14 +223,8 @@ namespace Temporal
 			// Slopped floor - take y where the actor stand
 			else
 			{
-				float x1 = segment.getPoint1().getX();
-				float x2 = segment.getPoint2().getX();
-				float y1 = segment.getPoint1().getY();
-				float y2 = segment.getPoint2().getY();
-				float m =  (y2 - y1) / (x2 - x1);
-				float b = y1 - m * x1;
-				float x = m > 0 ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
-				y = m * x + b;
+				float x = segment.getRadiusVy() > 0.0f ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
+				y = segment.getY(x);
 			}
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 

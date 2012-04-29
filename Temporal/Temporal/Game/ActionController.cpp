@@ -261,7 +261,7 @@ namespace Temporal
 
 	void PrepareToJump::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ACTION_FORWARD)
+		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
 			_stateMachine->changeState(ActionStateID::JUMP_START);

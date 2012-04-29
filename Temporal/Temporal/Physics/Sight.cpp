@@ -124,7 +124,7 @@ namespace Temporal
 		static const float SIGHT_SEGMENT_LENGTH = 512.0f;
 		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
 		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
-		Vector targetPosition = Vector(targetX, targetY);
+		Point targetPosition = Point(targetX, targetY);
 		Graphics::get().draw(Segment(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
