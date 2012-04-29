@@ -32,7 +32,7 @@ namespace Temporal
 	bool intersects(const AABB& rect, const Segment& seg, Vector* correction)
 	{
 		Point segmentCenter = seg.getCenter();
-		Vector segmentRadius = seg.getRadius();
+		const Vector& segmentRadius = seg.getRadius();
 		segmentCenter -= rect.getCenter(); // Translate box and segment to origin
 		// Try world coordinate axes as separating axes
 
@@ -41,7 +41,7 @@ namespace Temporal
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 		{
 			float segmentCenterAxis = segmentCenter.getAxis(axis);
-			float penetration = rect.getRadius().getAxis(axis) + segmentRadius.getAxis(axis) - abs(segmentCenterAxis);
+			float penetration = rect.getRadius().getAxis(axis) + abs(segmentRadius.getAxis(axis)) - abs(segmentCenterAxis);
 			if (penetration < 0.0f) return false;
 
 			if(isFirst || penetration < minCorrection.getLength())
@@ -116,10 +116,12 @@ namespace Temporal
 	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection)
 	{
 		Vector dirSegVec = dirSeg.getVector();
-		Vector segVec = seg.getPoint2() - seg.getPoint1();
+		Vector segVec = seg.getNaturalVector();
 		Vector segNormal = segVec.getRightNormal();
 		float denominator = segNormal * dirSegVec;
-		Vector difference = seg.getPoint1() - dirSeg.getOrigin();
+		Point segOrigin = seg.getNaturalOrigin();
+		Point dirSegOrigin = dirSeg.getOrigin();
+		Vector difference = segOrigin - dirSegOrigin;
 		Vector dirSegNormal = dirSegVec.getRightNormal();
 		float numerator2 = (dirSegNormal * difference);
 		if(denominator == 0)
@@ -128,15 +130,16 @@ namespace Temporal
 			{
 				if(pointOfIntersection != NULL)
 				{
-					Vector vector1 = seg.getPoint1() - dirSeg.getOrigin();
-					Vector vector2 = seg.getPoint2() - dirSeg.getOrigin();
+					Vector vector1 = segOrigin - dirSegOrigin;
+					Point segTarget = seg.getNaturalTarget();
+					Vector vector2 = segTarget - dirSegOrigin;
 					if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
 					{
 						*pointOfIntersection = dirSeg.getOrigin();
 					}
 					else
 					{
-						*pointOfIntersection = vector1.getLength() < vector2.getLength() ? seg.getPoint1() : seg.getPoint2();
+						*pointOfIntersection = vector1.getLength() < vector2.getLength() ? segOrigin : segTarget;
 					}
 				}
 				return true;
@@ -149,55 +152,28 @@ namespace Temporal
 			if(length1 >= 0.0f && length1 <= 1.0f && length2 >= 0.0f && length2 <= 1.0f)
 			{
 				if(pointOfIntersection != NULL)
-					*pointOfIntersection = dirSeg.getOrigin() + length1 * dirSegVec;
+					*pointOfIntersection = dirSegOrigin + length1 * dirSegVec;
 				return true;
 			}
 		}
 		return false;
 	}
 
-	bool intersects(const Shape& shape1, const Shape& shape2, Vector* correction)
+	bool intersects(const AABB& rect, const Shape& shape2, Vector* correction)
 	{
-		if(shape1.getType() == ShapeType::AABB)
+		if(shape2.getType() == ShapeType::AABB)
 		{
-			const AABB& rect1 = (const AABB&)shape1;
-			if(shape2.getType() == ShapeType::AABB)
-			{
-				const AABB& rect2 = (const AABB&)shape2;
-				return intersects(rect1, rect2, correction);
-			}
-			else if(shape2.getType() == ShapeType::SEGMENT)
-			{
-				const Segment& seg2 = (const Segment&)shape2;
-				return intersects(rect1, seg2, correction);
-			}
-			else
-			{
-				// ERROR
-				exit(1);
-			}
+			const AABB& rect2 = (const AABB&)shape2;
+			return intersects(rect, rect2, correction);
 		}
 		else if(shape2.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg1 = (const Segment&)shape1;
-			if(shape2.getType() == ShapeType::AABB)
-			{
-				const AABB& rect2 = (const AABB&)shape2;
-				return intersects(rect2, seg1, correction);
-			}
-			else if(shape2.getType() == ShapeType::SEGMENT)
-			{
-				const Segment& seg2 = (const Segment&)shape2;
-				return intersects(DirectedSegment(seg1.getPoint1(), seg1.getPoint2()), seg2);
-			}
-			else
-			{
-				// ERROR
-				exit(1);
-			}
+			const Segment& seg = (const Segment&)shape2;
+			return intersects(rect, seg, correction);
 		}
 		else
 		{
+			// ERROR
 			exit(1);
 		}
 	}

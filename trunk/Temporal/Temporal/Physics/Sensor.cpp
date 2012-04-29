@@ -21,11 +21,11 @@ namespace Temporal
 
 	void Sensor::update(void)
 	{
-		_point = NULL;
+		_point = Point::Zero;
 		
 		AABB bounds = getBounds();
 		Grid::get().iterateTiles(bounds, this, NULL, sense);
-		if(_point != NULL)
+		if(_point != Point::Zero)
 		{
 			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, this));
 		}
@@ -57,18 +57,20 @@ namespace Temporal
 				const Segment& segment = (const Segment&)shape;
 
 				// Then check if contain one of the edges
-				const Point* point = NULL;
-				if(sensorBounds.contains(segment.getPoint1()))
-					point = &(segment.getPoint1());
-				else if(sensorBounds.contains(segment.getPoint2()))
-					point = &(segment.getPoint2());
-				if(point != NULL)
+				Point point = Point::Zero;
+				Point leftPoint = segment.getLeftPoint();
+				Point rightPoint = segment.getRightPoint();
+				if(sensorBounds.contains(leftPoint))
+					point = leftPoint;
+				else if(sensorBounds.contains(rightPoint))
+					point = rightPoint;
+				if(point != Point::Zero)
 				{
 					Vector vector = segment.getNaturalVector();
 					
 					// Modify the angle according to relative position
-					if((vector.getVx() == 0.0f && shape.getTop() == point->getY()) ||
-					   (vector.getVx() != 0.0f && shape.getRight() == point->getX())) 
+					if((vector.getVx() == 0.0f && shape.getTop() == point.getY()) ||
+					   (vector.getVx() != 0.0f && shape.getRight() == point.getX())) 
 					{
 					   vector = -vector;
 					}
@@ -91,7 +93,7 @@ namespace Temporal
 				}
 				else
 				{
-					_point = NULL;
+					_point = Point::Zero;
 					return false;
 				}
 			}

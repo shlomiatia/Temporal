@@ -68,8 +68,8 @@ namespace Temporal
 		Point slopedAreaPointMax = slopedArea.getCenter() - yRadius;
 		float slopedAreaProjectionMin =   normal * slopedAreaPointMin;
 		float slopedAreaProjectionMax =   normal * slopedAreaPointMax;
-		float segmentProjection1 = normal * segment.getPoint1();
-		float segmentProjection2 = normal * segment.getPoint2();
+		float segmentProjection1 = normal * segment.getLeftPoint();
+		float segmentProjection2 = normal * segment.getRightPoint();
 		if((segmentProjection1 < slopedAreaProjectionMin && segmentProjection2 < slopedAreaProjectionMin) ||
 		   (segmentProjection1 > slopedAreaProjectionMax && segmentProjection2 > slopedAreaProjectionMax))
 		   return false;
@@ -184,7 +184,7 @@ namespace Temporal
 		}
 	}
 
-	bool intersectWithPlatform(const Segment& area, ShapeCollection& platforms)
+	bool intersectWithPlatform(const DirectedSegment& area, ShapeCollection& platforms)
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
@@ -242,7 +242,7 @@ namespace Temporal
 		Vector n2 = area2.getSlopedRadius().normalize();
 		float l2 = (x - area2.getCenterX()) / n2.getVx();
 		float y2 = area2.getCenterY() + n2.getVy() * l2 - area2.getYRadius();
-		const Segment fallArea = Segment(x, y1, x + orientation, y2);
+		const DirectedSegment fallArea = DirectedSegment(x, y1, x + orientation, y2);
 		float verticalDistance = y2 - y1;
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
@@ -271,7 +271,7 @@ namespace Temporal
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
 		if(y1 >= y2low && y1 <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
-			Segment jumpArea = Segment(area1.getRight() + 1.0f, y1 - 1.0f, area2.getLeft() - 1.0f, y2low - 1.0f);
+			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1 - 1.0f, area2.getLeft() - 1.0f, y2low - 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP));

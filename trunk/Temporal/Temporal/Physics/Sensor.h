@@ -14,10 +14,10 @@ namespace Temporal
 	{
 	public:
 		Sensor(SensorID::Enum id, const Vector& offset, const Size& size, float rangeCenter, float rangeSize)
-			: _id(id), _offset(offset), _size(size), _point(NULL), _rangeCenter(rangeCenter), _rangeSize(rangeSize) {}
+			: _id(id), _offset(offset), _size(size), _point(Point::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize) {}
 
 		SensorID::Enum getID() const { return _id; }
-		const Point* getPoint(void) const { return _point; }
+		const Point* getPoint(void) const { return _point == Point::Zero ? NULL : &_point; }
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
@@ -28,7 +28,7 @@ namespace Temporal
 		const Size _size;
 		const float _rangeCenter;
 		const float _rangeSize;
-		const Point* _point;
+		Point _point;
 
 		AABB getBounds(void) const;
 		void update(void);

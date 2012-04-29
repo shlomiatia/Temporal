@@ -202,17 +202,23 @@ namespace Temporal
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		setColor(color);
+		glPushMatrix();
+		{
+			setColor(color);
 
-		GLfloat vertices[] = { segment.getPoint1().getX(), segment.getPoint1().getY(), segment.getPoint2().getX(), segment.getPoint2().getY() };
+			glTranslatef(segment.getCenterX(), segment.getCenterY(), 0.0f);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
+			GLfloat vertices[] = { -segment.getRadiusVx(), -segment.getRadiusVy(), segment.getRadiusVx(), segment.getRadiusVy() };
+
+			glEnableClientState(GL_VERTEX_ARRAY);
  
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
+			glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-		glDrawArrays(GL_LINES, 0, 2);
+			glDrawArrays(GL_LINES, 0, 2);
  
-		glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+		}
+		glPopMatrix();
 	}
 
 	void Graphics::draw(const Shape& shape, const Color& color) const
