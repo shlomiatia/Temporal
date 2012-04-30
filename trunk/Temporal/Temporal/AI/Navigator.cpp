@@ -59,9 +59,14 @@ namespace Temporal
 				if(abs(distance) <= 10.0f)
 				{
 					if(reachedTargetPlatform)
+					{
 						_stateMachine->changeState(NavigatorStates::WAIT);
+					}
 					else
+					{
 						_stateMachine->changeState(NavigatorStates::TURN);
+						_stateMachine->handleMessage(message);
+					}
 				}
 				else
 				{
@@ -93,13 +98,14 @@ namespace Temporal
 					if(path->size() == 0)
 						navigator->setPath(NULL);
 					if(edge->getType() == NavigationEdgeType::FALL)
-						_stateMachine->changeState(NavigatorStates::FALL);
+						navigator->changeState(NavigatorStates::FALL);
 					else if(edge->getType() == NavigationEdgeType::JUMP)
-						_stateMachine->changeState(NavigatorStates::JUMP);
+						navigator->changeState(NavigatorStates::JUMP);
 					else if(edge->getType() == NavigationEdgeType::DESCEND)
-						_stateMachine->changeState(NavigatorStates::DESCEND);
+						navigator->changeState(NavigatorStates::DESCEND);
 					else if(edge->getType() == NavigationEdgeType::WALK)
-						_stateMachine->changeState(NavigatorStates::WALK);
+						navigator->changeState(NavigatorStates::WALK);
+					navigator->handleMessage(message);
 				}
 			}
 		}

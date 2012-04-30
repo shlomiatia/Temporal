@@ -160,7 +160,7 @@ namespace Temporal
 
 	void createChaser(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(1512.0f, 68.0f));
+		Position* position = new Position(Point(512.0f, 68.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
@@ -557,9 +557,9 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createChaser(spritesheet);
+		createChaser(spritesheet);
 		//createSentry(spritesheet);
-		createPatrol(spritesheet);
+		//createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();
 		//createBackground();
