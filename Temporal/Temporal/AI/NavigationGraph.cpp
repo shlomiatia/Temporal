@@ -150,7 +150,7 @@ namespace Temporal
 			for(YABPIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
 				const YABP area = *j;
-				if(intersects(area, segment) && area.getLeft() != segment.getRight() && area.getRight() != segment.getLeft() && area.getBottom() != segment.getBottom() && area.getTop() != segment.getBottom())
+				if(intersects(area, segment))
 				{
 					j = areas.erase(j);
 					DirectedSegment upperSlope = DirectedSegment(area.getCenter() + Vector(0.0f, area.getYRadius()) - area.getSlopedRadius(), area.getCenter() + Vector(0.0f, area.getYRadius()) + area.getSlopedRadius());
@@ -171,9 +171,9 @@ namespace Temporal
 							min = lowerSlopePoint.getX();
 						else
 							max = lowerSlopePoint.getX();
-					if(max > area.getLeft() && max < area.getRight())
+					if(max >= area.getLeft() && max <= area.getRight())
 						cutAreaLeft(max + 1.0f, area, areas, j);
-					if(min > area.getLeft() && min < area.getRight())
+					if(min >= area.getLeft() && min <= area.getRight())
 						cutAreaRight(min - 1.0f, area, areas, j);
 					if(j == areas.end())
 					{
@@ -195,6 +195,39 @@ namespace Temporal
 			}
 		}
 		return false;
+	}
+
+	void removeNodesWithoutEdges(NavigationNodeCollection& nodes)
+	{
+		for(NavigationNodeIterator i = nodes.begin(); i != nodes.end();)
+		{
+			const NavigationNode& inode = **i;
+			bool haveEdge = inode.getEdges().size() > 0;
+
+			if(!haveEdge)
+			{
+				for(NavigationNodeIterator j = nodes.begin(); j != nodes.end(); ++j)
+				{
+					const NavigationNode& jnode = **j;
+					for(NavigationEdgeIterator k = jnode.getEdges().begin(); k != jnode.getEdges().end(); ++k)
+					{
+						const NavigationEdge& edge = **k;
+						if(&(edge.getTarget()) == &inode)
+						{
+							haveEdge = true;
+							break;
+						}
+					}
+					if(haveEdge)
+						break;
+				}
+			}
+				
+			if(!haveEdge)
+				i = nodes.erase(i);
+			else
+				++i;
+		}
 	}
 
 	void NavigationGraph::createNodes(ShapeCollection& platforms)
@@ -238,24 +271,25 @@ namespace Temporal
 
 		Vector n1 = area1.getSlopedRadius().normalize();
 		float l1 = (x - area1.getCenterX()) / n1.getVx();
-		float y1 = area1.getCenterY() + n1.getVy() * l1;
+		float y1 = area1.getCenterY() + n1.getVy() * l1 - area2.getYRadius();
 		Vector n2 = area2.getSlopedRadius().normalize();
 		float l2 = (x - area2.getCenterX()) / n2.getVx();
 		float y2 = area2.getCenterY() + n2.getVy() * l2 - area2.getYRadius();
-		const DirectedSegment fallArea = DirectedSegment(x, y1, x + orientation, y2);
-		float verticalDistance = y2 - y1;
+		float verticalDistance = y1 - y2;
+		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
+		float distance = (area2.getSide(orientation) - x) * orientation;
+		NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
+
+		const DirectedSegment fallArea = type == NavigationEdgeType::DESCEND  ? DirectedSegment(x + orientation, y1, x, y2) : DirectedSegment(x + orientation, y1, x + orientation, y2);
+		
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
-			float distance = (area2.getSide(orientation) - x) * orientation;
-			float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
-
 			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy()) + 80.0f;
-			NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
-			node1.addEdge(new NavigationEdge(node1, node2, 
-				x, orientation, type));
+			
+			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 			if(verticalDistance <= maxJumpHeight)
-				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP));
+				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
 		}
 	}
 
@@ -271,11 +305,11 @@ namespace Temporal
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
 		if(y1 >= y2low && y1 <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
-			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1 - 1.0f, area2.getLeft() - 1.0f, y2low - 1.0f);
+			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1, area2.getLeft() - 1.0f, y2low);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
-				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP));
-				node2.addEdge(new NavigationEdge(node2, node1, area2.getLeft(), Orientation::LEFT, NavigationEdgeType::JUMP));
+				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP_FORWARD));
+				node2.addEdge(new NavigationEdge(node2, node1, area2.getLeft(), Orientation::LEFT, NavigationEdgeType::JUMP_FORWARD));
 			}
 		}
 	}
@@ -322,14 +356,7 @@ namespace Temporal
 		}
 
 		// Remove nodes without edges
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end();)
-		{
-			const NavigationNode& node = **i;
-			if(node.getEdges().size() == 0)
-				i = _nodes.erase(i);
-			else
-				++i;
-		}
+		removeNodesWithoutEdges(_nodes);
 	}
 
 	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
@@ -375,7 +402,7 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
-			Graphics::get().draw(node.getArea(), Color::Yellow);
+			//Graphics::get().draw(node.getArea(), Color::Yellow);
 		}
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -386,10 +413,30 @@ namespace Temporal
 				const NavigationEdge& edge = **j;
 				const YABP& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
-				float x2 = edge.getType() == NavigationEdgeType::JUMP ? area2.getOppositeSide(edge.getOrientation()) : x1;
+				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD || edge.getType() == NavigationEdgeType::JUMP_UP) ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = edge.getType() == NavigationEdgeType::WALK ? node.getArea().getCenterY() : node.getArea().getBottom();
 				float y2 = edge.getType() == NavigationEdgeType::WALK ? area2.getCenterY() : area2.getBottom();
-				Graphics::get().draw(Segment(Point(x1, y1), Point(x2, y2)), Color(1.0f, 0.5f, 0.0f));
+				Color color = Color::White;
+				if(edge.getType() == NavigationEdgeType::JUMP_UP)
+				{
+					color = Color::Blue;
+					x1 += 10.0f;
+				}
+				else if(edge.getType() == NavigationEdgeType::JUMP_FORWARD)
+				{
+					color = Color::Green;
+				}
+				else if(edge.getType() == NavigationEdgeType::DESCEND)
+				{
+					color = Color::Cyan;
+					x1 -= 10.0f;
+				}
+				else 
+				{
+					color = Color::Magenta;
+					x1 -= 10.0f;
+				}
+				Graphics::get().draw(Segment(Point(x1, y1), Point(x2, y2)), color);
 			}
 		}
 	}

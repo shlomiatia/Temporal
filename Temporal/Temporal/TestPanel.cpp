@@ -136,7 +136,7 @@ namespace Temporal
 
 	void createPlayer(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(1512.0f, 768.0f));
+		Position* position = new Position(Point(512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
@@ -341,7 +341,7 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
 
 		// Cover
-		EntitiesManager::get().add(createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
+		/*EntitiesManager::get().add(createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
 
 		// 30
 		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet));
@@ -388,7 +388,7 @@ namespace Temporal
 		// V
 		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet));
+		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet));*/
 	}
 
 	void createBackground()
