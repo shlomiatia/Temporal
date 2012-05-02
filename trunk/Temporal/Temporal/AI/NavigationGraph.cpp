@@ -123,7 +123,7 @@ namespace Temporal
 		float delta = slopedArea.getCenterX() - aabb.getCenterX();
 		if(slopedArea.getSlopedRadiusVx() + aabb.getRadiusVx()  < abs(delta)) return false;
 		delta = slopedArea.getCenterY() - aabb.getCenterY();
-		if(slopedArea.getSlopedRadiusVy() + slopedArea.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
+		if(abs(slopedArea.getSlopedRadiusVy()) + slopedArea.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
 
 		// TODO: Axis
 		Vector normal = slopedArea.getSlopedRadius().normalize().getRightNormal();
@@ -305,7 +305,7 @@ namespace Temporal
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
 		if(y1 >= y2low && y1 <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
-			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1, area2.getLeft() - 1.0f, y2low);
+			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1 - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP_FORWARD));
@@ -402,7 +402,7 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
-			//Graphics::get().draw(node.getArea(), Color::Yellow);
+			Graphics::get().draw(node.getArea(), Color::Yellow);
 		}
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -413,7 +413,7 @@ namespace Temporal
 				const NavigationEdge& edge = **j;
 				const YABP& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
-				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD || edge.getType() == NavigationEdgeType::JUMP_UP) ? area2.getOppositeSide(edge.getOrientation()) : x1;
+				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD) ? area2.getOppositeSide(edge.getOrientation()) : x1;
 				float y1 = edge.getType() == NavigationEdgeType::WALK ? node.getArea().getCenterY() : node.getArea().getBottom();
 				float y2 = edge.getType() == NavigationEdgeType::WALK ? area2.getCenterY() : area2.getBottom();
 				Color color = Color::White;
@@ -424,6 +424,7 @@ namespace Temporal
 				}
 				else if(edge.getType() == NavigationEdgeType::JUMP_FORWARD)
 				{
+					y1 += 10.0f;
 					color = Color::Green;
 				}
 				else if(edge.getType() == NavigationEdgeType::DESCEND)
@@ -431,7 +432,12 @@ namespace Temporal
 					color = Color::Cyan;
 					x1 -= 10.0f;
 				}
-				else 
+				else if(edge.getType() == NavigationEdgeType::FALL)
+				{
+					color = Color(1.0f, 0.5f, 0.0f);
+					x1 -= 10.0f;
+				}
+				else
 				{
 					color = Color::Magenta;
 					x1 -= 10.0f;

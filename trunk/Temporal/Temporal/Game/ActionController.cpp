@@ -160,7 +160,7 @@ namespace Temporal
 			if(canJumpForward(_stateMachine))
 			{
 				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
+				_stateMachine->changeState(ActionStateID::JUMP_START);
 			}
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
@@ -264,6 +264,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+			_stateMachine->changeState(ActionStateID::JUMP_START);
 		}
 		else if(isSensorMessage(message, SensorID::JUMP))
 		{

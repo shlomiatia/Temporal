@@ -16,7 +16,8 @@ namespace Temporal
 			WALK,
 			TURN,
 			FALL,
-			JUMP,
+			JUMP_UP,
+			JUMP_FORWARD,
 			DESCEND
 		};
 
@@ -53,11 +54,20 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class Jump : public ComponentState
+		class JumpUp : public ComponentState
 		{
 		public:
-			Jump(void) {}
+			JumpUp(void) {}
 
+			void handleMessage(Message& message);
+		};
+
+		class JumpForward : public ComponentState
+		{
+		public:
+			JumpForward(void) {}
+
+			void enter(void);
 			void handleMessage(Message& message);
 		};
 
