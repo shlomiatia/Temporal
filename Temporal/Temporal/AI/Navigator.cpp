@@ -99,13 +99,18 @@ namespace Temporal
 						navigator->setPath(NULL);
 					if(edge->getType() == NavigationEdgeType::FALL)
 						navigator->changeState(NavigatorStates::FALL);
-					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD || edge->getType() == NavigationEdgeType::JUMP_UP)
-						navigator->changeState(NavigatorStates::JUMP);
+					else if(edge->getType() == NavigationEdgeType::JUMP_UP)
+						navigator->changeState(NavigatorStates::JUMP_UP);
+					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD)
+						navigator->changeState(NavigatorStates::JUMP_FORWARD);
 					else if(edge->getType() == NavigationEdgeType::DESCEND)
 						navigator->changeState(NavigatorStates::DESCEND);
 					else if(edge->getType() == NavigationEdgeType::WALK)
+					{
 						navigator->changeState(NavigatorStates::WALK);
-					navigator->handleMessage(message);
+						navigator->handleMessage(message);
+					}
+					
 				}
 			}
 		}
@@ -124,18 +129,33 @@ namespace Temporal
 			}
 		}
 
-		void Jump::handleMessage(Message& message)
+		void JumpUp::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
 				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
-				if(state == ActionStateID::CLIMB || state == ActionStateID::JUMP_END)
+				if(state == ActionStateID::CLIMB)
 					_stateMachine->changeState(NavigatorStates::WALK);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+			}
+		}
+
+		void JumpForward::enter(void)
+		{
+			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
+			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+		}
+
+		void JumpForward::handleMessage(Message& message)
+		{
+			if(message.getID() == MessageID::STATE_EXITED)
+			{
+				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
+				if(state == ActionStateID::JUMP_END)
+					_stateMachine->changeState(NavigatorStates::WALK);
 			}
 		}
 
@@ -162,7 +182,8 @@ namespace Temporal
 		states.push_back(new Walk());
 		states.push_back(new Turn());
 		states.push_back(new Fall());
-		states.push_back(new Jump());
+		states.push_back(new JumpUp());
+		states.push_back(new JumpForward());
 		states.push_back(new Descend());
 		return states;
 	}
