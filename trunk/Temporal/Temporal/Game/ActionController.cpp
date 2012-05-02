@@ -160,7 +160,7 @@ namespace Temporal
 			if(canJumpForward(_stateMachine))
 			{
 				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(ActionStateID::JUMP_START);
+				_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
 			}
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
@@ -264,7 +264,6 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-			_stateMachine->changeState(ActionStateID::JUMP_START);
 		}
 		else if(isSensorMessage(message, SensorID::JUMP))
 		{
@@ -436,6 +435,8 @@ namespace Temporal
 	{
 		_platformFound = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::DROP)));
+
+		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
 
 		bool gravityEnabled = true;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));

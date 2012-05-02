@@ -17,7 +17,8 @@ namespace Temporal
 		{
 			WALK,
 			FALL,
-			JUMP,
+			JUMP_UP,
+			JUMP_FORWARD,
 			DESCEND
 		};
 	}

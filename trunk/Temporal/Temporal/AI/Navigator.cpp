@@ -99,7 +99,7 @@ namespace Temporal
 						navigator->setPath(NULL);
 					if(edge->getType() == NavigationEdgeType::FALL)
 						navigator->changeState(NavigatorStates::FALL);
-					else if(edge->getType() == NavigationEdgeType::JUMP)
+					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD || edge->getType() == NavigationEdgeType::JUMP_UP)
 						navigator->changeState(NavigatorStates::JUMP);
 					else if(edge->getType() == NavigationEdgeType::DESCEND)
 						navigator->changeState(NavigatorStates::DESCEND);
