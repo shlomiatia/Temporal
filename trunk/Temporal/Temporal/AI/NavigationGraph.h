@@ -3,12 +3,13 @@
 
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\AABB.h>
+#include <Temporal\Base\Shape.h>
 #include <Temporal\Base\YABP.h>
 #include <vector>
 
 namespace Temporal
 {
+	class AABB;
 	class NavigationEdge;
 
 	namespace NavigationEdgeType

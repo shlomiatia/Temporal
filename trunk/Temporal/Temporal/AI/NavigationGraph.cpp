@@ -44,16 +44,15 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	void cutArea(Orientation::Enum direction, float amount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutArea(Orientation::Enum direction, float cutAmount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
-		// TODO:
 		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
-		float l = amount / normalizedSlopedVector.getVx();
-		Vector d = (normalizedSlopedVector * l) / 2.0f;
+		float length = cutAmount / normalizedSlopedVector.getVx();
+		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
 
 		// Move center in the opposite direction
-		Point center = area.getCenter() + (float)Orientation::getOpposite(direction) * d;
-		Vector slopedRadius = area.getSlopedRadius() - d;
+		Point center = area.getCenter() + (float)Orientation::getOpposite(direction) * cutRadius;
+		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
 		const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
 		iterator = areas.insert(iterator, nodeAfterCut);
 	}
@@ -215,7 +214,6 @@ namespace Temporal
 		NavigationEdgeType::Enum type;
 		DirectedSegment fallArea = DirectedSegment::Empty;
 
-		// TODO:
 		if(distance < minFallDistance)
 		{
 			type = NavigationEdgeType::DESCEND;

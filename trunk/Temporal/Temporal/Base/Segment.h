@@ -50,9 +50,10 @@ namespace Temporal
 	class DirectedSegment : public Segment
 	{
 	public:
+		static const DirectedSegment Empty;
+
 		DirectedSegment(float originX, float originY, float targetX, float targetY) : Segment(originX, originY, targetX, targetY) {}
-		DirectedSegment(const Point& origin, const Point target) : Segment(origin, target) {}
-		DirectedSegment(const Segment& segment) : Segment(segment) {}
+		DirectedSegment(const Point& origin, const Point& target) : Segment(origin, target) {}
 
 		Point getOrigin(void) const { return getCenter() - getRadius(); }
 		Point getTarget(void) const { return getCenter() + getRadius(); }
