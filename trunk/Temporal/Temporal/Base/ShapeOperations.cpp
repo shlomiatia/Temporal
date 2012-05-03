@@ -13,11 +13,15 @@ namespace Temporal
 	{
 		bool isFirst = true;
 		Vector minCorrection = Vector::Zero;
+
+		// Check x and y axis
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
 		{
 			float delta = rect2.getCenter().getAxis(axis) - rect1.getCenter().getAxis(axis);
 			float penetration = rect1.getRadius().getAxis(axis) + rect2.getRadius().getAxis(axis) - abs(delta);
 			if(penetration < 0.0f) return false;
+
+			// Set min correction if first or smaller
 			if(isFirst || penetration < minCorrection.getLength())
 			{
 				isFirst = false;
@@ -35,16 +39,18 @@ namespace Temporal
 		Point segmentCenter = seg.getCenter();
 		const Vector& segmentRadius = seg.getRadius();
 		segmentCenter -= rect.getCenter(); // Translate box and segment to origin
-		// Try world coordinate axes as separating axes
-
+		
 		bool isFirst = true;
 		Vector minCorrection = Vector::Zero;
+
+		// Try world coordinate axes as separating axes
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++)
 		{
 			float segmentCenterAxis = segmentCenter.getAxis(axis);
 			float penetration = rect.getRadius().getAxis(axis) + abs(segmentRadius.getAxis(axis)) - abs(segmentCenterAxis);
 			if (penetration < 0.0f) return false;
 
+			// Set min correction if first or smaller
 			if(isFirst || penetration < minCorrection.getLength())
 			{
 				isFirst = false;
@@ -53,14 +59,13 @@ namespace Temporal
 			}
 		}
 
+		// To find max projection of rectangle unto the segment vector, we need to test +/-rx,+/-ry multiply nx*ny. 
+		// The max projection is obtained when all elements are positive, so we multiply rx,ry to abs(nx),abs(ny)
 		float y = seg.getY(rect.getCenterX());
 		Vector vector = seg.getNaturalVector().normalize();
 		Vector normal = y > rect.getCenterY() ? vector.getRightNormal() : vector.getLeftNormal();
-
 		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
 
-		// To find max projection of rectangle unto the segment vector, we need to test -rx,-ry;-rx,ry;rx,-ry;rx,ry multiply nx*ny. 
-		// The max projection is obtained when all elements are positive, so we multiply rx,ry to abs(nx),abs(ny)
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
 		float absRectRadiusProjection = rect.getRadius() * absNormal;
 		float penetration = absRectRadiusProjection - absSegCenterProjection;
@@ -125,28 +130,9 @@ namespace Temporal
 		Vector difference = segOrigin - dirSegOrigin;
 		Vector dirSegNormal = dirSegVec.getRightNormal();
 		float numerator2 = (dirSegNormal * difference);
-		if(denominator == 0)
-		{
-			if(numerator2 == 0 && abs(dirSeg.getCenterX() - seg.getCenterX()) <= dirSeg.getRadius().getVx() + seg.getRadius().getVx())
-			{
-				if(pointOfIntersection != NULL)
-				{
-					Vector vector1 = segOrigin - dirSegOrigin;
-					Point segTarget = seg.getNaturalTarget();
-					Vector vector2 = segTarget - dirSegOrigin;
-					if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
-					{
-						*pointOfIntersection = dirSeg.getOrigin();
-					}
-					else
-					{
-						*pointOfIntersection = vector1.getLength() < vector2.getLength() ? segOrigin : segTarget;
-					}
-				}
-				return true;
-			}
-		}
-		else
+
+		// Not parallel
+		if(denominator != 0)
 		{
 			float length1 = (segNormal * difference) / denominator;
 			float length2 = numerator2 / denominator;
@@ -157,18 +143,47 @@ namespace Temporal
 				return true;
 			}
 		}
+		// Parallel
+		else
+		{
+			// Overlaps
+			if(numerator2 == 0 && abs(dirSeg.getCenterX() - seg.getCenterX()) <= dirSeg.getRadius().getVx() + seg.getRadius().getVx())
+			{
+				if(pointOfIntersection != NULL)
+				{
+					Vector vector1 = segOrigin - dirSegOrigin;
+					Point segTarget = seg.getNaturalTarget();
+					Vector vector2 = segTarget - dirSegOrigin;
+
+					// We take 2 vectors that originated in th directed segment origin, and are directed to the segment natural origin and target.
+					// If the directions are opposite, it means that the directed segment origin is swallowed by the segment, therefore it's the point of intersection
+					if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
+					{
+						*pointOfIntersection = dirSeg.getOrigin();
+					}
+					// Otherwise, the shorter vector point to the point of intersection
+					else
+					{
+						*pointOfIntersection = vector1.getLength() < vector2.getLength() ? segOrigin : segTarget;
+					}
+				}
+				return true;
+			}
+		}
 		return false;
 	}
 
 	bool intersects(const YABP& yabp, const Segment& segment)
 	{
+		// Check x axis (parallel to y)
 		Vector segRadius = segment.getRadius();
 		float delta = yabp.getCenterX() - segment.getCenterX();
 		if(yabp.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
 
-		// TODO: Axis
+		// Check sloped axis
+		// TODO:
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius = Vector(0.0f, yabp.getYRadius());
+		Vector yRadius = yabp.getYVector();
 		Point yabpPointMin = yabp.getCenter() + yRadius;
 		Point yabpPointMax = yabp.getCenter() - yRadius;
 		float yabpProjectionMin =   normal * yabpPointMin;
@@ -179,27 +194,33 @@ namespace Temporal
 		   (segmentProjection1 > yabpProjectionMax && segmentProjection2 > yabpProjectionMax))
 		   return false;
 
+		// Check segment axis
 		normal = segRadius.normalize().getRightNormal();
 		float point = normal * segment.getCenter();
+
+		// We need project c +/- yr +/- sr to n. Instead, we'll project min: c - yr - abs(sr), and max: c + yr +abs(sr), to (abs)n
 		Vector yabpRadius = yabp.getSlopedRadius() + yRadius;
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
-		Vector absSlopedRadius = Vector(abs(yabp.getSlopedRadius().getVx()), abs(yabp.getSlopedRadius().getVy()));
-		float max = normal * yabp.getCenter()  + absSlopedRadius * absNormal + yRadius * absNormal;
-		float min = normal * yabp.getCenter()  - absSlopedRadius * absNormal - yRadius * absNormal;
+		Vector absSlopedRadius = Vector(abs(yabp.getSlopedRadiusVx()), abs(yabp.getSlopedRadiusVy()));
+		float max = normal * yabp.getCenter() + absSlopedRadius * absNormal + yRadius * absNormal;
+		float min = normal * yabp.getCenter() - absSlopedRadius * absNormal - yRadius * absNormal;
 		if(point < min || point > max) return false;
 		return true;
 	}
 	
-	bool slopeAxisOverlapps(const YABP& yabp1, const YABP& yabp2)
+	bool slopedAxisIntersects(const YABP& yabp1, const YABP& yabp2)
 	{
 		Vector normal = yabp1.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius1 = Vector(0.0f, yabp1.getYRadius());
+		Vector yRadius1 = yabp1.getYVector();
 		Point yabpMinPoint1 = yabp1.getCenter() + yRadius1;
 		Point yabpMaxPoint1 = yabp1.getCenter() - yRadius1;
 		float yabpMinProjection1 =   normal * yabpMinPoint1;
 		float yabpMaxProjection1 =   normal * yabpMaxPoint1;
+
+		// We need project c +/- yr +/- sr to n. Instead, we'll project min: c - yr - abs(sr), and max: c + yr +abs(sr), to (abs)n
+		// TODO:
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
-		Vector yRadius2 = Vector(0.0f, yabp2.getYRadius());
+		Vector yRadius2 = yabp2.getYVector();
 		Vector yabpRadius2 = yabp2.getSlopedRadius() + yRadius2;
 		Vector absSlopedRadius2 = Vector(abs(yabp2.getSlopedRadius().getVx()), abs(yabp2.getSlopedRadius().getVy()));
 		float yabpMinProjection2 = normal * yabp2.getCenter() - absSlopedRadius2 * absNormal - yRadius2 * absNormal;
@@ -211,13 +232,16 @@ namespace Temporal
 
 	bool intersects(const YABP& yabp1, const YABP& yabp2)
 	{
+		// Check x axis (parallel to y)
 		float delta = yabp1.getCenterX() - yabp2.getCenterX();
 		if(yabp1.getSlopedRadiusVx() + yabp2.getSlopedRadiusVx() < abs(delta)) return false;
 
-		if(!slopeAxisOverlapps(yabp1, yabp2))
+		// Check first YABP sloped axis
+		if(!slopedAxisIntersects(yabp1, yabp2))
 			return false;
 
-		if(!slopeAxisOverlapps(yabp2, yabp1))
+		// Check second YABP sloped axis
+		if(!slopedAxisIntersects(yabp2, yabp1))
 			return false;
 
 		return true;
@@ -225,18 +249,23 @@ namespace Temporal
 
 	bool intersects(const YABP& yabp, const AABB& aabb)
 	{
+		// Check x and y radiuses
 		float delta = yabp.getCenterX() - aabb.getCenterX();
 		if(yabp.getSlopedRadiusVx() + aabb.getRadiusVx()  < abs(delta)) return false;
 		delta = yabp.getCenterY() - aabb.getCenterY();
 		if(abs(yabp.getSlopedRadiusVy()) + yabp.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
 
-		// TODO: Axis
+		// Check sloped axis
+		// TODO:
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius = Vector(0.0f, yabp.getYRadius());
+		Vector yRadius = yabp.getYVector();
 		Point yabpPointMin = yabp.getCenter() + yRadius;
 		Point yabpPointMax = yabp.getCenter() - yRadius;
 		float yabpProjectionMin =   normal * yabpPointMin;
 		float yabpProjectionMax =   normal * yabpPointMax;
+
+		// We need project c +/- r to n. Instead, we'll project min: c - r, and max: c + r, to (abs)n
+		// TODO: Abs normal
 		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
 		float aabbProjectionMin = normal * aabb.getCenter() - absNormal * aabb.getRadius();
 		float aabbProjectionMax = normal * aabb.getCenter() + absNormal * aabb.getRadius();

@@ -229,10 +229,10 @@ namespace Temporal
 		
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
+			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
+
 			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy()) + 80.0f;
-			
-			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 			if(verticalDistance <= maxJumpHeight)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
 		}
