@@ -17,6 +17,8 @@ namespace Temporal
 
 		float getCenterX(void) const { return getCenter().getX(); }
 		float getCenterY(void) const { return getCenter().getY(); }
+
+		Vector getYVector(void) const { return Vector(0.0f, getYRadius()); }
 		
 		float getSlopedRadiusVx(void) const { return getSlopedRadius().getVx(); }
 		float getSlopedRadiusVy(void) const { return getSlopedRadius().getVy(); }
@@ -29,10 +31,8 @@ namespace Temporal
 		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
 
-		float getWidth(void) const { return getSlopedRadius().getLength() * 2.0f; }
-		float getHeight(void) const { return getYRadius() * 2.0f; }
-
-		YABP resize(const Vector& delta) const { return YABP(getCenter(), getSlopedRadius().normalize() * (getSlopedRadius().getLength() + delta.getVx() / 2.0f), getYRadius() + delta.getVy() / 2.0f); }
+		float getWidth(void) const { return getSlopedRadiusVx() * 2.0f; }
+		float getHeight(void) const { return getYRadius() * 2.0f + abs(getSlopedRadiusVy()) * 2.0f; }
 	private:
 		Point _center;
 		Vector _slopedRadius;
