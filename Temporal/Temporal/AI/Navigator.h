@@ -12,13 +12,13 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			WAIT,
-			WALK,
-			TURN,
+			WALK,	
 			FALL,
 			JUMP_UP,
 			JUMP_FORWARD,
-			DESCEND
+			DESCEND,
+			WAIT,
+			TURN,
 		};
 
 

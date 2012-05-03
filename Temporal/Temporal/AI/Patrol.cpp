@@ -59,7 +59,7 @@ namespace Temporal
 
 		void Turn::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
 			{
 				const ActionStateID::Enum& actionID = *(ActionStateID::Enum*)message.getParam();
 				if(actionID == ActionStateID::TURN)

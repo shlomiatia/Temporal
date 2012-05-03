@@ -117,7 +117,7 @@ namespace Temporal
 
 		void Fall::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
 			{
 				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::FALL)
@@ -131,7 +131,7 @@ namespace Temporal
 
 		void JumpUp::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
 			{
 				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::CLIMB)
@@ -151,7 +151,7 @@ namespace Temporal
 
 		void JumpForward::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
 			{
 				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::JUMP_END)
@@ -161,7 +161,7 @@ namespace Temporal
 
 		void Descend::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
 			{
 				const ActionStateID::Enum& state = *(ActionStateID::Enum*)message.getParam();
 				if(state == ActionStateID::DROP)
@@ -178,13 +178,13 @@ namespace Temporal
 	{
 		StateCollection states;
 		using namespace NavigatorStates;
-		states.push_back(new Wait());
 		states.push_back(new Walk());
-		states.push_back(new Turn());
 		states.push_back(new Fall());
 		states.push_back(new JumpUp());
 		states.push_back(new JumpForward());
 		states.push_back(new Descend());
+		states.push_back(new Wait());
+		states.push_back(new Turn());
 		return states;
 	}
 

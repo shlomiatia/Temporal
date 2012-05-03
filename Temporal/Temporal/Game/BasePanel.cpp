@@ -49,10 +49,10 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::AI_CONTROLLER | ComponentType::DYNAMIC_BODY | ComponentType::SENSOR;
-		EntitiesManager::get().sendMessageToAllComponents(Message(MessageID::DEBUG_DRAW), filter);
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::DYNAMIC_BODY | ComponentType::SENSOR;
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		//Grid::get().draw();
-		NavigationGraph::get().draw();
+		//NavigationGraph::get().draw();
 	}
 
 	void BasePanel::dispose(void)
