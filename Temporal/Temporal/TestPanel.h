@@ -9,7 +9,9 @@ namespace Temporal
 	// ASSUMPTION: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUMPTION: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Support directed jump at jump forward for platforms as well as ledges. Jump without hang PHYSICS
+	// TODO: Check sensor each movement step PHYSICS
+	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
+	// TODO: Store YABP in grid PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
 	
 	// TODO: Use hashed string for Entity, components, sensors, messages, states etc. ENTITIES
@@ -20,7 +22,6 @@ namespace Temporal
 	// TODO: Consider transition type in navigation edge cost  AI
 	// TODO: Fix huristics:  Take into account position, need for turning, and several edges to the same platform AI
 	// TODO: Fault tolerance in navigator AI
-	// TODO: Use entitiy size for stuff. Allow to hang on forward jumps AI
 
 	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
 	// TODO: Gradual hang & descend GRAPHICS

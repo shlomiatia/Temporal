@@ -54,7 +54,7 @@ namespace Temporal
 		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::AI_CONTROLLER;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		//Grid::get().draw();
-		NavigationGraph::get().draw();
+		//NavigationGraph::get().draw();
 	}
 
 	void BasePanel::dispose(void)
