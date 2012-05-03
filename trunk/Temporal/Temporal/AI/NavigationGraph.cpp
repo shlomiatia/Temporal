@@ -419,28 +419,28 @@ namespace Temporal
 				Color color = Color::White;
 				if(edge.getType() == NavigationEdgeType::JUMP_UP)
 				{
-					color = Color::Blue;
-					x1 += 10.0f;
+					color = Color(1.0f, 0.5f, 0.0f);
+					
 				}
 				else if(edge.getType() == NavigationEdgeType::JUMP_FORWARD)
 				{
-					y1 += 10.0f;
 					color = Color::Green;
 				}
 				else if(edge.getType() == NavigationEdgeType::DESCEND)
 				{
-					color = Color::Cyan;
-					x1 -= 10.0f;
+					color = Color::Blue;
+					x1 -= 5.0f;
+					x2 -= 5.0f;
 				}
 				else if(edge.getType() == NavigationEdgeType::FALL)
 				{
-					color = Color(1.0f, 0.5f, 0.0f);
-					x1 -= 10.0f;
+					color = Color::Cyan;
+					x1 += 5.0f;
+					x2 += 5.0f;
 				}
 				else
 				{
 					color = Color::Magenta;
-					x1 -= 10.0f;
 				}
 				Graphics::get().draw(Segment(Point(x1, y1), Point(x2, y2)), color);
 			}
