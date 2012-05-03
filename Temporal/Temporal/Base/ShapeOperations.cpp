@@ -66,7 +66,7 @@ namespace Temporal
 		Vector normal = y > rect.getCenterY() ? vector.getRightNormal() : vector.getLeftNormal();
 		float absSegCenterProjection = abs(Vector(segmentCenter) * normal);
 
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector absNormal = normal.absolute();
 		float absRectRadiusProjection = rect.getRadius() * absNormal;
 		float penetration = absRectRadiusProjection - absSegCenterProjection;
 		if(penetration < -EPSILON) return false;
@@ -200,7 +200,7 @@ namespace Temporal
 
 		// We need project c +/- yr +/- sr to n. Instead, we'll project min: c - yr - abs(sr), and max: c + yr +abs(sr), to (abs)n
 		Vector yabpRadius = yabp.getSlopedRadius() + yRadius;
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector absNormal = normal.absolute();
 		Vector absSlopedRadius = Vector(abs(yabp.getSlopedRadiusVx()), abs(yabp.getSlopedRadiusVy()));
 		float max = normal * yabp.getCenter() + absSlopedRadius * absNormal + yRadius * absNormal;
 		float min = normal * yabp.getCenter() - absSlopedRadius * absNormal - yRadius * absNormal;
@@ -219,7 +219,7 @@ namespace Temporal
 
 		// We need project c +/- yr +/- sr to n. Instead, we'll project min: c - yr - abs(sr), and max: c + yr +abs(sr), to (abs)n
 		// TODO:
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector absNormal = normal.absolute();
 		Vector yRadius2 = yabp2.getYVector();
 		Vector yabpRadius2 = yabp2.getSlopedRadius() + yRadius2;
 		Vector absSlopedRadius2 = Vector(abs(yabp2.getSlopedRadius().getVx()), abs(yabp2.getSlopedRadius().getVy()));
@@ -265,8 +265,7 @@ namespace Temporal
 		float yabpProjectionMax =   normal * yabpPointMax;
 
 		// We need project c +/- r to n. Instead, we'll project min: c - r, and max: c + r, to (abs)n
-		// TODO: Abs normal
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector absNormal = normal.absolute();
 		float aabbProjectionMin = normal * aabb.getCenter() - absNormal * aabb.getRadius();
 		float aabbProjectionMax = normal * aabb.getCenter() + absNormal * aabb.getRadius();
 		if((aabbProjectionMin < yabpProjectionMin && aabbProjectionMax < yabpProjectionMin) ||

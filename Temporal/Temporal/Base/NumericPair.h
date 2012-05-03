@@ -17,6 +17,7 @@ namespace Temporal
 		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? _n1 : _n2; }
 		void setAxis(Axis::Enum axis, float value) { if(axis == Axis::X) _n1 = value; else _n2 = value; }
 
+		NumericPair absolute(void) const;
 		NumericPair operator-(void) const { return NumericPair(-_n1, -_n2); }
 		bool operator==(const NumericPair& numericPair) const { return ((_n1 == numericPair._n1) && (_n2 == numericPair._n2)); }
 		bool operator!=(const NumericPair& numericPair) const { return !(*this == numericPair); }

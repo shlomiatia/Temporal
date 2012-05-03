@@ -4,6 +4,7 @@
 #include "Message.h"
 #include "EntitiesManager.h"
 #include "Game.h"
+#include <Temporal\Base\AABB.h>
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Graphics\ViewManager.h>
 #include <Temporal\Graphics\Graphics.h>
@@ -37,8 +38,9 @@ namespace Temporal
 		
 		if(Input::get().isQuit())
 		{
-			const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
-			EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&position));
+			AABB bounds = AABB::Empty;
+			EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_BOUNDS, &bounds));
+			EntitiesManager::get().sendMessageToEntity(1, Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
 			//Game::get().stop();
 		}
 	}

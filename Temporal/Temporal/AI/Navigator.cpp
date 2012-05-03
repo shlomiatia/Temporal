@@ -12,8 +12,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const Point& goalPoint = *(const Point*)message.getParam();
-				AABB goalPosition = AABB(goalPoint, Size(1.0f, 1.0f));
+				AABB goalPosition = *(const AABB*)message.getParam();
 				Navigator& navigator = *(Navigator*)_stateMachine;
 
 				AABB startPosition = AABB::Empty;
