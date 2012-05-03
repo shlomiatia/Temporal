@@ -160,7 +160,7 @@ namespace Temporal
 
 	void createChaser(SpriteSheet* spritesheet)
 	{
-		Position* position = new Position(Point(1512.0f, 68.0f));
+		Position* position = new Position(Point(1512.0f, 768.0f));
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
@@ -357,11 +357,11 @@ namespace Temporal
 		EntitiesManager::get().add(createPlatform(new Segment(1728.0f, 0.0f, 1792.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1792.0f, 128.0f, 1856.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1856.0f, 128.0f, 1920.0f, 0.0f), spritesheet));
-
+		
 		// Torches
 		EntitiesManager::get().add(createPlatform(new Segment(1024.0f, 64.0f, 1088.0f, 128.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1024.0f, 128.0f, 1088.0f, 128.0f), spritesheet));
-
+		
 		EntitiesManager::get().add(createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 64.0f), spritesheet));
 		EntitiesManager::get().add(createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 128.0f), spritesheet));
 

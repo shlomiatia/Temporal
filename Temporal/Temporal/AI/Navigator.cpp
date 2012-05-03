@@ -65,6 +65,8 @@ namespace Temporal
 					else
 					{
 						_stateMachine->changeState(NavigatorStates::TURN);
+						
+						// Prevent stop when edge is walk
 						_stateMachine->handleMessage(message);
 					}
 				}
@@ -97,17 +99,11 @@ namespace Temporal
 					path->erase(path->begin());
 					if(path->size() == 0)
 						navigator->setPath(NULL);
-					if(edge->getType() == NavigationEdgeType::FALL)
-						navigator->changeState(NavigatorStates::FALL);
-					else if(edge->getType() == NavigationEdgeType::JUMP_UP)
-						navigator->changeState(NavigatorStates::JUMP_UP);
-					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD)
-						navigator->changeState(NavigatorStates::JUMP_FORWARD);
-					else if(edge->getType() == NavigationEdgeType::DESCEND)
-						navigator->changeState(NavigatorStates::DESCEND);
-					else if(edge->getType() == NavigationEdgeType::WALK)
+					navigator->changeState((NavigatorStates::Enum)edge->getType());
+
+					// Prevent stop when edge is walk
+					if(edge->getType() == NavigationEdgeType::WALK)
 					{
-						navigator->changeState(NavigatorStates::WALK);
 						navigator->handleMessage(message);
 					}
 					

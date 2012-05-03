@@ -101,7 +101,7 @@ namespace Temporal
 	{
 		float interpolation = framePeriodInMillis / 1000.0f;
 
-		// TODO: Determine movement
+		// Determine movement
 		Vector movement = Vector::Zero;
 		if(_absoluteImpulse != Vector::Zero)
 		{
@@ -210,7 +210,6 @@ namespace Temporal
 		bool canModifyCorrection = isModerateSlope || isOnPlatformTopSide;
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-		// TODO: Sigma
 		if(canModifyCorrection && abs(_velocity.getVx()) < EPSILON && correction.getVx() != 0.0f) 
 		{	
 			float y = 0.0f;
@@ -236,7 +235,6 @@ namespace Temporal
 
 	void DynamicBody::modifyVelocity(const AABB& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
 	{
-		// TODO: Modify velocity
 		// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
 		if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
 			_velocity.setVx(0.0f);
