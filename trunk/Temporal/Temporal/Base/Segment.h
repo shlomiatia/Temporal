@@ -55,6 +55,9 @@ namespace Temporal
 		DirectedSegment(float originX, float originY, float targetX, float targetY) : Segment(originX, originY, targetX, targetY) {}
 		DirectedSegment(const Point& origin, const Point& target) : Segment(origin, target) {}
 
+		// Directed segment using natural segment direction
+		explicit DirectedSegment(const Segment& segment) : Segment(segment) {}
+
 		Point getOrigin(void) const { return getCenter() - getRadius(); }
 		Point getTarget(void) const { return getCenter() + getRadius(); }
 

@@ -181,7 +181,6 @@ namespace Temporal
 		if(yabp.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
 
 		// Check sloped axis
-		// TODO:
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = yabp.getYVector();
 		Point yabpPointMin = yabp.getCenter() + yRadius;
@@ -218,7 +217,6 @@ namespace Temporal
 		float yabpMaxProjection1 =   normal * yabpMaxPoint1;
 
 		// We need project c +/- yr +/- sr to n. Instead, we'll project min: c - yr - abs(sr), and max: c + yr +abs(sr), to (abs)n
-		// TODO:
 		Vector absNormal = normal.absolute();
 		Vector yRadius2 = yabp2.getYVector();
 		Vector yabpRadius2 = yabp2.getSlopedRadius() + yRadius2;
@@ -256,7 +254,6 @@ namespace Temporal
 		if(abs(yabp.getSlopedRadiusVy()) + yabp.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
 
 		// Check sloped axis
-		// TODO:
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = yabp.getYVector();
 		Point yabpPointMin = yabp.getCenter() + yRadius;

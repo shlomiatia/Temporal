@@ -69,6 +69,16 @@ namespace Temporal
 		cutArea(Orientation::RIGHT, amount, area, areas, iterator);
 	}
 
+	Segment getUpperSegment(const YABP& yabp)
+	{
+		return Segment(yabp.getCenter() + yabp.getYVector(), yabp.getSlopedRadius());
+	}
+
+	Segment getLowerSegment(const YABP& yabp)
+	{
+		return Segment(yabp.getCenter() - yabp.getYVector(), yabp.getSlopedRadius());
+	}
+
 	void updateMinMax(const Point& point, const Vector& segmentVector, const Vector& slopedRadius, float& val1, float& val2)
 	{
 		if(point != Vector::Zero)
@@ -92,9 +102,8 @@ namespace Temporal
 					j = areas.erase(j);
 					Vector yVector = area.getYVector();
 					const Vector& slopedRadius = area.getSlopedRadius();
-					// TODO:
-					DirectedSegment upperSlope = DirectedSegment(area.getCenter() + yVector - slopedRadius, area.getCenter() + yVector + slopedRadius);
-					DirectedSegment lowerSlope = DirectedSegment(area.getCenter() - yVector - slopedRadius, area.getCenter() - yVector + slopedRadius);
+					DirectedSegment upperSlope = DirectedSegment(getUpperSegment(area));
+					DirectedSegment lowerSlope = DirectedSegment(getLowerSegment(area));
 					Point upperSlopePoint = Point::Zero;
 					Point lowerSlopePoint = Point::Zero;
 					intersects(upperSlope, segment, &upperSlopePoint);
@@ -192,7 +201,7 @@ namespace Temporal
 				const YABP& area = *j;
 
 				// Check min width
-				if(area.getWidth() >= MIN_AREA_SIZE.getWidth())
+				if(area.getSlopedRadius().getLength() * 2.0f >= MIN_AREA_SIZE.getWidth())
 					_nodes.push_back(new NavigationNode(area));
 			}
 		}
@@ -202,14 +211,12 @@ namespace Temporal
 	{
 		const YABP& area1 = node1.getArea();
 		const YABP& area2 = node2.getArea();
-		// TODO:
-		Segment lowerSegment1 = Segment(Point(area1.getCenter() - area1.getYVector()), Vector(area1.getSlopedRadius() * 2.0f));
-		Segment lowerSegment2 = Segment(Point(area2.getCenter() - area2.getYVector()), Vector(area2.getSlopedRadius() * 2.0f));
+		Segment lowerSegment1 = getLowerSegment(area1);
+		Segment lowerSegment2 = getLowerSegment(area2);
 		float y1 = lowerSegment1.getY(x);
 		float y2 = lowerSegment2.getY(x);
 		float verticalDistance = y1 - y2;
-		// TODO:
-		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
+		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 		NavigationEdgeType::Enum type;
 		DirectedSegment fallArea = DirectedSegment::Empty;

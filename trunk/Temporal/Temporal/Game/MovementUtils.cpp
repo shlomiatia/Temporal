@@ -63,7 +63,7 @@ namespace Temporal
 		 * T = sqrt(-(2*y)/G))
 		 * x = sqrt(-(2*y)/G))*F
 		 */
-		float fallDistance = sqrt((2*height)/gravity)*fallStartForce;
+		float fallDistance = sqrt(-(2*height)/gravity)*fallStartForce;
 		return fallDistance;
 	}
 }
