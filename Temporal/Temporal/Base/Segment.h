@@ -12,7 +12,7 @@ namespace Temporal
 
 		Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
 		Segment(const Point& point1, const Point& point2) : _center((point1+point2)/2.0f), _radius((point2-point1)/2.0f) {}
-		Segment(const Point& center, const Vector& radius) : _center(_center), _radius(radius) {}
+		Segment(const Point& center, const Vector& radius) : _center(center), _radius(radius) {}
 		// No need for virtual destructor
 
 		ShapeType::Enum getType(void) const { return ShapeType::SEGMENT; }
@@ -52,6 +52,7 @@ namespace Temporal
 	public:
 		DirectedSegment(float originX, float originY, float targetX, float targetY) : Segment(originX, originY, targetX, targetY) {}
 		DirectedSegment(const Point& origin, const Point target) : Segment(origin, target) {}
+		DirectedSegment(const Segment& segment) : Segment(segment) {}
 
 		Point getOrigin(void) const { return getCenter() - getRadius(); }
 		Point getTarget(void) const { return getCenter() + getRadius(); }

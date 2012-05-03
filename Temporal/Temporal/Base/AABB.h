@@ -36,9 +36,6 @@ namespace Temporal
 
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
-		AABB move(const Vector& vector) const { return AABB(getCenter() + vector, getRadius()); }
-		AABB resize(const Vector& delta) const { return AABB(getCenter(), Vector(getRadius() + delta / 2.0f)); }
-		
 		bool contains(const Point& point) const;
 	private:
 		Point _center;

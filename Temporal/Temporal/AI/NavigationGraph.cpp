@@ -24,6 +24,17 @@ namespace Temporal
 		}
 	}
 
+	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
+	{
+		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		{
+			const NavigationNode* node = *i;
+			if(intersects(node->getArea(),  aabb))
+				return node;
+		}
+		return NULL;
+	}
+
 	float NavigationEdge::calculateCost(const NavigationNode& source)
 	{
 		const YABP& sourceArea = source.getArea();
@@ -33,112 +44,39 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	void cutAreaLeft(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutArea(Orientation::Enum direction, float amount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
+		// TODO:
 		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
-		float l = (x - area.getLeft()) / normalizedSlopedVector.getVx();
+		float l = amount / normalizedSlopedVector.getVx();
 		Vector d = (normalizedSlopedVector * l) / 2.0f;
-		Point center = area.getCenter() + d;
+
+		// Move center in the opposite direction
+		Point center = area.getCenter() + (float)Orientation::getOpposite(direction) * d;
 		Vector slopedRadius = area.getSlopedRadius() - d;
 		const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
 		iterator = areas.insert(iterator, nodeAfterCut);
+	}
+
+	void cutAreaLeft(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
+	{
+		float amount = x - area.getLeft();
+		cutArea(Orientation::LEFT, amount, area, areas, iterator);
 	}
 
 	void cutAreaRight(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
-		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
-		float l = (area.getRight() - x) / normalizedSlopedVector.getVx();
-		Vector d = (normalizedSlopedVector * l) / 2.0f;
-		Point center = area.getCenter() - d;
-		Vector slopedRadius = area.getSlopedRadius() - d;
-		const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
-		iterator = areas.insert(iterator, nodeAfterCut);
+		float amount = area.getRight() - x;
+		cutArea(Orientation::RIGHT, amount, area, areas, iterator);
 	}
 
-	bool intersects(const YABP& slopedArea, const Segment& segment)
+	void updateMinMax(const Point& point, const Vector& segmentVector, const Vector& slopedRadius, float& val1, float& val2)
 	{
-		Vector segRadius = segment.getRadius();
-		float delta = slopedArea.getCenterX() - segment.getCenterX();
-		if(slopedArea.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
-
-		// TODO: Axis
-		Vector normal = slopedArea.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
-		Point slopedAreaPointMin = slopedArea.getCenter() + yRadius;
-		Point slopedAreaPointMax = slopedArea.getCenter() - yRadius;
-		float slopedAreaProjectionMin =   normal * slopedAreaPointMin;
-		float slopedAreaProjectionMax =   normal * slopedAreaPointMax;
-		float segmentProjection1 = normal * segment.getLeftPoint();
-		float segmentProjection2 = normal * segment.getRightPoint();
-		if((segmentProjection1 < slopedAreaProjectionMin && segmentProjection2 < slopedAreaProjectionMin) ||
-		   (segmentProjection1 > slopedAreaProjectionMax && segmentProjection2 > slopedAreaProjectionMax))
-		   return false;
-
-		normal = segRadius.normalize().getRightNormal();
-		float point = normal * segment.getCenter();
-		Vector yabpRadius = slopedArea.getSlopedRadius() + yRadius;
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
-		Vector absSlopedRadius = Vector(abs(slopedArea.getSlopedRadius().getVx()), abs(slopedArea.getSlopedRadius().getVy()));
-		float max = normal * slopedArea.getCenter()  + absSlopedRadius * absNormal + yRadius * absNormal;
-		float min = normal * slopedArea.getCenter()  - absSlopedRadius * absNormal - yRadius * absNormal;
-		if(point < min || point > max) return false;
-		return true;
-	}
-	
-	bool slopeAxisOverlapps(const YABP& slopedArea1, const YABP& slopedArea2)
-	{
-		Vector normal = slopedArea1.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius1 = Vector(0.0f, slopedArea1.getYRadius());
-		Point yabpMinPoint1 = slopedArea1.getCenter() + yRadius1;
-		Point yabpMaxPoint1 = slopedArea1.getCenter() - yRadius1;
-		float yabpMinProjection1 =   normal * yabpMinPoint1;
-		float yabpMaxProjection1 =   normal * yabpMaxPoint1;
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
-		Vector yRadius2 = Vector(0.0f, slopedArea2.getYRadius());
-		Vector yabpRadius2 = slopedArea2.getSlopedRadius() + yRadius2;
-		Vector absSlopedRadius2 = Vector(abs(slopedArea2.getSlopedRadius().getVx()), abs(slopedArea2.getSlopedRadius().getVy()));
-		float yabpMinProjection2 = normal * slopedArea2.getCenter() - absSlopedRadius2 * absNormal - yRadius2 * absNormal;
-		float yabpMaxProjection2 = normal * slopedArea2.getCenter()  + absSlopedRadius2 * absNormal + yRadius2 * absNormal;
-		
-		return !((yabpMinProjection2 < yabpMinProjection1 && yabpMaxProjection2 < yabpMinProjection1) ||
-				 (yabpMinProjection2 > yabpMaxProjection1 && yabpMaxProjection2 > yabpMaxProjection1));
-	}
-
-	bool intersects(const YABP& slopedArea1, const YABP& slopedArea2)
-	{
-		float delta = slopedArea1.getCenterX() - slopedArea2.getCenterX();
-		if(slopedArea1.getSlopedRadiusVx() + slopedArea2.getSlopedRadiusVx() < abs(delta)) return false;
-
-		if(!slopeAxisOverlapps(slopedArea1, slopedArea2))
-			return false;
-
-		if(!slopeAxisOverlapps(slopedArea2, slopedArea1))
-			return false;
-
-		return true;
-	}
-
-	bool intersects(const YABP& slopedArea, const AABB& aabb)
-	{
-		float delta = slopedArea.getCenterX() - aabb.getCenterX();
-		if(slopedArea.getSlopedRadiusVx() + aabb.getRadiusVx()  < abs(delta)) return false;
-		delta = slopedArea.getCenterY() - aabb.getCenterY();
-		if(abs(slopedArea.getSlopedRadiusVy()) + slopedArea.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
-
-		// TODO: Axis
-		Vector normal = slopedArea.getSlopedRadius().normalize().getRightNormal();
-		Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
-		Point slopedAreaPointMin = slopedArea.getCenter() + yRadius;
-		Point slopedAreaPointMax = slopedArea.getCenter() - yRadius;
-		float slopedAreaProjectionMin =   normal * slopedAreaPointMin;
-		float slopedAreaProjectionMax =   normal * slopedAreaPointMax;
-		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
-		float aabbProjectionMin = normal * aabb.getCenter() - absNormal * aabb.getRadius();
-		float aabbProjectionMax = normal * aabb.getCenter() + absNormal * aabb.getRadius();
-		if((aabbProjectionMin < slopedAreaProjectionMin && aabbProjectionMax < slopedAreaProjectionMin) ||
-		   (aabbProjectionMin > slopedAreaProjectionMax && aabbProjectionMax > slopedAreaProjectionMax))
-		   return false;
-		return true;
+		if(point != Vector::Zero)
+		if(segmentVector.getVy() > 0.0f || (segmentVector.getVy() == 0.0f && slopedRadius.getVy() < 0.0f))
+			val1 = point.getX();
+		else
+			val2 = point.getX();	
 	}
 
 	void cutAreasByPlatforms(YABPCollection& areas, ShapeCollection& platforms)
@@ -153,24 +91,20 @@ namespace Temporal
 				if(intersects(area, segment))
 				{
 					j = areas.erase(j);
-					DirectedSegment upperSlope = DirectedSegment(area.getCenter() + Vector(0.0f, area.getYRadius()) - area.getSlopedRadius(), area.getCenter() + Vector(0.0f, area.getYRadius()) + area.getSlopedRadius());
-					DirectedSegment lowerSlope = DirectedSegment(area.getCenter() - Vector(0.0f, area.getYRadius()) - area.getSlopedRadius(), area.getCenter() - Vector(0.0f, area.getYRadius()) + area.getSlopedRadius());
+					Vector yVector = area.getYVector();
+					const Vector& slopedRadius = area.getSlopedRadius();
+					// TODO:
+					DirectedSegment upperSlope = DirectedSegment(area.getCenter() + yVector - slopedRadius, area.getCenter() + yVector + slopedRadius);
+					DirectedSegment lowerSlope = DirectedSegment(area.getCenter() - yVector - slopedRadius, area.getCenter() - yVector + slopedRadius);
 					Point upperSlopePoint = Point::Zero;
 					Point lowerSlopePoint = Point::Zero;
 					intersects(upperSlope, segment, &upperSlopePoint);
 					intersects(lowerSlope, segment, &lowerSlopePoint);
 					float min = segment.getLeft();
 					float max = segment.getRight();
-					if(upperSlopePoint != Vector::Zero)
-						if(segment.getNaturalVector().getVy() > 0.0f || (segment.getNaturalVector().getVy() == 0.0f && area.getSlopedRadius().getVy() < 0.0f))
-							max = upperSlopePoint.getX();
-						else
-							min = upperSlopePoint.getX();		
-					if(lowerSlopePoint != Vector::Zero)
-						if(segment.getNaturalVector().getVy() > 0.0f || (segment.getNaturalVector().getVy() == 0.0f && area.getSlopedRadius().getVy() < 0.0f))
-							min = lowerSlopePoint.getX();
-						else
-							max = lowerSlopePoint.getX();
+					Vector segmentVector = segment.getNaturalVector();
+					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
+					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
 					if(max >= area.getLeft() && max <= area.getRight())
 						cutAreaLeft(max + 1.0f, area, areas, j);
 					if(min >= area.getLeft() && min <= area.getRight())
@@ -204,6 +138,7 @@ namespace Temporal
 			const NavigationNode& inode = **i;
 			bool haveEdge = inode.getEdges().size() > 0;
 
+			// Check if any edge is directed to this node
 			if(!haveEdge)
 			{
 				for(NavigationNodeIterator j = nodes.begin(); j != nodes.end(); ++j)
@@ -268,19 +203,29 @@ namespace Temporal
 	{
 		const YABP& area1 = node1.getArea();
 		const YABP& area2 = node2.getArea();
-
-		Vector n1 = area1.getSlopedRadius().normalize();
-		float l1 = (x - area1.getCenterX()) / n1.getVx();
-		float y1 = area1.getCenterY() + n1.getVy() * l1 - area2.getYRadius();
-		Vector n2 = area2.getSlopedRadius().normalize();
-		float l2 = (x - area2.getCenterX()) / n2.getVx();
-		float y2 = area2.getCenterY() + n2.getVy() * l2 - area2.getYRadius();
+		// TODO:
+		Segment lowerSegment1 = Segment(Point(area1.getCenter() - area1.getYVector()), Vector(area1.getSlopedRadius() * 2.0f));
+		Segment lowerSegment2 = Segment(Point(area2.getCenter() - area2.getYVector()), Vector(area2.getSlopedRadius() * 2.0f));
+		float y1 = lowerSegment1.getY(x);
+		float y2 = lowerSegment2.getY(x);
 		float verticalDistance = y1 - y2;
+		// TODO:
 		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, -DynamicBody::GRAVITY.getVy(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
-		NavigationEdgeType::Enum type = distance < minFallDistance ? NavigationEdgeType::DESCEND : NavigationEdgeType::FALL;
+		NavigationEdgeType::Enum type;
+		DirectedSegment fallArea = DirectedSegment::Empty;
 
-		const DirectedSegment fallArea = type == NavigationEdgeType::DESCEND  ? DirectedSegment(x + orientation, y1, x, y2) : DirectedSegment(x + orientation, y1, x + orientation, y2);
+		// TODO:
+		if(distance < minFallDistance)
+		{
+			type = NavigationEdgeType::DESCEND;
+			fallArea = DirectedSegment(x + orientation, y1, x, y2);
+		}
+		else
+		{
+			type = NavigationEdgeType::FALL;
+			fallArea = DirectedSegment(x + orientation, y1, x + orientation, y2);
+		}
 		
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
@@ -299,13 +244,13 @@ namespace Temporal
 		const YABP& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float y1 = area1.getCenterY() + area1.getSlopedRadiusVy() - area1.getYRadius();
+		float y1low = area1.getCenterY() + area1.getSlopedRadiusVy() - area1.getYRadius();
 		float y2low = area2.getCenterY() - area2.getSlopedRadiusVy() - area2.getYRadius();
 		float y2high = area2.getCenterY() - area2.getSlopedRadiusVy() + area2.getYRadius();
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
-		if(y1 >= y2low && y1 <= y2high  && horizontalDistance <= maxJumpForwardDistance)
+		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
-			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1 - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
+			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1low - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP_FORWARD));
@@ -357,17 +302,6 @@ namespace Temporal
 
 		// Remove nodes without edges
 		removeNodesWithoutEdges(_nodes);
-	}
-
-	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
-	{
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
-		{
-			const NavigationNode* node = *i;
-			if(intersects(node->getArea(),  aabb))
-				return node;
-		}
-		return NULL;
 	}
 
 	void addPlatform(const Entity& entity, void* data) 

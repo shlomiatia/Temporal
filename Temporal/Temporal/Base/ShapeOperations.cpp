@@ -2,6 +2,7 @@
 
 #include "AABB.h"
 #include "Segment.h"
+#include "YABP.h"
 #include "Math.h"
 #include <math.h>
 #include <algorithm>
@@ -157,6 +158,92 @@ namespace Temporal
 			}
 		}
 		return false;
+	}
+
+	bool intersects(const YABP& yabp, const Segment& segment)
+	{
+		Vector segRadius = segment.getRadius();
+		float delta = yabp.getCenterX() - segment.getCenterX();
+		if(yabp.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
+
+		// TODO: Axis
+		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
+		Vector yRadius = Vector(0.0f, yabp.getYRadius());
+		Point yabpPointMin = yabp.getCenter() + yRadius;
+		Point yabpPointMax = yabp.getCenter() - yRadius;
+		float yabpProjectionMin =   normal * yabpPointMin;
+		float yabpProjectionMax =   normal * yabpPointMax;
+		float segmentProjection1 = normal * segment.getLeftPoint();
+		float segmentProjection2 = normal * segment.getRightPoint();
+		if((segmentProjection1 < yabpProjectionMin && segmentProjection2 < yabpProjectionMin) ||
+		   (segmentProjection1 > yabpProjectionMax && segmentProjection2 > yabpProjectionMax))
+		   return false;
+
+		normal = segRadius.normalize().getRightNormal();
+		float point = normal * segment.getCenter();
+		Vector yabpRadius = yabp.getSlopedRadius() + yRadius;
+		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector absSlopedRadius = Vector(abs(yabp.getSlopedRadius().getVx()), abs(yabp.getSlopedRadius().getVy()));
+		float max = normal * yabp.getCenter()  + absSlopedRadius * absNormal + yRadius * absNormal;
+		float min = normal * yabp.getCenter()  - absSlopedRadius * absNormal - yRadius * absNormal;
+		if(point < min || point > max) return false;
+		return true;
+	}
+	
+	bool slopeAxisOverlapps(const YABP& yabp1, const YABP& yabp2)
+	{
+		Vector normal = yabp1.getSlopedRadius().normalize().getRightNormal();
+		Vector yRadius1 = Vector(0.0f, yabp1.getYRadius());
+		Point yabpMinPoint1 = yabp1.getCenter() + yRadius1;
+		Point yabpMaxPoint1 = yabp1.getCenter() - yRadius1;
+		float yabpMinProjection1 =   normal * yabpMinPoint1;
+		float yabpMaxProjection1 =   normal * yabpMaxPoint1;
+		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		Vector yRadius2 = Vector(0.0f, yabp2.getYRadius());
+		Vector yabpRadius2 = yabp2.getSlopedRadius() + yRadius2;
+		Vector absSlopedRadius2 = Vector(abs(yabp2.getSlopedRadius().getVx()), abs(yabp2.getSlopedRadius().getVy()));
+		float yabpMinProjection2 = normal * yabp2.getCenter() - absSlopedRadius2 * absNormal - yRadius2 * absNormal;
+		float yabpMaxProjection2 = normal * yabp2.getCenter()  + absSlopedRadius2 * absNormal + yRadius2 * absNormal;
+		
+		return !((yabpMinProjection2 < yabpMinProjection1 && yabpMaxProjection2 < yabpMinProjection1) ||
+				 (yabpMinProjection2 > yabpMaxProjection1 && yabpMaxProjection2 > yabpMaxProjection1));
+	}
+
+	bool intersects(const YABP& yabp1, const YABP& yabp2)
+	{
+		float delta = yabp1.getCenterX() - yabp2.getCenterX();
+		if(yabp1.getSlopedRadiusVx() + yabp2.getSlopedRadiusVx() < abs(delta)) return false;
+
+		if(!slopeAxisOverlapps(yabp1, yabp2))
+			return false;
+
+		if(!slopeAxisOverlapps(yabp2, yabp1))
+			return false;
+
+		return true;
+	}
+
+	bool intersects(const YABP& yabp, const AABB& aabb)
+	{
+		float delta = yabp.getCenterX() - aabb.getCenterX();
+		if(yabp.getSlopedRadiusVx() + aabb.getRadiusVx()  < abs(delta)) return false;
+		delta = yabp.getCenterY() - aabb.getCenterY();
+		if(abs(yabp.getSlopedRadiusVy()) + yabp.getYRadius() + aabb.getRadiusVy()  < abs(delta)) return false;
+
+		// TODO: Axis
+		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
+		Vector yRadius = Vector(0.0f, yabp.getYRadius());
+		Point yabpPointMin = yabp.getCenter() + yRadius;
+		Point yabpPointMax = yabp.getCenter() - yRadius;
+		float yabpProjectionMin =   normal * yabpPointMin;
+		float yabpProjectionMax =   normal * yabpPointMax;
+		Vector absNormal = Vector(abs(normal.getVx()), abs(normal.getVy()));
+		float aabbProjectionMin = normal * aabb.getCenter() - absNormal * aabb.getRadius();
+		float aabbProjectionMax = normal * aabb.getCenter() + absNormal * aabb.getRadius();
+		if((aabbProjectionMin < yabpProjectionMin && aabbProjectionMax < yabpProjectionMin) ||
+		   (aabbProjectionMin > yabpProjectionMax && aabbProjectionMax > yabpProjectionMax))
+		   return false;
+		return true;
 	}
 
 	bool intersects(const AABB& rect, const Shape& shape2, Vector* correction)
