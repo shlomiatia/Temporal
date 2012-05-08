@@ -6,12 +6,16 @@ namespace Temporal
 {
 	namespace CameraStates
 	{
+		static const Hash SEARCH_ANIMATION = Hash("ANIM_CAM_SEARCH");
+		static const Hash SEE_ANIMATION = Hash("ANIM_CAM_SEE");
+		static const Hash TURN_ANIMATION = Hash("ANIM_CAM_TURN");
+
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
 		void Search::enter(void)
 		{
 			_timer.reset();
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
 		void Search::handleMessage(Message& message)
@@ -31,7 +35,7 @@ namespace Temporal
 
 		void See::enter(void)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 			_haveLineOfSight = false;
 		}
 
@@ -51,7 +55,7 @@ namespace Temporal
 
 		void Turn::enter(void)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 			_hasTurned = false;
 		}
 
@@ -66,7 +70,7 @@ namespace Temporal
 				else
 				{
 					_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::TURN, true)));
+					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
 					_hasTurned = true;
 				}
 			}
@@ -76,7 +80,7 @@ namespace Temporal
 
 		void Acquire::enter(void)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 			_timer.reset();
 			_blinking = false;
 			_haveLineOfSight = true;
@@ -87,9 +91,9 @@ namespace Temporal
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
 				if(_blinking)
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEARCH)));
+					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 				else
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CameraStates::SEE)));
+					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 				_blinking = !_blinking;
 			}
 			else if(message.getID() == MessageID::LINE_OF_SIGHT)

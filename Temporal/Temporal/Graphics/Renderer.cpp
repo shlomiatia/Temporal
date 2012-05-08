@@ -17,7 +17,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_GROUP_ID)
 		{
-			_spriteGroupID = *(int*)message.getParam();
+			_spriteGroupID = *(Hash*)message.getParam();
 		}
 		else if(message.getID() == MessageID::SET_SPRITE_ID)
 		{
@@ -60,5 +60,10 @@ namespace Temporal
 		Point screenLocation(screenLocationX, screenLocationY);
 
 		Graphics::get().draw(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
+	}
+
+	const Hash& Renderer::getFirstSpriteGroupID(const SpriteSheet& spritesheet)
+	{
+		return spritesheet.getFirstSpriteGroupID();
 	}
 }

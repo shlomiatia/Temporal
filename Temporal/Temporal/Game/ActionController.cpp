@@ -10,18 +10,34 @@
 
 namespace Temporal
 {
-	static const Hash BACK_EDGE_SENSOR_ID = Hash("SI_BACK_EDGE");
-	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SI_FRONT_EDGE");
-	static const Hash JUMP_SENSOR_ID = Hash("SI_JUMP");
-	static const Hash HANG_SENSOR_ID = Hash("SI_HANG");
+	static const Hash BACK_EDGE_SENSOR_ID = Hash("SENS_BACK_EDGE");
+	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
+	static const Hash JUMP_SENSOR_ID = Hash("SENS_JUMP");
+	static const Hash HANG_SENSOR_ID = Hash("SENS_HANG");
+
+	static const Hash STAND_ANIMATION = Hash("ANIM_POP_STAND");
+	static const Hash TURN_ANIMATION = Hash("ANIM_POP_TURN");
+	static const Hash DROP_ANIMATION = Hash("ANIM_POP_DROP");
+	static const Hash FALL_START_ANIMATION = Hash("ANIM_POP_FALL_START");
+	static const Hash FALL_ANIMATION = Hash("ANIM_POP_FALL");
+	static const Hash JUMP_UP_START_ANIMATION = Hash("ANIM_POP_JUMP_UP_START");
+	static const Hash JUMP_UP_ANIMATION = Hash("ANIM_POP_JUMP_UP");
+	static const Hash HANG_ANIMATION = Hash("ANIM_POP_HANG");
+	static const Hash CLIMB_ANIMATION = Hash("ANIM_POP_CLIMB");
+	static const Hash JUMP_FORWARD_START_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD_START");
+	static const Hash JUMP_FORWARD_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD");
+	static const Hash JUMP_FORWARD_END_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD_END");
+	static const Hash WALK_ANIMATION = Hash("ANIM_POP_WALK");
+	static const Hash SWING_FORWARD_ANIMATION = Hash("ANIM_POP_SWING_FORWARD");
+	static const Hash SWING_BACKWARD_ANIMATION = Hash("ANIM_POP_SWING_BACKWARD");
 
 	JumpInfoProvider::JumpInfoProvider(void)
 	{
-		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, AnimationID::JUMP_FORWARD_START, AnimationID::JUMP_FORWARD, AnimationID::JUMP_FORWARD_END));
-		_data.push_back(new JumpInfo(ANGLE_60_IN_RADIANS, AnimationID::JUMP_FORWARD_START, AnimationID::JUMP_FORWARD, AnimationID::JUMP_FORWARD_END));
-		_data.push_back(new JumpInfo(ANGLE_75_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
-		_data.push_back(new JumpInfo(ANGLE_90_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
-		_data.push_back(new JumpInfo(ANGLE_105_IN_RADIANS, AnimationID::JUMP_UP_START, AnimationID::JUMP_UP, AnimationID::STAND));
+		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
+		_data.push_back(new JumpInfo(ANGLE_60_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
+		_data.push_back(new JumpInfo(ANGLE_75_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
+		_data.push_back(new JumpInfo(ANGLE_90_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
+		_data.push_back(new JumpInfo(ANGLE_105_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
 	}
 
 	JumpInfoProvider::~JumpInfoProvider(void)
@@ -78,7 +94,7 @@ namespace Temporal
 	void Stand::enter(void)
 	{
 		_isDescending = false;
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::STAND)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION)));
 	}
 
 	void Stand::handleMessage(Message& message)
@@ -120,7 +136,7 @@ namespace Temporal
 	void Fall::enter(void)
 	{
 		// Not setting force because we want to continue the momentum
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::FALL)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION)));
 	}
 
 	void Fall::handleMessage(Message& message)
@@ -152,7 +168,7 @@ namespace Temporal
 		_stillWalking = true;
 		_noFloor = false;
 		_noFloorTimer.reset();
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::WALK, false, true)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
 	}
 
 	// BRODER
@@ -211,7 +227,7 @@ namespace Temporal
 
 	void Turn::enter(void)
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::TURN)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 	}
 
 	void Turn::handleMessage(Message& message)
@@ -284,7 +300,7 @@ namespace Temporal
 	void JumpStart::enter(void)
 	{
 		_animationEnded = false;
-		AnimationID::Enum animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
+		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
@@ -324,7 +340,7 @@ namespace Temporal
 		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
-		AnimationID::Enum animation = jumpInfo.getJumpAnimation();
+		Hash animation = jumpInfo.getJumpAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
@@ -354,7 +370,7 @@ namespace Temporal
 
 	void JumpEnd::enter(void)
 	{
-		AnimationID::Enum animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
+		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
@@ -409,7 +425,7 @@ namespace Temporal
 
 	void Hanging::enter(void)
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG_BACKWARD, true)));	
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SWING_BACKWARD_ANIMATION, true)));	
 	}
 
 	void Hanging::handleMessage(Message& message)
@@ -422,7 +438,7 @@ namespace Temporal
 
 	void Hang::enter(void)
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::HANG)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION)));
 	}
 
 	void Hang::handleMessage(Message& message)
@@ -440,7 +456,7 @@ namespace Temporal
 	void Drop::enter(void)
 	{
 		_platformFound = false;
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::DROP)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(DROP_ANIMATION)));
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
 
@@ -475,7 +491,7 @@ namespace Temporal
 		float climbForceY = size.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
@@ -540,7 +556,7 @@ namespace Temporal
 		float forceY = -(size.getHeight());
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(AnimationID::CLIMB, true)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
 	}
 
 	void Descend::handleMessage(Message& message)
