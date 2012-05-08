@@ -1,29 +1,30 @@
 #include "Patrol.h"
+#include <Temporal\Game\MessageParams.h>
 #include <Temporal\Game\Message.h>
-#include <Temporal\Physics\Sensor.h>
 
 namespace Temporal
 {
 	namespace PatrolStates
 	{
-		bool isSensorMessage(Message& message, SensorID::Enum sensorID)
+		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SI_FRONT_EDGE");
+
+		bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
 		{
 			if(message.getID() == MessageID::SENSOR_COLLISION)
 			{
-				const Sensor& sensor = *(Sensor*)message.getParam();
-				if(sensor.getID() == sensorID)
+				const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+				if(params.getSensorID() == sensorID)
 					return true;
 			}
-			return NULL;
+			return false;
 		}
-
 		void Walk::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_stateMachine->changeState(PatrolStates::SEE);
 			}
-			else if(isSensorMessage(message, SensorID::FRONT_EDGE))
+			else if(isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 			{
 				_stateMachine->changeState(PatrolStates::WAIT);
 			}

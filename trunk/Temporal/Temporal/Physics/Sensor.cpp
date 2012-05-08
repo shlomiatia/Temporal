@@ -5,6 +5,7 @@
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Game\Message.h>
+#include <Temporal\Game\MessageParams.h>
 #include <Temporal\Graphics\Graphics.h>
 #include <algorithm>
 
@@ -27,7 +28,7 @@ namespace Temporal
 		Grid::get().iterateTiles(bounds, this, NULL, sense);
 		if(_point != Point::Zero)
 		{
-			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, this));
+			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
 		}
 	}
 
@@ -39,7 +40,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(getBounds(), getPoint() != NULL ? Color::Green : Color::Red);
+			Graphics::get().draw(getBounds(), _point != Point::Zero ? Color::Green : Color::Red);
 		}
 	}
 

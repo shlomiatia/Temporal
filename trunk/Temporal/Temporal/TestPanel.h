@@ -14,9 +14,8 @@ namespace Temporal
 	// TODO: Store YABP in grid PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
 	
-	// TODO: Use hashed string for Entity, components, sensors, messages, states etc. ENTITIES
+	// TODO: Use hashed string for components, messages, states, animation id etc. ENTITIES
 	// TODO: Pass static entity id in sensor, instead of the static body itself ENTITIES
-	// TODO: Don't hard code IDs (Sight, View Manager) ENTITIES
 	// TODO: Deal with component order ENTITIES
 
 	// TODO: Consider transition type in navigation edge cost  AI

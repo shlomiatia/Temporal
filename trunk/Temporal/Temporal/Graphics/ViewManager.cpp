@@ -20,7 +20,7 @@ namespace Temporal
 
 	void ViewManager::update(void) const
 	{
-		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(Hash("PLAYER"), Message(MessageID::GET_POSITION));
+		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(Hash("EI_PLAYER"), Message(MessageID::GET_POSITION));
 		float cameraWidth = _cameraSize.getWidth();
 		float cameraHeight = _cameraSize.getHeight();
 		float levelWidth = _levelBounds.getWidth();
