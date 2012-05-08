@@ -309,12 +309,11 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(const Entity& entity, void* data) 
+	void addPlatform(const Entity& entity, ShapeCollection& platforms) 
 	{
 		bool isCover = *(bool*)entity.handleMessage(Message(MessageID::IS_COVER));
 		if(!isCover)
 		{
-			ShapeCollection& platforms = *((ShapeCollection*)data);
 			const Shape& platform = *(Shape*)entity.handleMessage(Message(MessageID::GET_SHAPE));
 			platforms.push_back(&platform);
 		}
@@ -323,7 +322,13 @@ namespace Temporal
 	void NavigationGraph::init(void)
 	{
 		ShapeCollection platforms;
-		EntitiesManager::get().iterateEntities(ComponentType::STATIC_BODY, &platforms, &addPlatform);
+		const EntityCollection& entities = EntitiesManager::get().getEntities();
+		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
+		{
+			const Entity& entity = (*(*i).second);
+			if(entity.have(ComponentType::STATIC_BODY))
+				addPlatform(entity, platforms);
+		}
 		createNodes(platforms);
 		createEdges(platforms);
 	}

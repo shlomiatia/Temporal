@@ -50,6 +50,7 @@
     <ClInclude Include="Base\ShapeOperations.h" />
     <ClInclude Include="Base\AABB.h" />
     <ClInclude Include="Base\YABP.h" />
+    <ClInclude Include="Base\Hash.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -93,5 +94,6 @@
     <ClCompile Include="Base\ShapeOperations.cpp" />
     <ClCompile Include="Base\Math.cpp" />
     <ClCompile Include="Base\AABB.cpp" />
+    <ClCompile Include="Base\Hash.cpp" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #ifndef SIGHT_H
 #define SIGHT_H
 
+#include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Segment.h>
@@ -11,7 +12,8 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float sightCenter, float sightSize) : _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
+		Sight(float sightCenter, float sightSize, const Hash& targetID) :
+		  _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false), _targetID(targetID) {};
 
 		ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
@@ -19,6 +21,8 @@ namespace Temporal
 	private:
 		const float _sightCenter;
 		const float _sightSize;
+
+		Hash _targetID;
 
 		Point _pointOfIntersection;
 		bool _isSeeing;
