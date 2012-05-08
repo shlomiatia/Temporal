@@ -2,14 +2,15 @@
 #define ENTITIESMANAGER_H
 
 #include "GameEnums.h"
-#include <vector>
+#include <Temporal\Base\Hash.h>
+#include <unordered_map>
 
 namespace Temporal
 {
 	class Entity;
 	class Message;
 
-	typedef std::vector<Entity*> EntityCollection;
+	typedef std::unordered_map<const Hash, const Entity*> EntityCollection;
 	typedef EntityCollection::const_iterator EntityIterator;
 
 	class EntitiesManager
@@ -23,14 +24,14 @@ namespace Temporal
 
 		void dispose(void);
 
-		void add(Entity* entity);
+		void add(const Hash& id, const Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
-		void* sendMessageToEntity(int id, Message& message) const;
-		void iterateEntities(ComponentType::Enum componentType, void* data, void (*handleEntity)(const Entity& entity, void* data));
+		void* sendMessageToEntity(const Hash& id, Message& message) const;
+		const EntityCollection& getEntities(void) const { return _entities; }
 	private:
-		EntityCollection _entities;
+		mutable EntityCollection _entities;
 
 		EntitiesManager(void) {}
 		EntitiesManager(const EntitiesManager&);

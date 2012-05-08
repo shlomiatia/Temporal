@@ -27,6 +27,7 @@
 #include <Temporal\AI\Sentry.h>
 #include <Temporal\AI\Patrol.h>
 #include <Temporal\AI\Camera.h>
+#include <sstream>
 
 namespace Temporal
 {
@@ -155,7 +156,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("PLAYER"), entity);
 	}
 
 	void createChaser(SpriteSheet* spritesheet)
@@ -179,7 +180,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("CHASER"), entity);
 	}
 
 	void createSentry(SpriteSheet* spritesheet)
@@ -188,7 +189,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("PLAYER"));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 
 		Entity* entity = new Entity();
@@ -198,7 +199,7 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("SENTRY"), entity);
 	}
 
 	void createPatrol(SpriteSheet* spritesheet)
@@ -211,7 +212,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("PLAYER"));
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -224,7 +225,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("PATROL"), entity);
 	}
 
 	void createCamera()
@@ -232,7 +233,7 @@ namespace Temporal
 		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, Hash("PLAYER"));
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
@@ -264,10 +265,11 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("CAMERA"), entity);
 	}
 
-	Entity* createPlatform(Shape* shape, SpriteSheet* spritesheet, bool cover = false) 
+	static int platformID = 0;
+	void createPlatform(Shape* shape, SpriteSheet* spritesheet, bool cover = false) 
 	{
 		Position* position = new Position(Point(shape->getCenterX(), shape->getCenterY()));
 		StaticBody* staticBody = new StaticBody(shape, cover);
@@ -277,7 +279,10 @@ namespace Temporal
 		entity->add(staticBody);
 		//entity->add(renderer);
 		Grid::get().add(staticBody);
-		return entity;
+		std::ostringstream id;
+		id << "Platform" << platformID;
+		EntitiesManager::get().add(Hash(id.str().c_str()), entity);
+		++platformID;
 	}
 
 	void createPlatforms()
@@ -290,105 +295,105 @@ namespace Temporal
 		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
 		// Edges
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 0.0f, 2047.0f, 0.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(2047.0f, 0.0f, 2047.0f, 767.0f), spritesheet));
+		createPlatform(new Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet);
+		createPlatform(new Segment(0.0f, 0.0f, 2047.0f, 0.0f), spritesheet);
+		createPlatform(new Segment(2047.0f, 0.0f, 2047.0f, 767.0f), spritesheet);
 
 		// Screen Splitter
-		EntitiesManager::get().add(createPlatform(new Segment(1023.0f, 0.0f, 1023.0f, 256.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1023.0f, 384.0f, 1023.0f, 767.0f), spritesheet));
+		createPlatform(new Segment(1023.0f, 0.0f, 1023.0f, 256.0f), spritesheet);
+		createPlatform(new Segment(1023.0f, 384.0f, 1023.0f, 767.0f), spritesheet);
 		
 		// Right lower platform
-		EntitiesManager::get().add(createPlatform(new Segment(723.0f, 0.0f, 723.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(723.0f, 128.0f, 1023.0f, 128.0f), spritesheet));
+		createPlatform(new Segment(723.0f, 0.0f, 723.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(723.0f, 128.0f, 1023.0f, 128.0f), spritesheet);
 
 		// Right upper platform
-		EntitiesManager::get().add(createPlatform(new Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(896.0f, 256.0f, 1023.0f, 256.0f), spritesheet));
+		createPlatform(new Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet);
+		createPlatform(new Segment(896.0f, 256.0f, 1023.0f, 256.0f), spritesheet);
 
 		// Right floater
-		EntitiesManager::get().add(createPlatform(new Segment(640.0f, 384.0f, 1023.0f, 384.0f), spritesheet));
+		createPlatform(new Segment(640.0f, 384.0f, 1023.0f, 384.0f), spritesheet);
 
 		// Right balcony
-		EntitiesManager::get().add(createPlatform(new Segment(767.0f, 512.0f, 1023.0f, 512.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(896.0f, 384.0f, 896.0f, 512.0f), spritesheet));
+		createPlatform(new Segment(767.0f, 512.0f, 1023.0f, 512.0f), spritesheet);
+		createPlatform(new Segment(896.0f, 384.0f, 896.0f, 512.0f), spritesheet);
 
 		// Right unreachable
-		EntitiesManager::get().add(createPlatform(new Segment(896.0f, 640.0f, 1023.0f, 640.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(896.0f, 640.0f, 896.0f, 767.0f), spritesheet));
+		createPlatform(new Segment(896.0f, 640.0f, 1023.0f, 640.0f), spritesheet);
+		createPlatform(new Segment(896.0f, 640.0f, 896.0f, 767.0f), spritesheet);
 		
 		// Left lower platform
-		EntitiesManager::get().add(createPlatform(new Segment(300, 0.0f, 300.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 128.0f, 300, 128.0f), spritesheet));
+		createPlatform(new Segment(300, 0.0f, 300.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(0.0f, 128.0f, 300, 128.0f), spritesheet);
 
 		// Left upper platform
-		EntitiesManager::get().add(createPlatform(new Segment(128.0f, 128.0f, 128.0f, 256.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet));
+		createPlatform(new Segment(128.0f, 128.0f, 128.0f, 256.0f), spritesheet);
+		createPlatform(new Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet);
 
 		// Left floater
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 384.0f, 384.0f, 384.0f), spritesheet));
+		createPlatform(new Segment(0.0f, 384.0f, 384.0f, 384.0f), spritesheet);
 
 		// Left balcony
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 512.0f, 256.0f, 512.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(128, 384.0f, 128.0f, 512.0f), spritesheet));
+		createPlatform(new Segment(0.0f, 512.0f, 256.0f, 512.0f), spritesheet);
+		createPlatform(new Segment(128, 384.0f, 128.0f, 512.0f), spritesheet);
 
 		// Left unrechable
-		EntitiesManager::get().add(createPlatform(new Segment(0.0f, 640.0f, 128.0f, 640.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(128.0f, 640.0f, 128.0f, 767.0f), spritesheet));
+		createPlatform(new Segment(0.0f, 640.0f, 128.0f, 640.0f), spritesheet);
+		createPlatform(new Segment(128.0f, 640.0f, 128.0f, 767.0f), spritesheet);
 		
 		// Middle floaters
-		EntitiesManager::get().add(createPlatform(new Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet));
+		createPlatform(new Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet);
 
 		// Cover
-		EntitiesManager::get().add(createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true));
+		createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true);
 
 		// 30
-		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1216.0f, 64.0f, 1280.0f, 64.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1280.0f, 64.0f, 1408.0f, 0.0f), spritesheet));
+		createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet);
+		createPlatform(new Segment(1216.0f, 64.0f, 1280.0f, 64.0f), spritesheet);
+		createPlatform(new Segment(1280.0f, 64.0f, 1408.0f, 0.0f), spritesheet);
 
 		// 45
-		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 0.0f, 1536.0f, 64.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 64.0f, 1600.0f, 64.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1600.0f, 64.0f, 1664.0f, 0.0f), spritesheet));
+		createPlatform(new Segment(1472.0f, 0.0f, 1536.0f, 64.0f), spritesheet);
+		createPlatform(new Segment(1536.0f, 64.0f, 1600.0f, 64.0f), spritesheet);
+		createPlatform(new Segment(1600.0f, 64.0f, 1664.0f, 0.0f), spritesheet);
 
 		// 60
-		EntitiesManager::get().add(createPlatform(new Segment(1728.0f, 0.0f, 1792.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1792.0f, 128.0f, 1856.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1856.0f, 128.0f, 1920.0f, 0.0f), spritesheet));
+		createPlatform(new Segment(1728.0f, 0.0f, 1792.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(1792.0f, 128.0f, 1856.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(1856.0f, 128.0f, 1920.0f, 0.0f), spritesheet);
 		
 		// Torches
-		EntitiesManager::get().add(createPlatform(new Segment(1024.0f, 64.0f, 1088.0f, 128.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1024.0f, 128.0f, 1088.0f, 128.0f), spritesheet));
+		createPlatform(new Segment(1024.0f, 64.0f, 1088.0f, 128.0f), spritesheet);
+		createPlatform(new Segment(1024.0f, 128.0f, 1088.0f, 128.0f), spritesheet);
 		
-		EntitiesManager::get().add(createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 64.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 128.0f), spritesheet));
+		createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 64.0f), spritesheet);
+		createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 128.0f), spritesheet);
 
 		// Platforms
-		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 256.0f, 1792.0f, 256.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1856.0f, 256.0f, 2047.0f, 256.0f), spritesheet));
+		createPlatform(new Segment(1088.0f, 256.0f, 1792.0f, 256.0f), spritesheet);
+		createPlatform(new Segment(1856.0f, 256.0f, 2047.0f, 256.0f), spritesheet);
 
 		// 30
-		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 384.0f, 1216.0f, 448.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1216.0f, 448.0f, 1344.0f, 384.0f), spritesheet));
+		createPlatform(new Segment(1088.0f, 384.0f, 1216.0f, 448.0f), spritesheet);
+		createPlatform(new Segment(1216.0f, 448.0f, 1344.0f, 384.0f), spritesheet);
 
 		// 45
-		EntitiesManager::get().add(createPlatform(new Segment(1408.0f, 384.0f, 1472.0f, 448.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 448.0f, 1536.0f, 384.0f), spritesheet));
+		createPlatform(new Segment(1408.0f, 384.0f, 1472.0f, 448.0f), spritesheet);
+		createPlatform(new Segment(1472.0f, 448.0f, 1536.0f, 384.0f), spritesheet);
 
 		// 60
-		EntitiesManager::get().add(createPlatform(new Segment(1600.0f, 384.0f, 1664.0f, 512.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1664.0f, 512.0f, 1728.0f, 384.0f), spritesheet));
+		createPlatform(new Segment(1600.0f, 384.0f, 1664.0f, 512.0f), spritesheet);
+		createPlatform(new Segment(1664.0f, 512.0f, 1728.0f, 384.0f), spritesheet);
 
 		// Platforms
-		EntitiesManager::get().add(createPlatform(new Segment(1855.0f, 384.0f, 2047.0f, 384.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1088.0f, 512.0f, 1983.0f, 512.0f), spritesheet));
+		createPlatform(new Segment(1855.0f, 384.0f, 2047.0f, 384.0f), spritesheet);
+		createPlatform(new Segment(1088.0f, 512.0f, 1983.0f, 512.0f), spritesheet);
 
 		// V
-		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet));
-		EntitiesManager::get().add(createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet));
+		createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet);
+		createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet);
+		createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet);
 	}
 
 	void createBackground()
@@ -405,7 +410,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(renderer);
-		EntitiesManager::get().add(entity);
+		EntitiesManager::get().add(Hash("BACKGROUND"), entity);
 	}
 	#pragma endregion
 
@@ -559,7 +564,7 @@ namespace Temporal
 		createPlayer(spritesheet);
 		createChaser(spritesheet);
 		//createSentry(spritesheet);
-		//createPatrol(spritesheet);
+		createPatrol(spritesheet);
 		//createCamera();
 		createPlatforms();
 		//createBackground();

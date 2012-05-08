@@ -27,7 +27,7 @@ namespace Temporal
 		_isSeeing = false;
 		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
+		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(_targetID, Message(MessageID::GET_POSITION));
 
 		// Check orientation
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), (float)sourceOrientation))
@@ -138,7 +138,6 @@ namespace Temporal
 	{
 		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Orientation::Enum sourceOrientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(0, Message(MessageID::GET_POSITION));
 
 		drawFieldOfView(sourcePosition, sourceOrientation);
 		if(_pointOfIntersection != Point::Zero)

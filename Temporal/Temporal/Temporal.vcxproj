@@ -19,6 +19,7 @@
     <ClInclude Include="AI\Sentry.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\BaseEnums.h" />
+    <ClInclude Include="Base\Hash.h" />
     <ClInclude Include="Base\Segment.h" />
     <ClInclude Include="Base\Math.h" />
     <ClInclude Include="Base\Shape.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="AI\Patrol.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Base\Color.cpp" />
+    <ClCompile Include="Base\Hash.cpp" />
     <ClCompile Include="Base\Math.cpp" />
     <ClCompile Include="Base\AABB.cpp" />
     <ClCompile Include="Base\Segment.cpp" />
