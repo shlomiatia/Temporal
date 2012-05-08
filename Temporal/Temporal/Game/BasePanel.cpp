@@ -39,8 +39,8 @@ namespace Temporal
 		if(Input::get().isQuit())
 		{
 			AABB bounds = AABB::Empty;
-			EntitiesManager::get().sendMessageToEntity(Hash("PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
-			EntitiesManager::get().sendMessageToEntity(Hash("CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
+			EntitiesManager::get().sendMessageToEntity(Hash("EI_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
+			EntitiesManager::get().sendMessageToEntity(Hash("EI_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
 			//Game::get().stop();
 		}
 	}

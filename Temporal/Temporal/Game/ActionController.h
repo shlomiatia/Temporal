@@ -8,7 +8,7 @@
 namespace Temporal
 {
 	class Point;
-	class Sensor;
+	class SensorCollisionParams;
 
 	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 150.0f;
@@ -107,7 +107,7 @@ namespace Temporal
 	public:
 		HangDescendHelper(void) : _point(NULL) {}
 
-		void setPointFromSensor(const Sensor& sensor);
+		void setPoint(const SensorCollisionParams& params);
 		const Point& getPoint(void) const { return *_point; }
 	private:
 		const Point* _point;

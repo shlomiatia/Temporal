@@ -87,7 +87,7 @@ namespace Temporal
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(SensorID::JUMP, sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Sensor* sensor(new Sensor(Hash("SI_JUMP"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -100,7 +100,7 @@ namespace Temporal
 		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::HANG, sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SI_HANG"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -110,7 +110,7 @@ namespace Temporal
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::BACK_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SI_BACK_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -120,7 +120,7 @@ namespace Temporal
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(SensorID::FRONT_EDGE, sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SI_FRONT_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -156,7 +156,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("PLAYER"), entity);
+		EntitiesManager::get().add(Hash("EI_PLAYER"), entity);
 	}
 
 	void createChaser(SpriteSheet* spritesheet)
@@ -180,7 +180,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("CHASER"), entity);
+		EntitiesManager::get().add(Hash("EI_CHASER"), entity);
 	}
 
 	void createSentry(SpriteSheet* spritesheet)
@@ -189,7 +189,7 @@ namespace Temporal
 		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("PLAYER"));
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("EI_PLAYER"));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 
 		Entity* entity = new Entity();
@@ -199,7 +199,7 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("SENTRY"), entity);
+		EntitiesManager::get().add(Hash("EI_SENTRY"), entity);
 	}
 
 	void createPatrol(SpriteSheet* spritesheet)
@@ -212,7 +212,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("PLAYER"));
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("EI_PLAYER"));
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -225,7 +225,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("PATROL"), entity);
+		EntitiesManager::get().add(Hash("EI_PATROL"), entity);
 	}
 
 	void createCamera()
@@ -233,7 +233,7 @@ namespace Temporal
 		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, Hash("PLAYER"));
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, Hash("EI_PLAYER"));
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
 		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		SpriteGroup* animation;
@@ -265,7 +265,7 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("CAMERA"), entity);
+		EntitiesManager::get().add(Hash("EI_CAMERA"), entity);
 	}
 
 	static int platformID = 0;
@@ -280,9 +280,8 @@ namespace Temporal
 		//entity->add(renderer);
 		Grid::get().add(staticBody);
 		std::ostringstream id;
-		id << "Platform" << platformID;
+		id << "EI_PLATFORM" << platformID++;
 		EntitiesManager::get().add(Hash(id.str().c_str()), entity);
-		++platformID;
 	}
 
 	void createPlatforms()
@@ -410,7 +409,7 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(renderer);
-		EntitiesManager::get().add(Hash("BACKGROUND"), entity);
+		EntitiesManager::get().add(Hash("EI_BACKGROUND"), entity);
 	}
 	#pragma endregion
 

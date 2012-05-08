@@ -80,7 +80,7 @@ namespace Temporal
 		};
 	}
 
-	namespace SensorID
+	/*namespace SensorID
 	{
 		enum Enum
 		{
@@ -89,7 +89,7 @@ namespace Temporal
 			BACK_EDGE,
 			FRONT_EDGE
 		};
-	}
+	}*/
 
 	namespace VisualLayer
 	{

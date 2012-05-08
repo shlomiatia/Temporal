@@ -3,13 +3,18 @@
 #include "MessageParams.h"
 #include "MovementUtils.h"
 #include <Temporal\Base\NumericPair.h>
+#include <Temporal\Base\AABB.h>
 #include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Math.h>
-#include <Temporal\Physics\Sensor.h>
-#include <Temporal\Physics\StaticBody.h>
+#include <Temporal\Game\MessageParams.h>
 
 namespace Temporal
 {
+	static const Hash BACK_EDGE_SENSOR_ID = Hash("SI_BACK_EDGE");
+	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SI_FRONT_EDGE");
+	static const Hash JUMP_SENSOR_ID = Hash("SI_JUMP");
+	static const Hash HANG_SENSOR_ID = Hash("SI_HANG");
+
 	JumpInfoProvider::JumpInfoProvider(void)
 	{
 		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, AnimationID::JUMP_FORWARD_START, AnimationID::JUMP_FORWARD, AnimationID::JUMP_FORWARD_END));
@@ -25,9 +30,9 @@ namespace Temporal
 			delete *i;
 	}
 
-	void HangDescendHelper::setPointFromSensor(const Sensor& sensor)
+	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
-		_point = sensor.getPoint();
+		_point = params.getPoint();
 	}
 
 	StateCollection ActionController::getStates() const
@@ -51,15 +56,15 @@ namespace Temporal
 		return states;
 	}
 
-	bool isSensorMessage(Message& message, SensorID::Enum sensorID)
+	bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{
-			const Sensor& sensor = *(Sensor*)message.getParam();
-			if(sensor.getID() == sensorID)
+			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			if(params.getSensorID() == sensorID)
 				return true;
 		}
-		return NULL;
+		return false;
 	}
 
 	bool canJumpForward(StateMachineComponent* component)
@@ -99,13 +104,13 @@ namespace Temporal
 		{
 			_isDescending = false;	
 		}
-		else if(_isDescending && isSensorMessage(message, SensorID::BACK_EDGE) != NULL)
+		else if(_isDescending && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
 		{
-			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
+			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
 		}
-		else if(_isDescending && isSensorMessage(message, SensorID::FRONT_EDGE) != NULL)
+		else if(_isDescending && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 		{
 			_stateMachine->changeState(ActionStateID::TURN);
 		}
@@ -124,10 +129,10 @@ namespace Temporal
 		{
 			_wantToHang = true;
 		}
-		else if (_wantToHang && isSensorMessage(message, SensorID::HANG))
+		else if (_wantToHang && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
+			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -220,7 +225,7 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message)
 	{
-		const Sensor& sensor = *(Sensor*)message.getParam();
+		const SensorCollisionParams& sensor = *(SensorCollisionParams*)message.getParam();
 		const Point* point = sensor.getPoint();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		AABB personBounds(AABB::Empty);
@@ -266,7 +271,7 @@ namespace Temporal
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
 			_stateMachine->changeState(ActionStateID::JUMP_START);
 		}
-		else if(isSensorMessage(message, SensorID::JUMP))
+		else if(isSensorCollisionMessage(message, JUMP_SENSOR_ID))
 		{
 			handleJumpSensor(message);
 		}
@@ -329,10 +334,10 @@ namespace Temporal
 		{
 			_wantToHang = true;
 		}
-		else if (_wantToHang && isSensorMessage(message, SensorID::HANG))
+		else if (_wantToHang && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			const Sensor& sensor = *(Sensor*)message.getParam();
-			((ActionController*)_stateMachine)->getHangDescendHelper().setPointFromSensor(sensor);
+			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -450,7 +455,7 @@ namespace Temporal
 
 	void Drop::handleMessage(Message& message)
 	{
-		if(isSensorMessage(message, SensorID::HANG))
+		if(isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			_platformFound = true;
 		}

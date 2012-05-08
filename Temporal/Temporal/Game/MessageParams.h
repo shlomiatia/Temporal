@@ -1,6 +1,9 @@
 #ifndef MESSAGEPARAMS_H
 #define MESSAGEPARAMS_H
 
+#include <Temporal\Base\Hash.h>
+#include <Temporal\Base\NumericPair.h>
+
 namespace Temporal
 {
 	class ResetAnimationParams
@@ -19,6 +22,20 @@ namespace Temporal
 
 		ResetAnimationParams(const ResetAnimationParams&);
 		ResetAnimationParams& operator=(const ResetAnimationParams&);
+	};
+
+	class SensorCollisionParams
+	{
+	public:
+		SensorCollisionParams(const Hash& sensorID, const Point* point) : _sensorID(sensorID), _point(point) {}
+
+		const Hash& getSensorID(void) const { return _sensorID; }
+		const Point* getPoint(void) const { return _point; }
+	
+	private:
+		const Hash _sensorID;
+		const Point* _point;
+	
 	};
 }
 #endif
