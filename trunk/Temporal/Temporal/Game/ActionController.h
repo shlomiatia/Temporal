@@ -1,6 +1,7 @@
 #ifndef ACTIONCONTROLLER_H
 #define ACTIONCONTROLLER_H
 
+#include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
@@ -14,47 +15,25 @@ namespace Temporal
 	static const float WALK_FORCE_PER_SECOND = 150.0f;
 	static const float JUMP_FORCE_PER_SECOND = 900.0f;
 
-	namespace AnimationID
-	{
-		enum Enum
-		{
-			STAND,
-			TURN,
-			DROP,
-			FALL_START,
-			FALL,
-			JUMP_UP_START,
-			JUMP_UP,
-			HANG,
-			CLIMB,
-			JUMP_FORWARD_START,
-			JUMP_FORWARD,
-			JUMP_FORWARD_END,
-			WALK,
-			HANG_FORWARD,
-			HANG_BACKWARD,
-		};
-	}
-
 	class JumpInfo
 	{
 	public:
-		JumpInfo(float angle, AnimationID::Enum startAnimation, AnimationID::Enum jumpAnimation, AnimationID::Enum endAnimation)
+		JumpInfo(float angle, const Hash& startAnimation, const Hash& jumpAnimation, const Hash& endAnimation)
 			: _angle(angle), _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
 
 		float getAngle(void) const { return _angle; }
-		AnimationID::Enum getStartAnimation(void) const { return _startAnimation; }
-		AnimationID::Enum getJumpAnimation(void) const { return _jumpAnimation; }
-		AnimationID::Enum getEndAnimation(void) const { return _endAnimation; }
+		Hash getStartAnimation(void) const { return _startAnimation; }
+		Hash getJumpAnimation(void) const { return _jumpAnimation; }
+		Hash getEndAnimation(void) const { return _endAnimation; }
 
 		bool operator==(const JumpInfo& other) const { return getAngle() == other.getAngle(); }
 		bool operator!=(const JumpInfo& other) const { return !(*this == other); }
 
 	private:
 		float _angle;
-		AnimationID::Enum _startAnimation;
-		AnimationID::Enum _jumpAnimation;
-		AnimationID::Enum _endAnimation;
+		Hash _startAnimation;
+		Hash _jumpAnimation;
+		Hash _endAnimation;
 
 		JumpInfo(const JumpInfo&);
 		JumpInfo& operator=(const JumpInfo&);

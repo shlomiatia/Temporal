@@ -1,10 +1,12 @@
 #ifndef SPRITESHEET_H
 #define SPRITESHEET_H
 
+#include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
 #include <vector>
+#include <unordered_map>
 
 namespace Temporal
 {
@@ -45,7 +47,7 @@ namespace Temporal
 	};
 
 	class Texture;
-	typedef std::vector<const SpriteGroup*> SpriteGroupCollection;
+	typedef std::unordered_map<const Hash, const SpriteGroup*> SpriteGroupCollection;
 	typedef SpriteGroupCollection::const_iterator SpriteGroupIterator;
 
 	class SpriteSheet
@@ -53,15 +55,16 @@ namespace Temporal
 	public:
 		SpriteSheet(const Texture* texture, Orientation::Enum orientation) : _texture(texture), _orientation(orientation) {}
 		~SpriteSheet(void);
-		void add(const SpriteGroup* element);
+		void add(const Hash& id, const SpriteGroup* element);
 
 		const Texture& getTexture(void) const { return *_texture; }
 		Orientation::Enum getOrientation(void) const { return _orientation; }
-		const SpriteGroup& get(int spriteGroupID) const;
+		const SpriteGroup& get(const Hash& spriteGroupID) const;
+		const Hash& getFirstSpriteGroupID(void) const;
 	private:
 		const Texture* _texture;
 		const Orientation::Enum _orientation;
-		SpriteGroupCollection _spriteGroups;
+		mutable SpriteGroupCollection _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

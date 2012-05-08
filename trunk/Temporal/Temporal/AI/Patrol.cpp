@@ -6,7 +6,7 @@ namespace Temporal
 {
 	namespace PatrolStates
 	{
-		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SI_FRONT_EDGE");
+		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
 
 		bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
 		{

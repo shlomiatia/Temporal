@@ -5,17 +5,16 @@
 
 namespace Temporal
 {
-	// ASSUMPTION: When trying to walk towards a steep hill, the entity will raise a bit */																															 																								
-	// ASSUMPTION: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
-	// ASSUMPTION: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
+	// ASSUME: When trying to walk towards a steep hill, the entity will raise a bit */																															 																								
+	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
+	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
 	// TODO: Store YABP in grid PHYSICS
 	// TODO: Buffer/query current sensors (drop) PHYSICS
 	
-	// TODO: Use hashed string for components, messages, states, animation id etc. ENTITIES
-	// TODO: Pass static entity id in sensor, instead of the static body itself ENTITIES
+	// TODO: Use hashed string for components, messages, states id etc. ENTITIES
 	// TODO: Deal with component order ENTITIES
 
 	// TODO: Consider transition type in navigation edge cost  AI

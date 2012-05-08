@@ -28,17 +28,21 @@ namespace Temporal
 	SpriteSheet::~SpriteSheet(void)
 	{
 		for(SpriteGroupIterator i = _spriteGroups.begin(); i != _spriteGroups.end(); ++i)
-			delete *i;
+			delete i->second;
 	}
 
-	void SpriteSheet::add(const SpriteGroup* sprite)
+	void SpriteSheet::add(const Hash& id, const SpriteGroup* sprite)
 	{
-		_spriteGroups.push_back(sprite);
+		_spriteGroups[id] = sprite;
 	}
 
-	const SpriteGroup& SpriteSheet::get(int spriteGroupID) const
+	const SpriteGroup& SpriteSheet::get(const Hash& spriteGroupID) const
 	{
-		assert(spriteGroupID < (int)_spriteGroups.size());
 		return *_spriteGroups[spriteGroupID];
+	}
+
+	const Hash& SpriteSheet::getFirstSpriteGroupID(void) const
+	{
+		return _spriteGroups.begin()->first;
 	}
 }
