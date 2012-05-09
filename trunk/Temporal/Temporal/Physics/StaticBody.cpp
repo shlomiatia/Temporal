@@ -16,13 +16,5 @@ namespace Temporal
 		{
 			Graphics::get().draw(*_shape);
 		}
-		else if(message.getID() == MessageID::IS_COVER)
-		{
-			message.setParam(&_cover);
-		}
-		else if(message.getID() == MessageID::GET_SHAPE)
-		{
-			message.setParam(_shape);
-		}
 	}
 }

@@ -7,6 +7,7 @@
 #include <Temporal\Base\Shape.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\MessageParams.h>
+#include <Temporal\Physics\DynamicBody.h>
 
 namespace Temporal
 {
@@ -268,7 +269,7 @@ namespace Temporal
 		JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
 
 		float max = 0.0f;
-		const Vector& gravity = *(Vector*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_GRAVITY));
+		const Vector& gravity = DynamicBody::GRAVITY;
 
 		// Broder
 		if(distance >= 0 && distance < 20.0f)
