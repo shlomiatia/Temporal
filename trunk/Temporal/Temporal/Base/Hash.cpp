@@ -2,6 +2,8 @@
 
 namespace Temporal
 {
+	const Hash Hash::INVALID = Hash("");
+
 	Hash::Hash(const char* string)
 	{
 		_value = 5381;

@@ -1,8 +1,9 @@
 #ifndef STATEMACHINECOMPONENT_H
 #define STATEMACHINECOMPONENT_H
 
+#include <Temporal\Base\Hash.h>
 #include "Component.h"
-#include <vector>
+#include <unordered_map>
 
 namespace Temporal
 {
@@ -29,7 +30,7 @@ namespace Temporal
 		ComponentState& operator=(const ComponentState&);
 	};
 
-	typedef std::vector<ComponentState*> StateCollection;
+	typedef std::unordered_map<const Hash, ComponentState*> StateCollection;
 	typedef StateCollection::const_iterator StateIterator;
 
 	class StateMachineComponent : public Component
@@ -38,16 +39,16 @@ namespace Temporal
 		explicit StateMachineComponent(StateCollection states);
 		virtual ~StateMachineComponent(void);
 
-		void changeState(int stateID);
+		void changeState(const Hash& stateID);
 		virtual void handleMessage(Message& message);
 
 	protected:
-		virtual int getInitialState(void) const = 0;
+		virtual Hash getInitialState(void) const = 0;
 
 	private:
 		StateCollection _states;
 		ComponentState* _currentState;
-		int _currentStateID;
+		Hash _currentStateID;
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);

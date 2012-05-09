@@ -80,17 +80,6 @@ namespace Temporal
 		};
 	}
 
-	/*namespace SensorID
-	{
-		enum Enum
-		{
-			JUMP,
-			HANG,
-			BACK_EDGE,
-			FRONT_EDGE
-		};
-	}*/
-
 	namespace VisualLayer
 	{
 		enum Enum
@@ -104,30 +93,6 @@ namespace Temporal
 
 		static const int FARTHEST = BACKGROUND;
 		static const int NEAREST = NPC;
-	}
-
-	namespace ActionStateID
-	{
-		enum Enum
-		{
-			STAND,
-			FALL,
-			WALK,
-			TURN,
-			PREPARE_TO_JUMP,
-
-			JUMP_START,
-			JUMP,
-			JUMP_END,
-
-			PREPARE_TO_HANG,
-			HANGING,
-			HANG,
-			DROP,
-			CLIMB,
-			PREPARE_TO_DESCEND,
-			DESCEND
-		};
 	}
 }
 #endif

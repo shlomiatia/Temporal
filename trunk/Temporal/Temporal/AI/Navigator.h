@@ -10,18 +10,6 @@ namespace Temporal
 {
 	namespace NavigatorStates
 	{
-		enum Enum
-		{
-			WALK,	
-			FALL,
-			JUMP_UP,
-			JUMP_FORWARD,
-			DESCEND,
-			WAIT,
-			TURN,
-		};
-
-
 		class Wait : public ComponentState
 		{
 		public:
@@ -94,7 +82,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	protected:
-		int getInitialState(void) const { return NavigatorStates::WAIT; }
+		Hash getInitialState(void) const;
 
 	private:
 		AABB _destination;
