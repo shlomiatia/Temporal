@@ -9,6 +9,7 @@
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\MovementUtils.h>
 #include <Temporal\Physics\DynamicBody.h>
+#include <Temporal\Physics\StaticBody.h>
 #include <Temporal\Graphics\Graphics.h>
 
 namespace Temporal
@@ -309,12 +310,11 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(const Entity& entity, ShapeCollection& platforms) 
+	void addPlatform(const StaticBody& body, ShapeCollection& platforms) 
 	{
-		bool isCover = *(bool*)entity.handleMessage(Message(MessageID::IS_COVER));
-		if(!isCover)
+		if(!body.isCover())
 		{
-			const Shape& platform = *(Shape*)entity.handleMessage(Message(MessageID::GET_SHAPE));
+			const Shape& platform = body.getShape();
 			platforms.push_back(&platform);
 		}
 	}
@@ -326,8 +326,9 @@ namespace Temporal
 		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = (*(*i).second);
-			if(entity.have(ComponentType::STATIC_BODY))
-				addPlatform(entity, platforms);
+			const Component* component = entity.get(ComponentType::STATIC_BODY);
+			if(component != NULL)
+				addPlatform((const StaticBody&)(*component), platforms);
 		}
 		createNodes(platforms);
 		createEdges(platforms);

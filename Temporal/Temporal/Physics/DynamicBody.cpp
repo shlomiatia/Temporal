@@ -80,10 +80,6 @@ namespace Temporal
 			_gravityEnabled = *(bool*)message.getParam();
 			_velocity = Vector::Zero;
 		}
-		else if(message.getID() == MessageID::GET_GRAVITY)
-		{
-			message.setParam((void*)&GRAVITY);
-		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriodInMillis = *(float*)message.getParam();

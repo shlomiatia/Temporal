@@ -18,7 +18,7 @@ namespace Temporal
 		~Entity(void);
 
 		void add(Component* component);
-		bool have(ComponentType::Enum type) const;
+		const Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
 
 	private:

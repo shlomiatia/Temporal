@@ -16,12 +16,15 @@ namespace Temporal
 		_components.push_back(component);
 	}
 
-	bool Entity::have(ComponentType::Enum type) const
+	const Component* Entity::get(ComponentType::Enum type) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
-			if((**i).getType() == type)
-				return true;
-		return false;
+		{
+			const Component* component = *i;
+			if(component->getType() == type)
+				return component;
+		}
+		return NULL;
 	}
 
 	void* Entity::handleMessage(Message& message, ComponentType::Enum filter) const
