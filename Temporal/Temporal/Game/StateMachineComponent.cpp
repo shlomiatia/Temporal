@@ -4,19 +4,19 @@
 namespace Temporal
 {
 	StateMachineComponent::StateMachineComponent(StateCollection states)
-		: _states(states), _currentState(NULL), _currentStateID(0)
+		: _states(states), _currentState(NULL), _currentStateID(Hash::INVALID)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
-			(**i).setStateMachine(this);
+			(*(*i).second).setStateMachine(this);
 	}
 
 	StateMachineComponent::~StateMachineComponent(void)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
-			delete *i;
+			delete (*i).second;
 	}
 
-	void StateMachineComponent::changeState(int stateID)
+	void StateMachineComponent::changeState(const Hash& stateID)
 	{
 		if(_currentState != NULL)
 		{

@@ -8,14 +8,6 @@ namespace Temporal
 {
 	namespace CameraStates
 	{
-		enum Enum
-		{
-			SEARCH,
-			SEE,
-			TURN,
-			ACQUIRE
-		};
-
 		class Search : public ComponentState
 		{
 		public:
@@ -77,7 +69,7 @@ namespace Temporal
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		int getInitialState(void) const { return CameraStates::SEARCH; }
+		Hash getInitialState(void) const;
 
 	private:
 		StateCollection getStates(void) const;

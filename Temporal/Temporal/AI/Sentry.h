@@ -8,13 +8,6 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
-		enum Enum
-		{
-			SEARCH,
-			ACQUIRE,
-			SEE
-		};
-
 		class Search : public ComponentState
 		{
 		public:
@@ -58,7 +51,7 @@ namespace Temporal
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		int getInitialState(void) const { return SentryStates::SEARCH; }
+		Hash getInitialState(void) const;
 
 	private:
 

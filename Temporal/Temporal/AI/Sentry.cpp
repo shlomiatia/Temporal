@@ -6,6 +6,10 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
+		static const Hash SEARCH_STATE = Hash("STAT_SEN_SEARCH");
+		static const Hash ACQUIRE_STATE = Hash("STAT_SEN_ACQUIRE");
+		static const Hash SEE_STATE = Hash("STAT_SEN_SEE");
+
 		void Search::enter(void)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Red));
@@ -15,7 +19,7 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(SentryStates::ACQUIRE);
+				_stateMachine->changeState(ACQUIRE_STATE);
 			}
 		}
 
@@ -39,9 +43,9 @@ namespace Temporal
 				float framePeriodInMillis = *(float*)message.getParam();
 				_timer.update(framePeriodInMillis);
 				if(!_haveLineOfSight)
-					_stateMachine->changeState(SentryStates::SEARCH);
+					_stateMachine->changeState(SEARCH_STATE);
 				else if(_timer.getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
-					_stateMachine->changeState(SentryStates::SEE);
+					_stateMachine->changeState(SEE_STATE);
 				_haveLineOfSight = false;
 			}
 		}
@@ -61,20 +65,25 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				if(!_haveLineOfSight)
-					_stateMachine->changeState(SentryStates::SEARCH);
+					_stateMachine->changeState(SEARCH_STATE);
 				_haveLineOfSight = false;
 			}
 		}
 	}
 
+	using namespace SentryStates;
+
 	StateCollection Sentry::getStates(void) const
 	{
 		StateCollection states;
-		using namespace SentryStates;
-		states.push_back(new Search());
-		states.push_back(new Acquire());
-		states.push_back(new See());
+		states[SEARCH_STATE] = new Search();
+		states[ACQUIRE_STATE] = new Acquire();
+		states[SEE_STATE] = new See();
 		return states;
 	}
 
+	Hash Sentry::getInitialState(void) const
+	{
+		return SEARCH_STATE;
+	}
 }

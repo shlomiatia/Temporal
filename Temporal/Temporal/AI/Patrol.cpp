@@ -8,6 +8,13 @@ namespace Temporal
 	{
 		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
 
+		static const Hash WALK_STATE = Hash("STAT_PAT_WALK");
+		static const Hash SEE_STATE = Hash("STAT_PAT_SEE");
+		static const Hash TURN_STATE = Hash("STAT_PAT_TURN");
+		static const Hash WAIT_STATE = Hash("STAT_PAT_WAIT");
+
+		static const Hash ACTION_TURN_STATE = Hash("STAT_ACT_TURN");
+
 		bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
 		{
 			if(message.getID() == MessageID::SENSOR_COLLISION)
@@ -22,11 +29,11 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(PatrolStates::SEE);
+				_stateMachine->changeState(SEE_STATE);
 			}
 			else if(isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 			{
-				_stateMachine->changeState(PatrolStates::WAIT);
+				_stateMachine->changeState(WAIT_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
@@ -48,7 +55,7 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				if(!_haveLineOfSight)
-					_stateMachine->changeState(PatrolStates::WALK);
+					_stateMachine->changeState(WALK_STATE);
 				_haveLineOfSight = false;
 			}
 		}
@@ -60,11 +67,11 @@ namespace Temporal
 
 		void Turn::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::STATE_EXITED && message.getSender() == ComponentType::ACTION_CONTROLLER)
+			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const ActionStateID::Enum& actionID = *(ActionStateID::Enum*)message.getParam();
-				if(actionID == ActionStateID::TURN)
-					_stateMachine->changeState(PatrolStates::WALK);
+				const Hash& actionID = *(Hash*)message.getParam();
+				if(actionID == ACTION_TURN_STATE)
+					_stateMachine->changeState(WALK_STATE);
 			}
 		}
 
@@ -79,7 +86,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(PatrolStates::SEE);
+				_stateMachine->changeState(SEE_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
@@ -88,21 +95,26 @@ namespace Temporal
 
 				if(_timer.getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)
 				{
-					_stateMachine->changeState(PatrolStates::TURN);
+					_stateMachine->changeState(TURN_STATE);
 				}
 			}
 		}
 	}
+	using namespace PatrolStates;
 
 	StateCollection Patrol::getStates(void) const
 	{
 		StateCollection states;
-		using namespace PatrolStates;
-		states.push_back(new Walk());
-		states.push_back(new See());
-		states.push_back(new Turn());
-		states.push_back(new Wait());
+		
+		states[WALK_STATE] = new Walk();
+		states[SEE_STATE] = new See();
+		states[TURN_STATE] = new Turn();
+		states[WAIT_STATE] = new Wait();
 		return states;
 	}
 
+	Hash Patrol::getInitialState(void) const
+	{
+		return WALK_STATE;
+	}
 }

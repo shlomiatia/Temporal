@@ -31,6 +31,22 @@ namespace Temporal
 	static const Hash SWING_FORWARD_ANIMATION = Hash("ANIM_POP_SWING_FORWARD");
 	static const Hash SWING_BACKWARD_ANIMATION = Hash("ANIM_POP_SWING_BACKWARD");
 
+	static const Hash STAND_STATE = Hash("STAT_ACT_STAND");
+	static const Hash FALL_STATE = Hash("STAT_ACT_FALL");
+	static const Hash WALK_STATE = Hash("STAT_ACT_WALK");
+	static const Hash TURN_STATE = Hash("STAT_ACT_TURN");
+	static const Hash PREPARE_TO_JUMP_STATE = Hash("STAT_ACT_PREPARE_TO_JUMP");
+	static const Hash JUMP_START_STATE = Hash("STAT_ACT_JUMP_START");
+	static const Hash JUMP_STATE = Hash("STAT_ACT_JUMP");
+	static const Hash JUMP_END_STATE = Hash("STAT_ACT_JUMP_END");
+	static const Hash PREPARE_TO_HANG_STATE = Hash("STAT_ACT_PREPARE_TO_HANG");
+	static const Hash HANGING_STATE = Hash("STAT_ACT_HANGING");
+	static const Hash HANG_STATE = Hash("STAT_ACT_HANG");
+	static const Hash DROP_STATE = Hash("STAT_ACT_DROP");
+	static const Hash CLIMB_STATE = Hash("STAT_ACT_CLIMB");
+	static const Hash PREPARE_TO_DESCEND_STATE = Hash("STAT_ACT_PREPARE_TO_DESCEND");
+	static const Hash DESCEND_STATE = Hash("STAT_ACT_DESCEND");
+
 	JumpInfoProvider::JumpInfoProvider(void)
 	{
 		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
@@ -54,21 +70,21 @@ namespace Temporal
 	StateCollection ActionController::getStates() const
 	{
 		StateCollection states;
-		states.push_back(new Stand());
-		states.push_back(new Fall());
-		states.push_back(new Walk());
-		states.push_back(new Turn());
-		states.push_back(new PrepareToJump());
-		states.push_back(new JumpStart());
-		states.push_back(new Jump());
-		states.push_back(new JumpEnd());
-		states.push_back(new PrepareToHang());
-		states.push_back(new Hanging());
-		states.push_back(new Hang());
-		states.push_back(new Drop());
-		states.push_back(new Climb());
-		states.push_back(new PrepareToDescend());
-		states.push_back(new Descend());
+		states[STAND_STATE] = new Stand();
+		states[FALL_STATE] = new Fall();
+		states[WALK_STATE] = new Walk();
+		states[TURN_STATE] = new Turn();
+		states[PREPARE_TO_JUMP_STATE] = new PrepareToJump();
+		states[JUMP_START_STATE] = new JumpStart();
+		states[JUMP_STATE] = new Jump();
+		states[JUMP_END_STATE] = new JumpEnd();
+		states[PREPARE_TO_HANG_STATE] = new PrepareToHang();
+		states[HANGING_STATE] = new Hanging();
+		states[HANG_STATE] = new Hang();
+		states[DROP_STATE] = new Drop();
+		states[CLIMB_STATE] = new Climb();
+		states[PREPARE_TO_DESCEND_STATE] = new PrepareToDescend();
+		states[DESCEND_STATE] = new Descend();
 		return states;
 	}
 
@@ -101,16 +117,16 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			_stateMachine->changeState(ActionStateID::WALK);
+			_stateMachine->changeState(WALK_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_BACKWARD)
 		{
-			_stateMachine->changeState(ActionStateID::TURN);
+			_stateMachine->changeState(TURN_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getHighest());
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_JUMP);
+			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
@@ -124,11 +140,11 @@ namespace Temporal
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_DESCEND);
+			_stateMachine->changeState(PREPARE_TO_DESCEND_STATE);
 		}
 		else if(_isDescending && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 		{
-			_stateMachine->changeState(ActionStateID::TURN);
+			_stateMachine->changeState(TURN_STATE);
 		}
 
 	}
@@ -149,7 +165,7 @@ namespace Temporal
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
+			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -159,7 +175,7 @@ namespace Temporal
 		{
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() < 0.0f)
-				_stateMachine->changeState(ActionStateID::STAND);
+				_stateMachine->changeState(STAND_STATE);
 		}
 	}
 
@@ -181,7 +197,7 @@ namespace Temporal
 			if(canJumpForward(_stateMachine))
 			{
 				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(ActionStateID::JUMP_START);
+				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
 		else if(message.getID() == MessageID::ACTION_FORWARD)
@@ -208,11 +224,11 @@ namespace Temporal
 			// Therefore we only fall when some time has passed
 			if(_noFloorTimer.getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
 			{
-				_stateMachine->changeState(ActionStateID::FALL);
+				_stateMachine->changeState(FALL_STATE);
 			}
 			else if(!_stillWalking)
 			{
-				_stateMachine->changeState(ActionStateID::STAND);
+				_stateMachine->changeState(STAND_STATE);
 			}
 			else
 			{
@@ -235,7 +251,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
-			_stateMachine->changeState(ActionStateID::STAND);
+			_stateMachine->changeState(STAND_STATE);
 		}
 	}
 
@@ -285,7 +301,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
-			_stateMachine->changeState(ActionStateID::JUMP_START);
+			_stateMachine->changeState(JUMP_START_STATE);
 		}
 		else if(isSensorCollisionMessage(message, JUMP_SENSOR_ID))
 		{
@@ -293,7 +309,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			_stateMachine->changeState(ActionStateID::JUMP_START);
+			_stateMachine->changeState(JUMP_START_STATE);
 		}
 	}
 
@@ -316,18 +332,18 @@ namespace Temporal
 			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
 			{
 				jumpHelper.setInfo(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(ActionStateID::JUMP_START);
+				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
 		else if(message.getID() == MessageID::ACTION_BACKWARD)
 		{
-			_stateMachine->changeState(ActionStateID::TURN);
+			_stateMachine->changeState(TURN_STATE);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(_animationEnded)
 			{
-				_stateMachine->changeState(ActionStateID::JUMP);
+				_stateMachine->changeState(JUMP_STATE);
 			}
 		}
 	}
@@ -354,7 +370,7 @@ namespace Temporal
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
-			_stateMachine->changeState(ActionStateID::PREPARE_TO_HANG);
+			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -364,7 +380,7 @@ namespace Temporal
 		{
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() < 0.0f)
-				_stateMachine->changeState(ActionStateID::JUMP_END);
+				_stateMachine->changeState(JUMP_END_STATE);
 		}
 	}
 
@@ -378,7 +394,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
-			_stateMachine->changeState(ActionStateID::STAND);
+			_stateMachine->changeState(STAND_STATE);
 		}
 	}
 
@@ -405,7 +421,7 @@ namespace Temporal
 			float personCenterX = personBounds.getCenterX();
 			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
-			_stateMachine->changeState(ActionStateID::HANGING);
+			_stateMachine->changeState(HANGING_STATE);
 		}
 	}
 
@@ -432,7 +448,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
-			_stateMachine->changeState(ActionStateID::HANG);
+			_stateMachine->changeState(HANG_STATE);
 		}
 	}
 
@@ -445,11 +461,11 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
-			_stateMachine->changeState(ActionStateID::DROP);
+			_stateMachine->changeState(DROP_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{	
-			_stateMachine->changeState(ActionStateID::CLIMB);
+			_stateMachine->changeState(CLIMB_STATE);
 		}
 	}
 
@@ -478,7 +494,7 @@ namespace Temporal
 		if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_platformFound)
-				_stateMachine->changeState(ActionStateID::FALL);
+				_stateMachine->changeState(FALL_STATE);
 			else
 				_platformFound = false;
 		}
@@ -506,7 +522,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
-			_stateMachine->changeState(ActionStateID::STAND);
+			_stateMachine->changeState(STAND_STATE);
 		}
 	}
 
@@ -531,7 +547,7 @@ namespace Temporal
 			float platformTop = point.getY();
 			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
-			_stateMachine->changeState(ActionStateID::DESCEND);
+			_stateMachine->changeState(DESCEND_STATE);
 		}
 	}
 
@@ -563,7 +579,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
-			_stateMachine->changeState(ActionStateID::HANG);
+			_stateMachine->changeState(HANG_STATE);
 		}
 	}
 

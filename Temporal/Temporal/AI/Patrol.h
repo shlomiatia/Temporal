@@ -8,15 +8,6 @@ namespace Temporal
 {
 	namespace PatrolStates
 	{
-		enum Enum
-		{
-			WALK,
-			SEE,
-			TURN,
-			WAIT
-		};
-
-
 		class Walk : public ComponentState
 		{
 		public:
@@ -67,7 +58,7 @@ namespace Temporal
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		int getInitialState(void) const { return PatrolStates::WALK; }
+		Hash getInitialState(void) const;
 
 	private:
 		StateCollection getStates(void) const;

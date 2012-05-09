@@ -105,7 +105,7 @@ namespace Temporal
 		HangDescendHelper& getHangDescendHelper(void) { return _hangDescendHelper; }
 
 	protected:
-		int getInitialState(void) const { return ActionStateID::STAND; }
+		Hash getInitialState(void) const { return Hash("STAT_ACT_STAND"); }
 
 	private:
 		JumpHelper _jumpHelper;

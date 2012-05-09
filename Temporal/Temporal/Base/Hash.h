@@ -6,6 +6,8 @@ namespace Temporal
 	class Hash
 	{
 	public:
+		static const Hash INVALID;
+
 		explicit Hash(const char* string);
 
 		operator unsigned int() const { return _value; }
