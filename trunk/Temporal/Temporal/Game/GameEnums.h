@@ -19,10 +19,11 @@ namespace Temporal
 			ACTION_CONTROLLER = 1024,
 			ANIMATOR = 2048,
 			RENDERER = 4096,
+			TEMPORAL_ECHO = 8192,
 
-			OTHER = 8192,
+			OTHER = 1048576,
 
-			ALL = 16383
+			ALL = 2097151
 		};
 	}
 	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return (ComponentType::Enum)((int)a | (int)b); }
@@ -38,6 +39,9 @@ namespace Temporal
 			UPDATE,
 			DRAW,
 			DEBUG_DRAW,
+
+			SERIALIZE,
+			DESERIALIZE,
 
 			GET_POSITION,
 			SET_POSITION,

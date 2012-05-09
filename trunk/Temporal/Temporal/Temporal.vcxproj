@@ -22,6 +22,7 @@
     <ClInclude Include="Base\Hash.h" />
     <ClInclude Include="Base\Segment.h" />
     <ClInclude Include="Base\Math.h" />
+    <ClInclude Include="Base\Serialization.h" />
     <ClInclude Include="Base\Shape.h" />
     <ClInclude Include="Base\ShapeOperations.h" />
     <ClInclude Include="Base\YABP.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Game\StateMachineComponent.h" />
     <ClInclude Include="Game\EntitiesManager.h" />
     <ClInclude Include="Game\MessageUtils.h" />
+    <ClInclude Include="Game\TemporalEcho.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\MessageParams.h" />
@@ -86,6 +88,7 @@
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\EntitiesManager.cpp" />
     <ClCompile Include="Game\MessageUtils.cpp" />
+    <ClCompile Include="Game\TemporalEcho.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
     <ClCompile Include="Game\Position.cpp" />

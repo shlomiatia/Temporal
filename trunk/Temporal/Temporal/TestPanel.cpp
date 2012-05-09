@@ -12,6 +12,7 @@
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
 #include <Temporal\Game\MovementUtils.h>
+#include <Temporal\Game\TemporalEcho.h>
 #include <Temporal\Physics\StaticBody.h>
 #include <Temporal\Physics\DynamicBody.h>
 #include <Temporal\Physics\Grid.h>
@@ -31,7 +32,7 @@
 
 namespace Temporal
 {
-	#pragma region Helper Methods
+	#pragma region Methods
 
 	static const Size ENTITY_SIZE(20.0f, 80.0f);
 	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
@@ -92,8 +93,18 @@ namespace Temporal
 		addFrontEdgeSensor(entity);
 	}
 
-	#pragma endregion
-	#pragma region Creation Methods
+	TemporalEcho* createTemporalEcho(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Point(512.0f, 768.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, Color(1.0f, 1.0f, 1.0f, 0.2f));
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(drawPosition);
+		entity->add(renderer);
+		TemporalEcho* temporalEcho = new TemporalEcho(entity);
+		return temporalEcho;
+	}
 
 	void createPlayer(SpriteSheet* spritesheet)
 	{
@@ -114,6 +125,7 @@ namespace Temporal
 		entity->add(dynamicBody);
 		addSensors(*entity);
 		entity->add(actionController);
+		entity->add(createTemporalEcho(spritesheet));
 		entity->add(animator);
 		entity->add(renderer);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
@@ -251,6 +263,8 @@ namespace Temporal
 		const Size TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
+		#pragma region Platforms
+
 		// Edges
 		createPlatform(new Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet);
 		createPlatform(new Segment(0.0f, 0.0f, 2047.0f, 0.0f), spritesheet);
@@ -351,6 +365,8 @@ namespace Temporal
 		createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet);
 		createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet);
 		createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet);
+
+		#pragma endregion
 	}
 
 	void createBackground()
@@ -519,10 +535,10 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createChaser(spritesheet);
-		createSentry(spritesheet);
-		createPatrol(spritesheet);
-		createCamera();
+		//createChaser(spritesheet);
+		//createSentry(spritesheet);
+		//createPatrol(spritesheet);
+		//screateCamera();
 		createPlatforms();
 		//createBackground();
 	}

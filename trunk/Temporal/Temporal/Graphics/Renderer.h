@@ -11,8 +11,8 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer) :
-		  _spritesheet(spritesheet), _layer(layer), _spriteGroupID(getFirstSpriteGroupID(spritesheet)), _spriteID(0), _color(Color::White) {};
+		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, Color color = Color::White) :
+		  _spritesheet(spritesheet), _layer(layer), _spriteGroupID(getFirstSpriteGroupID(spritesheet)), _spriteID(0), _color(color) {};
 
 		ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
 
