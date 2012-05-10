@@ -1,11 +1,11 @@
 #include "Position.h"
 #include "Message.h"
 #include <Temporal\Base\Serialization.h>
+#include <Temporal\Base\BaseUtils.h>
 
 namespace Temporal
 {
-	static const Hash X_SERIALIZATION = Hash("SER_POS_X");
-	static const Hash Y_SERIALIZATION = Hash("SER_POS_Y");
+	static const NumericPairSerializer POSITION_SERIALIZER("SER_POS");
 
 	void Position::handleMessage(Message& message)
 	{
@@ -20,14 +20,12 @@ namespace Temporal
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = *(Serialization*)message.getParam();
-			serialization.serialize(X_SERIALIZATION, _position.getX());
-			serialization.serialize(Y_SERIALIZATION, _position.getY());
+			POSITION_SERIALIZER.serialize(serialization, _position);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
-			_position.setX(serialization.deserializeFloat(X_SERIALIZATION));
-			_position.setY(serialization.deserializeFloat(Y_SERIALIZATION));
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			POSITION_SERIALIZER.deserialize(serialization, _position);
 		}
 	}
 }

@@ -20,10 +20,10 @@ namespace Temporal
 		void draw(void) const;
 	private:
 		const SpriteSheet& _spritesheet;
+		const VisualLayer::Enum _layer;
 
 		Hash _spriteGroupID;
 		int _spriteID;
-		VisualLayer::Enum _layer;
 		Color _color;
 
 		const Hash& getFirstSpriteGroupID(const SpriteSheet& spritesheet);

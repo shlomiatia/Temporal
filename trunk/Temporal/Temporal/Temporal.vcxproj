@@ -17,6 +17,7 @@
     <ClInclude Include="AI\Pathfinder.h" />
     <ClInclude Include="AI\Patrol.h" />
     <ClInclude Include="AI\Sentry.h" />
+    <ClInclude Include="Base\BaseUtils.h" />
     <ClInclude Include="Base\Color.h" />
     <ClInclude Include="Base\BaseEnums.h" />
     <ClInclude Include="Base\Hash.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="AI\Pathfinder.cpp" />
     <ClCompile Include="AI\Patrol.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />
+    <ClCompile Include="Base\BaseUtils.cpp" />
     <ClCompile Include="Base\Color.cpp" />
     <ClCompile Include="Base\Hash.cpp" />
     <ClCompile Include="Base\Math.cpp" />

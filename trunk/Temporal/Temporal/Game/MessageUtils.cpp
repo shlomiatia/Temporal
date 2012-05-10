@@ -1,6 +1,8 @@
 #include "MessageUtils.h"
 #include "Message.h"
 #include "Component.h"
+#include "MessageParams.h"
+#include <Temporal\Base\Hash.h>
 
 namespace Temporal
 {
@@ -11,5 +13,16 @@ namespace Temporal
 			component.sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 		else
 			component.sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+	}
+
+	bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
+	{
+		if(message.getID() == MessageID::SENSOR_COLLISION)
+		{
+			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			if(params.getSensorID() == sensorID)
+				return true;
+		}
+		return false;
 	}
 }

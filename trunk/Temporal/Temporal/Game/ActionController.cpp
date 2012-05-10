@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "MessageParams.h"
 #include "MovementUtils.h"
+#include "MessageUtils.h"
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
 #include <Temporal\Base\Shape.h>
@@ -87,17 +88,6 @@ namespace Temporal
 		states[PREPARE_TO_DESCEND_STATE] = new PrepareToDescend();
 		states[DESCEND_STATE] = new Descend();
 		return states;
-	}
-
-	bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
-	{
-		if(message.getID() == MessageID::SENSOR_COLLISION)
-		{
-			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
-			if(params.getSensorID() == sensorID)
-				return true;
-		}
-		return false;
 	}
 
 	bool canJumpForward(StateMachineComponent* component)
