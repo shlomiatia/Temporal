@@ -53,6 +53,7 @@
     <ClInclude Include="Base\Hash.h" />
     <ClInclude Include="Game\TemporalEcho.h" />
     <ClInclude Include="Base\Serialization.h" />
+    <ClInclude Include="Base\BaseUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -98,5 +99,6 @@
     <ClCompile Include="Base\AABB.cpp" />
     <ClCompile Include="Base\Hash.cpp" />
     <ClCompile Include="Game\TemporalEcho.cpp" />
+    <ClCompile Include="Base\BaseUtils.cpp" />
   </ItemGroup>
 </Project>

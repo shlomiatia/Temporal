@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 10000.0f;
+	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 5000.0f;
 
 	void TemporalEcho::handleMessage(Message& message)
 	{

@@ -1,5 +1,5 @@
 #include "Patrol.h"
-#include <Temporal\Game\MessageParams.h>
+#include <Temporal\Game\MessageUtils.h>
 #include <Temporal\Game\Message.h>
 
 namespace Temporal
@@ -15,16 +15,6 @@ namespace Temporal
 
 		static const Hash ACTION_TURN_STATE = Hash("STAT_ACT_TURN");
 
-		bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
-		{
-			if(message.getID() == MessageID::SENSOR_COLLISION)
-			{
-				const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
-				if(params.getSensorID() == sensorID)
-					return true;
-			}
-			return false;
-		}
 		void Walk::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)

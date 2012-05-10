@@ -14,8 +14,8 @@ namespace Temporal
 		ComponentType::Enum getType(void) const { return ComponentType::DRAW_POSITION; }
 		void handleMessage(Message& message);
 	private:
-		Vector _offset; // VECTOR
-		Point _override; // POINT
+		Vector _offset;
+		Point _override;
 	};
 }
 #endif

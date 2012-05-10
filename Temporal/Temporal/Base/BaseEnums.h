@@ -1,5 +1,5 @@
-#ifndef BASE_ENUMS_H
-#define BASE_ENUMS_H
+#ifndef BASEENUMS_H
+#define BASEENUMS_H
 
 namespace Temporal
 {

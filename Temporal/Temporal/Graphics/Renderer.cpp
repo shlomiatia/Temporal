@@ -1,10 +1,15 @@
 #include "Renderer.h"
 #include "Graphics.h"
 #include "SpriteSheet.h"
+#include <Temporal\Base\Hash.h>
+#include <Temporal\Base\Serialization.h>
 #include <Temporal\Game\Message.h>
 
 namespace Temporal
 {
+	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("SER_REN_SPR_GRP");
+	static const Hash SPRITE_SERIALIZATION = Hash("SER_REN_SPR");
+
 	void Renderer::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_SPRITE_GROUP)
@@ -32,6 +37,18 @@ namespace Temporal
 			VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
 			if(_layer == layer)
 				draw();			
+		}
+		else if(message.getID() == MessageID::SERIALIZE)
+		{
+			Serialization& serialization = *(Serialization*)message.getParam();
+			serialization.serialize(SPRITE_GROUP_SERIALIZATION, _spriteGroupID);
+			serialization.serialize(SPRITE_SERIALIZATION, _spriteID);
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			_spriteGroupID = Hash(serialization.deserializeUInt(SPRITE_GROUP_SERIALIZATION));
+			_spriteID = (Orientation::Enum)serialization.deserializeInt(SPRITE_SERIALIZATION);
 		}
 	}
 	

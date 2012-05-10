@@ -96,10 +96,12 @@ namespace Temporal
 	TemporalEcho* createTemporalEcho(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		Entity* entity = new Entity();
 		entity->add(position);
+		entity->add(orientation);
 		entity->add(drawPosition);
 		entity->add(renderer);
 		TemporalEcho* temporalEcho = new TemporalEcho(entity);
