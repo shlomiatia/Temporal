@@ -1,6 +1,7 @@
 #ifndef ACTIONCONTROLLER_H
 #define ACTIONCONTROLLER_H
 
+#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\Timer.h>
@@ -8,13 +9,15 @@
 
 namespace Temporal
 {
-	class Point;
 	class SensorCollisionParams;
 
 	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 150.0f;
 	static const float JUMP_FORCE_PER_SECOND = 900.0f;
 
+	/**********************************************************************************************
+	 * Jump Helpers
+	 *********************************************************************************************/
 	class JumpInfo
 	{
 	public:
@@ -81,31 +84,40 @@ namespace Temporal
 		JumpHelper& operator=(const JumpHelper&);
 	};
 
+	/**********************************************************************************************
+	 * Hang descend helper
+	 *********************************************************************************************/
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _point(NULL) {}
+		HangDescendHelper(void) : _point(Point::Zero) {}
 
 		void setPoint(const SensorCollisionParams& params);
-		const Point& getPoint(void) const { return *_point; }
+		const Point& getPoint(void) const { return _point; }
+		void setPoint(const Point& point) { _point = point; }
 	private:
-		const Point* _point;
+		Point _point;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
 	};
 
+	/**********************************************************************************************
+	 * Action controller
+	 *********************************************************************************************/
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController(void) : StateMachineComponent(getStates()) {}
+		ActionController(void) : StateMachineComponent(getStates(), "ACT") {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper(void) { return _jumpHelper; }
 		HangDescendHelper& getHangDescendHelper(void) { return _hangDescendHelper; }
 
+		void handleMessage(Message& message);
+
 	protected:
-		Hash getInitialState(void) const { return Hash("STAT_ACT_STAND"); }
+		Hash getInitialState(void) const { return Hash("STAT_ACT_STAND"); } // TODO:
 
 	private:
 		JumpHelper _jumpHelper;
@@ -114,170 +126,126 @@ namespace Temporal
 		StateCollection getStates() const;
 	};
 
+	/**********************************************************************************************
+	 * States
+	 *********************************************************************************************/
 	class Stand : public ComponentState
 	{
 	public:
-		Stand(void) : _isDescending(false) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
-
-	private:
-		bool _isDescending;
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Fall : public ComponentState
 	{
 	public:
-		Fall(void) : _wantToHang(false) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
-		
-	private:
-		bool _wantToHang;
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Walk : public ComponentState
 	{
 	public:
-		Walk(void) : _stillWalking(false), _noFloor(false) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 
 	private:
 		static const float NO_FLOOR_TIME_TO_FALL_IN_MILLIS;
-
-		bool _stillWalking;
-		bool _noFloor;
-		Timer _noFloorTimer;
 	};
 
 	class Turn : public ComponentState
 	{
 	public:
-		Turn(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToJump : public ComponentState
 	{
 	public:
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 
 	private:
-		void handleJumpSensor(Message &message);
+		void handleJumpSensor(Message &message) const;
 	};
 
 	class JumpStart : public ComponentState
 	{
 	public:
-		JumpStart(void) : _animationEnded(false) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
-
-	private:
-		bool _animationEnded;
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Jump : public ComponentState
 	{
 	public:
-		Jump(void) : _wantToHang(false) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
-
-	private:
-		bool _wantToHang;
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class JumpEnd : public ComponentState
 	{
 	public:
-		JumpEnd(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToHang : public ComponentState
 	{
 	public:
-		PrepareToHang(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 
 	private:
-		void update(void);
+		void update(void) const;
 	};
 
 	class Hanging : public ComponentState
 	{
 	public:
-		Hanging(void){};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Hang : public ComponentState
 	{
 	public:
-		Hang(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Drop : public ComponentState
 	{
 	public:
-		Drop(void) : _platformFound(false) {};
-
-		void enter(void);
-		void exit(void);
-		void handleMessage(Message& message);
-
-	private:
-		bool _platformFound;
+		void enter(void) const;
+		void exit(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class Climb : public ComponentState
 	{
 	public:
-		Climb(void) {};
-
-		void enter(void);
-		void exit(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void exit(void) const;
+		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToDescend : public ComponentState
 	{
 	public:
-		PrepareToDescend(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 
 	private:
-		void update(void);
+		void update(void) const;
 	};
 
 	class Descend : public ComponentState
 	{
 	public:
-		Descend(void) {};
-
-		void enter(void);
-		void handleMessage(Message& message);
+		void enter(void) const;
+		void handleMessage(Message& message) const;
 	};
 }
 

@@ -120,6 +120,7 @@ namespace Temporal
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
 
 		Entity* entity = new Entity();
+		entity->add(createTemporalEcho(spritesheet));
 		entity->add(position);
 		entity->add(orientation);
 		entity->add(drawPosition);
@@ -127,7 +128,6 @@ namespace Temporal
 		entity->add(dynamicBody);
 		addSensors(*entity);
 		entity->add(actionController);
-		entity->add(createTemporalEcho(spritesheet));
 		entity->add(animator);
 		entity->add(renderer);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);

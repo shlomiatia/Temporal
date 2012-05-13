@@ -13,65 +13,51 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
-			Wait(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class Walk : public ComponentState
 		{
 		public:
-			Walk(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			Turn(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class Fall : public ComponentState
 		{
 		public:
-			Fall(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class JumpUp : public ComponentState
 		{
 		public:
-			JumpUp(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class JumpForward : public ComponentState
 		{
 		public:
-			JumpForward(void) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Descend : public ComponentState
 		{
 		public:
-			Descend(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 	}
 
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator(void) : StateMachineComponent(getStates()), _destination(AABB::Empty), _path(NULL) {}
+		Navigator(void) : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Empty), _path(NULL) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 

@@ -6,7 +6,6 @@
 namespace Temporal
 {
 	static const NumericPairSerializer OVERRIDE_SERIALIZER("DRW_POS_OVERRIDE");
-	static const NumericPairSerializer OFFSET_SERIALIZER("DRW_POS_OFFSET");
 
 	void DrawPosition::handleMessage(Message& message)
 	{
@@ -31,13 +30,11 @@ namespace Temporal
 		{
 			Serialization& serialization = *(Serialization*)message.getParam();
 			OVERRIDE_SERIALIZER.serialize(serialization, _override);
-			OFFSET_SERIALIZER.serialize(serialization, _offset);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
 			const Serialization& serialization = *(const Serialization*)message.getParam();
 			OVERRIDE_SERIALIZER.deserialize(serialization, _override);
-			OFFSET_SERIALIZER.deserialize(serialization, _offset);
 		}
 	}
 }

@@ -2,6 +2,8 @@
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "Grid.h"
+#include <Temporal\Base\BaseUtils.h>
+#include <Temporal\Base\Serialization.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Base\ShapeOperations.h>
@@ -12,6 +14,10 @@
 
 namespace Temporal
 {
+	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("SER_DYN_IS_GRAVITY_ENABLED");
+	static const NumericPairSerializer VELOCITY_SERIALIZER("SER_DYN_VELOCITY");
+
+
 	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
 
 	float getMaxMovementStepSize(const Size& size)
@@ -44,7 +50,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::GET_SIZE)
 		{
-			message.setParam(&_size);
+			message.setParam((Size*)&_size);
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
@@ -84,6 +90,18 @@ namespace Temporal
 		{
 			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
+		}
+		else if(message.getID() == MessageID::SERIALIZE)
+		{
+			Serialization& serialization = *(Serialization*)message.getParam();
+			serialization.serialize(IS_GRAVITY_ENABLED_SERIALIZATION, _gravityEnabled);
+			VELOCITY_SERIALIZER.serialize(serialization, _velocity);
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			_gravityEnabled = serialization.deserializeBool(IS_GRAVITY_ENABLED_SERIALIZATION);
+			VELOCITY_SERIALIZER.deserialize(serialization, _velocity);
 		}
 	}
 

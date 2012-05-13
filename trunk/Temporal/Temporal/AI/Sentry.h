@@ -11,42 +11,32 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Acquire : public ComponentState
 		{
 		public:
-			Acquire(void) : _haveLineOfSight(false) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
-
-			bool _haveLineOfSight;
-			Timer _timer;
 		};
 
 		class See : public ComponentState
 		{
 		public:
-			See(void) : _haveLineOfSight(false) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
-
-		private:
-			bool _haveLineOfSight;
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 	}
 
 	class Sentry : public StateMachineComponent
 	{
 	public:
-		Sentry(void) : StateMachineComponent(getStates()) {}
+		Sentry(void) : StateMachineComponent(getStates(), "SEN") {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 

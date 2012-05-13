@@ -78,6 +78,8 @@ namespace Temporal
 
 			SET_NAVIGATION_DESTINATION,
 			STOP_NAVIGATION,
+
+			MERGE_TO_TEMPORAL_ECHOES,
 		};
 	}
 

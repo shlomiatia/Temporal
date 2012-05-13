@@ -20,7 +20,8 @@ namespace Temporal
 		static const Hash ACTION_JUMP_END_STATE = Hash("STAT_ACT_JUMP_END");
 		static const Hash ACTION_DROP_STATE = Hash("STAT_ACT_DROP");
 		static const Hash ACTION_CLIMB_STATE = Hash("STAT_ACT_CLIMB");
-		void Wait::handleMessage(Message& message)
+
+		void Wait::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
@@ -41,7 +42,7 @@ namespace Temporal
 			}
 		}
 
-		void Walk::handleMessage(Message& message)
+		void Walk::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
@@ -92,7 +93,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::handleMessage(Message& message)
+		void Turn::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
@@ -128,7 +129,7 @@ namespace Temporal
 			}
 		}
 
-		void Fall::handleMessage(Message& message)
+		void Fall::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -142,7 +143,7 @@ namespace Temporal
 			}
 		}
 
-		void JumpUp::handleMessage(Message& message)
+		void JumpUp::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -156,13 +157,13 @@ namespace Temporal
 			}
 		}
 
-		void JumpForward::enter(void)
+		void JumpForward::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 		}
 
-		void JumpForward::handleMessage(Message& message)
+		void JumpForward::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -172,7 +173,7 @@ namespace Temporal
 			}
 		}
 
-		void Descend::handleMessage(Message& message)
+		void Descend::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{

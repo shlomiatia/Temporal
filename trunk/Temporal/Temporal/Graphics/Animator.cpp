@@ -1,10 +1,15 @@
 #include "Animator.h"
 #include "SpriteSheet.h"
+#include <Temporal\Base\Serialization.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageParams.h>
 
 namespace Temporal
 {
+	static const Hash TIMER_SERIALIZATION = Hash("SER_ANM_TIMER");
+	static const Hash REPEAT_SERIALIZATION = Hash("SER_ANM_REPEAT");
+	static const Hash REWIND_SERIALIZATION = Hash("SER_ANM_REWIND");
+
 	void Animator::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::RESET_ANIMATION)
@@ -16,6 +21,20 @@ namespace Temporal
 		{
 			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
+		}
+		else if(message.getID() == MessageID::SERIALIZE)
+		{
+			Serialization& serialization = *(Serialization*)message.getParam();
+			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis()); // TODO:
+			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
+			serialization.serialize(REWIND_SERIALIZATION, _rewind);
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
+			_repeat = serialization.deserializeBool(REPEAT_SERIALIZATION);
+			_rewind = serialization.deserializeBool(REWIND_SERIALIZATION);
 		}
 	}
 

@@ -23,13 +23,26 @@ namespace Temporal
 				EchoIterator first = _echoesData.begin();
 				Serialization* deserialization = *first;
 				_echo->handleMessage(Message(MessageID::DESERIALIZE, deserialization));
-				_echoesData.erase(first);
 				delete deserialization;
+				_echoesData.erase(first);
 			}
 			Serialization* serialization = new Serialization();
 			sendMessageToOwner(Message(MessageID::SERIALIZE, serialization));
 			_echoesData.push_back(serialization);
 			
+		}
+		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
+		{
+			EchoIterator first = _echoesData.begin();
+			Serialization* deserialization = *first;
+			sendMessageToOwner(Message(MessageID::DESERIALIZE, deserialization));
+			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
+			{
+				delete *i;
+				i = _echoesData.erase(i);
+			}
+			_echoReady = false;
+
 		}
 		else if(_echoReady && (message.getID() == MessageID::DRAW || message.getID() == MessageID::DEBUG_DRAW)) 
 		{

@@ -11,60 +11,43 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 
 		private:
 			static const float SEARCH_TIME_FOR_SIDE_IN_MILLIS;
-
-			Timer _timer;
 		};
 
 		class See : public ComponentState
 		{
 		public:
-			See(void) : _haveLineOfSight(false) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
-
-		private:
-			bool _haveLineOfSight;
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			Turn(void) : _hasTurned(false) {}
-	
-			void enter(void);
-			void handleMessage(Message& message);
-
-		private:
-			bool _hasTurned;
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Acquire : public ComponentState
 		{
 		public:
-			Acquire(void) : _blinking(false), _haveLineOfSight(false) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
-			
-			Timer _timer;
-			bool _blinking;
-			bool _haveLineOfSight;
+			static const float BLINK_TIME_IN_MILLIS;
 		};
 	}
 
 	class Camera : public StateMachineComponent
 	{
 	public:
-		Camera(void) : StateMachineComponent(getStates()) {}
+		Camera(void) : StateMachineComponent(getStates(), "CAM") {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 

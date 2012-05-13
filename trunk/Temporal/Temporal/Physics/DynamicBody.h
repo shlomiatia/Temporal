@@ -25,11 +25,16 @@ namespace Temporal
 
 	private:
 		const float MAX_MOVEMENT_STEP_SIZE;
+		const Size _size;
 		
-		Size _size;
-		Vector _velocity;
-		Vector _absoluteImpulse;
+		// Persistent state
 		bool _gravityEnabled;
+		Vector _velocity;
+
+		// Temp state
+		Vector _absoluteImpulse;
+		
+		// Temp output TODO:
 		Vector _collision;
 		Vector _groundVector;
 
