@@ -10,6 +10,7 @@ namespace Temporal
 
 		float getElapsedTimeInMillis(void) const { return _elapsedTimeInMillis; }
 		void reset(void) { _elapsedTimeInMillis = 0.0f; }
+		void reset(float elapsedTimeInMillis) { _elapsedTimeInMillis = elapsedTimeInMillis; }
 		void update(float updateTimeInMillis) { _elapsedTimeInMillis += updateTimeInMillis; }
 
 	private:

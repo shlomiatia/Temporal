@@ -10,12 +10,12 @@ namespace Temporal
 		static const Hash ACQUIRE_STATE = Hash("STAT_SEN_ACQUIRE");
 		static const Hash SEE_STATE = Hash("STAT_SEN_SEE");
 
-		void Search::enter(void)
+		void Search::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Red));
 		}
 
-		void Search::handleMessage(Message& message)
+		void Search::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -25,48 +25,44 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(void)
+		void Acquire::enter(void) const
 		{
+			// Flag 1 - LOS
+			_stateMachine->setFlag1(true);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Yellow));
-			_timer.reset();
-			_haveLineOfSight = true;
 		}
 
-		void Acquire::handleMessage(Message& message)
+		void Acquire::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_haveLineOfSight = true;
+				_stateMachine->setFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(float*)message.getParam();
-				_timer.update(framePeriodInMillis);
-				if(!_haveLineOfSight)
+				if(!_stateMachine->getFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
-				else if(_timer.getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
+				else if(_stateMachine->getTimer().getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
 					_stateMachine->changeState(SEE_STATE);
-				_haveLineOfSight = false;
 			}
 		}
 
-		void See::enter(void)
+		void See::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Green));
-			_haveLineOfSight = false;
 		}
 
-		void See::handleMessage(Message& message)
+		void See::handleMessage(Message& message) const
 		{	
+			// Flag 1 - LOS
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_haveLineOfSight = true;
+				_stateMachine->setFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_haveLineOfSight)
+				if(!_stateMachine->getFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
-				_haveLineOfSight = false;
 			}
 		}
 	}

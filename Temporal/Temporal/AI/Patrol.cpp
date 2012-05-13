@@ -15,7 +15,7 @@ namespace Temporal
 
 		static const Hash ACTION_TURN_STATE = Hash("STAT_ACT_TURN");
 
-		void Walk::handleMessage(Message& message)
+		void Walk::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -31,31 +31,31 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void)
+		void See::enter(void) const
 		{
-			_haveLineOfSight = true;
+			// Flag1 - have line of sight
+			_stateMachine->setFlag1(true);
 		}
 
-		void See::handleMessage(Message& message)
+		void See::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_haveLineOfSight = true;
+				_stateMachine->setFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_haveLineOfSight)
+				if(!_stateMachine->getFlag1())
 					_stateMachine->changeState(WALK_STATE);
-				_haveLineOfSight = false;
 			}
 		}
 
-		void Turn::enter(void)
+		void Turn::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 		}
 
-		void Turn::handleMessage(Message& message)
+		void Turn::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -67,12 +67,7 @@ namespace Temporal
 
 		const float Wait::WAIT_TIME_IN_MILLIS(5000.0f);
 
-		void Wait::enter(void)
-		{
-			_timer.reset();
-		}
-
-		void Wait::handleMessage(Message& message)
+		void Wait::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -80,10 +75,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(float*)message.getParam();
-				_timer.update(framePeriodInMillis);
-
-				if(_timer.getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)
+				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)
 				{
 					_stateMachine->changeState(TURN_STATE);
 				}

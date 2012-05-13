@@ -17,13 +17,12 @@ namespace Temporal
 
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
-		void Search::enter(void)
+		void Search::enter(void) const
 		{
-			_timer.reset();
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
-		void Search::handleMessage(Message& message)
+		void Search::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -32,43 +31,41 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				float framePeriodInMillis = *(float*)message.getParam();
-				_timer.update(framePeriodInMillis);
-				if(_timer.getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
+				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
 					_stateMachine->changeState(TURN_STATE);
 			}
 		}
 
-		void See::enter(void)
+		void See::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
-			_haveLineOfSight = false;
 		}
 
-		void See::handleMessage(Message& message)
+		void See::handleMessage(Message& message) const
 		{	
+			// Flag 1 - Have line of sight
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_haveLineOfSight = true;
+				_stateMachine->setFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_haveLineOfSight)
+				if(!_stateMachine->getFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
-				_haveLineOfSight = false;
 			}
 		}
 
-		void Turn::enter(void)
+		void Turn::enter(void) const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
-			_hasTurned = false;
 		}
 
-		void Turn::handleMessage(Message& message)
+		void Turn::handleMessage(Message& message) const
 		{
+			// Flag 1 - has turned TODO:
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
-				if(_hasTurned)
+				if(_stateMachine->getFlag1())
 				{
 					_stateMachine->changeState(SEARCH_STATE);
 				}
@@ -76,45 +73,42 @@ namespace Temporal
 				{
 					_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
 					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
-					_hasTurned = true;
+					_stateMachine->setFlag1(true);
 				}
 			}
 		}
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
+		const float Acquire::BLINK_TIME_IN_MILLIS(200.0f);
 
-		void Acquire::enter(void)
+		void Acquire::enter(void) const
 		{
+			// Flag 1 - have LOS
+			_stateMachine->setFlag1(true);
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
-			_timer.reset();
-			_blinking = false;
-			_haveLineOfSight = true;
 		}
 
-		void Acquire::handleMessage(Message& message)
+		void Acquire::handleMessage(Message& message) const
 		{
-			if(message.getID() == MessageID::ANIMATION_ENDED)
+			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				if(_blinking)
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
-				else
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
-				_blinking = !_blinking;
-			}
-			else if(message.getID() == MessageID::LINE_OF_SIGHT)
-			{
-				_haveLineOfSight = true;
+				_stateMachine->setFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(float*)message.getParam();
-				_timer.update(framePeriodInMillis);
-
-				if(!_haveLineOfSight)
+				float elapsedTimeInMillis = _stateMachine->getTimer().getElapsedTimeInMillis();
+				if(!_stateMachine->getFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
-				else if(_timer.getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
+				else if(elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
 					_stateMachine->changeState(SEE_STATE);
-				_haveLineOfSight = false;
+				else
+				{
+					int blinkIndex = (int)(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
+					if(blinkIndex % 2 == 1)
+						_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+					else
+						_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+				}
 			}
 		}
 	}

@@ -11,49 +11,37 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
-			Walk(void) {}
-
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 		};
 
 		class See : public ComponentState
 		{
 		public:
-			See(void) : _haveLineOfSight(false) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
-
-		private:
-			bool _haveLineOfSight;
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			Turn(void) {}
-
-			void enter(void);
-			void handleMessage(Message& message);
+			void enter(void) const;
+			void handleMessage(Message& message) const;
 		};
 
 		class Wait : public ComponentState
 		{
 		public:
-			void enter(void);
-			void handleMessage(Message& message);
+			void handleMessage(Message& message) const;
 
 		private:
 			static const float WAIT_TIME_IN_MILLIS;
-
-			Timer _timer;
 		};
 	}
 
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol(void) : StateMachineComponent(getStates()) {}
+		Patrol(void) : StateMachineComponent(getStates(), "PAT") {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 

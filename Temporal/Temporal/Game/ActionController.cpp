@@ -3,6 +3,8 @@
 #include "MessageParams.h"
 #include "MovementUtils.h"
 #include "MessageUtils.h"
+#include <Temporal\Base\Serialization.h>
+#include <Temporal\Base\BaseUtils.h>
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
 #include <Temporal\Base\Shape.h>
@@ -12,6 +14,9 @@
 
 namespace Temporal
 {
+	/**********************************************************************************************
+	 * Constants
+	 *********************************************************************************************/
 	static const Hash BACK_EDGE_SENSOR_ID = Hash("SENS_BACK_EDGE");
 	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
 	static const Hash JUMP_SENSOR_ID = Hash("SENS_JUMP");
@@ -49,6 +54,13 @@ namespace Temporal
 	static const Hash PREPARE_TO_DESCEND_STATE = Hash("STAT_ACT_PREPARE_TO_DESCEND");
 	static const Hash DESCEND_STATE = Hash("STAT_ACT_DESCEND");
 
+	static const Hash JUMP_INFO_SERIALIZATION = Hash("SER_ACT_JUMP_INFO");
+	static const Hash LEDGE_DIRECTED_SERIALIZATION = Hash("SER_ACT_LEDGE_DIRECTED");
+	static const NumericPairSerializer HANG_DESCEND_POINT_SERIALIZATION("SER_ACT_HANG_DESCEND_POINT");
+
+	/**********************************************************************************************
+	 * Helpers
+	 *********************************************************************************************/
 	JumpInfoProvider::JumpInfoProvider(void)
 	{
 		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
@@ -66,9 +78,12 @@ namespace Temporal
 
 	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
-		_point = params.getPoint();
+		_point = params.getPoint() == NULL ? Point::Zero : *params.getPoint();
 	}
 
+	/**********************************************************************************************
+	 * Action controller
+	 *********************************************************************************************/
 	StateCollection ActionController::getStates() const
 	{
 		StateCollection states;
@@ -90,6 +105,30 @@ namespace Temporal
 		return states;
 	}
 
+	void ActionController::handleMessage(Message& message)
+	{
+		StateMachineComponent::handleMessage(message);
+		if(message.getID() == MessageID::SERIALIZE)
+		{
+			Serialization& serialization = *(Serialization*)message.getParam();
+			serialization.serialize(JUMP_INFO_SERIALIZATION, (int)&(getJumpHelper().getInfo()));
+			serialization.serialize(LEDGE_DIRECTED_SERIALIZATION, getJumpHelper().isLedgeDirected());
+			HANG_DESCEND_POINT_SERIALIZATION.serialize(serialization, getHangDescendHelper().getPoint());
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			const Serialization& serialization = *(Serialization*)message.getParam();
+			getJumpHelper().setInfo((const JumpInfo*)serialization.deserializeInt(JUMP_INFO_SERIALIZATION));
+			getJumpHelper().setLedgeDirected(serialization.deserializeBool(LEDGE_DIRECTED_SERIALIZATION));
+			Point point = Point::Zero;
+			HANG_DESCEND_POINT_SERIALIZATION.deserialize(serialization, point);
+			getHangDescendHelper().setPoint(point);
+		}
+	}
+
+	/**********************************************************************************************
+	 * States
+	 *********************************************************************************************/
 	bool canJumpForward(StateMachineComponent* component)
 	{
 		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
@@ -98,13 +137,12 @@ namespace Temporal
 		return !sameSign((float)orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
-	void Stand::enter(void)
+	void Stand::enter(void) const
 	{
-		_isDescending = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION)));
 	}
 
-	void Stand::handleMessage(Message& message)
+	void Stand::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
@@ -119,48 +157,41 @@ namespace Temporal
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getHighest());
 			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
 		}
+		// Flag1 - Is descending
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
-			_isDescending = true;
+			_stateMachine->setFlag1(true);
 		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			_isDescending = false;	
-		}
-		else if(_isDescending && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
+		else if(_stateMachine->getFlag1() && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_DESCEND_STATE);
 		}
-		else if(_isDescending && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
+		else if(_stateMachine->getFlag1() && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 		{
 			_stateMachine->changeState(TURN_STATE);
 		}
-
 	}
 
-	void Fall::enter(void)
+	void Fall::enter(void) const
 	{
 		// Not setting force because we want to continue the momentum
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION)));
 	}
 
-	void Fall::handleMessage(Message& message)
+	void Fall::handleMessage(Message& message) const
 	{
+		// Flag 1 - want to hang
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			_wantToHang = true;
+			_stateMachine->setFlag1(true);
 		}
-		else if (_wantToHang && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		else if (_stateMachine->getFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			_wantToHang = false;
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
@@ -170,18 +201,17 @@ namespace Temporal
 		}
 	}
 
-	void Walk::enter(void)
+	void Walk::enter(void) const
 	{
-		_stillWalking = true;
-		_noFloor = false;
-		_noFloorTimer.reset();
+		// Flag 1 - still walking
+		_stateMachine->setFlag1(true);
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
 	}
 
 	// BRODER
 	const float Walk::NO_FLOOR_TIME_TO_FALL_IN_MILLIS = 50.0f;
 
-	void Walk::handleMessage(Message& message)
+	void Walk::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_UP)
 		{
@@ -191,33 +221,30 @@ namespace Temporal
 				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
+		// Flag 1 - still walking
+		// Flag 2 - no floor
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			_stillWalking = true;
+			_stateMachine->setFlag1(true);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() >= 0.0f)
-				_noFloor = true;
+				_stateMachine->setFlag2(true);
 		}
 		else if(message.getID() == MessageID::UPDATE)
-		{
-			float framePeriodInMillis = *(float*)message.getParam();
-			
-			if(_noFloor)
-				_noFloorTimer.update(framePeriodInMillis);
-			else
-				_noFloorTimer.reset();
-			_noFloor = false;
+		{			
+			if(!_stateMachine->getFlag2())
+				_stateMachine->getTimer().reset();
 
 			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. 
 			// Therefore we only fall when some time has passed
-			if(_noFloorTimer.getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
+			if(_stateMachine->getTimer().getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
 			{
 				_stateMachine->changeState(FALL_STATE);
 			}
-			else if(!_stillWalking)
+			else if(!_stateMachine->getFlag1())
 			{
 				_stateMachine->changeState(STAND_STATE);
 			}
@@ -227,17 +254,16 @@ namespace Temporal
 				// Also, if we're in the midair (explained how it can happen in the previous comment), this will maintain a steady speed
 				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
-				_stillWalking = false;
 			}
 		}
 	}
 
-	void Turn::enter(void)
+	void Turn::enter(void) const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 	}
 
-	void Turn::handleMessage(Message& message)
+	void Turn::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
@@ -246,7 +272,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToJump::handleJumpSensor(Message &message)
+	void PrepareToJump::handleJumpSensor(Message &message) const
 	{
 		const SensorCollisionParams& sensor = *(SensorCollisionParams*)message.getParam();
 		const Point* point = sensor.getPoint();
@@ -282,12 +308,12 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToJump::enter(void)
+	void PrepareToJump::enter(void) const
 	{
 		((ActionController*)_stateMachine)->getJumpHelper().setLedgeDirected(false);
 	}
 
-	void PrepareToJump::handleMessage(Message& message)
+	void PrepareToJump::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
@@ -304,20 +330,15 @@ namespace Temporal
 		}
 	}
 
-	void JumpStart::enter(void)
+	void JumpStart::enter(void) const
 	{
-		_animationEnded = false;
 		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
-	void JumpStart::handleMessage(Message& message)
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{	
-			_animationEnded = true;
-		}
-		else if(message.getID() == MessageID::ACTION_FORWARD)
+	void JumpStart::handleMessage(Message& message) const
+	{		
+		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
 			JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
 			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
@@ -330,16 +351,22 @@ namespace Temporal
 		{
 			_stateMachine->changeState(TURN_STATE);
 		}
+		// Flag 1 - Animation ended TODO:
+
+		else if(message.getID() == MessageID::ANIMATION_ENDED)
+		{	
+			_stateMachine->setFlag1(true);
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(_animationEnded)
+			if(_stateMachine->getFlag1())
 			{
 				_stateMachine->changeState(JUMP_STATE);
 			}
 		}
 	}
 
-	void Jump::enter(void)
+	void Jump::enter(void) const
 	{
 		const JumpInfo& jumpInfo = ((ActionController*)_stateMachine)->getJumpHelper().getInfo();
 		float angle = jumpInfo.getAngle();
@@ -351,21 +378,18 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
-	void Jump::handleMessage(Message& message)
+	void Jump::handleMessage(Message& message) const
 	{
+		// Flag 1 - Want to hang
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			_wantToHang = true;
+			_stateMachine->setFlag1(true);
 		}
-		else if (_wantToHang && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		else if (_stateMachine->getFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			_wantToHang = false;
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
@@ -375,13 +399,13 @@ namespace Temporal
 		}
 	}
 
-	void JumpEnd::enter(void)
+	void JumpEnd::enter(void) const
 	{
 		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
-	void JumpEnd::handleMessage(Message& message)
+	void JumpEnd::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
@@ -389,7 +413,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToHang::update(void)
+	void PrepareToHang::update(void) const
 	{
 		AABB personBounds(AABB::Empty);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
@@ -416,13 +440,13 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToHang::enter(void)
+	void PrepareToHang::enter(void) const
 	{
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
-	void PrepareToHang::handleMessage(Message& message)
+	void PrepareToHang::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
@@ -430,12 +454,12 @@ namespace Temporal
 		}
 	}
 
-	void Hanging::enter(void)
+	void Hanging::enter(void) const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SWING_BACKWARD_ANIMATION, true)));	
 	}
 
-	void Hanging::handleMessage(Message& message)
+	void Hanging::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
@@ -443,12 +467,12 @@ namespace Temporal
 		}
 	}
 
-	void Hang::enter(void)
+	void Hang::enter(void) const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION)));
 	}
 
-	void Hang::handleMessage(Message& message)
+	void Hang::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
@@ -460,9 +484,8 @@ namespace Temporal
 		}
 	}
 
-	void Drop::enter(void)
+	void Drop::enter(void) const
 	{
-		_platformFound = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(DROP_ANIMATION)));
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
@@ -471,27 +494,26 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
-	void Drop::exit(void)
+	void Drop::exit(void) const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 	}
 
-	void Drop::handleMessage(Message& message)
+	void Drop::handleMessage(Message& message) const
 	{
+		// Flag 1 - Platform found
 		if(isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			_platformFound = true;
+			_stateMachine->setFlag1(true);
 		}
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(!_platformFound)
+			if(!_stateMachine->getFlag1())
 				_stateMachine->changeState(FALL_STATE);
-			else
-				_platformFound = false;
 		}
 	}
 
-	void Climb::enter(void)
+	void Climb::enter(void) const
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float climbForceX = 1.0f;
@@ -502,14 +524,14 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
-	void Climb::exit(void)
+	void Climb::exit(void) const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 		bool gravityEnabled = true;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
-	void Climb::handleMessage(Message& message)
+	void Climb::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
@@ -517,7 +539,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToDescend::update(void)
+	void PrepareToDescend::update(void) const
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		AABB personBounds(AABB::Empty);
@@ -542,13 +564,13 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToDescend::enter(void)
+	void PrepareToDescend::enter(void) const
 	{
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
-	void PrepareToDescend::handleMessage(Message& message)
+	void PrepareToDescend::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
@@ -556,7 +578,7 @@ namespace Temporal
 		}
 	}
 
-	void Descend::enter(void)
+	void Descend::enter(void) const
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float forceX = 0.0f;
@@ -566,7 +588,7 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
 	}
 
-	void Descend::handleMessage(Message& message)
+	void Descend::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
