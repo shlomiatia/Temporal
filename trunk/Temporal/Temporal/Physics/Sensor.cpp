@@ -14,7 +14,7 @@ namespace Temporal
 	AABB Sensor::getBounds(void) const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Point center(position.getX() + _offset.getVx() * orientation,
 					 position.getY() + _offset.getVy());
 		return AABB(center, _size);
@@ -76,10 +76,10 @@ namespace Temporal
 					   vector = -vector;
 					}
 					float angle = vector.getAngle();
-					Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+					Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
 					// Flip the range if looking backwards
-					float rangeCenter = orientation == Orientation::RIGHT ? _rangeCenter : mirroredAngle( _rangeCenter);
+					float rangeCenter = orientation == Side::RIGHT ? _rangeCenter : mirroredAngle( _rangeCenter);
 
 					// Check distance
 					float distance = minAnglesDistance(rangeCenter, angle);

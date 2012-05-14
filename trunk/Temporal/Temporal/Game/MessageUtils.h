@@ -9,7 +9,7 @@ namespace Temporal
 	class Message;
 	class Hash;
 
-	void sendDirectionAction(const Component& component, Orientation::Enum direction);
+	void sendDirectionAction(const Component& component, Side::Enum direction);
 	bool isSensorCollisionMessage(Message& message, const Hash& sensorID);
 }
 #endif

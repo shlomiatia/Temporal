@@ -6,9 +6,9 @@
 
 namespace Temporal
 {
-	void sendDirectionAction(const Component& component, Orientation::Enum direction)
+	void sendDirectionAction(const Component& component, Side::Enum direction)
 	{
-		Orientation::Enum orientation = *(Orientation::Enum*)component.sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)component.sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		if(direction == orientation)
 			component.sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
 		else

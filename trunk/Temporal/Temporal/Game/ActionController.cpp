@@ -134,7 +134,7 @@ namespace Temporal
 	bool canJumpForward(StateMachineComponent* component)
 	{
 		const Vector& groundVector = *(Vector*)component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR));
-		Orientation::Enum orientation = *(Orientation::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
 		return !sameSign((float)orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
@@ -278,7 +278,7 @@ namespace Temporal
 	{
 		const SensorCollisionParams& sensor = *(SensorCollisionParams*)message.getParam();
 		const Point* point = sensor.getPoint();
-		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = point->getX();
@@ -415,7 +415,7 @@ namespace Temporal
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
-		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float movementX = (platformEdge - entityFront) * orientation;
@@ -534,7 +534,7 @@ namespace Temporal
 
 	void PrepareToDescend::update(void) const
 	{
-		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();

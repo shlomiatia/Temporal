@@ -53,17 +53,17 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		SpriteSheet(const Texture* texture, Orientation::Enum orientation) : _texture(texture), _orientation(orientation) {}
+		SpriteSheet(const Texture* texture, Side::Enum orientation) : _texture(texture), _orientation(orientation) {}
 		~SpriteSheet(void);
 		void add(const Hash& id, const SpriteGroup* element);
 
 		const Texture& getTexture(void) const { return *_texture; }
-		Orientation::Enum getOrientation(void) const { return _orientation; }
+		Side::Enum getSide(void) const { return _orientation; }
 		const SpriteGroup& get(const Hash& spriteGroupID) const;
 		const Hash& getFirstSpriteGroupID(void) const;
 	private:
 		const Texture* _texture;
-		const Orientation::Enum _orientation;
+		const Side::Enum _orientation;
 		mutable SpriteGroupCollection _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);

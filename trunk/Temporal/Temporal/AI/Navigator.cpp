@@ -94,11 +94,11 @@ namespace Temporal
 				}
 				else
 				{
-					Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+					Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 					if(distance < 0)
-						sendDirectionAction(*_stateMachine, Orientation::LEFT);
+						sendDirectionAction(*_stateMachine, Side::LEFT);
 					else
-						sendDirectionAction(*_stateMachine, Orientation::RIGHT);
+						sendDirectionAction(*_stateMachine, Side::RIGHT);
 				}
 			}
 		}
@@ -110,9 +110,9 @@ namespace Temporal
 				Navigator* navigator = (Navigator*)_stateMachine;
 				NavigationEdgeCollection* path = navigator->getPath();
 				const NavigationEdge* edge = (*path)[0];
-				Orientation::Enum currentOrientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-				Orientation::Enum targetOrientation = edge->getOrientation();
-				if(currentOrientation != targetOrientation)
+				Side::Enum currentSide = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+				Side::Enum targetSide = edge->getSide();
+				if(currentSide != targetSide)
 				{
 					_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 				}

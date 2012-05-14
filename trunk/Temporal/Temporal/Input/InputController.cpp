@@ -20,11 +20,11 @@ namespace Temporal
 			}
 			if(Input::get().isLeft())
 			{
-				sendDirectionAction(*this, Orientation::LEFT);
+				sendDirectionAction(*this, Side::LEFT);
 			}
 			if(Input::get().isRight())
 			{
-				sendDirectionAction(*this, Orientation::RIGHT);
+				sendDirectionAction(*this, Side::RIGHT);
 			}
 		}
 	}

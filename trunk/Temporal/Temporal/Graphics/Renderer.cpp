@@ -48,7 +48,7 @@ namespace Temporal
 		{
 			const Serialization& serialization = *(const Serialization*)message.getParam();
 			_spriteGroupID = Hash(serialization.deserializeUInt(SPRITE_GROUP_SERIALIZATION));
-			_spriteID = (Orientation::Enum)serialization.deserializeInt(SPRITE_SERIALIZATION);
+			_spriteID = (Side::Enum)serialization.deserializeInt(SPRITE_SERIALIZATION);
 		}
 	}
 	
@@ -60,18 +60,18 @@ namespace Temporal
 		if(position == Vector::Zero)
 			position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
-		Orientation::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Orientation::Enum* entityOrientation = (const Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Orientation::Enum orientation;
-		if(entityOrientation == NULL || *entityOrientation == Orientation::NONE)
-			orientation = spritesheetOrientation;
+		Side::Enum spritesheetSide = _spritesheet.getSide();
+		const Side::Enum* entitySide = (const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation;
+		if(entitySide == NULL || *entitySide == Side::NONE)
+			orientation = spritesheetSide;
 		else
-			orientation = *entityOrientation;
+			orientation = *entitySide;
 		
-		bool mirrored = orientation != spritesheetOrientation;
+		bool mirrored = orientation != spritesheetSide;
 		const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
 		const Vector& offset = sprite.getOffset();
-		float screenLocationX = position.getX() - orientation * spritesheetOrientation * offset.getVx();
+		float screenLocationX = position.getX() - orientation * spritesheetSide * offset.getVx();
 		float screenLocationY = position.getY() - offset.getVy();
 
 		Point screenLocation(screenLocationX, screenLocationY);

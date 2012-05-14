@@ -28,8 +28,8 @@ namespace Temporal
 		float getTop(void) const { return getCenterY() + getYRadius() + abs(getSlopedRadiusVy()); }
 		float getBottom(void) const { return getCenterY() - getYRadius() - abs(getSlopedRadiusVy()); }
 
-		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
-		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
+		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
+		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
 
 		float getWidth(void) const { return getSlopedRadiusVx() * 2.0f; }
 		float getHeight(void) const { return getYRadius() * 2.0f + abs(getSlopedRadiusVy()) * 2.0f; }
