@@ -38,7 +38,7 @@ namespace Temporal
 		}
 		if(Input::get().isQ())
 		{
-			AABB bounds = AABB::Empty;
+			AABB bounds = AABB::Zero;
 			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
 		}

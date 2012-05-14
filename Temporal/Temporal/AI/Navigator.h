@@ -57,7 +57,7 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator(void) : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Empty), _path(NULL) {}
+		Navigator(void) : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Zero), _path(NULL) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 

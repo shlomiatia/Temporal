@@ -3,8 +3,8 @@
 
 namespace Temporal
 {
-	const Segment Segment::Empty(Point::Zero, Vector(Vector::Zero));
-	const DirectedSegment DirectedSegment::Empty(Point::Zero, Point(Vector::Zero));
+	const Segment Segment::Zero(Point::Zero, Vector(Vector::Zero));
+	const DirectedSegment DirectedSegment::Zero(Point::Zero, Point(Vector::Zero));
 
 	float Segment::getLength(void) const
 	{

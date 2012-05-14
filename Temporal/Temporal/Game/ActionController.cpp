@@ -279,7 +279,7 @@ namespace Temporal
 		const SensorCollisionParams& sensor = *(SensorCollisionParams*)message.getParam();
 		const Point* point = sensor.getPoint();
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		AABB personBounds(AABB::Empty);
+		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		float target = point->getX();
 		float front = personBounds.getSide(orientation);
@@ -408,7 +408,7 @@ namespace Temporal
 
 	void PrepareToHang::update(void) const
 	{
-		AABB personBounds(AABB::Empty);
+		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
@@ -535,7 +535,7 @@ namespace Temporal
 	void PrepareToDescend::update(void) const
 	{
 		Orientation::Enum orientation = *(Orientation::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		AABB personBounds(AABB::Empty);
+		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
 		const Point& point = ((ActionController*)_stateMachine)->getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();

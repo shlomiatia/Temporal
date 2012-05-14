@@ -220,7 +220,7 @@ namespace Temporal
 		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 		NavigationEdgeType::Enum type;
-		DirectedSegment fallArea = DirectedSegment::Empty;
+		DirectedSegment fallArea = DirectedSegment::Zero;
 
 		if(distance < minFallDistance)
 		{

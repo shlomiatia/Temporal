@@ -9,7 +9,7 @@ namespace Temporal
 	class AABB : public Shape
 	{
 	public:
-		static const AABB Empty;
+		static const AABB Zero;
 
 		AABB(float centerX, float centerY, float width, float height);
 		AABB(const Point& center, const Size& size);

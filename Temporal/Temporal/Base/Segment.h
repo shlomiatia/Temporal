@@ -8,7 +8,7 @@ namespace Temporal
 	class Segment : public Shape
 	{
 	public:
-		static const Segment Empty;
+		static const Segment Zero;
 
 		Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
 		Segment(const Point& point1, const Point& point2) : _center((point1+point2)/2.0f), _radius((point2-point1)/2.0f) {}
@@ -50,7 +50,7 @@ namespace Temporal
 	class DirectedSegment : public Segment
 	{
 	public:
-		static const DirectedSegment Empty;
+		static const DirectedSegment Zero;
 
 		DirectedSegment(float originX, float originY, float targetX, float targetY) : Segment(originX, originY, targetX, targetY) {}
 		DirectedSegment(const Point& origin, const Point& target) : Segment(origin, target) {}

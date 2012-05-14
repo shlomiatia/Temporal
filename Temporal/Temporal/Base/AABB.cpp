@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const AABB AABB::Empty(Point::Zero, Vector(Vector::Zero));
+	const AABB AABB::Zero(Point::Zero, Vector(Vector::Zero));
 
 	AABB::AABB(float centerX, float centerY, float width, float height)
 		: _center(centerX, centerY), _radius(width / 2.0f, height / 2.0f)
