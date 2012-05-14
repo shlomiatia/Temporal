@@ -25,10 +25,7 @@ namespace Temporal
 			_currentState->exit();
 			sendMessageToOwner(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
-		_currentState = _states[stateID];
-		_currentStateID = stateID;
-		resetTempState();
-		_timer.reset();
+		setState(stateID);
 		_currentState->enter();
 		sendMessageToOwner(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
@@ -37,7 +34,8 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_CREATED)
 		{
-			changeState(getInitialState());
+			setState(getInitialState());
+			_currentState->enter();
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
@@ -50,21 +48,22 @@ namespace Temporal
 			const Serialization& serialization = *(const Serialization*)message.getParam();
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			Hash stateID = Hash(serialization.deserializeUInt(STATE_SERIALIZATION));
-			
-			_currentState = _states[stateID];
-			_currentStateID = stateID;
-			resetTempState();
+			setState(stateID);
 		}
-		// Protect against events that occur before the inital state is set TODO:
-		if(_currentState != NULL)
-		{
-			_currentState->handleMessage(message);
-		}
+		_currentState->handleMessage(message);
 		if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriodInMillis = *(float*)message.getParam();
-			resetTempState();
 			_timer.update(framePeriodInMillis);
+			resetTempState();
 		}
+	}
+
+	void StateMachineComponent::setState(const Hash& stateID)
+	{
+		_currentState = _states[stateID];
+		_currentStateID = stateID;
+		resetTempState();
+		_timer.reset();
 	}
 }

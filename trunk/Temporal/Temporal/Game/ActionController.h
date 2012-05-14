@@ -117,7 +117,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 	protected:
-		Hash getInitialState(void) const { return Hash("STAT_ACT_STAND"); } // TODO:
+		Hash getInitialState(void) const;
 
 	private:
 		JumpHelper _jumpHelper;

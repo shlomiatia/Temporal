@@ -17,7 +17,6 @@ namespace Temporal
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("SER_DYN_IS_GRAVITY_ENABLED");
 	static const NumericPairSerializer VELOCITY_SERIALIZER("SER_DYN_VELOCITY");
 
-
 	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
 
 	float getMaxMovementStepSize(const Size& size)
@@ -28,7 +27,7 @@ namespace Temporal
 	}
 
 	DynamicBody::DynamicBody(const Size& size)
-		: _size(size), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _collision(Vector::Zero), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(size))
+		: _size(size), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(size))
 	{
 		assert(_size.getWidth() > 0.0f);
 		assert(_size.getHeight() > 0.0f);
@@ -142,7 +141,7 @@ namespace Temporal
 
 	void DynamicBody::executeMovement(Vector movement)
 	{
-		_collision = Vector::Zero;
+		Vector collision = Vector::Zero;
 		_groundVector = Vector::Zero;
 
 		// If the movement is too big, we'll divide it to smaller steps
@@ -167,29 +166,30 @@ namespace Temporal
 			movement -= stepMovement;
 			changePosition(stepMovement);
 			AABB bounds = getBounds();
-			Grid::get().iterateTiles(bounds, this, NULL, detectCollision);
-			if(_collision != Vector::Zero)
+			
+			Grid::get().iterateTiles(bounds, this, &collision, detectCollision);
+			if(collision != Vector::Zero)
 				break;
 		}
-		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &_collision));
+		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &collision));
 
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	bool DynamicBody::detectCollision(const StaticBody& staticBody)
+	bool DynamicBody::detectCollision(const StaticBody& staticBody, Vector& collision)
 	{
 		const Shape& staticBodyBounds = staticBody.getShape();
 		const AABB& dynamicBodyBounds = getBounds();
 		Vector correction = Vector::Zero;
 		if(!staticBody.isCover() && intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
-			correctCollision(dynamicBodyBounds, staticBodyBounds, correction);
+			correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision);
 		}
 		return true;
 	}
 
-	void DynamicBody::correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction)
+	void DynamicBody::correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
 	{
 		const Segment& segment = (Segment&)staticBodyBounds;
 		Vector platformVector = segment.getNaturalVector().normalize();
@@ -210,7 +210,7 @@ namespace Temporal
 		}
 
 		changePosition(correction);
-		_collision -= correction;
+		collision -= correction;
 	}
 
 	void DynamicBody::modifyCorrection(const AABB& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
@@ -279,7 +279,8 @@ namespace Temporal
 
 	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
+		Vector& collision = *(Vector*)data;
 		DynamicBody* dynamicBody = (DynamicBody*)caller;
-		return dynamicBody->detectCollision(staticBody);
+		return dynamicBody->detectCollision(staticBody, collision);
 	}
 }

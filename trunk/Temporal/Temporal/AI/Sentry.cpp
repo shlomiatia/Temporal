@@ -27,8 +27,8 @@ namespace Temporal
 
 		void Acquire::enter(void) const
 		{
-			// Flag 1 - LOS
-			_stateMachine->setFlag1(true);
+			// TempFlag 1 - LOS
+			_stateMachine->setTempFlag1(true);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Yellow));
 		}
 
@@ -36,11 +36,11 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setFlag1(true);
+				_stateMachine->setTempFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_stateMachine->getFlag1())
+				if(!_stateMachine->getTempFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
 				else if(_stateMachine->getTimer().getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
 					_stateMachine->changeState(SEE_STATE);
@@ -54,14 +54,14 @@ namespace Temporal
 
 		void See::handleMessage(Message& message) const
 		{	
-			// Flag 1 - LOS
+			// TempFlag 1 - LOS
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setFlag1(true);
+				_stateMachine->setTempFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_stateMachine->getFlag1())
+				if(!_stateMachine->getTempFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
 			}
 		}

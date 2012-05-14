@@ -33,19 +33,19 @@ namespace Temporal
 
 		void See::enter(void) const
 		{
-			// Flag1 - have line of sight
-			_stateMachine->setFlag1(true);
+			// TempFlag1 - have line of sight
+			_stateMachine->setTempFlag1(true);
 		}
 
 		void See::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setFlag1(true);
+				_stateMachine->setTempFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_stateMachine->getFlag1())
+				if(!_stateMachine->getTempFlag1())
 					_stateMachine->changeState(WALK_STATE);
 			}
 		}

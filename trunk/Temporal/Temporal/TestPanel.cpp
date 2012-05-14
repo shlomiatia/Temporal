@@ -546,9 +546,9 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createSentry(spritesheet);
-		//createCamera();
-		//createPatrol(spritesheet);
+		createSentry(spritesheet);
+		createCamera();
+		createPatrol(spritesheet);
 		createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();
