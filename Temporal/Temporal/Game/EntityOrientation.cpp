@@ -7,7 +7,7 @@ namespace Temporal
 {
 	void EntityOrientation::handleMessage(Message& message)
 	{
-		static const Hash ORIENTATION_SERIALIZATION = Hash("SER_ORI");
+		static const Hash ORIENTATION_SERIALIZATION = Hash("ORI_SER");
 
 		if(message.getID() == MessageID::GET_ORIENTATION)
 		{

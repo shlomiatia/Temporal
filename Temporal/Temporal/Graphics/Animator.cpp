@@ -6,9 +6,9 @@
 
 namespace Temporal
 {
-	static const Hash TIMER_SERIALIZATION = Hash("SER_ANM_TIMER");
-	static const Hash REPEAT_SERIALIZATION = Hash("SER_ANM_REPEAT");
-	static const Hash REWIND_SERIALIZATION = Hash("SER_ANM_REWIND");
+	static const Hash TIMER_SERIALIZATION = Hash("ANM_SER_TIMER");
+	static const Hash REPEAT_SERIALIZATION = Hash("ANM_SER_REPEAT");
+	static const Hash REWIND_SERIALIZATION = Hash("ANM_SER_REWIND");
 
 	void Animator::handleMessage(Message& message)
 	{

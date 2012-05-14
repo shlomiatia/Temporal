@@ -6,14 +6,14 @@ namespace Temporal
 {
 	namespace CameraStates
 	{
-		static const Hash SEARCH_ANIMATION = Hash("ANIM_CAM_SEARCH");
-		static const Hash SEE_ANIMATION = Hash("ANIM_CAM_SEE");
-		static const Hash TURN_ANIMATION = Hash("ANIM_CAM_TURN");
+		static const Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
+		static const Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
+		static const Hash TURN_ANIMATION = Hash("CAM_ANM_TURN");
 
-		static const Hash SEARCH_STATE = Hash("STAT_CAM_SEARCH");
-		static const Hash SEE_STATE = Hash("STAT_CAM_SEE");
-		static const Hash TURN_STATE = Hash("STAT_CAM_TURN");
-		static const Hash ACQUIRE_STATE = Hash("STAT_CAM_ACQUIRE");
+		static const Hash SEARCH_STATE = Hash("CAM_STT_SEARCH");
+		static const Hash SEE_STATE = Hash("CAM_STT_SEE");
+		static const Hash TURN_STATE = Hash("CAM_STT_TURN");
+		static const Hash ACQUIRE_STATE = Hash("CAM_STT_ACQUIRE");
 
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 

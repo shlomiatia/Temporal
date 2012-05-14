@@ -7,8 +7,8 @@
 
 namespace Temporal
 {
-	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("SER_REN_SPR_GRP");
-	static const Hash SPRITE_SERIALIZATION = Hash("SER_REN_SPR");
+	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("REN_SER_SPR_GRP");
+	static const Hash SPRITE_SERIALIZATION = Hash("REN_SER_SPR");
 
 	void Renderer::handleMessage(Message& message)
 	{

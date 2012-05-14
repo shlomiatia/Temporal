@@ -17,46 +17,46 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Constants
 	 *********************************************************************************************/
-	static const Hash BACK_EDGE_SENSOR_ID = Hash("SENS_BACK_EDGE");
-	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
-	static const Hash JUMP_SENSOR_ID = Hash("SENS_JUMP");
-	static const Hash HANG_SENSOR_ID = Hash("SENS_HANG");
+	static const Hash BACK_EDGE_SENSOR_ID = Hash("SNS_BACK_EDGE");
+	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
+	static const Hash JUMP_SENSOR_ID = Hash("SNS_JUMP");
+	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
 
-	static const Hash STAND_ANIMATION = Hash("ANIM_POP_STAND");
-	static const Hash TURN_ANIMATION = Hash("ANIM_POP_TURN");
-	static const Hash DROP_ANIMATION = Hash("ANIM_POP_DROP");
-	static const Hash FALL_START_ANIMATION = Hash("ANIM_POP_FALL_START");
-	static const Hash FALL_ANIMATION = Hash("ANIM_POP_FALL");
-	static const Hash JUMP_UP_START_ANIMATION = Hash("ANIM_POP_JUMP_UP_START");
-	static const Hash JUMP_UP_ANIMATION = Hash("ANIM_POP_JUMP_UP");
-	static const Hash HANG_ANIMATION = Hash("ANIM_POP_HANG");
-	static const Hash CLIMB_ANIMATION = Hash("ANIM_POP_CLIMB");
-	static const Hash JUMP_FORWARD_START_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD_START");
-	static const Hash JUMP_FORWARD_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD");
-	static const Hash JUMP_FORWARD_END_ANIMATION = Hash("ANIM_POP_JUMP_FORWARD_END");
-	static const Hash WALK_ANIMATION = Hash("ANIM_POP_WALK");
-	static const Hash SWING_FORWARD_ANIMATION = Hash("ANIM_POP_SWING_FORWARD");
-	static const Hash SWING_BACKWARD_ANIMATION = Hash("ANIM_POP_SWING_BACKWARD");
+	static const Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
+	static const Hash TURN_ANIMATION = Hash("POP_ANM_TURN");
+	static const Hash DROP_ANIMATION = Hash("POP_ANM_DROP");
+	static const Hash FALL_START_ANIMATION = Hash("POP_ANM_FALL_START");
+	static const Hash FALL_ANIMATION = Hash("POP_ANM_FALL");
+	static const Hash JUMP_UP_START_ANIMATION = Hash("POP_ANM_JUMP_UP_START");
+	static const Hash JUMP_UP_ANIMATION = Hash("POP_ANM_JUMP_UP");
+	static const Hash HANG_ANIMATION = Hash("POP_ANM_HANG");
+	static const Hash CLIMB_ANIMATION = Hash("POP_ANM_CLIMB");
+	static const Hash JUMP_FORWARD_START_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_START");
+	static const Hash JUMP_FORWARD_ANIMATION = Hash("POP_ANM_JUMP_FORWARD");
+	static const Hash JUMP_FORWARD_END_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_END");
+	static const Hash WALK_ANIMATION = Hash("POP_ANM_WALK");
+	static const Hash SWING_FORWARD_ANIMATION = Hash("POP_ANM_SWING_FORWARD");
+	static const Hash SWING_BACKWARD_ANIMATION = Hash("POP_ANM_SWING_BACKWARD");
 
-	static const Hash STAND_STATE = Hash("STAT_ACT_STAND");
-	static const Hash FALL_STATE = Hash("STAT_ACT_FALL");
-	static const Hash WALK_STATE = Hash("STAT_ACT_WALK");
-	static const Hash TURN_STATE = Hash("STAT_ACT_TURN");
-	static const Hash PREPARE_TO_JUMP_STATE = Hash("STAT_ACT_PREPARE_TO_JUMP");
-	static const Hash JUMP_START_STATE = Hash("STAT_ACT_JUMP_START");
-	static const Hash JUMP_STATE = Hash("STAT_ACT_JUMP");
-	static const Hash JUMP_END_STATE = Hash("STAT_ACT_JUMP_END");
-	static const Hash PREPARE_TO_HANG_STATE = Hash("STAT_ACT_PREPARE_TO_HANG");
-	static const Hash HANGING_STATE = Hash("STAT_ACT_HANGING");
-	static const Hash HANG_STATE = Hash("STAT_ACT_HANG");
-	static const Hash DROP_STATE = Hash("STAT_ACT_DROP");
-	static const Hash CLIMB_STATE = Hash("STAT_ACT_CLIMB");
-	static const Hash PREPARE_TO_DESCEND_STATE = Hash("STAT_ACT_PREPARE_TO_DESCEND");
-	static const Hash DESCEND_STATE = Hash("STAT_ACT_DESCEND");
+	static const Hash STAND_STATE = Hash("ACT_STT_STAND");
+	static const Hash FALL_STATE = Hash("ACT_STT_FALL");
+	static const Hash WALK_STATE = Hash("ACT_STT_WALK");
+	static const Hash TURN_STATE = Hash("ACT_STT_TURN");
+	static const Hash PREPARE_TO_JUMP_STATE = Hash("ACT_STT_PREPARE_TO_JUMP");
+	static const Hash JUMP_START_STATE = Hash("ACT_STT_JUMP_START");
+	static const Hash JUMP_STATE = Hash("ACT_STT_JUMP");
+	static const Hash JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
+	static const Hash PREPARE_TO_HANG_STATE = Hash("ACT_STT_PREPARE_TO_HANG");
+	static const Hash HANGING_STATE = Hash("ACT_STT_HANGING");
+	static const Hash HANG_STATE = Hash("ACT_STT_HANG");
+	static const Hash DROP_STATE = Hash("ACT_STT_DROP");
+	static const Hash CLIMB_STATE = Hash("ACT_STT_CLIMB");
+	static const Hash PREPARE_TO_DESCEND_STATE = Hash("ACT_STT_PREPARE_TO_DESCEND");
+	static const Hash DESCEND_STATE = Hash("ACT_STT_DESCEND");
 
-	static const Hash JUMP_INFO_SERIALIZATION = Hash("SER_ACT_JUMP_INFO");
-	static const Hash LEDGE_DIRECTED_SERIALIZATION = Hash("SER_ACT_LEDGE_DIRECTED");
-	static const NumericPairSerializer HANG_DESCEND_POINT_SERIALIZATION("SER_ACT_HANG_DESCEND_POINT");
+	static const Hash JUMP_INFO_SERIALIZATION = Hash("ACT_SER_JUMP_INFO");
+	static const Hash LEDGE_DIRECTED_SERIALIZATION = Hash("ACT_SER_LEDGE_DIRECTED");
+	static const NumericPairSerializer HANG_DESCEND_POINT_SERIALIZATION("ACT_SER_HANG_DESCEND_POINT");
 
 	/**********************************************************************************************
 	 * Helpers

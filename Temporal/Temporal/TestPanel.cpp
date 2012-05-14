@@ -48,7 +48,7 @@ namespace Temporal
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Sensor* sensor(new Sensor(Hash("SENS_JUMP"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Sensor* sensor(new Sensor(Hash("SNS_JUMP"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -61,7 +61,7 @@ namespace Temporal
 		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(Hash("SENS_HANG"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SNS_HANG"), sensorOffset, sensorSize, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -71,7 +71,7 @@ namespace Temporal
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(Hash("SENS_BACK_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SNS_BACK_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -81,7 +81,7 @@ namespace Temporal
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Sensor* sensor = new Sensor(Hash("SENS_FRONT_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Sensor* sensor = new Sensor(Hash("SNS_FRONT_EDGE"), sensorOffset, EDGE_SENSOR_SIZE, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
 
@@ -171,15 +171,15 @@ namespace Temporal
 		#pragma region Camera Animation
 		// Search - 0
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_CAM_SEARCH"), animation);
+		spritesheet->add(Hash("CAM_ANM_SEARCH"), animation);
 		animation->add(new Sprite(AABB(19, 19, 24, 32), Vector(4, 16)));
 		// See - 1
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_CAM_SEE"), animation);
+		spritesheet->add(Hash("CAM_ANM_SEE"), animation);
 		animation->add(new Sprite(AABB(19, 59, 24, 32), Vector(4, 16)));
 		// Turn - 2
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_CAM_TURN"), animation);
+		spritesheet->add(Hash("CAM_ANM_TURN"), animation);
 		animation->add(new Sprite(AABB(50.5, 19.5, 17, 33), Vector(2, 16)));
 		animation->add(new Sprite(AABB(76, 19.5, 12, 33), Vector(1, 16)));
 		animation->add(new Sprite(AABB(98, 19.5, 12, 33), Vector(0, 16)));
@@ -270,7 +270,7 @@ namespace Temporal
 		const Texture* texture = Texture::load("c:\\stuff\\tile.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_DEFAULT"), animation);
+		spritesheet->add(Hash("ANM_DEFAULT"), animation);
 		const Size TILE_SIZE(32.0f, 32.0f);
 		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
 
@@ -385,7 +385,7 @@ namespace Temporal
 		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
 		SpriteGroup* animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_DEFAULT"), animation);
+		spritesheet->add(Hash("ANM_DEFAULT"), animation);
 		animation->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
 
 		Position* position = new Position(texture->getSize() / 2.0f);
@@ -407,11 +407,11 @@ namespace Temporal
 		#pragma region Player Animations
 		// Stand - 0
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_STAND"), animation);
+		spritesheet->add(Hash("POP_ANM_STAND"), animation);
 		animation->add(new Sprite(AABB(26.5, 48, 21, 84), Vector(6, -42)));
 		// Turn - 1
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_TURN"), animation);
+		spritesheet->add(Hash("POP_ANM_TURN"), animation);
 		animation->add(new Sprite(AABB(60.5, 50, 23, 80), Vector(7, -40)));
 		animation->add(new Sprite(AABB(95.5, 50, 25, 80), Vector(8, -40)));
 		animation->add(new Sprite(AABB(134.5, 48, 29, 84), Vector(4, -42)));
@@ -422,7 +422,7 @@ namespace Temporal
 		animation->add(new Sprite(AABB(359, 51.5, 28, 79), Vector(-7, -40)));
 		// Drop - 2
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_DROP"), animation);
+		spritesheet->add(Hash("POP_ANM_DROP"), animation);
 		animation->add(new Sprite(AABB(418.5, 58.5, 23, 109), Vector(-3, 54)));
 		animation->add(new Sprite(AABB(462.5, 60, 21, 96), Vector(0, 48)));
 		animation->add(new Sprite(AABB(509, 65, 22, 86), Vector(3, 43)));
@@ -430,18 +430,18 @@ namespace Temporal
 		animation->add(new Sprite(AABB(584.5, 67.5, 25, 81), Vector(9, 40)));
 		// FallStart - 3
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_FALL_START"), animation);
+		spritesheet->add(Hash("POP_ANM_FALL_START"), animation);
 		animation->add(new Sprite(AABB(667.5, 71, 71, 76), Vector(3, -38)));
 		animation->add(new Sprite(AABB(737, 68.5, 62, 75), Vector(3, -38)));
 		animation->add(new Sprite(AABB(805.5, 67, 51, 72), Vector(10, -36)));
 		animation->add(new Sprite(AABB(866, 62, 54, 80), Vector(7, -40)));
 		// Fall - 4
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_FALL"), animation);
+		spritesheet->add(Hash("POP_ANM_FALL"), animation);
 		animation->add(new Sprite(AABB(927, 63, 34, 78), Vector(-2, -39)));
 		// JumpUpStart - 5
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_JUMP_UP_START"), animation);
+		spritesheet->add(Hash("POP_ANM_JUMP_UP_START"), animation);
 		animation->add(new Sprite(AABB(30, 193.5, 22, 83), Vector(2, -42)));
 		animation->add(new Sprite(AABB(72.5, 193, 23, 84), Vector(2, -42)));
 		animation->add(new Sprite(AABB(114, 194, 22, 82), Vector(2, -41)));
@@ -457,15 +457,15 @@ namespace Temporal
 		animation->add(new Sprite(AABB(582, 187.5, 32, 95), Vector(11, -48)));
 		// JumpUp - 6
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_JUMP_UP"), animation);
+		spritesheet->add(Hash("POP_ANM_JUMP_UP"), animation);
 		animation->add(new Sprite(AABB(630, 189.5, 32, 103), Vector(10, -52)));
 		// Hang - 7
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_HANG"), animation);
+		spritesheet->add(Hash("POP_ANM_HANG"), animation);
 		animation->add(new Sprite(AABB(717.5, 190.5, 23, 111), Vector(-1, 55)));
 		// Climb - 8
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_CLIMB"), animation);
+		spritesheet->add(Hash("POP_ANM_CLIMB"), animation);
 		animation->add(new Sprite(AABB(24.5, 342, 21, 106), Vector(-7, 49)));
 		animation->add(new Sprite(AABB(67, 348, 24, 88), Vector(-9, 40)));
 		animation->add(new Sprite(AABB(109, 348.5, 26, 89), Vector(-5, 28)));
@@ -485,7 +485,7 @@ namespace Temporal
 		animation->add(new Sprite(AABB(937, 324.5, 22, 79), Vector(3, -40)));
 		// JumpForwardStart - 9
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_JUMP_FORWARD_START"), animation);
+		spritesheet->add(Hash("POP_ANM_JUMP_FORWARD_START"), animation);
 		animation->add(new Sprite(AABB(20.5, 502, 25, 84), Vector(7, -42)));
 		animation->add(new Sprite(AABB(59.5, 503, 27, 82), Vector(8, -41)));
 		animation->add(new Sprite(AABB(106, 503, 42, 80), Vector(6, -40)));
@@ -495,14 +495,14 @@ namespace Temporal
 		animation->add(new Sprite(AABB(369, 505, 54, 68), Vector(22, -34)));
 		// JumpForward - 10
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_JUMP_FORWARD"), animation);
+		spritesheet->add(Hash("POP_ANM_JUMP_FORWARD"), animation);
 		animation->add(new Sprite(AABB(449.5, 503, 79, 70), Vector(2, -35)));
 		animation->add(new Sprite(AABB(557.5, 501, 99, 70), Vector(1, -35)));
 		animation->add(new Sprite(AABB(678.5, 507.5, 103, 61), Vector(-3, -31)));
 		animation->add(new Sprite(AABB(788, 506.5, 84, 55), Vector(-2, -28)));
 		// JumpForwardEnd - 11
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_JUMP_FORWARD_END"), animation);
+		spritesheet->add(Hash("POP_ANM_JUMP_FORWARD_END"), animation);
 		animation->add(new Sprite(AABB(52, 620.5, 58, 55), Vector(-8, -28)));
 		animation->add(new Sprite(AABB(114.5, 621.5, 41, 51), Vector(-4, -26)));
 		animation->add(new Sprite(AABB(189.5, 618, 55, 60), Vector(3, -30)));
@@ -511,7 +511,7 @@ namespace Temporal
 		animation->add(new Sprite(AABB(352, 608, 30, 82), Vector(0, -41)));
 		// Walk - 12
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_WALK"), animation);
+		spritesheet->add(Hash("POP_ANM_WALK"), animation);
 		animation->add(new Sprite(AABB(34, 735.5, 24, 81), Vector(8, -41)));
 		animation->add(new Sprite(AABB(76, 735, 22, 80), Vector(6, -40)));
 		animation->add(new Sprite(AABB(117.5, 736.5, 27, 77), Vector(6, -39)));
@@ -526,14 +526,14 @@ namespace Temporal
 		animation->add(new Sprite(AABB(634.5, 732, 21, 82), Vector(5, -41)));
 		// HangingForward - 13
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_SWING_FORWARD"), animation);
+		spritesheet->add(Hash("POP_ANM_SWING_FORWARD"), animation);
 		animation->add(new Sprite(AABB(32.5, 859.5, 29, 111), Vector(1, 55)));
 		animation->add(new Sprite(AABB(91.5, 859.5, 33, 109), Vector(6, 54)));
 		animation->add(new Sprite(AABB(152.5, 863.5, 41, 107), Vector(11, 53)));
 		animation->add(new Sprite(AABB(206, 861.5, 40, 103), Vector(9, 51)));
 		// HangingBackwards - 14
 		animation = new SpriteGroup();
-		spritesheet->add(Hash("ANIM_POP_SWING_BACKWARD"), animation);
+		spritesheet->add(Hash("POP_ANM_SWING_BACKWARD"), animation);
 		animation->add(new Sprite(AABB(252.5, 864.5, 23, 109), Vector(-6, 54)));
 		animation->add(new Sprite(AABB(295.5, 864, 35, 108), Vector(-11, 54)));
 		animation->add(new Sprite(AABB(348.5, 863, 45, 106), Vector(-16, 53)));
@@ -546,10 +546,10 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createSentry(spritesheet);
+		//createSentry(spritesheet);
 		createCamera();
-		createPatrol(spritesheet);
-		createChaser(spritesheet);
+		//createPatrol(spritesheet);
+		//createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();
 	}

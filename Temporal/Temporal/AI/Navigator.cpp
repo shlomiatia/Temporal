@@ -10,21 +10,21 @@ namespace Temporal
 {
 	namespace NavigatorStates
 	{
-		static const Hash WALK_STATE = Hash("STAT_NAV_WALK");	
-		static const Hash FALL_STATE = Hash("STAT_NAV_FALL");
-		static const Hash JUMP_UP_STATE = Hash("STAT_NAV_JUMP_UP");
-		static const Hash JUMP_FORWARD_STATE = Hash("STAT_NAV_JUMP_FORWARD");
-		static const Hash DESCEND_STATE = Hash("STAT_NAV_DESCEND");
-		static const Hash WAIT_STATE = Hash("STAT_NAV_WAIT");
-		static const Hash TURN_STATE = Hash("STAT_NAV_TURN");
+		static const Hash WALK_STATE = Hash("NAV_STT_WALK");	
+		static const Hash FALL_STATE = Hash("NAV_STT_FALL");
+		static const Hash JUMP_UP_STATE = Hash("NAV_STT_JUMP_UP");
+		static const Hash JUMP_FORWARD_STATE = Hash("NAV_STT_JUMP_FORWARD");
+		static const Hash DESCEND_STATE = Hash("NAV_STT_DESCEND");
+		static const Hash WAIT_STATE = Hash("NAV_STT_WAIT");
+		static const Hash TURN_STATE = Hash("NAV_STT_TURN");
 
-		static const Hash ACTION_FALL_STATE = Hash("STAT_ACT_FALL");
-		static const Hash ACTION_JUMP_END_STATE = Hash("STAT_ACT_JUMP_END");
-		static const Hash ACTION_DROP_STATE = Hash("STAT_ACT_DROP");
-		static const Hash ACTION_CLIMB_STATE = Hash("STAT_ACT_CLIMB");
+		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
+		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
+		static const Hash ACTION_DROP_STATE = Hash("ACT_STT_DROP");
+		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 
-		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("SER_NAV_CENTER");
-		static const NumericPairSerializer DESTINATION_RADIUS_SERIALIZER("SER_NAV_SIZE");
+		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
+		static const NumericPairSerializer DESTINATION_RADIUS_SERIALIZER("NAV_SER_SIZE");
 
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
