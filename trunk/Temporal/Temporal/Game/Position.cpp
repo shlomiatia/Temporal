@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	static const NumericPairSerializer POSITION_SERIALIZER("SER_POS");
+	static const NumericPairSerializer POSITION_SERIALIZER("POS_SER");
 
 	void Position::handleMessage(Message& message)
 	{

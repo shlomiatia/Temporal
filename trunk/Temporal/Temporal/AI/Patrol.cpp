@@ -6,14 +6,14 @@ namespace Temporal
 {
 	namespace PatrolStates
 	{
-		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SENS_FRONT_EDGE");
+		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
 
-		static const Hash WALK_STATE = Hash("STAT_PAT_WALK");
-		static const Hash SEE_STATE = Hash("STAT_PAT_SEE");
-		static const Hash TURN_STATE = Hash("STAT_PAT_TURN");
-		static const Hash WAIT_STATE = Hash("STAT_PAT_WAIT");
+		static const Hash WALK_STATE = Hash("PAT_STT_WALK");
+		static const Hash SEE_STATE = Hash("PAT_STT_SEE");
+		static const Hash TURN_STATE = Hash("PAT_STT_TURN");
+		static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
 
-		static const Hash ACTION_TURN_STATE = Hash("STAT_ACT_TURN");
+		static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
 
 		void Walk::handleMessage(Message& message) const
 		{	

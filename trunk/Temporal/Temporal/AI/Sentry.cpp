@@ -6,9 +6,9 @@ namespace Temporal
 {
 	namespace SentryStates
 	{
-		static const Hash SEARCH_STATE = Hash("STAT_SEN_SEARCH");
-		static const Hash ACQUIRE_STATE = Hash("STAT_SEN_ACQUIRE");
-		static const Hash SEE_STATE = Hash("STAT_SEN_SEE");
+		static const Hash SEARCH_STATE = Hash("SEN_STT_SEARCH");
+		static const Hash ACQUIRE_STATE = Hash("SEN_STT_ACQUIRE");
+		static const Hash SEE_STATE = Hash("SEN_STT_SEE");
 
 		void Search::enter(void) const
 		{

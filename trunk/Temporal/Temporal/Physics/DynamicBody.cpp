@@ -14,8 +14,8 @@
 
 namespace Temporal
 {
-	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("SER_DYN_IS_GRAVITY_ENABLED");
-	static const NumericPairSerializer VELOCITY_SERIALIZER("SER_DYN_VELOCITY");
+	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
+	static const NumericPairSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
 	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
 
