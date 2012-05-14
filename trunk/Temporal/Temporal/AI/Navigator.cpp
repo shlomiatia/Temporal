@@ -1,4 +1,6 @@
 #include "Navigator.h"
+#include <Temporal\Base\BaseUtils.h>
+#include <Temporal\Base\Serialization.h>
 #include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\MessageUtils.h>
@@ -21,24 +23,31 @@ namespace Temporal
 		static const Hash ACTION_DROP_STATE = Hash("STAT_ACT_DROP");
 		static const Hash ACTION_CLIMB_STATE = Hash("STAT_ACT_CLIMB");
 
+		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("SER_NAV_CENTER");
+		static const NumericPairSerializer DESTINATION_RADIUS_SERIALIZER("SER_NAV_SIZE");
+
+		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
+		{
+			Navigator& navigator = (Navigator&)stateMachine;
+			AABB startPosition = AABB::Empty;
+			navigator.sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
+			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
+			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
+			if(start != NULL && goal != NULL)
+			{
+				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
+				navigator.setDestination(goalPosition);
+				navigator.setPath(path);
+				navigator.changeState(WALK_STATE);
+			}
+		}
+
 		void Wait::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
 				AABB goalPosition = *(const AABB*)message.getParam();
-				Navigator& navigator = *(Navigator*)_stateMachine;
-
-				AABB startPosition = AABB::Empty;
-				_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
-				const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
-				const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
-				if(start != NULL && goal != NULL)
-				{
-					NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
-					navigator.setDestination(goalPosition);
-					navigator.setPath(path);
-					_stateMachine->changeState(WALK_STATE);
-				}
+				plotPath(*_stateMachine, goalPosition); 
 			}
 		}
 
@@ -48,7 +57,7 @@ namespace Temporal
 			{
 				const Point& position = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
 				float sourceX = position.getX();
-				const Navigator& navigator = *((const Navigator*)_stateMachine);
+				Navigator& navigator = *((Navigator*)_stateMachine);
 				NavigationEdgeCollection* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
@@ -72,6 +81,7 @@ namespace Temporal
 				{
 					if(reachedTargetPlatform)
 					{
+						navigator.setDestination(AABB::Empty);
 						_stateMachine->changeState(WAIT_STATE);
 					}
 					else
@@ -211,7 +221,29 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if(message.getID() == MessageID::DEBUG_DRAW)
+		if(message.getID() == MessageID::SERIALIZE)
+		{
+			Serialization& serialization = *(Serialization*)message.getParam();
+			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
+			DESTINATION_RADIUS_SERIALIZER.serialize(serialization, _destination.getRadius());
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			if(_path != NULL)
+			{
+				_path->clear();
+			}
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			Point center = Point::Zero;
+			DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
+			Vector radius = Vector::Zero;
+			DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
+			AABB destination = AABB(center, radius);
+			
+			if(destination != AABB::Empty)
+				plotPath(*this, destination);
+		}
+		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			AABB position = AABB::Empty;
 			sendMessageToOwner(Message(MessageID::GET_BOUNDS, &position));

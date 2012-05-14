@@ -34,11 +34,17 @@ namespace Temporal
 		
 		if(Input::get().isQuit())
 		{
-			/*AABB bounds = AABB::Empty;
+			Game::get().stop();
+		}
+		if(Input::get().isQ())
+		{
+			AABB bounds = AABB::Empty;
 			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));*/
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
+		}
+		if(Input::get().isW())
+		{
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-			//Game::get().stop();
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 		
@@ -53,7 +59,7 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SENSOR | ComponentType::DYNAMIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::AI_CONTROLLER | ComponentType::DYNAMIC_BODY;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();

@@ -13,6 +13,8 @@ namespace Temporal
 
 		ComponentType::Enum getType(void) const { return ComponentType::ORIENTATION; }
 
+		Orientation::Enum get(void) const { return _orientation; }
+
 		void handleMessage(Message& message);
 	private:
 		Orientation::Enum _orientation;

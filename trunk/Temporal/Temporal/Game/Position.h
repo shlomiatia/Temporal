@@ -13,6 +13,8 @@ namespace Temporal
 
 		virtual ComponentType::Enum getType(void) const { return ComponentType::POSITION; }
 		virtual void handleMessage(Message& message);
+
+		const Point& get(void) const { return _position; }
 	private:
 		Point _position;
 	};

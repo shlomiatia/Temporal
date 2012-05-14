@@ -93,19 +93,25 @@ namespace Temporal
 		addFrontEdgeSensor(entity);
 	}
 
-	TemporalEcho* createTemporalEcho(SpriteSheet* spritesheet)
+	void createTemporalEcho(Entity* entity)
 	{
-		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, Color(1.0f, 1.0f, 1.0f, 0.2f));
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(drawPosition);
-		entity->add(renderer);
-		TemporalEcho* temporalEcho = new TemporalEcho(entity);
-		return temporalEcho;
+		Position* position = new Position(((Position*)entity->get(ComponentType::POSITION))->get());
+		EntityOrientation* orientation = new EntityOrientation(((EntityOrientation*)entity->get(ComponentType::ORIENTATION))->get());
+		DrawPosition* drawPosition = NULL;
+		DrawPosition* otherDrawPosition = (DrawPosition*)entity->get(ComponentType::DRAW_POSITION);
+		if(otherDrawPosition != NULL)
+			drawPosition = new DrawPosition(otherDrawPosition->getOffset());
+		
+		Renderer* otherRenderer = (Renderer*)entity->get(ComponentType::RENDERER);
+		Renderer* renderer = new Renderer(otherRenderer->getSpriteSheet(), otherRenderer->getVisualLayer(), Color(1.0f, 1.0f, 1.0f, 0.2f));
+		Entity* echoEntity = new Entity();
+		echoEntity->add(position);
+		echoEntity->add(orientation);
+		if(drawPosition != NULL)
+			echoEntity->add(drawPosition);
+		echoEntity->add(renderer);
+		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
+		entity->add(temporalEcho);
 	}
 
 	void createPlayer(SpriteSheet* spritesheet)
@@ -120,7 +126,6 @@ namespace Temporal
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
 
 		Entity* entity = new Entity();
-		entity->add(createTemporalEcho(spritesheet));
 		entity->add(position);
 		entity->add(orientation);
 		entity->add(drawPosition);
@@ -131,30 +136,6 @@ namespace Temporal
 		entity->add(animator);
 		entity->add(renderer);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
-	}
-
-	void createChaser(SpriteSheet* spritesheet)
-	{
-		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
-		Navigator* navigator = new Navigator();
-		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
-		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(66.0f);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(drawPosition);
-		entity->add(navigator);
-		entity->add(dynamicBody);
-		addSensors(*entity);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
 	}
 
 	void createSentry(SpriteSheet* spritesheet)
@@ -173,33 +154,8 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
-	}
-
-	void createPatrol(SpriteSheet* spritesheet)
-	{
-		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
-		Patrol* patrol = new Patrol();
-		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
-		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(66.0f);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
-
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(orientation);
-		entity->add(drawPosition);
-		entity->add(patrol);
-		entity->add(dynamicBody);
-		entity->add(sight);
-		addFrontEdgeSensor(*entity);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
 
 	void createCamera()
@@ -239,7 +195,60 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
+	}
+
+	void createPatrol(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Point(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		Patrol* patrol = new Patrol();
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
+		ActionController* actionController = new ActionController();
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(patrol);
+		entity->add(dynamicBody);
+		entity->add(sight);
+		addFrontEdgeSensor(*entity);
+		entity->add(actionController);
+		entity->add(animator);
+		entity->add(renderer);
+		createTemporalEcho(entity);
+		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
+	}
+
+		void createChaser(SpriteSheet* spritesheet)
+	{
+		Position* position = new Position(Point(512.0f, 768.0f));
+		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		Navigator* navigator = new Navigator();
+		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
+		ActionController* actionController = new ActionController();
+		Animator* animator = new Animator(66.0f);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(orientation);
+		entity->add(drawPosition);
+		entity->add(navigator);
+		entity->add(dynamicBody);
+		addSensors(*entity);
+		entity->add(actionController);
+		entity->add(animator);
+		entity->add(renderer);
+		createTemporalEcho(entity);
+		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
 	}
 
 	static int platformID = 0;
@@ -537,10 +546,10 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createChaser(spritesheet);
 		//createSentry(spritesheet);
+		//createCamera();
 		//createPatrol(spritesheet);
-		//screateCamera();
+		createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();
 	}

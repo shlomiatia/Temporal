@@ -21,6 +21,8 @@ namespace Temporal
 		bool isUp(void) const { return (_up); }
 		bool isDown(void) const { return (_down); }
 		bool isQuit(void) const { return (_quit); }
+		bool isQ(void) const { return _q; }
+		bool isW(void) const { return _w; }
 		const Point& mouse(void) const { return _mouse; }
 
 	private:
@@ -29,9 +31,11 @@ namespace Temporal
 		bool _up;
 		bool _down;
 		bool _quit;
-		Point _mouse; // POINT
+		bool _q;
+		bool _w;
+		Point _mouse;
 
-		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _mouse(Point::Zero) {}
+		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _q(false), _w(false), _mouse(Point::Zero) {}
 		~Input(void) {}
 		Input(const Input&);
 		Input& operator=(const Input&);
