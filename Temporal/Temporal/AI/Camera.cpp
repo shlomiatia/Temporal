@@ -57,15 +57,15 @@ namespace Temporal
 
 		void Turn::enter(void) const
 		{
+			_hasTurned = false;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 		}
 
 		void Turn::handleMessage(Message& message) const
 		{
-			// Flag 1 - has turned TODO:
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
-				if(_stateMachine->getFlag1())
+				if(_hasTurned)
 				{
 					_stateMachine->changeState(SEARCH_STATE);
 				}
@@ -73,7 +73,7 @@ namespace Temporal
 				{
 					_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
 					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
-					_stateMachine->setFlag1(true);
+					_hasTurned = true;
 				}
 			}
 		}

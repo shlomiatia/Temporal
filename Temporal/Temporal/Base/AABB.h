@@ -37,6 +37,9 @@ namespace Temporal
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
 		bool contains(const Point& point) const;
+
+		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
+		bool operator!=(const AABB& other) const { return !(*this == other); }
 	private:
 		Point _center;
 		Vector _radius;

@@ -47,6 +47,16 @@ namespace Temporal
 						_quit = event.type == SDL_KEYDOWN;
 						break;
 					}
+					case (SDLK_q):
+					{
+						_q = event.type == SDL_KEYDOWN;
+						break;
+					}
+					case (SDLK_w):
+					{
+						_w = event.type == SDL_KEYDOWN;
+						break;
+					}
 				}
 			}
 		}

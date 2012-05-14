@@ -18,6 +18,9 @@ namespace Temporal
 
 		void handleMessage(Message& message);
 		void draw(void) const;
+
+		const SpriteSheet& getSpriteSheet(void) const { return _spritesheet; }
+		VisualLayer::Enum getVisualLayer(void) const { return _layer; }
 	private:
 		const SpriteSheet& _spritesheet;
 		const VisualLayer::Enum _layer;

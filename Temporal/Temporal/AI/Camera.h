@@ -28,8 +28,13 @@ namespace Temporal
 		class Turn : public ComponentState
 		{
 		public:
+			Turn(void) : _hasTurned(false) {}
+
 			void enter(void) const;
 			void handleMessage(Message& message) const;
+
+			mutable bool _hasTurned;
+
 		};
 
 		class Acquire : public ComponentState
