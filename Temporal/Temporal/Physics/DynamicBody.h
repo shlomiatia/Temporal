@@ -36,7 +36,7 @@ namespace Temporal
 		Vector _groundVector;
 
 		AABB getBounds(void) const;
-		Orientation::Enum getOrientation(void) const;
+		Side::Enum getSide(void) const;
 
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);

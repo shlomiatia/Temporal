@@ -28,7 +28,7 @@ namespace Temporal
 		bool _isSeeing;
 
 		void checkLineOfSight(void);
-		void drawFieldOfView(const Point& sourcePosition, Orientation::Enum sourceOrientation) const;
+		void drawFieldOfView(const Point& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo(void) const;
 
 		bool directedSegmentCast(const DirectedSegment& ray);

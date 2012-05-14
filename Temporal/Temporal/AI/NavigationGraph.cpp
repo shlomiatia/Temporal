@@ -45,14 +45,14 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	void cutArea(Orientation::Enum direction, float cutAmount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutArea(Side::Enum direction, float cutAmount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
 		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
 		float length = cutAmount / normalizedSlopedVector.getVx();
 		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
 
 		// Move center in the opposite direction
-		Point center = area.getCenter() + (float)Orientation::getOpposite(direction) * cutRadius;
+		Point center = area.getCenter() + (float)Side::getOpposite(direction) * cutRadius;
 		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
 		const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
 		iterator = areas.insert(iterator, nodeAfterCut);
@@ -61,13 +61,13 @@ namespace Temporal
 	void cutAreaLeft(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
 		float amount = x - area.getLeft();
-		cutArea(Orientation::LEFT, amount, area, areas, iterator);
+		cutArea(Side::LEFT, amount, area, areas, iterator);
 	}
 
 	void cutAreaRight(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
 		float amount = area.getRight() - x;
-		cutArea(Orientation::RIGHT, amount, area, areas, iterator);
+		cutArea(Side::RIGHT, amount, area, areas, iterator);
 	}
 
 	Segment getUpperSegment(const YABP& yabp)
@@ -208,7 +208,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, ShapeCollection& platforms)
+	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeCollection& platforms)
 	{
 		const YABP& area1 = node1.getArea();
 		const YABP& area2 = node2.getArea();
@@ -240,7 +240,7 @@ namespace Temporal
 			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
-				node2.addEdge(new NavigationEdge(node2, node1, x, Orientation::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
+				node2.addEdge(new NavigationEdge(node2, node1, x, Side::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
 		}
 	}
 
@@ -259,8 +259,8 @@ namespace Temporal
 			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1low - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
-				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::JUMP_FORWARD));
-				node2.addEdge(new NavigationEdge(node2, node1, area2.getLeft(), Orientation::LEFT, NavigationEdgeType::JUMP_FORWARD));
+				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Side::RIGHT, NavigationEdgeType::JUMP_FORWARD));
+				node2.addEdge(new NavigationEdge(node2, node1, area2.getLeft(), Side::LEFT, NavigationEdgeType::JUMP_FORWARD));
 			}
 		}
 	}
@@ -285,8 +285,8 @@ namespace Temporal
 				{
 					if(area1.getLeft() <= area2.getLeft())
 					{
-						node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Orientation::RIGHT, NavigationEdgeType::WALK));
-						node2.addEdge(new NavigationEdge(node2, node1, area1.getRight(), Orientation::LEFT, NavigationEdgeType::WALK));
+						node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Side::RIGHT, NavigationEdgeType::WALK));
+						node2.addEdge(new NavigationEdge(node2, node1, area1.getRight(), Side::LEFT, NavigationEdgeType::WALK));
 					}
 				}
 				// check fall/jump up
@@ -294,9 +294,9 @@ namespace Temporal
 				else if(area1.getTop() >= area2.getTop() && area1.getLeft() -20.f <= area2.getRight() && area1.getRight() + 20.0f >= area2.getLeft())
 				{
 					if(area1.getLeft() >= area2.getLeft())
-						checkVerticalEdges(node1, node2, area1.getLeft(), Orientation::LEFT, platforms);
+						checkVerticalEdges(node1, node2, area1.getLeft(), Side::LEFT, platforms);
 					if(area1.getRight() <= area2.getRight())
-						checkVerticalEdges(node1, node2, area1.getRight(), Orientation::RIGHT, platforms);
+						checkVerticalEdges(node1, node2, area1.getRight(), Side::RIGHT, platforms);
 				}
 				// check jump forward
 				else if(area1.getRight() < area2.getLeft() && area1.getTop() == area2.getTop())
@@ -358,7 +358,7 @@ namespace Temporal
 				const NavigationEdge& edge = **j;
 				const YABP& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
-				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD) ? area2.getOppositeSide(edge.getOrientation()) : x1;
+				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD) ? area2.getOppositeSide(edge.getSide()) : x1;
 				float y1 = edge.getType() == NavigationEdgeType::WALK ? node.getArea().getCenterY() : node.getArea().getBottom();
 				float y2 = edge.getType() == NavigationEdgeType::WALK ? area2.getCenterY() : area2.getBottom();
 				Color color = Color::White;

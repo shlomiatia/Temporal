@@ -7,7 +7,7 @@
 #include <Temporal\Game\Component.h>
 #include <Temporal\Game\Entity.h>
 #include <Temporal\Game\Position.h>
-#include <Temporal\Game\EntityOrientation.h>
+#include <Temporal\Game\Orientation.h>
 #include <Temporal\Game\DrawPosition.h>
 #include <Temporal\Game\ActionController.h>
 #include <Temporal\Game\EntitiesManager.h>
@@ -96,7 +96,7 @@ namespace Temporal
 	void createTemporalEcho(Entity* entity)
 	{
 		Position* position = new Position(((Position*)entity->get(ComponentType::POSITION))->get());
-		EntityOrientation* orientation = new EntityOrientation(((EntityOrientation*)entity->get(ComponentType::ORIENTATION))->get());
+		Orientation* orientation = new Orientation(((Orientation*)entity->get(ComponentType::ORIENTATION))->get());
 		DrawPosition* drawPosition = NULL;
 		DrawPosition* otherDrawPosition = (DrawPosition*)entity->get(ComponentType::DRAW_POSITION);
 		if(otherDrawPosition != NULL)
@@ -117,7 +117,7 @@ namespace Temporal
 	void createPlayer(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		Orientation* orientation = new Orientation(Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
@@ -141,7 +141,7 @@ namespace Temporal
 	void createSentry(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(100.0f, 550.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::RIGHT);
+		Orientation* orientation = new Orientation(Side::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
@@ -164,8 +164,8 @@ namespace Temporal
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, Hash("ENT_PLAYER"));
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::LEFT);
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
+		Orientation* orientation = new Orientation(Side::LEFT);
 		SpriteGroup* animation;
 
 		#pragma region Camera Animation
@@ -202,7 +202,7 @@ namespace Temporal
 	void createPatrol(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		Orientation* orientation = new Orientation(Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Patrol* patrol = new Patrol();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
@@ -229,7 +229,7 @@ namespace Temporal
 		void createChaser(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
-		EntityOrientation* orientation = new EntityOrientation(Orientation::LEFT);
+		Orientation* orientation = new Orientation(Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
@@ -268,7 +268,7 @@ namespace Temporal
 	void createPlatforms()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\tile.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(Hash("ANM_DEFAULT"), animation);
 		const Size TILE_SIZE(32.0f, 32.0f);
@@ -383,7 +383,7 @@ namespace Temporal
 	void createBackground()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Orientation::NONE);
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(Hash("ANM_DEFAULT"), animation);
 		animation->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
@@ -401,7 +401,7 @@ namespace Temporal
 	void TestPanel::createEntities(void)
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
-		SpriteSheet* spritesheet(new SpriteSheet(texture, Orientation::LEFT));
+		SpriteSheet* spritesheet(new SpriteSheet(texture, Side::LEFT));
 		SpriteGroup* animation;
 
 		#pragma region Player Animations

@@ -39,9 +39,9 @@ namespace Temporal
 		return AABB(position, _size);
 	}
 
-	Orientation::Enum DynamicBody::getOrientation(void) const
+	Side::Enum DynamicBody::getSide(void) const
 	{
-		Orientation::Enum orientation = *(Orientation::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return orientation;
 	}
 
@@ -68,7 +68,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			Vector timeBasedImpulse = Vector(param.getVx() * getSide(), param.getVy());
 
 			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
 			_velocity.setVx(0.0f);
@@ -77,7 +77,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
 			const Vector& param = *(Vector*)message.getParam();
-			_absoluteImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			_absoluteImpulse = Vector(param.getVx() * getSide(), param.getVy());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)

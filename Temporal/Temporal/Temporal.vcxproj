@@ -35,7 +35,7 @@
     <ClInclude Include="Game\Component.h" />
     <ClInclude Include="Game\MovementUtils.h" />
     <ClInclude Include="Game\Message.h" />
-    <ClInclude Include="Game\EntityOrientation.h" />
+    <ClInclude Include="Game\Orientation.h" />
     <ClInclude Include="Game\StateMachineComponent.h" />
     <ClInclude Include="Game\EntitiesManager.h" />
     <ClInclude Include="Game\MessageUtils.h" />
@@ -85,7 +85,7 @@
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Game\DrawPosition.cpp" />
     <ClCompile Include="Game\Entity.cpp" />
-    <ClCompile Include="Game\EntityOrientation.cpp" />
+    <ClCompile Include="Game\Orientation.cpp" />
     <ClCompile Include="Game\MovementUtils.cpp" />
     <ClCompile Include="Game\StateMachineComponent.cpp" />
     <ClCompile Include="Game\EntitiesManager.cpp" />

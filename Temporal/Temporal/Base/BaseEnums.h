@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	namespace Orientation
+	namespace Side
 	{ 
 		enum Enum
 		{
@@ -11,7 +11,7 @@ namespace Temporal
 			LEFT = -1,
 			RIGHT = 1 
 		};
-		inline Orientation::Enum getOpposite(Orientation::Enum value) { return value == LEFT ? RIGHT : LEFT; }
+		inline Side::Enum getOpposite(Side::Enum value) { return value == LEFT ? RIGHT : LEFT; }
 	}
 
 	namespace Axis

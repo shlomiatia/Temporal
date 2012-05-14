@@ -6,18 +6,18 @@
 
 namespace Temporal
 {
-	class EntityOrientation : public Component
+	class Orientation : public Component
 	{
 	public:
-		explicit EntityOrientation(Orientation::Enum orientation) : _orientation(orientation) {}
+		explicit Orientation(Side::Enum orientation) : _orientation(orientation) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::ORIENTATION; }
 
-		Orientation::Enum get(void) const { return _orientation; }
+		Side::Enum get(void) const { return _orientation; }
 
 		void handleMessage(Message& message);
 	private:
-		Orientation::Enum _orientation;
+		Side::Enum _orientation;
 	};
 }
 #endif

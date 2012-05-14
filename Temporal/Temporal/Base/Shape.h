@@ -32,8 +32,8 @@ namespace Temporal
 		virtual float getWidth(void) const { return getRight() - getLeft(); }
 		virtual float getHeight(void) const { return getTop() - getBottom(); }
 
-		float getSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getLeft() : getRight(); }
-		float getOppositeSide(Orientation::Enum orientation) const { return orientation == Orientation::LEFT ? getRight() : getLeft(); }
+		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
+		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
 	};
 }
 #endif

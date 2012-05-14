@@ -48,12 +48,12 @@ namespace Temporal
 	class NavigationEdge
 	{
 	public:
-		NavigationEdge(const NavigationNode& source, const NavigationNode& target, float x, Orientation::Enum orientation, NavigationEdgeType::Enum type)
+		NavigationEdge(const NavigationNode& source, const NavigationNode& target, float x, Side::Enum orientation, NavigationEdgeType::Enum type)
 			: _target(target), _x(x), _orientation(orientation), _type(type), _cost(calculateCost(source)) {}
 
 		const NavigationNode& getTarget(void) const { return _target; }
 		float getX(void) const { return _x; }
-		Orientation::Enum getOrientation(void) const { return _orientation; }
+		Side::Enum getSide(void) const { return _orientation; }
 		NavigationEdgeType::Enum getType(void) const { return _type; }
 		float getCost(void) const { return _cost; }
 		void draw(void) const;
@@ -61,7 +61,7 @@ namespace Temporal
 	private:
 		const NavigationNode& _target;
 		const float _x;
-		const Orientation::Enum _orientation;
+		const Side::Enum _orientation;
 		const NavigationEdgeType::Enum _type;
 		const float _cost;
 
@@ -98,7 +98,7 @@ namespace Temporal
 		NavigationNodeCollection _nodes; 
 
 		void createNodes(ShapeCollection& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Orientation::Enum orientation, ShapeCollection& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeCollection& platforms);
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void createEdges(ShapeCollection& platforms);
 

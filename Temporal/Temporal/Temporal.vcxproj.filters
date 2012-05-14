@@ -22,7 +22,6 @@
     <ClInclude Include="Physics\StaticBody.h" />
     <ClInclude Include="Input\InputController.h" />
     <ClInclude Include="Game\Position.h" />
-    <ClInclude Include="Game\EntityOrientation.h" />
     <ClInclude Include="Graphics\ViewManager.h" />
     <ClInclude Include="AI\Sentry.h" />
     <ClInclude Include="Game\DrawPosition.h" />
@@ -54,6 +53,7 @@
     <ClInclude Include="Game\TemporalEcho.h" />
     <ClInclude Include="Base\Serialization.h" />
     <ClInclude Include="Base\BaseUtils.h" />
+    <ClInclude Include="Game\Orientation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -73,7 +73,6 @@
     <ClCompile Include="Game\Component.cpp" />
     <ClCompile Include="Input\InputController.cpp" />
     <ClCompile Include="Game\Position.cpp" />
-    <ClCompile Include="Game\EntityOrientation.cpp" />
     <ClCompile Include="Graphics\ViewManager.cpp" />
     <ClCompile Include="AI\Sentry.cpp" />
     <ClCompile Include="Game\DrawPosition.cpp" />
@@ -100,5 +99,6 @@
     <ClCompile Include="Base\Hash.cpp" />
     <ClCompile Include="Game\TemporalEcho.cpp" />
     <ClCompile Include="Base\BaseUtils.cpp" />
+    <ClCompile Include="Game\Orientation.cpp" />
   </ItemGroup>
 </Project>
