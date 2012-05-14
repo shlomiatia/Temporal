@@ -29,7 +29,7 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
 			Navigator& navigator = (Navigator&)stateMachine;
-			AABB startPosition = AABB::Empty;
+			AABB startPosition = AABB::Zero;
 			navigator.sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
@@ -81,7 +81,7 @@ namespace Temporal
 				{
 					if(reachedTargetPlatform)
 					{
-						navigator.setDestination(AABB::Empty);
+						navigator.setDestination(AABB::Zero);
 						_stateMachine->changeState(WAIT_STATE);
 					}
 					else
@@ -240,12 +240,12 @@ namespace Temporal
 			DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
 			AABB destination = AABB(center, radius);
 			
-			if(destination != AABB::Empty)
+			if(destination != AABB::Zero)
 				plotPath(*this, destination);
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			AABB position = AABB::Empty;
+			AABB position = AABB::Zero;
 			sendMessageToOwner(Message(MessageID::GET_BOUNDS, &position));
 			const NavigationNode* current = NavigationGraph::get().getNodeByAABB(position);
 			NavigationEdgeCollection* path = getPath();
