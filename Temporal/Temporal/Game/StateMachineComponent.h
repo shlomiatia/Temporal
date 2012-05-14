@@ -43,12 +43,12 @@ namespace Temporal
 		void changeState(const Hash& stateID);
 		virtual void handleMessage(Message& message);
 
-		bool getFlag1(void) const { return _flag1; }
-		void setFlag1(bool value) { _flag1 = value; }
-		bool getFlag2(void) const { return _flag2; }
-		void setFlag2(bool value) { _flag2 = value; }
-		bool getFlag3(void) const { return _flag3; }
-		void setFlag3(bool value) { _flag3 = value; }
+		bool getTempFlag1(void) const { return _tempFlag1; }
+		void setTempFlag1(bool value) { _tempFlag1 = value; }
+		bool getTempFlag2(void) const { return _tempFlag2; }
+		void setTempFlag2(bool value) { _tempFlag2 = value; }
+		bool getTempFlag3(void) const { return _tempFlag3; }
+		void setTempFlag3(bool value) { _tempFlag3 = value; }
 
 		Timer& getTimer(void) { return _timer; }
 
@@ -60,17 +60,18 @@ namespace Temporal
 		const Hash TIMER_SERIALIZATION;
 		StateCollection _states;
 
+		// Persistent state
 		const ComponentState* _currentState;
 		Hash _currentStateID;
-
-		// Temp state
-		bool _flag1;
-		bool _flag2;
-		bool _flag3;
-
 		Timer _timer;
 
-		void resetTempState(void) { _flag1 = _flag2 = _flag3 = false; }
+		// Temp state
+		bool _tempFlag1;
+		bool _tempFlag2;
+		bool _tempFlag3;
+
+		void resetTempState(void) { _tempFlag1 = _tempFlag2 = _tempFlag3 = false; }
+		void setState(const Hash& stateID);
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);

@@ -33,9 +33,6 @@ namespace Temporal
 
 		// Temp state
 		Vector _absoluteImpulse;
-		
-		// Temp output TODO:
-		Vector _collision;
 		Vector _groundVector;
 
 		AABB getBounds(void) const;
@@ -44,8 +41,8 @@ namespace Temporal
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);
 		void executeMovement(Vector movement);
-		bool detectCollision(const StaticBody& staticBody);
-		void correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction);
+		bool detectCollision(const StaticBody& staticBody, Vector& collision);
+		void correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
 		void modifyCorrection(const AABB& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
 		void modifyVelocity(const AABB& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
 		void changePosition(const Vector& offset);

@@ -25,7 +25,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = *(Serialization*)message.getParam();
-			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis()); // TODO:
+			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
 			serialization.serialize(REWIND_SERIALIZATION, _rewind);
 		}

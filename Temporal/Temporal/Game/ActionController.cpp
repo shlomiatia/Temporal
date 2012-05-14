@@ -105,6 +105,8 @@ namespace Temporal
 		return states;
 	}
 
+	Hash ActionController::getInitialState(void) const { return STAND_STATE; }
+
 	void ActionController::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
@@ -157,18 +159,18 @@ namespace Temporal
 			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getHighest());
 			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
 		}
-		// Flag1 - Is descending
+		// TempFlag1 - Is descending
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
-			_stateMachine->setFlag1(true);
+			_stateMachine->setTempFlag1(true);
 		}
-		else if(_stateMachine->getFlag1() && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
+		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_DESCEND_STATE);
 		}
-		else if(_stateMachine->getFlag1() && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
+		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 		{
 			_stateMachine->changeState(TURN_STATE);
 		}
@@ -182,12 +184,12 @@ namespace Temporal
 
 	void Fall::handleMessage(Message& message) const
 	{
-		// Flag 1 - want to hang
+		// TempFlag 1 - want to hang
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			_stateMachine->setFlag1(true);
+			_stateMachine->setTempFlag1(true);
 		}
-		else if (_stateMachine->getFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
@@ -203,8 +205,8 @@ namespace Temporal
 
 	void Walk::enter(void) const
 	{
-		// Flag 1 - still walking
-		_stateMachine->setFlag1(true);
+		// TempFlag 1 - still walking
+		_stateMachine->setTempFlag1(true);
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
 	}
 
@@ -221,21 +223,21 @@ namespace Temporal
 				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
-		// Flag 1 - still walking
-		// Flag 2 - no floor
+		// TempFlag 1 - still walking
+		// TempFlag 2 - no floor
 		else if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			_stateMachine->setFlag1(true);
+			_stateMachine->setTempFlag1(true);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = *(Vector*)message.getParam();
 			if(collision.getVy() >= 0.0f)
-				_stateMachine->setFlag2(true);
+				_stateMachine->setTempFlag2(true);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{			
-			if(!_stateMachine->getFlag2())
+			if(!_stateMachine->getTempFlag2())
 				_stateMachine->getTimer().reset();
 
 			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. 
@@ -244,7 +246,7 @@ namespace Temporal
 			{
 				_stateMachine->changeState(FALL_STATE);
 			}
-			else if(!_stateMachine->getFlag1())
+			else if(!_stateMachine->getTempFlag1())
 			{
 				_stateMachine->changeState(STAND_STATE);
 			}
@@ -351,18 +353,9 @@ namespace Temporal
 		{
 			_stateMachine->changeState(TURN_STATE);
 		}
-		// Flag 1 - Animation ended TODO:
-
 		else if(message.getID() == MessageID::ANIMATION_ENDED)
 		{	
-			_stateMachine->setFlag1(true);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			if(_stateMachine->getFlag1())
-			{
-				_stateMachine->changeState(JUMP_STATE);
-			}
+			_stateMachine->changeState(JUMP_STATE);
 		}
 	}
 
@@ -380,12 +373,12 @@ namespace Temporal
 
 	void Jump::handleMessage(Message& message) const
 	{
-		// Flag 1 - Want to hang
+		// TempFlag 1 - Want to hang
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			_stateMachine->setFlag1(true);
+			_stateMachine->setTempFlag1(true);
 		}
-		else if (_stateMachine->getFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
 			((ActionController*)_stateMachine)->getHangDescendHelper().setPoint(params);
@@ -501,14 +494,14 @@ namespace Temporal
 
 	void Drop::handleMessage(Message& message) const
 	{
-		// Flag 1 - Platform found
+		// TempFlag 1 - Platform found
 		if(isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			_stateMachine->setFlag1(true);
+			_stateMachine->setTempFlag1(true);
 		}
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(!_stateMachine->getFlag1())
+			if(!_stateMachine->getTempFlag1())
 				_stateMachine->changeState(FALL_STATE);
 		}
 	}
