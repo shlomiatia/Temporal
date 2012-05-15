@@ -63,18 +63,21 @@ namespace Temporal
 	 *********************************************************************************************/
 	JumpInfoProvider::JumpInfoProvider(void)
 	{
-		_data.push_back(new JumpInfo(ANGLE_45_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
-		_data.push_back(new JumpInfo(ANGLE_60_IN_RADIANS, JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION));
-		_data.push_back(new JumpInfo(ANGLE_75_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
-		_data.push_back(new JumpInfo(ANGLE_90_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
-		_data.push_back(new JumpInfo(ANGLE_105_IN_RADIANS, JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION));
+		_data[ANGLE_45_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
+		_data[ANGLE_60_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
+		_data[ANGLE_75_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION);
+		_data[ANGLE_90_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION);
+		_data[ANGLE_105_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION);
 	}
 
 	JumpInfoProvider::~JumpInfoProvider(void)
 	{
 		for(JumpInfoIterator i = _data.begin(); i != _data.end(); ++i)
-			delete *i;
+			delete i->second;
 	}
+
+	float JumpInfoProvider::getFarthest(void) const { return ANGLE_45_IN_RADIANS; }
+	float JumpInfoProvider::getHighest(void) const { return ANGLE_90_IN_RADIANS; }
 
 	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
@@ -113,14 +116,14 @@ namespace Temporal
 		if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = *(Serialization*)message.getParam();
-			serialization.serialize(JUMP_INFO_SERIALIZATION, (int)&(getJumpHelper().getInfo()));
+			serialization.serialize(JUMP_INFO_SERIALIZATION, getJumpHelper().getAngle());
 			serialization.serialize(LEDGE_DIRECTED_SERIALIZATION, getJumpHelper().isLedgeDirected());
 			HANG_DESCEND_POINT_SERIALIZATION.serialize(serialization, getHangDescendHelper().getPoint());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
 			const Serialization& serialization = *(Serialization*)message.getParam();
-			getJumpHelper().setInfo((const JumpInfo*)serialization.deserializeInt(JUMP_INFO_SERIALIZATION));
+			getJumpHelper().setAngle(serialization.deserializeFloat(JUMP_INFO_SERIALIZATION));
 			getJumpHelper().setLedgeDirected(serialization.deserializeBool(LEDGE_DIRECTED_SERIALIZATION));
 			Point point = Point::Zero;
 			HANG_DESCEND_POINT_SERIALIZATION.deserialize(serialization, point);
@@ -156,7 +159,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{
-			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getHighest());
+			((ActionController*)_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
 			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
 		}
 		// TempFlag1 - Is descending
@@ -219,7 +222,7 @@ namespace Temporal
 		{
 			if(canJumpForward(_stateMachine))
 			{
-				((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+				((ActionController*)_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
@@ -292,19 +295,20 @@ namespace Temporal
 		// Broder
 		if(distance >= 0 && distance < 20.0f)
 		{
-			jumpHelper.setInfo(JumpInfoProvider::get().getHighest());
+			jumpHelper.setAngle(JumpInfoProvider::get().getHighest());
 			jumpHelper.setLedgeDirected(true);
 			return;
 		}
 		const JumpInfoCollection& data = JumpInfoProvider::get().getData();
 		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
 		{
-			const JumpInfo* jumpInfo = *i;
-			float height = getJumpHeight(jumpInfo->getAngle(), JUMP_FORCE_PER_SECOND, gravity.getVy(), distance);
+			float angle = i->first;
+			const JumpInfo* jumpInfo = i->second;
+			float height = getJumpHeight(angle, JUMP_FORCE_PER_SECOND, gravity.getVy(), distance);
 			if(max < height)
 			{
 				max = height;
-				jumpHelper.setInfo(jumpInfo);
+				jumpHelper.setAngle(angle);
 				jumpHelper.setLedgeDirected(true);
 			}
 		}
@@ -319,7 +323,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
-			((ActionController*)_stateMachine)->getJumpHelper().setInfo(JumpInfoProvider::get().getFarthest());
+			((ActionController*)_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
 			_stateMachine->changeState(JUMP_START_STATE);
 		}
 		else if(isSensorCollisionMessage(message, JUMP_SENSOR_ID))
@@ -343,9 +347,9 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
 			JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
-			if(jumpHelper.getInfo() != *JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
+			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
 			{
-				jumpHelper.setInfo(JumpInfoProvider::get().getFarthest());
+				jumpHelper.setAngle(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
@@ -361,13 +365,13 @@ namespace Temporal
 
 	void Jump::enter(void) const
 	{
-		const JumpInfo& jumpInfo = ((ActionController*)_stateMachine)->getJumpHelper().getInfo();
-		float angle = jumpInfo.getAngle();
+		const JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
+		float angle = jumpHelper.getAngle();
 		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
 		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
-		Hash animation = jumpInfo.getJumpAnimation();
+		Hash animation = jumpHelper.getInfo().getJumpAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 

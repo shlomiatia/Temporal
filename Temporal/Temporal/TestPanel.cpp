@@ -135,6 +135,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 

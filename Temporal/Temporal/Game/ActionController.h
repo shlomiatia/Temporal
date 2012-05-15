@@ -21,19 +21,14 @@ namespace Temporal
 	class JumpInfo
 	{
 	public:
-		JumpInfo(float angle, const Hash& startAnimation, const Hash& jumpAnimation, const Hash& endAnimation)
-			: _angle(angle), _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
+		JumpInfo(const Hash& startAnimation, const Hash& jumpAnimation, const Hash& endAnimation)
+			: _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
 
-		float getAngle(void) const { return _angle; }
 		Hash getStartAnimation(void) const { return _startAnimation; }
 		Hash getJumpAnimation(void) const { return _jumpAnimation; }
 		Hash getEndAnimation(void) const { return _endAnimation; }
 
-		bool operator==(const JumpInfo& other) const { return getAngle() == other.getAngle(); }
-		bool operator!=(const JumpInfo& other) const { return !(*this == other); }
-
 	private:
-		float _angle;
 		Hash _startAnimation;
 		Hash _jumpAnimation;
 		Hash _endAnimation;
@@ -42,7 +37,7 @@ namespace Temporal
 		JumpInfo& operator=(const JumpInfo&);
 	};
 
-	typedef std::vector<const JumpInfo*> JumpInfoCollection;
+	typedef std::unordered_map<float, const JumpInfo*> JumpInfoCollection;
 	typedef JumpInfoCollection::const_iterator JumpInfoIterator;
 
 	class JumpInfoProvider
@@ -54,12 +49,12 @@ namespace Temporal
 			return instance;
 		}
 
-		const JumpInfoCollection& getData(void) const { return _data; }
-		const JumpInfo* getFarthest(void) const { return _data[0]; }
-		const JumpInfo* getHighest(void) const { return _data[3]; }
+		JumpInfoCollection& getData(void) const { return _data; }
+		float getFarthest(void) const;
+		float getHighest(void) const;
 		
 	private:
-		JumpInfoCollection _data;
+		mutable JumpInfoCollection _data;
 
 		JumpInfoProvider(void);
 		~JumpInfoProvider(void);
@@ -70,14 +65,15 @@ namespace Temporal
 	class JumpHelper
 	{
 	public:
-		JumpHelper(void) : _info(NULL), _ledgeDirected(false) {}
+		JumpHelper(void) : _angle(0.0f), _ledgeDirected(false) {}
 
-		const JumpInfo& getInfo(void) const { return *_info; }
-		void setInfo(const JumpInfo* info) { _info = info; }
+		float getAngle(void) const { return _angle; }
+		void setAngle(float angle) { _angle = angle; }
+		const JumpInfo& getInfo(void) const { return *JumpInfoProvider::get().getData()[getAngle()]; }
 		bool isLedgeDirected(void) const { return _ledgeDirected; }
 		void setLedgeDirected(bool ledgeDirected) { _ledgeDirected = ledgeDirected; }
 	private:
-		const JumpInfo* _info;
+		float _angle;
 		bool _ledgeDirected;
 
 		JumpHelper(const JumpHelper&);
