@@ -203,10 +203,8 @@ namespace Temporal
 		// If got collision from below, calculate ground vector. Only do this for moderate slopes
 		if(correction.getVy() >= 0.0f && isModerateSlope)
 		{
-			if(_groundVector == Vector::Zero)
+			if(_groundVector == Vector::Zero || platformVector.getVy() == 0.0f)
 				_groundVector = platformVector;
-			else
-				_groundVector = (_groundVector + platformVector) / 2.0f;
 		}
 
 		changePosition(correction);
