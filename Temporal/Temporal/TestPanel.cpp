@@ -2,6 +2,7 @@
 
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
+#include <Temporal\Base\Segment.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>
 #include <Temporal\Game\Component.h>
