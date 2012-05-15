@@ -1,5 +1,5 @@
-#ifndef ENTITYORIENTATION_H
-#define ENTITYORIENTATION_H
+#ifndef ORIENTATION_H
+#define ORIENTATION_H
 
 #include <Temporal\Base\BaseEnums.h>
 #include "Component.h"
