@@ -23,7 +23,7 @@ namespace Temporal
 			Y
 		};
 
-		inline Axis::Enum opposite(Axis::Enum axis) { return axis == Axis::X ? Axis::Y : Axis::X; }
+		inline Axis::Enum getOpposite(Axis::Enum axis) { return axis == Axis::X ? Axis::Y : Axis::X; }
 	}
 	inline void operator++(Axis::Enum& value, int) { value = (Axis::Enum)(value + 1); }
 }

@@ -1,6 +1,6 @@
 #include "AABB.h"
 #include <assert.h>
-#include <algorithm>
+#include <math.h>
 
 namespace Temporal
 {

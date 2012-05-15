@@ -60,18 +60,18 @@ namespace Temporal
 		if(position == Vector::Zero)
 			position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
-		Side::Enum spritesheetSide = _spritesheet.getSide();
-		const Side::Enum* entitySide = (const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum spritesheetOrientation = _spritesheet.getOrientation();
+		const Side::Enum* entityOrientation = (const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		Side::Enum orientation;
-		if(entitySide == NULL || *entitySide == Side::NONE)
-			orientation = spritesheetSide;
+		if(entityOrientation == NULL || *entityOrientation == Side::NONE)
+			orientation = spritesheetOrientation;
 		else
-			orientation = *entitySide;
+			orientation = *entityOrientation;
 		
-		bool mirrored = orientation != spritesheetSide;
+		bool mirrored = orientation != spritesheetOrientation;
 		const Sprite& sprite = _spritesheet.get(_spriteGroupID).get(_spriteID);
 		const Vector& offset = sprite.getOffset();
-		float screenLocationX = position.getX() - orientation * spritesheetSide * offset.getVx();
+		float screenLocationX = position.getX() - orientation * spritesheetOrientation * offset.getVx();
 		float screenLocationY = position.getY() - offset.getVy();
 
 		Point screenLocation(screenLocationX, screenLocationY);

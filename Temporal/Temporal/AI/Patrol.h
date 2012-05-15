@@ -1,7 +1,6 @@
 #ifndef PATROL_H
 #define PATROL_H
 
-#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal

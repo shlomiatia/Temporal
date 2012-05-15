@@ -4,7 +4,6 @@
 #include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
-#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal

@@ -14,6 +14,7 @@
 
 namespace Temporal
 {
+	// TODO: Move specifics
 	void BasePanel::init(void)
 	{
 		Size screenSize = Size(1024.0f, 768.0f);

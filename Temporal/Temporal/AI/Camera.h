@@ -1,7 +1,6 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal
@@ -46,6 +45,8 @@ namespace Temporal
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
 			static const float BLINK_TIME_IN_MILLIS;
+
+			void update(void) const;
 		};
 	}
 

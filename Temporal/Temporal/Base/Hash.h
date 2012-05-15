@@ -3,6 +3,7 @@
 
 namespace Temporal
 {
+	// TODO: Global string list
 	class Hash
 	{
 	public:

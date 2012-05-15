@@ -12,9 +12,7 @@ namespace Temporal
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
 	// TODO: Store YABP in grid PHYSICS
-	// TODO: Buffer/query current sensors (drop) PHYSICS
 	
-	// TODO: Use hashed string for components, messages etc. ENTITIES
 	// TODO: Deal with component order ENTITIES
 
 	// TODO: Consider transition type in navigation edge cost  AI
@@ -25,13 +23,10 @@ namespace Temporal
 	// TODO: Gradual hang & descend GRAPHICS
 	// TODO: Test against top, center bottom in sight GRAPHICS
 
-	// TODO: Buffer/query current actions (descend, walk), or create another descending proxy state INPUT
-
-	// TODO: Separate action controller to pluggable modules SCRIPTS
-
 	// TODO: Enable/Disable Sensors PERFORMACE
 	// TODO: Request sight PERFORMANCE
 	// TODO: Cache ray properties PERFORMANCE
+	// TODO: Do not process collision twice PERFORMANCE
 	class TestPanel : public BasePanel
 	{
 	public:

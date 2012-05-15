@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	// A parallelogram with 1 axis parallel to Y
+	// A parallelogram with 1 axis parallel to Y TODO shape assert
 	class YABP
 	{
 	public:
