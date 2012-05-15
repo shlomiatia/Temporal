@@ -1,13 +1,13 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-#include <Temporal\Base\NumericPair.h>
 #include <Temporal\Base\AABB.h>
 #include <Temporal\Game\StateMachineComponent.h>
 #include "Pathfinder.h"
-#include <vector>
 
 namespace Temporal
 {
+	class Serialization;
+
 	namespace NavigatorStates
 	{
 		class Wait : public ComponentState
@@ -60,12 +60,12 @@ namespace Temporal
 		Navigator(void) : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Zero), _path(NULL) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		void handleMessage(Message& message);
 
 		const AABB& getDestination(void) const { return _destination; }
 		void setDestination(const AABB& destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath(void) const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { _path = path; }
-		void handleMessage(Message& message);
 
 	protected:
 		Hash getInitialState(void) const;
@@ -73,6 +73,9 @@ namespace Temporal
 	private:
 		AABB _destination;
 		NavigationEdgeCollection* _path;
+
+		void deserialize(const Serialization& serialization);
+		void debugDraw(void) const;
 
 		StateCollection getStates(void) const;
 	};

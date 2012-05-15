@@ -43,6 +43,8 @@ namespace Temporal
 		void changeState(const Hash& stateID);
 		virtual void handleMessage(Message& message);
 
+		// Temp flags. Used when some messages combinations make something happen, or if during update we need to check if someting didn't happen. 
+		// This flags are cleared every update and state change
 		bool getTempFlag1(void) const { return _tempFlag1; }
 		void setTempFlag1(bool value) { _tempFlag1 = value; }
 		bool getTempFlag2(void) const { return _tempFlag2; }
@@ -50,6 +52,7 @@ namespace Temporal
 		bool getTempFlag3(void) const { return _tempFlag3; }
 		void setTempFlag3(bool value) { _tempFlag3 = value; }
 
+		// Record amount of time spent in a single state. Expose non const object to allow state to record sub periods
 		Timer& getTimer(void) { return _timer; }
 
 	protected:

@@ -2,7 +2,6 @@
 #define TEMPORALECHO_H
 
 #include "Component.h"
-
 #include <vector>
 
 namespace Temporal
@@ -21,6 +20,9 @@ namespace Temporal
 		void handleMessage(Message& message);
 	private:
 		static const float ECHO_READY_TIME_IN_MILLIS;
+
+		void update(float framePeriodInMillis);
+		void mergeToTemporalEchoes(void);
 
 		EchoCollection _echoesData;
 		Entity* _echo;

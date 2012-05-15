@@ -7,31 +7,31 @@ namespace Temporal
 {
 	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 5000.0f;
 
-	void TemporalEcho::handleMessage(Message& message)
+	// TODO: Make it more effective. Also do this gradually
+	void TemporalEcho::update(float framePeriodInMillis)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		if(!_echoReady)
 		{
-			if(!_echoReady)
-			{
-				float framePeriodInMillis = *(float*)message.getParam();
-				float echoLifetimeInMillis = _echoesData.size() * framePeriodInMillis;
-				if(echoLifetimeInMillis > ECHO_READY_TIME_IN_MILLIS)
-					_echoReady = true;
-			}
-			if(_echoReady)
-			{
-				EchoIterator first = _echoesData.begin();
-				Serialization* deserialization = *first;
-				_echo->handleMessage(Message(MessageID::DESERIALIZE, deserialization));
-				delete deserialization;
-				_echoesData.erase(first);
-			}
-			Serialization* serialization = new Serialization();
-			sendMessageToOwner(Message(MessageID::SERIALIZE, serialization));
-			_echoesData.push_back(serialization);
-			
+			float echoLifetimeInMillis = _echoesData.size() * framePeriodInMillis;
+			if(echoLifetimeInMillis > ECHO_READY_TIME_IN_MILLIS)
+				_echoReady = true;
 		}
-		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
+		if(_echoReady)
+		{
+			EchoIterator first = _echoesData.begin();
+			Serialization* deserialization = *first;
+			_echo->handleMessage(Message(MessageID::DESERIALIZE, deserialization));
+			delete deserialization;
+			_echoesData.erase(first);
+		}
+		Serialization* serialization = new Serialization();
+		sendMessageToOwner(Message(MessageID::SERIALIZE, serialization));
+		_echoesData.push_back(serialization);
+	}
+
+	void TemporalEcho::mergeToTemporalEchoes(void)
+	{
+		if(_echoReady)
 		{
 			EchoIterator first = _echoesData.begin();
 			Serialization* deserialization = *first;
@@ -42,9 +42,22 @@ namespace Temporal
 				i = _echoesData.erase(i);
 			}
 			_echoReady = false;
-
 		}
-		else if(_echoReady && (message.getID() == MessageID::DRAW || message.getID() == MessageID::DEBUG_DRAW)) 
+	}
+
+	void TemporalEcho::handleMessage(Message& message)
+	{
+		if(message.getID() == MessageID::UPDATE)
+		{
+			float framePeriodInMillis = *(float*)message.getParam();
+			update(framePeriodInMillis);
+			
+		}
+		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
+		{
+			mergeToTemporalEchoes();
+		}
+		else if(_echoReady && message.getID() == MessageID::DRAW) 
 		{
 			_echo->handleMessage(message);
 		}

@@ -218,6 +218,43 @@ namespace Temporal
 		return WAIT_STATE;
 	}
 
+	void Navigator::deserialize(const Serialization& serialization)
+	{
+		if(_path != NULL)
+		{
+			_path->clear();
+		}
+		
+		Point center = Point::Zero;
+		DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
+		Vector radius = Vector::Zero;
+		DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
+		AABB destination = AABB(center, radius);
+			
+		if(destination != AABB::Zero)
+			plotPath(*this, destination);
+	}
+
+	void Navigator::debugDraw(void) const
+	{
+		Point currentPoint = Point::Zero;
+		sendMessageToOwner(Message(MessageID::GET_POSITION, &currentPoint));
+		NavigationEdgeCollection* path = getPath();
+			
+		if(path != NULL)
+		{	
+			for(NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
+			{
+				const NavigationEdge& edge = **i;
+				const NavigationNode& next = edge.getTarget();
+				Point nextPoint = next.getArea().getCenter();
+				Segment segment = Segment(currentPoint, nextPoint);
+				Graphics::get().draw(segment, Color::Cyan);
+				currentPoint = nextPoint;
+			}
+		}
+	}
+
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
@@ -229,37 +266,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			if(_path != NULL)
-			{
-				_path->clear();
-			}
 			const Serialization& serialization = *(const Serialization*)message.getParam();
-			Point center = Point::Zero;
-			DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
-			Vector radius = Vector::Zero;
-			DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
-			AABB destination = AABB(center, radius);
-			
-			if(destination != AABB::Zero)
-				plotPath(*this, destination);
+			deserialize(serialization);
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			AABB position = AABB::Zero;
-			sendMessageToOwner(Message(MessageID::GET_BOUNDS, &position));
-			const NavigationNode* current = NavigationGraph::get().getNodeByAABB(position);
-			NavigationEdgeCollection* path = getPath();
-			if(current != NULL && path != NULL)
-			{	
-				for(NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
-				{
-					const NavigationEdge& edge = **i;
-					const NavigationNode& next = edge.getTarget();
-					Segment segment = Segment(current->getArea().getCenter(), next.getArea().getCenter());
-					Graphics::get().draw(segment, Color::Cyan);
-					current = &next;
-				}
-			}
+			debugDraw();
 		}
 	}
 }

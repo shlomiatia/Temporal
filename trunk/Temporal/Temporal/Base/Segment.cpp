@@ -14,7 +14,7 @@ namespace Temporal
 	float Segment::get(Axis::Enum axis, float otherAxisValue) const
 	{
 		Vector normalizedRadius = getRadius().normalize();
-		Axis::Enum otherAxis = Axis::opposite(axis);
+		Axis::Enum otherAxis = Axis::getOpposite(axis);
 		float length = (otherAxisValue - getCenter().getAxis(otherAxis)) / normalizedRadius.getAxis(otherAxis);
 		float value = getCenter().getAxis(axis) + normalizedRadius.getAxis(axis) * length;
 		return value;

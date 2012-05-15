@@ -88,6 +88,23 @@ namespace Temporal
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
+		void Acquire::update(void) const
+		{
+			float elapsedTimeInMillis = _stateMachine->getTimer().getElapsedTimeInMillis();
+			if(!_stateMachine->getTempFlag1())
+				_stateMachine->changeState(SEARCH_STATE);
+			else if(elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
+				_stateMachine->changeState(SEE_STATE);
+			else
+			{
+				int blinkIndex = (int)(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
+				if(blinkIndex % 2 == 1)
+					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+				else
+					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+			}
+		}
+
 		void Acquire::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
@@ -96,19 +113,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float elapsedTimeInMillis = _stateMachine->getTimer().getElapsedTimeInMillis();
-				if(!_stateMachine->getTempFlag1())
-					_stateMachine->changeState(SEARCH_STATE);
-				else if(elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
-					_stateMachine->changeState(SEE_STATE);
-				else
-				{
-					int blinkIndex = (int)(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
-					if(blinkIndex % 2 == 1)
-						_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
-					else
-						_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
-				}
+				update();
 			}
 		}
 	}

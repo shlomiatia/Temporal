@@ -58,7 +58,7 @@ namespace Temporal
 		void add(const Hash& id, const SpriteGroup* element);
 
 		const Texture& getTexture(void) const { return *_texture; }
-		Side::Enum getSide(void) const { return _orientation; }
+		Side::Enum getOrientation(void) const { return _orientation; }
 		const SpriteGroup& get(const Hash& spriteGroupID) const;
 		const Hash& getFirstSpriteGroupID(void) const;
 	private:

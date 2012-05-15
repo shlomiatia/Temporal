@@ -1,7 +1,6 @@
 #ifndef SENTRY_H
 #define SENTRY_H
 
-#include <Temporal\Base\Timer.h>
 #include <Temporal\Game\StateMachineComponent.h>
 
 namespace Temporal

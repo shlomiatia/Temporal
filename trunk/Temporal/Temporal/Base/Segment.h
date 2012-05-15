@@ -5,6 +5,7 @@
 
 namespace Temporal
 {
+	// TODO: Assert
 	class Segment : public Shape
 	{
 	public:

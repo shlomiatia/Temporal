@@ -25,17 +25,6 @@ namespace Temporal
 		}
 	}
 
-	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
-	{
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
-		{
-			const NavigationNode* node = *i;
-			if(intersects(node->getArea(),  aabb))
-				return node;
-		}
-		return NULL;
-	}
-
 	float NavigationEdge::calculateCost(const NavigationNode& source)
 	{
 		const YABP& sourceArea = source.getArea();
@@ -172,6 +161,17 @@ namespace Temporal
 			else
 				++i;
 		}
+	}
+
+	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
+	{
+		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		{
+			const NavigationNode* node = *i;
+			if(intersects(node->getArea(),  aabb))
+				return node;
+		}
+		return NULL;
 	}
 
 	void NavigationGraph::createNodes(ShapeCollection& platforms)

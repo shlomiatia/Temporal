@@ -1,6 +1,7 @@
 #include "Sight.h"
 #include "Grid.h"
 #include "StaticBody.h"
+#include <Temporal\Base\Segment.h>
 #include <Temporal\Base\ShapeOperations.h>
 #include <Temporal\Base\Math.h>
 #include <Temporal\Game\Message.h>

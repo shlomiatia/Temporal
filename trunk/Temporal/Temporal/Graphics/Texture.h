@@ -15,7 +15,7 @@ namespace Temporal
 		const Size& getSize(void) const { return _size; }
 	private:
 		const unsigned int _id;
-		const Size _size; // SIZE
+		const Size _size;
 
 		Texture(unsigned int id, const Size& size) : _id(id), _size(size) {}
 

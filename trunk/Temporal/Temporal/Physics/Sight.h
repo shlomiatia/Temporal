@@ -4,11 +4,12 @@
 #include <Temporal\Base\Hash.h>
 #include <Temporal\Base\BaseEnums.h>
 #include <Temporal\Base\NumericPair.h>
-#include <Temporal\Base\Segment.h>
 #include <Temporal\Game\Component.h>
 
 namespace Temporal
 {
+	class DirectedSegment;
+
 	class Sight : public Component
 	{
 	public:
