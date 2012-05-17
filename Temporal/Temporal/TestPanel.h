@@ -22,11 +22,14 @@ namespace Temporal
 	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
 	// TODO: Gradual hang & descend GRAPHICS
 	// TODO: Test against top, center bottom in sight GRAPHICS
+	// TODO: Gradual temporal ech merge
 
 	// TODO: Enable/Disable Sensors PERFORMACE
 	// TODO: Request sight PERFORMANCE
 	// TODO: Cache ray properties PERFORMANCE
 	// TODO: Do not process collision twice PERFORMANCE
+	// TODO: Less temporal echo memory PERFORMANCE
+	// TODO: Delete spritesheets, textures and singletons (jumpinfoprovider) PERFORMANCE
 	class TestPanel : public BasePanel
 	{
 	public:

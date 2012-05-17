@@ -15,7 +15,6 @@ namespace Temporal
 		};
 	}
 
-	// TODO:
 	class Shape
 	{
 	public:

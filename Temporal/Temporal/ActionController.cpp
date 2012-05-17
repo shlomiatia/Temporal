@@ -70,7 +70,7 @@ namespace Temporal
 		_data[ANGLE_105_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION);
 	}
 
-	JumpInfoProvider::~JumpInfoProvider(void)
+	void JumpInfoProvider::dispose(void) const
 	{
 		for(JumpInfoIterator i = _data.begin(); i != _data.end(); ++i)
 			delete i->second;
