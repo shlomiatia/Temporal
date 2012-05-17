@@ -160,7 +160,10 @@ namespace Temporal
 			}
 				
 			if(!haveEdge)
+			{
+				delete *i;
 				i = nodes.erase(i);
+			}
 			else
 				++i;
 		}

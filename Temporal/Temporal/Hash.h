@@ -30,6 +30,7 @@ namespace Temporal
 			static HashToString instance;
 			return instance;
 		}
+		void dispose(void) const;
 
 		void save(const Hash& key, const char* value);
 		const char* getString(const Hash& hash) const;

@@ -32,6 +32,7 @@ namespace Temporal
 		for(int i = 0; i < size; ++i)
 			if(_grid[i] != NULL)
 				delete _grid[i];
+		delete _grid;
 	}
 
 	bool Grid::add(void* caller, void* data, int index)

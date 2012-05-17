@@ -120,7 +120,9 @@ namespace Temporal
 				{
 					path->erase(path->begin());
 					if(path->size() == 0)
+					{
 						navigator->setPath(NULL);
+					}
 					if(edge->getType() == NavigationEdgeType::DESCEND)
 						navigator->changeState(DESCEND_STATE);
 					else if(edge->getType() == NavigationEdgeType::FALL)
