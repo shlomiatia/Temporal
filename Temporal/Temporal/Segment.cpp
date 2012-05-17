@@ -1,10 +1,17 @@
 #include "Segment.h"
 #include <math.h>
+#include <assert.h>
 
 namespace Temporal
 {
 	const Segment Segment::Zero(Point::Zero, Vector(Vector::Zero));
 	const DirectedSegment DirectedSegment::Zero(Point::Zero, Point(Vector::Zero));
+
+	Segment::Segment(const Point& center, const Vector& radius) 
+		: _center(center), _radius(radius) 
+	{
+		assert(getRadiusVx() >= 0.0f);
+	}
 
 	float Segment::getLength(void) const
 	{

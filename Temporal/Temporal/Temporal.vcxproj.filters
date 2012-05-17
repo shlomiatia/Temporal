@@ -286,6 +286,9 @@
     <ClCompile Include="StaticBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="YABP.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">

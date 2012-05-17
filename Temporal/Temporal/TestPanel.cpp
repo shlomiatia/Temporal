@@ -256,10 +256,10 @@ namespace Temporal
 	static int platformID = 0;
 	void createPlatform(Shape* shape, SpriteSheet* spritesheet, bool cover = false) 
 	{
-		Position* position = new Position(Point(shape->getCenterX(), shape->getCenterY()));
+		//Position* position = new Position(Point(shape->getCenterX(), shape->getCenterY()));
 		StaticBody* staticBody = new StaticBody(shape, cover);
 		Entity* entity = new Entity();
-		entity->add(position);
+		//entity->add(position);
 		entity->add(staticBody);
 		Grid::get().add(staticBody);
 		std::ostringstream id;
@@ -549,9 +549,9 @@ namespace Temporal
 
 		createPlayer(spritesheet);
 		//createSentry(spritesheet);
-		createCamera();
+		//createCamera();
 		//createPatrol(spritesheet);
-		//createChaser(spritesheet);
+		createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();
 	}

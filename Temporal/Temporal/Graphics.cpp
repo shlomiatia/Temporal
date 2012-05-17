@@ -233,6 +233,11 @@ namespace Temporal
 			const Segment& seg = (const Segment&)shape;
 			draw(seg, color);
 		}
+		else if(shape.getType() == ShapeType::YABP)
+		{
+			const YABP& yabp = (const YABP&)shape;
+			draw(yabp, color);
+		}
 		else
 		{
 			exit(1);

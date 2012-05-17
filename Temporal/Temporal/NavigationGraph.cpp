@@ -43,8 +43,11 @@ namespace Temporal
 		// Move center in the opposite direction
 		Point center = area.getCenter() + (float)Side::getOpposite(direction) * cutRadius;
 		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
-		const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
-		iterator = areas.insert(iterator, nodeAfterCut);
+		if(slopedRadius.getVx() > 0.0f)
+		{
+			const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
+			iterator = areas.insert(iterator, nodeAfterCut);
+		}
 	}
 
 	void cutAreaLeft(float x, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
@@ -83,11 +86,10 @@ namespace Temporal
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			const Shape& platform = **i;
-			const Segment& segment = (const Segment&)platform;
 			for(YABPIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
 				const YABP area = *j;
-				if(intersects(area, segment))
+				if(intersects(area, platform))
 				{
 					j = areas.erase(j);
 					Vector yVector = area.getYVector();
@@ -96,10 +98,11 @@ namespace Temporal
 					DirectedSegment lowerSlope = DirectedSegment(getLowerSegment(area));
 					Point upperSlopePoint = Point::Zero;
 					Point lowerSlopePoint = Point::Zero;
-					intersects(upperSlope, segment, &upperSlopePoint);
-					intersects(lowerSlope, segment, &lowerSlopePoint);
-					float min = segment.getLeft();
-					float max = segment.getRight();
+					intersects(upperSlope, platform, &upperSlopePoint);
+					intersects(lowerSlope, platform, &lowerSlopePoint);
+					float min = platform.getLeft();
+					float max = platform.getRight();
+					const Segment& segment = (const Segment&)platform;
 					Vector segmentVector = segment.getNaturalVector();
 					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
 					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
