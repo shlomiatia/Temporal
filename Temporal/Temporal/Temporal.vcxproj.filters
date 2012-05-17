@@ -3,102 +3,308 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="TestPanel.h" />
-    <ClInclude Include="YABP.h" />
-    <ClInclude Include="AABB.h" />
-    <ClInclude Include="BaseEnums.h" />
-    <ClInclude Include="BaseUtils.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Hash.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="NumericPair.h" />
-    <ClInclude Include="Segment.h" />
-    <ClInclude Include="Serialization.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="ShapeOperations.h" />
-    <ClInclude Include="Thread.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="TemporalEcho.h" />
-    <ClInclude Include="ActionController.h" />
-    <ClInclude Include="BasePanel.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="DebugInfo.h" />
-    <ClInclude Include="DrawPosition.h" />
-    <ClInclude Include="EntitiesManager.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameEnums.h" />
-    <ClInclude Include="Message.h" />
-    <ClInclude Include="MessageParams.h" />
-    <ClInclude Include="MessageUtils.h" />
-    <ClInclude Include="MovementUtils.h" />
-    <ClInclude Include="Orientation.h" />
-    <ClInclude Include="Panel.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="StateMachineComponent.h" />
-    <ClInclude Include="ViewManager.h" />
-    <ClInclude Include="Animator.h" />
-    <ClInclude Include="Graphics.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="SpriteSheet.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="InputController.h" />
-    <ClInclude Include="StaticBody.h" />
-    <ClInclude Include="DynamicBody.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Sensor.h" />
-    <ClInclude Include="Sight.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="NavigationGraph.h" />
-    <ClInclude Include="Navigator.h" />
-    <ClInclude Include="Pathfinder.h" />
-    <ClInclude Include="Patrol.h" />
-    <ClInclude Include="Sentry.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGraph.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Navigator.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinder.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Patrol.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sentry.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnums.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseUtils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Hash.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericPair.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeOperations.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="YABP.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionController.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePanel.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugInfo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="EntitiesManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEnums.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageParams.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageUtils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementUtils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Orientation.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachineComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalEcho.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawPosition.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteSheet.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensor.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sight.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputController.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="TestPanel.cpp" />
-    <ClCompile Include="AABB.cpp" />
-    <ClCompile Include="BaseUtils.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Hash.cpp" />
-    <ClCompile Include="Math.cpp" />
-    <ClCompile Include="NumericPair.cpp" />
-    <ClCompile Include="Segment.cpp" />
-    <ClCompile Include="ShapeOperations.cpp" />
-    <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="ActionController.cpp" />
-    <ClCompile Include="BasePanel.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="DebugInfo.cpp" />
-    <ClCompile Include="DrawPosition.cpp" />
-    <ClCompile Include="EntitiesManager.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="MessageUtils.cpp" />
-    <ClCompile Include="MovementUtils.cpp" />
-    <ClCompile Include="Orientation.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="StateMachineComponent.cpp" />
-    <ClCompile Include="TemporalEcho.cpp" />
-    <ClCompile Include="Animator.cpp" />
-    <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="SpriteSheet.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="ViewManager.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="InputController.cpp" />
-    <ClCompile Include="DynamicBody.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Sensor.cpp" />
-    <ClCompile Include="Sight.cpp" />
-    <ClCompile Include="StaticBody.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="NavigationGraph.cpp" />
-    <ClCompile Include="Navigator.cpp" />
-    <ClCompile Include="Pathfinder.cpp" />
-    <ClCompile Include="Patrol.cpp" />
-    <ClCompile Include="Sentry.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGraph.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Navigator.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinder.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Patrol.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sentry.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUtils.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Hash.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="NumericPair.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeOperations.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionController.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePanel.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugInfo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="EntitiesManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageUtils.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementUtils.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Orientation.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachineComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalEcho.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Segment.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawPosition.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteSheet.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensor.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sight.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputController.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AI">
+      <UniqueIdentifier>{34be5eff-d527-414d-a280-e41c4c46477f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{ea8febfa-ed04-4a3e-b1f6-394e71cf37c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{d2fbca07-8f90-4d10-a05a-cfba0c01e738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{d43079ae-f5fd-46da-9429-00cde396dd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{5751b9a1-ba8e-44ca-8a00-453fe852e022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{014c8123-e9c4-4975-8753-42e8924c5704}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
