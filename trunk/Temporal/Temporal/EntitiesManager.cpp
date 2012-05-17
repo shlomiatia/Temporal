@@ -29,6 +29,6 @@ namespace Temporal
 
 	void* EntitiesManager::sendMessageToEntity(const Hash& id, Message& message) const
 	{
-		return _entities[id]->handleMessage(message);
+		return _entities.at(id)->handleMessage(message);
 	}
 }

@@ -17,7 +17,7 @@ namespace Temporal
 	const Sprite& SpriteGroup::get(int spriteID) const
 	{
 		assert(spriteID < (int)_sprites.size());
-		return *_sprites[spriteID];
+		return *_sprites.at(spriteID);
 	}
 
 	int SpriteGroup::getSize(void) const
@@ -38,7 +38,7 @@ namespace Temporal
 
 	const SpriteGroup& SpriteSheet::get(const Hash& spriteGroupID) const
 	{
-		return *_spriteGroups[spriteGroupID];
+		return *_spriteGroups.at(spriteGroupID);
 	}
 
 	const Hash& SpriteSheet::getFirstSpriteGroupID(void) const

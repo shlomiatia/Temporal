@@ -31,7 +31,7 @@ namespace Temporal
 		void* sendMessageToEntity(const Hash& id, Message& message) const;
 		const EntityCollection& getEntities(void) const { return _entities; }
 	private:
-		mutable EntityCollection _entities;
+		EntityCollection _entities;
 
 		EntitiesManager(void) {}
 		EntitiesManager(const EntitiesManager&);
