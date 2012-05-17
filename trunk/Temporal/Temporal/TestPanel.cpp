@@ -269,13 +269,14 @@ namespace Temporal
 
 	void createPlatforms()
 	{
-		const Texture* texture = Texture::load("c:\\stuff\\tile.png");
+		/*const Texture* texture = Texture::load("c:\\stuff\\tile.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
 		SpriteGroup* animation = new SpriteGroup();
 		spritesheet->add(Hash("ANM_DEFAULT"), animation);
 		const Size TILE_SIZE(32.0f, 32.0f);
-		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));
+		animation->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));*/
 
+		SpriteSheet* spritesheet = NULL;
 		#pragma region Platforms
 
 		// Edges
@@ -400,10 +401,18 @@ namespace Temporal
 	}
 	#pragma endregion
 
+	SpriteSheet* _popSpritesheet;
+
+	TestPanel::~TestPanel(void)
+	{
+		delete _popSpritesheet;
+	}
+
 	void TestPanel::createEntities(void)
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
-		SpriteSheet* spritesheet(new SpriteSheet(texture, Side::LEFT));
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
+		_popSpritesheet = spritesheet;
 		SpriteGroup* animation;
 
 		#pragma region Player Animations
@@ -551,7 +560,7 @@ namespace Temporal
 		//createSentry(spritesheet);
 		//createCamera();
 		//createPatrol(spritesheet);
-		createChaser(spritesheet);
+		//createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();
 	}

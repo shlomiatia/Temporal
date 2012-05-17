@@ -65,7 +65,7 @@ namespace Temporal
 		const AABB& getDestination(void) const { return _destination; }
 		void setDestination(const AABB& destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath(void) const { return _path; }
-		void setPath(NavigationEdgeCollection* path) { _path = path; }
+		void setPath(NavigationEdgeCollection* path) { if(_path != NULL) delete _path; _path = path; }
 
 	protected:
 		Hash getInitialState(void) const;

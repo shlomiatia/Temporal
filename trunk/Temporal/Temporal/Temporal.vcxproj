@@ -15,6 +15,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="BaseEnums.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Hash.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
@@ -152,6 +153,7 @@
       <Optimization>Disabled</Optimization>
       <ExceptionHandling>Sync</ExceptionHandling>
       <EnablePREfast>false</EnablePREfast>
+      <ForcedIncludeFiles>Debug.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

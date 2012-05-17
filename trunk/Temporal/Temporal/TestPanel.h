@@ -33,6 +33,7 @@ namespace Temporal
 	class TestPanel : public BasePanel
 	{
 	public:
+		~TestPanel(void);
 		void createEntities(void);
 	};
 }

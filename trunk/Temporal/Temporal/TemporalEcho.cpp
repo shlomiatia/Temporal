@@ -9,6 +9,7 @@ namespace Temporal
 
 	TemporalEcho::~TemporalEcho(void)
 	{
+		delete _echo;
 		for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
 		{
 			delete *i;

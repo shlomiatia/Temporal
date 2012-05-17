@@ -11,6 +11,7 @@
 #include "Grid.h"
 #include "NavigationGraph.h"
 #include "Input.h"
+#include "ActionController.h"
 
 namespace Temporal
 {
@@ -67,6 +68,8 @@ namespace Temporal
 
 	void BasePanel::dispose(void)
 	{
+		JumpInfoProvider::get().dispose();
+		HashToString::get().dispose();
 		EntitiesManager::get().dispose();
 		Graphics::get().dispose();
 		Grid::get().dispose();

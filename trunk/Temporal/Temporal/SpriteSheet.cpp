@@ -27,6 +27,7 @@ namespace Temporal
 
 	SpriteSheet::~SpriteSheet(void)
 	{
+		delete _texture;
 		for(SpriteGroupIterator i = _spriteGroups.begin(); i != _spriteGroups.end(); ++i)
 			delete i->second;
 	}
