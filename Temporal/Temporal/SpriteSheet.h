@@ -64,7 +64,7 @@ namespace Temporal
 	private:
 		const Texture* _texture;
 		const Side::Enum _orientation;
-		mutable SpriteGroupCollection _spriteGroups;
+		SpriteGroupCollection _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

@@ -48,12 +48,12 @@ namespace Temporal
 			return instance;
 		}
 
-		JumpInfoCollection& getData(void) const { return _data; }
+		const JumpInfoCollection& getData(void) const { return _data; }
 		float getFarthest(void) const;
 		float getHighest(void) const;
 		
 	private:
-		mutable JumpInfoCollection _data;
+		JumpInfoCollection _data;
 
 		JumpInfoProvider(void);
 		~JumpInfoProvider(void);
@@ -68,7 +68,7 @@ namespace Temporal
 
 		float getAngle(void) const { return _angle; }
 		void setAngle(float angle) { _angle = angle; }
-		const JumpInfo& getInfo(void) const { return *JumpInfoProvider::get().getData()[getAngle()]; }
+		const JumpInfo& getInfo(void) const { return *JumpInfoProvider::get().getData().at(getAngle()); }
 		bool isLedgeDirected(void) const { return _ledgeDirected; }
 		void setLedgeDirected(bool ledgeDirected) { _ledgeDirected = ledgeDirected; }
 	private:

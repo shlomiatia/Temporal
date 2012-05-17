@@ -33,12 +33,12 @@ namespace Temporal
 		void serialize(const Hash& key, float value) { _serialization[key] = value; }
 		void serialize(const Hash& key, bool value) { _serialization[key] = value; }
 
-		int deserializeInt(const Hash& key) const { return _serialization[key].Int; }
-		unsigned int deserializeUInt(const Hash& key) const { return _serialization[key].UInt; }
-		float deserializeFloat(const Hash& key) const { return _serialization[key].Float; }
-		bool deserializeBool(const Hash& key) const { return _serialization[key].Bool; }
+		int deserializeInt(const Hash& key) const { return _serialization.at(key).Int; }
+		unsigned int deserializeUInt(const Hash& key) const { return _serialization.at(key).UInt; }
+		float deserializeFloat(const Hash& key) const { return _serialization.at(key).Float; }
+		bool deserializeBool(const Hash& key) const { return _serialization.at(key).Bool; }
 	private:
-		mutable SerializationCollection _serialization;
+		SerializationCollection _serialization;
 	};
 }
 #endif
