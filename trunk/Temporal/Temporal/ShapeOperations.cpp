@@ -308,4 +308,28 @@ namespace Temporal
 			exit(1);
 		}
 	}
+
+	bool intersects(const YABP& yabp, const Shape& shape)
+	{
+		if(shape.getType() == ShapeType::AABB)
+		{
+			const AABB& rect = (const AABB&)shape;
+			return intersects(yabp, rect);
+		}
+		else if(shape.getType() == ShapeType::SEGMENT)
+		{
+			const Segment& seg = (const Segment&)shape;
+			return intersects(yabp, seg);
+		}
+		else if(shape.getType() == ShapeType::YABP)
+		{
+			const YABP& yabp2 = (const YABP&)shape;
+			return intersects(yabp, yabp2);
+		}
+		else
+		{
+			// ERROR
+			exit(1);
+		}
+	}
 }

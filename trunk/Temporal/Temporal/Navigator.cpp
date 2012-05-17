@@ -237,8 +237,7 @@ namespace Temporal
 
 	void Navigator::debugDraw(void) const
 	{
-		Point currentPoint = Point::Zero;
-		sendMessageToOwner(Message(MessageID::GET_POSITION, &currentPoint));
+		Point currentPoint = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		NavigationEdgeCollection* path = getPath();
 			
 		if(path != NULL)

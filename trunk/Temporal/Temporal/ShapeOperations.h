@@ -22,6 +22,7 @@ namespace Temporal
 
 	bool intersects(const AABB& rect, const Shape& shape, Vector* correction = NULL);
 	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection = NULL);
+	bool intersects(const YABP& yabp, const Shape& shape);
 }
 
 #endif

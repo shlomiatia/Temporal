@@ -110,6 +110,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="StaticBody.cpp" />
     <ClCompile Include="TestPanel.cpp" />
+    <ClCompile Include="YABP.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA48D0FC-FC62-43C4-95A0-520220DD4DB6}</ProjectGuid>
