@@ -1,7 +1,7 @@
 #ifndef TESTPANEL_H
 #define TESTPANEL_H
 
-#include <Temporal\Game\BasePanel.h>
+#include "BasePanel.h"
 
 namespace Temporal
 {
