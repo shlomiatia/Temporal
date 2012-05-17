@@ -15,6 +15,7 @@ namespace Temporal
 	{
 	public:
 		explicit TemporalEcho(Entity* echo) : _echo(echo), _echoReady(false) {}
+		~TemporalEcho(void);
 
 		ComponentType::Enum getType(void) const { return ComponentType::TEMPORAL_ECHO; }
 		void handleMessage(Message& message);

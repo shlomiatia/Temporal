@@ -51,12 +51,13 @@ namespace Temporal
 		const JumpInfoCollection& getData(void) const { return _data; }
 		float getFarthest(void) const;
 		float getHighest(void) const;
+
+		void dispose(void) const;
 		
 	private:
 		JumpInfoCollection _data;
 
 		JumpInfoProvider(void);
-		~JumpInfoProvider(void);
 		JumpInfoProvider(const JumpInfoProvider&);
 		JumpInfoProvider& operator=(const JumpInfoProvider&);
 	};

@@ -7,7 +7,14 @@ namespace Temporal
 {
 	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 5000.0f;
 
-	// TODO: Make it more effective. Also do this gradually
+	TemporalEcho::~TemporalEcho(void)
+	{
+		for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+
 	void TemporalEcho::update(float framePeriodInMillis)
 	{
 		if(!_echoReady)
