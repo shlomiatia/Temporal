@@ -11,6 +11,7 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
 #include "Graphics.h"
+#include "DirectedInterval.h"
 
 namespace Temporal
 {
@@ -94,8 +95,10 @@ namespace Temporal
 					j = areas.erase(j);
 					Vector yVector = area.getYVector();
 					const Vector& slopedRadius = area.getSlopedRadius();
-					DirectedSegment upperSlope = DirectedSegment(getUpperSegment(area));
-					DirectedSegment lowerSlope = DirectedSegment(getLowerSegment(area));
+					Segment upperSeg = getUpperSegment(area);
+					DirectedSegment upperSlope = DirectedSegment(upperSeg.getNaturalOrigin(), upperSeg.getNaturalVector());
+					Segment lowerSeg = getLowerSegment(area);
+					DirectedSegment lowerSlope = DirectedSegment(lowerSeg.getNaturalOrigin(), lowerSeg.getNaturalVector());
 					Point upperSlopePoint = Point::Zero;
 					Point lowerSlopePoint = Point::Zero;
 					intersects(upperSlope, platform, &upperSlopePoint);
@@ -226,7 +229,7 @@ namespace Temporal
 		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 		NavigationEdgeType::Enum type;
-		DirectedSegment fallArea = DirectedSegment::Zero;
+		DirectedSegment fallArea = DirectedSegment(Point::Zero, Vector::Zero);
 
 		if(distance < minFallDistance)
 		{
@@ -297,7 +300,7 @@ namespace Temporal
 				}
 				// check fall/jump up
 				// BRODER
-				else if(area1.getTop() >= area2.getTop() && area1.getLeft() -20.f <= area2.getRight() && area1.getRight() + 20.0f >= area2.getLeft())
+				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() -20.f <= area2.getRight() && area1.getRight() + 20.0f >= area2.getLeft())
 				{
 					if(area1.getLeft() >= area2.getLeft())
 						checkVerticalEdges(node1, node2, area1.getLeft(), Side::LEFT, platforms);

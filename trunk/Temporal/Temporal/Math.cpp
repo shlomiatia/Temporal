@@ -4,6 +4,8 @@
 
 namespace Temporal
 {
+	const float FLOAT_MAX = std::numeric_limits<float>::max();
+
 	void assertAngle(float angle, float range)
 	{
 		assert(angle >= -range);

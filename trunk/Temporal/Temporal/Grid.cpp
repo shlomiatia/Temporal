@@ -3,19 +3,11 @@
 #include "Shape.h"
 #include "AABB.h"
 #include "Graphics.h"
-#include "Segment.h"
 #include "ShapeOperations.h"
+#include "DirectedInterval.h"
 
 namespace Temporal
 {
-	void Grid::draw(void) const
-	{
-		for(int i = 0; i < _gridWidth; ++i)
-			for(int j = 0; j < _gridHeight; ++j)
-				if(getTile(i, j) != NULL)
-					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
-	}
-
 	void Grid::init(const Size& worldSize, float tileSize)
 	{
 		_tileSize = tileSize;
@@ -35,6 +27,14 @@ namespace Temporal
 			if(_grid[i] != NULL)
 				delete _grid[i];
 		delete _grid;
+	}
+
+	void Grid::draw(void) const
+	{
+		for(int i = 0; i < _gridWidth; ++i)
+			for(int j = 0; j < _gridHeight; ++j)
+				if(getTile(i, j) != NULL)
+					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
 	}
 
 	bool Grid::add(void* caller, void* data, int index)
@@ -72,12 +72,12 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::directedSegmentCast(const DirectedSegment& directedSegment, Point& pointOfIntersection)
+	bool Grid::cast(const DirectedInterval& dirInt, Point& pointOfIntersection)
 	{
-		const Point& source = directedSegment.getOrigin();
-		const Point& destination = directedSegment.getTarget();
-		float x1 = source.getX();
-		float y1 = source.getY();
+		const Point& origin = dirInt.getOrigin();
+		const Point& destination = dirInt.getTarget();
+		float x1 = origin.getX();
+		float y1 = origin.getY();
 		float x2 = destination.getX();
 		float y2 = destination.getY();
 		
@@ -119,7 +119,7 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
-					if(intersects(directedSegment, body.getShape(), &pointOfIntersection))
+					if(intersects(dirInt, body.getShape(), &pointOfIntersection))
 					{
 						return false;
 					}

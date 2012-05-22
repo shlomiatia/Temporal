@@ -16,5 +16,9 @@ namespace Temporal
 		{
 			Graphics::get().draw(*_shape);
 		}
+		else if(message.getID() == MessageID::GET_BOUNDS)
+		{
+			message.setParam(_shape);
+		}
 	}
 }

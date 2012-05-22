@@ -50,8 +50,6 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 		
 		ViewManager::get().update();
-		
-		
 	}
 
 	void BasePanel::draw(void) const
@@ -60,7 +58,7 @@ namespace Temporal
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::AI_CONTROLLER | ComponentType::DYNAMIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT | ComponentType::DYNAMIC_BODY;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();

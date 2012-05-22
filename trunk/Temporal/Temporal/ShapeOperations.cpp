@@ -4,6 +4,7 @@
 #include "Segment.h"
 #include "YABP.h"
 #include "Math.h"
+#include "DirectedInterval.h"
 #include <math.h>
 #include <algorithm>
 
@@ -79,12 +80,12 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const DirectedSegment& seg, const AABB& rect, Point* pointOfIntersection)
+	bool intersects(const DirectedInterval& dir, const AABB& rect, Point* pointOfIntersection)
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
-		const Point& origin = seg.getOrigin();
-		const Vector vector = seg.getVector().normalize();
-		float tmax = seg.getLength();
+		const Point& origin = dir.getOrigin();
+		const Vector vector = dir.getDirection();
+		float tmax = dir.getLength();
 
 		// For all 2 slabs
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
@@ -119,16 +120,16 @@ namespace Temporal
 	}
 
 
-	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection)
+	bool intersects(const DirectedInterval& dirInt, const Segment& seg, Point* pointOfIntersection)
 	{
-		Vector dirSegVec = dirSeg.getVector();
+		Vector dirIntVec = dirInt.getVector();
 		Vector segVec = seg.getNaturalVector();
 		Vector segNormal = segVec.getRightNormal();
-		float denominator = segNormal * dirSegVec;
+		float denominator = segNormal * dirIntVec;
 		Point segOrigin = seg.getNaturalOrigin();
-		Point dirSegOrigin = dirSeg.getOrigin();
+		Point dirSegOrigin = dirInt.getOrigin();
 		Vector difference = segOrigin - dirSegOrigin;
-		Vector dirSegNormal = dirSegVec.getRightNormal();
+		Vector dirSegNormal = dirIntVec.getRightNormal();
 		float numerator2 = (dirSegNormal * difference);
 
 		// Not parallel
@@ -139,7 +140,7 @@ namespace Temporal
 			if(length1 >= 0.0f && length1 <= 1.0f && length2 >= 0.0f && length2 <= 1.0f)
 			{
 				if(pointOfIntersection != NULL)
-					*pointOfIntersection = dirSegOrigin + length1 * dirSegVec;
+					*pointOfIntersection = dirSegOrigin + length1 * dirIntVec;
 				return true;
 			}
 		}
@@ -147,19 +148,23 @@ namespace Temporal
 		else
 		{
 			// Overlaps
-			if(numerator2 == 0 && abs(dirSeg.getCenterX() - seg.getCenterX()) <= dirSeg.getRadius().getVx() + seg.getRadius().getVx())
+			if(numerator2 == 0)
 			{
+				float dirHalfLength = dirInt.getLength() / 2.0f;
+				Point dirCenter = dirInt.getOrigin() + dirInt.getDirection() * dirHalfLength;
+				if(Vector(dirCenter - seg.getCenter()).getLength() > dirHalfLength + seg.getLength() / 2.0f)
+					return false;
 				if(pointOfIntersection != NULL)
 				{
 					Vector vector1 = segOrigin - dirSegOrigin;
 					Point segTarget = seg.getNaturalTarget();
 					Vector vector2 = segTarget - dirSegOrigin;
 
-					// We take 2 vectors that originated in th directed segment origin, and are directed to the segment natural origin and target.
+					// We take 2 vectors that originated in the directed segment origin, and are directed to the segment natural origin and target.
 					// If the directions are opposite, it means that the directed segment origin is swallowed by the segment, therefore it's the point of intersection
 					if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
 					{
-						*pointOfIntersection = dirSeg.getOrigin();
+						*pointOfIntersection = dirInt.getOrigin();
 					}
 					// Otherwise, the shorter vector point to the point of intersection
 					else
@@ -290,17 +295,17 @@ namespace Temporal
 		}
 	}
 
-	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection)
+	bool intersects(const DirectedInterval& dir, const Shape& shape, Point* pointOfIntersection)
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
 			const AABB& rect = (const AABB&)shape;
-			return intersects(seg, rect, pointOfIntersection);
+			return intersects(dir, rect, pointOfIntersection);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg2 = (const Segment&)shape;
-			return intersects(seg, seg2, pointOfIntersection);
+			const Segment& seg = (const Segment&)shape;
+			return intersects(dir, seg, pointOfIntersection);
 		}
 		else
 		{

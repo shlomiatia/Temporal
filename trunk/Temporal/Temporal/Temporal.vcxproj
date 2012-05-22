@@ -17,10 +17,12 @@
     <ClInclude Include="BaseEnums.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Hash.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
+    <ClInclude Include="DirectedInterval.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sentry.h" />
@@ -71,6 +73,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />

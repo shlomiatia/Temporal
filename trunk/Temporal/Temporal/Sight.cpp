@@ -6,6 +6,7 @@
 #include "Message.h"
 #include "EntitiesManager.h"
 #include "Graphics.h"
+#include "DirectedInterval.h"
 
 namespace Temporal
 {
@@ -34,13 +35,13 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		DirectedSegment directedSegment(sourcePosition, targetPosition);
-		float angle = directedSegment.getAngle();
+		DirectedSegment directedSegment(sourcePosition.getX(), sourcePosition.getY(), targetPosition.getX(), targetPosition.getY());
+		float angle = directedSegment.getDirection().getAngle();
 		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : mirroredAngle(_sightCenter);
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
-		_isSeeing = Grid::get().directedSegmentCast(directedSegment, _pointOfIntersection);
+		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection);
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));
