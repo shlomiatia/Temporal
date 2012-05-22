@@ -5,7 +5,6 @@
 namespace Temporal
 {
 	const Segment Segment::Zero(Point::Zero, Vector(Vector::Zero));
-	const DirectedSegment DirectedSegment::Zero(Point::Zero, Point(Vector::Zero));
 
 	Segment::Segment(const Point& center, const Vector& radius) 
 		: _center(center), _radius(radius) 
@@ -25,16 +24,5 @@ namespace Temporal
 		float length = (otherAxisValue - getCenter().getAxis(otherAxis)) / normalizedRadius.getAxis(otherAxis);
 		float value = getCenter().getAxis(axis) + normalizedRadius.getAxis(axis) * length;
 		return value;
-	}
-
-	float DirectedSegment::getAngle(void) const
-	{
-		Vector vector = getVector();
-		return vector.getAngle();
-	}
-
-	Vector DirectedSegment::getVector(void) const
-	{
-		return getRadius() * 2.0f;
 	}
 }

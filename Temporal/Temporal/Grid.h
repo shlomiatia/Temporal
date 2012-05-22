@@ -8,7 +8,7 @@ namespace Temporal
 {
 	class Shape;
 	class StaticBody;
-	class DirectedSegment;
+	class DirectedInterval;
 
 	typedef std::vector<const StaticBody*> StaticBodyCollection;
 	typedef StaticBodyCollection::const_iterator StaticBodyIterator;
@@ -25,7 +25,7 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose(void);
 
-		bool Grid::directedSegmentCast(const DirectedSegment& directedSegment, Point& pointOfIntersection);
+		bool cast(const DirectedInterval& dirInt, Point& pointOfIntersection);
 
 		void add(const StaticBody* staticBody);
 		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;

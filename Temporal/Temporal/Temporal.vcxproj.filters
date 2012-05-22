@@ -159,6 +159,12 @@
     <ClInclude Include="Debug.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectedInterval.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -291,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="YABP.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

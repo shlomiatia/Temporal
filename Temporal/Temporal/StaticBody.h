@@ -20,6 +20,8 @@ namespace Temporal
 
 	private:
 		bool _cover;
+
+		// TODO: WTF why pointer?
 		Shape* _shape;
 	};
 }
