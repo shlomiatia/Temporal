@@ -8,6 +8,7 @@ namespace Temporal
 {
 	class Shape;
 	class StaticBody;
+	class DirectedSegment;
 
 	typedef std::vector<const StaticBody*> StaticBodyCollection;
 	typedef StaticBodyCollection::const_iterator StaticBodyIterator;
@@ -24,10 +25,7 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose(void);
 
-		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
-		float getTileSize(void) const { return _tileSize; }
-		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
-		StaticBodyCollection* getTile(int i, int j) const;
+		bool Grid::directedSegmentCast(const DirectedSegment& directedSegment, Point& pointOfIntersection);
 
 		void add(const StaticBody* staticBody);
 		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;
@@ -41,9 +39,14 @@ namespace Temporal
 		int _gridWidth;
 		int _gridHeight;
 
+		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
+		float getTileSize(void) const { return _tileSize; }
+		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize(void) const { return _gridWidth * _gridHeight; }
+
+		StaticBodyCollection* getTile(int i, int j) const;
 		StaticBodyCollection* getTile(int index) const;
 
 		static bool iterateStaticBodies(void* caller, void* data, int index);

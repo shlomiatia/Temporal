@@ -401,18 +401,10 @@ namespace Temporal
 	}
 	#pragma endregion
 
-	SpriteSheet* _popSpritesheet;
-
-	TestPanel::~TestPanel(void)
-	{
-		delete _popSpritesheet;
-	}
-
 	void TestPanel::createEntities(void)
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
-		_popSpritesheet = spritesheet;
 		SpriteGroup* animation;
 
 		#pragma region Player Animations
@@ -557,7 +549,7 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		//createSentry(spritesheet);
+		createSentry(spritesheet);
 		//createCamera();
 		//createPatrol(spritesheet);
 		//createChaser(spritesheet);
