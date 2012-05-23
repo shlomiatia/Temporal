@@ -29,6 +29,7 @@
 #include "Sentry.h"
 #include "Patrol.h"
 #include "Camera.h"
+#include "Laser.h"
 #include <sstream>
 
 namespace Temporal
@@ -136,7 +137,6 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
@@ -399,6 +399,17 @@ namespace Temporal
 		entity->add(renderer);
 		EntitiesManager::get().add(Hash("ENT_BACKGROUND"), entity);
 	}
+
+	void createLaser()
+	{
+		Position* position = new Position(Point(100.0f, 100.0f));
+		Laser* laser = new Laser(Hash("ENT_PLAYER"), Hash("ENT_PLATFORM23"));
+
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(laser);
+		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
+	}
 	#pragma endregion
 
 	void TestPanel::createEntities(void)
@@ -549,7 +560,8 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createSentry(spritesheet);
+		createLaser();
+		//createSentry(spritesheet);
 		//createCamera();
 		//createPatrol(spritesheet);
 		//createChaser(spritesheet);

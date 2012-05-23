@@ -4,7 +4,8 @@
 #include "AABB.h"
 #include "Graphics.h"
 #include "ShapeOperations.h"
-#include "DirectedInterval.h"
+#include "DirectedSegment.h"
+#include <algorithm>
 
 namespace Temporal
 {
@@ -72,10 +73,17 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const DirectedInterval& dirInt, Point& pointOfIntersection)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection)
 	{
-		const Point& origin = dirInt.getOrigin();
-		const Point& destination = dirInt.getTarget();
+		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
+		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
+		return cast(ray, pointOfIntersection);
+	}
+
+	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection)
+	{
+		const Point& origin = dirSeg.getOrigin();
+		const Point& destination = dirSeg.getTarget();
 		float x1 = origin.getX();
 		float y1 = origin.getY();
 		float x2 = destination.getX();
@@ -119,7 +127,7 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
-					if(intersects(dirInt, body.getShape(), &pointOfIntersection))
+					if(intersects(dirSeg, body.getShape(), &pointOfIntersection))
 					{
 						return false;
 					}

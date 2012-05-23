@@ -162,7 +162,7 @@
     <ClInclude Include="Laser.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="DirectedInterval.h">
+    <ClInclude Include="DirectedSegment.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

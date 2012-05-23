@@ -22,7 +22,7 @@
     <ClInclude Include="Navigator.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
-    <ClInclude Include="DirectedInterval.h" />
+    <ClInclude Include="DirectedSegment.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sentry.h" />

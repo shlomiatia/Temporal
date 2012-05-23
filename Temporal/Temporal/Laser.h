@@ -12,12 +12,15 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		Laser(const Hash& platformID) : _platformID(platformID), _isPositiveDirection(true), _pointOfIntersection(Point::Zero), _isDetecting(false) {}
+		Laser(const Hash& playerID, const Hash& platformID) 
+			: _playerID(playerID), _platformID(platformID), _isPositiveDirection(true), _pointOfIntersection(Point::Zero), _isDetecting(false) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 		void handleMessage(Message& message);
 	private:
+		const Hash _playerID;
 		const Hash _platformID;
+
 		bool _isPositiveDirection;
 		Point _pointOfIntersection;
 		bool _isDetecting;

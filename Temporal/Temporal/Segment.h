@@ -46,5 +46,8 @@ namespace Temporal
 
 		float get(Axis::Enum axis, float otherAxisValue) const;
 	};
+
+	inline Segment SegmentPP(const Point& p1, const Point& p2) { return Segment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
+
 }
 #endif

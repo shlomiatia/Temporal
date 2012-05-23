@@ -36,6 +36,9 @@ namespace Temporal
 			ENTITY_CREATED,
 			ENTITY_DESTROYED,
 
+			LEVEL_CREATED,
+			LEVEL_DESTROYED,
+
 			UPDATE,
 			DRAW,
 			DEBUG_DRAW,
