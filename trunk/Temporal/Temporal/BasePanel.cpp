@@ -27,6 +27,8 @@ namespace Temporal
 		createEntities();
 
 		NavigationGraph::get().init();
+
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
 	}
 
 	void BasePanel::update(float framePeriodInMillis)
@@ -66,6 +68,7 @@ namespace Temporal
 
 	void BasePanel::dispose(void)
 	{
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
 		JumpInfoProvider::get().dispose();
 		HashToString::get().dispose();
 		EntitiesManager::get().dispose();

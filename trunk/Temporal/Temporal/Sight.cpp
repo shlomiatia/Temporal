@@ -6,7 +6,7 @@
 #include "Message.h"
 #include "EntitiesManager.h"
 #include "Graphics.h"
-#include "DirectedInterval.h"
+#include "DirectedSegment.h"
 
 namespace Temporal
 {
@@ -36,7 +36,7 @@ namespace Temporal
 
 		// Check field of view
 		DirectedSegment directedSegment(sourcePosition.getX(), sourcePosition.getY(), targetPosition.getX(), targetPosition.getY());
-		float angle = directedSegment.getDirection().getAngle();
+		float angle = directedSegment.getVector().getAngle();
 		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : mirroredAngle(_sightCenter);
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;

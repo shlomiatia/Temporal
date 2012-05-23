@@ -11,7 +11,7 @@
 #include "DynamicBody.h"
 #include "StaticBody.h"
 #include "Graphics.h"
-#include "DirectedInterval.h"
+#include "DirectedSegment.h"
 
 namespace Temporal
 {
