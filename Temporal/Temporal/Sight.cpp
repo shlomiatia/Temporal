@@ -10,6 +10,8 @@
 
 namespace Temporal
 {
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+
 	void Sight::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::UPDATE)
@@ -28,7 +30,7 @@ namespace Temporal
 		_isSeeing = false;
 		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(_targetID, Message(MessageID::GET_POSITION));
+		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 
 		// Check orientation
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), (float)sourceSide))
@@ -43,7 +45,7 @@ namespace Temporal
 		
 		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
 		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
-		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(_targetID, Message(MessageID::GET_PERIOD));
+		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
 		if(myCollisionFilter != 0 && targetCollisionFilter != 0 && (myCollisionFilter & targetCollisionFilter) == 0)
 			return;

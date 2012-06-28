@@ -148,7 +148,7 @@ namespace Temporal
 		Orientation* orientation = new Orientation(Side::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Past);
 
@@ -169,7 +169,7 @@ namespace Temporal
 		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, Hash("ENT_PLAYER"));
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		Orientation* orientation = new Orientation(Side::LEFT);
 		SpriteGroup* animation;
@@ -217,7 +217,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
 		Entity* entity = new Entity();
@@ -417,7 +417,7 @@ namespace Temporal
 	void createLaser()
 	{
 		Position* position = new Position(Point(100.0f, 100.0f));
-		Laser* laser = new Laser(Hash("ENT_PLAYER"), Hash("ENT_PLATFORM23"));
+		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
 		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC);
 
 		Entity* entity = new Entity();

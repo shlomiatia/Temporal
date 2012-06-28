@@ -12,6 +12,7 @@
 #include "NavigationGraph.h"
 #include "Input.h"
 #include "ActionController.h"
+#include "TemporalPeriod.h"
 
 namespace Temporal
 {
@@ -41,13 +42,22 @@ namespace Temporal
 		}
 		if(Input::get().isQ())
 		{
-			AABB bounds = AABB::Zero;
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
+			//AABB bounds = AABB::Zero;
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
+			Period::Enum period = Period::Past;
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		}
 		if(Input::get().isW())
 		{
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			Period::Enum period = Period::Present;
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+		}
+		if(Input::get().isE())
+		{
+			Period::Enum period = Period::Future;
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
 		
