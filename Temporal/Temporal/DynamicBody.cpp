@@ -167,7 +167,9 @@ namespace Temporal
 			changePosition(stepMovement);
 			AABB bounds = getBounds();
 			
-			Grid::get().iterateTiles(bounds, this, &collision, detectCollision);
+			int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+			int collisionFilter = periodPointer == NULL ? 0 : *periodPointer;
+			Grid::get().iterateTiles(bounds, collisionFilter, this, &collision, detectCollision);
 			if(collision != Vector::Zero)
 				break;
 		}

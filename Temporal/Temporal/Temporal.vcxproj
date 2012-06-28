@@ -30,6 +30,7 @@
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeOperations.h" />
+    <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="YABP.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="BasePanel.h" />
@@ -85,6 +86,7 @@
     <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
+    <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="NumericPair.cpp" />
     <ClCompile Include="BasePanel.cpp" />
