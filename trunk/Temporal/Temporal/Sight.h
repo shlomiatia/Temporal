@@ -11,8 +11,8 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float sightCenter, float sightSize, const Hash& targetID) :
-		  _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false), _targetID(targetID) {};
+		Sight(float sightCenter, float sightSize) :
+		  _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
@@ -20,8 +20,6 @@ namespace Temporal
 	private:
 		const float _sightCenter;
 		const float _sightSize;
-
-		Hash _targetID;
 
 		Point _pointOfIntersection;
 		bool _isSeeing;

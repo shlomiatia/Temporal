@@ -4,9 +4,12 @@
 #include "Hash.h"
 #include "Serialization.h"
 #include "Message.h"
+#include "EntitiesManager.h"
 
 namespace Temporal
 {
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+
 	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("REN_SER_SPR_GRP");
 	static const Hash SPRITE_SERIALIZATION = Hash("REN_SER_SPR");
 
@@ -76,7 +79,13 @@ namespace Temporal
 
 		Point screenLocation(screenLocationX, screenLocationY);
 
-		Graphics::get().draw(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, _color);
+		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
+		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
+		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
+		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);
+
+		Graphics::get().draw(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, color);
 	}
 
 	const Hash& Renderer::getFirstSpriteGroupID(const SpriteSheet& spritesheet)

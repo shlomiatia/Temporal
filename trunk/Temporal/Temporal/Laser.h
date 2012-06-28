@@ -11,16 +11,14 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		Laser(const Hash& playerID, const Hash& platformID) 
-			: _playerID(playerID), _platformID(platformID), _isPositiveDirection(true) {}
+		Laser(const Hash& platformID) 
+			: _platformID(platformID), _isPositiveDirection(true) {}
 
-		Hash getPlayerId(void) const { return _playerID; }
 		Hash getPlatformId(void) const { return _platformID; }
 		
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 		void handleMessage(Message& message);
 	private:
-		const Hash _playerID;
 		const Hash _platformID;
 
 		bool _isPositiveDirection;
