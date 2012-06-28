@@ -83,4 +83,9 @@ namespace Temporal
 	{
 		return spritesheet.getFirstSpriteGroupID();
 	}
+
+	Component* Renderer::clone(void) const
+	{
+		return new Renderer(_spritesheet, _layer, _color);
+	}
 }

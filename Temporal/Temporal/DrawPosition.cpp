@@ -37,4 +37,9 @@ namespace Temporal
 			OVERRIDE_SERIALIZER.deserialize(serialization, _override);
 		}
 	}
+
+	Component* DrawPosition::clone(void) const
+	{
+		return new DrawPosition(_offset);
+	}
 }

@@ -28,4 +28,9 @@ namespace Temporal
 			_orientation = (Side::Enum)serialization.deserializeInt(ORIENTATION_SERIALIZATION);
 		}
 	}
+
+	Component* Orientation::clone(void) const
+	{
+		return new Orientation(_orientation);
+	}
 }

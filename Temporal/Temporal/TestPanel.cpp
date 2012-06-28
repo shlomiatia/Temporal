@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Animator.h"
 #include "Renderer.h"
+#include "LineRenderer.h"
 #include "Navigator.h"
 #include "Sentry.h"
 #include "Patrol.h"
@@ -97,21 +98,19 @@ namespace Temporal
 
 	void createTemporalEcho(Entity* entity)
 	{
-		Position* position = new Position(((Position*)entity->get(ComponentType::POSITION))->get());
-		Orientation* orientation = new Orientation(((Orientation*)entity->get(ComponentType::ORIENTATION))->get());
-		DrawPosition* drawPosition = NULL;
-		DrawPosition* otherDrawPosition = (DrawPosition*)entity->get(ComponentType::DRAW_POSITION);
-		if(otherDrawPosition != NULL)
-			drawPosition = new DrawPosition(otherDrawPosition->getOffset());
+		const Component* position = entity->get(ComponentType::POSITION);
+		const Component* orientation = entity->get(ComponentType::ORIENTATION);
+		const Component* drawPosition = entity->get(ComponentType::DRAW_POSITION);
+		const Component* renderer = entity->get(ComponentType::RENDERER);
 		
-		Renderer* otherRenderer = (Renderer*)entity->get(ComponentType::RENDERER);
-		Renderer* renderer = new Renderer(otherRenderer->getSpriteSheet(), otherRenderer->getVisualLayer(), Color(1.0f, 1.0f, 1.0f, 0.2f));
 		Entity* echoEntity = new Entity();
-		echoEntity->add(position);
-		echoEntity->add(orientation);
+		echoEntity->add(position->clone());
+		if(orientation != NULL)
+			echoEntity->add(orientation->clone());
 		if(drawPosition != NULL)
-			echoEntity->add(drawPosition);
-		echoEntity->add(renderer);
+			echoEntity->add(drawPosition->clone());
+		if(renderer != NULL)
+			echoEntity->add(renderer->clone());
 		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
 		entity->add(temporalEcho);
 	}
@@ -404,10 +403,14 @@ namespace Temporal
 	{
 		Position* position = new Position(Point(100.0f, 100.0f));
 		Laser* laser = new Laser(Hash("ENT_PLAYER"), Hash("ENT_PLATFORM23"));
+		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC);
 
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(laser);
+		entity->add(renderer);
+
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
 	}
 	#pragma endregion

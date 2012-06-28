@@ -28,4 +28,9 @@ namespace Temporal
 			POSITION_SERIALIZER.deserialize(serialization, _position);
 		}
 	}
+
+	Component* Position::clone(void) const
+	{
+		return new Position(_position);
+	}
 }

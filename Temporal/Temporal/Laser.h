@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include "Hash.h"
-#include "NumericPair.h"
 
 namespace Temporal
 {
@@ -13,8 +12,11 @@ namespace Temporal
 	{
 	public:
 		Laser(const Hash& playerID, const Hash& platformID) 
-			: _playerID(playerID), _platformID(platformID), _isPositiveDirection(true), _pointOfIntersection(Point::Zero), _isDetecting(false) {}
+			: _playerID(playerID), _platformID(platformID), _isPositiveDirection(true) {}
 
+		Hash getPlayerId(void) const { return _playerID; }
+		Hash getPlatformId(void) const { return _platformID; }
+		
 		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
 		void handleMessage(Message& message);
 	private:
@@ -22,8 +24,6 @@ namespace Temporal
 		const Hash _platformID;
 
 		bool _isPositiveDirection;
-		Point _pointOfIntersection;
-		bool _isDetecting;
 
 		void update(float framePeriodInMillis);
 	};
