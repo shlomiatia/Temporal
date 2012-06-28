@@ -14,6 +14,7 @@
 #include "EntitiesManager.h"
 #include "MovementUtils.h"
 #include "TemporalEcho.h"
+#include "TemporalPeriod.h"
 #include "StaticBody.h"
 #include "DynamicBody.h"
 #include "Grid.h"
@@ -125,6 +126,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -136,6 +138,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
@@ -147,6 +150,7 @@ namespace Temporal
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Past);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -155,7 +159,8 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		createTemporalEcho(entity);
+		//createTemporalEcho(entity);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
@@ -188,6 +193,7 @@ namespace Temporal
 
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -196,7 +202,8 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		createTemporalEcho(entity);
+		//createTemporalEcho(entity);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
 	}
 
@@ -211,6 +218,7 @@ namespace Temporal
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, Hash("ENT_PLAYER"));
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -223,11 +231,12 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		createTemporalEcho(entity);
+		entity->add(temporalPeriod);
+		//createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
 
-		void createChaser(SpriteSheet* spritesheet)
+	void createChaser(SpriteSheet* spritesheet)
 	{
 		Position* position = new Position(Point(512.0f, 768.0f));
 		Orientation* orientation = new Orientation(Side::LEFT);
@@ -237,6 +246,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(66.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -248,8 +258,11 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		createTemporalEcho(entity);
+		entity->add(temporalPeriod);
+		//createTemporalEcho(entity);
+
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
+		
 	}
 
 	static int platformID = 0;
@@ -257,6 +270,7 @@ namespace Temporal
 	{
 		//Position* position = new Position(Point(shape->getCenterX(), shape->getCenterY()));
 		StaticBody* staticBody = new StaticBody(shape, cover);
+
 		Entity* entity = new Entity();
 		//entity->add(position);
 		entity->add(staticBody);
@@ -264,6 +278,7 @@ namespace Temporal
 		std::ostringstream id;
 		id << "ENT_PLATFORM" << platformID++;
 		EntitiesManager::get().add(Hash(id.str().c_str()), entity);
+		
 	}
 
 	void createPlatforms()
@@ -563,10 +578,10 @@ namespace Temporal
 #pragma endregion
 
 		createPlayer(spritesheet);
-		createLaser();
-		//createSentry(spritesheet);
+		//createLaser();
+		createSentry(spritesheet);
 		//createCamera();
-		//createPatrol(spritesheet);
+		createPatrol(spritesheet);
 		//createChaser(spritesheet);
 		createPlatforms();
 		//createBackground();

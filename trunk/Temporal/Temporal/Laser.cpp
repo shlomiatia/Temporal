@@ -68,11 +68,18 @@ namespace Temporal
 		Point newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 		Point pointOfIntersection = Point::Zero;
-		Grid::get().cast(newPosition, laserVector, pointOfIntersection);
+		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
+		Grid::get().cast(newPosition, laserVector, myCollisionFilter, pointOfIntersection);
 		AABB rect = AABB::Zero;
 		EntitiesManager::get().sendMessageToEntity(_playerID, Message(MessageID::GET_BOUNDS, &rect));
 		Segment seg = SegmentPP(newPosition, pointOfIntersection);
-		bool isDetecting = intersects(rect, seg);
+		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(_playerID, Message(MessageID::GET_PERIOD));
+		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
+		bool isDetecting = false;
+		if(myCollisionFilter == 0 || targetCollisionFilter == 0 || (myCollisionFilter & targetCollisionFilter) != 0)
+			isDetecting = intersects(rect, seg);
+		
 		Color color = isDetecting ? Color::Green : Color::Red;
 		sendMessageToOwner(Message(MessageID::SET_COLOR, &color));
 		sendMessageToOwner(Message(MessageID::SET_TARGET, &pointOfIntersection));

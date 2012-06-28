@@ -38,25 +38,29 @@ namespace Temporal
 					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
 	}
 
-	bool Grid::add(void* caller, void* data, int index)
-	{
-		Grid* grid = (Grid*)caller;
-		const StaticBody* staticBody = (StaticBody*)data;
-
-		StaticBodyCollection* tile = grid->getTile(index);
-		if(tile == NULL)
-		{
-			tile = new StaticBodyCollection();
-			grid->_grid[index] = tile;
-		}
-		tile->push_back(staticBody);
-		return true;
-	}
 
 	void Grid::add(const StaticBody* staticBody)
 	{
 		const Shape& shape = staticBody->getShape();
-		iterateTiles(shape, this, (void*)staticBody, add);
+		int leftIndex = getAxisIndex(shape.getLeft());
+		int rightIndex = getAxisIndex(shape.getRight());
+		int topIndex = getAxisIndex(shape.getTop());
+		int bottomIndex = getAxisIndex(shape.getBottom());
+
+		for(int i = leftIndex; i <= rightIndex; ++i)
+		{
+			for(int j = bottomIndex; j <= topIndex; ++j)
+			{
+				int index = getIndex(i, j);
+				StaticBodyCollection* staticBodies = getTile(index);
+				if(staticBodies == NULL)
+				{
+					staticBodies = new StaticBodyCollection();
+					_grid[index] = staticBodies;
+				}
+				staticBodies->push_back(staticBody);
+			}
+		}
 	}
 
 	StaticBodyCollection* Grid::getTile(int i, int j) const
@@ -73,14 +77,14 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter,  Point& pointOfIntersection)
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
-		return cast(ray, pointOfIntersection);
+		return cast(ray, collisionFilter, pointOfIntersection);
 	}
 
-	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection)
+	bool Grid::cast(const DirectedSegment& dirSeg, int collisionFilter, Point& pointOfIntersection)
 	{
 		const Point& origin = dirSeg.getOrigin();
 		const Point& destination = dirSeg.getTarget();
@@ -127,6 +131,8 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
+					if(collisionFilter != 0 && body.getCollisionFilter() != 0 && (collisionFilter & body.getCollisionFilter()) == 0)
+						continue;
 					if(intersects(dirSeg, body.getShape(), &pointOfIntersection))
 					{
 						return false;
@@ -151,7 +157,7 @@ namespace Temporal
 		return true;
 	}
 
-	void Grid::iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const
+	void Grid::iterateTiles(const Shape& shape, int collisionFilter, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
@@ -163,43 +169,19 @@ namespace Temporal
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				int index = getIndex(i, j);
-				if(!handleTile(caller, data, index))
-					return;
+				StaticBodyCollection* staticBodies = getTile(index);
+				if(staticBodies != NULL)
+				{
+					for(StaticBodyIterator i = staticBodies->begin(); i != staticBodies->end(); ++i)
+					{
+						const StaticBody& staticBody = **i;
+						if(collisionFilter != 0 && staticBody.getCollisionFilter() != 0 && (collisionFilter & staticBody.getCollisionFilter()) == 0)
+							continue;
+						if(!handleStaticBody(caller, data, staticBody))
+							return;
+					}
+				}
 			}
 		}
-	}
-
-	struct IterateStaticBodiesHelper
-	{
-		void* caller;
-		void* data;
-		bool(*handleStaticBody)(void* caller, void* data, const StaticBody& staticBody);
-	};
-
-	bool Grid::iterateStaticBodies(void* caller, void* data, int index)
-	{
-		const Grid& grid = *(Grid*)caller;
-		IterateStaticBodiesHelper* helper = (IterateStaticBodiesHelper*)data;
-
-		StaticBodyCollection* staticBodies = grid.getTile(index);
-		if(staticBodies != NULL)
-		{
-			for(StaticBodyIterator i = staticBodies->begin(); i != staticBodies->end(); ++i)
-			{
-				const StaticBody& staticBody = **i;
-				if(!helper->handleStaticBody(helper->caller, helper->data, staticBody))
-					return false;
-			}
-		}
-		return true;
-	}
-
-	void Grid::iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
-	{
-		IterateStaticBodiesHelper helper;
-		helper.caller = caller; 
-		helper.data = data;
-		helper.handleStaticBody = handleStaticBody;
-		iterateTiles(shape, (void*)this, &helper, iterateStaticBodies);
 	}
 }

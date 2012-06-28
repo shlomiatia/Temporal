@@ -21,4 +21,10 @@ namespace Temporal
 			message.setParam(_shape);
 		}
 	}
+
+	int StaticBody::getCollisionFilter(void) const
+	{
+		int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		return periodPointer == NULL ? 0 : *periodPointer;
+	}
 }

@@ -25,12 +25,11 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose(void);
 
-		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection);
-		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection);
+		bool cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter, Point& pointOfIntersection);
+		bool cast(const DirectedSegment& dirSeg, int collisionFilter, Point& pointOfIntersection);
 
 		void add(const StaticBody* staticBody);
-		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleTile)(void* caller, void* data, int index)) const;
-		void iterateTiles(const Shape& shape, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
+		void iterateTiles(const Shape& shape, int collisionFilter, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const;
 
 		void draw(void) const;
 
@@ -49,9 +48,6 @@ namespace Temporal
 
 		StaticBodyCollection* getTile(int i, int j) const;
 		StaticBodyCollection* getTile(int index) const;
-
-		static bool iterateStaticBodies(void* caller, void* data, int index);
-		static bool add(void* caller, void* data, int index);
 
 		Grid(void) {};
 		Grid(const Grid&);

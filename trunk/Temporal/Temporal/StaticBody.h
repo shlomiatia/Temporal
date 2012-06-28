@@ -17,10 +17,10 @@ namespace Temporal
 		const Shape& getShape(void) const { return *_shape; }
 		ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
+		int getCollisionFilter(void) const;
 
 	private:
 		bool _cover;
-
 		Shape* _shape;
 	};
 }

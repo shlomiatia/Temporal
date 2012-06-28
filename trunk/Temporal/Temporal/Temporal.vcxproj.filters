@@ -168,6 +168,9 @@
     <ClInclude Include="LineRenderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="TemporalPeriod.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -306,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="LineRenderer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalPeriod.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

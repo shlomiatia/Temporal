@@ -41,7 +41,13 @@ namespace Temporal
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
-		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection);
+		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
+		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(_targetID, Message(MessageID::GET_PERIOD));
+		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
+		if(myCollisionFilter != 0 && targetCollisionFilter != 0 && (myCollisionFilter & targetCollisionFilter) == 0)
+			return;
+		_isSeeing = Grid::get().cast(directedSegment, myCollisionFilter, _pointOfIntersection);
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));

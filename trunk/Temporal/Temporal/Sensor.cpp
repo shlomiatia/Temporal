@@ -25,7 +25,9 @@ namespace Temporal
 		_point = Point::Zero;
 		
 		AABB bounds = getBounds();
-		Grid::get().iterateTiles(bounds, this, NULL, sense);
+		int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		int collisionFilter = periodPointer == NULL ? 0 : *periodPointer;
+		Grid::get().iterateTiles(bounds, collisionFilter, this, NULL, sense);
 		if(_point != Point::Zero)
 		{
 			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
