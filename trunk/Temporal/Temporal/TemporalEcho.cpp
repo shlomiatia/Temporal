@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "Entity.h"
 #include "Serialization.h"
+#include "Color.h"
 
 namespace Temporal
 {
@@ -59,7 +60,6 @@ namespace Temporal
 		{
 			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
-			
 		}
 		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
 		{
@@ -68,6 +68,10 @@ namespace Temporal
 		else if(_echoReady && message.getID() == MessageID::DRAW) 
 		{
 			_echo->handleMessage(message);
+		}
+		else if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			_echo->handleMessage(Message(MessageID::SET_COLOR, &Color(1.0f, 1.0f, 1.0f, 0.2f)));
 		}
 	}
 }

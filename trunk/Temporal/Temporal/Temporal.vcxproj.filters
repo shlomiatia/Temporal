@@ -165,6 +165,9 @@
     <ClInclude Include="DirectedSegment.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="LineRenderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -300,6 +303,9 @@
     </ClCompile>
     <ClCompile Include="Laser.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="LineRenderer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

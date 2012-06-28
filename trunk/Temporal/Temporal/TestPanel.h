@@ -9,6 +9,7 @@ namespace Temporal
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
+	// TODO: Local coords
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
 	// TODO: Store YABP in grid PHYSICS
@@ -22,8 +23,8 @@ namespace Temporal
 	// TODO: Create arbitrary points on entity (draw position, eyes) GRAPHICS
 	// TODO: Gradual hang & descend GRAPHICS
 	// TODO: Test against top, center bottom in sight GRAPHICS
-	// TODO: Gradual temporal echo merge
-
+	// TODO: Gradual temporal echo merge GRAPHICS
+	 
 	// TODO: Enable/Disable Sensors PERFORMACE
 	// TODO: Request sight PERFORMANCE
 	// TODO: Cache ray properties PERFORMANCE

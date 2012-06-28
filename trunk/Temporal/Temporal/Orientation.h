@@ -12,10 +12,8 @@ namespace Temporal
 		explicit Orientation(Side::Enum orientation) : _orientation(orientation) {}
 
 		ComponentType::Enum getType(void) const { return ComponentType::ORIENTATION; }
-
-		Side::Enum get(void) const { return _orientation; }
-
 		void handleMessage(Message& message);
+		Component* clone(void) const;
 	private:
 		Side::Enum _orientation;
 	};

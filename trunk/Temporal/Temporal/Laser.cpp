@@ -8,9 +8,13 @@
 #include "Math.h"
 #include "ShapeOperations.h"
 #include "AABB.h"
+#include "NumericPair.h"
+#include "Serialization.h"
 
 namespace Temporal
 {
+	static const Hash DIRECTION_SERIALIZATION = Hash("LAS_SER_DIR");
+
 	void Laser::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::LEVEL_CREATED)
@@ -25,10 +29,15 @@ namespace Temporal
 			float framePeriodInMillis = *(float*)message.getParam();			
 			update(framePeriodInMillis);
 		}
-		else if(message.getID() == MessageID::DRAW)
+		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-			Graphics::get().draw(Segment(position, _pointOfIntersection), _isDetecting ? Color::Green : Color::Red);
+			Serialization& serialization = *(Serialization*)message.getParam();
+			serialization.serialize(DIRECTION_SERIALIZATION, _isPositiveDirection);
+		}
+		else if(message.getID() == MessageID::DESERIALIZE)
+		{
+			const Serialization& serialization = *(const Serialization*)message.getParam();
+			_isPositiveDirection = serialization.deserializeBool(DIRECTION_SERIALIZATION);
 		}
 	}
 
@@ -58,10 +67,14 @@ namespace Temporal
 		}
 		Point newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-		Grid::get().cast(newPosition, laserVector, _pointOfIntersection);
+		Point pointOfIntersection = Point::Zero;
+		Grid::get().cast(newPosition, laserVector, pointOfIntersection);
 		AABB rect = AABB::Zero;
 		EntitiesManager::get().sendMessageToEntity(_playerID, Message(MessageID::GET_BOUNDS, &rect));
-		Segment seg = SegmentPP(newPosition, _pointOfIntersection);
-		_isDetecting = intersects(rect, seg);
+		Segment seg = SegmentPP(newPosition, pointOfIntersection);
+		bool isDetecting = intersects(rect, seg);
+		Color color = isDetecting ? Color::Green : Color::Red;
+		sendMessageToOwner(Message(MessageID::SET_COLOR, &color));
+		sendMessageToOwner(Message(MessageID::SET_TARGET, &pointOfIntersection));
 	}
 }
