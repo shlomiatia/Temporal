@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationSample.h" />
     <ClInclude Include="BaseUtils.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
@@ -24,6 +26,8 @@
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
     <ClInclude Include="DirectedSegment.h" />
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="SceneNodeSample.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sentry.h" />
@@ -83,6 +87,7 @@
     <ClCompile Include="Navigator.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Patrol.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
