@@ -3,16 +3,21 @@
 
 #include "Timer.h"
 #include "Component.h"
+#include "Hash.h"
+#include <unordered_map>
 
 namespace Temporal
 {
 	class ResetAnimationParams;
-	class SpriteGroup;
+	class Animation;
+
+	typedef std::unordered_map<const Hash, const Animation*> AnimationCollection;
+	typedef HashCollection::const_iterator AnimationIterator;
 
 	class Animator : public Component
 	{
 	public:
-		explicit Animator(float framePeriod) : FRAME_PERIOD(framePeriod), _rewind(false), _repeat(false) {}
+		explicit Animator(const AnimationCollection& animations) : _animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false) {}
 		
 		ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
@@ -20,16 +25,14 @@ namespace Temporal
 		void update(float framePeriodInMillis);
 
 	private:
-		const float FRAME_PERIOD;
+		const AnimationCollection& _animations;
 
+		Hash _animationId;
 		bool _rewind;
 		bool _repeat;
 		Timer _timer;
 
-		int getInitialFrame(void) const;
-
 		void reset(const ResetAnimationParams& resetAnimationParams);
-		const SpriteGroup& getSpriteGroup(void) const;
 	};
 }
 #endif

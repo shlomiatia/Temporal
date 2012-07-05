@@ -6,13 +6,14 @@
 
 namespace Temporal
 {
+	class SceneNode;
 	class SpriteSheet;
 
 	class Renderer : public Component
 	{
 	public:
-		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, Color color = Color::White) :
-		  _spritesheet(spritesheet), _layer(layer), _spriteGroupID(getFirstSpriteGroupID(spritesheet)), _spriteID(0), _color(color) {};
+		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, SceneNode* root, Color color = Color::White) :
+		  _spritesheet(spritesheet), _layer(layer), _root(root), _color(color) {};
 
 		ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
 
@@ -23,11 +24,8 @@ namespace Temporal
 		const SpriteSheet& _spritesheet;
 		const VisualLayer::Enum _layer;
 
-		Hash _spriteGroupID;
-		int _spriteID;
 		Color _color;
-
-		const Hash& getFirstSpriteGroupID(const SpriteSheet& spritesheet);
+		SceneNode* _root;
 	};
 }
 #endif

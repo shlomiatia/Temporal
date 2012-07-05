@@ -3,6 +3,8 @@
 #include "Serialization.h"
 #include "Message.h"
 #include "MessageParams.h"
+#include "Animation.h"
+#include "AnimationSample.h"
 
 namespace Temporal
 {
@@ -40,40 +42,30 @@ namespace Temporal
 
 	void Animator::update(float framePeriodInMillis)
 	{
-		const SpriteGroup& spriteGroup = getSpriteGroup();
-		int framesCount = spriteGroup.getSize();
 		_timer.update(framePeriodInMillis);
-		int framesPassed = (int)(_timer.getElapsedTimeInMillis() / FRAME_PERIOD);
-		int framesDelta = framesPassed % framesCount;
-		int initialFrame = getInitialFrame();
-		int frameID = initialFrame + (_rewind ? -1 : 1) * framesDelta;
-		if(framesPassed < framesCount  || _repeat)
-			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &frameID));
-		bool animationEnded = frameID == initialFrame && framesPassed > 0;
+		const Animation& animation = *_animations.at(_animationId);
+		const AnimationSample& animationSample = animation.get(0);
+
+		float duration = animationSample.getDuration();
+		float normalizedTime = duration == 0.0f ? 1.0f : _timer.getElapsedTimeInMillis() / duration;
+		if(normalizedTime <= 1.0f  || _repeat)
+		{
+			float normalizedSpriteIndex = !_rewind ? normalizedTime : 1.0f - normalizedTime;
+			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &normalizedSpriteIndex));
+		}
+		bool animationEnded = normalizedTime >= 1.0f;
 		if(!_repeat && animationEnded)
 			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
-	}
-
-	const SpriteGroup& Animator::getSpriteGroup(void) const
-	{
-		const SpriteGroup& spriteGroup = *(SpriteGroup*)sendMessageToOwner(Message(MessageID::GET_SPRITE_GROUP));
-		return spriteGroup;
 	}
 
 	void Animator::reset(const ResetAnimationParams& resetAnimationParams)
 	{
 		_timer.reset();
+		_animationId = resetAnimationParams.getAnimationID();
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
-		int animationID = resetAnimationParams.getAnimationID();
-		sendMessageToOwner(Message(MessageID::SET_SPRITE_GROUP_ID, &animationID));
-		int initialFrame = getInitialFrame();
-		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &initialFrame));
-	}
-
-	int Animator::getInitialFrame(void) const
-	{
-		const SpriteGroup& spriteGroup = getSpriteGroup();
-		return !_rewind ? 0 : spriteGroup.getSize() - 1;
+		sendMessageToOwner(Message(MessageID::SET_SPRITE_GROUP_ID, &_animationId));
+		float normalizedTime = _rewind ? 1.0f : 0.0f;
+		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &normalizedTime));
 	}
 }

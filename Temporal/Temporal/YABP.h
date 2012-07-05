@@ -1,5 +1,5 @@
-#ifndef SLOPEDAREA_H
-#define SLOPEDAREA_H
+#ifndef YABP_H
+#define YABP_H
 #include "NumericPair.h"
 #include "Shape.h"
 #include <math.h>
