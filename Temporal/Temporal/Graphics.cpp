@@ -65,15 +65,12 @@ namespace Temporal
 	void Graphics::prepareForDrawing(void) const
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-
 		glLoadIdentity();
-		glTranslatef(_translation.getVx(), _translation.getVy(), 0.0f);
 	}
 
 	void Graphics::finishDrawing(void) const
 	{
 		SDL_GL_SwapBuffers();
-
 		validate();
 	}
 
@@ -92,7 +89,20 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::draw(const Texture& texture, const AABB& texturePart, const Point& screenLocation, bool mirrored, const Color& color) const
+	void Graphics::translate(const Vector& translation) const
+	{
+		glTranslatef(translation.getVx(), translation.getVy(), 0.0f);
+	}
+
+	void Graphics::beginTranslate(const Vector& translation) const
+	{
+		glPushMatrix();
+		{	
+			translate(translation);
+		}
+	}
+
+	void Graphics::beginDraw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color) const
 	{
 		const Size& textureSize = texture.getSize();
 		float textureWidth = textureSize.getWidth();
@@ -115,7 +125,7 @@ namespace Temporal
 
 		glPushMatrix();
 		{	
-			glTranslatef(screenLocation.getX(), screenLocation.getY(), 0.0f);
+			translate(translation);
 			//glRotatef(rotation, 0.0, 0.0, 1.0f);
 
 			GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
@@ -139,6 +149,10 @@ namespace Temporal
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
+	}
+
+	void Graphics::end(void) const
+	{
 		glPopMatrix();
 	}
 

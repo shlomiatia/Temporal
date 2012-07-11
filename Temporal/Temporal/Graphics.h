@@ -30,11 +30,12 @@ namespace Temporal
 		void prepareForDrawing(void) const;
 		void finishDrawing(void) const;
 
-		void setTranslation(const Vector& translation) { _translation = translation; }
-
 		void validate(void) const;
 
-		void draw(const Texture& texture, const AABB& texturePart, const Point& screenLocation, bool mirrored, const Color& color = Color::White) const;
+		void translate(const Vector& translation) const;
+		void beginTranslate(const Vector& translation) const;
+		void beginDraw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color = Color::White) const;
+		void end(void) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
 		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;
@@ -42,9 +43,8 @@ namespace Temporal
 
 	private:
 		static const int BIT_DEPTH = 32;
-		Vector _translation;
 
-		Graphics(void) : _translation(0.0f, 0.0f) {}
+		Graphics(void) {}
 		~Graphics(void) { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

@@ -26,8 +26,6 @@
 #include "Texture.h"
 #include "Graphics.h"
 #include "Animator.h"
-#include "Animation.h"
-#include "AnimationSample.h"
 #include "SceneNodeSample.h"
 #include "Renderer.h"
 #include "LineRenderer.h"
@@ -170,6 +168,16 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
+	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, float duration = 0.0f)
+	{
+		SceneGraphSampleCollection* animation = new SceneGraphSampleCollection();
+		SceneNodeSampleCollection* jointAnimation = new SceneNodeSampleCollection();
+		SceneNodeSample* jointSample = new SceneNodeSample(animationID, duration);
+		jointAnimation->push_back(jointSample);
+		(*animation)[sceneNodeID] = jointAnimation;
+		(*animations)[animationID] = animation;
+	}
+
 	void createCamera()
 	{
 		Position* position = new Position(Point(383.0f, 383.0f));
@@ -177,44 +185,38 @@ namespace Temporal
 		Camera* camera = new Camera();
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
 
-		Hash id = Hash::INVALID;
+		Hash animationID = Hash::INVALID;
+		Hash sceneNodeID = Hash("SCN_ROOT");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		Orientation* orientation = new Orientation(Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
-		Animation* animation;
-
+		
 		#pragma region Camera spriteGroup
 		// Search - 0
 		spriteGroup = new SpriteGroup();
-		id = Hash("CAM_ANM_SEARCH");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("CAM_ANM_SEARCH");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(19, 19, 24, 32), Vector(4, 16)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// See - 1
 		spriteGroup = new SpriteGroup();
-		id = Hash("CAM_ANM_SEE");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("CAM_ANM_SEE");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(19, 59, 24, 32), Vector(4, 16)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// Turn - 2
 		spriteGroup = new SpriteGroup();
-		id = Hash("CAM_ANM_TURN");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("CAM_ANM_TURN");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(50.5, 19.5, 17, 33), Vector(2, 16)));
 		spriteGroup->add(new Sprite(AABB(76, 19.5, 12, 33), Vector(1, 16)));
 		spriteGroup->add(new Sprite(AABB(98, 19.5, 12, 33), Vector(0, 16)));
-		animation = new Animation();
-		animation->add(new AnimationSample(200.0));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 200.0f);
 		#pragma endregion
 
 		Animator* animator = new Animator(*animations);
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		SceneNode* root = new SceneNode(sceneNodeID);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
@@ -300,9 +302,9 @@ namespace Temporal
 		//entity->add(position);
 		entity->add(staticBody);
 		Grid::get().add(staticBody);
-		std::ostringstream id;
-		id << "ENT_PLATFORM" << platformID++;
-		EntitiesManager::get().add(Hash(id.str().c_str()), entity);
+		std::ostringstream animationID;
+		animationID << "ENT_PLATFORM" << platformID++;
+		EntitiesManager::get().add(Hash(animationID.str().c_str()), entity);
 		
 	}
 
@@ -458,26 +460,24 @@ namespace Temporal
 
 	void TestPanel::createEntities(void)
 	{
-		Hash id = Hash::INVALID;
+		Hash animationID = Hash::INVALID;
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
-		Animation* animation;
+		Hash sceneNodeID = Hash("SCN_ROOT");
 
 		#pragma region Player Spritesheet
 		// Stand - 0
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_STAND");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_STAND");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(26.5, 48, 21, 84), Vector(6, -42)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// Turn - 1
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_TURN");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_TURN");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(60.5, 50, 23, 80), Vector(7, -40)));
 		spriteGroup->add(new Sprite(AABB(95.5, 50, 25, 80), Vector(8, -40)));
 		spriteGroup->add(new Sprite(AABB(134.5, 48, 29, 84), Vector(4, -42)));
@@ -486,44 +486,36 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(276, 52, 36, 76), Vector(-10, -38)));
 		spriteGroup->add(new Sprite(AABB(316.5, 51, 31, 78), Vector(-8, -39)));
 		spriteGroup->add(new Sprite(AABB(359, 51.5, 28, 79), Vector(-7, -40)));
-		animation = new Animation();
-		animation->add(new AnimationSample(530.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 530.0f);
 		// Drop - 2
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_DROP");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_DROP");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(418.5, 58.5, 23, 109), Vector(-3, 54)));
 		spriteGroup->add(new Sprite(AABB(462.5, 60, 21, 96), Vector(0, 48)));
 		spriteGroup->add(new Sprite(AABB(509, 65, 22, 86), Vector(3, 43)));
 		spriteGroup->add(new Sprite(AABB(546.5, 69.5, 25, 77), Vector(7, 38)));
 		spriteGroup->add(new Sprite(AABB(584.5, 67.5, 25, 81), Vector(9, 40)));
-		animation = new Animation();
-		animation->add(new AnimationSample(330.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 330.0f);
 		// FallStart - 3
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_FALL_START");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_FALL_START");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(667.5, 71, 71, 76), Vector(3, -38)));
 		spriteGroup->add(new Sprite(AABB(737, 68.5, 62, 75), Vector(3, -38)));
 		spriteGroup->add(new Sprite(AABB(805.5, 67, 51, 72), Vector(10, -36)));
 		spriteGroup->add(new Sprite(AABB(866, 62, 54, 80), Vector(7, -40)));
-		animation = new Animation();
-		animation->add(new AnimationSample(260.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 260.0f);
 		// Fall - 4
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_FALL");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_FALL");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(927, 63, 34, 78), Vector(-2, -39)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// JumpUpStart - 5
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_JUMP_UP_START");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_JUMP_UP_START");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(30, 193.5, 22, 83), Vector(2, -42)));
 		spriteGroup->add(new Sprite(AABB(72.5, 193, 23, 84), Vector(2, -42)));
 		spriteGroup->add(new Sprite(AABB(114, 194, 22, 82), Vector(2, -41)));
@@ -537,29 +529,23 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(486, 197.5, 42, 71), Vector(13, -36)));
 		spriteGroup->add(new Sprite(AABB(536, 195.5, 34, 75), Vector(12, -38)));
 		spriteGroup->add(new Sprite(AABB(582, 187.5, 32, 95), Vector(11, -48)));
-		animation = new Animation();
-		animation->add(new AnimationSample(860.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 860.0f);
 		// JumpUp - 6
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_JUMP_UP");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_JUMP_UP");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(630, 189.5, 32, 103), Vector(10, -52)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// Hang - 7
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_HANG");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_HANG");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(717.5, 190.5, 23, 111), Vector(-1, 55)));
-		animation = new Animation();
-		animation->add(new AnimationSample());
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID);
 		// Climb - 8
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_CLIMB");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_CLIMB");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(24.5, 342, 21, 106), Vector(-7, 49)));
 		spriteGroup->add(new Sprite(AABB(67, 348, 24, 88), Vector(-9, 40)));
 		spriteGroup->add(new Sprite(AABB(109, 348.5, 26, 89), Vector(-5, 28)));
@@ -577,13 +563,11 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(843, 330, 50, 68), Vector(20, -34)));
 		spriteGroup->add(new Sprite(AABB(896, 324, 30, 78), Vector(4, -39)));
 		spriteGroup->add(new Sprite(AABB(937, 324.5, 22, 79), Vector(3, -40)));
-		animation = new Animation();
-		animation->add(new AnimationSample(1120.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 1120.0f);
 		// JumpForwardStart - 9
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_JUMP_FORWARD_START");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_JUMP_FORWARD_START");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(20.5, 502, 25, 84), Vector(7, -42)));
 		spriteGroup->add(new Sprite(AABB(59.5, 503, 27, 82), Vector(8, -41)));
 		spriteGroup->add(new Sprite(AABB(106, 503, 42, 80), Vector(6, -40)));
@@ -591,37 +575,31 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(225, 509, 56, 64), Vector(15, -32)));
 		spriteGroup->add(new Sprite(AABB(298.5, 507.5, 55, 65), Vector(20, -33)));
 		spriteGroup->add(new Sprite(AABB(369, 505, 54, 68), Vector(22, -34)));
-		animation = new Animation();
-		animation->add(new AnimationSample(460.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 460.0f);
 		// JumpForward - 10
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_JUMP_FORWARD");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_JUMP_FORWARD");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(449.5, 503, 79, 70), Vector(2, -35)));
 		spriteGroup->add(new Sprite(AABB(557.5, 501, 99, 70), Vector(1, -35)));
 		spriteGroup->add(new Sprite(AABB(678.5, 507.5, 103, 61), Vector(-3, -31)));
 		spriteGroup->add(new Sprite(AABB(788, 506.5, 84, 55), Vector(-2, -28)));
-		animation = new Animation();
-		animation->add(new AnimationSample(260.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 260.0f);
 		// JumpForwardEnd - 11
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_JUMP_FORWARD_END");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_JUMP_FORWARD_END");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(52, 620.5, 58, 55), Vector(-8, -28)));
 		spriteGroup->add(new Sprite(AABB(114.5, 621.5, 41, 51), Vector(-4, -26)));
 		spriteGroup->add(new Sprite(AABB(189.5, 618, 55, 60), Vector(3, -30)));
 		spriteGroup->add(new Sprite(AABB(248, 613, 44, 70), Vector(-8, -35)));
 		spriteGroup->add(new Sprite(AABB(306.5, 609, 35, 80), Vector(-2, -40)));
 		spriteGroup->add(new Sprite(AABB(352, 608, 30, 82), Vector(0, -41)));
-		animation = new Animation();
-		animation->add(new AnimationSample(400.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 400.0f);
 		// Walk - 12
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_WALK");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_WALK");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(34, 735.5, 24, 81), Vector(8, -41)));
 		spriteGroup->add(new Sprite(AABB(76, 735, 22, 80), Vector(6, -40)));
 		spriteGroup->add(new Sprite(AABB(117.5, 736.5, 27, 77), Vector(6, -39)));
@@ -634,24 +612,20 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(543.5, 733, 41, 80), Vector(-3, -40)));
 		spriteGroup->add(new Sprite(AABB(593, 732.5, 26, 81), Vector(0, -41)));
 		spriteGroup->add(new Sprite(AABB(634.5, 732, 21, 82), Vector(5, -41)));
-		animation = new Animation();
-		animation->add(new AnimationSample(790.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 790.0f);
 		// HangingForward - 13
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_SWING_FORWARD");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_SWING_FORWARD");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(32.5, 859.5, 29, 111), Vector(1, 55)));
 		spriteGroup->add(new Sprite(AABB(91.5, 859.5, 33, 109), Vector(6, 54)));
 		spriteGroup->add(new Sprite(AABB(152.5, 863.5, 41, 107), Vector(11, 53)));
 		spriteGroup->add(new Sprite(AABB(206, 861.5, 40, 103), Vector(9, 51)));
-		animation = new Animation();
-		animation->add(new AnimationSample(260.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 260.0f);
 		// HangingBackwards - 14
 		spriteGroup = new SpriteGroup();
-		id = Hash("POP_ANM_SWING_BACKWARD");
-		spritesheet->add(id, spriteGroup);
+		animationID = Hash("POP_ANM_SWING_BACKWARD");
+		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(252.5, 864.5, 23, 109), Vector(-6, 54)));
 		spriteGroup->add(new Sprite(AABB(295.5, 864, 35, 108), Vector(-11, 54)));
 		spriteGroup->add(new Sprite(AABB(348.5, 863, 45, 106), Vector(-16, 53)));
@@ -659,9 +633,7 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(475.5, 860, 55, 102), Vector(-22, 51)));
 		spriteGroup->add(new Sprite(AABB(539, 859.5, 56, 101), Vector(-23, 50)));
 		spriteGroup->add(new Sprite(AABB(611, 858.5, 56, 99), Vector(-22, 49)));
-		animation = new Animation();
-		animation->add(new AnimationSample(460.0f));
-		(*animations)[id] = animation;
+		addAnimation(animations, animationID, sceneNodeID, 460.0f);
 
 #pragma endregion
 
@@ -669,7 +641,7 @@ namespace Temporal
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		createPatrol(spritesheet, animations);
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		//createBackground();

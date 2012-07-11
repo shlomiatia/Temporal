@@ -3,8 +3,6 @@
 #include "Serialization.h"
 #include "Message.h"
 #include "MessageParams.h"
-#include "Animation.h"
-#include "AnimationSample.h"
 
 namespace Temporal
 {
@@ -43,17 +41,43 @@ namespace Temporal
 	void Animator::update(float framePeriodInMillis)
 	{
 		_timer.update(framePeriodInMillis);
-		const Animation& animation = *_animations.at(_animationId);
-		const AnimationSample& animationSample = animation.get(0);
-
-		float duration = animationSample.getDuration();
-		float normalizedTime = duration == 0.0f ? 1.0f : _timer.getElapsedTimeInMillis() / duration;
-		if(normalizedTime <= 1.0f  || _repeat)
+		float animationPeriod = _timer.getElapsedTimeInMillis();
+		const SceneGraphSampleCollection& animation = *_animations.at(_animationId);
+		bool animationEnded = false;
+		for(SceneGraphSampleIterator i = animation.begin(); i != animation.end(); ++i)
 		{
-			float normalizedSpriteIndex = !_rewind ? normalizedTime : 1.0f - normalizedTime;
-			sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &normalizedSpriteIndex));
+			const Hash& sceneNodeID = i->first;
+			const SceneNodeSampleCollection& sceneNodeSamples =  *i->second;
+			int size = sceneNodeSamples.size();
+			float totalSamplesDuration = 0.0f;
+			for(int index = 0; index < size; ++index)
+			{
+				const SceneNodeSample& current = *sceneNodeSamples[index];
+				float currentSampleDuration = current.getDuration();
+				if(size == 1 || totalSamplesDuration + currentSampleDuration > animationPeriod)
+				{
+					float normalizedSampleDuration = 0.0f;
+					float currentSamplePeriod = animationPeriod - totalSamplesDuration;
+					if(currentSampleDuration != 0.0f)
+					{
+						normalizedSampleDuration = currentSamplePeriod / currentSampleDuration;
+					}
+					if(currentSampleDuration == 0.0f || normalizedSampleDuration >= 1.0f)
+					{
+						animationEnded = true;
+						_timer.reset(0.0f);
+					}
+					if(normalizedSampleDuration < 1.0f || _repeat)
+					{
+						SceneNodeParams params(sceneNodeID, Vector::Zero, 0.0f, current.getSpriteGroupId(), !_rewind ? normalizedSampleDuration : 1.0 - normalizedSampleDuration);
+						sendMessageToOwner(Message(MessageID::SET_SCENE_NODE, &params));
+					}
+					break;
+				}
+				totalSamplesDuration += currentSampleDuration;
+			}
 		}
-		bool animationEnded = normalizedTime >= 1.0f;
+
 		if(!_repeat && animationEnded)
 			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
 	}
@@ -64,8 +88,6 @@ namespace Temporal
 		_animationId = resetAnimationParams.getAnimationID();
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
-		sendMessageToOwner(Message(MessageID::SET_SPRITE_GROUP_ID, &_animationId));
-		float normalizedTime = _rewind ? 1.0f : 0.0f;
-		sendMessageToOwner(Message(MessageID::SET_SPRITE_ID, &normalizedTime));
+		update(0.0f);
 	}
 }

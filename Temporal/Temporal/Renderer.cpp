@@ -6,26 +6,24 @@
 #include "Message.h"
 #include "EntitiesManager.h"
 #include "SceneNode.h"
+#include "MessageParams.h"
 
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-
 	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("REN_SER_SPR_GRP");
 	static const Hash SPRITE_SERIALIZATION = Hash("REN_SER_SPR");
 
 	void Renderer::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::SET_SPRITE_GROUP_ID)
+		if(message.getID() == MessageID::SET_SCENE_NODE)
 		{
-			_root->setSpriteGroupId(*(Hash*)message.getParam());
-		}
-		else if(message.getID() == MessageID::SET_SPRITE_ID)
-		{
-			float normalizedSpriteIndex = *(float*)message.getParam();
-			int spritesSize = _spritesheet.get(_root->getSpriteGroupId()).getSize();
-			int spriteId = (int)(spritesSize * normalizedSpriteIndex) % spritesSize;
-			_root->setSpriteId(spriteId);
+			const SceneNodeParams& params = *(SceneNodeParams*)message.getParam();
+			SceneNode* sceneNode = _root->get(params.getSceneNodeID());
+			sceneNode->setSpriteGroupId(params.getSpriteGroupID());
+			int spritesSize = _spritesheet.get(params.getSpriteGroupID()).getSize();
+			int spriteId = (int)(spritesSize * params.getSpriteID()) % spritesSize;
+			sceneNode->setSpriteId(spriteId);
 		}
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
@@ -73,14 +71,9 @@ namespace Temporal
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
 		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);
 
-		bool mirrored = orientation != spritesheetOrientation;
-		const Sprite& sprite = _spritesheet.get(_root->getSpriteGroupId()).get(_root->getSpriteId());
-		const Vector& offset = sprite.getOffset();
-		float screenLocationX = position.getX() - orientation * spritesheetOrientation * offset.getVx();
-		float screenLocationY = position.getY() - offset.getVy();
-
-		Point screenLocation(screenLocationX, screenLocationY);
-		Graphics::get().draw(_spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored, color);
+		Graphics::get().beginTranslate(position);
+		_root->draw(_spritesheet, orientation);
+		Graphics::get().end();
 	}
 
 	Component* Renderer::clone(void) const
