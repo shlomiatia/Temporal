@@ -59,13 +59,12 @@ namespace Temporal
 			Period::Enum period = Period::Future;
 			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		}
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));
-		
-		ViewManager::get().update();
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
 	void BasePanel::draw(void) const
 	{
+		ViewManager::get().update();
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));

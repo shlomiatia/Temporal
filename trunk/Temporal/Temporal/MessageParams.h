@@ -35,7 +35,31 @@ namespace Temporal
 	private:
 		const Hash _sensorID;
 		const Point* _point;
-	
+
+		SensorCollisionParams(const SensorCollisionParams&);
+		SensorCollisionParams& operator=(const SensorCollisionParams&);
+	};
+
+	class SceneNodeParams
+	{
+	public:
+		SceneNodeParams(const Hash& sceneNodeID, const Vector& translation, float rotation, const Hash& spriteGroupID, float spriteID)
+			: _sceneNodeID(sceneNodeID), _translation(translation), _rotation(rotation), _spriteGroupID(spriteGroupID), _spriteID(spriteID) {}
+
+		const Hash& getSceneNodeID(void) const { return _sceneNodeID; }
+		const Vector& getTranslation(void) const { return _translation; }
+		float getRotation(void) const { return _rotation; }
+		const Hash& getSpriteGroupID(void) const { return _spriteGroupID; }
+		float getSpriteID(void) const { return _spriteID; }
+	private:
+		const Hash _sceneNodeID;
+		const Vector _translation;
+		const float _rotation;
+		const Hash _spriteGroupID;
+		const float _spriteID;
+
+		SceneNodeParams(const SceneNodeParams&);
+		SceneNodeParams& operator=(const SceneNodeParams&);
 	};
 }
 #endif

@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="AnimationSample.h" />
     <ClInclude Include="BaseUtils.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />

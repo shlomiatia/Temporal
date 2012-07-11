@@ -18,11 +18,12 @@ namespace Temporal
 		ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
 
 		void handleMessage(Message& message);
-		void draw(void) const;
 		Component* clone(void) const;
 	private:
 		const SpriteSheet& _spritesheet;
 		const VisualLayer::Enum _layer;
+
+		void draw(void) const;
 
 		Color _color;
 		SceneNode* _root;

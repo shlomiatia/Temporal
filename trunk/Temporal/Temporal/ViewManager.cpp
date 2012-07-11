@@ -33,6 +33,6 @@ namespace Temporal
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
 
 		Vector translation(-cameraLeftPosition, -cameraBottomPosition);
-		Graphics::get().setTranslation(translation);
+		Graphics::get().translate(translation);
 	}
 }

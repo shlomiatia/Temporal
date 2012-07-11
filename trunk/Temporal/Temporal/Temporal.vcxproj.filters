@@ -177,12 +177,6 @@
     <ClInclude Include="SceneNodeSample.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationSample.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

@@ -4,20 +4,17 @@
 #include "Timer.h"
 #include "Component.h"
 #include "Hash.h"
-#include <unordered_map>
+#include "SceneNodeSample.h"
 
 namespace Temporal
 {
 	class ResetAnimationParams;
-	class Animation;
-
-	typedef std::unordered_map<const Hash, const Animation*> AnimationCollection;
-	typedef HashCollection::const_iterator AnimationIterator;
 
 	class Animator : public Component
 	{
 	public:
-		explicit Animator(const AnimationCollection& animations) : _animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false) {}
+		explicit Animator(const AnimationCollection& animations) :
+		_animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false) {}
 		
 		ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
 
