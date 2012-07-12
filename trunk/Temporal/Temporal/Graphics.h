@@ -6,6 +6,8 @@
 
 namespace Temporal
 {
+	class SceneNode;
+	class SpriteSheet;
 	class Shape;
 	class AABB;
 	class Segment;
@@ -33,9 +35,7 @@ namespace Temporal
 		void validate(void) const;
 
 		void translate(const Vector& translation) const;
-		void beginTranslate(const Vector& translation) const;
-		void endTranslate(void) const;
-		void draw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color = Color::White) const;
+		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, Side::Enum orientation, const Color& color = Color::White) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
 		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;

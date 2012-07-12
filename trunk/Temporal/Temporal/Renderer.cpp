@@ -16,16 +16,7 @@ namespace Temporal
 
 	void Renderer::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::SET_SCENE_NODE)
-		{
-			const SceneNodeParams& params = *(SceneNodeParams*)message.getParam();
-			SceneNode* sceneNode = _root->get(params.getSceneNodeID());
-			sceneNode->setSpriteGroupID(params.getSpriteGroupID());
-			int spritesSize = _spritesheet.get(params.getSpriteGroupID()).getSize();
-			int spriteId = (int)(spritesSize * params.getSpriteID()) % spritesSize;
-			sceneNode->setSpriteId(spriteId);
-		}
-		else if(message.getID() == MessageID::SET_COLOR)
+		if(message.getID() == MessageID::SET_COLOR)
 		{
 			_color = *(Color*)message.getParam();
 		}
@@ -71,9 +62,8 @@ namespace Temporal
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
 		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);*/
 
-		Graphics::get().beginTranslate(position);
-		_root->draw(_spritesheet, orientation);
-		Graphics::get().endTranslate();
+		_root->setTranslation(position);
+		Graphics::get().draw(*_root, _spritesheet, orientation);
 	}
 
 	Component* Renderer::clone(void) const

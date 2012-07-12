@@ -17,25 +17,31 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		SceneNode(const Hash& id) : _id(id), _translation(Vector::Zero), _spriteGroupID(Hash::INVALID), _spriteID(0) {}
+		SceneNode(const Hash& id, bool drawBeforeParent = false) : _id(id), _translation(Vector::Zero), _rotation(0.0f), _spriteGroupID(Hash::INVALID), _spriteInterpolation(0), _drawBeforeParent(drawBeforeParent) {}
 		~SceneNode(void);
 
+		const bool drawBeforeParent(void) const { return _drawBeforeParent; }
+		const Hash& getID(void) const { return _id; }
 		const Hash& getSpriteGroupID(void) const { return _spriteGroupID; }
 		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
-		int getSpriteID(void) const { return _spriteID; }
-		void setSpriteId(int spriteId) { _spriteID = spriteId; }
+		float getSpriteInterpolation(void) const { return _spriteInterpolation; }
+		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
 		const Vector& getTranslation(void) const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
+		float getRotation(void) const { return _rotation; }
+		void setRotation(float rotation) { _rotation = rotation; }
+
+		const SceneNodeCollection& getChildren(void) const { return _children; }
 
 		void add(SceneNode* child) { _children.push_back(child); }
-		SceneNode* get(const Hash& id);
-		void draw(const SpriteSheet& spritesheet, Side::Enum orientation);
 	private:
 		const Hash _id;
 
+		bool _drawBeforeParent;
 		Vector _translation;
+		float _rotation;
 		Hash _spriteGroupID;
-		int _spriteID;
+		float _spriteInterpolation;
 		SceneNodeCollection _children;
 
 		SceneNode(const SceneNode&);

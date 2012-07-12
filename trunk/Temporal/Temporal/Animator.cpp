@@ -3,12 +3,29 @@
 #include "Serialization.h"
 #include "Message.h"
 #include "MessageParams.h"
+#include "SceneNode.h"
+#include <math.h>
 
 namespace Temporal
 {
 	static const Hash TIMER_SERIALIZATION = Hash("ANM_SER_TIMER");
 	static const Hash REPEAT_SERIALIZATION = Hash("ANM_SER_REPEAT");
 	static const Hash REWIND_SERIALIZATION = Hash("ANM_SER_REWIND");
+
+	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
+	{
+		bindings[node.getID()] = new SceneNodeBinding(node);
+		for(SceneNodeIterator i = node.getChildren().begin(); i != node.getChildren().end(); ++i)
+		{
+			bindSceneNodes(bindings, **i);
+		}
+	}
+
+	Animator::Animator(const AnimationCollection& animations, SceneNode& root) :
+		_animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false)
+	{
+		bindSceneNodes(_bindings, root);
+	}
 
 	void Animator::handleMessage(Message& message)
 	{
@@ -41,45 +58,42 @@ namespace Temporal
 	void Animator::update(float framePeriodInMillis)
 	{
 		_timer.update(framePeriodInMillis);
-		float animationPeriod = _timer.getElapsedTimeInMillis();
-		const SceneGraphSampleCollection& animation = *_animations.at(_animationId);
-		bool animationEnded = false;
-		for(SceneGraphSampleIterator i = animation.begin(); i != animation.end(); ++i)
+		float totalPeriod = _timer.getElapsedTimeInMillis();
+		const Animation& animation = *_animations.at(_animationId);
+		float animationDuration = animation.getDuration();
+		if(animationDuration != 0.0f && totalPeriod > animationDuration && !_repeat)
 		{
-			const Hash& sceneNodeID = i->first;
-			const SceneNodeSampleCollection& sceneNodeSamples =  *i->second;
-			int size = sceneNodeSamples.size();
-			float totalSamplesDuration = 0.0f;
-			for(int index = 0; index < size; ++index)
-			{
-				const SceneNodeSample& current = *sceneNodeSamples[index];
-				float currentSampleDuration = current.getDuration();
-				if(size == 1 || totalSamplesDuration + currentSampleDuration > animationPeriod)
-				{
-					float normalizedSampleDuration = 0.0f;
-					float currentSamplePeriod = animationPeriod - totalSamplesDuration;
-					if(currentSampleDuration != 0.0f)
-					{
-						normalizedSampleDuration = currentSamplePeriod / currentSampleDuration;
-					}
-					if(normalizedSampleDuration < 1.0f || _repeat)
-					{
-						SceneNodeParams params(sceneNodeID, Vector::Zero, 0.0f, current.getSpriteGroupId(), !_rewind ? normalizedSampleDuration : 1.0 - normalizedSampleDuration);
-						sendMessageToOwner(Message(MessageID::SET_SCENE_NODE, &params));
-					}
-					if(currentSampleDuration == 0.0f || normalizedSampleDuration >= 1.0f)
-					{
-						animationEnded = true;
-						_timer.reset(0.0f);
-					}
-					break;
-				}
-				totalSamplesDuration += currentSampleDuration;
-			}
+			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));			
+			return;
 		}
 
-		if(!_repeat && animationEnded)
-			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));
+		float relativePeriod =  fmod(totalPeriod, animationDuration);
+		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
+		{
+			const Hash& sceneNodeID = i->first;
+			SceneNodeBinding& binding = *i->second;
+			int index = binding.getIndex();
+			const SceneNodeSampleCollection& sceneNodeSamples = animation.get(sceneNodeID);
+			const SceneNodeSample* currentSample = sceneNodeSamples.at(index);
+			while(currentSample->getEndTime() != 0.0f && (currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() <= relativePeriod))
+			{
+				index = (index + 1) % sceneNodeSamples.size();
+				binding.setIndex(index);
+				currentSample = sceneNodeSamples.at(index);
+			}
+			index = (index + 1) % sceneNodeSamples.size();
+			const SceneNodeSample& nextSample = *sceneNodeSamples.at(index);
+			float samplePeriod = relativePeriod - currentSample->getStartTime();
+			float sampleDuration = currentSample->getDuration();
+			float interpolation = sampleDuration == 0.0f ? 0.0f : samplePeriod / sampleDuration;
+			Vector translation = currentSample->getTranslation() + (nextSample.getTranslation() - currentSample->getTranslation()) * interpolation;
+			float rotation = currentSample->getRotation() + (nextSample.getRotation() - currentSample->getRotation()) * interpolation;
+			SceneNode& sceneNode = binding.getSceneNode();
+			sceneNode.setTranslation(translation);
+			sceneNode.setRotation(rotation);
+			sceneNode.setSpriteInterpolation(interpolation);
+			sceneNode.setSpriteGroupID(currentSample->getSpriteGroupId());
+		}
 	}
 
 	void Animator::reset(const ResetAnimationParams& resetAnimationParams)

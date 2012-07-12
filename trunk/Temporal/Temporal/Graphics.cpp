@@ -1,5 +1,7 @@
 #include "Graphics.h"
+#include "SpriteSheet.h"
 #include "Texture.h"
+#include "SceneNode.h"
 #include "Shape.h"
 #include "Segment.h"
 #include "AABB.h"
@@ -94,63 +96,83 @@ namespace Temporal
 		glTranslatef(translation.getVx(), translation.getVy(), 0.0f);
 	}
 
-	void Graphics::beginTranslate(const Vector& translation) const
+	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, Side::Enum orientation, const Color& color) const
 	{
-		glPushMatrix();
-		translate(translation);
-	}
-
-	void Graphics::endTranslate(void) const
-	{
-		glPopMatrix();
-	}
-
-	void Graphics::draw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color) const
-	{
-		const Size& textureSize = texture.getSize();
-		float textureWidth = textureSize.getWidth();
-		float textureHeight = textureSize.getHeight();
-
-		// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
-		float imageLeft = texturePart.getLeft();
-		float imageRight = texturePart.getRight() + 1.0f;
-		float imageTop = texturePart.getBottom();
-		float imageBottom = texturePart.getTop() + 1.0f;
-
-		const float textureX0 = (!mirrored ? imageLeft : imageRight) / textureWidth;
-		const float textureX1 = (!mirrored ? imageRight : imageLeft) / textureWidth;
-		const float textureTop = imageTop / textureHeight;
-		const float textureBottom = imageBottom / textureHeight;
-
-		glBindTexture(GL_TEXTURE_2D, texture.getID());
-
-		setColor(color);
-
+		const Texture& texture = spritesheet.getTexture();
+		Side::Enum spritesheetOrientation = spritesheet.getOrientation();
+		bool mirrored = orientation != spritesheetOrientation;
+		const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
+		
 		glPushMatrix();
 		{	
-			translate(translation);
-			//glRotatef(rotation, 0.0, 0.0, 1.0f);
+			translate(sceneNode.getTranslation());
+			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
 
-			GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
-										 -texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-										  texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-										  texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
+			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
+			{
+				if((**i).drawBeforeParent())
+					draw(**i, spritesheet, orientation, color);
+			}
 
-			GLfloat textureVertices[] = { textureX0, textureBottom,
-										  textureX0, textureTop,
-										  textureX1, textureTop,
-										  textureX1, textureBottom };
+			if(spriteGroupID != Hash::INVALID)
+			{
+				glPushMatrix();
+				{
+					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
+					int spriteIndex = (int)(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+					const Sprite& sprite = spriteGroup.get(spriteIndex);
+					const AABB& texturePart = sprite.getBounds();
+				
+					const Size& textureSize = texture.getSize();
+					float textureWidth = textureSize.getWidth();
+					float textureHeight = textureSize.getHeight();
+
+					// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
+					float imageLeft = texturePart.getLeft();
+					float imageRight = texturePart.getRight() + 1.0f;
+					float imageTop = texturePart.getBottom();
+					float imageBottom = texturePart.getTop() + 1.0f;
+
+					const float textureX0 = (!mirrored ? imageLeft : imageRight) / textureWidth;
+					const float textureX1 = (!mirrored ? imageRight : imageLeft) / textureWidth;
+					const float textureTop = imageTop / textureHeight;
+					const float textureBottom = imageBottom / textureHeight;
+
+					glBindTexture(GL_TEXTURE_2D, texture.getID());
+
+					setColor(color);
+				
+					Vector offset = Vector(-sprite.getOffset().getVx()  * orientation * spritesheetOrientation, -sprite.getOffset().getVy());
+					glTranslatef(offset.getVx(), offset.getVy(), 0.0f);
+					GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
+												 -texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+												  texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+												  texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
+
+					GLfloat textureVertices[] = { textureX0, textureBottom,
+												  textureX0, textureTop,
+												  textureX1, textureTop,
+												  textureX1, textureBottom };
  
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
  
-			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
-			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
+					glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+					glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
  
-			glDrawArrays(GL_QUADS, 0, 4);
+					glDrawArrays(GL_QUADS, 0, 4);
  
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+					glDisableClientState(GL_VERTEX_ARRAY);
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				}
+				glPopMatrix();
+			}
+
+			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
+			{
+				if(!(**i).drawBeforeParent())
+					draw(**i, spritesheet, orientation, color);
+			}
 		}
 		glPopMatrix();
 	}
