@@ -34,6 +34,7 @@
 #include "Patrol.h"
 #include "Camera.h"
 #include "Laser.h"
+#include "MessageParams.h"
 #include <sstream>
 
 namespace Temporal
@@ -99,6 +100,17 @@ namespace Temporal
 		addFrontEdgeSensor(entity);
 	}
 
+	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
+	{
+		Animation* animation = (Animation*)(*animations)[animationID];
+		if(animation == NULL)
+		{
+			animation = new Animation();
+			(*animations)[animationID] = animation;
+		}
+		animation->add(sceneNodeID, duration, translation, rotation);
+	}
+
 	void createTemporalEcho(Entity* entity)
 	{
 		const Component* position = entity->get(ComponentType::POSITION);
@@ -126,8 +138,8 @@ namespace Temporal
 		InputController* controller = new InputController();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(*animations);
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
@@ -166,16 +178,6 @@ namespace Temporal
 		//createTemporalEcho(entity);
 		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
-	}
-
-	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f)
-	{
-		SceneGraphSampleCollection* animation = new SceneGraphSampleCollection();
-		SceneNodeSampleCollection* jointAnimation = new SceneNodeSampleCollection();
-		SceneNodeSample* jointSample = new SceneNodeSample(spriteGroupID, duration);
-		jointAnimation->push_back(jointSample);
-		(*animation)[sceneNodeID] = jointAnimation;
-		(*animations)[animationID] = animation;
 	}
 
 	void createCamera()
@@ -217,8 +219,8 @@ namespace Temporal
 		addAnimation(animations, animationID, animationID, sceneNodeID, 200.0f);
 		#pragma endregion
 
-		Animator* animator = new Animator(*animations);
 		SceneNode* root = new SceneNode(sceneNodeID);
+		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
@@ -242,8 +244,8 @@ namespace Temporal
 		Patrol* patrol = new Patrol();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(*animations);
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
@@ -272,8 +274,8 @@ namespace Temporal
 		Navigator* navigator = new Navigator();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(*animations);
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
@@ -465,115 +467,133 @@ namespace Temporal
 	{
 		Position* position = new Position(Point(300.0f, 300.0f));
 
-		Hash sceneNodeID = Hash::INVALID;
+		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		Hash animationID = Hash("ANM_WALK");
 		const Texture* texture = Texture::load("c:\\stuff\\Zombies5.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
+		AnimationCollection* animations = new AnimationCollection();
 
+		#pragma region SpriteGroup
 		// SCN_RIGHT_LEG
-		sceneNodeID = Hash("SCN_RIGHT_LEG");
-		SceneNode* SCN_RIGHT_LEG = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_RIGHT_LEG_ID = Hash("SCN_RIGHT_LEG");
+		SceneNode* SCN_RIGHT_LEG = new SceneNode(Hash(SCN_RIGHT_LEG_ID), true);
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_RIGHT_LEG->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_RIGHT_LEG_ID, spriteGroup);
+		SCN_RIGHT_LEG->setSpriteGroupID(SCN_RIGHT_LEG_ID);
 		spriteGroup->add(new Sprite(AABB(20.5, 31.5, 41, 45), Vector(6, 9)));
 		// SCN_LEFT_LEG
-		sceneNodeID = Hash("SCN_LEFT_LEG");
-		SceneNode* SCN_LEFT_LEG = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_LEFT_LEG_ID = Hash("SCN_LEFT_LEG");
+		SceneNode* SCN_LEFT_LEG = new SceneNode(Hash(SCN_LEFT_LEG_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_LEFT_LEG->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_LEFT_LEG_ID, spriteGroup);
+		SCN_LEFT_LEG->setSpriteGroupID(SCN_LEFT_LEG_ID);
 		spriteGroup->add(new Sprite(AABB(69, 31.5, 36, 55), Vector(-3, 14)));
 		// SCN_LEFT_FOOT
-		sceneNodeID = Hash("SCN_LEFT_FOOT");
-		SceneNode* SCN_LEFT_FOOT = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_LEFT_FOOT_ID = Hash("SCN_LEFT_FOOT");
+		SceneNode* SCN_LEFT_FOOT = new SceneNode(Hash(SCN_LEFT_FOOT_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_LEFT_FOOT->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_LEFT_FOOT_ID, spriteGroup);
+		SCN_LEFT_FOOT->setSpriteGroupID(SCN_LEFT_FOOT_ID);
 		spriteGroup->add(new Sprite(AABB(162.5, 33.5, 37, 53), Vector(-8, 20)));
 		// SCN_RIGHT_FOOT
-		sceneNodeID = Hash("SCN_RIGHT_FOOT");
-		SceneNode* SCN_RIGHT_FOOT = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_RIGHT_FOOT_ID = Hash("SCN_RIGHT_FOOT");
+		SceneNode* SCN_RIGHT_FOOT = new SceneNode(Hash(SCN_RIGHT_FOOT_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_RIGHT_FOOT->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_RIGHT_FOOT_ID, spriteGroup);
+		SCN_RIGHT_FOOT->setSpriteGroupID(SCN_RIGHT_FOOT_ID);
 		spriteGroup->add(new Sprite(AABB(114.5, 33.5, 37, 53), Vector(-8, 20)));
 		// SCN_BODY
-		sceneNodeID = Hash("SCN_BODY");
-		SceneNode* SCN_BODY = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_BODY_ID = Hash("SCN_BODY");
+		SceneNode* SCN_BODY = new SceneNode(Hash(SCN_BODY_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_BODY->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_BODY_ID, spriteGroup);
+		SCN_BODY->setSpriteGroupID(SCN_BODY_ID);
 		spriteGroup->add(new Sprite(AABB(27.5, 100.5, 55, 75), Vector(5, -2)));
 		// SCN_RIGHT_PALM
-		sceneNodeID = Hash("SCN_RIGHT_PALM");
-		SceneNode* SCN_RIGHT_PALM = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_RIGHT_PALM_ID = Hash("SCN_RIGHT_PALM");
+		SceneNode* SCN_RIGHT_PALM = new SceneNode(Hash(SCN_RIGHT_PALM_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_RIGHT_PALM->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_RIGHT_PALM_ID, spriteGroup);
+		SCN_RIGHT_PALM->setSpriteGroupID(SCN_RIGHT_PALM_ID);
 		spriteGroup->add(new Sprite(AABB(93, 103, 56, 58), Vector(21, 5)));
 		// SCN_RIGHT_HAND
-		sceneNodeID = Hash("SCN_RIGHT_HAND");
-		SceneNode* SCN_RIGHT_HAND = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_RIGHT_HAND_ID = Hash("SCN_RIGHT_HAND");
+		SceneNode* SCN_RIGHT_HAND = new SceneNode(Hash(SCN_RIGHT_HAND_ID), true);
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_RIGHT_HAND->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_RIGHT_HAND_ID, spriteGroup);
+		SCN_RIGHT_HAND->setSpriteGroupID(SCN_RIGHT_HAND_ID);
 		spriteGroup->add(new Sprite(AABB(206.5, 102, 27, 42), Vector(4, 14)));
 		// SCN_LEFT_HAND
-		sceneNodeID = Hash("SCN_LEFT_HAND");
-		SceneNode* SCN_LEFT_HAND = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_LEFT_HAND_ID = Hash("SCN_LEFT_HAND");
+		SceneNode* SCN_LEFT_HAND = new SceneNode(Hash(SCN_LEFT_HAND_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_LEFT_HAND->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_LEFT_HAND_ID, spriteGroup);
+		SCN_LEFT_HAND->setSpriteGroupID(SCN_LEFT_HAND_ID);
 		spriteGroup->add(new Sprite(AABB(153.5, 98, 35, 46), Vector(-11, 15)));
 		// SCN_LEFT_PALM
-		sceneNodeID = Hash("SCN_LEFT_PALM");
-		SceneNode* SCN_LEFT_PALM = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_LEFT_PALM_ID = Hash("SCN_LEFT_PALM");
+		SceneNode* SCN_LEFT_PALM = new SceneNode(Hash(SCN_LEFT_PALM_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_LEFT_PALM->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_LEFT_PALM_ID, spriteGroup);
+		SCN_LEFT_PALM->setSpriteGroupID(SCN_LEFT_PALM_ID);
 		spriteGroup->add(new Sprite(AABB(107.5, 197.5, 59, 59), Vector(22, 23)));
 		// SCN_HEAD
-		sceneNodeID = Hash("SCN_HEAD");
-		SceneNode* SCN_HEAD = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_HEAD_ID = Hash("SCN_HEAD");
+		SceneNode* SCN_HEAD = new SceneNode(Hash(SCN_HEAD_ID));
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_HEAD->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_HEAD_ID, spriteGroup);
+		SCN_HEAD->setSpriteGroupID(SCN_HEAD_ID);
 		spriteGroup->add(new Sprite(AABB(38.5, 195, 73, 62), Vector(24, -11)));
 		// SCN_SHADOW
-		sceneNodeID = Hash("SCN_SHADOW");
-		SceneNode* SCN_SHADOW = new SceneNode(Hash(sceneNodeID));
+		Hash SCN_SHADOW_ID = Hash("SCN_SHADOW");
+		SceneNode* SCN_SHADOW = new SceneNode(Hash(SCN_SHADOW_ID), true);
 		spriteGroup = new SpriteGroup();
-		spritesheet->add(sceneNodeID, spriteGroup);
-		SCN_SHADOW->setSpriteGroupID(sceneNodeID);
+		spritesheet->add(SCN_SHADOW_ID, spriteGroup);
+		SCN_SHADOW->setSpriteGroupID(SCN_SHADOW_ID);
 		spriteGroup->add(new Sprite(AABB(198, 212, 94, 30), Vector(-2, 2)));
 
-		SCN_BODY->add(SCN_HEAD);
-		SCN_HEAD->setTranslation(Vector(-9,31));
-		SCN_BODY->add(SCN_LEFT_HAND);
-		SCN_LEFT_HAND->setTranslation(Vector(1,22));
-		SCN_LEFT_HAND->add(SCN_LEFT_PALM);
-		SCN_LEFT_PALM->setTranslation(Vector(19,-38));
-		SCN_BODY->add(SCN_RIGHT_HAND);
-		SCN_RIGHT_HAND->setTranslation(Vector(-28,28));
-		SCN_RIGHT_HAND->add(SCN_RIGHT_PALM);
-		SCN_RIGHT_PALM->setTranslation(Vector(-10,-26));
-		SCN_BODY->add(SCN_LEFT_LEG);
-		SCN_LEFT_LEG->setTranslation(Vector(6,-29));
-		SCN_LEFT_LEG->add(SCN_LEFT_FOOT);
-		SCN_LEFT_FOOT->setTranslation(Vector(0,-38));
-		SCN_BODY->add(SCN_RIGHT_LEG);
-		SCN_RIGHT_LEG->setTranslation(Vector(-13,-29));
-		SCN_RIGHT_LEG->add(SCN_RIGHT_FOOT);
-		SCN_RIGHT_FOOT->setTranslation(Vector(-17,-33));
+
+
+		#pragma endregion
+
+		root->add(SCN_BODY);
 		SCN_BODY->add(SCN_SHADOW);
-		SCN_SHADOW->setTranslation(Vector(-5,-101));
+		SCN_BODY->add(SCN_RIGHT_HAND);
+		SCN_RIGHT_HAND->add(SCN_RIGHT_PALM);
+		SCN_BODY->add(SCN_RIGHT_LEG);
+		SCN_RIGHT_LEG->add(SCN_RIGHT_FOOT);
+		SCN_BODY->add(SCN_HEAD);
+		SCN_BODY->add(SCN_LEFT_LEG);
+		SCN_LEFT_LEG->add(SCN_LEFT_FOOT);
+		SCN_BODY->add(SCN_LEFT_HAND);
+		SCN_LEFT_HAND->add(SCN_LEFT_PALM);
 		
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, SCN_BODY);
+
+		Animator* animator = new Animator(*animations, *SCN_BODY);
+
+		addAnimation(animations, animationID, SCN_BODY_ID, SCN_BODY_ID);
+		addAnimation(animations, animationID, SCN_HEAD_ID, SCN_HEAD_ID, 0.0f, Vector(-9,31));
+		addAnimation(animations, animationID, SCN_LEFT_HAND_ID, SCN_LEFT_HAND_ID, 500.0f, Vector(1,22));
+		addAnimation(animations, animationID, SCN_LEFT_HAND_ID, SCN_LEFT_HAND_ID, 500.0f, Vector(1,22), -90.0f);
+		addAnimation(animations, animationID, SCN_LEFT_PALM_ID, SCN_LEFT_PALM_ID, 0.0f, Vector(19,-38));
+		addAnimation(animations, animationID, SCN_RIGHT_HAND_ID, SCN_RIGHT_HAND_ID, 250.0f, Vector(-28,28), -45.0f);
+		addAnimation(animations, animationID, SCN_RIGHT_HAND_ID, SCN_RIGHT_HAND_ID, 500.0f, Vector(-28,28), -90.0f);
+		addAnimation(animations, animationID, SCN_RIGHT_HAND_ID, SCN_RIGHT_HAND_ID, 250.0f, Vector(-28,28), 0.0f);
+		addAnimation(animations, animationID, SCN_RIGHT_PALM_ID, SCN_RIGHT_PALM_ID, 0.0f, Vector(-10,-26));
+		addAnimation(animations, animationID, SCN_LEFT_LEG_ID, SCN_LEFT_LEG_ID, 0.0f, Vector(6,-29));
+		addAnimation(animations, animationID, SCN_LEFT_FOOT_ID, SCN_LEFT_FOOT_ID, 0.0f, Vector(0,-38));
+		addAnimation(animations, animationID, SCN_RIGHT_LEG_ID, SCN_RIGHT_LEG_ID, 0.0f, Vector(-13,-39));
+		addAnimation(animations, animationID, SCN_RIGHT_FOOT_ID, SCN_RIGHT_FOOT_ID, 0.0f, Vector(-18,-29));
+		addAnimation(animations, animationID, SCN_SHADOW_ID, SCN_SHADOW_ID, 0.0f, Vector(-5,-101));
+
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 
 		Entity* entity = new Entity();
 		entity->add(position);
+		entity->add(animator);
 		entity->add(renderer);
+		entity->handleMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animationID, false, true)));
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 

@@ -322,6 +322,9 @@
     <ClCompile Include="SceneNode.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="SceneNodeSample.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">

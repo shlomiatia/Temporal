@@ -5,6 +5,8 @@
 
 namespace Temporal
 {
+	// TODO: Cast/(void)/merge files
+
 	// ASSUME: When trying to walk towards a steep hill, the entity will raise a bit */																															 																								
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */

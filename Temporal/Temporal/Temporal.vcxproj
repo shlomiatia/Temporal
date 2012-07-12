@@ -86,6 +86,7 @@
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="SceneNodeSample.cpp" />
     <ClCompile Include="Segment.cpp" />
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
