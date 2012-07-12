@@ -17,24 +17,25 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		SceneNode(const Hash& id) : _id(id), _translation(Vector::Zero), _spriteGroupId(Hash::INVALID), _spriteId(0) {}
+		SceneNode(const Hash& id) : _id(id), _translation(Vector::Zero), _spriteGroupID(Hash::INVALID), _spriteID(0) {}
 		~SceneNode(void);
 
-		const Hash& getSpriteGroupId(void) const { return _spriteGroupId; }
-		void setSpriteGroupId(const Hash& spriteGroupId) { _spriteGroupId = spriteGroupId; }
-		int getSpriteId(void) const { return _spriteId; }
-		void setSpriteId(int spriteId) { _spriteId = spriteId; }
+		const Hash& getSpriteGroupID(void) const { return _spriteGroupID; }
+		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
+		int getSpriteID(void) const { return _spriteID; }
+		void setSpriteId(int spriteId) { _spriteID = spriteId; }
 		const Vector& getTranslation(void) const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
 
+		void add(SceneNode* child) { _children.push_back(child); }
 		SceneNode* get(const Hash& id);
 		void draw(const SpriteSheet& spritesheet, Side::Enum orientation);
 	private:
 		const Hash _id;
 
 		Vector _translation;
-		Hash _spriteGroupId;
-		int _spriteId;
+		Hash _spriteGroupID;
+		int _spriteID;
 		SceneNodeCollection _children;
 
 		SceneNode(const SceneNode&);

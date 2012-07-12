@@ -20,7 +20,7 @@ namespace Temporal
 		{
 			const SceneNodeParams& params = *(SceneNodeParams*)message.getParam();
 			SceneNode* sceneNode = _root->get(params.getSceneNodeID());
-			sceneNode->setSpriteGroupId(params.getSpriteGroupID());
+			sceneNode->setSpriteGroupID(params.getSpriteGroupID());
 			int spritesSize = _spritesheet.get(params.getSpriteGroupID()).getSize();
 			int spriteId = (int)(spritesSize * params.getSpriteID()) % spritesSize;
 			sceneNode->setSpriteId(spriteId);
@@ -65,15 +65,15 @@ namespace Temporal
 		else
 			orientation = *entityOrientation;
 		
-		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		/*int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
 		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
 		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
-		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);
+		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);*/
 
 		Graphics::get().beginTranslate(position);
 		_root->draw(_spritesheet, orientation);
-		Graphics::get().end();
+		Graphics::get().endTranslate();
 	}
 
 	Component* Renderer::clone(void) const
