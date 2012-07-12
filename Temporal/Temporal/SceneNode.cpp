@@ -16,17 +16,15 @@ namespace Temporal
 	{
 		Side::Enum spritesheetOrientation = spritesheet.getOrientation();
 		bool mirrored = orientation != spritesheetOrientation;
-		const Sprite& sprite = spritesheet.get(getSpriteGroupId()).get(getSpriteId());
-		const Vector& offset = sprite.getOffset();
-		float screenLocationX = (getTranslation().getVx() - offset.getVx()) * orientation * spritesheetOrientation;
-		float screenLocationY = getTranslation().getVy() - offset.getVy();
-		Point screenLocation(screenLocationX, screenLocationY);
-		Graphics::get().beginDraw(spritesheet.getTexture(), sprite.getBounds(), screenLocation, mirrored);
+		const Sprite& sprite = spritesheet.get(getSpriteGroupID()).get(getSpriteID());
+		Graphics::get().beginTranslate(getTranslation());
+		Vector offset = Vector(-sprite.getOffset().getVx()  * orientation * spritesheetOrientation, -sprite.getOffset().getVy());
+		Graphics::get().draw(spritesheet.getTexture(), sprite.getBounds(), offset, mirrored);
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
 		{
 			(*i)->draw(spritesheet, orientation);
 		}
-		Graphics::get().end();
+		Graphics::get().endTranslate();
 	}
 
 	SceneNode* SceneNode::get(const Hash& id)

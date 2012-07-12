@@ -34,8 +34,8 @@ namespace Temporal
 
 		void translate(const Vector& translation) const;
 		void beginTranslate(const Vector& translation) const;
-		void beginDraw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color = Color::White) const;
-		void end(void) const;
+		void endTranslate(void) const;
+		void draw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color = Color::White) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
 		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;

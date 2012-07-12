@@ -97,12 +97,15 @@ namespace Temporal
 	void Graphics::beginTranslate(const Vector& translation) const
 	{
 		glPushMatrix();
-		{	
-			translate(translation);
-		}
+		translate(translation);
 	}
 
-	void Graphics::beginDraw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color) const
+	void Graphics::endTranslate(void) const
+	{
+		glPopMatrix();
+	}
+
+	void Graphics::draw(const Texture& texture, const AABB& texturePart, const Vector& translation, bool mirrored, const Color& color) const
 	{
 		const Size& textureSize = texture.getSize();
 		float textureWidth = textureSize.getWidth();
@@ -149,10 +152,6 @@ namespace Temporal
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
-	}
-
-	void Graphics::end(void) const
-	{
 		glPopMatrix();
 	}
 

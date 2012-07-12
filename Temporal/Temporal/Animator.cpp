@@ -62,15 +62,15 @@ namespace Temporal
 					{
 						normalizedSampleDuration = currentSamplePeriod / currentSampleDuration;
 					}
-					if(currentSampleDuration == 0.0f || normalizedSampleDuration >= 1.0f)
-					{
-						animationEnded = true;
-						_timer.reset(0.0f);
-					}
 					if(normalizedSampleDuration < 1.0f || _repeat)
 					{
 						SceneNodeParams params(sceneNodeID, Vector::Zero, 0.0f, current.getSpriteGroupId(), !_rewind ? normalizedSampleDuration : 1.0 - normalizedSampleDuration);
 						sendMessageToOwner(Message(MessageID::SET_SCENE_NODE, &params));
+					}
+					if(currentSampleDuration == 0.0f || normalizedSampleDuration >= 1.0f)
+					{
+						animationEnded = true;
+						_timer.reset(0.0f);
 					}
 					break;
 				}
