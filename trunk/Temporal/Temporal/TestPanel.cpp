@@ -466,6 +466,7 @@ namespace Temporal
 	void createSkeleton()
 	{
 		Position* position = new Position(Point(300.0f, 300.0f));
+		Orientation* orientation = new Orientation(Side::RIGHT);
 
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
 		Hash animationID = Hash("ANM_WALK");
@@ -591,6 +592,7 @@ namespace Temporal
 
 		Entity* entity = new Entity();
 		entity->add(position);
+		entity->add(orientation);
 		entity->add(animator);
 		entity->add(renderer);
 		entity->handleMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animationID, false, true)));

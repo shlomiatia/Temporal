@@ -35,7 +35,7 @@ namespace Temporal
 		void validate(void) const;
 
 		void translate(const Vector& translation) const;
-		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, Side::Enum orientation, const Color& color = Color::White) const;
+		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color = Color::White) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
 		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;
