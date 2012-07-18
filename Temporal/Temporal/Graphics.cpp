@@ -118,8 +118,9 @@ namespace Temporal
 			{
 				glPushMatrix();
 				{
+					const char* ccc = HashToString::get().getString(spriteGroupID);
 					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
-					int spriteIndex = (int)(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+					int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : (int)(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 					const Sprite& sprite = spriteGroup.get(spriteIndex);
 					const AABB& texturePart = sprite.getBounds();
 				

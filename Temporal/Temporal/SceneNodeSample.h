@@ -45,7 +45,7 @@ namespace Temporal
 		Animation(void) : _duration(0.0f) {}
 		
 		float getDuration(void) const { return _duration; }
-		void add(const Hash& sceneNodeID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
+		void add(const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
 		const SceneNodeSampleCollection& get(const Hash& sceneNodeID) const { return *_sceneGraphSamples.at(sceneNodeID); }
 
 	private:
