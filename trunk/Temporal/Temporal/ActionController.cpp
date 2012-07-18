@@ -144,7 +144,7 @@ namespace Temporal
 
 	void Stand::enter(void) const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION, false, true)));
 	}
 
 	void Stand::handleMessage(Message& message) const
@@ -182,7 +182,7 @@ namespace Temporal
 	void Fall::enter(void) const
 	{
 		// Not setting force because we want to continue the momentum
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION, false, true)));
 	}
 
 	void Fall::handleMessage(Message& message) const
@@ -372,7 +372,7 @@ namespace Temporal
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		Hash animation = jumpHelper.getInfo().getJumpAnimation();
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation, false, true)));
 	}
 
 	void Jump::handleMessage(Message& message) const
@@ -466,7 +466,7 @@ namespace Temporal
 
 	void Hang::enter(void) const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
 	}
 
 	void Hang::handleMessage(Message& message) const
