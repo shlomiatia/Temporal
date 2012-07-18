@@ -118,20 +118,25 @@ namespace Temporal
 		const Component* position = entity->get(ComponentType::POSITION);
 		const Component* orientation = entity->get(ComponentType::ORIENTATION);
 		const Component* drawPosition = entity->get(ComponentType::DRAW_POSITION);
-		Renderer* renderer = (Renderer*)entity->get(ComponentType::RENDERER)->clone();
+		const Component* renderer = entity->get(ComponentType::RENDERER);
 		
 		Entity* echoEntity = new Entity();
-		echoEntity->add(position->clone());
+		if(position != NULL)
+			echoEntity->add(position->clone());
 		if(orientation != NULL)
 			echoEntity->add(orientation->clone());
 		if(drawPosition != NULL)
 			echoEntity->add(drawPosition->clone());
-		if(animations != NULL)
+		if(renderer != NULL)
 		{
-			Animator* animator = new Animator(*animations, renderer->getRoot());
-			echoEntity->add(animator);
+			Component* rendererClone = renderer->clone();
+			if(animations != NULL)
+			{
+				Animator* animator = new Animator(*animations, ((Renderer*)rendererClone)->getRoot());
+				echoEntity->add(animator);
+			}
+			echoEntity->add(rendererClone);
 		}
-		echoEntity->add(renderer);
 
 		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
 		entity->add(temporalEcho);
@@ -453,7 +458,7 @@ namespace Temporal
 		entity->add(laser);
 		entity->add(renderer);
 
-//		createTemporalEcho(entity);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
 	}
 
@@ -770,7 +775,7 @@ namespace Temporal
 
 		createSkeleton();
 		createPlayer(spritesheet, animations);
-		//createLaser();
+		createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
 		createPatrol(spritesheet, animations);
