@@ -10,11 +10,12 @@
 #include "AABB.h"
 #include "NumericPair.h"
 #include "Serialization.h"
+#include "MessageUtils.h"
+#include "PhysicsUtils.h"
 
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-
 	static const Hash DIRECTION_SERIALIZATION = Hash("LAS_SER_DIR");
 
 	void Laser::handleMessage(Message& message)
@@ -70,14 +71,12 @@ namespace Temporal
 		Point newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 		Point pointOfIntersection = Point::Zero;
-		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
-		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
-		Grid::get().cast(newPosition, laserVector, myCollisionFilter, pointOfIntersection);
+		int myPeriod = getPeriod(*this);
+		Grid::get().cast(newPosition, laserVector, myPeriod, pointOfIntersection);
 		Segment seg = SegmentPP(newPosition, pointOfIntersection);
-		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
-		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
+		int targetPeriod = getPlayerPeriod();
 		bool isDetecting = false;
-		if(myCollisionFilter == 0 || targetCollisionFilter == 0 || (myCollisionFilter & targetCollisionFilter) != 0)
+		if(canCollide(myPeriod, targetPeriod))
 		{
 			AABB rect = AABB::Zero;
 			EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_BOUNDS, &rect));

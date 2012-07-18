@@ -177,6 +177,9 @@
     <ClInclude Include="SceneNodeSample.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsUtils.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

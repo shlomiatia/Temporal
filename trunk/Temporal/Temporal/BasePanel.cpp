@@ -45,20 +45,20 @@ namespace Temporal
 			//AABB bounds = AABB::Zero;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
-			//Period::Enum period = Period::Past;
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			Period::Enum period = Period::Past;
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
 		}
 		if(Input::get().isW())
 		{
-			//Period::Enum period = Period::Present;
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			Period::Enum period = Period::Present;
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 		}
 		if(Input::get().isE())
 		{
 			//Period::Enum period = Period::Future;
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}

@@ -9,6 +9,7 @@
 #include "ShapeOperations.h"
 #include "Message.h"
 #include "Graphics.h"
+#include "MessageUtils.h"
 #include <algorithm>
 #include <assert.h>
 
@@ -167,8 +168,7 @@ namespace Temporal
 			changePosition(stepMovement);
 			AABB bounds = getBounds();
 			
-			int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
-			int collisionFilter = periodPointer == NULL ? 0 : *periodPointer;
+			int collisionFilter = getPeriod(*this);
 			Grid::get().iterateTiles(bounds, collisionFilter, this, &collision, detectCollision);
 			if(collision != Vector::Zero)
 				break;
