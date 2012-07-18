@@ -45,27 +45,27 @@ namespace Temporal
 			//AABB bounds = AABB::Zero;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
-			Period::Enum period = Period::Past;
+			//Period::Enum period = Period::Past;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::FLIP_ORIENTATION));
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+
 		}
 		if(Input::get().isW())
 		{
-			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-			Period::Enum period = Period::Present;
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			//Period::Enum period = Period::Present;
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		}
 		if(Input::get().isE())
 		{
-			Period::Enum period = Period::Future;
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			//Period::Enum period = Period::Future;
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
 	void BasePanel::draw(void) const
 	{
-		//ViewManager::get().update();
+		ViewManager::get().update();
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
