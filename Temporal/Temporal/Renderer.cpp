@@ -52,4 +52,10 @@ namespace Temporal
 		_root->setTranslation(position);
 		Graphics::get().draw(*_root, _spritesheet, _color);
 	}
+
+	Component* Renderer::clone(void) const
+	{
+		return new Renderer(_spritesheet, _layer, _root->clone(), _color);
+	}
+
 }

@@ -80,7 +80,10 @@ namespace Temporal
 		{
 			const Hash& sceneNodeID = i->first;
 			SceneNodeBinding& binding = *i->second;
+			if(binding.getSceneNode().isTransformOnly())
+				continue;
 			int index = binding.getIndex();
+			const char* aaa = HashToString::get().getString(sceneNodeID);
 			const SceneNodeSampleCollection& sceneNodeSamples = animation.get(sceneNodeID);
 			int size = sceneNodeSamples.size();
 			const SceneNodeSample* currentSample = sceneNodeSamples.at(index);
