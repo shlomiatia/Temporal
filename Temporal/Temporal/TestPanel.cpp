@@ -1,5 +1,4 @@
 #include "TestPanel.h"
-
 #include "NumericPair.h"
 #include "AABB.h"
 #include "Segment.h"
@@ -39,8 +38,6 @@
 
 namespace Temporal
 {
-	#pragma region Methods
-
 	static const Size ENTITY_SIZE(20.0f, 80.0f);
 	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
 
@@ -100,6 +97,11 @@ namespace Temporal
 		addFrontEdgeSensor(entity);
 	}
 
+	SceneNode* createDefaultSceneGraph()
+	{
+		return new SceneNode(Hash("SCN_ROOT"));
+	}
+
 	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
 	{
 		Animation* animation = (Animation*)(*animations)[animationID];
@@ -111,12 +113,11 @@ namespace Temporal
 		animation->add(sceneNodeID, spriteGroupID, duration, translation, rotation);
 	}
 
-	void createTemporalEcho(Entity* entity)
+	void createTemporalEcho(Entity* entity, SceneNode* root, const SpriteSheet& spritesheet, VisualLayer::Enum layer, AnimationCollection* animations = NULL)
 	{
 		const Component* position = entity->get(ComponentType::POSITION);
 		const Component* orientation = entity->get(ComponentType::ORIENTATION);
 		const Component* drawPosition = entity->get(ComponentType::DRAW_POSITION);
-		const Component* renderer = entity->get(ComponentType::RENDERER);
 		
 		Entity* echoEntity = new Entity();
 		echoEntity->add(position->clone());
@@ -124,8 +125,14 @@ namespace Temporal
 			echoEntity->add(orientation->clone());
 		if(drawPosition != NULL)
 			echoEntity->add(drawPosition->clone());
-		if(renderer != NULL)
-			echoEntity->add(renderer->clone());
+		if(animations != NULL)
+		{
+			Animator* animator = new Animator(*animations, *root);
+			echoEntity->add(animator);
+		}
+		Renderer* renderer = new Renderer(spritesheet, layer, root, Color(1.0f, 1.0f, 1.0f, 0.2f));
+		echoEntity->add(renderer);
+
 		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
 		entity->add(temporalEcho);
 	}
@@ -138,7 +145,7 @@ namespace Temporal
 		InputController* controller = new InputController();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		SceneNode* root = createDefaultSceneGraph();
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
@@ -153,7 +160,6 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
@@ -164,7 +170,7 @@ namespace Temporal
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		SceneNode* root = createDefaultSceneGraph();
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Past);
 
@@ -182,19 +188,13 @@ namespace Temporal
 
 	void createCamera()
 	{
-		Position* position = new Position(Point(383.0f, 383.0f));
 		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
-		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
-
-		
-		Orientation* orientation = new Orientation(Side::LEFT);
-		
-		Hash animationID = Hash::INVALID;
-		Hash sceneNodeID = Hash("SCN_ROOT");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
+		Hash animationID = Hash::INVALID;
+		Hash sceneNodeID = Hash("SCN_ROOT");
+		SceneNode* root = new SceneNode(sceneNodeID);
 		
 		#pragma region Camera spriteGroup
 		// Search - 0
@@ -219,7 +219,10 @@ namespace Temporal
 		addAnimation(animations, animationID, sceneNodeID, animationID, 200.0f);
 		#pragma endregion
 
-		SceneNode* root = new SceneNode(sceneNodeID);
+		Position* position = new Position(Point(383.0f, 383.0f));
+		Orientation* orientation = new Orientation(Side::LEFT);
+		Camera* camera = new Camera();
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
@@ -244,9 +247,9 @@ namespace Temporal
 		Patrol* patrol = new Patrol();
 		DynamicBody* dynamicBody = new DynamicBody(Size(ENTITY_SIZE.getWidth(), ENTITY_SIZE.getHeight()));
 		ActionController* actionController = new ActionController();
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		SceneNode* root = createDefaultSceneGraph();
 		Animator* animator = new Animator(*animations, *root);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present);
 
@@ -262,7 +265,7 @@ namespace Temporal
 		entity->add(animator);
 		entity->add(renderer);
 		//entity->add(temporalPeriod);
-		//createTemporalEcho(entity);
+		createTemporalEcho(entity, createDefaultSceneGraph(), *spritesheet, VisualLayer::NPC, animations);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
 
@@ -314,13 +317,6 @@ namespace Temporal
 
 	void createPlatforms()
 	{
-		/*const Texture* texture = Texture::load("c:\\stuff\\tile.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
-		SpriteGroup* spriteGroup = new SpriteGroup();
-		spritesheet->add(Hash("ANM_DEFAULT"), spriteGroup);
-		const Size TILE_SIZE(32.0f, 32.0f);
-		spriteGroup->add(new Sprite(AABB(TILE_SIZE / 2.0f, TILE_SIZE), Vector::Zero));*/
-
 		SpriteSheet* spritesheet = NULL;
 		#pragma region Platforms
 
@@ -435,9 +431,9 @@ namespace Temporal
 		SpriteGroup* spriteGroup = new SpriteGroup();
 		spritesheet->add(Hash("ANM_DEFAULT"), spriteGroup);
 		spriteGroup->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
+		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
 
 		Position* position = new Position(texture->getSize() / 2.0f);
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND, root);
 
 		Entity* entity = new Entity();
@@ -457,23 +453,18 @@ namespace Temporal
 		entity->add(laser);
 		entity->add(renderer);
 
-		createTemporalEcho(entity);
+//		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
 	}
-	#pragma endregion
-
 
 	void createSkeleton()
 	{
-		Position* position = new Position(Point(300.0f, 300.0f));
-		Orientation* orientation = new Orientation(Side::RIGHT);
-
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
-		Hash animationID = Hash("ANM_WALK");
 		const Texture* texture = Texture::load("c:\\stuff\\Zombies5.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
+		Hash animationID = Hash("ANM_WALK");
+		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
 
 		#pragma region SpriteGroup
 		// SCN_RIGHT_LEG
@@ -570,9 +561,6 @@ namespace Temporal
 		SCN_BODY->add(SCN_LEFT_HAND);
 		SCN_LEFT_HAND->add(SCN_LEFT_PALM);
 		
-
-		Animator* animator = new Animator(*animations, *SCN_BODY);
-
 		addAnimation(animations, animationID, SCN_BODY_ID, SCN_BODY_ID);
 		addAnimation(animations, animationID, SCN_HEAD_ID, SCN_HEAD_ID, 0.0f, Vector(-9,31));
 		addAnimation(animations, animationID, SCN_LEFT_HAND_ID, SCN_LEFT_HAND_ID, 500.0f, Vector(1,22));
@@ -588,6 +576,9 @@ namespace Temporal
 		addAnimation(animations, animationID, SCN_RIGHT_FOOT_ID, SCN_RIGHT_FOOT_ID, 0.0f, Vector(-18,-29));
 		addAnimation(animations, animationID, SCN_SHADOW_ID, SCN_SHADOW_ID, 0.0f, Vector(-5,-101));
 
+		Position* position = new Position(Point(300.0f, 300.0f));
+		Orientation* orientation = new Orientation(Side::RIGHT);
+		Animator* animator = new Animator(*animations, *SCN_BODY);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 
 		Entity* entity = new Entity();
@@ -601,11 +592,11 @@ namespace Temporal
 
 	void TestPanel::createEntities(void)
 	{
-		Hash animationID = Hash::INVALID;
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
+		Hash animationID = Hash::INVALID;
 		Hash sceneNodeID = Hash("SCN_ROOT");
 
 		#pragma region Player Spritesheet
@@ -778,12 +769,12 @@ namespace Temporal
 
 #pragma endregion
 
-		createSkeleton();
+		//createSkeleton();
 		createPlayer(spritesheet, animations);
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		//createPatrol(spritesheet, animations);
+		createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		//createBackground();

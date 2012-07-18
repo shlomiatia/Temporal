@@ -3,7 +3,6 @@
 
 namespace Temporal
 {
-
 	void TemporalPeriod::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_PERIOD)

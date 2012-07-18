@@ -8,6 +8,7 @@
 
 namespace Temporal
 {
+	static const Hash ANIMATION_ID_SERIALIZATION = Hash("ANM_SER_ANIMATION_ID");
 	static const Hash TIMER_SERIALIZATION = Hash("ANM_SER_TIMER");
 	static const Hash REPEAT_SERIALIZATION = Hash("ANM_SER_REPEAT");
 	static const Hash REWIND_SERIALIZATION = Hash("ANM_SER_REWIND");
@@ -43,6 +44,7 @@ namespace Temporal
 		{
 			Serialization& serialization = *(Serialization*)message.getParam();
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
+			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
 			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
 			serialization.serialize(REWIND_SERIALIZATION, _rewind);
 		}
@@ -50,6 +52,7 @@ namespace Temporal
 		{
 			const Serialization& serialization = *(const Serialization*)message.getParam();
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
+			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
 			_repeat = serialization.deserializeBool(REPEAT_SERIALIZATION);
 			_rewind = serialization.deserializeBool(REWIND_SERIALIZATION);
 		}

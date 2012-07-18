@@ -60,14 +60,17 @@ namespace Temporal
 		{
 			float framePeriodInMillis = *(float*)message.getParam();
 			update(framePeriodInMillis);
+			if(_echoReady)
+				_echo->handleMessage(message);
 		}
 		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
 		{
 			mergeToTemporalEchoes();
 		}
-		else if(_echoReady && message.getID() == MessageID::DRAW) 
+		else if(message.getID() == MessageID::DRAW) 
 		{
-			_echo->handleMessage(message);
+			if(_echoReady)
+				_echo->handleMessage(message);
 		}
 		else if(message.getID() == MessageID::ENTITY_CREATED)
 		{

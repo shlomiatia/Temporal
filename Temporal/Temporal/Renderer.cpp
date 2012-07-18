@@ -11,8 +11,6 @@
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	static const Hash SPRITE_GROUP_SERIALIZATION = Hash("REN_SER_SPR_GRP");
-	static const Hash SPRITE_SERIALIZATION = Hash("REN_SER_SPR");
 
 	void Renderer::handleMessage(Message& message)
 	{
@@ -26,18 +24,6 @@ namespace Temporal
 			if(_layer == layer)
 				draw();			
 		}
-		/*else if(message.getID() == MessageID::SERIALIZE)
-		{
-			Serialization& serialization = *(Serialization*)message.getParam();
-			serialization.serialize(SPRITE_GROUP_SERIALIZATION, _spriteGroupID);
-			serialization.serialize(SPRITE_SERIALIZATION, _spriteID);
-		}
-		else if(message.getID() == MessageID::DESERIALIZE)
-		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
-			_spriteGroupID = Hash(serialization.deserializeUInt(SPRITE_GROUP_SERIALIZATION));
-			_spriteID = (Side::Enum)serialization.deserializeInt(SPRITE_SERIALIZATION);
-		}*/
 	}
 	
 	void Renderer::draw(void) const
@@ -64,11 +50,6 @@ namespace Temporal
 
 		_root->setMirrored(orientation != spritesheetOrientation);
 		_root->setTranslation(position);
-		Graphics::get().draw(*_root, _spritesheet);
-	}
-
-	Component* Renderer::clone(void) const
-	{
-		return new Renderer(_spritesheet, _layer, _root, _color);
+		Graphics::get().draw(*_root, _spritesheet, _color);
 	}
 }
