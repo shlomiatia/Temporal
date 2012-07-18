@@ -17,7 +17,7 @@ namespace Temporal
 
 		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
 
-		void Search::enter(void) const
+		void Search::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
@@ -36,7 +36,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void) const
+		void See::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 		}
@@ -55,7 +55,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(void) const
+		void Turn::enter() const
 		{
 			_hasTurned = false;
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
@@ -81,14 +81,14 @@ namespace Temporal
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 		const float Acquire::BLINK_TIME_IN_MILLIS(200.0f);
 
-		void Acquire::enter(void) const
+		void Acquire::enter() const
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
 			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
-		void Acquire::update(void) const
+		void Acquire::update() const
 		{
 			float elapsedTimeInMillis = _stateMachine->getTimer().getElapsedTimeInMillis();
 			if(!_stateMachine->getTempFlag1())
@@ -120,7 +120,7 @@ namespace Temporal
 
 	using namespace CameraStates;
 
-	StateCollection Camera::getStates(void) const
+	StateCollection Camera::getStates() const
 	{
 		StateCollection states;
 		states[SEARCH_STATE] = new Search();
@@ -130,7 +130,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash Camera::getInitialState(void) const
+	Hash Camera::getInitialState() const
 	{
 		return SEARCH_STATE;
 	}

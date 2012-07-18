@@ -12,7 +12,7 @@
 
 namespace Temporal
 {
-	AABB Sensor::getBounds(void) const
+	AABB Sensor::getBounds() const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -21,7 +21,7 @@ namespace Temporal
 		return AABB(center, _size);
 	}
 
-	void Sensor::update(void)
+	void Sensor::update()
 	{
 		_point = Point::Zero;
 		

@@ -14,16 +14,16 @@ namespace Temporal
 		NumericPair(float n1, float n2) : _n1(n1), _n2(n2) {}
 		// No virtual destructor
 
-		float getN1(void) const { return (_n1); }
+		float getN1() const { return (_n1); }
 		void setN1(float n1) { _n1 = n1; }
-		float getN2(void) const { return (_n2); }
+		float getN2() const { return (_n2); }
 		void setN2(float n2) { _n2 = n2; }
 
 		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? getN1() : getN2(); }
 		void setAxis(Axis::Enum axis, float value) { if(axis == Axis::X) setN1(value); else setN2(value); }
 
-		NumericPair absolute(void) const;
-		NumericPair operator-(void) const { return NumericPair(-getN1(), -getN2()); }
+		NumericPair absolute() const;
+		NumericPair operator-() const { return NumericPair(-getN1(), -getN2()); }
 		bool operator==(const NumericPair& numericPair) const { return ((getN1() == numericPair.getN1()) && (getN2() == numericPair.getN2())); }
 		bool operator!=(const NumericPair& numericPair) const { return !(*this == numericPair); }
 		NumericPair operator+(const NumericPair& numericPair) const {	return (NumericPair(getN1() + numericPair.getN1(), getN2() + numericPair.getN2())); }
@@ -81,9 +81,9 @@ namespace Temporal
 		Point(const NumericPair& numericPair) : NumericPair(numericPair) {}
 		Point(float x, float y) : NumericPair(x, y) {}
 
-		float getX(void) const { return getN1(); }
+		float getX() const { return getN1(); }
 		void setX(float x) { setN1(x); }
-		float getY(void) const { return getN2(); }
+		float getY() const { return getN2(); }
 		void setY(float y) { setN2(y); }
 	};
 
@@ -93,18 +93,18 @@ namespace Temporal
 		Vector(const NumericPair& numericPair) : NumericPair(numericPair) {}
 		Vector(float x, float y) : NumericPair(x, y) {}
 
-		float getVx(void) const { return getN1(); }
+		float getVx() const { return getN1(); }
 		void setVx(float vx) { setN1(vx); }
-		float getVy(void) const { return getN2(); }
+		float getVy() const { return getN2(); }
 		void setVy(float vy) { setN2(vy); }
 
-		float getLength(void) const;
+		float getLength() const;
 
 		// Angle is between -180 to 180 (-PI to PI)
-		float getAngle(void) const;
-		Vector normalize(void) const;
-		Vector getLeftNormal(void) const { return Vector(-getVy(), getVx()); }
-		Vector getRightNormal(void) const { return Vector(getVy(), -getVx()); }
+		float getAngle() const;
+		Vector normalize() const;
+		Vector getLeftNormal() const { return Vector(-getVy(), getVx()); }
+		Vector getRightNormal() const { return Vector(getVy(), -getVx()); }
 
 		float operator*(const Vector& other) const { return getVx() * other.getVx() + getVy() * other.getVy(); }
 	};
@@ -115,9 +115,9 @@ namespace Temporal
 		Size(const NumericPair& numericPair) : NumericPair(numericPair) {}
 		Size(float width, float height) : NumericPair(width, height) {}
 
-		float getWidth(void) const { return getN1(); }
+		float getWidth() const { return getN1(); }
 		void setWidth(float width) { setN1(width); }
-		float getHeight(void) const { return getN2(); }
+		float getHeight() const { return getN2(); }
 		void setHeight(float height) { setN2(height); }
 	};
 
@@ -127,9 +127,9 @@ namespace Temporal
 		Range(const NumericPair& numericPair) : NumericPair(numericPair) {}
 		Range(float min, float max) : NumericPair(min, max) {}
 
-		float getMin(void) const { return getN1(); }
+		float getMin() const { return getN1(); }
 		void setMin(float min) { setN1(min); }
-		float getMax(void) const { return getN2(); }
+		float getMax() const { return getN2(); }
 		void setMax(float max) { setN2(max); }
 	};
 }

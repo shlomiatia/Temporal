@@ -8,7 +8,7 @@ namespace Temporal
 		SDL_Delay(millis);
 	}
 
-	unsigned long Thread::getElapsedTimeInMillis(void)
+	unsigned long Thread::getElapsedTimeInMillis()
 	{
 		return SDL_GetTicks();
 	}

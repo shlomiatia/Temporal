@@ -596,7 +596,7 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
-	void TestPanel::createEntities(void)
+	void TestPanel::createEntities()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);

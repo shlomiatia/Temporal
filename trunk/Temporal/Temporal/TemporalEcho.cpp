@@ -8,7 +8,7 @@ namespace Temporal
 {
 	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 4500.0f;
 
-	TemporalEcho::~TemporalEcho(void)
+	TemporalEcho::~TemporalEcho()
 	{
 		delete _echo;
 		for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
@@ -38,7 +38,7 @@ namespace Temporal
 		_echoesData.push_back(serialization);
 	}
 
-	void TemporalEcho::mergeToTemporalEchoes(void)
+	void TemporalEcho::mergeToTemporalEchoes()
 	{
 		if(_echoReady)
 		{

@@ -29,7 +29,7 @@ namespace Temporal
 		}
 	}
 
-	Component* Position::clone(void) const
+	Component* Position::clone() const
 	{
 		return new Position(_position);
 	}

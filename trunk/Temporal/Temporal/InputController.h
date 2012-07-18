@@ -8,9 +8,9 @@ namespace Temporal
 	class InputController : public Component
 	{
 	public:
-		InputController(void) {}
+		InputController() {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::INPUT_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::INPUT_CONTROLLER; }
 
 		void handleMessage(Message& message);
 	};

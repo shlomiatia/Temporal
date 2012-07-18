@@ -8,13 +8,13 @@ namespace Temporal
 	class BasePanel : public Panel
 	{
 	public:
-		void init(void);
+		void init();
 		void update(float framePeriodInMillis);
-		void draw(void) const;
-		void dispose(void);
+		void draw() const;
+		void dispose();
 
 	protected:
-		virtual void createEntities(void) = 0;
+		virtual void createEntities() = 0;
 	};
 }
 

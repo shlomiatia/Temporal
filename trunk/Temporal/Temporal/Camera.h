@@ -10,7 +10,7 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 
 		private:
@@ -20,16 +20,16 @@ namespace Temporal
 		class See : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			Turn(void) : _hasTurned(false) {}
+			Turn() : _hasTurned(false) {}
 
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 
 			mutable bool _hasTurned;
@@ -39,29 +39,29 @@ namespace Temporal
 		class Acquire : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
 			static const float BLINK_TIME_IN_MILLIS;
 
-			void update(void) const;
+			void update() const;
 		};
 	}
 
 	class Camera : public StateMachineComponent
 	{
 	public:
-		Camera(void) : StateMachineComponent(getStates(), "CAM") {}
+		Camera() : StateMachineComponent(getStates(), "CAM") {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		Hash getInitialState(void) const;
+		Hash getInitialState() const;
 
 	private:
-		StateCollection getStates(void) const;
+		StateCollection getStates() const;
 	};
 }
 

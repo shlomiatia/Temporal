@@ -31,11 +31,11 @@ namespace Temporal
 	{
 	public:
 		NavigationNode(const YABP& area) : _area(area) {}
-		~NavigationNode(void);
+		~NavigationNode();
 
-		const YABP& getArea(void) const { return _area; }
+		const YABP& getArea() const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
-		const NavigationEdgeCollection& getEdges(void) const { return _edges; }
+		const NavigationEdgeCollection& getEdges() const { return _edges; }
 
 	private:
 		const YABP _area;
@@ -51,12 +51,12 @@ namespace Temporal
 		NavigationEdge(const NavigationNode& source, const NavigationNode& target, float x, Side::Enum orientation, NavigationEdgeType::Enum type)
 			: _target(target), _x(x), _orientation(orientation), _type(type), _cost(calculateCost(source)) {}
 
-		const NavigationNode& getTarget(void) const { return _target; }
-		float getX(void) const { return _x; }
-		Side::Enum getSide(void) const { return _orientation; }
-		NavigationEdgeType::Enum getType(void) const { return _type; }
-		float getCost(void) const { return _cost; }
-		void draw(void) const;
+		const NavigationNode& getTarget() const { return _target; }
+		float getX() const { return _x; }
+		Side::Enum getSide() const { return _orientation; }
+		NavigationEdgeType::Enum getType() const { return _type; }
+		float getCost() const { return _cost; }
+		void draw() const;
 
 	private:
 		const NavigationNode& _target;
@@ -81,16 +81,16 @@ namespace Temporal
 	class NavigationGraph
 	{
 	public:
-		static NavigationGraph& get(void)
+		static NavigationGraph& get()
 		{
 			static NavigationGraph instance;
 			return instance;
 		}
 
-		void init(void);
-		void dispose(void);
+		void init();
+		void dispose();
 		const NavigationNode* getNodeByAABB(const AABB& aabb) const;
-		void draw(void) const;
+		void draw() const;
 
 	private:
 		static const Size MIN_AREA_SIZE;
@@ -102,7 +102,7 @@ namespace Temporal
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void createEdges(ShapeCollection& platforms);
 
-		NavigationGraph(void) {}
+		NavigationGraph() {}
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);
 	};

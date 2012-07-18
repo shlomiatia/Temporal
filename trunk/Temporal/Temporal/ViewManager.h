@@ -8,7 +8,7 @@ namespace Temporal
 	class ViewManager
 	{
 	public:
-		static ViewManager& get(void)
+		static ViewManager& get()
 		{
 			static ViewManager instance;
 			return (instance);
@@ -18,12 +18,12 @@ namespace Temporal
 
 		void init(const Size& resolution, float logicalHeight, bool fullScreen = false);
 		void setVideoMode(const Size& resolution, bool fullScreen = false);
-		void update(void) const;
+		void update() const;
 	private:
 		Size _levelBounds;
 		Size _cameraSize;
 
-		ViewManager(void) : _levelBounds(Size::Zero), _cameraSize(Size::Zero) {}
+		ViewManager() : _levelBounds(Size::Zero), _cameraSize(Size::Zero) {}
 		ViewManager(const ViewManager&);
 		ViewManager& operator=(const ViewManager&);
 	};

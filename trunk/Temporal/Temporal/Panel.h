@@ -6,13 +6,13 @@ namespace Temporal
 	class Panel
 	{
 	public:
-		virtual void init(void) = 0;
+		virtual void init() = 0;
 		virtual void update(float framePeriodInMillis) = 0;
-		virtual void draw(void) const = 0;
-		virtual void dispose(void) = 0;
+		virtual void draw() const = 0;
+		virtual void dispose() = 0;
 
-		Panel(void) {};
-		virtual ~Panel(void) {}
+		Panel() {};
+		virtual ~Panel() {}
 	private:
 		Panel(const Panel&);
 		Panel& operator=(const Panel&);

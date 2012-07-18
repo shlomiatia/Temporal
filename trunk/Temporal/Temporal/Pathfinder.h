@@ -11,14 +11,14 @@ namespace Temporal
 		PathNode(const NavigationNode& navigationNode, const NavigationNode& goal) 
 			: _navigationNode(navigationNode), _costFromStart(0.0f), _previous(NULL), _edge(NULL), _heuristicCostToGoal(calculateHeuristicCost(goal)) {}
 
-		const NavigationNode& getNavigationNode(void) const { return _navigationNode; }
+		const NavigationNode& getNavigationNode() const { return _navigationNode; }
 		void setCostFromStart(float costFromStart) { _costFromStart = costFromStart; }
-		float getCostFromStart(void) const { return _costFromStart; }
-		float getHeuristicCostToGoal(void) const { return _heuristicCostToGoal; }
-		float getEstaminedPathCost(void) const { return getCostFromStart() + getHeuristicCostToGoal(); }
-		const PathNode* getPrevious(void) const { return _previous; }
+		float getCostFromStart() const { return _costFromStart; }
+		float getHeuristicCostToGoal() const { return _heuristicCostToGoal; }
+		float getEstaminedPathCost() const { return getCostFromStart() + getHeuristicCostToGoal(); }
+		const PathNode* getPrevious() const { return _previous; }
 		void setPrevious(const PathNode* previous) { _previous = previous; }
-		const NavigationEdge* getEdge(void) const { return _edge; }
+		const NavigationEdge* getEdge() const { return _edge; }
 		void setEdge(const NavigationEdge* edge) { _edge = edge; }
 
 	private:
@@ -37,7 +37,7 @@ namespace Temporal
 	class Pathfinder
 	{
 	public:
-		static Pathfinder& get(void)
+		static Pathfinder& get()
 		{
 			static Pathfinder instance;
 			return instance;
@@ -45,7 +45,7 @@ namespace Temporal
 
 		NavigationEdgeCollection* findPath(const NavigationNode* start, const NavigationNode* goal) const;
 	private:
-		Pathfinder(void) {}
+		Pathfinder() {}
 		Pathfinder(const Pathfinder&);
 		Pathfinder& operator=(const Pathfinder&);
 	};

@@ -34,13 +34,13 @@ namespace Temporal
 		assert(_size.getHeight() > 0.0f);
 	}
 
-	AABB DynamicBody::getBounds(void) const
+	AABB DynamicBody::getBounds() const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		return AABB(position, _size);
 	}
 
-	Side::Enum DynamicBody::getOrientation(void) const
+	Side::Enum DynamicBody::getOrientation() const
 	{
 		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		return orientation;

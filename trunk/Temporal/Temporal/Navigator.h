@@ -43,7 +43,7 @@ namespace Temporal
 		class JumpForward : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 		};
 
@@ -57,27 +57,27 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator(void) : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Zero), _path(NULL) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Zero), _path(NULL) {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
 		void handleMessage(Message& message);
 
-		const AABB& getDestination(void) const { return _destination; }
+		const AABB& getDestination() const { return _destination; }
 		void setDestination(const AABB& destination) { _destination = destination; }
-		NavigationEdgeCollection* getPath(void) const { return _path; }
+		NavigationEdgeCollection* getPath() const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { if(_path != NULL) delete _path; _path = path; }
 
 	protected:
-		Hash getInitialState(void) const;
+		Hash getInitialState() const;
 
 	private:
 		AABB _destination;
 		NavigationEdgeCollection* _path;
 
 		void deserialize(const Serialization& serialization);
-		void debugDraw(void) const;
+		void debugDraw() const;
 
-		StateCollection getStates(void) const;
+		StateCollection getStates() const;
 	};
 }
 #endif

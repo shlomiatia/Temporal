@@ -22,7 +22,7 @@ namespace Temporal
 			_grid[i] = NULL;
 	}
 
-	void Grid::dispose(void)
+	void Grid::dispose()
 	{
 		int size = getSize();
 		for(int i = 0; i < size; ++i)
@@ -31,7 +31,7 @@ namespace Temporal
 		delete _grid;
 	}
 
-	void Grid::draw(void) const
+	void Grid::draw() const
 	{
 		for(int i = 0; i < _gridWidth; ++i)
 			for(int j = 0; j < _gridHeight; ++j)

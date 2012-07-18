@@ -38,7 +38,7 @@ namespace Temporal
 		}
 	}
 
-	Component* DrawPosition::clone(void) const
+	Component* DrawPosition::clone() const
 	{
 		return new DrawPosition(_offset);
 	}

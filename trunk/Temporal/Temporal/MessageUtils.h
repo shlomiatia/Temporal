@@ -12,6 +12,6 @@ namespace Temporal
 	void sendDirectionAction(const Component& component, Side::Enum direction);
 	bool isSensorCollisionMessage(Message& message, const Hash& sensorID);
 	int getPeriod(const Component& component);
-	int getPlayerPeriod(void);
+	int getPlayerPeriod();
 }
 #endif

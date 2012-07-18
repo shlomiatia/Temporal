@@ -26,7 +26,7 @@ namespace Temporal
 		}
 	}
 
-	void Sight::checkLineOfSight(void)
+	void Sight::checkLineOfSight()
 	{
 		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
@@ -72,7 +72,7 @@ namespace Temporal
 		drawFieldOfViewSegment(_sightCenter - (_sightSize / 2.0f), sourceSide, sourcePosition);
 	}
 
-	void Sight::drawDebugInfo(void) const
+	void Sight::drawDebugInfo() const
 	{
 		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));

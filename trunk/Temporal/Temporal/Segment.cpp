@@ -12,7 +12,7 @@ namespace Temporal
 		assert(getRadiusVx() >= 0.0f);
 	}
 
-	float Segment::getLength(void) const
+	float Segment::getLength() const
 	{
 		return getRadius().getLength() * 2.0f;
 	}

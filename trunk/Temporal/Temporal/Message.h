@@ -11,8 +11,8 @@ namespace Temporal
 	public:
 		explicit Message(MessageID::Enum id, void* param = NULL) : _id(id), _param(param) {}
 
-		MessageID::Enum getID(void) const { return _id; }
-		void* getParam(void) const { return _param; }
+		MessageID::Enum getID() const { return _id; }
+		void* getParam() const { return _param; }
 		void setParam(void* param) { _param = param; }
 
 	private:

@@ -31,7 +31,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void) const
+		void See::enter() const
 		{
 			// TempFlag1 - have line of sight
 			_stateMachine->setTempFlag1(true);
@@ -50,7 +50,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter(void) const
+		void Turn::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
 		}
@@ -84,7 +84,7 @@ namespace Temporal
 	}
 	using namespace PatrolStates;
 
-	StateCollection Patrol::getStates(void) const
+	StateCollection Patrol::getStates() const
 	{
 		StateCollection states;
 		
@@ -95,7 +95,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash Patrol::getInitialState(void) const
+	Hash Patrol::getInitialState() const
 	{
 		return WALK_STATE;
 	}

@@ -11,9 +11,9 @@ namespace Temporal
 	public:
 		explicit Position(const Point& position) : _position(position) {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::POSITION; }
+		ComponentType::Enum getType() const { return ComponentType::POSITION; }
 		void handleMessage(Message& message);
-		Component* clone(void) const;
+		Component* clone() const;
 	private:
 		Point _position;
 	};

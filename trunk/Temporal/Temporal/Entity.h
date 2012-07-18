@@ -15,7 +15,7 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		~Entity(void);
+		~Entity();
 
 		void add(Component* component);
 		const Component* get(ComponentType::Enum type) const;

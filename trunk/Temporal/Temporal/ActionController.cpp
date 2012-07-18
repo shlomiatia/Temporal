@@ -61,7 +61,7 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Helpers
 	 *********************************************************************************************/
-	JumpInfoProvider::JumpInfoProvider(void)
+	JumpInfoProvider::JumpInfoProvider()
 	{
 		_data[ANGLE_45_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 		_data[ANGLE_60_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
@@ -70,14 +70,14 @@ namespace Temporal
 		_data[ANGLE_105_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, STAND_ANIMATION);
 	}
 
-	void JumpInfoProvider::dispose(void) const
+	void JumpInfoProvider::dispose() const
 	{
 		for(JumpInfoIterator i = _data.begin(); i != _data.end(); ++i)
 			delete i->second;
 	}
 
-	float JumpInfoProvider::getFarthest(void) const { return ANGLE_45_IN_RADIANS; }
-	float JumpInfoProvider::getHighest(void) const { return ANGLE_90_IN_RADIANS; }
+	float JumpInfoProvider::getFarthest() const { return ANGLE_45_IN_RADIANS; }
+	float JumpInfoProvider::getHighest() const { return ANGLE_90_IN_RADIANS; }
 
 	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
@@ -108,7 +108,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash ActionController::getInitialState(void) const { return STAND_STATE; }
+	Hash ActionController::getInitialState() const { return STAND_STATE; }
 
 	void ActionController::handleMessage(Message& message)
 	{
@@ -142,7 +142,7 @@ namespace Temporal
 		return !sameSign((float)orientation, groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
-	void Stand::enter(void) const
+	void Stand::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION, false, true)));
 	}
@@ -179,7 +179,7 @@ namespace Temporal
 		}
 	}
 
-	void Fall::enter(void) const
+	void Fall::enter() const
 	{
 		// Not setting force because we want to continue the momentum
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION, false, true)));
@@ -206,7 +206,7 @@ namespace Temporal
 		}
 	}
 
-	void Walk::enter(void) const
+	void Walk::enter() const
 	{
 		// TempFlag 1 - still walking
 		_stateMachine->setTempFlag1(true);
@@ -263,7 +263,7 @@ namespace Temporal
 		}
 	}
 
-	void Turn::enter(void) const
+	void Turn::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 	}
@@ -314,7 +314,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToJump::enter(void) const
+	void PrepareToJump::enter() const
 	{
 		((ActionController*)_stateMachine)->getJumpHelper().setLedgeDirected(false);
 	}
@@ -336,7 +336,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpStart::enter(void) const
+	void JumpStart::enter() const
 	{
 		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
@@ -363,7 +363,7 @@ namespace Temporal
 		}
 	}
 
-	void Jump::enter(void) const
+	void Jump::enter() const
 	{
 		const JumpHelper& jumpHelper = ((ActionController*)_stateMachine)->getJumpHelper();
 		float angle = jumpHelper.getAngle();
@@ -396,7 +396,7 @@ namespace Temporal
 		}
 	}
 
-	void JumpEnd::enter(void) const
+	void JumpEnd::enter() const
 	{
 		Hash animation = ((ActionController*)_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
@@ -410,7 +410,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToHang::update(void) const
+	void PrepareToHang::update() const
 	{
 		AABB personBounds(AABB::Zero);
 		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
@@ -437,7 +437,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToHang::enter(void) const
+	void PrepareToHang::enter() const
 	{
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
@@ -451,7 +451,7 @@ namespace Temporal
 		}
 	}
 
-	void Hanging::enter(void) const
+	void Hanging::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SWING_BACKWARD_ANIMATION, true)));	
 	}
@@ -464,7 +464,7 @@ namespace Temporal
 		}
 	}
 
-	void Hang::enter(void) const
+	void Hang::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
 	}
@@ -481,7 +481,7 @@ namespace Temporal
 		}
 	}
 
-	void Drop::enter(void) const
+	void Drop::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(DROP_ANIMATION)));
 
@@ -491,7 +491,7 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
-	void Drop::exit(void) const
+	void Drop::exit() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 	}
@@ -510,7 +510,7 @@ namespace Temporal
 		}
 	}
 
-	void Climb::enter(void) const
+	void Climb::enter() const
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float climbForceX = 1.0f;
@@ -521,7 +521,7 @@ namespace Temporal
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
-	void Climb::exit(void) const
+	void Climb::exit() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, (void*)&Point::Zero));
 		bool gravityEnabled = true;
@@ -536,7 +536,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToDescend::update(void) const
+	void PrepareToDescend::update() const
 	{
 		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		AABB personBounds(AABB::Zero);
@@ -561,7 +561,7 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToDescend::enter(void) const
+	void PrepareToDescend::enter() const
 	{
 		bool gravityEnabled = false;
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
@@ -575,7 +575,7 @@ namespace Temporal
 		}
 	}
 
-	void Descend::enter(void) const
+	void Descend::enter() const
 	{
 		const Size& size = *(Size*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE));
 		float forceX = 0.0f;

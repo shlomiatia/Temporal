@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	SceneNode::~SceneNode(void)
+	SceneNode::~SceneNode()
 	{
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
 		{
@@ -12,7 +12,7 @@ namespace Temporal
 		}
 	}
 
-	SceneNode* SceneNode::clone(void) const
+	SceneNode* SceneNode::clone() const
 	{
 		SceneNode* clone = new SceneNode(_id, _drawBeforeParent, _transformOnly);
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)

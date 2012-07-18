@@ -15,11 +15,11 @@ namespace Temporal
 		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, SceneNode* root, Color color = Color::White) :
 		  _spritesheet(spritesheet), _layer(layer), _root(root), _color(color) {};
 
-		ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
-		SceneNode& getRoot(void) const { return *_root; }
+		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
+		SceneNode& getRoot() const { return *_root; }
 
 		void handleMessage(Message& message);
-		Component* clone(void) const;
+		Component* clone() const;
 	private:
 		const SpriteSheet& _spritesheet;
 		const VisualLayer::Enum _layer;
@@ -27,7 +27,7 @@ namespace Temporal
 		SceneNode* _root;
 		Color _color;
 
-		void draw(void) const;
+		void draw() const;
 
 	};
 }

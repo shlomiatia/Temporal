@@ -13,7 +13,7 @@ namespace Temporal
 		_nextPanel = panel;
 	}
 
-	void Game::run(void)
+	void Game::run()
 	{
 		_running = true;
 
@@ -36,7 +36,7 @@ namespace Temporal
 		_panel->dispose();
 	}
 
-	Game::~Game(void)
+	Game::~Game()
 	{
 		stop();
 		while (isRunning())
@@ -45,7 +45,7 @@ namespace Temporal
 		}
 	}
 
-	void Game::handlePanelsSwitch(void)
+	void Game::handlePanelsSwitch()
 	{
 		if (_nextPanel != NULL)
 		{
@@ -61,7 +61,7 @@ namespace Temporal
 		}
 	}
 
-	void Game::update(void)
+	void Game::update()
 	{
 		float currFrameMillis = (float)Thread::getElapsedTimeInMillis();
 		float framesToSkip = (currFrameMillis - _lastFrameMillis) / FRAME_PERIOD_IN_MILLIS - 1.0f;
@@ -74,7 +74,7 @@ namespace Temporal
 		}
 	}
 
-	void Game::draw(void) const
+	void Game::draw() const
 	{
 		Graphics::get().prepareForDrawing();
 		_panel->draw();

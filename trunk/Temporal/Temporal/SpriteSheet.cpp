@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	SpriteGroup::~SpriteGroup(void)
+	SpriteGroup::~SpriteGroup()
 	{
 		for(SpriteIterator i = _sprites.begin(); i != _sprites.end(); ++i)
 			delete *i;
@@ -20,12 +20,12 @@ namespace Temporal
 		return *_sprites.at(spriteID);
 	}
 
-	int SpriteGroup::getSize(void) const
+	int SpriteGroup::getSize() const
 	{
 		return _sprites.size();
 	}
 
-	SpriteSheet::~SpriteSheet(void)
+	SpriteSheet::~SpriteSheet()
 	{
 		delete _texture;
 		for(SpriteGroupIterator i = _spriteGroups.begin(); i != _spriteGroups.end(); ++i)
@@ -42,7 +42,7 @@ namespace Temporal
 		return *_spriteGroups.at(spriteGroupID);
 	}
 
-	const Hash& SpriteSheet::getFirstSpriteGroupID(void) const
+	const Hash& SpriteSheet::getFirstSpriteGroupID() const
 	{
 		return _spriteGroups.begin()->first;
 	}

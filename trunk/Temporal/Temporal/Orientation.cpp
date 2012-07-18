@@ -29,7 +29,7 @@ namespace Temporal
 		}
 	}
 
-	Component* Orientation::clone(void) const
+	Component* Orientation::clone() const
 	{
 		return new Orientation(_orientation);
 	}

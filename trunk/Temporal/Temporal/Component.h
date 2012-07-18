@@ -12,14 +12,14 @@ namespace Temporal
 	class Component
 	{
 	public:
-		Component(void) : _entity(NULL) {}
-		virtual ~Component(void) {}
+		Component() : _entity(NULL) {}
+		virtual ~Component() {}
 
 		void setEntity(const Entity* entity) { _entity = entity; }
-		virtual ComponentType::Enum getType(void) const = 0;
+		virtual ComponentType::Enum getType() const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
-		virtual Component* clone(void) const { return NULL; }
+		virtual Component* clone() const { return NULL; }
 		void* sendMessageToOwner(Message& message) const;
 
 	private:

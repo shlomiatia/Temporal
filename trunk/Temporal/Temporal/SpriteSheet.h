@@ -16,8 +16,8 @@ namespace Temporal
 		Sprite(const AABB& bounds, const Vector& offset) 
 			: _bounds(bounds), _offset(offset) {}
 
-		const AABB& getBounds(void) const { return _bounds; }
-		const Vector& getOffset(void) const { return _offset; }
+		const AABB& getBounds() const { return _bounds; }
+		const Vector& getOffset() const { return _offset; }
 	private:
 		const AABB _bounds;
 		const Vector _offset;
@@ -32,13 +32,13 @@ namespace Temporal
 	class SpriteGroup
 	{
 	public:
-		SpriteGroup(void) {}
-		~SpriteGroup(void);
+		SpriteGroup() {}
+		~SpriteGroup();
 
 		void add(const Sprite* sprite);
 
 		const Sprite& get(int spriteID) const;
-		int getSize(void) const;
+		int getSize() const;
 	private:
 		SpriteCollection _sprites;
 
@@ -54,13 +54,13 @@ namespace Temporal
 	{
 	public:
 		SpriteSheet(const Texture* texture, Side::Enum orientation) : _texture(texture), _orientation(orientation) {}
-		~SpriteSheet(void);
+		~SpriteSheet();
 		void add(const Hash& id, const SpriteGroup* element);
 
-		const Texture& getTexture(void) const { return *_texture; }
-		Side::Enum getOrientation(void) const { return _orientation; }
+		const Texture& getTexture() const { return *_texture; }
+		Side::Enum getOrientation() const { return _orientation; }
 		const SpriteGroup& get(const Hash& spriteGroupID) const;
-		const Hash& getFirstSpriteGroupID(void) const;
+		const Hash& getFirstSpriteGroupID() const;
 	private:
 		const Texture* _texture;
 		const Side::Enum _orientation;

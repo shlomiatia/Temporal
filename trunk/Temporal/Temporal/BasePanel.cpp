@@ -16,7 +16,7 @@
 
 namespace Temporal
 {
-	void BasePanel::init(void)
+	void BasePanel::init()
 	{
 		Size screenSize = Size(1024.0f, 768.0f);
 		ViewManager::get().init(screenSize, 768.0f);
@@ -63,7 +63,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
-	void BasePanel::draw(void) const
+	void BasePanel::draw() const
 	{
 		ViewManager::get().update();
 		DebugInfo::get().draw();
@@ -76,7 +76,7 @@ namespace Temporal
 		//NavigationGraph::get().draw();
 	}
 
-	void BasePanel::dispose(void)
+	void BasePanel::dispose()
 	{
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
 		JumpInfoProvider::get().dispose();

@@ -13,7 +13,7 @@ namespace Temporal
 		explicit Hash(const char* string);		
 		explicit Hash(unsigned int value) : _value(value) {}
 
-		operator unsigned int(void) const { return _value; }
+		operator unsigned int() const { return _value; }
 		bool operator==(const Hash& other) const { return _value == other._value; }
 	private:
 		unsigned int _value;
@@ -25,19 +25,19 @@ namespace Temporal
 	class HashToString
 	{
 	public:
-		static HashToString& get(void)
+		static HashToString& get()
 		{
 			static HashToString instance;
 			return instance;
 		}
-		void dispose(void) const;
+		void dispose() const;
 
 		void save(const Hash& key, const char* value);
 		const char* getString(const Hash& hash) const;
 	private:
 		HashCollection _hashStrings;
 
-		HashToString(void) {}
+		HashToString() {}
 		HashToString(const HashToString&);
 		HashToString& operator=(const HashToString&);
 	};

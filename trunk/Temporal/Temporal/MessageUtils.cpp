@@ -41,7 +41,7 @@ namespace Temporal
 		return getPeriod(periodPointer);
 	}
 
-	int getPlayerPeriod(void)
+	int getPlayerPeriod()
 	{
 		int* periodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
 		return getPeriod(periodPointer);

@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	void EntitiesManager::dispose(void)
+	void EntitiesManager::dispose()
 	{
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
