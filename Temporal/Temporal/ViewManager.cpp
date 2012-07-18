@@ -18,7 +18,7 @@ namespace Temporal
 		Graphics::get().init(resolution, _cameraSize, fullScreen);
 	}
 
-	void ViewManager::update(void) const
+	void ViewManager::update() const
 	{
 		const Point& position = *(Point*)EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION));
 		float cameraWidth = _cameraSize.getWidth();

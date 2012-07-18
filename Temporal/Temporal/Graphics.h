@@ -17,22 +17,22 @@ namespace Temporal
 	class Graphics
 	{
 	public:
-		static Graphics& get(void)
+		static Graphics& get()
 		{
 			static Graphics instance;
 			return (instance);
 		}
 
 		void init(const Size& resolution, const Size& viewSize, bool fullScreen = false);
-		void dispose(void) const;
+		void dispose() const;
 
 		void setVideoMode(const Size& resolution, const Size& viewSize, bool fullScreen = false) const;
 		void setTitle(const char* title) const;
 
-		void prepareForDrawing(void) const;
-		void finishDrawing(void) const;
+		void prepareForDrawing() const;
+		void finishDrawing() const;
 
-		void validate(void) const;
+		void validate() const;
 
 		void translate(const Vector& translation) const;
 		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color = Color::White) const;
@@ -44,8 +44,8 @@ namespace Temporal
 	private:
 		static const int BIT_DEPTH = 32;
 
-		Graphics(void) {}
-		~Graphics(void) { dispose(); }
+		Graphics() {}
+		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);
 	};

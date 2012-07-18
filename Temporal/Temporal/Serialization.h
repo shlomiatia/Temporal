@@ -8,7 +8,7 @@ namespace Temporal
 	class Variant
 	{
 	public:
-		Variant(void) : Int(0) {}
+		Variant() : Int(0) {}
 		Variant(int value) : Int(value) {}
 		Variant(unsigned int value) : UInt(value) {}
 		Variant(float value) : Float(value) {}

@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	void DebugInfo::draw(void) const
+	void DebugInfo::draw() const
 	{
 		if (isShowingFPS())
 		{

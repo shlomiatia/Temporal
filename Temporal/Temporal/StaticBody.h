@@ -11,13 +11,13 @@ namespace Temporal
 	{
 	public:
 		StaticBody(Shape* shape, bool cover) : _shape(shape), _cover(cover) {};
-		~StaticBody(void);
+		~StaticBody();
 
-		bool isCover(void) const { return _cover; }
-		const Shape& getShape(void) const { return *_shape; }
-		ComponentType::Enum getType(void) const { return ComponentType::STATIC_BODY; }
+		bool isCover() const { return _cover; }
+		const Shape& getShape() const { return *_shape; }
+		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
-		int getCollisionFilter(void) const;
+		int getCollisionFilter() const;
 
 	private:
 		bool _cover;

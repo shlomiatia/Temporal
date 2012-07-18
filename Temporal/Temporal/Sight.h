@@ -14,7 +14,7 @@ namespace Temporal
 		Sight(float sightCenter, float sightSize) :
 		  _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
-		ComponentType::Enum getType(void) const { return ComponentType::SIGHT; }
+		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
 
 	private:
@@ -24,9 +24,9 @@ namespace Temporal
 		Point _pointOfIntersection;
 		bool _isSeeing;
 
-		void checkLineOfSight(void);
+		void checkLineOfSight();
 		void drawFieldOfView(const Point& sourcePosition, Side::Enum sourceSide) const;
-		void drawDebugInfo(void) const;
+		void drawDebugInfo() const;
 	};
 }
 #endif

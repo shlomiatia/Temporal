@@ -14,13 +14,13 @@ namespace Temporal
 	class ComponentState
 	{
 	public:
-		ComponentState(void) {};
-		virtual ~ComponentState(void) {};
+		ComponentState() {};
+		virtual ~ComponentState() {};
 
 		void setStateMachine(StateMachineComponent* stateMachine) { _stateMachine = stateMachine; }
 
-		virtual void enter(void) const {}
-		virtual void exit(void) const {}
+		virtual void enter() const {}
+		virtual void exit() const {}
 		virtual void handleMessage(Message& message) const = 0;
 
 	protected:
@@ -38,25 +38,25 @@ namespace Temporal
 	{
 	public:
 		explicit StateMachineComponent(StateCollection states, const char* prefix);
-		virtual ~StateMachineComponent(void);
+		virtual ~StateMachineComponent();
 
 		void changeState(const Hash& stateID);
 		virtual void handleMessage(Message& message);
 
 		// Temp flags. Used when some messages combinations make something happen, or if during update we need to check if someting didn't happen. 
 		// This flags are cleared every update and state change
-		bool getTempFlag1(void) const { return _tempFlag1; }
+		bool getTempFlag1() const { return _tempFlag1; }
 		void setTempFlag1(bool value) { _tempFlag1 = value; }
-		bool getTempFlag2(void) const { return _tempFlag2; }
+		bool getTempFlag2() const { return _tempFlag2; }
 		void setTempFlag2(bool value) { _tempFlag2 = value; }
-		bool getTempFlag3(void) const { return _tempFlag3; }
+		bool getTempFlag3() const { return _tempFlag3; }
 		void setTempFlag3(bool value) { _tempFlag3 = value; }
 
 		// Record amount of time spent in a single state. Expose non const object to allow state to record sub periods
-		Timer& getTimer(void) { return _timer; }
+		Timer& getTimer() { return _timer; }
 
 	protected:
-		virtual Hash getInitialState(void) const = 0;
+		virtual Hash getInitialState() const = 0;
 
 	private:
 		const Hash STATE_SERIALIZATION;
@@ -73,7 +73,7 @@ namespace Temporal
 		bool _tempFlag2;
 		bool _tempFlag3;
 
-		void resetTempState(void) { _tempFlag1 = _tempFlag2 = _tempFlag3 = false; }
+		void resetTempState() { _tempFlag1 = _tempFlag2 = _tempFlag3 = false; }
 		void setState(const Hash& stateID);
 
 		StateMachineComponent(const StateMachineComponent&);

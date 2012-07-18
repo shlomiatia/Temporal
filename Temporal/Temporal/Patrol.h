@@ -16,14 +16,14 @@ namespace Temporal
 		class See : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			void enter(void) const;
+			void enter() const;
 			void handleMessage(Message& message) const;
 		};
 
@@ -40,15 +40,15 @@ namespace Temporal
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol(void) : StateMachineComponent(getStates(), "PAT") {}
+		Patrol() : StateMachineComponent(getStates(), "PAT") {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
 
 	protected:
-		Hash getInitialState(void) const;
+		Hash getInitialState() const;
 
 	private:
-		StateCollection getStates(void) const;
+		StateCollection getStates() const;
 	};
 }
 

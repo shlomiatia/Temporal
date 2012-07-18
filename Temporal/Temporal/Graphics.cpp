@@ -60,23 +60,23 @@ namespace Temporal
 		SDL_WM_SetCaption(title, title);
 	}
 
-	void Graphics::dispose(void) const
+	void Graphics::dispose() const
 	{
 		SDL_VideoQuit();
 	}
-	void Graphics::prepareForDrawing(void) const
+	void Graphics::prepareForDrawing() const
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
 	}
 
-	void Graphics::finishDrawing(void) const
+	void Graphics::finishDrawing() const
 	{
 		SDL_GL_SwapBuffers();
 		validate();
 	}
 
-	void Graphics::validate(void) const
+	void Graphics::validate() const
 	{
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)

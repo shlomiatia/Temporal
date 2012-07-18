@@ -18,7 +18,7 @@ namespace Temporal
 	// BRODER
 	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 96.0f);
 
-	NavigationNode::~NavigationNode(void)
+	NavigationNode::~NavigationNode()
 	{
 		for(NavigationEdgeIterator i = _edges.begin(); i != _edges.end(); ++i)
 		{
@@ -328,7 +328,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::init(void)
+	void NavigationGraph::init()
 	{
 		ShapeCollection platforms;
 		const EntityCollection& entities = EntitiesManager::get().getEntities();
@@ -343,7 +343,7 @@ namespace Temporal
 		createEdges(platforms);
 	}
 
-	void NavigationGraph::dispose(void)
+	void NavigationGraph::dispose()
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -351,7 +351,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::draw(void) const
+	void NavigationGraph::draw() const
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{

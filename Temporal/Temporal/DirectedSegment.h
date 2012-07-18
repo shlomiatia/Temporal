@@ -9,9 +9,9 @@ namespace Temporal
 	public:
 		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
 		DirectedSegment(const Point& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
-		const Point& getOrigin(void) const { return _origin; }
-		const Vector& getVector(void) const { return _vector; }
-		Point getTarget(void) const { return getOrigin() + getVector(); }
+		const Point& getOrigin() const { return _origin; }
+		const Vector& getVector() const { return _vector; }
+		Point getTarget() const { return getOrigin() + getVector(); }
 	private:
 		Point _origin;
 		Vector _vector;

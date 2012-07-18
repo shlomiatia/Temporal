@@ -8,23 +8,23 @@ namespace Temporal
 	class Input
 	{
 	public:
-		static Input& get(void)
+		static Input& get()
 		{
 			static Input instance;
 			return (instance);
 		}
 
-		void update(void);
+		void update();
 
-		bool isLeft(void) const { return (_left); }
-		bool isRight(void) const { return (_right); }
-		bool isUp(void) const { return (_up); }
-		bool isDown(void) const { return (_down); }
-		bool isQuit(void) const { return (_quit); }
-		bool isQ(void) const { return _q; }
-		bool isW(void) const { return _w; }
-		bool isE(void) const { return _e; }
-		const Point& mouse(void) const { return _mouse; }
+		bool isLeft() const { return (_left); }
+		bool isRight() const { return (_right); }
+		bool isUp() const { return (_up); }
+		bool isDown() const { return (_down); }
+		bool isQuit() const { return (_quit); }
+		bool isQ() const { return _q; }
+		bool isW() const { return _w; }
+		bool isE() const { return _e; }
+		const Point& mouse() const { return _mouse; }
 
 	private:
 		bool _left;
@@ -37,8 +37,8 @@ namespace Temporal
 		bool _e;
 		Point _mouse;
 
-		Input(void) : _left(false), _right(false), _up(false), _down(false), _quit(false), _q(false), _w(false), _e(false), _mouse(Point::Zero) {}
-		~Input(void) {}
+		Input() : _left(false), _right(false), _up(false), _down(false), _quit(false), _q(false), _w(false), _e(false), _mouse(Point::Zero) {}
+		~Input() {}
 		Input(const Input&);
 		Input& operator=(const Input&);
 	};

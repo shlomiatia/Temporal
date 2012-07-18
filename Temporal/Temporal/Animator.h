@@ -18,8 +18,8 @@ namespace Temporal
 		SceneNodeBinding(SceneNode& node)
 			: _node(node), _index(0) {}
 
-		SceneNode& getSceneNode(void) { return _node; }
-		int getIndex(void) { return _index; }
+		SceneNode& getSceneNode() { return _node; }
+		int getIndex() { return _index; }
 		void setIndex(int index) { _index = index; }
 
 	private:
@@ -35,7 +35,7 @@ namespace Temporal
 	public:
 		explicit Animator(const AnimationCollection& animations, SceneNode& root);
 		
-		ComponentType::Enum getType(void) const { return ComponentType::ANIMATOR; }
+		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 
 		void handleMessage(Message& message);
 		void update(float framePeriodInMillis);

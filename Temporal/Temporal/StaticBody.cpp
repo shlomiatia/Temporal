@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	StaticBody::~StaticBody(void)
+	StaticBody::~StaticBody()
 	{
 		delete _shape;
 	}
@@ -23,7 +23,7 @@ namespace Temporal
 		}
 	}
 
-	int StaticBody::getCollisionFilter(void) const
+	int StaticBody::getCollisionFilter() const
 	{
 		return getPeriod(*this);
 	}

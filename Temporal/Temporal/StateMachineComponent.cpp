@@ -12,7 +12,7 @@ namespace Temporal
 			(*(*i).second).setStateMachine(this);
 	}
 
-	StateMachineComponent::~StateMachineComponent(void)
+	StateMachineComponent::~StateMachineComponent()
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			delete (*i).second;

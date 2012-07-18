@@ -11,9 +11,9 @@ namespace Temporal
 	public:
 		explicit ResetAnimationParams(const Hash& animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
 
-		const Hash& getAnimationID(void) const { return _animationID; }
-		bool getRewind(void) const { return _rewind; }
-		bool getRepeat(void) const { return _repeat; }
+		const Hash& getAnimationID() const { return _animationID; }
+		bool getRewind() const { return _rewind; }
+		bool getRepeat() const { return _repeat; }
 
 	private:
 		const Hash _animationID;
@@ -29,8 +29,8 @@ namespace Temporal
 	public:
 		SensorCollisionParams(const Hash& sensorID, const Point* point) : _sensorID(sensorID), _point(point) {}
 
-		const Hash& getSensorID(void) const { return _sensorID; }
-		const Point* getPoint(void) const { return _point; }
+		const Hash& getSensorID() const { return _sensorID; }
+		const Point* getPoint() const { return _point; }
 	
 	private:
 		const Hash _sensorID;
@@ -46,11 +46,11 @@ namespace Temporal
 		SceneNodeParams(const Hash& sceneNodeID, const Vector& translation, float rotation, const Hash& spriteGroupID, float spriteID)
 			: _sceneNodeID(sceneNodeID), _translation(translation), _rotation(rotation), _spriteGroupID(spriteGroupID), _spriteID(spriteID) {}
 
-		const Hash& getSceneNodeID(void) const { return _sceneNodeID; }
-		const Vector& getTranslation(void) const { return _translation; }
-		float getRotation(void) const { return _rotation; }
-		const Hash& getSpriteGroupID(void) const { return _spriteGroupID; }
-		float getSpriteID(void) const { return _spriteID; }
+		const Hash& getSceneNodeID() const { return _sceneNodeID; }
+		const Vector& getTranslation() const { return _translation; }
+		float getRotation() const { return _rotation; }
+		const Hash& getSpriteGroupID() const { return _spriteGroupID; }
+		float getSpriteID() const { return _spriteID; }
 	private:
 		const Hash _sceneNodeID;
 		const Vector _translation;

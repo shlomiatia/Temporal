@@ -15,15 +15,15 @@ namespace Temporal
 	{
 	public:
 		explicit TemporalEcho(Entity* echo) : _echo(echo), _echoReady(false) {}
-		~TemporalEcho(void);
+		~TemporalEcho();
 
-		ComponentType::Enum getType(void) const { return ComponentType::TEMPORAL_ECHO; }
+		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_ECHO; }
 		void handleMessage(Message& message);
 	private:
 		static const float ECHO_READY_TIME_IN_MILLIS;
 
 		void update(float framePeriodInMillis);
-		void mergeToTemporalEchoes(void);
+		void mergeToTemporalEchoes();
 
 		EchoCollection _echoesData;
 		Entity* _echo;

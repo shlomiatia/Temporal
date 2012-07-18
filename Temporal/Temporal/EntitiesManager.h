@@ -16,24 +16,24 @@ namespace Temporal
 	class EntitiesManager
 	{
 	public:
-		static EntitiesManager& get(void)
+		static EntitiesManager& get()
 		{
 			static EntitiesManager instance;
 			return instance;
 		}
 
-		void dispose(void);
+		void dispose();
 
 		void add(const Hash& id, const Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
 		void* sendMessageToEntity(const Hash& id, Message& message) const;
-		const EntityCollection& getEntities(void) const { return _entities; }
+		const EntityCollection& getEntities() const { return _entities; }
 	private:
 		EntityCollection _entities;
 
-		EntitiesManager(void) {}
+		EntitiesManager() {}
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);
 	};

@@ -19,7 +19,7 @@ namespace Temporal
 
 		explicit DynamicBody(const Size& size);
 
-		ComponentType::Enum getType(void) const { return ComponentType::DYNAMIC_BODY; }
+		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
@@ -34,8 +34,8 @@ namespace Temporal
 		Vector _absoluteImpulse;
 		Vector _groundVector;
 
-		AABB getBounds(void) const;
-		Side::Enum getOrientation(void) const;
+		AABB getBounds() const;
+		Side::Enum getOrientation() const;
 
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);

@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	// TODO: Cast/(void)/merge files
+	// TODO: Cast/()/merge files
 
 	// ASSUME: When trying to walk towards a steep hill, the entity will raise a bit */																															 																								
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
@@ -36,7 +36,7 @@ namespace Temporal
 	class TestPanel : public BasePanel
 	{
 	public:
-		void createEntities(void);
+		void createEntities();
 	};
 }
 

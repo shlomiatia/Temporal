@@ -37,13 +37,13 @@ namespace Temporal
 		}
 	}
 	
-	void LineRenderer::draw(void) const
+	void LineRenderer::draw() const
 	{
 		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		Graphics::get().draw(Segment(position, _target), _color);
 	}
 
-	Component* LineRenderer::clone(void) const
+	Component* LineRenderer::clone() const
 	{
 		return new LineRenderer(_layer, _color);
 	}

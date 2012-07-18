@@ -15,28 +15,28 @@ namespace Temporal
 		Segment(const Point& center, const Vector& radius);
 		// No need for virtual destructor
 
-		ShapeType::Enum getType(void) const { return ShapeType::SEGMENT; }
+		ShapeType::Enum getType() const { return ShapeType::SEGMENT; }
 
-		const Point& getCenter(void) const { return _center; }
-		const Vector& getRadius(void) const { return _radius; }
-		float getCenterX(void) const { return getCenter().getX(); }
-		float getCenterY(void) const { return getCenter().getY(); }
-		float getRadiusVx(void) const { return getRadius().getVx(); }
-		float getRadiusVy(void) const { return getRadius().getVy(); }
+		const Point& getCenter() const { return _center; }
+		const Vector& getRadius() const { return _radius; }
+		float getCenterX() const { return getCenter().getX(); }
+		float getCenterY() const { return getCenter().getY(); }
+		float getRadiusVx() const { return getRadius().getVx(); }
+		float getRadiusVy() const { return getRadius().getVy(); }
 
-		Point getLeftPoint(void) const { return getCenter() + (getRadiusVx() <= 0.0f ? getRadius() : -getRadius()); }
-		Point getRightPoint(void) const { return getCenter() + (getRadiusVx() > 0.0f ? getRadius() : -getRadius()); }
-		Point getBottomPoint(void) const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
-		Point getTopPoint(void) const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
-		Point getNaturalOrigin(void) const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }
-		Point getNaturalTarget(void) const { return getRadiusVx() == 0.0f ? getTopPoint() : getRightPoint(); }
-		Vector getNaturalVector(void) const { return getNaturalTarget() - getNaturalOrigin(); }
+		Point getLeftPoint() const { return getCenter() + (getRadiusVx() <= 0.0f ? getRadius() : -getRadius()); }
+		Point getRightPoint() const { return getCenter() + (getRadiusVx() > 0.0f ? getRadius() : -getRadius()); }
+		Point getBottomPoint() const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
+		Point getTopPoint() const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
+		Point getNaturalOrigin() const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }
+		Point getNaturalTarget() const { return getRadiusVx() == 0.0f ? getTopPoint() : getRightPoint(); }
+		Vector getNaturalVector() const { return getNaturalTarget() - getNaturalOrigin(); }
 		
-		float getLeft(void) const { return getLeftPoint().getX(); }
-		float getRight(void) const { return getRightPoint().getX(); }
-		float getBottom(void) const { return getBottomPoint().getY(); }
-		float getTop(void) const { return getTopPoint().getY(); }
-		float getLength(void) const;
+		float getLeft() const { return getLeftPoint().getX(); }
+		float getRight() const { return getRightPoint().getX(); }
+		float getBottom() const { return getBottomPoint().getY(); }
+		float getTop() const { return getTopPoint().getY(); }
+		float getLength() const;
 		float getY(float x) const { return get(Axis::Y, x); }
 		float getX(float y) const  { return get(Axis::X, y); }
 

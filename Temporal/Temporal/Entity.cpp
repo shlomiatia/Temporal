@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	Entity::~Entity(void)
+	Entity::~Entity()
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 			delete *i;

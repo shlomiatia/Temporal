@@ -18,14 +18,14 @@ namespace Temporal
 	class Shape
 	{
 	public:
-		virtual ~Shape(void) {}
+		virtual ~Shape() {}
 		
-		virtual ShapeType::Enum getType(void) const = 0;
+		virtual ShapeType::Enum getType() const = 0;
 
-		virtual float getBottom(void) const = 0;
-		virtual float getLeft(void) const = 0;
-		virtual float getTop(void) const = 0;
-		virtual float getRight(void) const = 0;
+		virtual float getBottom() const = 0;
+		virtual float getLeft() const = 0;
+		virtual float getTop() const = 0;
+		virtual float getRight() const = 0;
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }

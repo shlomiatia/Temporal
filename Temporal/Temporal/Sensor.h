@@ -18,7 +18,7 @@ namespace Temporal
 			: _id(id), _offset(offset), _size(size), _point(Point::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize) {}
 		
 		void handleMessage(Message& message);
-		ComponentType::Enum getType(void) const { return ComponentType::SENSOR; }
+		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
 
 	private:
 		const Hash _id;
@@ -28,8 +28,8 @@ namespace Temporal
 		const float _rangeSize;
 		Point _point;
 
-		AABB getBounds(void) const;
-		void update(void);
+		AABB getBounds() const;
+		void update();
 		bool sense(const StaticBody &staticBody);
 		static bool sense(void* caller, void* data, const StaticBody& staticBody);
 	};

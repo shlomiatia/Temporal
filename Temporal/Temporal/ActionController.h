@@ -23,9 +23,9 @@ namespace Temporal
 		JumpInfo(const Hash& startAnimation, const Hash& jumpAnimation, const Hash& endAnimation)
 			: _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
 
-		Hash getStartAnimation(void) const { return _startAnimation; }
-		Hash getJumpAnimation(void) const { return _jumpAnimation; }
-		Hash getEndAnimation(void) const { return _endAnimation; }
+		Hash getStartAnimation() const { return _startAnimation; }
+		Hash getJumpAnimation() const { return _jumpAnimation; }
+		Hash getEndAnimation() const { return _endAnimation; }
 
 	private:
 		Hash _startAnimation;
@@ -42,22 +42,22 @@ namespace Temporal
 	class JumpInfoProvider
 	{
 	public:
-		static const JumpInfoProvider& get(void)
+		static const JumpInfoProvider& get()
 		{
 			static JumpInfoProvider instance;
 			return instance;
 		}
 
-		const JumpInfoCollection& getData(void) const { return _data; }
-		float getFarthest(void) const;
-		float getHighest(void) const;
+		const JumpInfoCollection& getData() const { return _data; }
+		float getFarthest() const;
+		float getHighest() const;
 
-		void dispose(void) const;
+		void dispose() const;
 		
 	private:
 		JumpInfoCollection _data;
 
-		JumpInfoProvider(void);
+		JumpInfoProvider();
 		JumpInfoProvider(const JumpInfoProvider&);
 		JumpInfoProvider& operator=(const JumpInfoProvider&);
 	};
@@ -65,12 +65,12 @@ namespace Temporal
 	class JumpHelper
 	{
 	public:
-		JumpHelper(void) : _angle(0.0f), _ledgeDirected(false) {}
+		JumpHelper() : _angle(0.0f), _ledgeDirected(false) {}
 
-		float getAngle(void) const { return _angle; }
+		float getAngle() const { return _angle; }
 		void setAngle(float angle) { _angle = angle; }
-		const JumpInfo& getInfo(void) const { return *JumpInfoProvider::get().getData().at(getAngle()); }
-		bool isLedgeDirected(void) const { return _ledgeDirected; }
+		const JumpInfo& getInfo() const { return *JumpInfoProvider::get().getData().at(getAngle()); }
+		bool isLedgeDirected() const { return _ledgeDirected; }
 		void setLedgeDirected(bool ledgeDirected) { _ledgeDirected = ledgeDirected; }
 	private:
 		float _angle;
@@ -86,10 +86,10 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper(void) : _point(Point::Zero) {}
+		HangDescendHelper() : _point(Point::Zero) {}
 
 		void setPoint(const SensorCollisionParams& params);
-		const Point& getPoint(void) const { return _point; }
+		const Point& getPoint() const { return _point; }
 		void setPoint(const Point& point) { _point = point; }
 	private:
 		Point _point;
@@ -104,16 +104,16 @@ namespace Temporal
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController(void) : StateMachineComponent(getStates(), "ACT") {}
+		ActionController() : StateMachineComponent(getStates(), "ACT") {}
 
-		ComponentType::Enum getType(void) const { return ComponentType::ACTION_CONTROLLER; }
-		JumpHelper& getJumpHelper(void) { return _jumpHelper; }
-		HangDescendHelper& getHangDescendHelper(void) { return _hangDescendHelper; }
+		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
+		JumpHelper& getJumpHelper() { return _jumpHelper; }
+		HangDescendHelper& getHangDescendHelper() { return _hangDescendHelper; }
 
 		void handleMessage(Message& message);
 
 	protected:
-		Hash getInitialState(void) const;
+		Hash getInitialState() const;
 
 	private:
 		JumpHelper _jumpHelper;
@@ -128,21 +128,21 @@ namespace Temporal
 	class Stand : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Fall : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Walk : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 
 	private:
@@ -152,14 +152,14 @@ namespace Temporal
 	class Turn : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToJump : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 
 	private:
@@ -169,78 +169,78 @@ namespace Temporal
 	class JumpStart : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Jump : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class JumpEnd : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToHang : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 
 	private:
-		void update(void) const;
+		void update() const;
 	};
 
 	class Hanging : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Hang : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Drop : public ComponentState
 	{
 	public:
-		void enter(void) const;
-		void exit(void) const;
+		void enter() const;
+		void exit() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class Climb : public ComponentState
 	{
 	public:
-		void enter(void) const;
-		void exit(void) const;
+		void enter() const;
+		void exit() const;
 		void handleMessage(Message& message) const;
 	};
 
 	class PrepareToDescend : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 
 	private:
-		void update(void) const;
+		void update() const;
 	};
 
 	class Descend : public ComponentState
 	{
 	public:
-		void enter(void) const;
+		void enter() const;
 		void handleMessage(Message& message) const;
 	};
 }

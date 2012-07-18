@@ -7,9 +7,9 @@ namespace Temporal
 	{
 	public:
 		static void sleep(unsigned int millis);
-		static unsigned long getElapsedTimeInMillis(void);
+		static unsigned long getElapsedTimeInMillis();
 	private:
-		Thread(void) {}
+		Thread() {}
 		Thread(const Thread&);
 		Thread& operator=(const Thread&);
 	};

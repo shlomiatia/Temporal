@@ -10,7 +10,7 @@ namespace Temporal
 	class Game
 	{
 	public:
-		static Game& get(void)
+		static Game& get()
 		{
 			static Game instance;
 			return (instance);
@@ -18,12 +18,12 @@ namespace Temporal
 
 		void setPanel(Panel* panel);
 
-		bool isRunning(void) const { return (_running); }
-		bool isPaused(void) const { return (_paused); }
+		bool isRunning() const { return (_running); }
+		bool isPaused() const { return (_paused); }
 
-		void run(void);
+		void run();
 
-		void stop(void) { _running = false;	}
+		void stop() { _running = false;	}
 
 	private:
 		static const float FRAME_PERIOD_IN_MILLIS;
@@ -35,12 +35,12 @@ namespace Temporal
 		Panel* _nextPanel;
 		float _lastFrameMillis;
 
-		void handlePanelsSwitch(void);
-		void update(void);
-		void draw(void) const;
+		void handlePanelsSwitch();
+		void update();
+		void draw() const;
 
-		Game(void) : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL), _lastFrameMillis(0.0f) {}
-		~Game(void);
+		Game() : _running(false), _paused(false), _panel(NULL), _nextPanel(NULL), _lastFrameMillis(0.0f) {}
+		~Game();
 		Game(const Game&);
 		Game& operator=(const Game&);
 	};

@@ -12,11 +12,11 @@ namespace Temporal
 		LineRenderer(VisualLayer::Enum layer, Color color = Color::White) :
 			_layer(layer), _target(Point::Zero), _color(color) {};
 
-		ComponentType::Enum getType(void) const { return ComponentType::RENDERER; }
+		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 
 		void handleMessage(Message& message);
-		void draw(void) const;
-		Component* clone(void) const;
+		void draw() const;
+		Component* clone() const;
 	private:
 		const VisualLayer::Enum _layer;
 		Point _target;

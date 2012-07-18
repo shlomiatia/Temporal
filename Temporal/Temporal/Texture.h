@@ -11,8 +11,8 @@ namespace Temporal
 		static const Texture* load(const char* path);
 		~Texture();
 
-		unsigned int getID(void) const { return _id; }
-		const Size& getSize(void) const { return _size; }
+		unsigned int getID() const { return _id; }
+		const Size& getSize() const { return _size; }
 	private:
 		const unsigned int _id;
 		const Size _size;

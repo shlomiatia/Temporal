@@ -26,7 +26,7 @@ namespace Temporal
 		}
 	}
 	
-	void Renderer::draw(void) const
+	void Renderer::draw() const
 	{
 		Point position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
@@ -53,7 +53,7 @@ namespace Temporal
 		Graphics::get().draw(*_root, _spritesheet, _color);
 	}
 
-	Component* Renderer::clone(void) const
+	Component* Renderer::clone() const
 	{
 		return new Renderer(_spritesheet, _layer, _root->clone(), _color);
 	}

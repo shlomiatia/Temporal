@@ -10,7 +10,7 @@ namespace Temporal
 		static const Hash ACQUIRE_STATE = Hash("SEN_STT_ACQUIRE");
 		static const Hash SEE_STATE = Hash("SEN_STT_SEE");
 
-		void Search::enter(void) const
+		void Search::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Red));
 		}
@@ -25,7 +25,7 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
 
-		void Acquire::enter(void) const
+		void Acquire::enter() const
 		{
 			// TempFlag 1 - LOS
 			_stateMachine->setTempFlag1(true);
@@ -47,7 +47,7 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void) const
+		void See::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::Green));
 		}
@@ -69,7 +69,7 @@ namespace Temporal
 
 	using namespace SentryStates;
 
-	StateCollection Sentry::getStates(void) const
+	StateCollection Sentry::getStates() const
 	{
 		StateCollection states;
 		states[SEARCH_STATE] = new Search();
@@ -78,7 +78,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash Sentry::getInitialState(void) const
+	Hash Sentry::getInitialState() const
 	{
 		return SEARCH_STATE;
 	}

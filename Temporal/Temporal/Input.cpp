@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	void Input::update(void)
+	void Input::update()
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))

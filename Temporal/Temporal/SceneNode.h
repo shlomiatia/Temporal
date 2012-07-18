@@ -19,25 +19,25 @@ namespace Temporal
 	public:
 		SceneNode(const Hash& id, bool drawBeforeParent = false, bool transformOnly = false) :
 		  _id(id), _translation(Vector::Zero), _rotation(0.0f), _isMirrored(false), _spriteGroupID(Hash::INVALID), _spriteInterpolation(0), _drawBeforeParent(drawBeforeParent), _transformOnly(transformOnly) {}
-		~SceneNode(void);
+		~SceneNode();
 
-		const bool drawBeforeParent(void) const { return _drawBeforeParent; }
-		const Hash& getID(void) const { return _id; }
-		const Hash& getSpriteGroupID(void) const { return _spriteGroupID; }
+		const bool drawBeforeParent() const { return _drawBeforeParent; }
+		const Hash& getID() const { return _id; }
+		const Hash& getSpriteGroupID() const { return _spriteGroupID; }
 		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
-		float getSpriteInterpolation(void) const { return _spriteInterpolation; }
+		float getSpriteInterpolation() const { return _spriteInterpolation; }
 		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
-		const Vector& getTranslation(void) const { return _translation; }
+		const Vector& getTranslation() const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
-		float getRotation(void) const { return _rotation; }
+		float getRotation() const { return _rotation; }
 		void setRotation(float rotation) { _rotation = rotation; }
-		bool isMirrored(void) const { return _isMirrored; }
+		bool isMirrored() const { return _isMirrored; }
 		void setMirrored(bool isMirrored) { _isMirrored = isMirrored; }
-		bool isTransformOnly(void) const { return _transformOnly; }
-		const SceneNodeCollection& getChildren(void) const { return _children; }
+		bool isTransformOnly() const { return _transformOnly; }
+		const SceneNodeCollection& getChildren() const { return _children; }
 
 		void add(SceneNode* child) { _children.push_back(child); }
-		SceneNode* clone(void) const;
+		SceneNode* clone() const;
 	private:
 		const Hash _id;
 

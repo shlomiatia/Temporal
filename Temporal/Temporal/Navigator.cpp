@@ -169,7 +169,7 @@ namespace Temporal
 			}
 		}
 
-		void JumpForward::enter(void) const
+		void JumpForward::enter() const
 		{
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
 			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
@@ -201,7 +201,7 @@ namespace Temporal
 	}
 
 	using namespace NavigatorStates;
-	StateCollection Navigator::getStates(void) const
+	StateCollection Navigator::getStates() const
 	{
 		StateCollection states;
 		
@@ -215,7 +215,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash Navigator::getInitialState(void) const
+	Hash Navigator::getInitialState() const
 	{
 		return WAIT_STATE;
 	}
@@ -237,7 +237,7 @@ namespace Temporal
 			plotPath(*this, destination);
 	}
 
-	void Navigator::debugDraw(void) const
+	void Navigator::debugDraw() const
 	{
 		Point currentPoint = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 		NavigationEdgeCollection* path = getPath();
