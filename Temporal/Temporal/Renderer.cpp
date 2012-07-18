@@ -62,8 +62,9 @@ namespace Temporal
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
 		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);*/
 
+		_root->setMirrored(orientation != spritesheetOrientation);
 		_root->setTranslation(position);
-		Graphics::get().draw(*_root, _spritesheet, orientation);
+		Graphics::get().draw(*_root, _spritesheet);
 	}
 
 	Component* Renderer::clone(void) const

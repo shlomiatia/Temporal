@@ -96,22 +96,22 @@ namespace Temporal
 		glTranslatef(translation.getVx(), translation.getVy(), 0.0f);
 	}
 
-	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, Side::Enum orientation, const Color& color) const
+	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color) const
 	{
 		const Texture& texture = spritesheet.getTexture();
-		Side::Enum spritesheetOrientation = spritesheet.getOrientation();
-		bool mirrored = orientation != spritesheetOrientation;
 		const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
 		
 		glPushMatrix();
 		{	
 			translate(sceneNode.getTranslation());
+			if(sceneNode.isMirrored())
+				glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if((**i).drawBeforeParent())
-					draw(**i, spritesheet, orientation, color);
+					draw(**i, spritesheet, color);
 			}
 
 			if(spriteGroupID != Hash::INVALID)
@@ -133,16 +133,17 @@ namespace Temporal
 					float imageTop = texturePart.getBottom();
 					float imageBottom = texturePart.getTop() + 1.0f;
 
-					const float textureX0 = (!mirrored ? imageLeft : imageRight) / textureWidth;
-					const float textureX1 = (!mirrored ? imageRight : imageLeft) / textureWidth;
+					const float textureX0 = imageLeft / textureWidth;
+					const float textureX1 = imageRight / textureWidth;
 					const float textureTop = imageTop / textureHeight;
 					const float textureBottom = imageBottom / textureHeight;
 
 					glBindTexture(GL_TEXTURE_2D, texture.getID());
 
 					setColor(color);
-				
-					Vector offset = Vector(-sprite.getOffset().getVx()  * orientation * spritesheetOrientation, -sprite.getOffset().getVy());
+
+					
+					Vector offset = Vector(-sprite.getOffset().getVx(), -sprite.getOffset().getVy());
 					glTranslatef(offset.getVx(), offset.getVy(), 0.0f);
 					GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
 												 -texturePart.getRadiusVx(), texturePart.getRadiusVy(),
@@ -164,6 +165,7 @@ namespace Temporal
  
 					glDisableClientState(GL_VERTEX_ARRAY);
 					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 				}
 				glPopMatrix();
 			}
@@ -171,7 +173,7 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if(!(**i).drawBeforeParent())
-					draw(**i, spritesheet, orientation, color);
+					draw(**i, spritesheet, color);
 			}
 		}
 		glPopMatrix();

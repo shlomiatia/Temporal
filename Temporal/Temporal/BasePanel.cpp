@@ -46,7 +46,8 @@ namespace Temporal
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
 			Period::Enum period = Period::Past;
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::FLIP_ORIENTATION));
 		}
 		if(Input::get().isW())
 		{
