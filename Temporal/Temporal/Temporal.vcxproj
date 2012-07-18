@@ -24,6 +24,7 @@
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
     <ClInclude Include="DirectedSegment.h" />
+    <ClInclude Include="PhysicsUtils.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeSample.h" />
     <ClInclude Include="Segment.h" />

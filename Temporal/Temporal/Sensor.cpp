@@ -6,6 +6,7 @@
 #include "ShapeOperations.h"
 #include "Message.h"
 #include "MessageParams.h"
+#include "MessageUtils.h"
 #include "Graphics.h"
 #include <algorithm>
 
@@ -25,8 +26,7 @@ namespace Temporal
 		_point = Point::Zero;
 		
 		AABB bounds = getBounds();
-		int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
-		int collisionFilter = periodPointer == NULL ? 0 : *periodPointer;
+		int collisionFilter = getPeriod(*this);
 		Grid::get().iterateTiles(bounds, collisionFilter, this, NULL, sense);
 		if(_point != Point::Zero)
 		{

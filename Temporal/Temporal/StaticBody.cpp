@@ -2,6 +2,7 @@
 #include "Shape.h"
 #include "Message.h"
 #include "Graphics.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -24,7 +25,6 @@ namespace Temporal
 
 	int StaticBody::getCollisionFilter(void) const
 	{
-		int* periodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
-		return periodPointer == NULL ? 0 : *periodPointer;
+		return getPeriod(*this);
 	}
 }

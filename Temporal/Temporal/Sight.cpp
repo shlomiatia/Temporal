@@ -7,6 +7,8 @@
 #include "EntitiesManager.h"
 #include "Graphics.h"
 #include "DirectedSegment.h"
+#include "MessageUtils.h"
+#include "PhysicsUtils.h"
 
 namespace Temporal
 {
@@ -43,19 +45,15 @@ namespace Temporal
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
-		int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
-		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
-		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
-		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
-		if(myCollisionFilter != 0 && targetCollisionFilter != 0 && (myCollisionFilter & targetCollisionFilter) == 0)
+		int myPeriod = getPeriod(*this);
+		int targetPeriod = getPlayerPeriod();
+		if(!canCollide(myPeriod, targetPeriod))
 			return;
-		_isSeeing = Grid::get().cast(directedSegment, myCollisionFilter, _pointOfIntersection);
+		_isSeeing = Grid::get().cast(directedSegment, myPeriod, _pointOfIntersection);
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));
 	}
-
-
 
 	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Point &sourcePosition)
 	{

@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "ShapeOperations.h"
 #include "DirectedSegment.h"
+#include "PhysicsUtils.h"
 #include <algorithm>
 
 namespace Temporal
@@ -131,7 +132,7 @@ namespace Temporal
 				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
 				{
 					const StaticBody& body = **iterator;
-					if(collisionFilter != 0 && body.getCollisionFilter() != 0 && (collisionFilter & body.getCollisionFilter()) == 0)
+					if(!canCollide(collisionFilter, body.getCollisionFilter()))
 						continue;
 					if(intersects(dirSeg, body.getShape(), &pointOfIntersection))
 					{
@@ -175,7 +176,7 @@ namespace Temporal
 					for(StaticBodyIterator i = staticBodies->begin(); i != staticBodies->end(); ++i)
 					{
 						const StaticBody& staticBody = **i;
-						if(collisionFilter != 0 && staticBody.getCollisionFilter() != 0 && (collisionFilter & staticBody.getCollisionFilter()) == 0)
+						if(!canCollide(collisionFilter, staticBody.getCollisionFilter()))
 							continue;
 						if(!handleStaticBody(caller, data, staticBody))
 							return;
