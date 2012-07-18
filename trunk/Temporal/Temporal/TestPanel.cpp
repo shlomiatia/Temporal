@@ -113,11 +113,12 @@ namespace Temporal
 		animation->add(sceneNodeID, spriteGroupID, duration, translation, rotation);
 	}
 
-	void createTemporalEcho(Entity* entity, SceneNode* root, const SpriteSheet& spritesheet, VisualLayer::Enum layer, AnimationCollection* animations = NULL)
+	void createTemporalEcho(Entity* entity, AnimationCollection* animations = NULL)
 	{
 		const Component* position = entity->get(ComponentType::POSITION);
 		const Component* orientation = entity->get(ComponentType::ORIENTATION);
 		const Component* drawPosition = entity->get(ComponentType::DRAW_POSITION);
+		Renderer* renderer = (Renderer*)entity->get(ComponentType::RENDERER)->clone();
 		
 		Entity* echoEntity = new Entity();
 		echoEntity->add(position->clone());
@@ -127,10 +128,9 @@ namespace Temporal
 			echoEntity->add(drawPosition->clone());
 		if(animations != NULL)
 		{
-			Animator* animator = new Animator(*animations, *root);
+			Animator* animator = new Animator(*animations, renderer->getRoot());
 			echoEntity->add(animator);
 		}
-		Renderer* renderer = new Renderer(spritesheet, layer, root, Color(1.0f, 1.0f, 1.0f, 0.2f));
 		echoEntity->add(renderer);
 
 		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
@@ -265,7 +265,7 @@ namespace Temporal
 		entity->add(animator);
 		entity->add(renderer);
 		//entity->add(temporalPeriod);
-		createTemporalEcho(entity, createDefaultSceneGraph(), *spritesheet, VisualLayer::NPC, animations);
+		createTemporalEcho(entity, animations);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
 
@@ -464,7 +464,7 @@ namespace Temporal
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
 		Hash animationID = Hash("ANM_WALK");
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"));
+		SceneNode* root = new SceneNode(Hash("SCN_ROOT"), false, true);
 
 		#pragma region SpriteGroup
 		// SCN_RIGHT_LEG
@@ -545,8 +545,6 @@ namespace Temporal
 		SCN_SHADOW->setSpriteGroupID(SCN_SHADOW_ID);
 		spriteGroup->add(new Sprite(AABB(198, 212, 94, 30), Vector(-2, 2)));
 
-
-
 		#pragma endregion
 
 		root->add(SCN_BODY);
@@ -578,7 +576,7 @@ namespace Temporal
 
 		Position* position = new Position(Point(300.0f, 300.0f));
 		Orientation* orientation = new Orientation(Side::RIGHT);
-		Animator* animator = new Animator(*animations, *SCN_BODY);
+		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 
 		Entity* entity = new Entity();
@@ -586,6 +584,7 @@ namespace Temporal
 		entity->add(orientation);
 		entity->add(animator);
 		entity->add(renderer);
+		createTemporalEcho(entity, animations);
 		entity->handleMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animationID, true, true)));
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
@@ -769,7 +768,7 @@ namespace Temporal
 
 #pragma endregion
 
-		//createSkeleton();
+		createSkeleton();
 		createPlayer(spritesheet, animations);
 		//createLaser();
 		//createSentry(spritesheet);
