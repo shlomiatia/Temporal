@@ -1,7 +1,7 @@
 #ifndef TEMPORALECHO_H
 #define TEMPORALECHO_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 #include <vector>
 
 namespace Temporal

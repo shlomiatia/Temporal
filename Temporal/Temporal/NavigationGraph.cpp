@@ -1,17 +1,13 @@
 #include "NavigationGraph.h"
-#include "Shape.h"
-#include "Segment.h"
+#include "Shapes.h"
 #include "ShapeOperations.h"
 #include "Math.h"
-#include "Message.h"
-#include "Entity.h"
-#include "EntitiesManager.h"
+#include "EntitySystem.h"
 #include "ActionController.h"
 #include "MovementUtils.h"
 #include "DynamicBody.h"
 #include "StaticBody.h"
 #include "Graphics.h"
-#include "DirectedSegment.h"
 
 namespace Temporal
 {

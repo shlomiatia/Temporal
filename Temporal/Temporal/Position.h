@@ -2,7 +2,7 @@
 #define POSITION_H
 
 #include "NumericPair.h"
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

@@ -1,10 +1,9 @@
 #include "BasePanel.h"
 
 #include "DebugInfo.h"
-#include "Message.h"
-#include "EntitiesManager.h"
+#include "EntitySystem.h"
 #include "Game.h"
-#include "AABB.h"
+#include "Shapes.h"
 #include "NumericPair.h"
 #include "ViewManager.h"
 #include "Graphics.h"

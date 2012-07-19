@@ -1,5 +1,4 @@
 #include "DrawPosition.h"
-#include "Message.h"
 #include "BaseUtils.h"
 #include "Serialization.h"
 

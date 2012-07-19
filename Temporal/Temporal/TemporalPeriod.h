@@ -1,7 +1,7 @@
 #ifndef TEMPORALPERIOD_H
 #define TEMPORALPERIOD_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

@@ -1,7 +1,7 @@
 #ifndef DRAWPOSITION_H
 #define DRAWPOSITION_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 #include "NumericPair.h"
 
 namespace Temporal

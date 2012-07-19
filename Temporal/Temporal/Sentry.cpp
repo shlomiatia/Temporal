@@ -1,6 +1,5 @@
 #include "Sentry.h"
 #include "Color.h"
-#include "Message.h"
 
 namespace Temporal
 {

@@ -1,6 +1,5 @@
 #include "StaticBody.h"
-#include "Shape.h"
-#include "Message.h"
+#include "Shapes.h"
 #include "Graphics.h"
 #include "MessageUtils.h"
 

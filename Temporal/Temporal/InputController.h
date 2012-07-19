@@ -1,7 +1,7 @@
 #ifndef INPUTCONTROLLER_H
 #define INPUTCONTROLLER_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

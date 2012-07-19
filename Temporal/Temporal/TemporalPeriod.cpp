@@ -1,8 +1,6 @@
 #include "TemporalPeriod.h"
-#include "Message.h"
 #include "MessageUtils.h"
 #include "Color.h"
-#include "EntitiesManager.h"
 
 namespace Temporal
 {

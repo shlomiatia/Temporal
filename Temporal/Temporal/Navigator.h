@@ -1,6 +1,6 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-#include "AABB.h"
+#include "Shapes.h"
 #include "StateMachineComponent.h"
 #include "Pathfinder.h"
 

@@ -2,7 +2,7 @@
 #define ANIMATOR_H
 
 #include "Timer.h"
-#include "Component.h"
+#include "EntitySystem.h"
 #include "Hash.h"
 #include "SceneNodeSample.h"
 

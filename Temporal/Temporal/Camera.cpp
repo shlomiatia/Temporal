@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "Message.h"
 #include "MessageParams.h"
 
 namespace Temporal
@@ -19,7 +18,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
 		}
 
 		void Search::handleMessage(Message& message) const

@@ -2,7 +2,7 @@
 #define LINERENDERER_H
 #include "NumericPair.h"
 #include "Color.h"
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

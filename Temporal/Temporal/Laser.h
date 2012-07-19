@@ -1,7 +1,7 @@
 #ifndef LASER_H
 #define LASER_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 #include "Hash.h"
 
 namespace Temporal

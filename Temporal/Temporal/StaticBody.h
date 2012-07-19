@@ -1,7 +1,7 @@
 #ifndef STATICBODY_H
 #define STATICBODY_H
 
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

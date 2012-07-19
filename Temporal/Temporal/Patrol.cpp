@@ -1,6 +1,5 @@
 #include "Patrol.h"
 #include "MessageUtils.h"
-#include "Message.h"
 
 namespace Temporal
 {

@@ -1,5 +1,4 @@
 #include "StateMachineComponent.h"
-#include "Message.h"
 #include "Serialization.h"
 #include "BaseUtils.h"
 
