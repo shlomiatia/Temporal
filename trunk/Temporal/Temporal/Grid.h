@@ -41,7 +41,7 @@ namespace Temporal
 
 		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
 		float getTileSize() const { return _tileSize; }
-		int getAxisIndex(float value) const { return (int)(value / _tileSize); }
+		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }

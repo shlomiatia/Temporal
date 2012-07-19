@@ -28,12 +28,12 @@ namespace Temporal
 	{
 		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
-		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		const Point& targetPosition = *(Point*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		const Point& targetPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 
 		// Check orientation
-		if(differentSign(targetPosition.getX() - sourcePosition.getX(), (float)sourceSide))
+		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
 			return;
 
 		// Check field of view
@@ -72,7 +72,7 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
-		const Point& sourcePosition = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
 		drawFieldOfView(sourcePosition, sourceSide);

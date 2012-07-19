@@ -17,7 +17,7 @@ namespace Temporal
 	{
 		_running = true;
 
-		_lastFrameMillis = (float)Thread::getElapsedTimeInMillis();
+		_lastFrameMillis = Thread::getElapsedTimeInMillis();
 
 		while (isRunning())
 		{
@@ -63,7 +63,7 @@ namespace Temporal
 
 	void Game::update()
 	{
-		float currFrameMillis = (float)Thread::getElapsedTimeInMillis();
+		float currFrameMillis = Thread::getElapsedTimeInMillis();
 		float framesToSkip = (currFrameMillis - _lastFrameMillis) / FRAME_PERIOD_IN_MILLIS - 1.0f;
 		if(framesToSkip > MAX_FRAMES_SKIP)
 			_lastFrameMillis = currFrameMillis - MAX_FRAMES_SKIP * FRAME_PERIOD_IN_MILLIS;

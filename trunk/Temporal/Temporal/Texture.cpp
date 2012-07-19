@@ -45,7 +45,7 @@ namespace Temporal
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, image->format->BytesPerPixel, image->w, image->h, 0, texture_format, GL_UNSIGNED_BYTE, image->pixels);
-		Size size((float)image->w, (float)image->h);
+		Size size(static_cast<float>(image->w), static_cast<float>(image->h));
 		const Texture* result(new Texture(id, size));
 
 		Graphics::get().validate();

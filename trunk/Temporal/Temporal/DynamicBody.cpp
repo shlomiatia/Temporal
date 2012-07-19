@@ -34,7 +34,7 @@ namespace Temporal
 
 	AABB DynamicBody::getBounds() const
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		return AABB(position, _size);
 	}
 
@@ -48,11 +48,11 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::GET_SIZE)
 		{
-			message.setParam((Size*)&_size);
+			message.setParam(const_cast<Size*>(&_size));
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
-			AABB* outParam = (AABB*)message.getParam();
+			AABB* outParam = static_cast<AABB*>(message.getParam());
 			*outParam = getBounds();
 		}
 		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
@@ -66,7 +66,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
-			const Vector& param = *(Vector*)message.getParam();
+			const Vector& param = *static_cast<Vector*>(message.getParam());
 			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
 
 			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
@@ -75,29 +75,29 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
-			const Vector& param = *(Vector*)message.getParam();
+			const Vector& param = *static_cast<Vector*>(message.getParam());
 			_absoluteImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
-			_gravityEnabled = *(bool*)message.getParam();
+			_gravityEnabled = *static_cast<bool*>(message.getParam());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(float*)message.getParam();
+			float framePeriodInMillis = *static_cast<float*>(message.getParam());
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			serialization.serialize(IS_GRAVITY_ENABLED_SERIALIZATION, _gravityEnabled);
 			VELOCITY_SERIALIZER.serialize(serialization, _velocity);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			_gravityEnabled = serialization.deserializeBool(IS_GRAVITY_ENABLED_SERIALIZATION);
 			VELOCITY_SERIALIZER.deserialize(serialization, _velocity);
 		}
@@ -191,7 +191,7 @@ namespace Temporal
 
 	void DynamicBody::correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
 	{
-		const Segment& segment = (Segment&)staticBodyBounds;
+		const Segment& segment = static_cast<const Segment&>(staticBodyBounds);
 		Vector platformVector = segment.getNaturalVector().normalize();
 		float angle = platformVector.getAngle();
 		bool isModerateSlope = isModerateAngle(angle);
@@ -270,15 +270,15 @@ namespace Temporal
 
 	void DynamicBody::changePosition(const Vector& offset)
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Point newPosition = position + offset;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
 	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
 	{
-		Vector& collision = *(Vector*)data;
-		DynamicBody* dynamicBody = (DynamicBody*)caller;
+		Vector& collision = *static_cast<Vector*>(data);
+		DynamicBody* dynamicBody = static_cast<DynamicBody*>(caller);
 		return dynamicBody->detectCollision(staticBody, collision);
 	}
 }

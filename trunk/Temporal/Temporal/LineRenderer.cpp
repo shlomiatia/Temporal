@@ -12,33 +12,33 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_COLOR)
 		{
-			_color = *(Color*)message.getParam();
+			_color = *static_cast<Color*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::SET_TARGET)
 		{
-			_target = *(Point*)message.getParam();
+			_target = *static_cast<Point*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
+			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
 			if(_layer == layer)
 				draw();			
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			TARGET_SERIALIZER.serialize(serialization, _target);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			TARGET_SERIALIZER.deserialize(serialization, _target);
 		}
 	}
 	
 	void LineRenderer::draw() const
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Graphics::get().draw(Segment(position, _target), _color);
 	}
 

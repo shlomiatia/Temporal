@@ -29,7 +29,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *(float*)message.getParam();
+				float framePeriodInMillis = *static_cast<float*>(message.getParam());
 				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
 					_stateMachine->changeState(TURN_STATE);
 			}
@@ -96,7 +96,8 @@ namespace Temporal
 				_stateMachine->changeState(SEE_STATE);
 			else
 			{
-				int blinkIndex = (int)(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
+				
+				int blinkIndex = static_cast<int>(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
 				if(blinkIndex % 2 == 1)
 					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 				else

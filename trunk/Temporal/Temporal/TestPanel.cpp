@@ -100,7 +100,7 @@ namespace Temporal
 
 	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
 	{
-		Animation* animation = (Animation*)(*animations)[animationID];
+		Animation* animation = const_cast<Animation*>((*animations)[animationID]);
 		if(animation == NULL)
 		{
 			animation = new Animation();
@@ -128,7 +128,7 @@ namespace Temporal
 			Component* rendererClone = renderer->clone();
 			if(animations != NULL)
 			{
-				Animator* animator = new Animator(*animations, ((Renderer*)rendererClone)->getRoot());
+				Animator* animator = new Animator(*animations, static_cast<Renderer*>(rendererClone)->getRoot());
 				echoEntity->add(animator);
 			}
 			echoEntity->add(rendererClone);

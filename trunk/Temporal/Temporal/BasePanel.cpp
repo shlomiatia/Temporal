@@ -43,7 +43,7 @@ namespace Temporal
 		{
 			//AABB bounds = AABB::Zero;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, (void*)&bounds));
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, static_cast<void*>(&bounds));
 			Period::Enum period = Period::Past;
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));

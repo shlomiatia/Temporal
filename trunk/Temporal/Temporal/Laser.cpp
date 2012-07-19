@@ -18,32 +18,32 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::LEVEL_CREATED)
 		{
-			const Segment& segment = *(Segment*)EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS));
+			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS)));
 			Point position = segment.getNaturalOrigin();
 			position.setY(position.getY() - 1.0f);
 			sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(float*)message.getParam();			
+			float framePeriodInMillis = *static_cast<float*>(message.getParam());			
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			serialization.serialize(DIRECTION_SERIALIZATION, _isPositiveDirection);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			_isPositiveDirection = serialization.deserializeBool(DIRECTION_SERIALIZATION);
 		}
 	}
 
 	void Laser::update(float framePeriodInMillis)
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		const Segment& segment = *(Segment*)EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS));
+		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS)));
 		Vector directionVector = segment.getNaturalVector().normalize();
 		Vector laserVector = directionVector.getRightNormal();
 		float movementAmount = LASER_SPEED_PER_SECOND * framePeriodInMillis / 1000.0f;

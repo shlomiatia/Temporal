@@ -27,8 +27,8 @@ namespace Temporal
 			ALL = 2097151
 		};
 	}
-	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return (ComponentType::Enum)((int)a | (int)b); }
-	inline ComponentType::Enum operator&(ComponentType::Enum a, ComponentType::Enum b) { return (ComponentType::Enum)((int)a & (int)b); }
+	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) | static_cast<int>(b)); }
+	inline ComponentType::Enum operator&(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) & static_cast<int>(b)); }
 
 	namespace MessageID
 	{

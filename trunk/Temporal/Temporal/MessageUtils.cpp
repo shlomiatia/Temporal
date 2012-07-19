@@ -20,7 +20,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{
-			const SensorCollisionParams& params = *(SensorCollisionParams*)message.getParam();
+			const SensorCollisionParams& params = *static_cast<SensorCollisionParams*>(message.getParam());
 			if(params.getSensorID() == sensorID)
 				return true;
 		}
@@ -35,13 +35,13 @@ namespace Temporal
 
 	int getPeriod(const Component& component)
 	{
-		int* periodPointer = (int*)component.sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		int* periodPointer = static_cast<int*>(component.sendMessageToOwner(Message(MessageID::GET_PERIOD)));
 		return getPeriod(periodPointer);
 	}
 
 	int getPlayerPeriod()
 	{
-		int* periodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
+		int* periodPointer = static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD)));
 		return getPeriod(periodPointer);
 	}
 }

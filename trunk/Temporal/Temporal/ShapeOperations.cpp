@@ -318,17 +318,17 @@ namespace Temporal
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
-			const AABB& rect = (const AABB&)shape;
+			const AABB& rect = static_cast<const AABB&>(shape);
 			return intersects(yabp, rect);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg = (const Segment&)shape;
+			const Segment& seg = static_cast<const Segment&>(shape);
 			return intersects(yabp, seg);
 		}
 		else if(shape.getType() == ShapeType::YABP)
 		{
-			const YABP& yabp2 = (const YABP&)shape;
+			const YABP& yabp2 = static_cast<const YABP&>(shape);
 			return intersects(yabp, yabp2);
 		}
 		else
