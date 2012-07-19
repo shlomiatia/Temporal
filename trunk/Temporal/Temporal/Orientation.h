@@ -2,7 +2,7 @@
 #define ORIENTATION_H
 
 #include "BaseEnums.h"
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

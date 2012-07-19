@@ -2,7 +2,7 @@
 #define RENDERER_H
 #include "Hash.h"
 #include "Color.h"
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

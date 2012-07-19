@@ -3,7 +3,7 @@
 
 #include "Timer.h"
 #include "Hash.h"
-#include "Component.h"
+#include "EntitySystem.h"
 #include <unordered_map>
 
 namespace Temporal

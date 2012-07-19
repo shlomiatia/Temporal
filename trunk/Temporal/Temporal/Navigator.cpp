@@ -2,7 +2,6 @@
 #include "BaseUtils.h"
 #include "Serialization.h"
 #include "Segment.h"
-#include "Message.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
 

@@ -1,7 +1,6 @@
 #include "ViewManager.h"
 #include "Graphics.h"
-#include "Message.h"
-#include "EntitiesManager.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

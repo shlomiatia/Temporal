@@ -3,8 +3,6 @@
 #include "SpriteSheet.h"
 #include "Hash.h"
 #include "Serialization.h"
-#include "Message.h"
-#include "EntitiesManager.h"
 #include "SceneNode.h"
 #include "MessageParams.h"
 

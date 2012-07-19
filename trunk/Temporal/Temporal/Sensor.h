@@ -4,8 +4,8 @@
 #include "Hash.h"
 #include "BaseEnums.h"
 #include "NumericPair.h"
-#include "AABB.h"
-#include "Component.h"
+#include "Shapes.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

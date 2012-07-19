@@ -1,9 +1,6 @@
 #include "ShapeOperations.h"
 
-#include "AABB.h"
-#include "Segment.h"
-#include "DirectedSegment.h"
-#include "YABP.h"
+#include "Shapes.h"
 #include "Math.h"
 #include <math.h>
 #include <algorithm>

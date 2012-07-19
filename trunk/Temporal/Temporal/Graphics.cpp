@@ -2,10 +2,7 @@
 #include "SpriteSheet.h"
 #include "Texture.h"
 #include "SceneNode.h"
-#include "Shape.h"
-#include "Segment.h"
-#include "AABB.h"
-#include "YABP.h"
+#include "Shapes.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 

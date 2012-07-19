@@ -1,9 +1,8 @@
 #include "LineRenderer.h"
 #include "Graphics.h"
 #include "Serialization.h"
-#include "Message.h"
 #include "BaseUtils.h"
-#include "Segment.h"
+#include "Shapes.h"
 
 namespace Temporal
 {

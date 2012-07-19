@@ -3,10 +3,8 @@
 #include "StaticBody.h"
 #include "Segment.h"
 #include "Math.h"
-#include "Message.h"
-#include "EntitiesManager.h"
 #include "Graphics.h"
-#include "DirectedSegment.h"
+#include "Shapes.h"
 #include "MessageUtils.h"
 #include "PhysicsUtils.h"
 

@@ -21,9 +21,6 @@
     <ClInclude Include="Sentry.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="BaseEnums.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -45,37 +42,19 @@
     <ClInclude Include="ShapeOperations.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="YABP.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="ActionController.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="BasePanel.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="DebugInfo.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="EntitiesManager.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="GameEnums.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Message.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="MessageParams.h">
@@ -101,9 +80,6 @@
     </ClInclude>
     <ClInclude Include="TemporalEcho.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Segment.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Serialization.h">
       <Filter>Common</Filter>
@@ -162,9 +138,6 @@
     <ClInclude Include="Laser.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="DirectedSegment.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="LineRenderer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -179,6 +152,12 @@
     </ClInclude>
     <ClInclude Include="PhysicsUtils.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="EntitySystem.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +180,6 @@
     </ClCompile>
     <ClCompile Include="Sentry.cpp">
       <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="BaseUtils.cpp">
       <Filter>Common</Filter>
@@ -229,16 +205,7 @@
     <ClCompile Include="BasePanel.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="DebugInfo.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="EntitiesManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -261,9 +228,6 @@
     </ClCompile>
     <ClCompile Include="TemporalEcho.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Segment.cpp">
-      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Thread.cpp">
       <Filter>Common</Filter>
@@ -310,9 +274,6 @@
     <ClCompile Include="StaticBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="YABP.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Laser.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -327,6 +288,12 @@
     </ClCompile>
     <ClCompile Include="SceneNodeSample.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="EntitySystem.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

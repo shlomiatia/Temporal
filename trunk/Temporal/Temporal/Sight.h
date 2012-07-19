@@ -4,7 +4,7 @@
 #include "Hash.h"
 #include "BaseEnums.h"
 #include "NumericPair.h"
-#include "Component.h"
+#include "EntitySystem.h"
 
 namespace Temporal
 {

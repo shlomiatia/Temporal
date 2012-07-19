@@ -1,9 +1,7 @@
 #include "MessageUtils.h"
-#include "Message.h"
-#include "Component.h"
+#include "EntitySystem.h"
 #include "MessageParams.h"
 #include "Hash.h"
-#include "EntitiesManager.h"
 
 namespace Temporal
 {

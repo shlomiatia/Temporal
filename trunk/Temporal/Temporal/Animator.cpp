@@ -1,7 +1,6 @@
 #include "Animator.h"
 #include "SpriteSheet.h"
 #include "Serialization.h"
-#include "Message.h"
 #include "MessageParams.h"
 #include "SceneNode.h"
 #include <math.h>

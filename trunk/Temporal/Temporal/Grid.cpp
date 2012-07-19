@@ -1,10 +1,8 @@
 #include "Grid.h"
 #include "StaticBody.h"
-#include "Shape.h"
-#include "AABB.h"
+#include "Shapes.h"
 #include "Graphics.h"
 #include "ShapeOperations.h"
-#include "DirectedSegment.h"
 #include "PhysicsUtils.h"
 #include <algorithm>
 

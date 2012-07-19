@@ -5,13 +5,13 @@
 
 namespace Temporal
 {
-	// TODO: Cast/()/merge files
+	// TODO: Local coords
+	// TODO: Cast/merge files
 
 	// ASSUME: When trying to walk towards a steep hill, the entity will raise a bit */																															 																								
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Local coords
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
 	// TODO: Store YABP in grid PHYSICS

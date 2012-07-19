@@ -4,7 +4,6 @@
 #include "Math.h"
 #include "Segment.h"
 #include "ShapeOperations.h"
-#include "Message.h"
 #include "MessageParams.h"
 #include "MessageUtils.h"
 #include "Graphics.h"

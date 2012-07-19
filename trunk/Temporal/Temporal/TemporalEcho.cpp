@@ -1,6 +1,4 @@
 #include "TemporalEcho.h"
-#include "Message.h"
-#include "Entity.h"
 #include "Serialization.h"
 #include "Color.h"
 
