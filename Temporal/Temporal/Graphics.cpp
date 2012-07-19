@@ -28,13 +28,13 @@ namespace Temporal
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
 
-		if (SDL_SetVideoMode((int)resolution.getWidth(), (int)resolution.getHeight(), BIT_DEPTH, flags) == NULL)
+		if (SDL_SetVideoMode(static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()), BIT_DEPTH, flags) == NULL)
 		{
 			// ERROR: Error Failed setting video mode
 			exit(1);
 		}
 		
-		glViewport(0, 0, (int)resolution.getWidth(), (int)resolution.getHeight());
+		glViewport(0, 0, static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()));
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -117,7 +117,7 @@ namespace Temporal
 				{
 					const char* ccc = HashToString::get().getString(spriteGroupID);
 					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
-					int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : (int)(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+					int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 					const Sprite& sprite = spriteGroup.get(spriteIndex);
 					const AABB& texturePart = sprite.getBounds();
 				

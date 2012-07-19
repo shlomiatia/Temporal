@@ -14,16 +14,16 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = *(Point*)message.getParam();
+			_position = *static_cast<Point*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			POSITION_SERIALIZER.serialize(serialization, _position);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			POSITION_SERIALIZER.deserialize(serialization, _position);
 		}
 	}

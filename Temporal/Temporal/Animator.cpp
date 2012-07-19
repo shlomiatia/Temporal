@@ -31,17 +31,17 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			const ResetAnimationParams& resetAnimationParams = *(ResetAnimationParams*)message.getParam();
+			const ResetAnimationParams& resetAnimationParams = *static_cast<ResetAnimationParams*>(message.getParam());
 			reset(resetAnimationParams);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(float*)message.getParam();
+			float framePeriodInMillis = *static_cast<float*>(message.getParam());
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
 			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
@@ -49,7 +49,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
 			_repeat = serialization.deserializeBool(REPEAT_SERIALIZATION);

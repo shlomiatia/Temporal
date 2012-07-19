@@ -25,13 +25,12 @@ namespace Temporal
 			}
 			else
 			{
-				
 				newSample = Thread::getElapsedTimeInMillis() - lastTick;
 				sum += newSample - samples[sampleIndex];
 				samples[sampleIndex] = newSample;
 				sampleIndex = (sampleIndex + 1) % MAX_SAMPLES;
 
-				title << "FPS: " << 1000.0f / ((float)sum / MAX_SAMPLES);
+				title << "FPS: " << 1000.0f / (static_cast<float>(sum) / MAX_SAMPLES);
 				
 			}
 			lastTick = Thread::getElapsedTimeInMillis();

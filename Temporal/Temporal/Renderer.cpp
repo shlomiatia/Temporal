@@ -14,11 +14,11 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_COLOR)
 		{
-			_color = *(Color*)message.getParam();
+			_color = *static_cast<Color*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = *(VisualLayer::Enum*)message.getParam();
+			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
 			if(_layer == layer)
 				draw();			
 		}
@@ -30,7 +30,7 @@ namespace Temporal
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+			position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 
 		Side::Enum spritesheetOrientation = _spritesheet.getOrientation();
 		const Side::Enum* entityOrientation = (const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -40,9 +40,9 @@ namespace Temporal
 		else
 			orientation = *entityOrientation;
 		
-		/*int* myPeriodPointer = (int*)sendMessageToOwner(Message(MessageID::GET_PERIOD));
+		/*int* myPeriodPointer = static_cast<int*>(sendMessageToOwner(Message(MessageID::GET_PERIOD));
 		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
-		int* targetPeriodPointer = (int*)EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
+		int* targetPeriodPointer = static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
 		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
 		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);*/
 

@@ -38,13 +38,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			serialization.serialize(STATE_SERIALIZATION, _currentStateID);
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			Hash stateID = Hash(serialization.deserializeUInt(STATE_SERIALIZATION));
 			setState(stateID);
@@ -52,7 +52,7 @@ namespace Temporal
 		_currentState->handleMessage(message);
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(float*)message.getParam();
+			float framePeriodInMillis = *static_cast<float*>(message.getParam());
 			_timer.update(framePeriodInMillis);
 			resetTempState();
 		}

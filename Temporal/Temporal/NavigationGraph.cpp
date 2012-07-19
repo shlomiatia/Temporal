@@ -38,7 +38,7 @@ namespace Temporal
 		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
 
 		// Move center in the opposite direction
-		Point center = area.getCenter() + (float)Side::getOpposite(direction) * cutRadius;
+		Point center = area.getCenter() + static_cast<float>(Side::getOpposite(direction)) * cutRadius;
 		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
 		if(slopedRadius.getVx() > 0.0f)
 		{

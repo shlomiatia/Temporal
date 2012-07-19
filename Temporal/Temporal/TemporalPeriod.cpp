@@ -17,11 +17,11 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_PERIOD)
 		{
-			Period::Enum playerPeriod = *(Period::Enum*)message.getParam();
+			Period::Enum playerPeriod = *static_cast<Period::Enum*>(message.getParam());
 			if(_isPlayer)
 				_period = playerPeriod;
 			else if(_period  == playerPeriod)
-				sendMessageToOwner(Message(MessageID::SET_COLOR, (void*)&Color::White));
+				sendMessageToOwner(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::White)));
 			else
 				sendMessageToOwner(Message(MessageID::SET_COLOR, &Color(1.0f, 1.0f, 1.0f, 0.1f)));
 

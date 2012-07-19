@@ -13,8 +13,8 @@ namespace Temporal
 {
 	AABB Sensor::getBounds() const
 	{
-		const Point& position = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
-		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		Side::Enum orientation = *static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
 		Point center(position.getX() + _offset.getVx() * orientation,
 					 position.getY() + _offset.getVy());
 		return AABB(center, _size);
@@ -105,7 +105,7 @@ namespace Temporal
 
 	bool Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
 	{
-		Sensor& sensor = *(Sensor*)caller;
+		Sensor& sensor = *static_cast<Sensor*>(caller);
 		return sensor.sense(staticBody);
 	}
 }

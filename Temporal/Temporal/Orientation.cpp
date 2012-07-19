@@ -18,12 +18,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			serialization.serialize(ORIENTATION_SERIALIZATION, _orientation);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			_orientation = (Side::Enum)serialization.deserializeInt(ORIENTATION_SERIALIZATION);
 		}
 	}

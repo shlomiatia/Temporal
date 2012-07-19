@@ -4,7 +4,7 @@ namespace Temporal
 {
 	void Animation::add(const Hash& sceneNodeID, const Hash& spriteGroupID, float duration, const Vector& translation, float rotation)
 	{
-		SceneNodeSampleCollection* sceneNodeAnimation = (SceneNodeSampleCollection*)_sceneGraphSamples[sceneNodeID];
+		SceneNodeSampleCollection* sceneNodeAnimation = const_cast<SceneNodeSampleCollection*>(_sceneGraphSamples[sceneNodeID]);
 		if(sceneNodeAnimation == NULL)
 		{
 			sceneNodeAnimation = new SceneNodeSampleCollection();

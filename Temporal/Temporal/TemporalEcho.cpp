@@ -56,7 +56,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *(float*)message.getParam();
+			float framePeriodInMillis = *static_cast<float*>(message.getParam());
 			update(framePeriodInMillis);
 			if(_echoReady)
 				_echo->handleMessage(message);

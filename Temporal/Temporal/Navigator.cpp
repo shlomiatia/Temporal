@@ -27,7 +27,7 @@ namespace Temporal
 
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
-			Navigator& navigator = (Navigator&)stateMachine;
+			Navigator& navigator = static_cast<Navigator&>(stateMachine);
 			AABB startPosition = AABB::Zero;
 			navigator.sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
@@ -45,7 +45,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				AABB goalPosition = *(const AABB*)message.getParam();
+				AABB goalPosition = *static_cast<const AABB*>(message.getParam());
 				plotPath(*_stateMachine, goalPosition); 
 			}
 		}
@@ -54,9 +54,9 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Point& position = *(Point*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Point& position = *static_cast<Point*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION)));
 				float sourceX = position.getX();
-				Navigator& navigator = *((Navigator*)_stateMachine);
+				Navigator& navigator = *(static_cast<Navigator*>(_stateMachine));
 				NavigationEdgeCollection* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
@@ -106,7 +106,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				Navigator* navigator = (Navigator*)_stateMachine;
+				Navigator* navigator = static_cast<Navigator*>(_stateMachine);
 				NavigationEdgeCollection* path = navigator->getPath();
 				const NavigationEdge* edge = (*path)[0];
 				Side::Enum currentSide = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -144,7 +144,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *(Hash*)message.getParam();
+				const Hash& state = *static_cast<Hash*>(message.getParam());
 				if(state == ACTION_FALL_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -158,7 +158,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *(Hash*)message.getParam();
+				const Hash& state = *static_cast<Hash*>(message.getParam());
 				if(state == ACTION_CLIMB_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -178,7 +178,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *(Hash*)message.getParam();
+				const Hash& state = *static_cast<Hash*>(message.getParam());
 				if(state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -188,7 +188,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *(Hash*)message.getParam();
+				const Hash& state = *static_cast<Hash*>(message.getParam());
 				if(state == ACTION_DROP_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -238,7 +238,7 @@ namespace Temporal
 
 	void Navigator::debugDraw() const
 	{
-		Point currentPoint = *(Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+		Point currentPoint = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		NavigationEdgeCollection* path = getPath();
 			
 		if(path != NULL)
@@ -260,13 +260,13 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *(Serialization*)message.getParam();
+			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
 			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
 			DESTINATION_RADIUS_SERIALIZER.serialize(serialization, _destination.getRadius());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *(const Serialization*)message.getParam();
+			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
 			deserialize(serialization);
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
