@@ -69,9 +69,12 @@ namespace Temporal
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
 		bool contains(const Point& point) const;
+		AABB translate(const Vector& translation) const { return AABB(getCenter() + translation, getRadius()); }
+		AABB rotate(Side::Enum orientation) const { return AABB(Vector(getCenterX() * orientation, getCenterY()), getRadius()); }
 
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }
+		
 	private:
 		Point _center;
 		Vector _radius;

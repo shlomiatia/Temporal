@@ -14,16 +14,15 @@ namespace Temporal
 	class Sensor : public Component
 	{
 	public:
-		Sensor(const Hash& id, const Vector& offset, const Size& size, float rangeCenter, float rangeSize)
-			: _id(id), _offset(offset), _size(size), _point(Point::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize) {}
+		Sensor(const Hash& id, const AABB& bounds, float rangeCenter, float rangeSize)
+			: _id(id), _bounds(bounds), _point(Point::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize) {}
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
 
 	private:
 		const Hash _id;
-		const Vector _offset;
-		const Size _size;
+		const AABB _bounds;
 		const float _rangeCenter;
 		const float _rangeSize;
 		Point _point;

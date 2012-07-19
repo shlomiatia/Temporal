@@ -15,9 +15,7 @@ namespace Temporal
 	{
 		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Side::Enum orientation = *static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
-		Point center(position.getX() + _offset.getVx() * orientation,
-					 position.getY() + _offset.getVy());
-		return AABB(center, _size);
+		return _bounds.rotate(orientation).translate(position);
 	}
 
 	void Sensor::update()
