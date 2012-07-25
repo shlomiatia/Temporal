@@ -14,7 +14,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(*_shape);
+			Graphics::get().draw(*_shape, Color(0.5f, 0.25f, 0.125f));
 		}
 		else if(message.getID() == MessageID::GET_BOUNDS)
 		{
