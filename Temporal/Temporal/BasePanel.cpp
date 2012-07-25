@@ -1,5 +1,4 @@
 #include "BasePanel.h"
-
 #include "DebugInfo.h"
 #include "EntitySystem.h"
 #include "Game.h"
@@ -65,6 +64,7 @@ namespace Temporal
 	void BasePanel::draw() const
 	{
 		ViewManager::get().update();
+
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
