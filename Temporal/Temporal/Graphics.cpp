@@ -82,10 +82,11 @@ namespace Temporal
 
 			float vertices[8];
 
-			vertices[0] = leftPoint.getX();
-			vertices[1] = leftPoint.getY();
-			vertices[2] = leftPoint.getX() + vector1.getVx() * shadowSize;
-			vertices[3] = leftPoint.getY() + vector1.getVy() * shadowSize;
+			
+			vertices[0] = leftPoint.getX() + vector1.getVx() * shadowSize;
+			vertices[1] = leftPoint.getY() + vector1.getVy() * shadowSize;
+			vertices[2] = leftPoint.getX();
+			vertices[3] = leftPoint.getY();
 			vertices[4] = rightPoint.getX();
 			vertices[5] = rightPoint.getY();
 			vertices[6] = rightPoint.getX() + vector2.getVx() * shadowSize;
@@ -95,19 +96,17 @@ namespace Temporal
 
 			glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			glDrawArrays(GL_QUADS, 0, 4);
  
 			glDisableClientState(GL_VERTEX_ARRAY);
 		}
 		return true;
 	}
 
-	void Graphics::prepareForDrawing() const
+	void Graphics::light() const 
 	{
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
 		glClear(GL_COLOR_BUFFER_BIT);
-		glLoadIdentity();
 		float radius = _texture->getSize().getHeight() / 2.0f;
 		glDisable(GL_BLEND);
 		glColorMask(false, false, false, true);
@@ -151,13 +150,20 @@ namespace Temporal
 		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
+	void Graphics::prepareForDrawing() const
+	{
+		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glLoadIdentity();
+	}
+
 	void Graphics::finishDrawing() const
 	{
+		glLoadIdentity();
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
 		glBindTexture(GL_TEXTURE_2D, _texture->getID());
