@@ -33,6 +33,7 @@ namespace Temporal
 		void finishDrawing() const;
 
 		void validate() const;
+		void light() const;
 
 		void translate(const Vector& translation) const;
 		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color = Color::White) const;

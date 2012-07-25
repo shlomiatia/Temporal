@@ -61,10 +61,11 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
+
 	void BasePanel::draw() const
 	{
 		ViewManager::get().update();
-
+		Graphics::get().light();
 		DebugInfo::get().draw();
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
