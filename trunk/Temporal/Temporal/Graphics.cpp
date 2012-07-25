@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
+#include "Math.h"
+
 namespace Temporal
 {
 	static const Texture* _texture;
@@ -70,9 +72,43 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
 
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glPushMatrix();
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			glTranslatef(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f, 0.0f);
+
+			static const int parts = 32;
+			float radius = _texture->getSize().getHeight() / 2.0f;
+
+			float vertices[(parts + 1) * 2];
+			float colors[(parts + 1) * 4] = { 1.0f, 1.0f, 1.0f, 0.5 };
+
+			vertices[0] = 0.0f;
+			vertices[1] = 0.0f;
+
+			for(int i = 0; i < parts; ++i)
+			{
+				float angle = (PI * 2) * ((float)i / ((float)(parts - 1)));
+				vertices[i*2 + 2] = radius * cos(angle);
+				vertices[i*2 + 3] = radius * sin(angle);
+			}
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_COLOR_ARRAY);
+
+			glVertexPointer(2, GL_FLOAT, 0, vertices);
+			glColorPointer(4, GL_FLOAT, 0, colors);
+ 
+			glDrawArrays(GL_TRIANGLE_FAN, 0, parts + 1);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_COLOR_ARRAY);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
@@ -81,7 +117,7 @@ namespace Temporal
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
 		glBindTexture(GL_TEXTURE_2D, _texture->getID());
-
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		GLfloat screenVertices[] = { 0.0f, 0.0f,
 									 0.0f, _texture->getSize().getHeight(),
 									 _texture->getSize().getWidth(), _texture->getSize().getHeight(),
