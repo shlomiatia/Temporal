@@ -53,6 +53,24 @@ namespace Temporal
 		return result;
 	}
 
+	const Texture* Texture::load(const Size& size)
+	{
+		GLuint id;
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		unsigned int* data = (unsigned int*)new unsigned int[((static_cast<int>(size.getWidth()) * static_cast<int>(size.getHeight()))* 4 * sizeof(unsigned int))];
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, size.getWidth(), size.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		const Texture* result(new Texture(id, size));
+		Graphics::get().validate();
+		delete data;
+		return result;
+	}
+
 	Texture::~Texture()
 	{
 		glDeleteTextures(1, &_id);

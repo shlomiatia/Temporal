@@ -775,8 +775,8 @@ namespace Temporal
 		createPlayer(spritesheet, animations);
 		//createLaser();
 		//createSentry(spritesheet);
-		createCamera();
-		createPatrol(spritesheet, animations);
+		//createCamera();
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		//createBackground();

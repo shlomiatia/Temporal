@@ -8,6 +8,7 @@
 
 namespace Temporal
 {
+	static const Texture* _texture;
 	void Graphics::init(const Size& resolution, const Size& viewSize, bool fullScreen)
 	{
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
@@ -17,6 +18,7 @@ namespace Temporal
 		}
 
 		setVideoMode(resolution, viewSize, fullScreen);
+		_texture = Texture::load(viewSize);
 	}
 	void Graphics::setVideoMode(const Size& resolution, const Size& viewSize, bool fullScreen) const
 	{
@@ -47,7 +49,7 @@ namespace Temporal
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		validate();
 	}
@@ -63,12 +65,46 @@ namespace Temporal
 	}
 	void Graphics::prepareForDrawing() const
 	{
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
+
+		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
+		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	void Graphics::finishDrawing() const
 	{
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+
+		glBindTexture(GL_TEXTURE_2D, _texture->getID());
+
+		GLfloat screenVertices[] = { 0.0f, 0.0f,
+									 0.0f, _texture->getSize().getHeight(),
+									 _texture->getSize().getWidth(), _texture->getSize().getHeight(),
+									 _texture->getSize().getWidth(), 0.0f };
+
+		GLfloat textureVertices[] = { 0.0f, 0.0f,
+									  0.0f, 1.0f,
+								      1.0f, 1.0f,
+									  1.0f, 0.0f };
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ 
+		glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+		glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
+ 
+		glDrawArrays(GL_QUADS, 0, 4);
+ 
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		SDL_GL_SwapBuffers();
 		validate();
 	}
@@ -115,7 +151,6 @@ namespace Temporal
 			{
 				glPushMatrix();
 				{
-					const char* ccc = HashToString::get().getString(spriteGroupID);
 					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
 					int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 					const Sprite& sprite = spriteGroup.get(spriteIndex);
@@ -140,7 +175,6 @@ namespace Temporal
 
 					setColor(color);
 
-					
 					Vector offset = Vector(-sprite.getOffset().getVx(), -sprite.getOffset().getVy());
 					glTranslatef(offset.getVx(), offset.getVy(), 0.0f);
 					GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
