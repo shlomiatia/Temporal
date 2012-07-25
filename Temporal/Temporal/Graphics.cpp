@@ -7,6 +7,8 @@
 #include <SDL_opengl.h>
 
 #include "Math.h"
+#include "Grid.h"
+#include "StaticBody.h"
 
 namespace Temporal
 {
@@ -65,23 +67,64 @@ namespace Temporal
 	{
 		SDL_VideoQuit();
 	}
+
+	bool crap(void* caller, void* data, const StaticBody& staticBody)
+	{
+		if(!staticBody.isCover())
+		{
+			float shadowSize = _texture->getSize().getWidth() / 2.0f;
+			Vector lightCenter = Vector(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f);
+			const Segment& segment = (const Segment&)staticBody.getShape();
+			Point leftPoint = segment.getLeftPoint();
+			Point rightPoint = segment.getRightPoint();
+			Vector vector1 = Vector(leftPoint - lightCenter).normalize();
+			Vector vector2 = Vector(rightPoint - lightCenter).normalize();
+
+			float vertices[8];
+
+			vertices[0] = leftPoint.getX();
+			vertices[1] = leftPoint.getY();
+			vertices[2] = leftPoint.getX() + vector1.getVx() * shadowSize;
+			vertices[3] = leftPoint.getY() + vector1.getVy() * shadowSize;
+			vertices[4] = rightPoint.getX();
+			vertices[5] = rightPoint.getY();
+			vertices[6] = rightPoint.getX() + vector2.getVx() * shadowSize;
+			vertices[7] = rightPoint.getY() + vector2.getVy() * shadowSize;
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+
+			glVertexPointer(2, GL_FLOAT, 0, vertices);
+ 
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
+		}
+		return true;
+	}
+
 	void Graphics::prepareForDrawing() const
 	{
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
-
+		float radius = _texture->getSize().getHeight() / 2.0f;
+		glDisable(GL_BLEND);
+		glColorMask(false, false, false, true);
+		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+		Grid::get().iterateTiles(AABB(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f, radius, radius), 0, NULL, NULL, crap);
+		glColorMask(true, true, true, true);
+		glEnable(GL_BLEND);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glPushMatrix();
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		{
+			glBlendFunc(GL_DST_ALPHA, GL_ONE);
 			glTranslatef(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f, 0.0f);
 
 			static const int parts = 32;
-			float radius = _texture->getSize().getHeight() / 2.0f;
 
 			float vertices[(parts + 1) * 2];
-			float colors[(parts + 1) * 4] = { 1.0f, 1.0f, 1.0f, 0.5 };
+			float colors[(parts + 1) * 4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
 			vertices[0] = 0.0f;
 			vertices[1] = 0.0f;
@@ -104,6 +147,7 @@ namespace Temporal
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_COLOR_ARRAY);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
 		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
