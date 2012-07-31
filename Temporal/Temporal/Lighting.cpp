@@ -68,7 +68,7 @@ namespace Temporal
 
 		glColorMask(false, false, false, true);
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2, _radius * 2);
+		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 22.0f);
 		Grid::get().iterateTiles(lightAABB, 0, NULL, static_cast<void*>(&position), drawShadows);
 		glColorMask(true, true, true, true);
 		glEnable(GL_BLEND);
@@ -122,7 +122,6 @@ namespace Temporal
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
 
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}

@@ -30,6 +30,7 @@
 #include "Camera.h"
 #include "Laser.h"
 #include "MessageParams.h"
+#include "Lighting.h"
 #include <sstream>
 
 namespace Temporal
@@ -150,6 +151,7 @@ namespace Temporal
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
+		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -161,6 +163,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
+		entity->add(light);
 		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}

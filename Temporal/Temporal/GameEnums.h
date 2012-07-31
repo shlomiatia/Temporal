@@ -98,7 +98,7 @@ namespace Temporal
 			NPC
 		};
 
-		static const int FARTHEST = LIGHT;
+		static const int FARTHEST = BACKGROUND;
 		static const int NEAREST = NPC;
 	}
 }
