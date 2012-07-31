@@ -8,10 +8,6 @@ namespace Temporal
 {
 	class Size;
 	class Texture;
-	class Quad;
-
-	typedef std::vector<const Quad*> QuadCollection;
-	typedef QuadCollection::const_iterator QuadIterator;
 
 	class Light : public Component
 	{
@@ -26,6 +22,13 @@ namespace Temporal
 		float _radius;
 
 		void draw() const;
+	};
+
+	class LightDetector : public Component
+	{
+	public:
+	private:
+		bool _isDetected;
 	};
 
 	class LightSystem
