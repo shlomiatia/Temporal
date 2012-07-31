@@ -8,8 +8,6 @@
 
 namespace Temporal
 {
-	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-
 	void Renderer::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::SET_COLOR)
@@ -39,12 +37,6 @@ namespace Temporal
 			orientation = spritesheetOrientation;
 		else
 			orientation = *entityOrientation;
-		
-		/*int* myPeriodPointer = static_cast<int*>(sendMessageToOwner(Message(MessageID::GET_PERIOD));
-		int myCollisionFilter = myPeriodPointer == NULL ? 0 : *myPeriodPointer ;
-		int* targetPeriodPointer = static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD));
-		int targetCollisionFilter = targetPeriodPointer == NULL ? 0 : *targetPeriodPointer;
-		Color color = myCollisionFilter == targetCollisionFilter ? _color : Color(_color.getR(), _color.getG(), _color.getB(), 0.2f);*/
 
 		_root->setMirrored(orientation != spritesheetOrientation);
 		_root->setTranslation(position);

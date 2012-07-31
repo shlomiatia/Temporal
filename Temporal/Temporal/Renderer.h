@@ -15,8 +15,8 @@ namespace Temporal
 		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, SceneNode* root, Color color = Color::White) :
 		  _spritesheet(spritesheet), _layer(layer), _root(root), _color(color) {};
 
-		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		SceneNode& getRoot() const { return *_root; }
+		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 
 		void handleMessage(Message& message);
 		Component* clone() const;
