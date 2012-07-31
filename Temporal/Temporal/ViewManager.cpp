@@ -17,9 +17,9 @@ namespace Temporal
 		Graphics::get().init(resolution, _cameraSize, fullScreen);
 	}
 
-	void ViewManager::update() const
+	void ViewManager::update()
 	{
-		const Point& position = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
+		const Point& position = *static_cast<const Point*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
 		float cameraWidth = _cameraSize.getWidth();
 		float cameraHeight = _cameraSize.getHeight();
 		float levelWidth = _levelBounds.getWidth();
@@ -30,8 +30,8 @@ namespace Temporal
 		float cameraBottomPosition = position.getY() - cameraHeight / 2.0f;
 		cameraBottomPosition = cameraBottomPosition + cameraHeight < levelHeight ? cameraBottomPosition :  (levelHeight - cameraHeight);
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
-
-		Vector translation(-cameraLeftPosition, -cameraBottomPosition);
+		_cameraBottomLeft = Point(cameraLeftPosition, cameraBottomPosition);
+		Vector translation = -_cameraBottomLeft;
 		Graphics::get().translate(translation);
 	}
 }

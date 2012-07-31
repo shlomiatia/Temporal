@@ -1,4 +1,5 @@
 #include "SpriteSheet.h"
+#include "Texture.h"
 #include <assert.h>
 
 namespace Temporal
@@ -16,7 +17,7 @@ namespace Temporal
 
 	const Sprite& SpriteGroup::get(int spriteID) const
 	{
-		assert(spriteID < _sprites.size());
+		assert(static_cast<unsigned int>(spriteID) < _sprites.size());
 		return *_sprites.at(spriteID);
 	}
 

@@ -64,7 +64,7 @@ namespace Temporal
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		unsigned int* data = (unsigned int*)new unsigned int[((static_cast<int>(size.getWidth()) * static_cast<int>(size.getHeight()))* 4 * sizeof(unsigned int))];
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, size.getWidth(), size.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, static_cast<int>(size.getWidth()), static_cast<int>(size.getHeight()), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		const Texture* result(new Texture(id, size));
 		Graphics::get().validate();
 		delete data;
