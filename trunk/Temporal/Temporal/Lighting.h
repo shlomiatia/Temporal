@@ -8,6 +8,10 @@ namespace Temporal
 {
 	class Size;
 	class Texture;
+	class Quad;
+
+	typedef std::vector<const Quad*> QuadCollection;
+	typedef QuadCollection::const_iterator QuadIterator;
 
 	class Light : public Component
 	{

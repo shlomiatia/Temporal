@@ -134,24 +134,6 @@ namespace Temporal
 	inline Segment SegmentPP(const Point& p1, const Point& p2) { return Segment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
 
 	/**********************************************************************************************
-	 * Directed segment
-	 *********************************************************************************************/
-	class DirectedSegment
-	{
-	public:
-		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
-		DirectedSegment(const Point& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
-		const Point& getOrigin() const { return _origin; }
-		const Vector& getVector() const { return _vector; }
-		Point getTarget() const { return getOrigin() + getVector(); }
-	private:
-		Point _origin;
-		Vector _vector;
-	};
-
-	inline DirectedSegment DirectedSegmentPP(const Point& p1, const Point& p2) { return DirectedSegment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
-
-	/**********************************************************************************************
 	 * YABP - A parallelogram with 1 axis parallel to Y
 	 *********************************************************************************************/
 	class YABP : public Shape
@@ -185,5 +167,23 @@ namespace Temporal
 		
 		void validate() const;
 	};
+
+	/**********************************************************************************************
+	 * Directed segment
+	 *********************************************************************************************/
+	class DirectedSegment
+	{
+	public:
+		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
+		DirectedSegment(const Point& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
+		const Point& getOrigin() const { return _origin; }
+		const Vector& getVector() const { return _vector; }
+		Point getTarget() const { return getOrigin() + getVector(); }
+	private:
+		Point _origin;
+		Vector _vector;
+	};
+
+	inline DirectedSegment DirectedSegmentPP(const Point& p1, const Point& p2) { return DirectedSegment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
 }
 #endif

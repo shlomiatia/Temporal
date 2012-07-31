@@ -5,11 +5,13 @@
 #include "StaticBody.h"
 #include "Shapes.h"
 #include "Texture.h"
+#include "ViewManager.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
 namespace Temporal
 {
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const int LIGHT_PARTS = 32;
 
 	void Light::handleMessage(Message& message)
@@ -64,13 +66,12 @@ namespace Temporal
 		glColorMask(false, false, false, true);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glColorMask(true, true, true, true);
 
-		glColorMask(false, false, false, true);
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 22.0f);
+		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
 		Grid::get().iterateTiles(lightAABB, 0, NULL, static_cast<void*>(&position), drawShadows);
 		glColorMask(true, true, true, true);
+
 		glEnable(GL_BLEND);
 		glPushMatrix();
 		{
@@ -101,6 +102,18 @@ namespace Temporal
 			glDisableClientState(GL_COLOR_ARRAY);
 		}
 		glPopMatrix();
+
+		Color color = Color::Red;
+		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
+		if(Vector(playerPosition - position).getLength() < _radius)
+		{
+			Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
+			GLubyte alpha;
+			glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_ALPHA, GL_UNSIGNED_BYTE, &alpha);
+			if(alpha > 0)
+				color = Color::Green;
+		}
+		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
 	}
 
 	void LightSystem::init(const Size& size)

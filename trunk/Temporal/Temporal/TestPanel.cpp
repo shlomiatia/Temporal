@@ -151,7 +151,6 @@ namespace Temporal
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
-		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -163,7 +162,6 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		entity->add(light);
 		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
@@ -596,6 +594,16 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
+	void createLight(const Point& point)
+	{
+		Position* position = new Position(point);
+		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(light);
+		EntitiesManager::get().add(Hash("ENT_LIGHT"), entity);
+	}
+
 	void TestPanel::createEntities()
 	{
 		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
@@ -784,5 +792,6 @@ namespace Temporal
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
+		createLight(Point(500.0f, 300.0f));
 	}
 }
