@@ -601,7 +601,9 @@ namespace Temporal
 		Entity* entity = new Entity();
 		entity->add(position);
 		entity->add(light);
-		EntitiesManager::get().add(Hash("ENT_LIGHT"), entity);
+		std::ostringstream lightID;
+		lightID << "ENT_LIGHT" << platformID++;
+		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
 	}
 
 	void TestPanel::createEntities()
@@ -793,5 +795,6 @@ namespace Temporal
 		createPlatforms();
 		createBackground();
 		createLight(Point(500.0f, 300.0f));
+		createLight(Point(1500.0f, 300.0f));
 	}
 }

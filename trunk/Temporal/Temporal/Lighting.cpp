@@ -103,7 +103,7 @@ namespace Temporal
 		}
 		glPopMatrix();
 
-		Color color = Color::Red;
+		
 		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
 		if(Vector(playerPosition - position).getLength() < _radius)
 		{
@@ -111,9 +111,12 @@ namespace Temporal
 			GLubyte alpha;
 			glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_ALPHA, GL_UNSIGNED_BYTE, &alpha);
 			if(alpha > 0)
-				color = Color::Green;
+			{
+				Color color = Color::Green;
+				EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
+			}
 		}
-		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
+		
 	}
 
 	void LightSystem::init(const Size& size)
@@ -123,6 +126,8 @@ namespace Temporal
 
 	void LightSystem::preLightsDraw() const
 	{
+		Color color = Color::Red;
+		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
