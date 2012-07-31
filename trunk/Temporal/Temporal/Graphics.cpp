@@ -68,12 +68,12 @@ namespace Temporal
 		SDL_VideoQuit();
 	}
 
-	bool crap(void* caller, void* data, const StaticBody& staticBody)
+	bool shadows(void* caller, void* data, const StaticBody& staticBody)
 	{
 		if(!staticBody.isCover())
 		{
-			float shadowSize = _texture->getSize().getWidth() / 2.0f;
-			Vector lightCenter = Vector(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f);
+			float shadowSize = 10000.0f;
+			const Vector& lightCenter = *(const Vector*)data;
 			const Segment& segment = (const Segment&)staticBody.getShape();
 			Point leftPoint = segment.getLeftPoint();
 			Point rightPoint = segment.getRightPoint();
@@ -81,7 +81,6 @@ namespace Temporal
 			Vector vector2 = Vector(rightPoint - lightCenter).normalize();
 
 			float vertices[8];
-
 			
 			vertices[0] = leftPoint.getX() + vector1.getVx() * shadowSize;
 			vertices[1] = leftPoint.getY() + vector1.getVy() * shadowSize;
@@ -103,60 +102,73 @@ namespace Temporal
 		return true;
 	}
 
-	void Graphics::light() const 
+	void Graphics::light(const Point& playerLight) const 
 	{
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		float radius = _texture->getSize().getHeight() / 2.0f;
-		glDisable(GL_BLEND);
-		glColorMask(false, false, false, true);
-		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		Grid::get().iterateTiles(AABB(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f, radius, radius), 0, NULL, NULL, crap);
-		glColorMask(true, true, true, true);
-		glEnable(GL_BLEND);
+		Point lights[2] = { playerLight, Point(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0) };
+		glBlendFunc(GL_DST_ALPHA, GL_ONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glPushMatrix();
+		for(int j = 0; j < 2; ++j)
 		{
-			glBlendFunc(GL_DST_ALPHA, GL_ONE);
-			glTranslatef(_texture->getSize().getWidth() / 2.0f, _texture->getSize().getHeight() / 2.0f, 0.0f);
+			const Point& light = lights[j == 0 ? 0 : 1];
+			float radius = _texture->getSize().getHeight() / 2.0f;
 
-			static const int parts = 32;
+			glDisable(GL_BLEND);
+			glColorMask(false, false, false, true);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glColorMask(true, true, true, true);
 
-			float vertices[(parts + 1) * 2];
-			float colors[(parts + 1) * 4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-
-			vertices[0] = 0.0f;
-			vertices[1] = 0.0f;
-
-			for(int i = 0; i < parts; ++i)
+			glColorMask(false, false, false, true);
+			glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+			Grid::get().iterateTiles(AABB(light.getX(), light.getY(), radius * 2, radius * 2), 0, NULL, (void*)&light, shadows);
+			glColorMask(true, true, true, true);
+			glEnable(GL_BLEND);
+			glPushMatrix();
 			{
-				float angle = (PI * 2) * ((float)i / ((float)(parts - 1)));
-				vertices[i*2 + 2] = radius * cos(angle);
-				vertices[i*2 + 3] = radius * sin(angle);
+				glTranslatef(light.getX(), light.getY(), 0.0f);
+
+				static const int parts = 32;
+
+				float vertices[(parts + 1) * 2];
+				float colors[(parts + 1) * 4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+				vertices[0] = 0.0f;
+				vertices[1] = 0.0f;
+
+				for(int i = 0; i < parts; ++i)
+				{
+					float angle = (PI * 2) * ((float)i / ((float)(parts - 1)));
+					vertices[i*2 + 2] = radius * cos(angle);
+					vertices[i*2 + 3] = radius * sin(angle);
+				}
+
+				glEnableClientState(GL_VERTEX_ARRAY);
+				glEnableClientState(GL_COLOR_ARRAY);
+
+				glVertexPointer(2, GL_FLOAT, 0, vertices);
+				glColorPointer(4, GL_FLOAT, 0, colors);
+ 
+				glDrawArrays(GL_TRIANGLE_FAN, 0, parts + 1);
+ 
+				glDisableClientState(GL_VERTEX_ARRAY);
+				glDisableClientState(GL_COLOR_ARRAY);
 			}
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_COLOR_ARRAY);
-
-			glVertexPointer(2, GL_FLOAT, 0, vertices);
-			glColorPointer(4, GL_FLOAT, 0, colors);
- 
-			glDrawArrays(GL_TRIANGLE_FAN, 0, parts + 1);
- 
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_COLOR_ARRAY);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glPopMatrix();
 		}
-		glPopMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	void Graphics::prepareForDrawing() const
 	{
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
 	}

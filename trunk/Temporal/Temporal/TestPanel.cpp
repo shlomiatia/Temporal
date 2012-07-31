@@ -432,10 +432,11 @@ namespace Temporal
 		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
 		SpriteGroup* spriteGroup = new SpriteGroup();
-		spritesheet->add(Hash("ANM_DEFAULT"), spriteGroup);
+		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
+		spritesheet->add(spriteGroupID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
 		SceneNode* root = createDefaultSceneGraph();
-
+		root->setSpriteGroupID(spriteGroupID);
 		Position* position = new Position(texture->getSize() / 2.0f);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND, root);
 
@@ -779,6 +780,6 @@ namespace Temporal
 		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
-		//createBackground();
+		createBackground();
 	}
 }
