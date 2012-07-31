@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "ActionController.h"
 #include "TemporalPeriod.h"
+#include "Lighting.h"
 
 namespace Temporal
 {
@@ -18,6 +19,7 @@ namespace Temporal
 	{
 		Size screenSize = Size(1024.0f, 768.0f);
 		ViewManager::get().init(screenSize, 768.0f);
+		LightSystem::get().init(screenSize);
 		Size worldSize = Size(screenSize.getWidth() * 2.0f, screenSize.getHeight());
 		ViewManager::get().setLevelBounds(worldSize);
 		Grid::get().init(worldSize, 128.0f);
@@ -55,8 +57,8 @@ namespace Temporal
 		}
 		if(Input::get().isE())
 		{
-			//Period::Enum period = Period::Future;
-			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+			Period::Enum period = Period::Future;
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
@@ -66,11 +68,18 @@ namespace Temporal
 	{
 		ViewManager::get().update();
 		DebugInfo::get().draw();
+
+		LightSystem::get().preLightsDraw();
+		VisualLayer::Enum lightLayer = VisualLayer::LIGHT;
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, static_cast<void*>(&lightLayer)));
+		LightSystem::get().postLightsDraw();
+
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
-
 		ComponentType::Enum filter = ComponentType::STATIC_BODY;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
+		LightSystem::get().postDraw();
+		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 	}

@@ -12,11 +12,14 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
+		Light(const Color& color, float radius)
+			: _color(color), _radius(radius) {}
+
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 	private:
-		int _radius;
 		Color _color;
+		float _radius;
 
 		void draw() const;
 	};
@@ -24,6 +27,12 @@ namespace Temporal
 	class LightSystem
 	{
 	public:
+		static LightSystem& get()
+		{
+			static LightSystem instance;
+			return instance;
+		}
+
 		void init(const Size& size);
 		void preLightsDraw() const;
 		void postLightsDraw() const;
