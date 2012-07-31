@@ -90,6 +90,7 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			LIGHT,
 			BACKGROUND,
 			STATIC,
 			PC,
@@ -97,7 +98,7 @@ namespace Temporal
 			NPC
 		};
 
-		static const int FARTHEST = BACKGROUND;
+		static const int FARTHEST = LIGHT;
 		static const int NEAREST = NPC;
 	}
 }
