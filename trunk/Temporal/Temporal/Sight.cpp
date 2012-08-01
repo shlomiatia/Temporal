@@ -28,6 +28,11 @@ namespace Temporal
 	{
 		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
+
+		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
+		if(isLit != NULL && !*static_cast<bool*>(isLit))
+			return;
+
 		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 		const Point& targetPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));

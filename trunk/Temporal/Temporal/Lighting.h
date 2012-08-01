@@ -24,11 +24,16 @@ namespace Temporal
 		void draw() const;
 	};
 
-	class LightDetector : public Component
+	class LightGem : public Component
 	{
 	public:
+		LightGem()
+			: _isLit(false) {}
+
+		ComponentType::Enum getType() const { return ComponentType::OTHER; }
+		void handleMessage(Message& message);
 	private:
-		bool _isDetected;
+		bool _isLit;
 	};
 
 	class LightSystem

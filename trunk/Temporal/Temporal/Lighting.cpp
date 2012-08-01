@@ -14,6 +14,22 @@ namespace Temporal
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const int LIGHT_PARTS = 32;
 
+	void LightGem::handleMessage(Message& message)
+	{
+		if(message.getID() == MessageID::RESET_LIT)
+		{
+			_isLit = false;
+		}
+		else if(message.getID() == MessageID::SET_LIT)
+		{
+			_isLit = true;
+		}
+		else if(message.getID() == MessageID::IS_LIT)
+		{
+			message.setParam(&_isLit);
+		}
+	}
+
 	void Light::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::DRAW)
@@ -104,7 +120,7 @@ namespace Temporal
 		glPopMatrix();
 
 		
-		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
+		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 		if(Vector(playerPosition - position).getLength() < _radius)
 		{
 			Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
@@ -112,11 +128,9 @@ namespace Temporal
 			glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_ALPHA, GL_UNSIGNED_BYTE, &alpha);
 			if(alpha > 0)
 			{
-				Color color = Color::Green;
-				EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
+				EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT));
 			}
 		}
-		
 	}
 
 	void LightSystem::init(const Size& size)
@@ -126,8 +140,8 @@ namespace Temporal
 
 	void LightSystem::preLightsDraw() const
 	{
-		Color color = Color::Red;
-		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_COLOR, &color));
+		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::RESET_LIT));
+
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
