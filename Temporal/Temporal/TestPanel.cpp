@@ -151,6 +151,7 @@ namespace Temporal
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
+		LightGem* lightGem = new LightGem();
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -160,9 +161,10 @@ namespace Temporal
 		entity->add(dynamicBody);
 		addSensors(*entity);
 		entity->add(actionController);
+		entity->add(lightGem);
 		entity->add(animator);
 		entity->add(renderer);
-		entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
@@ -268,7 +270,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		//createTemporalEcho(entity, animations);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
@@ -296,7 +298,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		//createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
@@ -790,7 +792,7 @@ namespace Temporal
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		//createPatrol(spritesheet, animations);
+		createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
