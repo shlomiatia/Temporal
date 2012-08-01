@@ -3,6 +3,7 @@
 
 #include "Color.h"
 #include "EntitySystem.h"
+#include "Math.h"
 
 namespace Temporal
 {
@@ -12,14 +13,16 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		Light(const Color& color, float radius)
-			: _color(color), _radius(radius) {}
+		Light(const Color& color, float radius, float beamCenter = 0.0f, float beamSize = 2 * PI)
+			: _color(color), _radius(radius), _beamCenter(beamCenter), _beamSize(beamSize) {}
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 	private:
-		Color _color;
-		float _radius;
+		const Color _color;
+		const float _radius;
+		const float _beamCenter;
+		const float _beamSize;
 
 		void draw() const;
 	};

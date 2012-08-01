@@ -12,7 +12,7 @@
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	static const int LIGHT_PARTS = 32;
+	static const int MAX_LIGHT_PARTS = 32;
 
 	void LightGem::handleMessage(Message& message)
 	{
@@ -77,6 +77,8 @@ namespace Temporal
 	void Light::draw() const
 	{
 		Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		Side::Enum* orientation = static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
+		bool isFlipped = orientation != NULL && *orientation == Side::LEFT;
 
 		glDisable(GL_BLEND);
 		glColorMask(false, false, false, true);
@@ -93,15 +95,18 @@ namespace Temporal
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 
-			float vertices[(LIGHT_PARTS + 1) * 2];
-			float colors[(LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
+			int lightParts =  (_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS;
+			float vertices[(MAX_LIGHT_PARTS + 1) * 2];
+			float colors[(MAX_LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
 
 			vertices[0] = 0.0f;
 			vertices[1] = 0.0f;
 
-			for(int i = 0; i < LIGHT_PARTS; ++i)
+			for(int i = 0; i < lightParts; ++i)
 			{
-				float angle = (PI * 2) * (static_cast<float>(i) / (static_cast<float>(LIGHT_PARTS - 1)));
+				float angle = _beamCenter - _beamSize / 2.0f + _beamSize * (static_cast<float>(i) / (static_cast<float>(lightParts - 1)));
+				if(isFlipped)
+					angle = PI - angle;
 				vertices[i*2 + 2] = _radius * cos(angle);
 				vertices[i*2 + 3] = _radius * sin(angle);
 			}
@@ -112,7 +117,7 @@ namespace Temporal
 			glVertexPointer(2, GL_FLOAT, 0, vertices);
 			glColorPointer(4, GL_FLOAT, 0, colors);
  
-			glDrawArrays(GL_TRIANGLE_FAN, 0, LIGHT_PARTS + 1);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, lightParts + 1);
  
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_COLOR_ARRAY);
@@ -121,15 +126,12 @@ namespace Temporal
 
 		
 		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
-		if(Vector(playerPosition - position).getLength() < _radius)
+		Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
+		GLubyte alpha[4];
+		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
+		if(alpha[0] > 25.0f || alpha[1] > 25.0f || alpha[2] > 25.0f)
 		{
-			Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
-			GLubyte alpha;
-			glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_ALPHA, GL_UNSIGNED_BYTE, &alpha);
-			if(alpha > 0)
-			{
-				EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT));
-			}
+			EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT));
 		}
 	}
 

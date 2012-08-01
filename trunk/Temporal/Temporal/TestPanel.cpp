@@ -257,6 +257,7 @@ namespace Temporal
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
+		Light* light = new Light(Color::White, 500.0f, ANGLE_0_IN_RADIANS, ANGLE_30_IN_RADIANS); 
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Past);
 
 		Entity* entity = new Entity();
@@ -268,6 +269,7 @@ namespace Temporal
 		entity->add(sight);
 		addFrontEdgeSensor(*entity);
 		entity->add(actionController);
+		entity->add(light);
 		entity->add(animator);
 		entity->add(renderer);
 		//entity->add(temporalPeriod);
@@ -796,7 +798,7 @@ namespace Temporal
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
-		createLight(Point(500.0f, 300.0f));
+		//createLight(Point(500.0f, 300.0f));
 		createLight(Point(1500.0f, 300.0f));
 	}
 }
