@@ -53,7 +53,11 @@ namespace Temporal
 		void postLightsDraw() const;
 		void postDraw() const;
 	private:
+		const Color AMBIENT_COLOR;
 		const Texture* _texture;
+
+		LightSystem()
+			: AMBIENT_COLOR(0.1f, 0.1f, 0.1f) {}
 	};
 }
 

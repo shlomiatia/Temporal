@@ -84,7 +84,6 @@ namespace Temporal
 			SET_PERIOD,
 			MERGE_TO_TEMPORAL_ECHOES,
 
-			RESET_LIT,
 			SET_LIT,
 			IS_LIT
 		};
