@@ -24,6 +24,7 @@ namespace Temporal
 	// TODO: Gradual hang & descend GRAPHICS
 	// TODO: Test against top, center bottom in sight GRAPHICS
 	// TODO: Gradual temporal echo merge GRAPHICS
+	// TODO: Soft shadows GRAPHICS
 	 
 	// TODO: Enable/Disable Sensors PERFORMACE
 	// TODO: Request sight PERFORMANCE
@@ -31,6 +32,7 @@ namespace Temporal
 	// TODO: Do not process collision twice PERFORMANCE
 	// TODO: Less temporal echo memory PERFORMANCE
 	// TODO: Delete spritesheets, singletons, static stl containers PERFORMANCE
+	// TODO: Cache shadows/display list/FBO/circle grid/light culling/save texture PERFORMANCE
 	class TestPanel : public BasePanel
 	{
 	public:
