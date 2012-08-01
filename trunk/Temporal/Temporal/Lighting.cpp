@@ -16,13 +16,9 @@ namespace Temporal
 
 	void LightGem::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::RESET_LIT)
+		if(message.getID() == MessageID::SET_LIT)
 		{
-			_isLit = false;
-		}
-		else if(message.getID() == MessageID::SET_LIT)
-		{
-			_isLit = true;
+			_isLit = *static_cast<bool*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::IS_LIT)
 		{
@@ -95,7 +91,7 @@ namespace Temporal
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 
-			int lightParts =  (_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS;
+			int lightParts = static_cast<int>((_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS);
 			float vertices[(MAX_LIGHT_PARTS + 1) * 2];
 			float colors[(MAX_LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
 
@@ -123,16 +119,6 @@ namespace Temporal
 			glDisableClientState(GL_COLOR_ARRAY);
 		}
 		glPopMatrix();
-
-		
-		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
-		Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
-		GLubyte alpha[4];
-		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
-		if(alpha[0] > 25.0f || alpha[1] > 25.0f || alpha[2] > 25.0f)
-		{
-			EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT));
-		}
 	}
 
 	void LightSystem::init(const Size& size)
@@ -142,9 +128,7 @@ namespace Temporal
 
 	void LightSystem::preLightsDraw() const
 	{
-		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::RESET_LIT));
-
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -152,6 +136,13 @@ namespace Temporal
 
 	void LightSystem::postLightsDraw() const
 	{
+		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+		Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
+		GLubyte alpha[4];
+		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
+		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
+		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
