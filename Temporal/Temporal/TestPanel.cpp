@@ -31,6 +31,7 @@
 #include "Laser.h"
 #include "MessageParams.h"
 #include "Lighting.h"
+#include "Particles.h"
 #include <sstream>
 
 namespace Temporal
@@ -152,6 +153,7 @@ namespace Temporal
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
 		LightGem* lightGem = new LightGem();
+		ParticleEmitter* particleEmitter = new ParticleEmitter(2000.0f, 100);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -161,9 +163,10 @@ namespace Temporal
 		entity->add(dynamicBody);
 		addSensors(*entity);
 		entity->add(actionController);
-		//entity->add(lightGem);
 		entity->add(animator);
 		entity->add(renderer);
+		entity->add(particleEmitter);
+		//entity->add(lightGem);
 		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}

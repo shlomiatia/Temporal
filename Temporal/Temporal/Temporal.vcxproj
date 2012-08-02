@@ -22,6 +22,7 @@
     <ClInclude Include="LineRenderer.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
+    <ClInclude Include="Particles.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
     <ClInclude Include="PhysicsUtils.h" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
     <ClCompile Include="Navigator.cpp" />
+    <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
