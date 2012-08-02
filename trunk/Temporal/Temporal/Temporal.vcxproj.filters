@@ -162,6 +162,9 @@
     <ClInclude Include="Lighting.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Particles.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -299,6 +302,9 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Lighting.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Particles.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

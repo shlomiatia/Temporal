@@ -13,6 +13,7 @@ namespace Temporal
 	// TODO: Animations (position, size, rotation)
 	// TODO: Systems. Init, exist, params
 	// TODO: Collision between everything (static/dynamic/particles)
+	// TODO: Minimize casting
 
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS
