@@ -161,7 +161,7 @@ namespace Temporal
 		entity->add(dynamicBody);
 		addSensors(*entity);
 		entity->add(actionController);
-		entity->add(lightGem);
+		//entity->add(lightGem);
 		entity->add(animator);
 		entity->add(renderer);
 		//entity->add(temporalPeriod);
