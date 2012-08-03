@@ -81,7 +81,7 @@ namespace Temporal
 				for(int i = 0; i < bornParticles; ++i)
 				{
 					float angle = (rand() % 1000) * ANGLE_60_IN_RADIANS / 1000.0f + ANGLE_60_IN_RADIANS;
-					Vector movement = Vector(10.0f * cos(angle), 10.0f * sin(angle));
+					Vector movement = Vector(100.0f * cos(angle), 100.0f * sin(angle));
 					_particles[_birthIndex].setAlive(true);
 					_particles[_birthIndex].setPosition(position);
 					_particles[_birthIndex].setMovement(movement);
@@ -100,19 +100,21 @@ namespace Temporal
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				float PARTICLE_SIZE = 8.0f;
 				int j = 8;
+				int k = 0;
 				for(int i = 0; i < length; ++i)
 				{
 					const Particle& particle = _particles[i];
 					if(particle.isAlive())
 					{
-						_vertices[i*j] = particle.getPosition().getX() - PARTICLE_SIZE;
-						_vertices[i*j+1] = particle.getPosition().getY() - PARTICLE_SIZE;
-						_vertices[i*j+2] = particle.getPosition().getX() - PARTICLE_SIZE;
-						_vertices[i*j+3] = particle.getPosition().getY() + PARTICLE_SIZE;
-						_vertices[i*j+4] = particle.getPosition().getX() + PARTICLE_SIZE;
-						_vertices[i*j+5] = particle.getPosition().getY() + PARTICLE_SIZE;
-						_vertices[i*j+6] = particle.getPosition().getX() + PARTICLE_SIZE;
-						_vertices[i*j+7] = particle.getPosition().getY() - PARTICLE_SIZE;
+						_vertices[k*j] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[k*j+1] = particle.getPosition().getY() - PARTICLE_SIZE;
+						_vertices[k*j+2] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[k*j+3] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[k*j+4] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[k*j+5] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[k*j+6] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[k*j+7] = particle.getPosition().getY() - PARTICLE_SIZE;
+						++k;
 					}
 				}
 				glEnableClientState(GL_VERTEX_ARRAY);
@@ -121,7 +123,7 @@ namespace Temporal
 				glVertexPointer(2, GL_FLOAT, 0, _vertices);
 				glTexCoordPointer(2, GL_FLOAT, 0, _texCoords);
  
-				glDrawArrays(GL_QUADS, 0, length * 4);
+				glDrawArrays(GL_QUADS, 0, k * 4);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 				glDisableClientState(GL_VERTEX_ARRAY);
 			}
