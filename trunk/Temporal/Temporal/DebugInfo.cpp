@@ -30,7 +30,7 @@ namespace Temporal
 				samples[sampleIndex] = newSample;
 				sampleIndex = (sampleIndex + 1) % MAX_SAMPLES;
 
-				title << "FPS: " << 1000.0f / (static_cast<float>(sum) / MAX_SAMPLES);
+				title << "FPS: " << (1000.0f * MAX_SAMPLES) / (static_cast<float>(sum));
 				
 			}
 			lastTick = Thread::getElapsedTimeInMillis();

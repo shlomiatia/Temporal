@@ -3,6 +3,8 @@
 #include "Shapes.h"
 #include "Math.h"
 #include <cstdlib>
+#include <SDL_opengl.h>
+
 
 namespace Temporal
 {
@@ -12,35 +14,45 @@ namespace Temporal
 		_position += _movement;
 	}
 
-	void Particle::draw() const
+	ParticleEmitter::ParticleEmitter(float deathAge, int birthRate)
+			: DEATH_AGE(deathAge), BIRTH_RATE(birthRate), _particles(new Particle[getLength()]), _vertices(new float[getLength()*8]), _birthIndex(0) 
 	{
-		Graphics::get().draw(AABB(_position, Size(1.0f, 1.0f)), _color);
 	}
 
+	int ParticleEmitter::getLength() const
+	{
+		return static_cast<int>(DEATH_AGE * BIRTH_RATE / 1000.0f);
+	}
+	
 	void ParticleEmitter::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriodInMillis = *static_cast<float*>(message.getParam());
-			for(ParticleIterator i = _particles.begin(); i != _particles.end(); ++i)
+			int length = getLength();
+			for(int i = 0; i < length; ++i)
 			{
-				Particle& particle = **i;
-				particle.update(framePeriodInMillis);
-				if(particle.getAge() > DEATH_AGE)
+				Particle& particle = _particles[i];
+				if(particle.isAlive())
 				{
-					delete *i;
-					i =_particles.erase(i);
+					particle.update(framePeriodInMillis);
+					if(particle.getAge() > DEATH_AGE)
+					{
+						particle.setAlive(false);	
+					}
 				}
-				if(i == _particles.end())
-					break;
 			}
 			const Point& position = *(const Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 			int bornParticles = static_cast<int>(BIRTH_RATE * framePeriodInMillis / 1000.0f);
 			for(int i = 0; i < bornParticles; ++i)
 			{
 				float angle = (rand() % 1000) * 2 * PI / 1000.0f;
-				Particle* particle = new Particle(position, Vector(cos(angle), sin(angle)), Color::Red);
-				_particles.push_back(particle);
+				Vector movement = Vector(cos(angle), sin(angle));
+				_particles[_birthIndex].setAlive(true);
+				_particles[_birthIndex].setPosition(position);
+				_particles[_birthIndex].setMovement(movement);
+				_particles[_birthIndex].resetAge();
+				_birthIndex = (_birthIndex + 1) % length;
 			}
 		}
 		else if(message.getID() == MessageID::DRAW)
@@ -48,10 +60,33 @@ namespace Temporal
 			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
 			if(layer == VisualLayer::NPC)
 			{
-				for(ParticleIterator i = _particles.begin(); i != _particles.end(); ++i)
+				int length = getLength();
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glColor4f(1.0f, 0.0f, 0.0f, 0.1f);
+				float PARTICLE_SIZE = 1.0f;
+				int j = 8;
+				for(int i = 0; i < length; ++i)
 				{
-					(**i).draw();
+					const Particle& particle = _particles[i];
+					if(particle.isAlive())
+					{
+						_vertices[i*j] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[i*j+1] = particle.getPosition().getY() - PARTICLE_SIZE;
+						_vertices[i*j+2] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[i*j+3] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[i*j+4] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[i*j+5] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[i*j+6] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[i*j+7] = particle.getPosition().getY() - PARTICLE_SIZE;
+					}
 				}
+				glEnableClientState(GL_VERTEX_ARRAY);
+ 
+				glVertexPointer(2, GL_FLOAT, 0, _vertices);
+ 
+				glDrawArrays(GL_QUADS, 0, length * 4);
+ 
+				glDisableClientState(GL_VERTEX_ARRAY);
 			}
 		}
 	}

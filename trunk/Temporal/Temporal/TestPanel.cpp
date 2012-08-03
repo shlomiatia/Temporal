@@ -153,7 +153,7 @@ namespace Temporal
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
 		LightGem* lightGem = new LightGem();
-		ParticleEmitter* particleEmitter = new ParticleEmitter(2000.0f, 100);
+		ParticleEmitter* particleEmitter = new ParticleEmitter(3000.0f, 1000);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -601,6 +601,16 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
+	void createParticleEmitter()
+	{
+		Position* position = new Position(Point(400.0f, 400.0f));
+		ParticleEmitter* particleEmitter = new ParticleEmitter(5000.0f, 2000);
+		Entity* entity = new Entity();
+		entity->add(position);
+		entity->add(particleEmitter);
+		EntitiesManager::get().add(Hash("ENT_PARTICLES"), entity);
+	}
+
 	void createLight(const Point& point)
 	{
 		Position* position = new Position(point);
@@ -797,11 +807,12 @@ namespace Temporal
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		createPatrol(spritesheet, animations);
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
 		//createLight(Point(500.0f, 300.0f));
-		createLight(Point(1500.0f, 300.0f));
+		//createLight(Point(1500.0f, 300.0f));
+		//createParticleEmitter();
 	}
 }
