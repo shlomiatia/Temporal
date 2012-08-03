@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	Game::get().setPanel(panel);
 	Game::get().run();
 	delete panel;
-	_CrtDumpMemoryLeaks();
+//	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

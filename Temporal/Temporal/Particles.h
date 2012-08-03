@@ -11,27 +11,34 @@ namespace Temporal
 	class Particle
 	{
 	public:
-		Particle(Point position, Vector movement, Color color)
-			: _position(position), _movement(movement), _color(color), _age() {}
-		float getAge() { return _age.getElapsedTimeInMillis(); }
+		Particle()
+			: _position(Point::Zero), _movement(Vector::Zero), _age(), _isAlive(true) 
+		{
+		}
+		void resetAge() { _age.reset(); }
+		float getAge() const { return _age.getElapsedTimeInMillis(); }
+		const Point& getPosition() const { return _position; }
+		void setPosition(const Point& position) { _position = position; }
+		void setMovement(const Vector& movement) { _movement = movement; }
+		void setAlive(bool isAlive) { _isAlive = isAlive; } 
+		bool isAlive() const { return _isAlive; }
 
 		void update(float time);
-		void draw() const;
 	private:
 		Point _position;
 		Vector _movement;
-		Color _color;
 		Timer _age;
-	};
+		bool _isAlive;
 
-	typedef std::vector<Particle*> ParticleCollection;
-	typedef ParticleCollection::const_iterator ParticleIterator;
+		Particle(const Particle&);
+		Particle& operator=(const Particle&);
+	};
 
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter(float deathAge, int birthRate)
-			: DEATH_AGE(deathAge), BIRTH_RATE(birthRate) {}
+		ParticleEmitter(float deathAge, int birthRate);
+		~ParticleEmitter() { delete[] _particles; delete[] _vertices; }
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
@@ -39,7 +46,11 @@ namespace Temporal
 		const float DEATH_AGE;
 		const int BIRTH_RATE;
 
-		ParticleCollection _particles;
+		int _birthIndex;
+		Particle* _particles;
+		float* _vertices;
+
+		int getLength() const;
 	};
 }
 

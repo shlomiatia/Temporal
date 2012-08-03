@@ -197,7 +197,7 @@ namespace Temporal
  
 			glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glDrawArrays(GL_LINE_LOOP, 0, 4);
+			glDrawArrays(GL_QUADS, 0, 4);
  
 			glDisableClientState(GL_VERTEX_ARRAY);
 		}

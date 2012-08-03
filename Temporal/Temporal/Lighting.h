@@ -58,6 +58,9 @@ namespace Temporal
 
 		LightSystem()
 			: AMBIENT_COLOR(0.1f, 0.1f, 0.1f) {}
+
+		LightSystem(const LightSystem&);
+		LightSystem& operator=(const LightSystem&);
 	};
 }
 
