@@ -153,7 +153,8 @@ namespace Temporal
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
 		LightGem* lightGem = new LightGem();
-		ParticleEmitter* particleEmitter = new ParticleEmitter(3000.0f, 1000);
+		const Texture* texture = Texture::load("bubble.png");
+		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 10000.0f, 2);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -196,7 +197,7 @@ namespace Temporal
 
 	void createCamera()
 	{
-		const Texture* texture = Texture::load("c:\\stuff\\camera.png");
+		const Texture* texture = Texture::load("camera.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
@@ -437,7 +438,7 @@ namespace Temporal
 
 	void createBackground()
 	{
-		const Texture* texture = Texture::load("c:\\stuff\\bg.png");
+		const Texture* texture = Texture::load("bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::NONE);
 		SpriteGroup* spriteGroup = new SpriteGroup();
 		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
@@ -471,7 +472,7 @@ namespace Temporal
 
 	void createSkeleton()
 	{
-		const Texture* texture = Texture::load("c:\\stuff\\Zombies5.png");
+		const Texture* texture = Texture::load("skeleton.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
@@ -601,16 +602,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
-	void createParticleEmitter()
-	{
-		Position* position = new Position(Point(400.0f, 400.0f));
-		ParticleEmitter* particleEmitter = new ParticleEmitter(5000.0f, 2000);
-		Entity* entity = new Entity();
-		entity->add(position);
-		entity->add(particleEmitter);
-		EntitiesManager::get().add(Hash("ENT_PARTICLES"), entity);
-	}
-
 	void createLight(const Point& point)
 	{
 		Position* position = new Position(point);
@@ -625,7 +616,7 @@ namespace Temporal
 
 	void TestPanel::createEntities()
 	{
-		const Texture* texture = Texture::load("c:\\stuff\\pop.png");
+		const Texture* texture = Texture::load("pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
@@ -813,6 +804,5 @@ namespace Temporal
 		createBackground();
 		//createLight(Point(500.0f, 300.0f));
 		//createLight(Point(1500.0f, 300.0f));
-		//createParticleEmitter();
 	}
 }

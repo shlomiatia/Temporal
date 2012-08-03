@@ -12,11 +12,11 @@ namespace Temporal
 	{
 	public:
 		Particle()
-			: _position(Point::Zero), _movement(Vector::Zero), _age(), _isAlive(true) 
+			: _position(Point::Zero), _movement(Vector::Zero), _ageTimer(), _isAlive(true) 
 		{
 		}
-		void resetAge() { _age.reset(); }
-		float getAge() const { return _age.getElapsedTimeInMillis(); }
+		void resetAge() { _ageTimer.reset(); }
+		float getAge() const { return _ageTimer.getElapsedTimeInMillis(); }
 		const Point& getPosition() const { return _position; }
 		void setPosition(const Point& position) { _position = position; }
 		void setMovement(const Vector& movement) { _movement = movement; }
@@ -27,28 +27,34 @@ namespace Temporal
 	private:
 		Point _position;
 		Vector _movement;
-		Timer _age;
+		Timer _ageTimer;
 		bool _isAlive;
 
 		Particle(const Particle&);
 		Particle& operator=(const Particle&);
 	};
 
+	class Texture;
+
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter(float deathAge, int birthRate);
-		~ParticleEmitter() { delete[] _particles; delete[] _vertices; }
+		ParticleEmitter(const Texture* texture, float deathAge, int births);
+		~ParticleEmitter();
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 	private:
 		const float DEATH_AGE;
-		const int BIRTH_RATE;
+		const float BIRTH_RATE;
+		const Texture* _texture;
 
+		Timer _birthTimer;
 		int _birthIndex;
 		Particle* _particles;
 		float* _vertices;
+		float* _texCoords;
+		
 
 		int getLength() const;
 	};
