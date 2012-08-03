@@ -154,7 +154,7 @@ namespace Temporal
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::Present, true);
 		LightGem* lightGem = new LightGem();
 		const Texture* texture = Texture::load("bubble.png");
-		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 10000.0f, 2);
+		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 3000.0f, 2);
 
 		Entity* entity = new Entity();
 		entity->add(position);
