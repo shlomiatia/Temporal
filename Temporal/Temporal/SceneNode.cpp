@@ -14,7 +14,7 @@ namespace Temporal
 
 	SceneNode* SceneNode::clone() const
 	{
-		SceneNode* clone = new SceneNode(_id, _drawBeforeParent, _transformOnly);
+		SceneNode* clone = new SceneNode(_id, _drawBehindParent, _transformOnly);
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
 		{
 			clone->add((**i).clone());
