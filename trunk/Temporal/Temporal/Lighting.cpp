@@ -126,15 +126,18 @@ namespace Temporal
 		_texture = Texture::load(size);
 	}
 
-	void LightSystem::preLightsDraw() const
+	void LightSystem::preDraw() const
 	{
+		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
+		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
+
 		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void LightSystem::postLightsDraw() const
+	void LightSystem::postDraw() const
 	{
 		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 		Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
@@ -143,40 +146,36 @@ namespace Temporal
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
 		EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
-		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-	}
+			glBindTexture(GL_TEXTURE_2D, _texture->getID());
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			GLfloat screenVertices[] = { 0.0f, 0.0f,
+										 0.0f, _texture->getSize().getHeight(),
+										 _texture->getSize().getWidth(), _texture->getSize().getHeight(),
+										 _texture->getSize().getWidth(), 0.0f };
 
-	void LightSystem::postDraw() const
-	{
-		glLoadIdentity();
-		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+			GLfloat textureVertices[] = { 0.0f, 0.0f,
+										  0.0f, 1.0f,
+										  1.0f, 1.0f,
+										  1.0f, 0.0f };
 
-		glBindTexture(GL_TEXTURE_2D, _texture->getID());
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		GLfloat screenVertices[] = { 0.0f, 0.0f,
-									 0.0f, _texture->getSize().getHeight(),
-									 _texture->getSize().getWidth(), _texture->getSize().getHeight(),
-									 _texture->getSize().getWidth(), 0.0f };
-
-		GLfloat textureVertices[] = { 0.0f, 0.0f,
-									  0.0f, 1.0f,
-								      1.0f, 1.0f,
-									  1.0f, 0.0f };
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
  
-		glVertexPointer(2, GL_FLOAT, 0, screenVertices);
-		glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
+			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
  
-		glDrawArrays(GL_QUADS, 0, 4);
+			glDrawArrays(GL_QUADS, 0, 4);
  
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		glPopMatrix();
 	}
 }
