@@ -39,14 +39,14 @@ namespace Temporal
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter(const Texture* texture, float deathAge, int births);
+		ParticleEmitter(const Texture* texture, float lifetimeInMillis, int birthsPerSecond);
 		~ParticleEmitter();
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 	private:
-		const float DEATH_AGE;
-		const float BIRTH_RATE;
+		const float LIFETIME_IN_MILLIS;
+		const float BIRTH_THRESHOLD_IN_MILLIS;
 		const Texture* _texture;
 
 		Timer _birthTimer;
@@ -55,7 +55,6 @@ namespace Temporal
 		float* _vertices;
 		float* _texCoords;
 		
-
 		int getLength() const;
 	};
 }

@@ -793,7 +793,7 @@ namespace Temporal
 
 #pragma endregion
 
-		createSkeleton();
+		//createSkeleton();
 		createPlayer(spritesheet, animations);
 		//createLaser();
 		//createSentry(spritesheet);
