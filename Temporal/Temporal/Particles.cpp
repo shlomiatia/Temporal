@@ -16,8 +16,8 @@ namespace Temporal
 	}
 
 	ParticleEmitter::ParticleEmitter(const Texture* texture, float deathAge, int births) :
-		DEATH_AGE(deathAge),
-		BIRTH_RATE(1000.0f / births),
+		LIFETIME_IN_MILLIS(deathAge),
+		BIRTH_THRESHOLD_IN_MILLIS(1000.0f / births),
 		_particles(new Particle[getLength()]),
 		_vertices(new float[getLength()*8]),
 		_texCoords(new float[getLength()*8]),
@@ -49,7 +49,7 @@ namespace Temporal
 
 	int ParticleEmitter::getLength() const
 	{
-		return static_cast<int>(DEATH_AGE / BIRTH_RATE);
+		return static_cast<int>(LIFETIME_IN_MILLIS / BIRTH_THRESHOLD_IN_MILLIS);
 	}
 	
 	void ParticleEmitter::handleMessage(Message& message)
@@ -64,7 +64,7 @@ namespace Temporal
 				if(particle.isAlive())
 				{
 					particle.update(framePeriodInMillis);
-					if(particle.getAge() > DEATH_AGE)
+					if(particle.getAge() > LIFETIME_IN_MILLIS)
 					{
 						particle.setAlive(false);	
 					}
@@ -72,12 +72,12 @@ namespace Temporal
 			}
 			_birthTimer.update(framePeriodInMillis);
 			float timeSinceLastBirth = _birthTimer.getElapsedTimeInMillis();
-			if(timeSinceLastBirth > BIRTH_RATE)
+			if(timeSinceLastBirth > BIRTH_THRESHOLD_IN_MILLIS)
 			{
 				_birthTimer.reset();
 				const Point& position = *(const Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
 
-				int bornParticles = static_cast<int>(timeSinceLastBirth / BIRTH_RATE);
+				int bornParticles = static_cast<int>(timeSinceLastBirth / BIRTH_THRESHOLD_IN_MILLIS);
 				for(int i = 0; i < bornParticles; ++i)
 				{
 					float angle = (rand() % 1000) * ANGLE_60_IN_RADIANS / 1000.0f + ANGLE_60_IN_RADIANS;
@@ -98,23 +98,24 @@ namespace Temporal
 				int length = getLength();
 				glBindTexture(GL_TEXTURE_2D, _texture->getID());
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				float PARTICLE_SIZE = 8.0f;
-				int j = 8;
-				int k = 0;
+				const float PARTICLE_SIZE = 8.0f;
+				const int PARTICLE_VERTICES = 8;
+				int vertexIndex = 0;
 				for(int i = 0; i < length; ++i)
 				{
 					const Particle& particle = _particles[i];
 					if(particle.isAlive())
 					{
-						_vertices[k*j] = particle.getPosition().getX() - PARTICLE_SIZE;
-						_vertices[k*j+1] = particle.getPosition().getY() - PARTICLE_SIZE;
-						_vertices[k*j+2] = particle.getPosition().getX() - PARTICLE_SIZE;
-						_vertices[k*j+3] = particle.getPosition().getY() + PARTICLE_SIZE;
-						_vertices[k*j+4] = particle.getPosition().getX() + PARTICLE_SIZE;
-						_vertices[k*j+5] = particle.getPosition().getY() + PARTICLE_SIZE;
-						_vertices[k*j+6] = particle.getPosition().getX() + PARTICLE_SIZE;
-						_vertices[k*j+7] = particle.getPosition().getY() - PARTICLE_SIZE;
-						++k;
+						int startIndex = PARTICLE_VERTICES * vertexIndex;
+						_vertices[startIndex] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[startIndex+1] = particle.getPosition().getY() - PARTICLE_SIZE;
+						_vertices[startIndex+2] = particle.getPosition().getX() - PARTICLE_SIZE;
+						_vertices[startIndex+3] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[startIndex+4] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[startIndex+5] = particle.getPosition().getY() + PARTICLE_SIZE;
+						_vertices[startIndex+6] = particle.getPosition().getX() + PARTICLE_SIZE;
+						_vertices[startIndex+7] = particle.getPosition().getY() - PARTICLE_SIZE;
+						++vertexIndex;
 					}
 				}
 				glEnableClientState(GL_VERTEX_ARRAY);
@@ -123,7 +124,7 @@ namespace Temporal
 				glVertexPointer(2, GL_FLOAT, 0, _vertices);
 				glTexCoordPointer(2, GL_FLOAT, 0, _texCoords);
  
-				glDrawArrays(GL_QUADS, 0, k * 4);
+				glDrawArrays(GL_QUADS, 0, vertexIndex * 4);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 				glDisableClientState(GL_VERTEX_ARRAY);
 			}
