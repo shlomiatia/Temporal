@@ -10,6 +10,18 @@ namespace Temporal
 	class Size;
 	class Texture;
 
+	class LightGem : public Component
+	{
+	public:
+		LightGem()
+			: _isLit(false) {}
+
+		ComponentType::Enum getType() const { return ComponentType::OTHER; }
+		void handleMessage(Message& message);
+	private:
+		bool _isLit;
+	};
+
 	class Light : public Component
 	{
 	public:
@@ -25,18 +37,6 @@ namespace Temporal
 		const float _beamSize;
 
 		void draw() const;
-	};
-
-	class LightGem : public Component
-	{
-	public:
-		LightGem()
-			: _isLit(false) {}
-
-		ComponentType::Enum getType() const { return ComponentType::OTHER; }
-		void handleMessage(Message& message);
-	private:
-		bool _isLit;
 	};
 
 	class LightSystem

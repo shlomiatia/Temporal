@@ -98,24 +98,23 @@ namespace Temporal
 
 	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color) const
 	{
-		const Texture& texture = spritesheet.getTexture();
-		const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
-		
 		glPushMatrix();
 		{	
 			translate(sceneNode.getTranslation());
 			if(sceneNode.isMirrored())
-				glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+				glScalef(-1.0f, 1.0f, 1.0f);
 			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
-				if((**i).drawBeforeParent())
+				if((**i).drawBehindParent())
 					draw(**i, spritesheet, color);
 			}
 
-			if(spriteGroupID != Hash::INVALID)
+			if(!sceneNode.isTransformOnly())
 			{
+				const Texture& texture = spritesheet.getTexture();
+				const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
 				glPushMatrix();
 				{
 					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
@@ -138,6 +137,7 @@ namespace Temporal
 					const float textureTop = imageTop / textureHeight;
 					const float textureBottom = imageBottom / textureHeight;
 
+					// TODO: Bind texture in the root level
 					glBindTexture(GL_TEXTURE_2D, texture.getID());
 
 					setColor(color);
@@ -171,7 +171,7 @@ namespace Temporal
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
-				if(!(**i).drawBeforeParent())
+				if(!(**i).drawBehindParent())
 					draw(**i, spritesheet, color);
 			}
 		}

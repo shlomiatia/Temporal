@@ -167,7 +167,7 @@ namespace Temporal
 		entity->add(animator);
 		entity->add(renderer);
 		//entity->add(particleEmitter);
-		entity->add(lightGem);
+		//entity->add(lightGem);
 		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
@@ -793,16 +793,16 @@ namespace Temporal
 
 #pragma endregion
 
-		//createSkeleton();
+		createSkeleton();
 		createPlayer(spritesheet, animations);
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		createPatrol(spritesheet, animations);
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
-		createLight(Point(500.0f, 300.0f));
-		createLight(Point(1500.0f, 300.0f));
+		//createLight(Point(500.0f, 300.0f));
+		//createLight(Point(1500.0f, 300.0f));
 	}
 }

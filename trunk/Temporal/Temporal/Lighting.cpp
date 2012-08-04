@@ -36,6 +36,8 @@ namespace Temporal
 		}
 	}
 
+	// TODO: Render in one vertex array
+	// TODO: Shadow size
 	bool drawShadows(void* caller, void* data, const StaticBody& staticBody)
 	{
 		if(!staticBody.isCover())
@@ -69,7 +71,8 @@ namespace Temporal
 		}
 		return true;
 	}
-
+	
+	// TODO: message utils
 	void Light::draw() const
 	{
 		Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
@@ -92,6 +95,8 @@ namespace Temporal
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 
 			int lightParts = static_cast<int>((_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS);
+			
+			// TODO: data member
 			float vertices[(MAX_LIGHT_PARTS + 1) * 2];
 			float colors[(MAX_LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
 

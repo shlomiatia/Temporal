@@ -71,11 +71,14 @@ namespace Temporal
 
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
-		LightSystem::get().preDraw();
+
+		/*LightSystem::get().preDraw();
 		VisualLayer::Enum lightLayer = VisualLayer::LIGHT;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, static_cast<void*>(&lightLayer)));
-		LightSystem::get().postDraw();
+		LightSystem::get().postDraw();*/
+
+		ComponentType::Enum filter = ComponentType::STATIC_BODY;
+
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		
 		//Grid::get().draw();
