@@ -49,8 +49,7 @@ namespace Temporal
 		}
 
 		void init(const Size& size);
-		void preLightsDraw() const;
-		void postLightsDraw() const;
+		void preDraw() const;
 		void postDraw() const;
 	private:
 		const Color AMBIENT_COLOR;
