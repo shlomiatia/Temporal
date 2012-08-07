@@ -9,11 +9,8 @@ namespace Temporal
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Graphics utils. Post light. line renderer scene graph	
-	// TODO: Systems. Init, exist, params
+	// TODO: Graphics utils. line renderer scene graph	
 	// TODO: Normalize positions - attch to scene graph
-	// TODO: Animations (position, size, rotation, color, alpha)
-	// TODO: Collision between everything (static/dynamic/particles/buttons/sensors)
 	// TODO: Minimize casting
 
 	// TODO: Check sensor each movement step PHYSICS
