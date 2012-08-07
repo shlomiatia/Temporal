@@ -11,6 +11,8 @@ namespace Temporal
 
 	// TODO: Normalize positions - attch to scene graph
 	// TODO: Minimize casting
+	// TODO: message utils
+	// TODO: sprite size
 
 	// TODO: Check sensor each movement step PHYSICS
 	// TODO: Insert segments to grid using grid traversale algorithm PHYSICS

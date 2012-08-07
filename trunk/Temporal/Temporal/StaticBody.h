@@ -5,23 +5,22 @@
 
 namespace Temporal
 {
-	class Shape;
+	class CollisionInfo;
 
 	class StaticBody : public Component
 	{
 	public:
-		StaticBody(Shape* shape, bool cover) : _shape(shape), _cover(cover) {};
+		StaticBody(CollisionInfo* collisionInfo) : _collisionInfo(collisionInfo) {};
 		~StaticBody();
 
-		bool isCover() const { return _cover; }
-		const Shape& getShape() const { return *_shape; }
+		const CollisionInfo& getCollisionInfo() const { return *_collisionInfo; }
+
 		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
 		int getCollisionFilter() const;
 
 	private:
-		bool _cover;
-		Shape* _shape;
+		const CollisionInfo* _collisionInfo;
 	};
 }
 #endif

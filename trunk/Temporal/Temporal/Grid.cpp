@@ -1,9 +1,9 @@
 #include "Grid.h"
-#include "StaticBody.h"
 #include "Shapes.h"
 #include "Graphics.h"
 #include "ShapeOperations.h"
 #include "PhysicsUtils.h"
+#include "CollisionInfo.h"
 #include <algorithm>
 
 namespace Temporal
@@ -15,7 +15,7 @@ namespace Temporal
 		_gridHeight = getAxisIndex(worldSize.getHeight());
 		
 		int size = getSize();
-		_grid = new StaticBodyCollection*[size];
+		_grid = new CollisionInfoCollection*[size];
 		for(int i = 0; i < size; ++i)
 			_grid[i] = NULL;
 	}
@@ -38,9 +38,9 @@ namespace Temporal
 	}
 
 
-	void Grid::add(const StaticBody* staticBody)
+	void Grid::add(const CollisionInfo* body)
 	{
-		const Shape& shape = staticBody->getShape();
+		const Shape& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
@@ -51,24 +51,24 @@ namespace Temporal
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				int index = getIndex(i, j);
-				StaticBodyCollection* staticBodies = getTile(index);
-				if(staticBodies == NULL)
+				CollisionInfoCollection* bodies = getTile(index);
+				if(bodies == NULL)
 				{
-					staticBodies = new StaticBodyCollection();
-					_grid[index] = staticBodies;
+					bodies = new CollisionInfoCollection();
+					_grid[index] = bodies;
 				}
-				staticBodies->push_back(staticBody);
+				bodies->push_back(body);
 			}
 		}
 	}
 
-	StaticBodyCollection* Grid::getTile(int i, int j) const
+	CollisionInfoCollection* Grid::getTile(int i, int j) const
 	{
 		int index = getIndex(i, j);
 		return getTile(index);
 	}
 
-	StaticBodyCollection* Grid::getTile(int index) const
+	CollisionInfoCollection* Grid::getTile(int index) const
 	{
 		if(index < 0 || index >= getSize())
 			return NULL;
@@ -76,7 +76,7 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter,  Point& pointOfIntersection)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter, Point& pointOfIntersection)
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
@@ -124,15 +124,15 @@ namespace Temporal
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
-			StaticBodyCollection* staticBodies = getTile(i, j);
-			if(staticBodies != NULL)
+			CollisionInfoCollection* bodies = getTile(i, j);
+			if(bodies != NULL)
 			{
-				for(StaticBodyIterator iterator = staticBodies->begin(); iterator != staticBodies->end(); ++iterator)
+				for(CollisionInfoIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
-					const StaticBody& body = **iterator;
-					if(!canCollide(collisionFilter, body.getCollisionFilter()))
+					const CollisionInfo& body = **iterator;
+					if(!canCollide(collisionFilter, body.getFilter()))
 						continue;
-					if(intersects(dirSeg, body.getShape(), &pointOfIntersection))
+					if(intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
 					{
 						return false;
 					}
@@ -156,31 +156,34 @@ namespace Temporal
 		return true;
 	}
 
-	void Grid::iterateTiles(const Shape& shape, int collisionFilter, void* caller, void* data, bool(*handleStaticBody)(void* caller, void* data, const StaticBody&)) const
+	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int collisionFilter) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
 		int bottomIndex = getAxisIndex(shape.getBottom());
 
+		CollisionInfoCollection result;
+
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				int index = getIndex(i, j);
-				StaticBodyCollection* staticBodies = getTile(index);
-				if(staticBodies != NULL)
+				CollisionInfoCollection* bodies = getTile(index);
+				if(bodies != NULL)
 				{
-					for(StaticBodyIterator i = staticBodies->begin(); i != staticBodies->end(); ++i)
+					for(CollisionInfoIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
-						const StaticBody& staticBody = **i;
-						if(!canCollide(collisionFilter, staticBody.getCollisionFilter()))
+						const CollisionInfo* body = *i;
+						if(!canCollide(collisionFilter, body->getFilter()))
 							continue;
-						if(!handleStaticBody(caller, data, staticBody))
-							return;
+						result.push_back(body);
 					}
 				}
 			}
 		}
+
+		return result;
 	}
 }

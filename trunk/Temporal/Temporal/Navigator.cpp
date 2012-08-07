@@ -28,8 +28,7 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
 			Navigator& navigator = static_cast<Navigator&>(stateMachine);
-			AABB startPosition = AABB::Zero;
-			navigator.sendMessageToOwner(Message(MessageID::GET_BOUNDS, &startPosition));
+			const AABB& startPosition = *static_cast<AABB*>(navigator.sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
 			if(start != NULL && goal != NULL)

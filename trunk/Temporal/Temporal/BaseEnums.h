@@ -7,7 +7,6 @@ namespace Temporal
 	{ 
 		enum Enum
 		{
-			NONE = 0,
 			LEFT = -1,
 			RIGHT = 1 
 		};

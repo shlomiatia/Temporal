@@ -280,8 +280,7 @@ namespace Temporal
 		const SensorCollisionParams& sensor = *static_cast<SensorCollisionParams*>(message.getParam());
 		const Point* point = sensor.getPoint();
 		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		AABB personBounds(AABB::Zero);
-		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
+		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		float target = point->getX();
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
@@ -410,8 +409,7 @@ namespace Temporal
 
 	void PrepareToHang::update() const
 	{
-		AABB personBounds(AABB::Zero);
-		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
+		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		const Point& point = static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
 		float entityTop = personBounds.getTop();
@@ -510,9 +508,9 @@ namespace Temporal
 
 	void Climb::enter() const
 	{
-		const Size& size = *static_cast<Size*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE)));
+		const Shape& shape = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		float climbForceX = 1.0f;
-		float climbForceY = size.getHeight();
+		float climbForceY = shape.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
@@ -537,8 +535,7 @@ namespace Temporal
 	void PrepareToDescend::update() const
 	{
 		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		AABB personBounds(AABB::Zero);
-		_stateMachine->sendMessageToOwner(Message(MessageID::GET_BOUNDS, &personBounds));
+		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		const Point& point = static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
@@ -575,7 +572,7 @@ namespace Temporal
 
 	void Descend::enter() const
 	{
-		const Size& size = *static_cast<Size*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SIZE)));
+		const Shape& size = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		float forceX = 0.0f;
 		float forceY = -(size.getHeight());
 

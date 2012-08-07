@@ -6,6 +6,7 @@
 #include "Shapes.h"
 #include "Texture.h"
 #include "ViewManager.h"
+#include "CollisionInfo.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -36,41 +37,35 @@ namespace Temporal
 		}
 	}
 
-	bool drawShadows(void* caller, void* data, const StaticBody& staticBody)
+	void drawShadow(const Point& lightCenter, const Shape& shape)
 	{
-		if(!staticBody.isCover())
-		{
-			float shadowSize = 10000.0f;
-			const Vector& lightCenter = *static_cast<const Vector*>(data);
-			const Segment& segment = static_cast<const Segment&>(staticBody.getShape());
-			Point leftPoint = segment.getLeftPoint();
-			Point rightPoint = segment.getRightPoint();
-			Vector vector1 = Vector(leftPoint - lightCenter).normalize();
-			Vector vector2 = Vector(rightPoint - lightCenter).normalize();
+		float shadowSize = 10000.0f;
+		const Segment& segment = static_cast<const Segment&>(shape);
+		Point leftPoint = segment.getLeftPoint();
+		Point rightPoint = segment.getRightPoint();
+		Vector vector1 = Vector(leftPoint - lightCenter).normalize();
+		Vector vector2 = Vector(rightPoint - lightCenter).normalize();
 
-			float vertices[8];
+		float vertices[8];
 			
-			vertices[0] = leftPoint.getX() + vector1.getVx() * shadowSize;
-			vertices[1] = leftPoint.getY() + vector1.getVy() * shadowSize;
-			vertices[2] = leftPoint.getX();
-			vertices[3] = leftPoint.getY();
-			vertices[4] = rightPoint.getX();
-			vertices[5] = rightPoint.getY();
-			vertices[6] = rightPoint.getX() + vector2.getVx() * shadowSize;
-			vertices[7] = rightPoint.getY() + vector2.getVy() * shadowSize;
+		vertices[0] = leftPoint.getX() + vector1.getVx() * shadowSize;
+		vertices[1] = leftPoint.getY() + vector1.getVy() * shadowSize;
+		vertices[2] = leftPoint.getX();
+		vertices[3] = leftPoint.getY();
+		vertices[4] = rightPoint.getX();
+		vertices[5] = rightPoint.getY();
+		vertices[6] = rightPoint.getX() + vector2.getVx() * shadowSize;
+		vertices[7] = rightPoint.getY() + vector2.getVy() * shadowSize;
 
-			glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_VERTEX_ARRAY);
 
-			glVertexPointer(2, GL_FLOAT, 0, vertices);
+		glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glDrawArrays(GL_QUADS, 0, 4);
+		glDrawArrays(GL_QUADS, 0, 4);
  
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		return true;
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 	
-	// TODO: message utils
 	void Light::draw() const
 	{
 		Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
@@ -84,7 +79,11 @@ namespace Temporal
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
-		Grid::get().iterateTiles(lightAABB, 0, NULL, static_cast<void*>(&position), drawShadows);
+		CollisionInfoCollection result = Grid::get().iterateTiles(lightAABB, 0);
+		for(CollisionInfoIterator i = result.begin(); i != result.end(); ++i)
+		{
+			drawShadow(position, (**i).getGlobalShape());
+		}
 		glColorMask(true, true, true, true);
 
 		glEnable(GL_BLEND);
@@ -94,7 +93,6 @@ namespace Temporal
 
 			int lightParts = static_cast<int>((_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS);
 			
-			// TODO: data member
 			float vertices[(MAX_LIGHT_PARTS + 1) * 2];
 			float colors[(MAX_LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
 
