@@ -35,7 +35,9 @@ namespace Temporal
 		void validate() const;
 
 		void translate(const Vector& translation) const;
-		void draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color = Color::White) const;
+		void draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color = Color::White) const;
+		void draw(const Point& position, const Texture& texture, const Color& color = Color::White) const;
+		void draw(const Point& position, const Texture& texture, const AABB& texturePart, const Color& color = Color::White) const;
 		void draw(const AABB& rect, const Color& color = Color::White) const;
 		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
 		void draw(const Segment& segment, const Color& color = Color::White) const;
@@ -44,7 +46,11 @@ namespace Temporal
 	private:
 		static const int BIT_DEPTH = 32;
 
-		Graphics() {}
+		mutable unsigned int _lastTextureId;
+
+		void bindTexture(unsigned int id) const;
+
+		Graphics() : _lastTextureId(0) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

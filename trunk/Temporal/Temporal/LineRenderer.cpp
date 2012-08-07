@@ -43,14 +43,12 @@ namespace Temporal
 	void LineRenderer::draw() const
 	{
 		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		//Graphics::get().draw(Segment(position, _target), _color);
 
 		glPushMatrix();
 		{	
 			Vector vector = _target -position;
 			glTranslatef(position.getX() + vector.getVx() / 2.0f, position.getY() + vector.getVy() / 2.0f, 0.0f);
 
-			
 			float length = vector.getLength() / 2.0f;
 			glRotatef(vector.getAngle() * 180.0f / PI, 0.0, 0.0, 1.0f);
 			

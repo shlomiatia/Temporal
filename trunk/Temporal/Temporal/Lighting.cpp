@@ -36,8 +36,6 @@ namespace Temporal
 		}
 	}
 
-	// TODO: Render in one vertex array
-	// TODO: Shadow size
 	bool drawShadows(void* caller, void* data, const StaticBody& staticBody)
 	{
 		if(!staticBody.isCover())

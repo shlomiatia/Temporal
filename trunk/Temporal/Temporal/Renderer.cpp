@@ -40,7 +40,7 @@ namespace Temporal
 
 		_root->setMirrored(orientation != spritesheetOrientation);
 		_root->setTranslation(position);
-		Graphics::get().draw(*_root, _spritesheet, _color);
+		Graphics::get().draw(_spritesheet, *_root, _color);
 	}
 
 	Component* Renderer::clone() const

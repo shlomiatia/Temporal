@@ -8,6 +8,11 @@
 
 namespace Temporal
 {
+	void setColor(const Color& color)
+	{
+		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
+	}
+
 	void Graphics::init(const Size& resolution, const Size& viewSize, bool fullScreen)
 	{
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
@@ -86,17 +91,21 @@ namespace Temporal
 		}
 	}
 
-	void setColor(const Color& color)
-	{
-		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
-	}
-
 	void Graphics::translate(const Vector& translation) const
 	{
 		glTranslatef(translation.getVx(), translation.getVy(), 0.0f);
 	}
 
-	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color) const
+	void Graphics::bindTexture(unsigned int id) const
+	{
+		if(id != _lastTextureId)
+		{
+			glBindTexture(GL_TEXTURE_2D, id);
+			_lastTextureId = id;
+		}
+	}
+
+	void Graphics::draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color) const
 	{
 		glPushMatrix();
 		{	
@@ -108,79 +117,86 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if((**i).drawBehindParent())
-					draw(**i, spritesheet, color);
+					draw(spritesheet, **i, color);
 			}
 
 			if(!sceneNode.isTransformOnly())
 			{
 				const Texture& texture = spritesheet.getTexture();
 				const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
-				glPushMatrix();
-				{
-					const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
-					int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
-					const Sprite& sprite = spriteGroup.get(spriteIndex);
-					const AABB& texturePart = sprite.getBounds();
-				
-					const Size& textureSize = texture.getSize();
-					float textureWidth = textureSize.getWidth();
-					float textureHeight = textureSize.getHeight();
+				const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
+				int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+				const Sprite& sprite = spriteGroup.get(spriteIndex);
+				const AABB& texturePart = sprite.getBounds();
 
-					// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
-					float imageLeft = texturePart.getLeft();
-					float imageRight = texturePart.getRight() + 1.0f;
-					float imageTop = texturePart.getBottom();
-					float imageBottom = texturePart.getTop() + 1.0f;
-
-					const float textureX0 = imageLeft / textureWidth;
-					const float textureX1 = imageRight / textureWidth;
-					const float textureTop = imageTop / textureHeight;
-					const float textureBottom = imageBottom / textureHeight;
-
-					// TODO: Bind texture in the root level
-					glBindTexture(GL_TEXTURE_2D, texture.getID());
-
-					setColor(color);
-
-					Vector offset = Vector(-sprite.getOffset().getVx(), -sprite.getOffset().getVy());
-					glTranslatef(offset.getVx(), offset.getVy(), 0.0f);
-					GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
-												 -texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-												  texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-												  texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
-
-					GLfloat textureVertices[] = { textureX0, textureBottom,
-												  textureX0, textureTop,
-												  textureX1, textureTop,
-												  textureX1, textureBottom };
- 
-					glEnableClientState(GL_VERTEX_ARRAY);
-					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
- 
-					glVertexPointer(2, GL_FLOAT, 0, screenVertices);
-					glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
- 
-					glDrawArrays(GL_QUADS, 0, 4);
- 
-					glDisableClientState(GL_VERTEX_ARRAY);
-					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-				}
-				glPopMatrix();
+				Point offset(-sprite.getOffset().getVx(), -sprite.getOffset().getVy());
+				draw(offset, texture, texturePart, color);
 			}
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if(!(**i).drawBehindParent())
-					draw(**i, spritesheet, color);
+					draw(spritesheet, **i, color);
 			}
+		}
+		glPopMatrix();
+	}
+
+	void Graphics::draw(const Point& position, const Texture& texture, const Color& color) const
+	{
+		draw(position, texture, AABB(texture.getSize() / 2.0f, texture.getSize()), color);
+	}
+
+	void Graphics::draw(const Point& position, const Texture& texture, const AABB& texturePart, const Color& color) const
+	{
+		glPushMatrix();
+		{
+			bindTexture(texture.getID());
+			glTranslatef(position.getX(), position.getY(), 0.0f);				
+			setColor(color);
+
+			const Size& textureSize = texture.getSize();
+			float textureWidth = textureSize.getWidth();
+			float textureHeight = textureSize.getHeight();
+
+			// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
+			float imageLeft = texturePart.getLeft();
+			float imageRight = texturePart.getRight() + 1.0f;
+			float imageTop = texturePart.getBottom();
+			float imageBottom = texturePart.getTop() + 1.0f;
+
+			const float textureLeft = imageLeft / textureWidth;
+			const float textureRight = imageRight / textureWidth;
+			const float textureTop = imageTop / textureHeight;
+			const float textureBottom = imageBottom / textureHeight;
+
+			GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
+											-texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+											texturePart.getRadiusVx(), texturePart.getRadiusVy(),
+											texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
+
+			GLfloat textureVertices[] = { textureLeft, textureBottom,
+											textureLeft, textureTop,
+											textureRight, textureTop,
+											textureRight, textureBottom };
+ 
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ 
+			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
+ 
+			glDrawArrays(GL_QUADS, 0, 4);
+ 
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 		glPopMatrix();
 	}
 
 	void Graphics::draw(const AABB& rect, const Color& color) const
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		bindTexture(0);
 
 		glPushMatrix();
 		{
@@ -206,7 +222,7 @@ namespace Temporal
 
 	void Graphics::draw(const YABP& slopedArea, const Color& color) const
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		bindTexture(0);
 
 		glPushMatrix();
 		{
@@ -236,7 +252,7 @@ namespace Temporal
 
 	void Graphics::draw(const Segment& segment, const Color& color) const
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		bindTexture(0);
 
 		glPushMatrix();
 		{

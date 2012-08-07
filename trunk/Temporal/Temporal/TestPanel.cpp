@@ -443,7 +443,8 @@ namespace Temporal
 		SpriteGroup* spriteGroup = new SpriteGroup();
 		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
 		spritesheet->add(spriteGroupID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(texture->getSize() / 2.0f, texture->getSize()), Vector::Zero));
+		Size size = texture->getSize() - Size(1.0f, 1.0f);
+		spriteGroup->add(new Sprite(AABB(size / 2.0f, size), Vector::Zero));
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(spriteGroupID);
 		Position* position = new Position(texture->getSize() / 2.0f);
@@ -613,6 +614,11 @@ namespace Temporal
 		std::ostringstream lightID;
 		lightID << "ENT_LIGHT" << platformID++;
 		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
+	}
+
+	void TestPanel::draw() const 
+	{
+		BasePanel::draw();
 	}
 
 	void TestPanel::createEntities()
@@ -803,7 +809,7 @@ namespace Temporal
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();
-		//createLight(Point(500.0f, 300.0f));
-		//createLight(Point(1500.0f, 300.0f));
+		createLight(Point(500.0f, 300.0f));
+		createLight(Point(1500.0f, 300.0f));
 	}
 }
