@@ -459,7 +459,8 @@ namespace Temporal
 	{
 		Position* position = new Position(Point(100.0f, 100.0f));
 		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
-		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC);
+		const Texture* texture = Texture::load("laser.png");
+		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
 
 		Entity* entity = new Entity();
 		entity->add(position);
@@ -795,7 +796,7 @@ namespace Temporal
 
 		//createSkeleton();
 		createPlayer(spritesheet, animations);
-		//createLaser();
+		createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
 		//createPatrol(spritesheet, animations);
