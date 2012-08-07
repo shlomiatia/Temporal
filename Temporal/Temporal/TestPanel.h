@@ -9,7 +9,6 @@ namespace Temporal
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Graphics utils. line renderer scene graph	
 	// TODO: Normalize positions - attch to scene graph
 	// TODO: Minimize casting
 
@@ -39,6 +38,8 @@ namespace Temporal
 	class TestPanel : public BasePanel
 	{
 	public:
+		void draw() const;
+	protected:
 		void createEntities();
 	};
 }

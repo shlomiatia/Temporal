@@ -10,7 +10,7 @@ namespace Temporal
 	public:
 		void init();
 		void update(float framePeriodInMillis);
-		void draw() const;
+		virtual void draw() const;
 		void dispose();
 
 	protected:
