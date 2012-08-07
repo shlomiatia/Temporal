@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="BaseUtils.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CollisionInfo.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="BaseEnums.h" />
     <ClInclude Include="Debug.h" />
@@ -40,14 +41,13 @@
     <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="GameEnums.h" />
     <ClInclude Include="MovementUtils.h" />
-    <ClInclude Include="Orientation.h" />
     <ClInclude Include="StateMachineComponent.h" />
     <ClInclude Include="MessageUtils.h" />
     <ClInclude Include="TemporalEcho.h" />
     <ClInclude Include="ViewManager.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="MessageParams.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="SpriteSheet.h" />
@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionInfo.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="Laser.cpp" />
@@ -93,14 +94,13 @@
     <ClCompile Include="BasePanel.cpp" />
     <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
-    <ClCompile Include="Orientation.cpp" />
     <ClCompile Include="MovementUtils.cpp" />
     <ClCompile Include="StateMachineComponent.cpp" />
     <ClCompile Include="MessageUtils.cpp" />
     <ClCompile Include="TemporalEcho.cpp" />
     <ClCompile Include="ViewManager.cpp" />
     <ClCompile Include="InputController.cpp" />
-    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />

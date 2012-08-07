@@ -18,7 +18,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::LEVEL_CREATED)
 		{
-			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS)));
+			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 			Point position = segment.getNaturalOrigin();
 			position.setY(position.getY() - 1.0f);
 			sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
@@ -43,7 +43,7 @@ namespace Temporal
 	void Laser::update(float framePeriodInMillis)
 	{
 		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_BOUNDS)));
+		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 		Vector directionVector = segment.getNaturalVector().normalize();
 		Vector laserVector = directionVector.getRightNormal();
 		float movementAmount = LASER_SPEED_PER_SECOND * framePeriodInMillis / 1000.0f;
@@ -74,8 +74,7 @@ namespace Temporal
 		bool isDetecting = false;
 		if(canCollide(myPeriod, targetPeriod))
 		{
-			AABB rect = AABB::Zero;
-			EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_BOUNDS, &rect));
+			const AABB& rect = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
 			isDetecting = intersects(rect, seg);
 		}
 		

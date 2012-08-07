@@ -1,24 +1,25 @@
 #include "StaticBody.h"
-#include "Shapes.h"
 #include "Graphics.h"
 #include "MessageUtils.h"
+#include "CollisionInfo.h"
 
 namespace Temporal
 {
 	StaticBody::~StaticBody()
 	{
-		delete _shape;
+		delete _collisionInfo;
 	}
 
 	void StaticBody::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(*_shape, Color(0.5f, 0.25f, 0.125f));
+			Graphics::get().draw(_collisionInfo->getGlobalShape(), Color(0.5f, 0.25f, 0.125f));
 		}
-		else if(message.getID() == MessageID::GET_BOUNDS)
+		else if(message.getID() == MessageID::GET_SHAPE)
 		{
-			message.setParam(_shape);
+			Shape* shape = const_cast<Shape*>(&_collisionInfo->getGlobalShape());
+			message.setParam(shape);
 		}
 	}
 

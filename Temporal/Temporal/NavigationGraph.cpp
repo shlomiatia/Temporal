@@ -7,6 +7,7 @@
 #include "MovementUtils.h"
 #include "DynamicBody.h"
 #include "StaticBody.h"
+#include "CollisionInfo.h"
 #include "Graphics.h"
 
 namespace Temporal
@@ -317,11 +318,8 @@ namespace Temporal
 
 	void addPlatform(const StaticBody& body, ShapeCollection& platforms) 
 	{
-		if(!body.isCover())
-		{
-			const Shape& platform = body.getShape();
-			platforms.push_back(&platform);
-		}
+		const Shape& platform = body.getCollisionInfo().getGlobalShape();
+		platforms.push_back(&platform);
 	}
 
 	void NavigationGraph::init()

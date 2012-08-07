@@ -31,14 +31,9 @@ namespace Temporal
 			position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 
 		Side::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Side::Enum* entityOrientation = (const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		Side::Enum orientation;
-		if(entityOrientation == NULL || *entityOrientation == Side::NONE)
-			orientation = spritesheetOrientation;
-		else
-			orientation = *entityOrientation;
+		const Side::Enum entityOrientation = *(const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
 
-		_root->setMirrored(orientation != spritesheetOrientation);
+		_root->setMirrored(entityOrientation != spritesheetOrientation);
 		_root->setTranslation(position);
 		Graphics::get().draw(_spritesheet, *_root, _color);
 	}

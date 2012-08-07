@@ -1,5 +1,4 @@
 #include "DynamicBody.h"
-#include "StaticBody.h"
 #include "Grid.h"
 #include "BaseUtils.h"
 #include "Serialization.h"
@@ -8,8 +7,8 @@
 #include "ShapeOperations.h"
 #include "Graphics.h"
 #include "MessageUtils.h"
+#include "CollisionInfo.h"
 #include <algorithm>
-#include <assert.h>
 
 namespace Temporal
 {
@@ -18,42 +17,25 @@ namespace Temporal
 
 	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
 
-	float getMaxMovementStepSize(const Size& size)
+	float getMaxMovementStepSize(const CollisionInfo& info)
 	{
-		float maxHorizontalStepSize = size.getWidth() / 2.0f - 1.0f;
-		float maxVerticalStepSize = size.getHeight() / 2.0f - 1.0f;
+		const Shape& shape = info.getLocalShape();
+		float maxHorizontalStepSize = shape.getWidth() / 2.0f - 1.0f;
+		float maxVerticalStepSize = shape.getHeight() / 2.0f - 1.0f;
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
-	DynamicBody::DynamicBody(const Size& size)
-		: _size(size), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(size))
+	DynamicBody::DynamicBody(const CollisionInfo* info)
+		: _collisionInfo(info), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*info)) 
 	{
-		assert(_size.getWidth() > 0.0f);
-		assert(_size.getHeight() > 0.0f);
-	}
-
-	AABB DynamicBody::getBounds() const
-	{
-		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		return AABB(position, _size);
-	}
-
-	Side::Enum DynamicBody::getOrientation() const
-	{
-		Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
-		return orientation;
 	}
 
 	void DynamicBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::GET_SIZE)
+		if(message.getID() == MessageID::GET_SHAPE)
 		{
-			message.setParam(const_cast<Size*>(&_size));
-		}
-		else if(message.getID() == MessageID::GET_BOUNDS)
-		{
-			AABB* outParam = static_cast<AABB*>(message.getParam());
-			*outParam = getBounds();
+			Shape* shape = const_cast<Shape*>(&_collisionInfo->getGlobalShape());
+			message.setParam(shape);
 		}
 		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
 		{
@@ -61,8 +43,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			AABB bounds = getBounds();
-			Graphics::get().draw(bounds);
+			Graphics::get().draw(_collisionInfo->getGlobalShape());
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
@@ -164,10 +145,14 @@ namespace Temporal
 			
 			movement -= stepMovement;
 			changePosition(stepMovement);
-			AABB bounds = getBounds();
 			
 			int collisionFilter = getPeriod(*this);
-			Grid::get().iterateTiles(bounds, collisionFilter, this, &collision, detectCollision);
+			const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
+			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, collisionFilter);
+			for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
+			{
+				detectCollision(**i, collision);
+			}
 			if(collision != Vector::Zero)
 				break;
 		}
@@ -177,19 +162,18 @@ namespace Temporal
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	bool DynamicBody::detectCollision(const StaticBody& staticBody, Vector& collision)
+	void DynamicBody::detectCollision(const CollisionInfo& info, Vector& collision)
 	{
-		const Shape& staticBodyBounds = staticBody.getShape();
-		const AABB& dynamicBodyBounds = getBounds();
+		const Shape& staticBodyBounds = info.getGlobalShape();
+		const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
 		Vector correction = Vector::Zero;
-		if(!staticBody.isCover() && intersects(dynamicBodyBounds, staticBodyBounds, &correction))
+		if(intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
 			correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision);
 		}
-		return true;
 	}
 
-	void DynamicBody::correctCollision(const AABB& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
+	void DynamicBody::correctCollision(const Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
 	{
 		const Segment& segment = static_cast<const Segment&>(staticBodyBounds);
 		Vector platformVector = segment.getNaturalVector().normalize();
@@ -211,7 +195,7 @@ namespace Temporal
 		collision -= correction;
 	}
 
-	void DynamicBody::modifyCorrection(const AABB& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
+	void DynamicBody::modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope)
 	{
 		// BRODER
 		bool isOnPlatformTopSide =  (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
@@ -245,7 +229,7 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::modifyVelocity(const AABB& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
+	void DynamicBody::modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
 	{
 		// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
 		if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
@@ -275,10 +259,9 @@ namespace Temporal
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 
-	bool DynamicBody::detectCollision(void* caller, void* data, const StaticBody& staticBody)
+	Side::Enum DynamicBody::getOrientation() const
 	{
-		Vector& collision = *static_cast<Vector*>(data);
-		DynamicBody* dynamicBody = static_cast<DynamicBody*>(caller);
-		return dynamicBody->detectCollision(staticBody, collision);
+		Side::Enum orientation = *static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
+		return orientation;
 	}
 }

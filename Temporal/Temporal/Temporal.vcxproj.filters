@@ -66,13 +66,7 @@
     <ClInclude Include="MovementUtils.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Orientation.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Panel.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Position.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="StateMachineComponent.h">
@@ -165,6 +159,12 @@
     <ClInclude Include="Particles.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionInfo.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -221,12 +221,6 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="MovementUtils.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Orientation.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Position.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="StateMachineComponent.cpp">
@@ -306,6 +300,12 @@
     </ClCompile>
     <ClCompile Include="Particles.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionInfo.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

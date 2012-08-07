@@ -276,8 +276,9 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const AABB& rect, const Shape& shape2, Vector* correction)
+	bool intersects(const Shape& shape1, const Shape& shape2, Vector* correction)
 	{
+		const AABB& rect = static_cast<const AABB&>(shape1);
 		if(shape2.getType() == ShapeType::AABB)
 		{
 			const AABB& rect2 = (const AABB&)shape2;
@@ -325,11 +326,6 @@ namespace Temporal
 		{
 			const Segment& seg = static_cast<const Segment&>(shape);
 			return intersects(yabp, seg);
-		}
-		else if(shape.getType() == ShapeType::YABP)
-		{
-			const YABP& yabp2 = static_cast<const YABP&>(shape);
-			return intersects(yabp, yabp2);
 		}
 		else
 		{

@@ -1,57 +1,28 @@
 #include "Sensor.h"
 #include "Grid.h"
-#include "StaticBody.h"
 #include "Math.h"
-#include "Segment.h"
 #include "ShapeOperations.h"
 #include "MessageParams.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
+#include "CollisionInfo.h"
+#include "Shapes.h"
 #include <algorithm>
 
 namespace Temporal
 {
-	AABB Sensor::getBounds() const
-	{
-		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		Side::Enum orientation = *static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
-		return _bounds.rotate(orientation).translate(position);
-	}
-
 	void Sensor::update()
 	{
 		_point = Point::Zero;
-		
-		AABB bounds = getBounds();
 		int collisionFilter = getPeriod(*this);
-		Grid::get().iterateTiles(bounds, collisionFilter, this, NULL, sense);
-		if(_point != Point::Zero)
+		const AABB& sensorShape = (const AABB&)_collisionInfo->getGlobalShape();
+		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, collisionFilter);
+		for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 		{
-			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
-		}
-	}
-
-	void Sensor::handleMessage(Message& message)
-	{
-		if(message.getID() == MessageID::UPDATE)
-		{
-			update();
-		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
-		{
-			Graphics::get().draw(getBounds(), _point != Point::Zero ? Color::Green : Color::Red);
-		}
-	}
-
-	bool Sensor::sense(const StaticBody& staticBody)
-	{
-		const AABB& sensorBounds = getBounds();
-		if(!staticBody.isCover())
-		{
-			const Shape& shape = staticBody.getShape();
+			const Shape& shape = (**i).getGlobalShape();
 
 			// First check for basic intersection
-			if(intersects(sensorBounds, shape))
+			if(intersects(sensorShape, shape))
 			{
 				bool isSensing = false;
 				const Segment& segment = (const Segment&)shape;
@@ -60,9 +31,9 @@ namespace Temporal
 				Point point = Point::Zero;
 				Point leftPoint = segment.getLeftPoint();
 				Point rightPoint = segment.getRightPoint();
-				if(sensorBounds.contains(leftPoint))
+				if(sensorShape.contains(leftPoint))
 					point = leftPoint;
-				else if(sensorBounds.contains(rightPoint))
+				else if(sensorShape.contains(rightPoint))
 					point = rightPoint;
 				if(point != Point::Zero)
 				{
@@ -94,16 +65,25 @@ namespace Temporal
 				else
 				{
 					_point = Point::Zero;
-					return false;
+					break;
 				}
 			}
 		}
-		return true;
+		if(_point != Point::Zero)
+		{
+			sendMessageToOwner(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
+		}
 	}
 
-	bool Sensor::sense(void* caller, void* data, const StaticBody& staticBody)
+	void Sensor::handleMessage(Message& message)
 	{
-		Sensor& sensor = *static_cast<Sensor*>(caller);
-		return sensor.sense(staticBody);
+		if(message.getID() == MessageID::UPDATE)
+		{
+			update();
+		}
+		else if(message.getID() == MessageID::DEBUG_DRAW)
+		{
+			Graphics::get().draw(_collisionInfo->getGlobalShape(), _point != Point::Zero ? Color::Green : Color::Red);
+		}
 	}
 }
