@@ -172,16 +172,17 @@ namespace Temporal
 		entity->add(renderer);
 		//entity->add(particleEmitter);
 		//entity->add(lightGem);
-		//entity->add(temporalPeriod);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
 	void createSentry(SpriteSheet* spritesheet)
 	{
+		CollisionFilter* collisionFilter = new CollisionFilter();
 		Transform* transform = new Transform(Point(100.0f, 550.0f), Side::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(Hash("POP_ANM_STAND"));
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
@@ -189,12 +190,13 @@ namespace Temporal
 
 		Entity* entity = new Entity();
 		entity->add(transform);
+		entity->add(collisionFilter);
 		entity->add(drawPosition);
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
 		//createTemporalEcho(entity);
-		//entity->add(temporalPeriod);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
@@ -234,19 +236,21 @@ namespace Temporal
 
 		Transform* transform = new Transform(Point(383.0f, 383.0f), Side::LEFT);
 		Camera* camera = new Camera();
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS);
+		CollisionFilter* collisionFilter = new CollisionFilter();
+		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
+		entity->add(collisionFilter);
 		entity->add(camera);
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
 		//createTemporalEcho(entity);
-		//entity->add(temporalPeriod);
+		entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
 	}
 
@@ -262,9 +266,9 @@ namespace Temporal
 		SceneNode* root = createDefaultSceneGraph();
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS);
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		Light* light = new Light(Color::White, 500.0f, ANGLE_0_IN_RADIANS, ANGLE_30_IN_RADIANS); 
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
@@ -278,7 +282,7 @@ namespace Temporal
 		entity->add(light);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(temporalPeriod);
+		entity->add(temporalPeriod);
 		//createTemporalEcho(entity, animations);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
@@ -295,7 +299,7 @@ namespace Temporal
 		SceneNode* root = createDefaultSceneGraph();
 		Animator* animator = new Animator(*animations, *root);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
@@ -307,11 +311,10 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(temporalPeriod);
+		entity->add(temporalPeriod);
 		//createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
-		
 	}
 
 	static int platformID = 0;
@@ -468,11 +471,13 @@ namespace Temporal
 		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
 		const Texture* texture = Texture::load("laser.png");
 		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
 		entity->add(laser);
 		entity->add(renderer);
+		entity->add(temporalPeriod);
 
 		//createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
@@ -806,10 +811,10 @@ namespace Temporal
 
 		//createSkeleton();
 		createPlayer(spritesheet, animations);
-		//createLaser();
-		//createSentry(spritesheet);
-		//createCamera();
-		//createPatrol(spritesheet, animations);
+		createLaser();
+		createSentry(spritesheet);
+		createCamera();
+		createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();

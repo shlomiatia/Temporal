@@ -10,19 +10,26 @@ namespace Temporal
 		{
 			message.setParam(&_period);
 		}
+		else if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			sendMessageToOwner(Message(MessageID::SET_COLLISION_GROUP, &_period));
+		}
 		else if(message.getID() == MessageID::SET_PERIOD)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
 			_period = period;
+			sendMessageToOwner(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
 		else if(message.getID() == MessageID::SET_CURRENT_PERIOD)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
 
-			if(_period  == period)
-				sendMessageToOwner(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::White)));
+			float alpha;
+			if(_period == period)
+				alpha = 1.0f;
 			else
-				sendMessageToOwner(Message(MessageID::SET_COLOR, &Color(1.0f, 1.0f, 1.0f, 0.1f)));
+				alpha = 0.2f;
+			sendMessageToOwner(Message(MessageID::SET_ALPHA, &alpha));
 		}
 	}
 

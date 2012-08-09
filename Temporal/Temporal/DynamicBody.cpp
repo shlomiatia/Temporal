@@ -41,7 +41,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(_collisionInfo->getGlobalShape());
+			Graphics::get().draw(_collisionInfo->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
 		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
 		{

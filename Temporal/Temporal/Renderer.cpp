@@ -12,7 +12,13 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_COLOR)
 		{
-			_color = *static_cast<Color*>(message.getParam());
+			const Color& color = *static_cast<Color*>(message.getParam());
+			_color.setColor(color);
+		}
+		else if(message.getID() == MessageID::SET_ALPHA)
+		{
+			float alpha = *static_cast<float*>(message.getParam());
+			_color.setA(alpha);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{

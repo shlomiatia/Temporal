@@ -43,12 +43,12 @@ namespace Temporal
 		void draw(const Segment& segment, const Color& color = Color::White) const;
 		void draw(const Shape& shape, const Color& color = Color::White) const;
 
+		void bindTexture(unsigned int id) const;
+
 	private:
 		static const int BIT_DEPTH = 32;
 
 		mutable unsigned int _lastTextureId;
-
-		void bindTexture(unsigned int id) const;
 
 		Graphics() : _lastTextureId(0) {}
 		~Graphics() { dispose(); }
