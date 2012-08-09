@@ -162,6 +162,9 @@
     <ClInclude Include="Transform.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionFilter.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
     <ClInclude Include="PhysicsEnums.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -306,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionFilter.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
