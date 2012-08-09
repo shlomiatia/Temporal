@@ -33,6 +33,12 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
 	}
 
+	void ChangePeriod(Period::Enum period)
+	{
+		EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
+	}
+
 	void BasePanel::update(float framePeriodInMillis)
 	{
 		Input::get().update();
@@ -46,20 +52,17 @@ namespace Temporal
 			//AABB bounds = AABB::Zero;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, static_cast<void*>(&bounds));
-			Period::Enum period = Period::PAST;
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+			ChangePeriod(Period::PAST);
 			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
 		}
 		if(Input::get().isW())
 		{
-			Period::Enum period = Period::PRESENT;
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+			ChangePeriod(Period::PRESENT);
 		}
 		if(Input::get().isE())
 		{
-			Period::Enum period = Period::FUTURE;
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+			ChangePeriod(Period::FUTURE);
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
@@ -77,7 +80,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, static_cast<void*>(&lightLayer)));
 		LightSystem::get().postDraw();*/
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::DYNAMIC_BODY;
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		

@@ -7,6 +7,7 @@
 #include "Shapes.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
+#include "CollisionFilter.h"
 
 namespace Temporal
 {
@@ -31,9 +32,12 @@ namespace Temporal
 		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
 
-		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
-		if(isLit != NULL && !*static_cast<bool*>(isLit))
-			return;
+		int sourceCollisionGroup = *static_cast<int*>(sendMessageToOwner(Message(MessageID::GET_COLLISION_GROUP)));
+		int targetCollisionGroup = *static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
+		if(sourceCollisionGroup != -1 &&
+		   targetCollisionGroup != -1 &&
+		   sourceCollisionGroup != targetCollisionGroup)
+		   return;
 
 		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
@@ -43,6 +47,10 @@ namespace Temporal
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
 			return;
 
+		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
+		if(isLit != NULL && !*static_cast<bool*>(isLit))
+			return;
+
 		// Check field of view
 		DirectedSegment directedSegment(sourcePosition.getX(), sourcePosition.getY(), targetPosition.getX(), targetPosition.getY());
 		float angle = directedSegment.getVector().getAngle();
@@ -50,7 +58,9 @@ namespace Temporal
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
-		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection);
+		
+
+		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection, COLLISION_MASK, _collisionFilter.getGroup());
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));

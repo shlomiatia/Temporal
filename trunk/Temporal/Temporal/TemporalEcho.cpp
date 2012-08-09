@@ -72,7 +72,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_CREATED)
 		{
-			_echo->handleMessage(Message(MessageID::SET_COLOR, &Color(1.0f, 1.0f, 1.0f, 0.1f)));
+			float alpha = 0.2f;
+			_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
 	}
 }

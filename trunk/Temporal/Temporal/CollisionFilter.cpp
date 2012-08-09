@@ -2,8 +2,8 @@
 
 namespace Temporal
 {
-	CollisionFilter::CollisionFilter(int filter, int mask, int group)
-		: _filter(filter), _mask(mask), _group(group) {}
+	CollisionFilter::CollisionFilter(int filter, int group)
+		: _filter(filter), _group(group) {}
 
 	void CollisionFilter::handleMessage(Message& message)
 	{
@@ -11,6 +11,10 @@ namespace Temporal
 		{
 			int group = *static_cast<int*>(message.getParam());
 			_group = group;
+		}
+		else if(message.getID() == MessageID::GET_COLLISION_GROUP)
+		{
+			message.setParam(&_group);
 		}
 	}
 

@@ -25,6 +25,8 @@ namespace Temporal
 		void setB(float b) { _b = b; }
 		float getA() const { return _a; }
 		void setA(float a) { _a = a; }
+
+		void setColor(const Color& color);
 		
 	private:
 		float _r;

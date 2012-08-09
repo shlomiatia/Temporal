@@ -4,7 +4,6 @@
 #include "BaseUtils.h"
 #include "Shapes.h"
 #include "Math.h"
-
 #include "Texture.h"
 #include <SDL_opengl.h>
 
@@ -16,7 +15,13 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_COLOR)
 		{
-			_color = *static_cast<Color*>(message.getParam());
+			const Color& color = *static_cast<Color*>(message.getParam());
+			_color.setColor(color);
+		}
+		else if(message.getID() == MessageID::SET_ALPHA)
+		{
+			float alpha = *static_cast<float*>(message.getParam());
+			_color.setA(alpha);
 		}
 		else if(message.getID() == MessageID::SET_TARGET)
 		{
@@ -56,7 +61,7 @@ namespace Temporal
 			float textureWidth = textureSize.getWidth() / 2.0f;
 			float textureHeight = textureSize.getHeight() / 2.0f;
 
-			glBindTexture(GL_TEXTURE_2D, _texture.getID());
+			Graphics::get().bindTexture(_texture.getID());
 
 			glColor4f(_color.getR(), _color.getG(), _color.getB(), _color.getA());
 
