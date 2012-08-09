@@ -7,16 +7,18 @@
 #include "Graphics.h"
 #include "CollisionInfo.h"
 #include "Shapes.h"
+#include "PhysicsEnums.h"
 #include <algorithm>
 
 namespace Temporal
 {
+	static const int COLLISION_MASK1 = Filter1::OBSTACLE;
+
 	void Sensor::update()
 	{
 		_point = Point::Zero;
-		int collisionFilter = getPeriod(*this);
 		const AABB& sensorShape = (const AABB&)_collisionInfo->getGlobalShape();
-		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, collisionFilter);
+		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK1);
 		for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 		{
 			const Shape& shape = (**i).getGlobalShape();

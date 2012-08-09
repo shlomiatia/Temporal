@@ -20,11 +20,11 @@ namespace Temporal
 		_components.push_back(component);
 	}
 
-	const Component* Entity::get(ComponentType::Enum type) const
+	Component* Entity::get(ComponentType::Enum type) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
-			const Component* component = *i;
+			Component* component = *i;
 			if(component->getType() == type)
 				return component;
 		}

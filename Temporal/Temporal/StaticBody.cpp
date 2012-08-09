@@ -1,6 +1,5 @@
 #include "StaticBody.h"
 #include "Graphics.h"
-#include "MessageUtils.h"
 #include "CollisionInfo.h"
 
 namespace Temporal
@@ -21,10 +20,5 @@ namespace Temporal
 			Shape* shape = const_cast<Shape*>(&_collisionInfo->getGlobalShape());
 			message.setParam(shape);
 		}
-	}
-
-	int StaticBody::getCollisionFilter() const
-	{
-		return getPeriod(*this);
 	}
 }

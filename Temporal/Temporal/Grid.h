@@ -10,7 +10,7 @@ namespace Temporal
 	class CollisionInfo;
 	class DirectedSegment;
 
-	typedef std::vector<const CollisionInfo*> CollisionInfoCollection;
+	typedef std::vector<CollisionInfo*> CollisionInfoCollection;
 	typedef CollisionInfoCollection::const_iterator CollisionInfoIterator;
 
 	class Grid
@@ -25,11 +25,11 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose();
 
-		bool cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter, Point& pointOfIntersection);
-		bool cast(const DirectedSegment& dirSeg, int collisionFilter, Point& pointOfIntersection);
+		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask1 = -1, int mask2 = -1);
+		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask1 = -1, int mask2 = -1);
 
-		void add(const CollisionInfo* body);
-		CollisionInfoCollection iterateTiles(const Shape& shape, int collisionFilter) const;
+		void add(CollisionInfo* body);
+		CollisionInfoCollection iterateTiles(const Shape& shape, int mask1 = -1, int mask2 = -1) const;
 
 		void draw() const;
 

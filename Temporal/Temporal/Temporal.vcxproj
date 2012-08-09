@@ -26,7 +26,7 @@
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
-    <ClInclude Include="PhysicsUtils.h" />
+    <ClInclude Include="PhysicsEnums.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeSample.h" />
     <ClInclude Include="Math.h" />

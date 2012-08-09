@@ -6,12 +6,14 @@
 #include "Shapes.h"
 #include "ShapeOperations.h"
 #include "Graphics.h"
-#include "MessageUtils.h"
 #include "CollisionInfo.h"
+#include "PhysicsEnums.h"
 #include <algorithm>
 
 namespace Temporal
 {
+	static const int COLLISION_MASK1 = Filter1::OBSTACLE;
+
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
 	static const NumericPairSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
@@ -25,7 +27,7 @@ namespace Temporal
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
-	DynamicBody::DynamicBody(const CollisionInfo* info)
+	DynamicBody::DynamicBody(CollisionInfo* info)
 		: _collisionInfo(info), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*info)) 
 	{
 	}
@@ -146,9 +148,8 @@ namespace Temporal
 			movement -= stepMovement;
 			changePosition(stepMovement);
 			
-			int collisionFilter = getPeriod(*this);
 			const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
-			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, collisionFilter);
+			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK1);
 			for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 			{
 				detectCollision(**i, collision);
@@ -162,7 +163,7 @@ namespace Temporal
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	void DynamicBody::detectCollision(const CollisionInfo& info, Vector& collision)
+	void DynamicBody::detectCollision(CollisionInfo& info, Vector& collision)
 	{
 		const Shape& staticBodyBounds = info.getGlobalShape();
 		const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();

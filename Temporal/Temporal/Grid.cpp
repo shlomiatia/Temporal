@@ -2,7 +2,6 @@
 #include "Shapes.h"
 #include "Graphics.h"
 #include "ShapeOperations.h"
-#include "PhysicsUtils.h"
 #include "CollisionInfo.h"
 #include <algorithm>
 
@@ -38,7 +37,7 @@ namespace Temporal
 	}
 
 
-	void Grid::add(const CollisionInfo* body)
+	void Grid::add(CollisionInfo* body)
 	{
 		const Shape& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
@@ -76,14 +75,14 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, int collisionFilter, Point& pointOfIntersection)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask1, int mask2)
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
-		return cast(ray, collisionFilter, pointOfIntersection);
+		return cast(ray, pointOfIntersection, mask1, mask2);
 	}
 
-	bool Grid::cast(const DirectedSegment& dirSeg, int collisionFilter, Point& pointOfIntersection)
+	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask1, int mask2)
 	{
 		const Point& origin = dirSeg.getOrigin();
 		const Point& destination = dirSeg.getTarget();
@@ -129,15 +128,12 @@ namespace Temporal
 			{
 				for(CollisionInfoIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
-					const CollisionInfo& body = **iterator;
-					if(!canCollide(collisionFilter, body.getFilter()))
-						continue;
-					if(intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
+					CollisionInfo& body = **iterator;
+					if(body.canCollide(mask1, mask2) && intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
 					{
 						return false;
 					}
 				}
-				
 			}
 			if (tx <= ty) 
 			{ // tx smallest, step in x
@@ -156,7 +152,7 @@ namespace Temporal
 		return true;
 	}
 
-	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int collisionFilter) const
+	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int mask1, int mask2) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
@@ -175,10 +171,9 @@ namespace Temporal
 				{
 					for(CollisionInfoIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
-						const CollisionInfo* body = *i;
-						if(!canCollide(collisionFilter, body->getFilter()))
-							continue;
-						result.push_back(body);
+						CollisionInfo* body = *i;
+						if(body->canCollide(mask1, mask2))
+							result.push_back(body);
 					}
 				}
 			}
