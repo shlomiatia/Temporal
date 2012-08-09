@@ -75,14 +75,14 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask1, int mask2)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask, int group)
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
-		return cast(ray, pointOfIntersection, mask1, mask2);
+		return cast(ray, pointOfIntersection, mask, group);
 	}
 
-	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask1, int mask2)
+	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask, int group)
 	{
 		const Point& origin = dirSeg.getOrigin();
 		const Point& destination = dirSeg.getTarget();
@@ -129,7 +129,7 @@ namespace Temporal
 				for(CollisionInfoIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
 					CollisionInfo& body = **iterator;
-					if(body.canCollide(mask1, mask2) && intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
+					if(body.getFilter().canCollide(mask, group) && intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
 					{
 						return false;
 					}
@@ -152,7 +152,7 @@ namespace Temporal
 		return true;
 	}
 
-	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int mask1, int mask2) const
+	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int mask, int group) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
@@ -172,7 +172,7 @@ namespace Temporal
 					for(CollisionInfoIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						CollisionInfo* body = *i;
-						if(body->canCollide(mask1, mask2))
+						if(body->getFilter().canCollide(mask, group))
 							result.push_back(body);
 					}
 				}

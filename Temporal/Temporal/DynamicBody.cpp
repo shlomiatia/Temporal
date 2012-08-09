@@ -12,7 +12,7 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK1 = Filter1::OBSTACLE;
+	static const int COLLISION_MASK = FilterType::OBSTACLE;
 
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
 	static const NumericPairSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
@@ -39,13 +39,13 @@ namespace Temporal
 			Shape* shape = const_cast<Shape*>(&_collisionInfo->getGlobalShape());
 			message.setParam(shape);
 		}
-		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
-		{
-			message.setParam(&_groundVector);
-		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			Graphics::get().draw(_collisionInfo->getGlobalShape());
+		}
+		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
+		{
+			message.setParam(&_groundVector);
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
@@ -149,7 +149,7 @@ namespace Temporal
 			changePosition(stepMovement);
 			
 			const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
-			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK1);
+			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
 			for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 			{
 				detectCollision(**i, collision);

@@ -28,8 +28,9 @@ namespace Temporal
 		createEntities();
 
 		NavigationGraph::get().init();
-
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
+		Period::Enum period = Period::PRESENT;
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
 	}
 
 	void BasePanel::update(float framePeriodInMillis)
@@ -45,24 +46,23 @@ namespace Temporal
 			//AABB bounds = AABB::Zero;
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, static_cast<void*>(&bounds));
-			Period::Enum period = Period::Past;
+			Period::Enum period = Period::PAST;
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
 		}
 		if(Input::get().isW())
 		{
-			Period::Enum period = Period::Present;
+			Period::Enum period = Period::PRESENT;
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 		}
 		if(Input::get().isE())
 		{
-			Period::Enum period = Period::Future;
+			Period::Enum period = Period::FUTURE;
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 		}
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
-
 
 	void BasePanel::draw() const
 	{

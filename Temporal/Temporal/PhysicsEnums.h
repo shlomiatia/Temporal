@@ -1,9 +1,9 @@
-#ifndef PHYSICSENUMS_ENUMS_H
-#define PHYSICSENUMS_ENUMS_H
+#ifndef PHYSICSENUMS_H
+#define PHYSICSENUMS_H
 
 namespace Temporal
 {
-	namespace Filter1
+	namespace FilterType
 	{
 		enum Enum
 		{

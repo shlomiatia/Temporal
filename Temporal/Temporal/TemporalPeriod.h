@@ -9,22 +9,23 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			Past = 1,
-			Present = 2,
-			Future = 4
+			PAST = 1,
+			PRESENT = 2,
+			FUTURE = 4
 		};
 	}
 
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period, bool isPlayer = false) : _period(period), _isPlayer(isPlayer) {}
+		explicit TemporalPeriod(Period::Enum period) : _period(period) {}
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
 	private:
 		Period::Enum _period;
-		bool _isPlayer;
 	};
+
+	
 }
 #endif

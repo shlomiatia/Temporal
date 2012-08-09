@@ -10,7 +10,7 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK1 = Filter1::OBSTACLE | Filter1::COVER;
+	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::COVER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 

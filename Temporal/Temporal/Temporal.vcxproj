@@ -26,6 +26,7 @@
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
+    <ClInclude Include="CollisionFilter.h" />
     <ClInclude Include="PhysicsEnums.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SceneNodeSample.h" />
@@ -71,6 +72,7 @@
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="CollisionInfo.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Hash.cpp" />

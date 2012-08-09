@@ -12,13 +12,13 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK1 = Filter1::OBSTACLE;
+	static const int COLLISION_MASK = FilterType::OBSTACLE;
 
 	void Sensor::update()
 	{
 		_point = Point::Zero;
 		const AABB& sensorShape = (const AABB&)_collisionInfo->getGlobalShape();
-		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK1);
+		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK);
 		for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 		{
 			const Shape& shape = (**i).getGlobalShape();

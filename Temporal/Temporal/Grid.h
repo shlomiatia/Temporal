@@ -25,11 +25,11 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose();
 
-		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask1 = -1, int mask2 = -1);
-		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask1 = -1, int mask2 = -1);
+		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask = -1, int group = -1);
+		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask = -1, int group = -1);
 
 		void add(CollisionInfo* body);
-		CollisionInfoCollection iterateTiles(const Shape& shape, int mask1 = -1, int mask2 = -1) const;
+		CollisionInfoCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;
 
