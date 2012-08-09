@@ -26,22 +26,4 @@ namespace Temporal
 		}
 		return false;
 	}
-
-	int getPeriod(int* periodPointer)
-	{
-		int period = periodPointer == NULL ? 0 : *periodPointer;
-		return period;
-	}
-
-	int getPeriod(const Component& component)
-	{
-		int* periodPointer = static_cast<int*>(component.sendMessageToOwner(Message(MessageID::GET_PERIOD)));
-		return getPeriod(periodPointer);
-	}
-
-	int getPlayerPeriod()
-	{
-		int* periodPointer = static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_PERIOD)));
-		return getPeriod(periodPointer);
-	}
 }

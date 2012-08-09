@@ -15,7 +15,7 @@ namespace Temporal
 		explicit Message(MessageID::Enum id, void* param = NULL) : _id(id), _param(param) {}
 
 		MessageID::Enum getID() const { return _id; }
-		void* getParam() const { return _param; }
+		void* getParam() { return _param; }
 		void setParam(void* param) { _param = param; }
 
 	private:
@@ -57,7 +57,7 @@ namespace Temporal
 		~Entity();
 
 		void add(Component* component);
-		const Component* get(ComponentType::Enum type) const;
+		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
 
 	private:

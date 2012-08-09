@@ -7,7 +7,6 @@
 #include "NumericPair.h"
 #include "Serialization.h"
 #include "MessageUtils.h"
-#include "PhysicsUtils.h"
 
 namespace Temporal
 {
@@ -67,17 +66,11 @@ namespace Temporal
 		Point newPosition = position + movement;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 		Point pointOfIntersection = Point::Zero;
-		int myPeriod = getPeriod(*this);
-		Grid::get().cast(newPosition, laserVector, myPeriod, pointOfIntersection);
+		Grid::get().cast(newPosition, laserVector, pointOfIntersection);
 		Segment seg = SegmentPP(newPosition, pointOfIntersection);
-		int targetPeriod = getPlayerPeriod();
 		bool isDetecting = false;
-		if(canCollide(myPeriod, targetPeriod))
-		{
-			const AABB& rect = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
-			isDetecting = intersects(rect, seg);
-		}
-		
+		const AABB& rect = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
+		isDetecting = intersects(rect, seg);
 		Color color = isDetecting ? Color::Green : Color::Red;
 		sendMessageToOwner(Message(MessageID::SET_COLOR, &color));
 		sendMessageToOwner(Message(MessageID::SET_TARGET, &pointOfIntersection));

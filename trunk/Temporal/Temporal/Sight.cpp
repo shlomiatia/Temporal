@@ -6,10 +6,12 @@
 #include "Graphics.h"
 #include "Shapes.h"
 #include "MessageUtils.h"
-#include "PhysicsUtils.h"
+#include "PhysicsEnums.h"
 
 namespace Temporal
 {
+	static const int COLLISION_MASK1 = Filter1::OBSTACLE | Filter1::COVER;
+
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
 	void Sight::handleMessage(Message& message)
@@ -48,11 +50,7 @@ namespace Temporal
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 		
-		int myPeriod = getPeriod(*this);
-		int targetPeriod = getPlayerPeriod();
-		if(!canCollide(myPeriod, targetPeriod))
-			return;
-		_isSeeing = Grid::get().cast(directedSegment, myPeriod, _pointOfIntersection);
+		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection);
 		
 		if(_isSeeing)
 			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));

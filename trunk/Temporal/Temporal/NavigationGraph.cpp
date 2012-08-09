@@ -316,7 +316,7 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(const StaticBody& body, ShapeCollection& platforms) 
+	void addPlatform(StaticBody& body, ShapeCollection& platforms) 
 	{
 		const Shape& platform = body.getCollisionInfo().getGlobalShape();
 		platforms.push_back(&platform);
@@ -331,7 +331,7 @@ namespace Temporal
 			const Entity& entity = (*(*i).second);
 			const Component* component = entity.get(ComponentType::STATIC_BODY);
 			if(component != NULL)
-				addPlatform((const StaticBody&)(*component), platforms);
+				addPlatform((StaticBody&)(*component), platforms);
 		}
 		createNodes(platforms);
 		createEdges(platforms);

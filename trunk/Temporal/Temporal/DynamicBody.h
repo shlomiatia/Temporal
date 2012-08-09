@@ -17,14 +17,14 @@ namespace Temporal
 		// BRODER
 		static const Vector GRAVITY;
 
-		explicit DynamicBody(const CollisionInfo* collisionInfo);
+		explicit DynamicBody(CollisionInfo* collisionInfo);
 
 		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
 		const float MAX_MOVEMENT_STEP_SIZE;
-		const CollisionInfo* _collisionInfo;
+		CollisionInfo* _collisionInfo;
 		
 		// Persistent state
 		bool _gravityEnabled;
@@ -39,7 +39,7 @@ namespace Temporal
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);
 		void executeMovement(Vector movement);
-		void detectCollision(const CollisionInfo& info, Vector& collision);
+		void detectCollision(CollisionInfo& info, Vector& collision);
 		void correctCollision(const Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
 		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
 		void modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);

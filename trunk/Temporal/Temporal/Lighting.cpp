@@ -79,7 +79,7 @@ namespace Temporal
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
-		CollisionInfoCollection result = Grid::get().iterateTiles(lightAABB, 0);
+		CollisionInfoCollection result = Grid::get().iterateTiles(lightAABB);
 		for(CollisionInfoIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());

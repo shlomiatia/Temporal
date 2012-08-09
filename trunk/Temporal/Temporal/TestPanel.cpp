@@ -32,6 +32,7 @@
 #include "Lighting.h"
 #include "Particles.h"
 #include "CollisionInfo.h"
+#include "PhysicsEnums.h"
 #include <sstream>
 
 namespace Temporal
@@ -50,7 +51,7 @@ namespace Temporal
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, sensorSize), 0);
+		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, sensorSize));
 		Sensor* sensor(new Sensor(Hash("SNS_JUMP"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
@@ -64,7 +65,7 @@ namespace Temporal
 		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, sensorSize), 0);
+		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, sensorSize));
 		Sensor* sensor = new Sensor(Hash("SNS_HANG"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
@@ -75,7 +76,7 @@ namespace Temporal
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, EDGE_SENSOR_SIZE), 0);
+		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
 		Sensor* sensor = new Sensor(Hash("SNS_BACK_EDGE"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
@@ -86,7 +87,7 @@ namespace Temporal
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, EDGE_SENSOR_SIZE), 0);
+		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
 		Sensor* sensor = new Sensor(Hash("SNS_FRONT_EDGE"), info, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
 		entity.add(sensor);
 	}
@@ -146,7 +147,7 @@ namespace Temporal
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
-		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE), 0);
+		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -250,7 +251,7 @@ namespace Temporal
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Patrol* patrol = new Patrol();
-		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE), 0);
+		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -281,7 +282,7 @@ namespace Temporal
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
-		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE), 0);
+		CollisionInfo* info = new CollisionInfo(*transform, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -306,11 +307,11 @@ namespace Temporal
 	}
 
 	static int platformID = 0;
-	void createPlatform(Shape* shape, SpriteSheet* spritesheet) 
+	void createPlatform(Shape* shape, SpriteSheet* spritesheet, int filter1 = Filter1::OBSTACLE) 
 	{
 		Transform* transform = new Transform(shape->getCenter());
 		shape->setCenter(Point::Zero);
-		CollisionInfo* collisionInfo = new CollisionInfo(*transform, shape, 0);
+		CollisionInfo* collisionInfo = new CollisionInfo(*transform, shape, filter1);
 		StaticBody* staticBody = new StaticBody(collisionInfo);
 		Grid::get().add(collisionInfo);
 		Entity* entity = new Entity();
@@ -379,7 +380,7 @@ namespace Temporal
 		createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet);
 
 		// Cover
-		//createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, true);
+		createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, Filter1::COVER);
 
 		// 30
 		createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet);

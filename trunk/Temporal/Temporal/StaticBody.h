@@ -13,14 +13,13 @@ namespace Temporal
 		StaticBody(CollisionInfo* collisionInfo) : _collisionInfo(collisionInfo) {};
 		~StaticBody();
 
-		const CollisionInfo& getCollisionInfo() const { return *_collisionInfo; }
+		CollisionInfo& getCollisionInfo() { return *_collisionInfo; }
 
 		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
-		int getCollisionFilter() const;
 
 	private:
-		const CollisionInfo* _collisionInfo;
+		CollisionInfo* _collisionInfo;
 	};
 }
 #endif

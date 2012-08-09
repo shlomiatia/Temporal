@@ -144,9 +144,6 @@
     <ClInclude Include="SceneNodeSample.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsUtils.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Shapes.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -164,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEnums.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
