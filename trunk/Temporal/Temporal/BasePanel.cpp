@@ -49,11 +49,10 @@ namespace Temporal
 		}
 		if(Input::get().isQ())
 		{
-			//AABB bounds = AABB::Zero;
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_BOUNDS, &bounds));
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, static_cast<void*>(&bounds));
-			ChangePeriod(Period::PAST);
-			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
+			//ChangePeriod(Period::PAST);
+			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
 		}
 		if(Input::get().isW())
@@ -80,7 +79,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, static_cast<void*>(&lightLayer)));
 		LightSystem::get().postDraw();*/
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::DYNAMIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY;
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		
