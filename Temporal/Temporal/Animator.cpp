@@ -1,8 +1,8 @@
 #include "Animator.h"
 #include "SpriteSheet.h"
 #include "Serialization.h"
-#include "MessageParams.h"
 #include "SceneNode.h"
+#include "MessageUtils.h"
 #include <math.h>
 
 namespace Temporal
@@ -31,17 +31,17 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			const ResetAnimationParams& resetAnimationParams = *static_cast<ResetAnimationParams*>(message.getParam());
+			const ResetAnimationParams& resetAnimationParams = getResetAnimationParams(message.getParam());
 			reset(resetAnimationParams);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
 			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
@@ -49,7 +49,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
 			_repeat = serialization.deserializeBool(REPEAT_SERIALIZATION);

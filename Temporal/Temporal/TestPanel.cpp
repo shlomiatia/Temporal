@@ -28,7 +28,7 @@
 #include "Patrol.h"
 #include "Camera.h"
 #include "Laser.h"
-#include "MessageParams.h"
+#include "MessageUtils.h"
 #include "Lighting.h"
 #include "Particles.h"
 #include "CollisionInfo.h"
@@ -133,7 +133,7 @@ namespace Temporal
 			Component* rendererClone = renderer->clone();
 			if(animations != NULL)
 			{
-				Animator* animator = new Animator(*animations, static_cast<Renderer*>(rendererClone)->getRoot());
+				Animator* animator = new Animator(*animations, ((Renderer*)rendererClone)->getRoot());
 				echoEntity->add(animator);
 			}
 			echoEntity->add(rendererClone);
@@ -812,7 +812,7 @@ namespace Temporal
 		//createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		createPatrol(spritesheet, animations);
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground();

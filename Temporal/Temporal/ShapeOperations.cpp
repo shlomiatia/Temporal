@@ -281,12 +281,12 @@ namespace Temporal
 		const AABB& rect = static_cast<const AABB&>(shape1);
 		if(shape2.getType() == ShapeType::AABB)
 		{
-			const AABB& rect2 = (const AABB&)shape2;
+			const AABB& rect2 = static_cast<const AABB&>(shape2);
 			return intersects(rect, rect2, correction);
 		}
 		else if(shape2.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg = (const Segment&)shape2;
+			const Segment& seg = static_cast<const Segment&>(shape2);
 			return intersects(rect, seg, correction);
 		}
 		else
@@ -300,12 +300,12 @@ namespace Temporal
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
-			const AABB& rect = (const AABB&)shape;
+			const AABB& rect = static_cast<const AABB&>(shape);
 			return intersects(seg, rect, pointOfIntersection);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg2 = (const Segment&)shape;
+			const Segment& seg2 = static_cast<const Segment&>(shape);
 			return intersects(seg, seg2, pointOfIntersection);
 		}
 		else

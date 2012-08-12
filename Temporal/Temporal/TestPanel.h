@@ -9,8 +9,6 @@ namespace Temporal
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: Minimize casting
-	// TODO: message utils
 	// TODO: sprite size
 
 	// General
@@ -50,7 +48,7 @@ namespace Temporal
 	// TODO: Less temporal echo memory
 	// TODO: Culling
 	// TODO: Delete spritesheets, singletons, static stl containers
-	// TODO: Cache shadows/display list/FBO/circle grid/light culling/save texture
+	// TODO: Cache shadows/display list/FBO/save texture
 	class TestPanel : public BasePanel
 	{
 	public:

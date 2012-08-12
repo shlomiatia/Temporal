@@ -57,9 +57,6 @@
     <ClInclude Include="GameEnums.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="MessageParams.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="MessageUtils.h">
       <Filter>Game</Filter>
     </ClInclude>

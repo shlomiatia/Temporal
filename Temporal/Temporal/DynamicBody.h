@@ -34,8 +34,6 @@ namespace Temporal
 		Vector _absoluteImpulse;
 		Vector _groundVector;
 
-		Side::Enum getOrientation() const;
-
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);
 		void executeMovement(Vector movement);

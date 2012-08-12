@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "ViewManager.h"
 #include "CollisionInfo.h"
+#include "MessageUtils.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -19,7 +20,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_LIT)
 		{
-			_isLit = *static_cast<bool*>(message.getParam());
+			_isLit = getBoolParam(message.getParam());
 		}
 		else if(message.getID() == MessageID::IS_LIT)
 		{
@@ -68,7 +69,7 @@ namespace Temporal
 	
 	void Light::draw() const
 	{
-		Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		const Point& position = getPosition(*this);
 		Side::Enum* orientation = static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
 		bool isFlipped = orientation != NULL && *orientation == Side::LEFT;
 

@@ -1,6 +1,7 @@
 #include "StateMachineComponent.h"
 #include "Serialization.h"
 #include "BaseUtils.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -38,13 +39,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(STATE_SERIALIZATION, _currentStateID);
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			Hash stateID = Hash(serialization.deserializeUInt(STATE_SERIALIZATION));
 			setState(stateID);
@@ -52,7 +53,7 @@ namespace Temporal
 		_currentState->handleMessage(message);
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			_timer.update(framePeriodInMillis);
 			resetTempState();
 		}

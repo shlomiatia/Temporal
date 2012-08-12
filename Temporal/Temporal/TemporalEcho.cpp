@@ -1,6 +1,7 @@
 #include "TemporalEcho.h"
 #include "Serialization.h"
 #include "Color.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -56,7 +57,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			update(framePeriodInMillis);
 			if(_echoReady)
 				_echo->handleMessage(message);

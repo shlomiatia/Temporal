@@ -76,7 +76,7 @@ namespace Temporal
 
 		/*LightSystem::get().preDraw();
 		VisualLayer::Enum lightLayer = VisualLayer::LIGHT;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, static_cast<void*>(&lightLayer)));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &lightLayer));
 		LightSystem::get().postDraw();*/
 
 		ComponentType::Enum filter = ComponentType::STATIC_BODY;

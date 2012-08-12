@@ -47,7 +47,6 @@
     <ClInclude Include="TemporalEcho.h" />
     <ClInclude Include="ViewManager.h" />
     <ClInclude Include="InputController.h" />
-    <ClInclude Include="MessageParams.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Animator.h" />

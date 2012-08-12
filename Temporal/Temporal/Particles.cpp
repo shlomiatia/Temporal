@@ -3,6 +3,7 @@
 #include "Shapes.h"
 #include "Math.h"
 #include "Texture.h"
+#include "MessageUtils.h"
 #include <cstdlib>
 #include <SDL_opengl.h>
 
@@ -56,7 +57,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			int length = getLength();
 			for(int i = 0; i < length; ++i)
 			{
@@ -75,7 +76,7 @@ namespace Temporal
 			if(timeSinceLastBirth > BIRTH_THRESHOLD_IN_MILLIS)
 			{
 				_birthTimer.reset();
-				const Point& position = *(const Point*)sendMessageToOwner(Message(MessageID::GET_POSITION));
+				const Point& position = *static_cast<const Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
 
 				int bornParticles = static_cast<int>(timeSinceLastBirth / BIRTH_THRESHOLD_IN_MILLIS);
 				for(int i = 0; i < bornParticles; ++i)

@@ -1,6 +1,7 @@
 #include "DrawPosition.h"
 #include "BaseUtils.h"
 #include "Serialization.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -17,7 +18,7 @@ namespace Temporal
 			}
 			else
 			{
-				const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+				const Point& position = getPosition(*this);
 				*outParam = position + _offset;
 			}
 		}
@@ -27,12 +28,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			OVERRIDE_SERIALIZER.serialize(serialization, _override);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			OVERRIDE_SERIALIZER.deserialize(serialization, _override);
 		}
 	}
