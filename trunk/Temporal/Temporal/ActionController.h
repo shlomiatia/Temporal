@@ -11,7 +11,7 @@ namespace Temporal
 	class SensorCollisionParams;
 
 	// BRODER
-	static const float WALK_FORCE_PER_SECOND = 150.0f;
+	static const float WALK_FORCE_PER_SECOND = 250.0f;
 	static const float JUMP_FORCE_PER_SECOND = 900.0f;
 
 	/**********************************************************************************************
@@ -197,25 +197,10 @@ namespace Temporal
 		void update() const;
 	};
 
-	class Hanging : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
-
 	class Hang : public ComponentState
 	{
 	public:
 		void enter() const;
-		void handleMessage(Message& message) const;
-	};
-
-	class Drop : public ComponentState
-	{
-	public:
-		void enter() const;
-		void exit() const;
 		void handleMessage(Message& message) const;
 	};
 

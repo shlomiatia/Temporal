@@ -20,8 +20,6 @@ namespace Temporal
 
 	static const Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
 	static const Hash TURN_ANIMATION = Hash("POP_ANM_TURN");
-	static const Hash DROP_ANIMATION = Hash("POP_ANM_DROP");
-	static const Hash FALL_START_ANIMATION = Hash("POP_ANM_FALL_START");
 	static const Hash FALL_ANIMATION = Hash("POP_ANM_FALL");
 	static const Hash JUMP_UP_START_ANIMATION = Hash("POP_ANM_JUMP_UP_START");
 	static const Hash JUMP_UP_ANIMATION = Hash("POP_ANM_JUMP_UP");
@@ -31,8 +29,6 @@ namespace Temporal
 	static const Hash JUMP_FORWARD_ANIMATION = Hash("POP_ANM_JUMP_FORWARD");
 	static const Hash JUMP_FORWARD_END_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_END");
 	static const Hash WALK_ANIMATION = Hash("POP_ANM_WALK");
-	static const Hash SWING_FORWARD_ANIMATION = Hash("POP_ANM_SWING_FORWARD");
-	static const Hash SWING_BACKWARD_ANIMATION = Hash("POP_ANM_SWING_BACKWARD");
 
 	static const Hash STAND_STATE = Hash("ACT_STT_STAND");
 	static const Hash FALL_STATE = Hash("ACT_STT_FALL");
@@ -43,9 +39,7 @@ namespace Temporal
 	static const Hash JUMP_STATE = Hash("ACT_STT_JUMP");
 	static const Hash JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
 	static const Hash PREPARE_TO_HANG_STATE = Hash("ACT_STT_PREPARE_TO_HANG");
-	static const Hash HANGING_STATE = Hash("ACT_STT_HANGING");
 	static const Hash HANG_STATE = Hash("ACT_STT_HANG");
-	static const Hash DROP_STATE = Hash("ACT_STT_DROP");
 	static const Hash CLIMB_STATE = Hash("ACT_STT_CLIMB");
 	static const Hash PREPARE_TO_DESCEND_STATE = Hash("ACT_STT_PREPARE_TO_DESCEND");
 	static const Hash DESCEND_STATE = Hash("ACT_STT_DESCEND");
@@ -100,9 +94,7 @@ namespace Temporal
 		states[JUMP_STATE] = new Jump();
 		states[JUMP_END_STATE] = new JumpEnd();
 		states[PREPARE_TO_HANG_STATE] = new PrepareToHang();
-		states[HANGING_STATE] = new Hanging();
 		states[HANG_STATE] = new Hang();
-		states[DROP_STATE] = new Drop();
 		states[CLIMB_STATE] = new Climb();
 		states[PREPARE_TO_DESCEND_STATE] = new PrepareToDescend();
 		states[DESCEND_STATE] = new Descend();
@@ -432,7 +424,7 @@ namespace Temporal
 			float personCenterX = personBounds.getCenterX();
 			Point drawPosition(personCenterX, platformTop);
 			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
-			_stateMachine->changeState(HANGING_STATE);
+			_stateMachine->changeState(HANG_STATE);
 		}
 	}
 
@@ -450,19 +442,6 @@ namespace Temporal
 		}
 	}
 
-	void Hanging::enter() const
-	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SWING_BACKWARD_ANIMATION, true)));	
-	}
-
-	void Hanging::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine->changeState(HANG_STATE);
-		}
-	}
-
 	void Hang::enter() const
 	{
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
@@ -472,40 +451,15 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
-			_stateMachine->changeState(DROP_STATE);
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
+			bool gravityEnabled = true;
+			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			_stateMachine->changeState(FALL_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{	
 			_stateMachine->changeState(CLIMB_STATE);
-		}
-	}
-
-	void Drop::enter() const
-	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(DROP_ANIMATION)));
-
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
-
-		bool gravityEnabled = true;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-	}
-
-	void Drop::exit() const
-	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
-	}
-
-	void Drop::handleMessage(Message& message) const
-	{
-		// TempFlag 1 - Platform found
-		if(isSensorCollisionMessage(message, HANG_SENSOR_ID))
-		{
-			_stateMachine->setTempFlag1(true);
-		}
-		if(message.getID() == MessageID::UPDATE)
-		{
-			if(!_stateMachine->getTempFlag1())
-				_stateMachine->changeState(FALL_STATE);
 		}
 	}
 
@@ -516,7 +470,7 @@ namespace Temporal
 		float climbForceY = shape.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
@@ -580,7 +534,7 @@ namespace Temporal
 		float forceY = -(size.getHeight());
 
 		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
+		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
 	}
 
 	void Descend::handleMessage(Message& message) const

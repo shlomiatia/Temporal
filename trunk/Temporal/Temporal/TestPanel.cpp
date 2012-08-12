@@ -108,7 +108,7 @@ namespace Temporal
 
 	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
 	{
-		Animation* animation = const_cast<Animation*>((*animations)[animationID]);
+		Animation* animation = (Animation*)(*animations)[animationID];
 		if(animation == NULL)
 		{
 			animation = new Animation();
@@ -450,7 +450,7 @@ namespace Temporal
 		SpriteGroup* spriteGroup = new SpriteGroup();
 		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
 		spritesheet->add(spriteGroupID, spriteGroup);
-		Size size = texture->getSize() - Size(1.0f, 1.0f);
+		Size size = texture->getSize();
 		spriteGroup->add(new Sprite(AABB(size / 2.0f, size), Vector::Zero));
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(spriteGroupID);
@@ -631,181 +631,168 @@ namespace Temporal
 	void TestPanel::createEntities()
 	{
 		const Texture* texture = Texture::load("pop.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
+		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::RIGHT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
 		Hash animationID = Hash::INVALID;
 		Hash sceneNodeID = Hash("SCN_ROOT");
 
 		#pragma region Player Spritesheet
-		// Stand - 0
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_STAND");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(26.5, 48, 21, 84), Vector(6, -42)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// Turn - 1
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_TURN");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(60.5, 50, 23, 80), Vector(7, -40)));
-		spriteGroup->add(new Sprite(AABB(95.5, 50, 25, 80), Vector(8, -40)));
-		spriteGroup->add(new Sprite(AABB(134.5, 48, 29, 84), Vector(4, -42)));
-		spriteGroup->add(new Sprite(AABB(177, 49.5, 38, 81), Vector(5, -41)));
-		spriteGroup->add(new Sprite(AABB(224.5, 50, 43, 80), Vector(-4, -40)));
-		spriteGroup->add(new Sprite(AABB(276, 52, 36, 76), Vector(-10, -38)));
-		spriteGroup->add(new Sprite(AABB(316.5, 51, 31, 78), Vector(-8, -39)));
-		spriteGroup->add(new Sprite(AABB(359, 51.5, 28, 79), Vector(-7, -40)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 530.0f);
-		// Drop - 2
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_DROP");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(418.5, 58.5, 23, 109), Vector(-3, 54)));
-		spriteGroup->add(new Sprite(AABB(462.5, 60, 21, 96), Vector(0, 48)));
-		spriteGroup->add(new Sprite(AABB(509, 65, 22, 86), Vector(3, 43)));
-		spriteGroup->add(new Sprite(AABB(546.5, 69.5, 25, 77), Vector(7, 38)));
-		spriteGroup->add(new Sprite(AABB(584.5, 67.5, 25, 81), Vector(9, 40)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 330.0f);
-		// FallStart - 3
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_FALL_START");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(667.5, 71, 71, 76), Vector(3, -38)));
-		spriteGroup->add(new Sprite(AABB(737, 68.5, 62, 75), Vector(3, -38)));
-		spriteGroup->add(new Sprite(AABB(805.5, 67, 51, 72), Vector(10, -36)));
-		spriteGroup->add(new Sprite(AABB(866, 62, 54, 80), Vector(7, -40)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 260.0f);
-		// Fall - 4
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_FALL");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(927, 63, 34, 78), Vector(-2, -39)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// JumpUpStart - 5
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_JUMP_UP_START");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(30, 193.5, 22, 83), Vector(2, -42)));
-		spriteGroup->add(new Sprite(AABB(72.5, 193, 23, 84), Vector(2, -42)));
-		spriteGroup->add(new Sprite(AABB(114, 194, 22, 82), Vector(2, -41)));
-		spriteGroup->add(new Sprite(AABB(158, 195, 28, 80), Vector(-1, -40)));
-		spriteGroup->add(new Sprite(AABB(202, 195, 36, 80), Vector(-5, -40)));
-		spriteGroup->add(new Sprite(AABB(245.5, 194.5, 43, 81), Vector(-4, -41)));
-		spriteGroup->add(new Sprite(AABB(296, 194.5, 48, 81), Vector(-7, -41)));
-		spriteGroup->add(new Sprite(AABB(349.5, 196, 43, 78), Vector(1, -39)));
-		spriteGroup->add(new Sprite(AABB(396, 198.5, 32, 73), Vector(7, -37)));
-		spriteGroup->add(new Sprite(AABB(438, 198.5, 32, 73), Vector(7, -37)));
-		spriteGroup->add(new Sprite(AABB(486, 197.5, 42, 71), Vector(13, -36)));
-		spriteGroup->add(new Sprite(AABB(536, 195.5, 34, 75), Vector(12, -38)));
-		spriteGroup->add(new Sprite(AABB(582, 187.5, 32, 95), Vector(11, -48)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 860.0f);
-		// JumpUp - 6
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_JUMP_UP");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(630, 189.5, 32, 103), Vector(10, -52)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// Hang - 7
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_HANG");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(717.5, 190.5, 23, 111), Vector(-1, 55)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// Climb - 8
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_CLIMB");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(24.5, 342, 21, 106), Vector(-7, 49)));
-		spriteGroup->add(new Sprite(AABB(67, 348, 24, 88), Vector(-9, 40)));
-		spriteGroup->add(new Sprite(AABB(109, 348.5, 26, 89), Vector(-5, 28)));
-		spriteGroup->add(new Sprite(AABB(150.5, 346.5, 33, 91), Vector(-4, 20)));
-		spriteGroup->add(new Sprite(AABB(200.5, 348.5, 45, 81), Vector(5, 13)));
-		spriteGroup->add(new Sprite(AABB(258, 349, 48, 70), Vector(7, 10)));
-		spriteGroup->add(new Sprite(AABB(319, 349.5, 46, 59), Vector(7, 0)));
-		spriteGroup->add(new Sprite(AABB(385.5, 346, 61, 46), Vector(16, -9)));
-		spriteGroup->add(new Sprite(AABB(459.5, 347.5, 59, 41), Vector(2, -10)));
-		spriteGroup->add(new Sprite(AABB(528, 346.5, 62, 51), Vector(5, -14)));
-		spriteGroup->add(new Sprite(AABB(600, 344.5, 56, 45), Vector(14, -23)));
-		spriteGroup->add(new Sprite(AABB(660, 344.5, 52, 47), Vector(18, -24)));
-		spriteGroup->add(new Sprite(AABB(727.5, 338.5, 53, 57), Vector(11, -29)));
-		spriteGroup->add(new Sprite(AABB(787, 332.5, 52, 63), Vector(17, -32)));
-		spriteGroup->add(new Sprite(AABB(843, 330, 50, 68), Vector(20, -34)));
-		spriteGroup->add(new Sprite(AABB(896, 324, 30, 78), Vector(4, -39)));
-		spriteGroup->add(new Sprite(AABB(937, 324.5, 22, 79), Vector(3, -40)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 1120.0f);
-		// JumpForwardStart - 9
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_JUMP_FORWARD_START");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(20.5, 502, 25, 84), Vector(7, -42)));
-		spriteGroup->add(new Sprite(AABB(59.5, 503, 27, 82), Vector(8, -41)));
-		spriteGroup->add(new Sprite(AABB(106, 503, 42, 80), Vector(6, -40)));
-		spriteGroup->add(new Sprite(AABB(159.5, 508, 47, 68), Vector(12, -34)));
-		spriteGroup->add(new Sprite(AABB(225, 509, 56, 64), Vector(15, -32)));
-		spriteGroup->add(new Sprite(AABB(298.5, 507.5, 55, 65), Vector(20, -33)));
-		spriteGroup->add(new Sprite(AABB(369, 505, 54, 68), Vector(22, -34)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 460.0f);
-		// JumpForward - 10
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_JUMP_FORWARD");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(449.5, 503, 79, 70), Vector(2, -35)));
-		spriteGroup->add(new Sprite(AABB(557.5, 501, 99, 70), Vector(1, -35)));
-		spriteGroup->add(new Sprite(AABB(678.5, 507.5, 103, 61), Vector(-3, -31)));
-		spriteGroup->add(new Sprite(AABB(788, 506.5, 84, 55), Vector(-2, -28)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 260.0f);
-		// JumpForwardEnd - 11
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_JUMP_FORWARD_END");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(52, 620.5, 58, 55), Vector(-8, -28)));
-		spriteGroup->add(new Sprite(AABB(114.5, 621.5, 41, 51), Vector(-4, -26)));
-		spriteGroup->add(new Sprite(AABB(189.5, 618, 55, 60), Vector(3, -30)));
-		spriteGroup->add(new Sprite(AABB(248, 613, 44, 70), Vector(-8, -35)));
-		spriteGroup->add(new Sprite(AABB(306.5, 609, 35, 80), Vector(-2, -40)));
-		spriteGroup->add(new Sprite(AABB(352, 608, 30, 82), Vector(0, -41)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 400.0f);
-		// Walk - 12
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_WALK");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(34, 735.5, 24, 81), Vector(8, -41)));
-		spriteGroup->add(new Sprite(AABB(76, 735, 22, 80), Vector(6, -40)));
-		spriteGroup->add(new Sprite(AABB(117.5, 736.5, 27, 77), Vector(6, -39)));
-		spriteGroup->add(new Sprite(AABB(164.5, 734.5, 41, 77), Vector(0, -39)));
-		spriteGroup->add(new Sprite(AABB(226, 734.5, 54, 75), Vector(5, -38)));
-		spriteGroup->add(new Sprite(AABB(290, 734, 58, 76), Vector(5, -38)));
-		spriteGroup->add(new Sprite(AABB(358.5, 734, 57, 78), Vector(3, -39)));
-		spriteGroup->add(new Sprite(AABB(424.5, 735, 53, 76), Vector(0, -38)));
-		spriteGroup->add(new Sprite(AABB(487, 734, 50, 78), Vector(-6, -39)));
-		spriteGroup->add(new Sprite(AABB(543.5, 733, 41, 80), Vector(-3, -40)));
-		spriteGroup->add(new Sprite(AABB(593, 732.5, 26, 81), Vector(0, -41)));
-		spriteGroup->add(new Sprite(AABB(634.5, 732, 21, 82), Vector(5, -41)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 790.0f);
-		// HangingForward - 13
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_SWING_FORWARD");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(32.5, 859.5, 29, 111), Vector(1, 55)));
-		spriteGroup->add(new Sprite(AABB(91.5, 859.5, 33, 109), Vector(6, 54)));
-		spriteGroup->add(new Sprite(AABB(152.5, 863.5, 41, 107), Vector(11, 53)));
-		spriteGroup->add(new Sprite(AABB(206, 861.5, 40, 103), Vector(9, 51)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 260.0f);
-		// HangingBackwards - 14
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("POP_ANM_SWING_BACKWARD");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(252.5, 864.5, 23, 109), Vector(-6, 54)));
-		spriteGroup->add(new Sprite(AABB(295.5, 864, 35, 108), Vector(-11, 54)));
-		spriteGroup->add(new Sprite(AABB(348.5, 863, 45, 106), Vector(-16, 53)));
-		spriteGroup->add(new Sprite(AABB(408, 860.5, 52, 101), Vector(-22, 50)));
-		spriteGroup->add(new Sprite(AABB(475.5, 860, 55, 102), Vector(-22, 51)));
-		spriteGroup->add(new Sprite(AABB(539, 859.5, 56, 101), Vector(-23, 50)));
-		spriteGroup->add(new Sprite(AABB(611, 858.5, 56, 99), Vector(-22, 49)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 460.0f);
+		
+		addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_JUMP_FORWARD
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_JUMP_FORWARD");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(541.5, 232.5, 60, 58), Vector(4, -29)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_STAND
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_STAND");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(16.5, 44.5, 14, 78), Vector(-1, -39)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_TURN
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_TURN");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(46.5, 44.5, 14, 78), Vector(-1, -39)));
+spriteGroup->add(new Sprite(AABB(73.5, 44.5, 16, 78), Vector(1, -39)));
+spriteGroup->add(new Sprite(AABB(108.5, 44.5, 22, 78), Vector(4, -39)));
+spriteGroup->add(new Sprite(AABB(142.5, 44.5, 22, 78), Vector(2, -39)));
+spriteGroup->add(new Sprite(AABB(176.5, 44.5, 22, 78), Vector(1, -39)));
+spriteGroup->add(new Sprite(AABB(213.5, 44.5, 24, 78), Vector(4, -39)));
+spriteGroup->add(new Sprite(AABB(248.5, 44.5, 26, 78), Vector(1, -39)));
+spriteGroup->add(new Sprite(AABB(285.5, 44.5, 20, 78), Vector(-3, -39)));
+spriteGroup->add(new Sprite(AABB(320.5, 44.5, 22, 78), Vector(-1, -39)));
+spriteGroup->add(new Sprite(AABB(356.5, 44.5, 18, 78), Vector(-1, -39)));
+spriteGroup->add(new Sprite(AABB(387.5, 44.5, 12, 78), Vector(0, -39)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 363.0f);
+// POP_ANM_FALL
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_FALL");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(425.5, 46.5, 24, 90), Vector(4, -45)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_WALK
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_WALK");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(15.5, 136.5, 20, 78), Vector(0, -39)));
+spriteGroup->add(new Sprite(AABB(52.5, 137.5, 30, 76), Vector(1, -38)));
+spriteGroup->add(new Sprite(AABB(107.5, 137.5, 44, 76), Vector(0, -38)));
+spriteGroup->add(new Sprite(AABB(161.5, 137.5, 40, 76), Vector(1, -38)));
+spriteGroup->add(new Sprite(AABB(212.5, 136.5, 34, 78), Vector(8, -39)));
+spriteGroup->add(new Sprite(AABB(260.5, 136.5, 22, 78), Vector(5, -39)));
+spriteGroup->add(new Sprite(AABB(302.5, 136.5, 18, 78), Vector(1, -39)));
+spriteGroup->add(new Sprite(AABB(344.5, 137.5, 34, 76), Vector(-2, -38)));
+spriteGroup->add(new Sprite(AABB(394.5, 137.5, 42, 76), Vector(-2, -38)));
+spriteGroup->add(new Sprite(AABB(445.5, 138.5, 40, 74), Vector(0, -37)));
+spriteGroup->add(new Sprite(AABB(493.5, 137.5, 32, 76), Vector(2, -38)));
+spriteGroup->add(new Sprite(AABB(536.5, 137.5, 22, 76), Vector(2, -38)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 396.0f);
+// POP_ANM_JUMP_FORWARD_START
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_JUMP_FORWARD_START");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(11.5, 227.5, 16, 76), Vector(2, -38)));
+spriteGroup->add(new Sprite(AABB(49.5, 230.5, 20, 70), Vector(-6, -35)));
+spriteGroup->add(new Sprite(AABB(89.5, 232.5, 24, 66), Vector(-5, -33)));
+spriteGroup->add(new Sprite(AABB(129.5, 234.5, 32, 62), Vector(0, -31)));
+spriteGroup->add(new Sprite(AABB(177.5, 236.5, 32, 58), Vector(-8, -29)));
+spriteGroup->add(new Sprite(AABB(225.5, 235.5, 32, 60), Vector(-8, -30)));
+spriteGroup->add(new Sprite(AABB(277.5, 234.5, 44, 62), Vector(-15, -31)));
+spriteGroup->add(new Sprite(AABB(338.5, 234.5, 54, 66), Vector(-16, -33)));
+spriteGroup->add(new Sprite(AABB(402.5, 232.5, 54, 70), Vector(-22, -35)));
+spriteGroup->add(new Sprite(AABB(467.5, 231.5, 56, 64), Vector(-20, -32)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 330.0f);
+// POP_ANM_JUMP_UP_START
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_JUMP_UP_START");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(20.5, 333.5, 22, 76), Vector(0, -38)));
+spriteGroup->add(new Sprite(AABB(57.5, 333.5, 24, 76), Vector(-2, -38)));
+spriteGroup->add(new Sprite(AABB(91.5, 335.5, 28, 72), Vector(-1, -36)));
+spriteGroup->add(new Sprite(AABB(131.5, 339.5, 32, 64), Vector(-4, -32)));
+spriteGroup->add(new Sprite(AABB(172.5, 342.5, 30, 58), Vector(3, -29)));
+spriteGroup->add(new Sprite(AABB(208.5, 344.5, 22, 54), Vector(4, -27)));
+spriteGroup->add(new Sprite(AABB(246.5, 346.5, 26, 50), Vector(4, -25)));
+spriteGroup->add(new Sprite(AABB(286.5, 348.5, 30, 46), Vector(3, -23)));
+spriteGroup->add(new Sprite(AABB(330.5, 344.5, 30, 54), Vector(4, -27)));
+spriteGroup->add(new Sprite(AABB(375.5, 349.5, 36, 44), Vector(7, -22)));
+spriteGroup->add(new Sprite(AABB(420.5, 347.5, 26, 48), Vector(2, -24)));
+spriteGroup->add(new Sprite(AABB(461.5, 342.5, 32, 58), Vector(-4, -29)));
+spriteGroup->add(new Sprite(AABB(502.5, 338.5, 30, 66), Vector(-3, -33)));
+spriteGroup->add(new Sprite(AABB(540.5, 328.5, 18, 86), Vector(2, -43)));
+spriteGroup->add(new Sprite(AABB(577.5, 326.5, 20, 90), Vector(0, -45)));
+spriteGroup->add(new Sprite(AABB(609.5, 326.5, 24, 90), Vector(-2, -45)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 528.0f);
+// POP_ANM_JUMP_UP
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_JUMP_UP");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(643.5, 326.5, 24, 90), Vector(-1, -45)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_CLIMB
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_CLIMB");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(19.5, 440.5, 16, 74), Vector(-4, -37)));
+spriteGroup->add(new Sprite(AABB(54.5, 443.5, 22, 68), Vector(-5, -34)));
+spriteGroup->add(new Sprite(AABB(88.5, 447.5, 26, 60), Vector(-1, -30)));
+spriteGroup->add(new Sprite(AABB(128.5, 449.5, 26, 56), Vector(-4, -28)));
+spriteGroup->add(new Sprite(AABB(169.5, 450.5, 28, 54), Vector(-2, -27)));
+spriteGroup->add(new Sprite(AABB(212.5, 451.5, 34, 52), Vector(0, -26)));
+spriteGroup->add(new Sprite(AABB(259.5, 455.5, 40, 48), Vector(0, -24)));
+spriteGroup->add(new Sprite(AABB(311.5, 457.5, 36, 52), Vector(1, -15)));
+spriteGroup->add(new Sprite(AABB(358.5, 457.5, 34, 52), Vector(-1, -10)));
+spriteGroup->add(new Sprite(AABB(404.5, 454.5, 34, 54), Vector(1, -1)));
+spriteGroup->add(new Sprite(AABB(450.5, 458.5, 30, 54), Vector(2, -1)));
+spriteGroup->add(new Sprite(AABB(496.5, 457.5, 30, 60), Vector(3, 7)));
+spriteGroup->add(new Sprite(AABB(541.5, 454.5, 32, 62), Vector(8, 4)));
+spriteGroup->add(new Sprite(AABB(586.5, 453.5, 38, 64), Vector(8, 6)));
+spriteGroup->add(new Sprite(AABB(635.5, 455.5, 36, 64), Vector(7, 10)));
+spriteGroup->add(new Sprite(AABB(681.5, 449.5, 36, 68), Vector(11, 12)));
+spriteGroup->add(new Sprite(AABB(724.5, 448.5, 34, 70), Vector(10, 14)));
+spriteGroup->add(new Sprite(AABB(768.5, 449.5, 26, 72), Vector(6, 17)));
+spriteGroup->add(new Sprite(AABB(807.5, 449.5, 24, 72), Vector(5, 20)));
+spriteGroup->add(new Sprite(AABB(843.5, 449.5, 24, 72), Vector(4, 22)));
+spriteGroup->add(new Sprite(AABB(878.5, 447.5, 22, 72), Vector(7, 30)));
+spriteGroup->add(new Sprite(AABB(911.5, 445.5, 20, 76), Vector(6, 37)));
+spriteGroup->add(new Sprite(AABB(947.5, 441.5, 20, 80), Vector(10, 39)));
+spriteGroup->add(new Sprite(AABB(983.5, 439.5, 20, 92), Vector(9, 45)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 792.0f);
+// POP_ANM_HANG
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_HANG");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(1018.5, 438.5, 14, 94), Vector(1, 46)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
+// POP_ANM_DROP
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_DROP");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(26.5, 544.5, 26, 70), Vector(6, 34)));
+spriteGroup->add(new Sprite(AABB(78.5, 546.5, 30, 78), Vector(7, 38)));
+spriteGroup->add(new Sprite(AABB(127.5, 546.5, 24, 94), Vector(3, 46)));
+spriteGroup->add(new Sprite(AABB(166.5, 547.5, 18, 92), Vector(-1, 45)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 132.0f);
+// POP_ANM_JUMP_FORWARD_END
+spriteGroup = new SpriteGroup();
+animationID = Hash("POP_ANM_JUMP_FORWARD_END");
+spritesheet->add(animationID, spriteGroup);
+spriteGroup->add(new Sprite(AABB(614.5, 236.5, 58, 62), Vector(23, -31)));
+spriteGroup->add(new Sprite(AABB(679.5, 238.5, 48, 58), Vector(20, -29)));
+spriteGroup->add(new Sprite(AABB(736.5, 239.5, 30, 56), Vector(11, -28)));
+spriteGroup->add(new Sprite(AABB(779.5, 241.5, 28, 52), Vector(10, -26)));
+spriteGroup->add(new Sprite(AABB(823.5, 242.5, 32, 50), Vector(7, -25)));
+spriteGroup->add(new Sprite(AABB(867.5, 238.5, 28, 58), Vector(0, -29)));
+spriteGroup->add(new Sprite(AABB(906.5, 234.5, 22, 66), Vector(-2, -33)));
+spriteGroup->add(new Sprite(AABB(943.5, 230.5, 16, 74), Vector(-1, -37)));
+addAnimation(animations, animationID, sceneNodeID, animationID, 264.0f);
 
-#pragma endregion
+
+		#pragma endregion
 
 		//createSkeleton();
 		createPlayer(spritesheet, animations);
