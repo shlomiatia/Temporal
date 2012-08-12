@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "MessageParams.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -29,7 +29,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = *static_cast<float*>(message.getParam());
+				float framePeriodInMillis = getFloatParam(message.getParam());
 				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
 					_stateMachine->changeState(TURN_STATE);
 			}

@@ -1,4 +1,5 @@
 #include "CollisionFilter.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -9,7 +10,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::SET_COLLISION_GROUP)
 		{
-			int group = *static_cast<int*>(message.getParam());
+			int group = getIntParam(message.getParam());
 			_group = group;
 		}
 		else if(message.getID() == MessageID::GET_COLLISION_GROUP)

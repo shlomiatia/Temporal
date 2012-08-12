@@ -277,12 +277,12 @@ namespace Temporal
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
-			const AABB& rect = (const AABB&)shape;
+			const AABB& rect = static_cast<const AABB&>(shape);
 			draw(rect, color);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
 		{
-			const Segment& seg = (const Segment&)shape;
+			const Segment& seg = static_cast<const Segment&>(shape);
 			draw(seg, color);
 		}
 		else

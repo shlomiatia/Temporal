@@ -8,6 +8,7 @@
 #include "Graphics.h"
 #include "CollisionInfo.h"
 #include "PhysicsEnums.h"
+#include "MessageUtils.h"
 #include <algorithm>
 
 namespace Temporal
@@ -49,8 +50,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
-			const Vector& param = *static_cast<Vector*>(message.getParam());
-			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			const Vector& param = getVectorParam(message.getParam());
+			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
 
 			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
 			_velocity.setVx(0.0f);
@@ -58,29 +59,29 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
-			const Vector& param = *static_cast<Vector*>(message.getParam());
-			_absoluteImpulse = Vector(param.getVx() * getOrientation(), param.getVy());
+			const Vector& param = getVectorParam(message.getParam());
+			_absoluteImpulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
-			_gravityEnabled = *static_cast<bool*>(message.getParam());
+			_gravityEnabled = getBoolParam(message.getParam());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(IS_GRAVITY_ENABLED_SERIALIZATION, _gravityEnabled);
 			VELOCITY_SERIALIZER.serialize(serialization, _velocity);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_gravityEnabled = serialization.deserializeBool(IS_GRAVITY_ENABLED_SERIALIZATION);
 			VELOCITY_SERIALIZER.deserialize(serialization, _velocity);
 		}
@@ -255,14 +256,8 @@ namespace Temporal
 
 	void DynamicBody::changePosition(const Vector& offset)
 	{
-		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		const Point& position = getPosition(*this);
 		Point newPosition = position + offset;
 		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
-	}
-
-	Side::Enum DynamicBody::getOrientation() const
-	{
-		Side::Enum orientation = *static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
-		return orientation;
 	}
 }

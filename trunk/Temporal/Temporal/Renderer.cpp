@@ -4,7 +4,7 @@
 #include "Hash.h"
 #include "Serialization.h"
 #include "SceneNode.h"
-#include "MessageParams.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -17,7 +17,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_ALPHA)
 		{
-			float alpha = *static_cast<float*>(message.getParam());
+			float alpha = getFloatParam(message.getParam());
 			_color.setA(alpha);
 		}
 		else if(message.getID() == MessageID::DRAW)
@@ -34,10 +34,10 @@ namespace Temporal
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		sendMessageToOwner(getDrawPosition);
 		if(position == Vector::Zero)
-			position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+			position = getPosition(*this);
 
 		Side::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Side::Enum entityOrientation = *(const Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
 
 		_root->setMirrored(entityOrientation != spritesheetOrientation);
 		_root->setTranslation(position);

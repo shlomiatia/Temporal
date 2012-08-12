@@ -1,6 +1,7 @@
 #include "Transform.h"
 #include "Serialization.h"
 #include "BaseUtils.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -19,15 +20,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			POSITION_SERIALIZER.serialize(serialization, _position);
 			serialization.serialize(ORIENTATION_SERIALIZATION, _orientation);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			POSITION_SERIALIZER.deserialize(serialization, _position);
-			_orientation = (Side::Enum)serialization.deserializeInt(ORIENTATION_SERIALIZATION);
+			_orientation = static_cast<Side::Enum>(serialization.deserializeInt(ORIENTATION_SERIALIZATION));
 		}
 		else if(message.getID() == MessageID::GET_ORIENTATION)
 		{

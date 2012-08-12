@@ -5,6 +5,7 @@
 #include "Shapes.h"
 #include "Math.h"
 #include "Texture.h"
+#include "MessageUtils.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -20,7 +21,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_ALPHA)
 		{
-			float alpha = *static_cast<float*>(message.getParam());
+			float alpha = getFloatParam(message.getParam());
 			_color.setA(alpha);
 		}
 		else if(message.getID() == MessageID::SET_TARGET)
@@ -35,19 +36,19 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			TARGET_SERIALIZER.serialize(serialization, _target);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			TARGET_SERIALIZER.deserialize(serialization, _target);
 		}
 	}
 	
 	void LineRenderer::draw() const
 	{
-		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		const Point& position = getPosition(*this);
 
 		glPushMatrix();
 		{	

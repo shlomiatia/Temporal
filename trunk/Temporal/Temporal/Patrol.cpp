@@ -58,7 +58,7 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& actionID = *static_cast<Hash*>(message.getParam());
+				const Hash& actionID = getHashParam(message.getParam());
 				if(actionID == ACTION_TURN_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}

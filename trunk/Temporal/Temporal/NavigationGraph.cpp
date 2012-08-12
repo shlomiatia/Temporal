@@ -102,7 +102,7 @@ namespace Temporal
 					intersects(lowerSlope, platform, &lowerSlopePoint);
 					float min = platform.getLeft();
 					float max = platform.getRight();
-					const Segment& segment = (const Segment&)platform;
+					const Segment& segment = static_cast<const Segment&>(platform);
 					Vector segmentVector = segment.getNaturalVector();
 					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
 					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
@@ -186,7 +186,7 @@ namespace Temporal
 		{
 			// Create area from platform
 			const Shape& platform = **i;
-			const Segment& segment = (const Segment&)platform;
+			const Segment& segment = static_cast<const Segment&>(platform);
 			Vector vector = segment.getNaturalVector();
 			float angle = vector.getAngle();
 			if(!isModerateAngle(angle))

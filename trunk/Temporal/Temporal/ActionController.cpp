@@ -1,5 +1,4 @@
 #include "ActionController.h"
-#include "MessageParams.h"
 #include "MovementUtils.h"
 #include "MessageUtils.h"
 #include "Serialization.h"
@@ -7,7 +6,6 @@
 #include "NumericPair.h"
 #include "Shapes.h"
 #include "Math.h"
-#include "MessageParams.h"
 #include "DynamicBody.h"
 
 namespace Temporal
@@ -59,6 +57,11 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Helpers
 	 *********************************************************************************************/
+	ActionController& getActionController(StateMachineComponent* stateMachine)
+	{
+		return *static_cast<ActionController*>(stateMachine);
+	}
+
 	JumpInfoProvider::JumpInfoProvider()
 	{
 		_data[ANGLE_45_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
@@ -113,14 +116,14 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(JUMP_INFO_SERIALIZATION, getJumpHelper().getAngle());
 			serialization.serialize(LEDGE_DIRECTED_SERIALIZATION, getJumpHelper().isLedgeDirected());
 			HANG_DESCEND_POINT_SERIALIZATION.serialize(serialization, getHangDescendHelper().getPoint());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			const Serialization& serialization = getSerializationParam(message.getParam());
 			getJumpHelper().setAngle(serialization.deserializeFloat(JUMP_INFO_SERIALIZATION));
 			getJumpHelper().setLedgeDirected(serialization.deserializeBool(LEDGE_DIRECTED_SERIALIZATION));
 			Point point = Point::Zero;
@@ -134,8 +137,8 @@ namespace Temporal
 	 *********************************************************************************************/
 	bool canJumpForward(StateMachineComponent* component)
 	{
-		const Vector& groundVector = *static_cast<Vector*>(component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR)));
-		Side::Enum orientation = *(Side::Enum*)component->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Vector& groundVector = getVectorParam(component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR)));
+		Side::Enum orientation = getOrientation(*component);
 
 		return !sameSign(static_cast<float>(orientation), groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
@@ -157,7 +160,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
 		{
-			static_cast<ActionController*>(_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
+			getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
 			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
 		}
 		// TempFlag1 - Is descending
@@ -167,8 +170,8 @@ namespace Temporal
 		}
 		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
 		{
-			const SensorCollisionParams& params = *static_cast<SensorCollisionParams*>(message.getParam());
-			static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().setPoint(params);
+			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
+			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_DESCEND_STATE);
 		}
 		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
@@ -192,13 +195,13 @@ namespace Temporal
 		}
 		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			const SensorCollisionParams& params = *static_cast<SensorCollisionParams*>(message.getParam());
-			static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().setPoint(params);
+			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
+			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			const Vector& collision = *static_cast<Vector*>(message.getParam());
+			const Vector& collision = getVectorParam(message.getParam());
 			if(collision.getVy() < 0.0f)
 				_stateMachine->changeState(STAND_STATE);
 		}
@@ -220,7 +223,7 @@ namespace Temporal
 		{
 			if(canJumpForward(_stateMachine))
 			{
-				static_cast<ActionController*>(_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
+				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(JUMP_START_STATE);
 			}
 		}
@@ -232,7 +235,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			const Vector& collision = *static_cast<Vector*>(message.getParam());
+			const Vector& collision = getVectorParam(message.getParam());
 			if(collision.getVy() >= 0.0f)
 				_stateMachine->setTempFlag2(true);
 		}
@@ -277,14 +280,14 @@ namespace Temporal
 
 	void PrepareToJump::handleJumpSensor(Message &message) const
 	{
-		const SensorCollisionParams& sensor = *static_cast<SensorCollisionParams*>(message.getParam());
-		const Point* point = sensor.getPoint();
-		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
+		const Point* point = params.getPoint();
+		Side::Enum orientation = getOrientation(*_stateMachine);
 		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 		float target = point->getX();
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
-		JumpHelper& jumpHelper = static_cast<ActionController*>(_stateMachine)->getJumpHelper();
+		JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
 
 		float max = 0.0f;
 		const Vector& gravity = DynamicBody::GRAVITY;
@@ -313,14 +316,14 @@ namespace Temporal
 
 	void PrepareToJump::enter() const
 	{
-		static_cast<ActionController*>(_stateMachine)->getJumpHelper().setLedgeDirected(false);
+		getActionController(_stateMachine).getJumpHelper().setLedgeDirected(false);
 	}
 
 	void PrepareToJump::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
 		{
-			static_cast<ActionController*>(_stateMachine)->getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
+			getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
 			_stateMachine->changeState(JUMP_START_STATE);
 		}
 		else if(isSensorCollisionMessage(message, JUMP_SENSOR_ID))
@@ -335,7 +338,7 @@ namespace Temporal
 
 	void JumpStart::enter() const
 	{
-		Hash animation = static_cast<ActionController*>(_stateMachine)->getJumpHelper().getInfo().getStartAnimation();
+		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getStartAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
@@ -343,7 +346,7 @@ namespace Temporal
 	{		
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
-			JumpHelper& jumpHelper = static_cast<ActionController*>(_stateMachine)->getJumpHelper();
+			JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
 			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
 			{
 				jumpHelper.setAngle(JumpInfoProvider::get().getFarthest());
@@ -362,7 +365,7 @@ namespace Temporal
 
 	void Jump::enter() const
 	{
-		const JumpHelper& jumpHelper = static_cast<ActionController*>(_stateMachine)->getJumpHelper();
+		const JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
 		float angle = jumpHelper.getAngle();
 		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
 		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
@@ -381,13 +384,13 @@ namespace Temporal
 		}
 		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			const SensorCollisionParams& params = *static_cast<SensorCollisionParams*>(message.getParam());
-			static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().setPoint(params);
+			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
+			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			const Vector& collision = *static_cast<Vector*>(message.getParam());
+			const Vector& collision = getVectorParam(message.getParam());
 			if(collision.getVy() < 0.0f)
 				_stateMachine->changeState(JUMP_END_STATE);
 		}
@@ -395,7 +398,7 @@ namespace Temporal
 
 	void JumpEnd::enter() const
 	{
-		Hash animation = static_cast<ActionController*>(_stateMachine)->getJumpHelper().getInfo().getEndAnimation();
+		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getEndAnimation();
 		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
@@ -410,12 +413,12 @@ namespace Temporal
 	void PrepareToHang::update() const
 	{
 		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
-		const Point& point = static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().getPoint();
+		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
-		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = getOrientation(*_stateMachine);
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float movementX = (platformEdge - entityFront) * orientation;
@@ -534,9 +537,9 @@ namespace Temporal
 
 	void PrepareToDescend::update() const
 	{
-		Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		Side::Enum orientation = getOrientation(*_stateMachine);
 		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
-		const Point& point = static_cast<ActionController*>(_stateMachine)->getHangDescendHelper().getPoint();
+		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;

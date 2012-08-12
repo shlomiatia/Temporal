@@ -13,7 +13,7 @@ namespace Temporal
 			std::ostringstream title;
 			static const int MAX_SAMPLES = 100;
 			static int samples[MAX_SAMPLES];
-			static int sum = 0;
+			static float sum = 0.0f;
 			static int sampleIndex = 0;
 			static int lastTick = 0;
 			static int newSample = 0;
@@ -30,7 +30,7 @@ namespace Temporal
 				samples[sampleIndex] = newSample;
 				sampleIndex = (sampleIndex + 1) % MAX_SAMPLES;
 
-				title << "FPS: " << (1000.0f * MAX_SAMPLES) / (static_cast<float>(sum));
+				title << "FPS: " << (1000.0f * MAX_SAMPLES) / sum;
 				
 			}
 			lastTick = Thread::getElapsedTimeInMillis();

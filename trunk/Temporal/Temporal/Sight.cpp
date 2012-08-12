@@ -39,8 +39,8 @@ namespace Temporal
 		   sourceCollisionGroup != targetCollisionGroup)
 		   return;
 
-		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Point& sourcePosition = getPosition(*this);
+		Side::Enum sourceSide = getOrientation(*this);
 		const Point& targetPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 
 		// Check orientation
@@ -48,7 +48,7 @@ namespace Temporal
 			return;
 
 		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
-		if(isLit != NULL && !*static_cast<bool*>(isLit))
+		if(isLit != NULL && !getBoolParam(isLit))
 			return;
 
 		// Check field of view
@@ -85,8 +85,8 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
-		const Point& sourcePosition = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
-		Side::Enum sourceSide = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+		const Point& sourcePosition = getPosition(*this);
+		Side::Enum sourceSide = getOrientation(*this);
 
 		drawFieldOfView(sourcePosition, sourceSide);
 		if(_pointOfIntersection != Point::Zero)

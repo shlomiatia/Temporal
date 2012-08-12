@@ -24,24 +24,24 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = *static_cast<float*>(message.getParam());			
+			float framePeriodInMillis = getFloatParam(message.getParam());
 			update(framePeriodInMillis);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(DIRECTION_SERIALIZATION, _isPositiveDirection);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_isPositiveDirection = serialization.deserializeBool(DIRECTION_SERIALIZATION);
 		}
 	}
 
 	void Laser::update(float framePeriodInMillis)
 	{
-		const Point& position = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		const Point& position = getPosition(*this);
 		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 		Vector directionVector = segment.getNaturalVector().normalize();
 		Vector laserVector = directionVector.getRightNormal();

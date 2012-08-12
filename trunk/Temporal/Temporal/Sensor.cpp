@@ -2,7 +2,6 @@
 #include "Grid.h"
 #include "Math.h"
 #include "ShapeOperations.h"
-#include "MessageParams.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
 #include "CollisionInfo.h"
@@ -17,7 +16,7 @@ namespace Temporal
 	void Sensor::update()
 	{
 		_point = Point::Zero;
-		const AABB& sensorShape = (const AABB&)_collisionInfo->getGlobalShape();
+		const AABB& sensorShape = static_cast<const AABB&>(_collisionInfo->getGlobalShape());
 		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK);
 		for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 		{
@@ -27,7 +26,7 @@ namespace Temporal
 			if(intersects(sensorShape, shape))
 			{
 				bool isSensing = false;
-				const Segment& segment = (const Segment&)shape;
+				const Segment& segment = static_cast<const Segment&>(shape);
 
 				// Then check if contain one of the edges
 				Point point = Point::Zero;
@@ -48,7 +47,7 @@ namespace Temporal
 					   vector = -vector;
 					}
 					float angle = vector.getAngle();
-					Side::Enum orientation = *(Side::Enum*)sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+					Side::Enum orientation = getOrientation(*this);
 
 					// Flip the range if looking backwards
 					float rangeCenter = orientation == Side::RIGHT ? _rangeCenter : mirroredAngle( _rangeCenter);

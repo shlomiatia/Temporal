@@ -25,9 +25,14 @@ namespace Temporal
 		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
 		static const NumericPairSerializer DESTINATION_RADIUS_SERIALIZER("NAV_SER_SIZE");
 
+		Navigator& getNavigator(StateMachineComponent& stateMachine)
+		{
+			return static_cast<Navigator&>(stateMachine);
+		}
+
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
-			Navigator& navigator = static_cast<Navigator&>(stateMachine);
+			Navigator& navigator = getNavigator(stateMachine);
 			const AABB& startPosition = *static_cast<AABB*>(navigator.sendMessageToOwner(Message(MessageID::GET_SHAPE)));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
@@ -44,7 +49,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				AABB goalPosition = *static_cast<const AABB*>(message.getParam());
+				const AABB& goalPosition = *static_cast<const AABB*>(message.getParam());
 				plotPath(*_stateMachine, goalPosition); 
 			}
 		}
@@ -53,9 +58,9 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Point& position = *static_cast<Point*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_POSITION)));
+				const Point& position = getPosition(*_stateMachine);
 				float sourceX = position.getX();
-				Navigator& navigator = *(static_cast<Navigator*>(_stateMachine));
+				Navigator& navigator = getNavigator(*_stateMachine);
 				NavigationEdgeCollection* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
@@ -92,7 +97,7 @@ namespace Temporal
 				}
 				else
 				{
-					Side::Enum orientation = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+					Side::Enum orientation = getOrientation(*_stateMachine);
 					if(distance < 0)
 						sendDirectionAction(*_stateMachine, Side::LEFT);
 					else
@@ -105,10 +110,10 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				Navigator* navigator = static_cast<Navigator*>(_stateMachine);
-				NavigationEdgeCollection* path = navigator->getPath();
+				Navigator& navigator = getNavigator(*_stateMachine);
+				NavigationEdgeCollection* path = navigator.getPath();
 				const NavigationEdge* edge = (*path)[0];
-				Side::Enum currentSide = *(Side::Enum*)_stateMachine->sendMessageToOwner(Message(MessageID::GET_ORIENTATION));
+				Side::Enum currentSide = getOrientation(*_stateMachine);
 				Side::Enum targetSide = edge->getSide();
 				if(currentSide != targetSide)
 				{
@@ -119,21 +124,21 @@ namespace Temporal
 					path->erase(path->begin());
 					if(path->size() == 0)
 					{
-						navigator->setPath(NULL);
+						navigator.setPath(NULL);
 					}
 					if(edge->getType() == NavigationEdgeType::DESCEND)
-						navigator->changeState(DESCEND_STATE);
+						navigator.changeState(DESCEND_STATE);
 					else if(edge->getType() == NavigationEdgeType::FALL)
-						navigator->changeState(FALL_STATE);
+						navigator.changeState(FALL_STATE);
 					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD)
-						navigator->changeState(JUMP_FORWARD_STATE);
+						navigator.changeState(JUMP_FORWARD_STATE);
 					else if(edge->getType() == NavigationEdgeType::JUMP_UP)
-						navigator->changeState(JUMP_UP_STATE);
+						navigator.changeState(JUMP_UP_STATE);
 					else if(edge->getType() == NavigationEdgeType::WALK)
 					{
-						navigator->changeState(WALK_STATE);
+						navigator.changeState(WALK_STATE);
 						// Prevent stop when edge is walk
-						navigator->handleMessage(message);
+						navigator.handleMessage(message);
 					}
 				}
 			}
@@ -143,7 +148,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *static_cast<Hash*>(message.getParam());
+				const Hash& state = getHashParam(message.getParam());
 				if(state == ACTION_FALL_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -157,7 +162,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *static_cast<Hash*>(message.getParam());
+				const Hash& state = getHashParam(message.getParam());
 				if(state == ACTION_CLIMB_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -177,7 +182,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *static_cast<Hash*>(message.getParam());
+				const Hash& state = getHashParam(message.getParam());
 				if(state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -187,7 +192,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = *static_cast<Hash*>(message.getParam());
+				const Hash& state = getHashParam(message.getParam());
 				if(state == ACTION_DROP_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -237,7 +242,7 @@ namespace Temporal
 
 	void Navigator::debugDraw() const
 	{
-		Point currentPoint = *static_cast<Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		Point currentPoint = getPosition(*this);
 		NavigationEdgeCollection* path = getPath();
 			
 		if(path != NULL)
@@ -259,13 +264,13 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if(message.getID() == MessageID::SERIALIZE)
 		{
-			Serialization& serialization = *static_cast<Serialization*>(message.getParam());
+			Serialization& serialization = getSerializationParam(message.getParam());
 			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
 			DESTINATION_RADIUS_SERIALIZER.serialize(serialization, _destination.getRadius());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
-			const Serialization& serialization = *static_cast<const Serialization*>(message.getParam());
+			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			deserialize(serialization);
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
