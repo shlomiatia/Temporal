@@ -161,9 +161,9 @@ namespace Temporal
 
 			// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
 			float imageLeft = texturePart.getLeft();
-			float imageRight = texturePart.getRight() + 1.0f;
+			float imageRight = texturePart.getRight();
 			float imageTop = texturePart.getBottom();
-			float imageBottom = texturePart.getTop() + 1.0f;
+			float imageBottom = texturePart.getTop();
 
 			const float textureLeft = imageLeft / textureWidth;
 			const float textureRight = imageRight / textureWidth;
