@@ -3,10 +3,16 @@
 #include "Graphics.h"
 #include "ShapeOperations.h"
 #include "Fixture.h"
+#include "NumericPair.h"
 #include <algorithm>
 
 namespace Temporal
 {
+	AABB Grid::getTileAABB(int i, int j) const
+	{
+		return AABB(Point(getTileAxisCenter(i), getTileAxisCenter(j)), Size(_tileSize, _tileSize));
+	}
+
 	void Grid::init(const Size& worldSize, float tileSize)
 	{
 		_tileSize = tileSize;
@@ -37,16 +43,7 @@ namespace Temporal
 				FixtureCollection* fixtures = getTile(i, j);
 				if(fixtures != NULL && fixtures->size() != 0)
 				{
-					Color color = Color(0.0f, 0.0f, 1.0f, 0.3f);
-					for(FixtureIterator iterator = fixtures->begin(); iterator != fixtures->end(); ++iterator)
-					{
-						if((**iterator).getFilter().getFilter() == 4)
-						{
-							color.setR(1.0f);
-							break;
-						}
-					}
-					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), color);
+					Graphics::get().draw(getTileAABB(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
 				}
 			}
 		}
@@ -55,7 +52,7 @@ namespace Temporal
 	void Grid::add(Fixture* body, int i, int j)
 	{
 		int index = getIndex(i, j);
-		FixtureCollection* bodies = getTile(index);
+		FixtureCollection* bodies = getTile(i, j);
 		if(bodies == NULL)
 		{
 			bodies = new FixtureCollection();
@@ -76,7 +73,9 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				add(body, i, j);
+				AABB tile = getTileAABB(i, j);
+				if(intersects(tile, body->getGlobalShape()))
+					add(body, i, j);
 			}
 		}
 	}
@@ -100,8 +99,7 @@ namespace Temporal
 			{
 				if(i >= leftIndex && i <= rightIndex && j >= bottomIndex && j <= topIndex)
 					continue;
-				int index = getIndex(i, j);
-				FixtureCollection* bodies = getTile(index);
+				FixtureCollection* bodies = getTile(i, j);
 				if(bodies == NULL)
 					continue;
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
@@ -129,11 +127,6 @@ namespace Temporal
 	FixtureCollection* Grid::getTile(int i, int j) const
 	{
 		int index = getIndex(i, j);
-		return getTile(index);
-	}
-
-	FixtureCollection* Grid::getTile(int index) const
-	{
 		if(index < 0 || index >= getSize())
 			return NULL;
 		else
@@ -167,22 +160,20 @@ namespace Temporal
 		int di = ((x1 < x2) ? 1 : ((x1 > x2) ? -1 : 0));
 		int dj = ((y1 < y2) ? 1 : ((y1 > y2) ? -1 : 0));
 
-		const float tileSize = Grid::get().getTileSize();
-
 		// Determine tx and ty, the values of t at which the directed segment
 		// (x1,y1)-(x2,y2) crosses the first horizontal and vertical cell
 		// boundaries, respectively. Min(tx, ty) indicates how far one can
 		// travel along the segment and still remain in the current cell
-		float minx = tileSize * floorf(x1/tileSize), maxx = minx + tileSize;
+		float minx = _tileSize * floorf(x1/_tileSize), maxx = minx + _tileSize;
 		float tx = ((x1 > x2) ? (x1 - minx) : (maxx - x1)) / abs(x2 - x1);
-		float miny = tileSize * floorf(y1/tileSize), maxy = miny + tileSize;
+		float miny = _tileSize * floorf(y1/_tileSize), maxy = miny + _tileSize;
 		float ty = ((y1 > y2) ? (y1 - miny) : (maxy - y1)) / abs(y2 - y1);
 
 		// Determine deltax/deltay, how far (in units of t) one must step
 		// along the directed line segment for the horizontal/vertical
 		// movement (respectively) to equal the width/height of a cell
-		float deltatx = tileSize / abs(x2 - x1);
-		float deltaty = tileSize / abs(y2 - y1);
+		float deltatx = _tileSize / abs(x2 - x1);
+		float deltaty = _tileSize / abs(y2 - y1);
 
 		pointOfIntersection = destination;
 		// Main loop. Visits cells until last cell reached
@@ -230,8 +221,7 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				int index = getIndex(i, j);
-				FixtureCollection* bodies = getTile(index);
+				FixtureCollection* bodies = getTile(i, j);
 				if(bodies != NULL)
 				{
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
