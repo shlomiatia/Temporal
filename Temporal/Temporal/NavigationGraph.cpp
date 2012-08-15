@@ -9,6 +9,7 @@
 #include "StaticBody.h"
 #include "Fixture.h"
 #include "Graphics.h"
+#include "PhysicsEnums.h"
 
 namespace Temporal
 {
@@ -318,8 +319,11 @@ namespace Temporal
 
 	void addPlatform(StaticBody& body, ShapeCollection& platforms) 
 	{
-		const Shape& platform = body.getFixture().getGlobalShape();
-		platforms.push_back(&platform);
+		if(body.getFixture().getFilter().getFilter() == FilterType::OBSTACLE)
+		{
+			const Shape& platform = body.getFixture().getGlobalShape();
+			platforms.push_back(&platform);
+		}
 	}
 
 	void NavigationGraph::init()

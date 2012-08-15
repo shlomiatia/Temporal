@@ -23,9 +23,6 @@ namespace Temporal
 
 	// Physics
 	// TODO: moving platforms
-	// TODO: Sensor/Button
-	// TODO: Check sensor each movement step
-	// TODO: Insert segments to grid using grid traversale algorithm
 	// TODO: Store YABP in grid
 
 	// Graphics
