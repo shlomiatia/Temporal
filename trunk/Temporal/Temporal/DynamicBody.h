@@ -37,11 +37,10 @@ namespace Temporal
 		void update(float framePeriodInMillis);
 		Vector determineMovement(float framePeriodInMillis);
 		void executeMovement(Vector movement);
-		void detectCollision(CollisionInfo& info, Vector& collision);
-		void correctCollision(const Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
+		void detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision);
+		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
 		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
 		void modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
-		void changePosition(const Vector& offset);
 	};
 }
 #endif

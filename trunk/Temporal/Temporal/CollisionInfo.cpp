@@ -6,14 +6,15 @@
 namespace Temporal
 {
 	CollisionInfo::CollisionInfo(const Transform& transform, const CollisionFilter& filter, const Shape* shape)
-			: _transform(transform), _filter(filter), _localShape(shape), _globalShape(shape->clone()) {}
+			: _transform(transform), _filter(filter), _localShape(shape), _globalShape(shape->clone())
+	{
+		update();
+	}
 
-	const Shape& CollisionInfo::getGlobalShape()
+	void CollisionInfo::update()
 	{
 		_globalShape->setCenter(_localShape->getCenter());
 		_globalShape->rotate(_transform.getOrientation());
 		_globalShape->translate(_transform.getPosition());
-		return *_globalShape;
 	}
-
 }
