@@ -7,6 +7,7 @@
 #include "NumericPair.h"
 #include "Serialization.h"
 #include "MessageUtils.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
@@ -65,14 +66,12 @@ namespace Temporal
 		}
 		Point newPosition = position + movement;
 		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
-		Point pointOfIntersection = Point::Zero;
-		Grid::get().cast(newPosition, laserVector, pointOfIntersection);
-		Segment seg = SegmentPP(newPosition, pointOfIntersection);
-		bool isDetecting = false;
-		const AABB& rect = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
-		isDetecting = intersects(rect, seg);
-		Color color = isDetecting ? Color::Green : Color::Red;
-		raiseMessage(Message(MessageID::SET_COLOR, &color));
-		raiseMessage(Message(MessageID::SET_TARGET, &pointOfIntersection));
+		RayCastResult result;
+		if(Grid::get().cast(newPosition, laserVector, result))
+		{
+			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
+			raiseMessage(Message(MessageID::SET_COLOR, &color));
+			raiseMessage(Message(MessageID::SET_TARGET, const_cast<Point*>(&result.getPoint())));
+		}
 	}
 }

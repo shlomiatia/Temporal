@@ -49,7 +49,7 @@ namespace Temporal
 		}
 	}
 
-	void Grid::add(Fixture* body, int i, int j)
+	void Grid::add(const Fixture* body, int i, int j)
 	{
 		int index = getIndex(i, j);
 		FixtureCollection* bodies = getTile(i, j);
@@ -61,7 +61,7 @@ namespace Temporal
 		bodies->push_back(body);
 	}
 
-	void Grid::add(Fixture* body)
+	void Grid::add(const Fixture* body)
 	{
 		const Shape& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
@@ -80,7 +80,7 @@ namespace Temporal
 		}
 	}
 
-	void Grid::update(const Shape& previous, Fixture* body)
+	void Grid::update(const Shape& previous, const Fixture* body)
 	{
 		const Shape& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
@@ -133,17 +133,12 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask, int group)
+	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask, int group) const
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
-		return cast(ray, pointOfIntersection, mask, group);
-	}
-
-	bool Grid::cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask, int group)
-	{
-		const Point& origin = dirSeg.getOrigin();
-		const Point& destination = dirSeg.getTarget();
+		const Point& origin = ray.getOrigin();
+		const Point& destination = ray.getTarget();
 		float x1 = origin.getX();
 		float y1 = origin.getY();
 		float x2 = destination.getX();
@@ -175,20 +170,33 @@ namespace Temporal
 		float deltatx = _tileSize / abs(x2 - x1);
 		float deltaty = _tileSize / abs(y2 - y1);
 
-		pointOfIntersection = destination;
+		float minDistance = ray.getVector().getLength();
+
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
 			FixtureCollection* bodies = getTile(i, j);
+			AABB tile = getTileAABB(i, j);
 			if(bodies != NULL)
 			{
+				float distance = 0;
+				Point pointOfIntersection = Point::Zero;
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
-					Fixture& body = **iterator;
-					if(body.getFilter().canCollide(mask, group) && intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
+					const Fixture& body = **iterator;
+					if(body.getFilter().canCollide(mask, group) &&
+					   intersects(ray, body.getGlobalShape(), &pointOfIntersection, &distance) &&
+					   tile.contains(pointOfIntersection) &&
+					   distance < minDistance)
 					{
-						return false;
+						result.setFixture(&body);
+						result.SetPoint(pointOfIntersection);
+						minDistance = distance;
 					}
+				}
+				if(result.getPoint() != Point::Zero)
+				{
+					return true;
 				}
 			}
 			if (tx <= ty) 
@@ -204,8 +212,7 @@ namespace Temporal
 				j += dj;
 			}
 		}
-			
-		return true;
+		return false;
 	}
 
 	FixtureCollection Grid::iterateTiles(const Shape& shape, int mask, int group) const
@@ -226,7 +233,7 @@ namespace Temporal
 				{
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
-						Fixture* body = *i;
+						const Fixture* body = *i;
 						if(body->getFilter().canCollide(mask, group))
 							result.push_back(body);
 					}

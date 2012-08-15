@@ -10,6 +10,7 @@ namespace Temporal
 			OBSTACLE = 1,
 			COVER = 2,
 			CHARACTER = 4,
+			PLAYER = 8
 		};
 	}
 }

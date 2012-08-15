@@ -146,7 +146,7 @@ namespace Temporal
 	void createPlayer(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
+		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::PLAYER);
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
 		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
@@ -478,7 +478,7 @@ namespace Temporal
 		entity->add(transform);
 		entity->add(laser);
 		entity->add(renderer);
-		entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 
 		//createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
@@ -798,10 +798,10 @@ namespace Temporal
 
 		//createSkeleton();
 		createPlayer(spritesheet, animations);
-		//createLaser();
+		createLaser();
 		//createSentry(spritesheet);
 		//createCamera();
-		//createPatrol(spritesheet, animations);
+		createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
 		createPlatforms();
 		createBackground(Point(512.0f, 384.0f));

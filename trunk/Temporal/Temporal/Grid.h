@@ -7,11 +7,28 @@
 
 namespace Temporal
 {
+	class Point;
+	class Vector;
 	class Fixture;
 	class DirectedSegment;
 
-	typedef std::vector<Fixture*> FixtureCollection;
+	typedef std::vector<const Fixture*> FixtureCollection;
 	typedef FixtureCollection::const_iterator FixtureIterator;
+
+	class RayCastResult
+	{
+	public:
+		RayCastResult() : _fixture(NULL), _point(Point::Zero) {}
+
+		const Fixture& getFixture() const { return *_fixture; }
+		void setFixture(const Fixture* fixture) { _fixture = fixture; }
+		const Point& getPoint() const { return _point; }
+		void SetPoint(const Point& point) { _point = point; }
+
+	private:
+		const Fixture* _fixture;
+		Point _point;
+	};
 
 	class Grid
 	{
@@ -25,11 +42,10 @@ namespace Temporal
 		void init(const Size& worldSize, float tileSize);
 		void dispose();
 
-		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask = -1, int group = -1);
-		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask = -1, int group = -1);
+		void add(const Fixture* body);
+		void update(const Shape& previous, const Fixture* body);
 
-		void add(Fixture* body);
-		void update(const Shape& previous, Fixture* body);
+		bool cast(const Point& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
 		FixtureCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;
@@ -46,7 +62,7 @@ namespace Temporal
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }
 
-		void add(Fixture* body, int i, int j);
+		void add(const Fixture* body, int i, int j);
 		FixtureCollection* getTile(int i, int j) const;
 
 		Grid() {};

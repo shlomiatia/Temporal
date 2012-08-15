@@ -79,7 +79,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &lightLayer));
 		LightSystem::get().postDraw();*/
 
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT;
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
 		
