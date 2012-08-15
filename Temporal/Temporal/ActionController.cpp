@@ -207,7 +207,7 @@ namespace Temporal
 	}
 
 	// BRODER
-	const float Walk::NO_FLOOR_TIME_TO_FALL_IN_MILLIS = 50.0f;
+	const float Walk::NO_FLOOR_TIME_TO_FALL_IN_MILLIS = 75.0f;
 
 	void Walk::handleMessage(Message& message) const
 	{
