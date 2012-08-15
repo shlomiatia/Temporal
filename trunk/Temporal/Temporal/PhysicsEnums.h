@@ -8,7 +8,8 @@ namespace Temporal
 		enum Enum
 		{
 			OBSTACLE = 1,
-			COVER = 2
+			COVER = 2,
+			CHARACTER = 4,
 		};
 	}
 }

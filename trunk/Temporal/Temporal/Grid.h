@@ -29,6 +29,7 @@ namespace Temporal
 		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask = -1, int group = -1);
 
 		void add(Fixture* body);
+		void update(const Shape& previous, Fixture* body);
 		FixtureCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;
@@ -39,6 +40,7 @@ namespace Temporal
 		int _gridWidth;
 		int _gridHeight;
 
+		
 		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
 		float getTileSize() const { return _tileSize; }
 		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
@@ -46,6 +48,7 @@ namespace Temporal
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }
 
+		void add(Fixture* body, int i, int j);
 		FixtureCollection* getTile(int i, int j) const;
 		FixtureCollection* getTile(int index) const;
 
