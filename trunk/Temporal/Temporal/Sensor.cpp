@@ -11,13 +11,11 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK = FilterType::OBSTACLE;
-
 	void Sensor::update()
 	{
 		_fixture->update();
 		const AABB& sensorShape = static_cast<const AABB&>(_fixture->getGlobalShape());
-		FixtureCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK);
+		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _collisionMask, _fixture->getFilter().getGroup());
 		_listener->start();
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
