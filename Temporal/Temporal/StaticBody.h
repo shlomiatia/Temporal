@@ -5,21 +5,21 @@
 
 namespace Temporal
 {
-	class CollisionInfo;
+	class Fixture;
 
 	class StaticBody : public Component
 	{
 	public:
-		StaticBody(CollisionInfo* collisionInfo) : _collisionInfo(collisionInfo) {};
+		StaticBody(Fixture* fixture) : _fixture(fixture) {};
 		~StaticBody();
 
-		CollisionInfo& getCollisionInfo() { return *_collisionInfo; }
+		Fixture& getFixture() { return *_fixture; }
 
 		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
-		CollisionInfo* _collisionInfo;
+		Fixture* _fixture;
 	};
 }
 #endif

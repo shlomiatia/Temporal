@@ -7,11 +7,11 @@
 namespace Temporal
 {
 	class Shape;
-	class CollisionInfo;
+	class Fixture;
 	class DirectedSegment;
 
-	typedef std::vector<CollisionInfo*> CollisionInfoCollection;
-	typedef CollisionInfoCollection::const_iterator CollisionInfoIterator;
+	typedef std::vector<Fixture*> FixtureCollection;
+	typedef FixtureCollection::const_iterator FixtureIterator;
 
 	class Grid
 	{
@@ -28,13 +28,13 @@ namespace Temporal
 		bool cast(const Point& rayOrigin, const Vector& rayDirection, Point& pointOfIntersection, int mask = -1, int group = -1);
 		bool cast(const DirectedSegment& dirSeg, Point& pointOfIntersection, int mask = -1, int group = -1);
 
-		void add(CollisionInfo* body);
-		CollisionInfoCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
+		void add(Fixture* body);
+		FixtureCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;
 
 	private:
-		CollisionInfoCollection** _grid;
+		FixtureCollection** _grid;
 		float _tileSize;
 		int _gridWidth;
 		int _gridHeight;
@@ -46,8 +46,8 @@ namespace Temporal
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }
 
-		CollisionInfoCollection* getTile(int i, int j) const;
-		CollisionInfoCollection* getTile(int index) const;
+		FixtureCollection* getTile(int i, int j) const;
+		FixtureCollection* getTile(int index) const;
 
 		Grid() {};
 		Grid(const Grid&);

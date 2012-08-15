@@ -23,11 +23,11 @@ namespace Temporal
 		if(_currentState != NULL)
 		{
 			_currentState->exit();
-			sendMessageToOwner(Message(MessageID::STATE_EXITED, &_currentStateID));
+			raiseMessage(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
 		setState(stateID);
 		_currentState->enter();
-		sendMessageToOwner(Message(MessageID::STATE_ENTERED, &_currentStateID));
+		raiseMessage(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
 
 	void StateMachineComponent::handleMessage(Message& message)

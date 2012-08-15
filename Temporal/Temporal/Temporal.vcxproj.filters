@@ -153,9 +153,6 @@
     <ClInclude Include="Particles.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionInfo.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -163,6 +160,9 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEnums.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture.h">
       <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -301,13 +301,13 @@
     <ClCompile Include="Particles.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionInfo.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="CollisionFilter.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixture.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>

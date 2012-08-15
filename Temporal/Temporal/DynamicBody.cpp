@@ -6,7 +6,7 @@
 #include "Shapes.h"
 #include "ShapeOperations.h"
 #include "Graphics.h"
-#include "CollisionInfo.h"
+#include "Fixture.h"
 #include "PhysicsEnums.h"
 #include "MessageUtils.h"
 #include <algorithm>
@@ -20,7 +20,7 @@ namespace Temporal
 
 	const Vector DynamicBody::GRAVITY(0.0f, -4350.0f);
 
-	float getMaxMovementStepSize(const CollisionInfo& info)
+	float getMaxMovementStepSize(const Fixture& info)
 	{
 		const Shape& shape = info.getLocalShape();
 		float maxHorizontalStepSize = shape.getWidth() / 2.0f - 1.0f;
@@ -28,8 +28,8 @@ namespace Temporal
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
-	DynamicBody::DynamicBody(CollisionInfo* info)
-		: _collisionInfo(info), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*info)) 
+	DynamicBody::DynamicBody(Fixture* info)
+		: _fixture(info), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*info)) 
 	{
 	}
 
@@ -37,12 +37,12 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::GET_SHAPE)
 		{
-			Shape* shape = const_cast<Shape*>(&_collisionInfo->getGlobalShape());
+			Shape* shape = const_cast<Shape*>(&_fixture->getGlobalShape());
 			message.setParam(shape);
 		}
 		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
-			Graphics::get().draw(_collisionInfo->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
+			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
 		else if(message.getID() == MessageID::GET_GROUND_VECTOR)
 		{
@@ -95,7 +95,7 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriodInMillis)
 	{
-		_collisionInfo->update();
+		_fixture->update();
 		Vector movement = determineMovement(framePeriodInMillis);
 		executeMovement(movement);
 	}
@@ -131,7 +131,7 @@ namespace Temporal
 		Vector collision = Vector::Zero;
 		_groundVector = Vector::Zero;
 
-		AABB dynamicBodyBounds = static_cast<const AABB&>(_collisionInfo->getGlobalShape());
+		AABB dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
 
 		// If the movement is too big, we'll divide it to smaller steps
 		while(movement != Vector::Zero)
@@ -155,8 +155,8 @@ namespace Temporal
 			movement -= stepMovement;
 			dynamicBodyBounds.translate(stepMovement);
 			
-			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
-			for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
+			FixtureCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
+			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Shape& staticBodyBounds = (**i).getGlobalShape();
 				detectCollision(dynamicBodyBounds, staticBodyBounds, collision);
@@ -164,9 +164,9 @@ namespace Temporal
 			if(collision != Vector::Zero)
 				break;
 		}
-		sendMessageToOwner(Message(MessageID::SET_POSITION, const_cast<Point*>(&dynamicBodyBounds.getCenter())));
-		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &collision));
-		_collisionInfo->update();
+		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Point*>(&dynamicBodyBounds.getCenter())));
+		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
+		_fixture->update();
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
 	}

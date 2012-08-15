@@ -20,7 +20,7 @@ namespace Temporal
 			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 			Point position = segment.getNaturalOrigin();
 			position.setY(position.getY() - 1.0f);
-			sendMessageToOwner(Message(MessageID::SET_POSITION, &position));
+			raiseMessage(Message(MessageID::SET_POSITION, &position));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -64,7 +64,7 @@ namespace Temporal
 			_isPositiveDirection = !_isPositiveDirection;
 		}
 		Point newPosition = position + movement;
-		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
+		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		Point pointOfIntersection = Point::Zero;
 		Grid::get().cast(newPosition, laserVector, pointOfIntersection);
 		Segment seg = SegmentPP(newPosition, pointOfIntersection);
@@ -72,7 +72,7 @@ namespace Temporal
 		const AABB& rect = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
 		isDetecting = intersects(rect, seg);
 		Color color = isDetecting ? Color::Green : Color::Red;
-		sendMessageToOwner(Message(MessageID::SET_COLOR, &color));
-		sendMessageToOwner(Message(MessageID::SET_TARGET, &pointOfIntersection));
+		raiseMessage(Message(MessageID::SET_COLOR, &color));
+		raiseMessage(Message(MessageID::SET_TARGET, &pointOfIntersection));
 	}
 }

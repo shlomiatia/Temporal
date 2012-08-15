@@ -33,7 +33,7 @@ namespace Temporal
 			_echoesData.erase(first);
 		}
 		Serialization* serialization = new Serialization();
-		sendMessageToOwner(Message(MessageID::SERIALIZE, serialization));
+		raiseMessage(Message(MessageID::SERIALIZE, serialization));
 		_echoesData.push_back(serialization);
 	}
 
@@ -43,7 +43,7 @@ namespace Temporal
 		{
 			EchoIterator first = _echoesData.begin();
 			Serialization* deserialization = *first;
-			sendMessageToOwner(Message(MessageID::DESERIALIZE, deserialization));
+			raiseMessage(Message(MessageID::DESERIALIZE, deserialization));
 			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
 			{
 				delete *i;

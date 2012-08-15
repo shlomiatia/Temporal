@@ -18,7 +18,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
 		}
 
 		void Search::handleMessage(Message& message) const
@@ -37,7 +37,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 		}
 
 		void See::handleMessage(Message& message) const
@@ -57,7 +57,7 @@ namespace Temporal
 		void Turn::enter() const
 		{
 			_hasTurned = false;
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 		}
 
 		void Turn::handleMessage(Message& message) const
@@ -70,8 +70,8 @@ namespace Temporal
 				}
 				else
 				{
-					_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
+					_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
 					_hasTurned = true;
 				}
 			}
@@ -84,7 +84,7 @@ namespace Temporal
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
 		void Acquire::update() const
@@ -99,9 +99,9 @@ namespace Temporal
 				
 				int blinkIndex = static_cast<int>(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
 				if(blinkIndex % 2 == 1)
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 				else
-					_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 			}
 		}
 

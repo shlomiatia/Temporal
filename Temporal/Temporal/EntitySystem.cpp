@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	void* Component::sendMessageToOwner(Message& message) const
+	void* Component::raiseMessage(Message& message) const
 	{
 		_entity->handleMessage(message);
 		return message.getParam();

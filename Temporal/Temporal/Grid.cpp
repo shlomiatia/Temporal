@@ -2,7 +2,7 @@
 #include "Shapes.h"
 #include "Graphics.h"
 #include "ShapeOperations.h"
-#include "CollisionInfo.h"
+#include "Fixture.h"
 #include <algorithm>
 
 namespace Temporal
@@ -14,7 +14,7 @@ namespace Temporal
 		_gridHeight = getAxisIndex(worldSize.getHeight());
 		
 		int size = getSize();
-		_grid = new CollisionInfoCollection*[size];
+		_grid = new FixtureCollection*[size];
 		for(int i = 0; i < size; ++i)
 			_grid[i] = NULL;
 	}
@@ -37,7 +37,7 @@ namespace Temporal
 	}
 
 
-	void Grid::add(CollisionInfo* body)
+	void Grid::add(Fixture* body)
 	{
 		const Shape& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
@@ -50,10 +50,10 @@ namespace Temporal
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				int index = getIndex(i, j);
-				CollisionInfoCollection* bodies = getTile(index);
+				FixtureCollection* bodies = getTile(index);
 				if(bodies == NULL)
 				{
-					bodies = new CollisionInfoCollection();
+					bodies = new FixtureCollection();
 					_grid[index] = bodies;
 				}
 				bodies->push_back(body);
@@ -61,13 +61,13 @@ namespace Temporal
 		}
 	}
 
-	CollisionInfoCollection* Grid::getTile(int i, int j) const
+	FixtureCollection* Grid::getTile(int i, int j) const
 	{
 		int index = getIndex(i, j);
 		return getTile(index);
 	}
 
-	CollisionInfoCollection* Grid::getTile(int index) const
+	FixtureCollection* Grid::getTile(int index) const
 	{
 		if(index < 0 || index >= getSize())
 			return NULL;
@@ -123,12 +123,12 @@ namespace Temporal
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
-			CollisionInfoCollection* bodies = getTile(i, j);
+			FixtureCollection* bodies = getTile(i, j);
 			if(bodies != NULL)
 			{
-				for(CollisionInfoIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
+				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
-					CollisionInfo& body = **iterator;
+					Fixture& body = **iterator;
 					if(body.getFilter().canCollide(mask, group) && intersects(dirSeg, body.getGlobalShape(), &pointOfIntersection))
 					{
 						return false;
@@ -152,26 +152,26 @@ namespace Temporal
 		return true;
 	}
 
-	CollisionInfoCollection Grid::iterateTiles(const Shape& shape, int mask, int group) const
+	FixtureCollection Grid::iterateTiles(const Shape& shape, int mask, int group) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
 		int bottomIndex = getAxisIndex(shape.getBottom());
 
-		CollisionInfoCollection result;
+		FixtureCollection result;
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				int index = getIndex(i, j);
-				CollisionInfoCollection* bodies = getTile(index);
+				FixtureCollection* bodies = getTile(index);
 				if(bodies != NULL)
 				{
-					for(CollisionInfoIterator i = bodies->begin(); i != bodies->end(); ++i)
+					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
-						CollisionInfo* body = *i;
+						Fixture* body = *i;
 						if(body->getFilter().canCollide(mask, group))
 							result.push_back(body);
 					}

@@ -32,7 +32,7 @@ namespace Temporal
 		_pointOfIntersection = Point::Zero;
 		_isSeeing = false;
 
-		int sourceCollisionGroup = *static_cast<int*>(sendMessageToOwner(Message(MessageID::GET_COLLISION_GROUP)));
+		int sourceCollisionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		int targetCollisionGroup = *static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
 		if(sourceCollisionGroup != -1 &&
 		   targetCollisionGroup != -1 &&
@@ -63,7 +63,7 @@ namespace Temporal
 		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection, COLLISION_MASK, _collisionFilter.getGroup());
 		
 		if(_isSeeing)
-			sendMessageToOwner(Message(MessageID::LINE_OF_SIGHT));
+			raiseMessage(Message(MessageID::LINE_OF_SIGHT));
 	}
 
 	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Point &sourcePosition)

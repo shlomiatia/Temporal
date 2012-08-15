@@ -33,7 +33,7 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const AABB& startPosition = *static_cast<AABB*>(navigator.sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+			const AABB& startPosition = *static_cast<AABB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
 			if(start != NULL && goal != NULL)
@@ -117,7 +117,7 @@ namespace Temporal
 				Side::Enum targetSide = edge->getSide();
 				if(currentSide != targetSide)
 				{
-					_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+					_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
 				}
 				else
 				{
@@ -154,7 +154,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 
@@ -168,14 +168,14 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
 			}
 		}
 
 		void JumpForward::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_UP));
-			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 		}
 
 		void JumpForward::handleMessage(Message& message) const
@@ -198,7 +198,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_DOWN));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
 		}
 	}

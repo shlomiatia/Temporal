@@ -6,7 +6,7 @@
 #include "Shapes.h"
 #include "Texture.h"
 #include "ViewManager.h"
-#include "CollisionInfo.h"
+#include "Fixture.h"
 #include "MessageUtils.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -70,7 +70,7 @@ namespace Temporal
 	void Light::draw() const
 	{
 		const Point& position = getPosition(*this);
-		Side::Enum* orientation = static_cast<Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
+		Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 		bool isFlipped = orientation != NULL && *orientation == Side::LEFT;
 
 		glDisable(GL_BLEND);
@@ -80,8 +80,8 @@ namespace Temporal
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
-		CollisionInfoCollection result = Grid::get().iterateTiles(lightAABB);
-		for(CollisionInfoIterator i = result.begin(); i != result.end(); ++i)
+		FixtureCollection result = Grid::get().iterateTiles(lightAABB);
+		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());
 		}
