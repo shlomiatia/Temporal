@@ -49,14 +49,15 @@ namespace Temporal
 	class Sensor : public Component
 	{
 	public:
-		Sensor(Fixture* fixture, ContactListener* listener)
-			: _fixture(fixture), _listener(listener) { _listener->setOwner(*this); }
+		Sensor(Fixture* fixture, ContactListener* listener, int collisionMask)
+			: _fixture(fixture), _listener(listener), _collisionMask(collisionMask) { _listener->setOwner(*this); }
 		~Sensor() { delete _fixture; delete _listener; }
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
 
 	private:
+		const int _collisionMask;
 		Fixture* _fixture;
 		ContactListener* _listener;
 

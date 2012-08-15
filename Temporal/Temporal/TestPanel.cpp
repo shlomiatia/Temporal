@@ -53,7 +53,7 @@ namespace Temporal
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
 		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS)));
+		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE));
 		entity.add(sensor);
 	}
 
@@ -67,7 +67,7 @@ namespace Temporal
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
 		entity.add(sensor);
 	}
 
@@ -78,7 +78,7 @@ namespace Temporal
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
 		entity.add(sensor);
 	}
 
@@ -89,7 +89,7 @@ namespace Temporal
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
 		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
 		entity.add(sensor);
 	}
 
