@@ -77,7 +77,7 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const DirectedSegment& seg, const AABB& rect, Point* pointOfIntersection)
+	bool intersects(const DirectedSegment& seg, const AABB& rect, Point* pointOfIntersection, float* distance)
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
 		const Point& origin = seg.getOrigin();
@@ -114,11 +114,13 @@ namespace Temporal
 		}
 		if(pointOfIntersection != NULL)
 			*pointOfIntersection = origin + vector * tmin;
+		if(distance != NULL)
+			*distance = tmin;
 		return true;
 	}
 
 
-	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection)
+	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection, float* distance)
 	{
 		Vector dirSegVec = dirSeg.getVector();
 		Vector segVec = seg.getNaturalVector();
@@ -138,8 +140,11 @@ namespace Temporal
 			float length2 = numerator2 / denominator;
 			if(length1 >= 0.0f && length1 <= 1.0f && length2 >= 0.0f && length2 <= 1.0f)
 			{
+				Vector ray = length2 * dirSegVec;
 				if(pointOfIntersection != NULL)
-					*pointOfIntersection = dirSegOrigin + length2 * dirSegVec;
+					*pointOfIntersection = dirSegOrigin + ray;
+				if(distance != NULL)
+					*distance = ray.getLength();
 				return true;
 			}
 		}
@@ -150,26 +155,42 @@ namespace Temporal
 			if(numerator1 == 0)
 			{
 				Point dirSegCenter = dirSeg.getOrigin() + dirSeg.getVector() / 2.0f;
-				Vector distance = Vector(dirSegCenter - seg.getCenterX());
-				if(distance.getLength() <= dirSeg.getVector().getLength() + seg.getRadius().getLength())
+				Vector centersVector = Vector(dirSegCenter - seg.getCenterX());
+				if(centersVector.getLength() <= dirSeg.getVector().getLength() + seg.getRadius().getLength())
 				{
 					if(pointOfIntersection != NULL)
 					{
 						Vector vector1 = segOrigin - dirSegOrigin;
 						Point segTarget = seg.getNaturalTarget();
 						Vector vector2 = segTarget - dirSegOrigin;
+						float tempDistance;
 
-						// We take 2 vectors that originated in th directed segment origin, and are directed to the segment natural origin and target.
+						// We take 2 vectors that originated in the directed segment origin, and are directed to the segment natural origin and target.
 						// If the directions are opposite, it means that the directed segment origin is swallowed by the segment, therefore it's the point of intersection
 						if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
 						{
 							*pointOfIntersection = dirSeg.getOrigin();
+							tempDistance = 0.0f;
 						}
 						// Otherwise, the shorter vector point to the point of intersection
-						else
+						else 
 						{
-							*pointOfIntersection = vector1.getLength() < vector2.getLength() ? segOrigin : segTarget;
+							float length1 = vector1.getLength();
+							float length2 = vector2.getLength();
+							if(length1 < length2)
+							{
+								*pointOfIntersection = segOrigin;
+								tempDistance = length1;
+							}
+							else
+							{
+								*pointOfIntersection = segTarget;
+								tempDistance = length2;
+							}
 						}
+						
+						if(distance != NULL)
+							*distance = tempDistance;
 					}
 					return true;
 				}
@@ -296,17 +317,17 @@ namespace Temporal
 		}
 	}
 
-	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection)
+	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection, float* distance)
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
 			const AABB& rect = static_cast<const AABB&>(shape);
-			return intersects(seg, rect, pointOfIntersection);
+			return intersects(seg, rect, pointOfIntersection, distance);
 		}
 		else if(shape.getType() == ShapeType::SEGMENT)
 		{
 			const Segment& seg2 = static_cast<const Segment&>(shape);
-			return intersects(seg, seg2, pointOfIntersection);
+			return intersects(seg, seg2, pointOfIntersection, distance);
 		}
 		else
 		{

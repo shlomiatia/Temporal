@@ -1,6 +1,5 @@
 #include "Sight.h"
 #include "Grid.h"
-#include "StaticBody.h"
 #include "Segment.h"
 #include "Math.h"
 #include "Graphics.h"
@@ -8,10 +7,11 @@
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
-	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::COVER;
+	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::COVER | FilterType::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
@@ -52,15 +52,21 @@ namespace Temporal
 			return;
 
 		// Check field of view
-		DirectedSegment directedSegment(sourcePosition.getX(), sourcePosition.getY(), targetPosition.getX(), targetPosition.getY());
-		float angle = directedSegment.getVector().getAngle();
+		Vector vector = targetPosition - sourcePosition;
+		float angle = vector.getAngle();
 		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : mirroredAngle(_sightCenter);
 		float distance = minAnglesDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
-		
-		
 
-		_isSeeing = Grid::get().cast(directedSegment, _pointOfIntersection, COLLISION_MASK, _collisionFilter.getGroup());
+		RayCastResult result;
+		if(Grid::get().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _collisionFilter.getGroup()))
+		{
+			_pointOfIntersection = result.getPoint();
+			if(result.getFixture().getEntityId() == PLAYER_ENTITY)
+				_isSeeing = true;
+			
+		}
+		
 		
 		if(_isSeeing)
 			raiseMessage(Message(MessageID::LINE_OF_SIGHT));
