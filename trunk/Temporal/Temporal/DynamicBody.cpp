@@ -18,7 +18,7 @@ namespace Temporal
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
 	static const NumericPairSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
-	const Vector DynamicBody::GRAVITY(0.0f, -4500.0f);
+	const Vector DynamicBody::GRAVITY(0.0f, -4350.0f);
 
 	float getMaxMovementStepSize(const CollisionInfo& info)
 	{
@@ -99,6 +99,12 @@ namespace Temporal
 
 		// Determine movement
 		Vector movement = Vector::Zero;
+		// Apply gravity if needed
+		if(_gravityEnabled)
+		{
+			_velocity += GRAVITY * interpolation;
+		}
+		
 		if(_absoluteImpulse != Vector::Zero)
 		{
 			movement = _absoluteImpulse;
@@ -113,12 +119,8 @@ namespace Temporal
 				movement = (movement.getVx() > 0.0f ? _groundVector : -_groundVector) * movement.getLength();
 			}
 		}
-		// Apply gravity if needed
-		if(_gravityEnabled)
-		{
-			movement += (GRAVITY * pow(interpolation, 2.0f)) / 2.0f;
-			_velocity += GRAVITY * interpolation;
-		}
+		
+		
 		return movement;
 	}
 
