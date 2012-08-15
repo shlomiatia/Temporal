@@ -65,7 +65,7 @@ namespace Temporal
 		float animationDuration = animation.getDuration();
 		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !_repeat)
 		{
-			sendMessageToOwner(Message(MessageID::ANIMATION_ENDED));			
+			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
 			return;
 		}
 		float relativePeriod =  fmod(totalPeriod, animationDuration);

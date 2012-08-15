@@ -31,7 +31,7 @@
 #include "MessageUtils.h"
 #include "Lighting.h"
 #include "Particles.h"
-#include "CollisionInfo.h"
+#include "Fixture.h"
 #include "CollisionFilter.h"
 #include "PhysicsEnums.h"
 #include <sstream>
@@ -52,8 +52,8 @@ namespace Temporal
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
 		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor(new Sensor(Hash("SNS_JUMP"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
+		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
+		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS)));
 		entity.add(sensor);
 	}
 
@@ -66,8 +66,8 @@ namespace Temporal
 		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
 		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor = new Sensor(Hash("SNS_HANG"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -77,8 +77,8 @@ namespace Temporal
 		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(Hash("SNS_BACK_EDGE"), info, -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -88,8 +88,8 @@ namespace Temporal
 		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
 		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
 		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		CollisionInfo* info = new CollisionInfo((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(Hash("SNS_FRONT_EDGE"), info, -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS);
+		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS));
 		entity.add(sensor);
 	}
 
@@ -149,7 +149,7 @@ namespace Temporal
 		CollisionFilter* collisionFilter = new CollisionFilter();
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		InputController* controller = new InputController();
-		CollisionInfo* info = new CollisionInfo(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -260,7 +260,7 @@ namespace Temporal
 		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Patrol* patrol = new Patrol();
 		CollisionFilter* collisionFilter = new CollisionFilter();
-		CollisionInfo* info = new CollisionInfo(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -291,7 +291,7 @@ namespace Temporal
 		CollisionFilter* collisionFilter = new CollisionFilter();
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
 		Navigator* navigator = new Navigator();
-		CollisionInfo* info = new CollisionInfo(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -321,9 +321,9 @@ namespace Temporal
 		Transform* transform = new Transform(shape->getCenter());
 		shape->setCenter(Point::Zero);
 		CollisionFilter* collisionFilter = new CollisionFilter(filter);
-		CollisionInfo* collisionInfo = new CollisionInfo(*transform, *collisionFilter, shape);
-		StaticBody* staticBody = new StaticBody(collisionInfo);
-		Grid::get().add(collisionInfo);
+		Fixture* fixture = new Fixture(*transform, *collisionFilter, shape);
+		StaticBody* staticBody = new StaticBody(fixture);
+		Grid::get().add(fixture);
 		Entity* entity = new Entity();
 		entity->add(transform);
 		entity->add(collisionFilter);

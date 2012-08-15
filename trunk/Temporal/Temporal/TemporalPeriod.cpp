@@ -12,13 +12,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_CREATED)
 		{
-			sendMessageToOwner(Message(MessageID::SET_COLLISION_GROUP, &_period));
+			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
 		else if(message.getID() == MessageID::SET_PERIOD)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
 			_period = period;
-			sendMessageToOwner(Message(MessageID::SET_COLLISION_GROUP, &_period));
+			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
 		else if(message.getID() == MessageID::SET_CURRENT_PERIOD)
 		{
@@ -29,7 +29,7 @@ namespace Temporal
 				alpha = 1.0f;
 			else
 				alpha = 0.2f;
-			sendMessageToOwner(Message(MessageID::SET_ALPHA, &alpha));
+			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
 	}
 

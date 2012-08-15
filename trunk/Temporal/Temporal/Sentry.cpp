@@ -11,7 +11,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Red)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Red)));
 		}
 
 		void Search::handleMessage(Message& message) const
@@ -28,7 +28,7 @@ namespace Temporal
 		{
 			// TempFlag 1 - LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Yellow)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Yellow)));
 		}
 
 		void Acquire::handleMessage(Message& message) const
@@ -48,7 +48,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Green)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Green)));
 		}
 
 		void See::handleMessage(Message& message) const

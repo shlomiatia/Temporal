@@ -7,7 +7,7 @@
 #include "MovementUtils.h"
 #include "DynamicBody.h"
 #include "StaticBody.h"
-#include "CollisionInfo.h"
+#include "Fixture.h"
 #include "Graphics.h"
 
 namespace Temporal
@@ -318,7 +318,7 @@ namespace Temporal
 
 	void addPlatform(StaticBody& body, ShapeCollection& platforms) 
 	{
-		const Shape& platform = body.getCollisionInfo().getGlobalShape();
+		const Shape& platform = body.getFixture().getGlobalShape();
 		platforms.push_back(&platform);
 	}
 

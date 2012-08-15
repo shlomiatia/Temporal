@@ -9,7 +9,7 @@ namespace Temporal
 {
 	class Shape;
 	class Segment;
-	class CollisionInfo;
+	class Fixture;
 
 	class DynamicBody : public Component
 	{
@@ -17,14 +17,14 @@ namespace Temporal
 		// BRODER
 		static const Vector GRAVITY;
 
-		explicit DynamicBody(CollisionInfo* collisionInfo);
+		explicit DynamicBody(Fixture* fixture);
 
 		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
 		const float MAX_MOVEMENT_STEP_SIZE;
-		CollisionInfo* _collisionInfo;
+		Fixture* _fixture;
 		
 		// Persistent state
 		bool _gravityEnabled;

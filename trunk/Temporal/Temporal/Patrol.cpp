@@ -26,7 +26,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace Temporal
 
 		void Turn::enter() const
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
 		}
 
 		void Turn::handleMessage(Message& message) const

@@ -7,12 +7,12 @@ namespace Temporal
 
 	const Point& getPosition(const Component& component)
 	{
-		return *static_cast<Point*>(component.sendMessageToOwner(Message(MessageID::GET_POSITION)));
+		return *static_cast<Point*>(component.raiseMessage(Message(MessageID::GET_POSITION)));
 	}
 
 	Side::Enum getOrientation(const Component& component)
 	{
-		return *static_cast<Side::Enum*>(component.sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
+		return *static_cast<Side::Enum*>(component.raiseMessage(Message(MessageID::GET_ORIENTATION)));
 	}
 
 	const Hash& getHashParam(void* data)
@@ -49,9 +49,9 @@ namespace Temporal
 	{
 		Side::Enum orientation = getOrientation(component);
 		if(direction == orientation)
-			component.sendMessageToOwner(Message(MessageID::ACTION_FORWARD));
+			component.raiseMessage(Message(MessageID::ACTION_FORWARD));
 		else
-			component.sendMessageToOwner(Message(MessageID::ACTION_BACKWARD));
+			component.raiseMessage(Message(MessageID::ACTION_BACKWARD));
 	}
 
 	bool isSensorCollisionMessage(Message& message, const Hash& sensorID)

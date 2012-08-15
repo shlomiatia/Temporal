@@ -40,7 +40,7 @@ namespace Temporal
 
 		virtual void handleMessage(Message& message) = 0;
 		virtual Component* clone() const { return NULL; }
-		void* sendMessageToOwner(Message& message) const;
+		void* raiseMessage(Message& message) const;
 
 	private:
 		const Entity* _entity;

@@ -32,12 +32,12 @@ namespace Temporal
 	{
 		Point position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
-		sendMessageToOwner(getDrawPosition);
+		raiseMessage(getDrawPosition);
 		if(position == Vector::Zero)
 			position = getPosition(*this);
 
 		Side::Enum spritesheetOrientation = _spritesheet.getOrientation();
-		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(sendMessageToOwner(Message(MessageID::GET_ORIENTATION)));
+		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 
 		_root->setMirrored(entityOrientation != spritesheetOrientation);
 		_root->setTranslation(position);

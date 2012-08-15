@@ -1,5 +1,5 @@
-#ifndef COLLISIONINFO_H
-#define COLLISIONINFO_H
+#ifndef FIXTURE_H
+#define FIXTURE_H
 
 #include "CollisionFilter.h"
 
@@ -9,11 +9,11 @@ namespace Temporal
 	class Transform;
 	class Shape;
 
-	class CollisionInfo
+	class Fixture
 	{
 	public:
-		CollisionInfo(const Transform& transform, const CollisionFilter& filter, const Shape* shape);
-		~CollisionInfo() { delete _globalShape; }
+		Fixture(const Transform& transform, const CollisionFilter& filter, const Shape* shape);
+		~Fixture() { delete _globalShape; }
 
 		const Shape& getLocalShape() const { return *_localShape; }
 		const Shape& getGlobalShape() const { return *_globalShape; }

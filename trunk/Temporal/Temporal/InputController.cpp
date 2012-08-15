@@ -11,11 +11,11 @@ namespace Temporal
 		{
 			if(Input::get().isUp())
 			{
-				sendMessageToOwner(Message(MessageID::ACTION_UP));
+				raiseMessage(Message(MessageID::ACTION_UP));
 			}
 			if(Input::get().isDown())
 			{
-				sendMessageToOwner(Message(MessageID::ACTION_DOWN));
+				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
 			if(Input::get().isLeft())
 			{

@@ -76,7 +76,7 @@ namespace Temporal
 			if(timeSinceLastBirth > BIRTH_THRESHOLD_IN_MILLIS)
 			{
 				_birthTimer.reset();
-				const Point& position = *static_cast<const Point*>(sendMessageToOwner(Message(MessageID::GET_POSITION)));
+				const Point& position = *static_cast<const Point*>(raiseMessage(Message(MessageID::GET_POSITION)));
 
 				int bornParticles = static_cast<int>(timeSinceLastBirth / BIRTH_THRESHOLD_IN_MILLIS);
 				for(int i = 0; i < bornParticles; ++i)

@@ -129,7 +129,7 @@ namespace Temporal
 	 *********************************************************************************************/
 	bool canJumpForward(StateMachineComponent* component)
 	{
-		const Vector& groundVector = getVectorParam(component->sendMessageToOwner(Message(MessageID::GET_GROUND_VECTOR)));
+		const Vector& groundVector = getVectorParam(component->raiseMessage(Message(MessageID::GET_GROUND_VECTOR)));
 		Side::Enum orientation = getOrientation(*component);
 
 		return !sameSign(static_cast<float>(orientation), groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
@@ -137,7 +137,7 @@ namespace Temporal
 
 	void Stand::enter() const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION, false, true)));
 	}
 
 	void Stand::handleMessage(Message& message) const
@@ -175,7 +175,7 @@ namespace Temporal
 	void Fall::enter() const
 	{
 		// Not setting force because we want to continue the momentum
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION, false, true)));
 	}
 
 	void Fall::handleMessage(Message& message) const
@@ -203,7 +203,7 @@ namespace Temporal
 	{
 		// TempFlag 1 - still walking
 		_stateMachine->setTempFlag1(true);
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
 	}
 
 	// BRODER
@@ -251,21 +251,21 @@ namespace Temporal
 				// We need to apply this every update because the ground has infinite restitution. 
 				// Also, if we're in the midair (explained how it can happen in the previous comment), this will maintain a steady speed
 				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
-				_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
+				_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 			}
 		}
 	}
 
 	void Turn::enter() const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
 	}
 
 	void Turn::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ANIMATION_ENDED)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::FLIP_ORIENTATION));
+			_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 			_stateMachine->changeState(STAND_STATE);
 		}
 	}
@@ -275,7 +275,7 @@ namespace Temporal
 		const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
 		const Point* point = params.getPoint();
 		Side::Enum orientation = getOrientation(*_stateMachine);
-		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float target = point->getX();
 		float front = personBounds.getSide(orientation);
 		float distance = (target - front) * orientation;
@@ -331,7 +331,7 @@ namespace Temporal
 	void JumpStart::enter() const
 	{
 		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getStartAnimation();
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void JumpStart::handleMessage(Message& message) const
@@ -362,9 +362,9 @@ namespace Temporal
 		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
 		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
+		_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		Hash animation = jumpHelper.getInfo().getJumpAnimation();
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation, false, true)));
 	}
 
 	void Jump::handleMessage(Message& message) const
@@ -391,7 +391,7 @@ namespace Temporal
 	void JumpEnd::enter() const
 	{
 		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getEndAnimation();
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void JumpEnd::handleMessage(Message& message) const
@@ -404,7 +404,7 @@ namespace Temporal
 
 	void PrepareToHang::update() const
 	{
-		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
 		float entityTop = personBounds.getTop();
@@ -417,13 +417,13 @@ namespace Temporal
 		Vector movement(movementX, movementY);
 		if(movement != Vector::Zero)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
 		}
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
 			Point drawPosition(personCenterX, platformTop);
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(HANG_STATE);
 		}
 	}
@@ -431,7 +431,7 @@ namespace Temporal
 	void PrepareToHang::enter() const
 	{
 		bool gravityEnabled = false;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
 	void PrepareToHang::handleMessage(Message& message) const
@@ -444,17 +444,17 @@ namespace Temporal
 
 	void Hang::enter() const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
 	}
 
 	void Hang::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
 			bool gravityEnabled = true;
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			_stateMachine->changeState(FALL_STATE);
 		}
 		else if(message.getID() == MessageID::ACTION_UP)
@@ -465,20 +465,20 @@ namespace Temporal
 
 	void Climb::enter() const
 	{
-		const Shape& shape = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+		const Shape& shape = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float climbForceX = 1.0f;
 		float climbForceY = shape.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
+		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
 	void Climb::exit() const
 	{
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
+		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
 		bool gravityEnabled = true;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
 	void Climb::handleMessage(Message& message) const
@@ -492,7 +492,7 @@ namespace Temporal
 	void PrepareToDescend::update() const
 	{
 		Side::Enum orientation = getOrientation(*_stateMachine);
-		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
@@ -501,14 +501,14 @@ namespace Temporal
 		Vector movement = Vector(moveX, moveY);
 		if(movement != Vector::Zero)
 		{
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
 		}
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
 			float platformTop = point.getY();
 			Point drawPosition(personCenterX, platformTop);
-			_stateMachine->sendMessageToOwner(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(DESCEND_STATE);
 		}
 	}
@@ -516,7 +516,7 @@ namespace Temporal
 	void PrepareToDescend::enter() const
 	{
 		bool gravityEnabled = false;
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
 
 	void PrepareToDescend::handleMessage(Message& message) const
@@ -529,12 +529,12 @@ namespace Temporal
 
 	void Descend::enter() const
 	{
-		const Shape& size = *static_cast<Shape*>(_stateMachine->sendMessageToOwner(Message(MessageID::GET_SHAPE)));
+		const Shape& size = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float forceX = 0.0f;
 		float forceY = -(size.getHeight());
 
-		_stateMachine->sendMessageToOwner(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
-		_stateMachine->sendMessageToOwner(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
 	}
 
 	void Descend::handleMessage(Message& message) const

@@ -28,6 +28,8 @@ namespace Temporal
 	class Serialization
 	{
 	public:
+		Serialization() {};
+
 		void serialize(const Hash& key, int value) { _serialization[key] = value; }
 		void serialize(const Hash& key, unsigned int value) { _serialization[key] = value; }
 		void serialize(const Hash& key, float value) { _serialization[key] = value; }
@@ -39,6 +41,9 @@ namespace Temporal
 		bool deserializeBool(const Hash& key) const { return _serialization.at(key).Bool; }
 	private:
 		SerializationCollection _serialization;
+
+		Serialization(const Serialization&);
+		Serialization& operator=(const Serialization&);
 	};
 }
 #endif
