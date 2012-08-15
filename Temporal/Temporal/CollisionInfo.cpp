@@ -17,4 +17,9 @@ namespace Temporal
 		_globalShape->rotate(_transform.getOrientation());
 		_globalShape->translate(_transform.getPosition());
 	}
+
+	const Hash& CollisionInfo::getEntityId()
+	{
+		return _transform.getEntity().getId();
+	}
 }

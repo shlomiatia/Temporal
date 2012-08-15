@@ -1,11 +1,11 @@
 #ifndef COLLISIONINFO_H
 #define COLLISIONINFO_H
 
-#include "Hash.h"
 #include "CollisionFilter.h"
 
 namespace Temporal
 {
+	class Hash;
 	class Transform;
 	class Shape;
 
@@ -13,10 +13,12 @@ namespace Temporal
 	{
 	public:
 		CollisionInfo(const Transform& transform, const CollisionFilter& filter, const Shape* shape);
+		~CollisionInfo() { delete _globalShape; }
 
 		const Shape& getLocalShape() const { return *_localShape; }
 		const Shape& getGlobalShape() const { return *_globalShape; }
 		const CollisionFilter& getFilter() { return _filter; }
+		const Hash& getEntityId();
 
 		void update();
 	private:
