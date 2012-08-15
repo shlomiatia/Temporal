@@ -19,7 +19,6 @@ namespace Temporal
 
 		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
 		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
-		static const Hash ACTION_DROP_STATE = Hash("ACT_STT_DROP");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 
 		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
@@ -190,10 +189,10 @@ namespace Temporal
 
 		void Descend::handleMessage(Message& message) const
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if(message.getID() == MessageID::STATE_ENTERED)
 			{
 				const Hash& state = getHashParam(message.getParam());
-				if(state == ACTION_DROP_STATE)
+				if(state == ACTION_FALL_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)

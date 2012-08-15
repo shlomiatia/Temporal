@@ -31,11 +31,38 @@ namespace Temporal
 	void Grid::draw() const
 	{
 		for(int i = 0; i < _gridWidth; ++i)
+		{
 			for(int j = 0; j < _gridHeight; ++j)
-				if(getTile(i, j) != NULL)
-					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), Color(0.0f, 0.0f, 1.0f, 0.3f));
+			{
+				FixtureCollection* fixtures = getTile(i, j);
+				if(fixtures != NULL && fixtures->size() != 0)
+				{
+					Color color = Color(0.0f, 0.0f, 1.0f, 0.3f);
+					for(FixtureIterator iterator = fixtures->begin(); iterator != fixtures->end(); ++iterator)
+					{
+						if((**iterator).getFilter().getFilter() == 4)
+						{
+							color.setR(1.0f);
+							break;
+						}
+					}
+					Graphics::get().draw(AABB(getTileCenter(i, j), Size(_tileSize, _tileSize)), color);
+				}
+			}
+		}
 	}
 
+	void Grid::add(Fixture* body, int i, int j)
+	{
+		int index = getIndex(i, j);
+		FixtureCollection* bodies = getTile(index);
+		if(bodies == NULL)
+		{
+			bodies = new FixtureCollection();
+			_grid[index] = bodies;
+		}
+		bodies->push_back(body);
+	}
 
 	void Grid::add(Fixture* body)
 	{
@@ -49,16 +76,54 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
+				add(body, i, j);
+			}
+		}
+	}
+
+	void Grid::update(const Shape& previous, Fixture* body)
+	{
+		const Shape& shape = body->getGlobalShape();
+		int leftIndex = getAxisIndex(shape.getLeft());
+		int rightIndex = getAxisIndex(shape.getRight());
+		int topIndex = getAxisIndex(shape.getTop());
+		int bottomIndex = getAxisIndex(shape.getBottom());
+
+		int leftRemoveIndex = getAxisIndex(previous.getLeft());
+		int rightRemoveIndex = getAxisIndex(previous.getRight());
+		int topRemoveIndex = getAxisIndex(previous.getTop());
+		int bottomRemoveIndex = getAxisIndex(previous.getBottom());
+
+		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
+		{
+			for(int j = bottomRemoveIndex; j <= topRemoveIndex; ++j)
+			{
+				if(i >= leftIndex && i <= rightIndex && j >= bottomIndex && j <= topIndex)
+					continue;
 				int index = getIndex(i, j);
 				FixtureCollection* bodies = getTile(index);
 				if(bodies == NULL)
+					continue;
+				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
-					bodies = new FixtureCollection();
-					_grid[index] = bodies;
+					if((**iterator).getEntityId() == body->getEntityId())
+					{
+						bodies->erase(iterator);
+						break;
+					}
 				}
-				bodies->push_back(body);
 			}
 		}
+		for(int i = leftIndex; i <= rightIndex; ++i)
+		{
+			for(int j = bottomIndex; j <= topIndex; ++j)
+			{
+				if(i >= leftRemoveIndex && i <= rightRemoveIndex && j >= bottomRemoveIndex && j <= topRemoveIndex)
+					continue;
+				add(body, i, j);
+			}
+		}
+
 	}
 
 	FixtureCollection* Grid::getTile(int i, int j) const

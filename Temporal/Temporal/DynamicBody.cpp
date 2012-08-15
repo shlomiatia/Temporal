@@ -20,17 +20,19 @@ namespace Temporal
 
 	const Vector DynamicBody::GRAVITY(0.0f, -4350.0f);
 
-	float getMaxMovementStepSize(const Fixture& info)
+	float getMaxMovementStepSize(const Fixture& fixture)
 	{
-		const Shape& shape = info.getLocalShape();
+		const Shape& shape = fixture.getLocalShape();
 		float maxHorizontalStepSize = shape.getWidth() / 2.0f - 1.0f;
 		float maxVerticalStepSize = shape.getHeight() / 2.0f - 1.0f;
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
-	DynamicBody::DynamicBody(Fixture* info)
-		: _fixture(info), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero), MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*info)) 
+	DynamicBody::DynamicBody(Fixture* fixture)
+		: _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero),
+		MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*fixture)) 
 	{
+		Grid::get().add(_fixture);
 	}
 
 	void DynamicBody::handleMessage(Message& message)
@@ -132,6 +134,7 @@ namespace Temporal
 		_groundVector = Vector::Zero;
 
 		AABB dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
+		AABB previous = dynamicBodyBounds;
 
 		// If the movement is too big, we'll divide it to smaller steps
 		while(movement != Vector::Zero)
@@ -167,6 +170,7 @@ namespace Temporal
 		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Point*>(&dynamicBodyBounds.getCenter())));
 		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 		_fixture->update();
+		Grid::get().update(previous, _fixture);
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
 	}

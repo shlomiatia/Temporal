@@ -1,9 +1,14 @@
 #include "StaticBody.h"
 #include "Graphics.h"
 #include "Fixture.h"
+#include "Grid.h"
 
 namespace Temporal
 {
+	StaticBody::StaticBody(Fixture* fixture) : _fixture(fixture)
+	{
+		Grid::get().add(fixture);
+	}
 	StaticBody::~StaticBody()
 	{
 		delete _fixture;
