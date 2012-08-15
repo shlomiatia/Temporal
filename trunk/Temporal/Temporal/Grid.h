@@ -1,12 +1,12 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "NumericPair.h"
+#include "Shapes.h"
+
 #include <vector>
 
 namespace Temporal
 {
-	class Shape;
 	class Fixture;
 	class DirectedSegment;
 
@@ -40,17 +40,14 @@ namespace Temporal
 		int _gridWidth;
 		int _gridHeight;
 
-		
-		Point getTileCenter(int i, int j) const { return  Point(getTileAxisCenter(i), getTileAxisCenter(j)); }
-		float getTileSize() const { return _tileSize; }
-		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
+		AABB getTileAABB(int i, int j) const;
+		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }
 
 		void add(Fixture* body, int i, int j);
 		FixtureCollection* getTile(int i, int j) const;
-		FixtureCollection* getTile(int index) const;
 
 		Grid() {};
 		Grid(const Grid&);
