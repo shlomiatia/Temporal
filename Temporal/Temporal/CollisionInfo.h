@@ -15,8 +15,10 @@ namespace Temporal
 		CollisionInfo(const Transform& transform, const CollisionFilter& filter, const Shape* shape);
 
 		const Shape& getLocalShape() const { return *_localShape; }
-		const Shape& getGlobalShape();
+		const Shape& getGlobalShape() const { return *_globalShape; }
 		const CollisionFilter& getFilter() { return _filter; }
+
+		void update();
 	private:
 		const Transform& _transform;
 		const CollisionFilter& _filter;

@@ -89,6 +89,7 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriodInMillis)
 	{
+		_collisionInfo->update();
 		Vector movement = determineMovement(framePeriodInMillis);
 		executeMovement(movement);
 	}
@@ -99,11 +100,6 @@ namespace Temporal
 
 		// Determine movement
 		Vector movement = Vector::Zero;
-		// Apply gravity if needed
-		if(_gravityEnabled)
-		{
-			_velocity += GRAVITY * interpolation;
-		}
 		
 		if(_absoluteImpulse != Vector::Zero)
 		{
@@ -111,13 +107,21 @@ namespace Temporal
 		}
 		else
 		{
-			movement = _velocity * interpolation;
+			Vector velocity = _velocity;
 
 			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
-			if(movement.getVy() == 0.0f && movement.getVx() != 0.0f && _groundVector != Vector::Zero)
+			if(velocity.getVy() == 0.0f && velocity.getVx() != 0.0f && _groundVector != Vector::Zero)
 			{
-				movement = (movement.getVx() > 0.0f ? _groundVector : -_groundVector) * movement.getLength();
+				velocity = (velocity.getVx() > 0.0f ? _groundVector : -_groundVector) * velocity.getLength();
 			}
+
+			// Apply gravity if needed
+			if(_gravityEnabled)
+			{
+				_velocity += GRAVITY * interpolation;
+			}
+
+			movement = velocity * interpolation;
 		}
 		
 		
@@ -128,6 +132,8 @@ namespace Temporal
 	{
 		Vector collision = Vector::Zero;
 		_groundVector = Vector::Zero;
+
+		AABB dynamicBodyBounds = static_cast<const AABB&>(_collisionInfo->getGlobalShape());
 
 		// If the movement is too big, we'll divide it to smaller steps
 		while(movement != Vector::Zero)
@@ -149,27 +155,26 @@ namespace Temporal
 			}
 			
 			movement -= stepMovement;
-			changePosition(stepMovement);
+			dynamicBodyBounds.translate(stepMovement);
 			
-			const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
 			CollisionInfoCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
 			for(CollisionInfoIterator i = info.begin(); i != info.end(); ++i)
 			{
-				detectCollision(**i, collision);
+				const Shape& staticBodyBounds = (**i).getGlobalShape();
+				detectCollision(dynamicBodyBounds, staticBodyBounds, collision);
 			}
 			if(collision != Vector::Zero)
 				break;
 		}
+		sendMessageToOwner(Message(MessageID::SET_POSITION, const_cast<Point*>(&dynamicBodyBounds.getCenter())));
 		sendMessageToOwner(Message(MessageID::BODY_COLLISION, &collision));
-
+		_collisionInfo->update();
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	void DynamicBody::detectCollision(CollisionInfo& info, Vector& collision)
+	void DynamicBody::detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision)
 	{
-		const Shape& staticBodyBounds = info.getGlobalShape();
-		const Shape& dynamicBodyBounds = _collisionInfo->getGlobalShape();
 		Vector correction = Vector::Zero;
 		if(intersects(dynamicBodyBounds, staticBodyBounds, &correction))
 		{
@@ -177,7 +182,7 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::correctCollision(const Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
+	void DynamicBody::correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision)
 	{
 		const Segment& segment = static_cast<const Segment&>(staticBodyBounds);
 		Vector platformVector = segment.getNaturalVector().normalize();
@@ -195,7 +200,7 @@ namespace Temporal
 				_groundVector = platformVector;
 		}
 
-		changePosition(correction);
+		dynamicBodyBounds.translate(correction);
 		collision -= correction;
 	}
 
@@ -254,12 +259,5 @@ namespace Temporal
 			// BRODER
 			_velocity = directedPlatformVector * 500.0f;
 		}
-	}
-
-	void DynamicBody::changePosition(const Vector& offset)
-	{
-		const Point& position = getPosition(*this);
-		Point newPosition = position + offset;
-		sendMessageToOwner(Message(MessageID::SET_POSITION, &newPosition));
 	}
 }

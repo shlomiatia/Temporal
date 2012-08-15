@@ -15,6 +15,7 @@ namespace Temporal
 
 	void Sensor::update()
 	{
+		_collisionInfo->update();
 		_point = Point::Zero;
 		const AABB& sensorShape = static_cast<const AABB&>(_collisionInfo->getGlobalShape());
 		CollisionInfoCollection info = Grid::get().iterateTiles(sensorShape, COLLISION_MASK);
