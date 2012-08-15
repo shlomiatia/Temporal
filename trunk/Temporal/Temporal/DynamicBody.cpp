@@ -51,11 +51,17 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
-			Vector timeBasedImpulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
+			Vector impulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
+
+			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
+			if(impulse.getVy() == 0.0f && impulse.getVx() != 0.0f && _groundVector != Vector::Zero)
+			{
+				impulse = (impulse.getVx() > 0.0f ? _groundVector : -_groundVector) * impulse.getLength();
+			}
 
 			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
 			_velocity.setVx(0.0f);
-			_velocity += timeBasedImpulse;
+			_velocity += impulse;
 		}
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
@@ -107,21 +113,13 @@ namespace Temporal
 		}
 		else
 		{
-			Vector velocity = _velocity;
-
-			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
-			if(velocity.getVy() == 0.0f && velocity.getVx() != 0.0f && _groundVector != Vector::Zero)
-			{
-				velocity = (velocity.getVx() > 0.0f ? _groundVector : -_groundVector) * velocity.getLength();
-			}
-
 			// Apply gravity if needed
 			if(_gravityEnabled)
 			{
 				_velocity += GRAVITY * interpolation;
 			}
-
-			movement = velocity * interpolation;
+			
+			movement = _velocity * interpolation;
 		}
 		
 		

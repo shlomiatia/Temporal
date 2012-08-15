@@ -34,6 +34,7 @@ namespace Temporal
 		Component() : _entity(NULL) {}
 		virtual ~Component() {}
 
+		const Entity& getEntity() const { return *_entity; }
 		void setEntity(const Entity* entity) { _entity = entity; }
 		virtual ComponentType::Enum getType() const = 0;
 
@@ -54,17 +55,21 @@ namespace Temporal
 	class Entity
 	{
 	public:
+		Entity() : _id(Hash::INVALID) {}
 		~Entity();
 
+		const Hash& getId() const { return _id; }
+		void setId(const Hash& id) { _id = id; }
 		void add(Component* component);
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
 
 	private:
+		Hash _id;
 		ComponentCollection _components;
 	};
 
-	typedef std::unordered_map<const Hash, const Entity*> EntityCollection;
+	typedef std::unordered_map<const Hash, Entity*> EntityCollection;
 	typedef EntityCollection::const_iterator EntityIterator;
 
 	class EntitiesManager
@@ -77,7 +82,7 @@ namespace Temporal
 		}
 
 		void dispose();
-		void add(const Hash& id, const Entity* entity);
+		void add(const Hash& id, Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
