@@ -7,7 +7,7 @@ namespace Temporal
 	/**********************************************************************************************
 	 * AABB
 	 *********************************************************************************************/
-	const AABB AABB::Zero(Point::Zero, Vector(Vector::Zero));
+	const AABB AABB::Zero(Vector::Zero, Vector(Vector::Zero));
 
 	AABB::AABB(float centerX, float centerY, float width, float height)
 		: Shape(centerX, centerY), _radius(width / 2.0f, height / 2.0f)
@@ -15,13 +15,13 @@ namespace Temporal
 		validate();
 	}
 
-	AABB::AABB(const Point& center, const Size& size)
-		: Shape(center), _radius(size / 2.0f)
+	AABB::AABB(const Vector& center, const Size& size)
+		: Shape(center), _radius(size.toVector() / 2.0f)
 	{
 		validate();
 	}
 
-	AABB::AABB(const Point& center, const Vector& radius)
+	AABB::AABB(const Vector& center, const Vector& radius)
 		: Shape(center), _radius(radius)
 	{
 		validate();
@@ -33,7 +33,7 @@ namespace Temporal
 		assert(getRadiusVy() >= 0);
 	}
 
-	bool AABB::contains(const Point& point) const
+	bool AABB::contains(const Vector& point) const
 	{
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
 		{
@@ -45,9 +45,9 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Segment
 	 *********************************************************************************************/
-	const Segment Segment::Zero(Point::Zero, Vector(Vector::Zero));
+	const Segment Segment::Zero(Vector::Zero, Vector(Vector::Zero));
 
-	Segment::Segment(const Point& center, const Vector& radius) 
+	Segment::Segment(const Vector& center, const Vector& radius) 
 		: Shape(center), _radius(radius) 
 	{
 		assert(getRadiusVx() >= 0.0f);
@@ -70,7 +70,7 @@ namespace Temporal
 	/**********************************************************************************************
 	 * YABP
 	 *********************************************************************************************/
-	YABP::YABP(const Point& center, const Vector& slopedRadius, float yRadius)
+	YABP::YABP(const Vector& center, const Vector& slopedRadius, float yRadius)
 		: _center(center), _slopedRadius(slopedRadius), _yRadius(yRadius)
 	{
 		assert(getSlopedRadiusVx() >= 0.0f);

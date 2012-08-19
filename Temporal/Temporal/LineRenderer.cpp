@@ -10,7 +10,7 @@
 
 namespace Temporal
 {
-	static const NumericPairSerializer TARGET_SERIALIZER("LRE_SER_TAR");
+	static const VectorSerializer TARGET_SERIALIZER("LRE_SER_TAR");
 
 	void LineRenderer::handleMessage(Message& message)
 	{
@@ -26,7 +26,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_TARGET)
 		{
-			_target = *static_cast<Point*>(message.getParam());
+			_target = *static_cast<Vector*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
@@ -48,12 +48,12 @@ namespace Temporal
 	
 	void LineRenderer::draw() const
 	{
-		const Point& position = getPosition(*this);
+		const Vector& position = getPosition(*this);
 
 		glPushMatrix();
 		{	
 			Vector vector = _target -position;
-			glTranslatef(position.getX() + vector.getVx() / 2.0f, position.getY() + vector.getVy() / 2.0f, 0.0f);
+			glTranslatef(position.getX() + vector.getX() / 2.0f, position.getY() + vector.getY() / 2.0f, 0.0f);
 
 			float length = vector.getLength() / 2.0f;
 			glRotatef(vector.getAngle() * 180.0f / PI, 0.0, 0.0, 1.0f);

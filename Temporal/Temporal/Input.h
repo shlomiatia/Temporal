@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -24,7 +24,7 @@ namespace Temporal
 		bool isQ() const { return _q; }
 		bool isW() const { return _w; }
 		bool isE() const { return _e; }
-		const Point& mouse() const { return _mouse; }
+		const Vector& mouse() const { return _mouse; }
 
 	private:
 		bool _left;
@@ -35,9 +35,9 @@ namespace Temporal
 		bool _q;
 		bool _w;
 		bool _e;
-		Point _mouse;
+		Vector _mouse;
 
-		Input() : _left(false), _right(false), _up(false), _down(false), _quit(false), _q(false), _w(false), _e(false), _mouse(Point::Zero) {}
+		Input() : _left(false), _right(false), _up(false), _down(false), _quit(false), _q(false), _w(false), _e(false), _mouse(Vector::Zero) {}
 		~Input() {}
 		Input(const Input&);
 		Input& operator=(const Input&);

@@ -55,7 +55,7 @@
     <ClInclude Include="DynamicBody.h" />
     <ClInclude Include="DebugInfo.h" />
     <ClInclude Include="Thread.h" />
-    <ClInclude Include="NumericPair.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Panel.h" />
@@ -91,7 +91,7 @@
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="NumericPair.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="BasePanel.cpp" />
     <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />

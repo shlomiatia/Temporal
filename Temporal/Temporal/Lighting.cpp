@@ -1,5 +1,5 @@
 #include "Lighting.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Math.h"
 #include "Grid.h"
 #include "StaticBody.h"
@@ -39,25 +39,25 @@ namespace Temporal
 		}
 	}
 
-	void drawShadow(const Point& lightCenter, const Shape& shape)
+	void drawShadow(const Vector& lightCenter, const Shape& shape)
 	{
 		float shadowSize = 10000.0f;
 		const Segment& segment = static_cast<const Segment&>(shape);
-		Point leftPoint = segment.getLeftPoint();
-		Point rightPoint = segment.getRightPoint();
+		Vector leftPoint = segment.getLeftPoint();
+		Vector rightPoint = segment.getRightPoint();
 		Vector vector1 = Vector(leftPoint - lightCenter).normalize();
 		Vector vector2 = Vector(rightPoint - lightCenter).normalize();
 
 		float vertices[8];
 			
-		vertices[0] = leftPoint.getX() + vector1.getVx() * shadowSize;
-		vertices[1] = leftPoint.getY() + vector1.getVy() * shadowSize;
+		vertices[0] = leftPoint.getX() + vector1.getX() * shadowSize;
+		vertices[1] = leftPoint.getY() + vector1.getY() * shadowSize;
 		vertices[2] = leftPoint.getX();
 		vertices[3] = leftPoint.getY();
 		vertices[4] = rightPoint.getX();
 		vertices[5] = rightPoint.getY();
-		vertices[6] = rightPoint.getX() + vector2.getVx() * shadowSize;
-		vertices[7] = rightPoint.getY() + vector2.getVy() * shadowSize;
+		vertices[6] = rightPoint.getX() + vector2.getX() * shadowSize;
+		vertices[7] = rightPoint.getY() + vector2.getY() * shadowSize;
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -70,7 +70,7 @@ namespace Temporal
 	
 	void Light::draw() const
 	{
-		const Point& position = getPosition(*this);
+		const Vector& position = getPosition(*this);
 		Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 		bool isFlipped = orientation != NULL && *orientation == Side::LEFT;
 
@@ -142,8 +142,8 @@ namespace Temporal
 
 	void LightSystem::postDraw() const
 	{
-		const Point& playerPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
-		Point relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
+		const Vector& playerPosition = *static_cast<Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+		Vector relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;

@@ -7,7 +7,7 @@
 
 namespace Temporal
 {
-	class Point;
+	class Vector;
 	class Vector;
 	class Fixture;
 	class DirectedSegment;
@@ -18,16 +18,16 @@ namespace Temporal
 	class RayCastResult
 	{
 	public:
-		RayCastResult() : _fixture(NULL), _point(Point::Zero) {}
+		RayCastResult() : _fixture(NULL), _point(Vector::Zero) {}
 
 		const Fixture& getFixture() const { return *_fixture; }
 		void setFixture(const Fixture* fixture) { _fixture = fixture; }
-		const Point& getPoint() const { return _point; }
-		void SetPoint(const Point& point) { _point = point; }
+		const Vector& getPoint() const { return _point; }
+		void SetPoint(const Vector& point) { _point = point; }
 
 	private:
 		const Fixture* _fixture;
-		Point _point;
+		Vector _point;
 	};
 
 	class Grid
@@ -45,7 +45,7 @@ namespace Temporal
 		void add(const Fixture* body);
 		void update(const Shape& previous, const Fixture* body);
 
-		bool cast(const Point& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
+		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
 		FixtureCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;

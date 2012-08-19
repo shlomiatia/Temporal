@@ -2,7 +2,7 @@
 #define NAVIGATIONGRAPH_H
 
 #include "BaseEnums.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Shapes.h"
 #include <vector>
 

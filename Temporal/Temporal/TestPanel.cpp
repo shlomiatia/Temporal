@@ -1,5 +1,5 @@
 #include "TestPanel.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Shapes.h"
 #include "Math.h"
 #include "EntitySystem.h"
@@ -67,9 +67,9 @@ namespace Temporal
 	{
 		// Jump sensor
 		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
-		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
+		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
-		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
+		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
 		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
 		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
@@ -137,11 +137,11 @@ namespace Temporal
 		const Texture* texture = Texture::load("bubble.png");
 		SceneNode* root = createDefaultSceneGraph();
 
-		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
+		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::PLAYER);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		InputController* controller = new InputController();
-		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(*animations);
@@ -175,7 +175,7 @@ namespace Temporal
 		root->setSpriteGroupID(Hash("POP_ANM_STAND"));
 
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		Transform* transform = new Transform(Point(100.0f, 550.0f), Side::RIGHT);
+		Transform* transform = new Transform(Vector(100.0f, 550.0f), Side::RIGHT);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
@@ -228,7 +228,7 @@ namespace Temporal
 		addAnimation(animations, animationID, sceneNodeID, animationID, 200.0f);
 		#pragma endregion
 
-		Transform* transform = new Transform(Point(383.0f, 383.0f), Side::LEFT);
+		Transform* transform = new Transform(Vector(383.0f, 383.0f), Side::LEFT);
 		Camera* camera = new Camera();
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
@@ -252,10 +252,10 @@ namespace Temporal
 	void createPatrol(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
 		SceneNode* root = createDefaultSceneGraph();
-		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
 
-		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
+		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Patrol* patrol = new Patrol();
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		DynamicBody* dynamicBody = new DynamicBody(info);
@@ -287,7 +287,7 @@ namespace Temporal
 
 	void createLaser()
 	{
-		Transform* transform = new Transform(Point(100.0f, 100.0f));
+		Transform* transform = new Transform(Vector(100.0f, 100.0f));
 		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
 		const Texture* texture = Texture::load("laser.png");
 		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
@@ -308,11 +308,11 @@ namespace Temporal
 
 	void createChaser(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
-		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
+		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Navigator* navigator = new Navigator();
-		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
@@ -341,7 +341,7 @@ namespace Temporal
 	void createPlatform(Shape* shape, SpriteSheet* spritesheet, int filter = FilterType::OBSTACLE) 
 	{
 		Transform* transform = new Transform(shape->getCenter());
-		shape->setCenter(Point::Zero);
+		shape->setCenter(Vector::Zero);
 		CollisionFilter* collisionFilter = new CollisionFilter(filter);
 		Fixture* fixture = new Fixture(shape);
 		StaticBody* staticBody = new StaticBody(fixture);
@@ -466,7 +466,7 @@ namespace Temporal
 	}
 
 	// TODO: Draw texture
-	void createBackground(const Point& position)
+	void createBackground(const Vector& position)
 	{
 		const Texture* texture = Texture::load("bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
@@ -474,7 +474,7 @@ namespace Temporal
 		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
 		spritesheet->add(spriteGroupID, spriteGroup);
 		Size size = texture->getSize();
-		spriteGroup->add(new Sprite(AABB(size / 2.0f, size), Vector::Zero));
+		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(spriteGroupID);
 
@@ -608,7 +608,7 @@ namespace Temporal
 		addAnimation(animations, animationID, SCN_RIGHT_FOOT_ID, SCN_RIGHT_FOOT_ID, 0.0f, Vector(-18,-29));
 		addAnimation(animations, animationID, SCN_SHADOW_ID, SCN_SHADOW_ID, 0.0f, Vector(-5,-101));
 
-		Transform* transform = new Transform(Point(300.0f, 300.0f), Side::RIGHT);
+		Transform* transform = new Transform(Vector(300.0f, 300.0f), Side::RIGHT);
 		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 
@@ -621,7 +621,7 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
-	void createLight(const Point& point)
+	void createLight(const Vector& point)
 	{
 		if(!_lights)
 			return;
@@ -814,10 +814,10 @@ namespace Temporal
 		//createChaser(spritesheet, animations);
 		createLaser();
 		createPlatforms();
-		createBackground(Point(512.0f, 384.0f));
-		createBackground(Point(1536.0f, 384.0f));
+		createBackground(Vector(512.0f, 384.0f));
+		createBackground(Vector(1536.0f, 384.0f));
 		createSkeleton();
-		createLight(Point(700.0f, 300.0f));
-		createLight(Point(1500.0f, 300.0f));
+		createLight(Vector(700.0f, 300.0f));
+		createLight(Vector(1500.0f, 300.0f));
 	}
 }

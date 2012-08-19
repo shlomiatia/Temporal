@@ -1,7 +1,7 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -14,7 +14,7 @@ namespace Temporal
 			return (instance);
 		}
 
-		const Point& getCameraBottomLeft() const { return _cameraBottomLeft; }
+		const Vector& getCameraBottomLeft() const { return _cameraBottomLeft; }
 		void setLevelBounds(const Size& levelBounds) { _levelBounds = levelBounds; }
 
 		void init(const Size& resolution, float logicalHeight, bool fullScreen = false);
@@ -23,7 +23,7 @@ namespace Temporal
 
 		
 	private:
-		Point _cameraBottomLeft;
+		Vector _cameraBottomLeft;
 		Size _levelBounds;
 		Size _cameraSize;
 

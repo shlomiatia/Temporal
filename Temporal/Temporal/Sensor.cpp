@@ -51,13 +51,13 @@ namespace Temporal
 
 	void LedgeDetector::start()
 	{
-		_point = Point::Zero;
+		_point = Vector::Zero;
 		_isBlocked = false;
 	}
 
 	void LedgeDetector::end()
 	{
-		if(_point != Point::Zero)
+		if(_point != Vector::Zero)
 		{
 			getOwner().raiseMessage(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
 		}
@@ -74,20 +74,20 @@ namespace Temporal
 		const Segment& segment = static_cast<const Segment&>(contact.getTarget().getGlobalShape());
 
 		// Then check if contain one of the edges
-		Point point = Point::Zero;
-		Point leftPoint = segment.getLeftPoint();
-		Point rightPoint = segment.getRightPoint();
+		Vector point = Vector::Zero;
+		Vector leftPoint = segment.getLeftPoint();
+		Vector rightPoint = segment.getRightPoint();
 		if(sensorShape.contains(leftPoint))
 			point = leftPoint;
 		else if(sensorShape.contains(rightPoint))
 			point = rightPoint;
-		if(point != Point::Zero)
+		if(point != Vector::Zero)
 		{
 			Vector vector = segment.getNaturalVector();
 					
 			// Modify the angle according to relative position
-			if((vector.getVx() == 0.0f && segment.getTop() == point.getY()) ||
-				(vector.getVx() != 0.0f && segment.getRight() == point.getX())) 
+			if((vector.getX() == 0.0f && segment.getTop() == point.getY()) ||
+				(vector.getX() != 0.0f && segment.getRight() == point.getX())) 
 			{
 				vector = -vector;
 			}
@@ -111,7 +111,7 @@ namespace Temporal
 		else
 		{
 			_isBlocked = true;
-			_point = Point::Zero;
+			_point = Vector::Zero;
 		}		
 	}
 }

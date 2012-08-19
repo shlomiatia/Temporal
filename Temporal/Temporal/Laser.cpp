@@ -4,7 +4,7 @@
 #include "Grid.h"
 #include "Math.h"
 #include "ShapeOperations.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Fixture.h"
@@ -22,7 +22,7 @@ namespace Temporal
 		if(message.getID() == MessageID::LEVEL_CREATED)
 		{
 			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
-			Point position = segment.getNaturalOrigin();
+			Vector position = segment.getNaturalOrigin();
 			position.setY(position.getY() - 1.0f);
 			raiseMessage(Message(MessageID::SET_POSITION, &position));
 		}
@@ -45,12 +45,12 @@ namespace Temporal
 
 	void Laser::update(float framePeriodInMillis)
 	{
-		const Point& position = getPosition(*this);
+		const Vector& position = getPosition(*this);
 		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 		Vector directionVector = segment.getNaturalVector().normalize();
 		Vector laserVector = directionVector.getRightNormal();
 		float movementAmount = LASER_SPEED_PER_SECOND * framePeriodInMillis / 1000.0f;
-		Point maxPoint = Point::Zero;
+		Vector maxPoint = Vector::Zero;
 		if(_isPositiveDirection)
 		{
 			maxPoint = segment.getNaturalTarget();
@@ -63,11 +63,11 @@ namespace Temporal
 		Vector movement = directionVector * movementAmount;
 		Vector currDiff = maxPoint - position;
 		Vector nextDiff = currDiff + movement;
-		if(!sameSign(currDiff.getVx(), nextDiff.getVx()) || !sameSign(currDiff.getVy(), nextDiff.getVy()))
+		if(!sameSign(currDiff.getX(), nextDiff.getX()) || !sameSign(currDiff.getY(), nextDiff.getY()))
 		{
 			_isPositiveDirection = !_isPositiveDirection;
 		}
-		Point newPosition = position + movement;
+		Vector newPosition = position + movement;
 		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		RayCastResult result;
 		int group = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
@@ -75,7 +75,7 @@ namespace Temporal
 		{
 			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
 			raiseMessage(Message(MessageID::SET_COLOR, &color));
-			raiseMessage(Message(MessageID::SET_TARGET, const_cast<Point*>(&result.getPoint())));
+			raiseMessage(Message(MessageID::SET_TARGET, const_cast<Vector*>(&result.getPoint())));
 		}
 	}
 }

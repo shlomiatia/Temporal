@@ -34,7 +34,7 @@ namespace Temporal
 
 	bool intersects(const AABB& rect, const Segment& seg, Vector* correction)
 	{
-		Point segmentCenter = seg.getCenter();
+		Vector segmentCenter = seg.getCenter();
 		const Vector& segmentRadius = seg.getRadius();
 		segmentCenter -= rect.getCenter(); // Translate box and segment to origin
 		
@@ -77,10 +77,10 @@ namespace Temporal
 		return true;
 	}
 
-	bool intersects(const DirectedSegment& seg, const AABB& rect, Point* pointOfIntersection, float* distance)
+	bool intersects(const DirectedSegment& seg, const AABB& rect, Vector* pointOfIntersection, float* distance)
 	{
 		float tmin = 0.0f; // set to -FLT_MAX to get first hit on line
-		const Point& origin = seg.getOrigin();
+		const Vector& origin = seg.getOrigin();
 		Vector vector = seg.getVector();
 		const Vector direction = vector.normalize();
 		float tmax = vector.getLength();
@@ -120,14 +120,14 @@ namespace Temporal
 	}
 
 
-	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Point* pointOfIntersection, float* distance)
+	bool intersects(const DirectedSegment& dirSeg, const Segment& seg, Vector* pointOfIntersection, float* distance)
 	{
 		Vector dirSegVec = dirSeg.getVector();
 		Vector segVec = seg.getNaturalVector();
 		Vector segNormal = segVec.getRightNormal();
 		float denominator = segNormal * dirSegVec;
-		Point segOrigin = seg.getNaturalOrigin();
-		Point dirSegOrigin = dirSeg.getOrigin();
+		Vector segOrigin = seg.getNaturalOrigin();
+		Vector dirSegOrigin = dirSeg.getOrigin();
 		Vector difference = segOrigin - dirSegOrigin;
 		Vector dirSegNormal = dirSegVec.getRightNormal();
 		float numerator1 = dirSegNormal * difference;
@@ -154,20 +154,20 @@ namespace Temporal
 			// Overlaps
 			if(numerator1 == 0)
 			{
-				Point dirSegCenter = dirSeg.getOrigin() + dirSeg.getVector() / 2.0f;
+				Vector dirSegCenter = dirSeg.getOrigin() + dirSeg.getVector() / 2.0f;
 				Vector centersVector = Vector(dirSegCenter - seg.getCenterX());
 				if(centersVector.getLength() <= dirSeg.getVector().getLength() + seg.getRadius().getLength())
 				{
 					if(pointOfIntersection != NULL)
 					{
 						Vector vector1 = segOrigin - dirSegOrigin;
-						Point segTarget = seg.getNaturalTarget();
+						Vector segTarget = seg.getNaturalTarget();
 						Vector vector2 = segTarget - dirSegOrigin;
 						float tempDistance;
 
 						// We take 2 vectors that originated in the directed segment origin, and are directed to the segment natural origin and target.
 						// If the directions are opposite, it means that the directed segment origin is swallowed by the segment, therefore it's the point of intersection
-						if(differentSign(vector1.getVx(), vector2.getVx()) || differentSign(vector1.getVy(), vector2.getVy()))
+						if(differentSign(vector1.getX(), vector2.getX()) || differentSign(vector1.getY(), vector2.getY()))
 						{
 							*pointOfIntersection = dirSeg.getOrigin();
 							tempDistance = 0.0f;
@@ -204,13 +204,13 @@ namespace Temporal
 		// Check x axis (parallel to y)
 		Vector segRadius = segment.getRadius();
 		float delta = yabp.getCenterX() - segment.getCenterX();
-		if(yabp.getSlopedRadiusVx() + segRadius.getVx() < abs(delta)) return false;
+		if(yabp.getSlopedRadiusVx() + segRadius.getX() < abs(delta)) return false;
 
 		// Check sloped axis
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = yabp.getYVector();
-		Point yabpPointMin = yabp.getCenter() + yRadius;
-		Point yabpPointMax = yabp.getCenter() - yRadius;
+		Vector yabpPointMin = yabp.getCenter() + yRadius;
+		Vector yabpPointMax = yabp.getCenter() - yRadius;
 		float yabpProjectionMin =   normal * yabpPointMin;
 		float yabpProjectionMax =   normal * yabpPointMax;
 		float segmentProjection1 = normal * segment.getLeftPoint();
@@ -237,8 +237,8 @@ namespace Temporal
 	{
 		Vector normal = yabp1.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius1 = yabp1.getYVector();
-		Point yabpMinPoint1 = yabp1.getCenter() + yRadius1;
-		Point yabpMaxPoint1 = yabp1.getCenter() - yRadius1;
+		Vector yabpMinPoint1 = yabp1.getCenter() + yRadius1;
+		Vector yabpMaxPoint1 = yabp1.getCenter() - yRadius1;
 		float yabpMinProjection1 =   normal * yabpMinPoint1;
 		float yabpMaxProjection1 =   normal * yabpMaxPoint1;
 
@@ -246,7 +246,7 @@ namespace Temporal
 		Vector absNormal = normal.absolute();
 		Vector yRadius2 = yabp2.getYVector();
 		Vector yabpRadius2 = yabp2.getSlopedRadius() + yRadius2;
-		Vector absSlopedRadius2 = Vector(abs(yabp2.getSlopedRadius().getVx()), abs(yabp2.getSlopedRadius().getVy()));
+		Vector absSlopedRadius2 = Vector(abs(yabp2.getSlopedRadius().getX()), abs(yabp2.getSlopedRadius().getY()));
 		float yabpMinProjection2 = normal * yabp2.getCenter() - absSlopedRadius2 * absNormal - yRadius2 * absNormal;
 		float yabpMaxProjection2 = normal * yabp2.getCenter()  + absSlopedRadius2 * absNormal + yRadius2 * absNormal;
 		
@@ -282,8 +282,8 @@ namespace Temporal
 		// Check sloped axis
 		Vector normal = yabp.getSlopedRadius().normalize().getRightNormal();
 		Vector yRadius = yabp.getYVector();
-		Point yabpPointMin = yabp.getCenter() + yRadius;
-		Point yabpPointMax = yabp.getCenter() - yRadius;
+		Vector yabpPointMin = yabp.getCenter() + yRadius;
+		Vector yabpPointMax = yabp.getCenter() - yRadius;
 		float yabpProjectionMin =   normal * yabpPointMin;
 		float yabpProjectionMax =   normal * yabpPointMax;
 
@@ -317,7 +317,7 @@ namespace Temporal
 		}
 	}
 
-	bool intersects(const DirectedSegment& seg, const Shape& shape, Point* pointOfIntersection, float* distance)
+	bool intersects(const DirectedSegment& seg, const Shape& shape, Vector* pointOfIntersection, float* distance)
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{

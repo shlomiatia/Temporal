@@ -1,7 +1,7 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Timer.h"
@@ -12,20 +12,20 @@ namespace Temporal
 	{
 	public:
 		Particle()
-			: _position(Point::Zero), _movement(Vector::Zero), _ageTimer(), _isAlive(true) 
+			: _position(Vector::Zero), _movement(Vector::Zero), _ageTimer(), _isAlive(true) 
 		{
 		}
 		void resetAge() { _ageTimer.reset(); }
 		float getAge() const { return _ageTimer.getElapsedTimeInMillis(); }
-		const Point& getPosition() const { return _position; }
-		void setPosition(const Point& position) { _position = position; }
+		const Vector& getPosition() const { return _position; }
+		void setPosition(const Vector& position) { _position = position; }
 		void setMovement(const Vector& movement) { _movement = movement; }
 		void setAlive(bool isAlive) { _isAlive = isAlive; } 
 		bool isAlive() const { return _isAlive; }
 
 		void update(float time);
 	private:
-		Point _position;
+		Vector _position;
 		Vector _movement;
 		Timer _ageTimer;
 		bool _isAlive;

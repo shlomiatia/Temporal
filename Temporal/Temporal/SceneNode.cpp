@@ -14,7 +14,17 @@ namespace Temporal
 
 	SceneNode* SceneNode::clone() const
 	{
-		SceneNode* clone = new SceneNode(_id, _drawBehindParent, _transformOnly, _spriteGroupID, _translation, _rotation, _isMirrored);
+		SceneNode* clone = new SceneNode(_id, _drawBehindParent, _transformOnly);
+
+		clone->setTranslation(getTranslation());
+		clone->setScale(getScale());
+		clone->setRotation(getRotation());
+		clone->setMirrored(isMirrored());
+		clone->setTextureTranslation(getTextureTranslation());
+
+		clone->setSpriteGroupID(getSpriteGroupID());
+		clone->setSpriteInterpolation(getSpriteInterpolation());
+
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
 		{
 			clone->add((**i).clone());

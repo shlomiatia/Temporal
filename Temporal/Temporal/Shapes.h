@@ -2,7 +2,7 @@
 #define SHAPES_H
 
 #include "BaseEnums.h"
-#include "NumericPair.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -21,7 +21,7 @@ namespace Temporal
 	class Shape
 	{
 	public:
-		Shape(const Point& center) : _center(center) {}
+		Shape(const Vector& center) : _center(center) {}
 		Shape(float centerX, float centerY) : _center(centerX, centerY) {}
 		virtual ~Shape() {}
 		
@@ -37,8 +37,8 @@ namespace Temporal
 
 		virtual Shape* clone() const = 0;
 
-		const Point& getCenter() const { return _center; }
-		void setCenter(const Point& center) { _center = center; }
+		const Vector& getCenter() const { return _center; }
+		void setCenter(const Vector& center) { _center = center; }
 
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
@@ -49,7 +49,7 @@ namespace Temporal
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
 	protected:
-		Point _center;
+		Vector _center;
 
 	};
 
@@ -62,15 +62,15 @@ namespace Temporal
 		static const AABB Zero;
 
 		AABB(float centerX, float centerY, float width, float height);
-		AABB(const Point& center, const Size& size);
-		AABB(const Point& center, const Vector& radius);
+		AABB(const Vector& center, const Size& size);
+		AABB(const Vector& center, const Vector& radius);
 
 		ShapeType::Enum getType() const { return ShapeType::AABB; }
 		
 		const Vector& getRadius() const { return _radius; }
 
-		float getRadiusVx() const { return getRadius().getVx(); }
-		float getRadiusVy() const { return getRadius().getVy(); }
+		float getRadiusVx() const { return getRadius().getX(); }
+		float getRadiusVy() const { return getRadius().getY(); }
 
 		float getBottom() const { return getCenterY() - getRadiusVy(); }
 		float getLeft() const {	return getCenterX() - getRadiusVx(); }
@@ -84,7 +84,7 @@ namespace Temporal
 
 		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
 
-		bool contains(const Point& point) const;
+		bool contains(const Vector& point) const;
 
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }
@@ -108,22 +108,21 @@ namespace Temporal
 		static const Segment Zero;
 
 		Segment(float x1, float y1, float x2, float y2) : Shape((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
-		Segment(const Point& point1, const Point& point2) : Shape((point1+point2)/2.0f), _radius((point2-point1)/2.0f) {}
-		Segment(const Point& center, const Vector& radius);
+		Segment(const Vector& center, const Vector& radius);
 		// No need for virtual destructor
 
 		ShapeType::Enum getType() const { return ShapeType::SEGMENT; }
 
 		const Vector& getRadius() const { return _radius; }
-		float getRadiusVx() const { return getRadius().getVx(); }
-		float getRadiusVy() const { return getRadius().getVy(); }
+		float getRadiusVx() const { return getRadius().getX(); }
+		float getRadiusVy() const { return getRadius().getY(); }
 
-		Point getLeftPoint() const { return getCenter() + (getRadiusVx() <= 0.0f ? getRadius() : -getRadius()); }
-		Point getRightPoint() const { return getCenter() + (getRadiusVx() > 0.0f ? getRadius() : -getRadius()); }
-		Point getBottomPoint() const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
-		Point getTopPoint() const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
-		Point getNaturalOrigin() const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }
-		Point getNaturalTarget() const { return getRadiusVx() == 0.0f ? getTopPoint() : getRightPoint(); }
+		Vector getLeftPoint() const { return getCenter() + (getRadiusVx() <= 0.0f ? getRadius() : -getRadius()); }
+		Vector getRightPoint() const { return getCenter() + (getRadiusVx() > 0.0f ? getRadius() : -getRadius()); }
+		Vector getBottomPoint() const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
+		Vector getTopPoint() const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
+		Vector getNaturalOrigin() const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }
+		Vector getNaturalTarget() const { return getRadiusVx() == 0.0f ? getTopPoint() : getRightPoint(); }
 		Vector getNaturalVector() const { return getNaturalTarget() - getNaturalOrigin(); }
 		
 		float getLeft() const { return getLeftPoint().getX(); }
@@ -145,7 +144,7 @@ namespace Temporal
 		float get(Axis::Enum axis, float otherAxisValue) const;
 	};
 
-	inline Segment SegmentPP(const Point& p1, const Point& p2) { return Segment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
+	inline Segment SegmentPP(const Vector& p1, const Vector& p2) { return Segment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
 
 	/**********************************************************************************************
 	 * YABP - A parallelogram with 1 axis parallel to Y
@@ -153,9 +152,9 @@ namespace Temporal
 	class YABP
 	{
 	public:
-		YABP(const Point& center, const Vector& slopedRadius, float yRadius);
+		YABP(const Vector& center, const Vector& slopedRadius, float yRadius);
 
-		const Point& getCenter() const { return _center; }
+		const Vector& getCenter() const { return _center; }
 		const Vector& getSlopedRadius() const { return _slopedRadius; }
 		float getYRadius() const { return _yRadius; }
 
@@ -164,8 +163,8 @@ namespace Temporal
 
 		Vector getYVector() const { return Vector(0.0f, getYRadius()); }
 		
-		float getSlopedRadiusVx() const { return getSlopedRadius().getVx(); }
-		float getSlopedRadiusVy() const { return getSlopedRadius().getVy(); }
+		float getSlopedRadiusVx() const { return getSlopedRadius().getX(); }
+		float getSlopedRadiusVy() const { return getSlopedRadius().getY(); }
 
 		float getLeft() const {	return getCenterX() - getSlopedRadiusVx(); }
 		float getRight() const { return getCenterX() + getSlopedRadiusVx(); }
@@ -175,7 +174,7 @@ namespace Temporal
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
 	private:
-		Point _center;
+		Vector _center;
 		Vector _slopedRadius;
 		float _yRadius;
 		
@@ -189,15 +188,15 @@ namespace Temporal
 	{
 	public:
 		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
-		DirectedSegment(const Point& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
-		const Point& getOrigin() const { return _origin; }
+		DirectedSegment(const Vector& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
+		const Vector& getOrigin() const { return _origin; }
 		const Vector& getVector() const { return _vector; }
-		Point getTarget() const { return getOrigin() + getVector(); }
+		Vector getTarget() const { return getOrigin() + getVector(); }
 	private:
-		Point _origin;
+		Vector _origin;
 		Vector _vector;
 	};
 
-	inline DirectedSegment DirectedSegmentPP(const Point& p1, const Point& p2) { return DirectedSegment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
+	inline DirectedSegment DirectedSegmentPP(const Vector& p1, const Vector& p2) { return DirectedSegment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }
 }
 #endif

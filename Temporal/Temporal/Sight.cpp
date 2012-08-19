@@ -29,7 +29,7 @@ namespace Temporal
 
 	void Sight::checkLineOfSight()
 	{
-		_pointOfIntersection = Point::Zero;
+		_pointOfIntersection = Vector::Zero;
 		_isSeeing = false;
 
 		int sourceCollisionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
@@ -39,9 +39,9 @@ namespace Temporal
 		   sourceCollisionGroup != targetCollisionGroup)
 		   return;
 
-		const Point& sourcePosition = getPosition(*this);
+		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
-		const Point& targetPosition = *static_cast<Point*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+		const Vector& targetPosition = *static_cast<Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 
 		// Check orientation
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
@@ -72,18 +72,18 @@ namespace Temporal
 			raiseMessage(Message(MessageID::LINE_OF_SIGHT));
 	}
 
-	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Point &sourcePosition)
+	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Vector &sourcePosition)
 	{
 		if(sourceSide == Side::LEFT)
 			angle = PI - angle;
 		static const float SIGHT_SEGMENT_LENGTH = 512.0f;
 		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
 		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
-		Point targetPosition = Point(targetX, targetY);
-		Graphics::get().draw(Segment(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Vector targetPosition = Vector(targetX, targetY);
+		Graphics::get().draw(SegmentPP(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
-	void Sight::drawFieldOfView(const Point &sourcePosition, Side::Enum sourceSide) const
+	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
 	{
 		drawFieldOfViewSegment(_sightCenter + (_sightSize / 2.0f), sourceSide, sourcePosition);
 		drawFieldOfViewSegment(_sightCenter - (_sightSize / 2.0f), sourceSide, sourcePosition);
@@ -91,11 +91,11 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
-		const Point& sourcePosition = getPosition(*this);
+		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
 
 		drawFieldOfView(sourcePosition, sourceSide);
-		if(_pointOfIntersection != Point::Zero)
-			Graphics::get().draw(Segment(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
+		if(_pointOfIntersection != Vector::Zero)
+			Graphics::get().draw(SegmentPP(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
 	}
 }

@@ -1,6 +1,6 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Color.h"
 #include "EntitySystem.h"
 
@@ -12,7 +12,7 @@ namespace Temporal
 	{
 	public:
 		LineRenderer(VisualLayer::Enum layer, const Texture& texture, Color color = Color::White) :
-			_layer(layer), _target(Point::Zero), _color(color), _texture(texture) {};
+			_layer(layer), _target(Vector::Zero), _color(color), _texture(texture) {};
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 
@@ -22,7 +22,7 @@ namespace Temporal
 	private:
 		const Texture& _texture;
 		const VisualLayer::Enum _layer;
-		Point _target;
+		Vector _target;
 		Color _color;
 	};
 }
