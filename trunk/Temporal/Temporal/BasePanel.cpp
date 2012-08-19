@@ -3,7 +3,7 @@
 #include "EntitySystem.h"
 #include "Game.h"
 #include "Shapes.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "ViewManager.h"
 #include "Graphics.h"
 #include "Grid.h"

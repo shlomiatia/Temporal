@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	static const NumericPairSerializer POSITION_SERIALIZER("POS_SER");
+	static const VectorSerializer POSITION_SERIALIZER("POS_SER");
 	static const Hash ORIENTATION_SERIALIZATION = Hash("ORI_SER");
 
 	void Transform::handleMessage(Message& message)
@@ -16,7 +16,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = *static_cast<Point*>(message.getParam());
+			_position = *static_cast<Vector*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{

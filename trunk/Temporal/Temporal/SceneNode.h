@@ -1,9 +1,10 @@
 #ifndef SCENENODE_H
 #define SCENENODE_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Hash.h"
 #include "BaseEnums.h"
+#include "Color.h"
 #include <vector>
 
 namespace Temporal
@@ -17,24 +18,32 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		SceneNode(const Hash& id, bool drawBehindParent = false, bool transformOnly = false, const Hash& spriteGroupID = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f, bool isMirrored = false) :
-		  _id(id), _translation(translation), _rotation(rotation), _isMirrored(isMirrored), _spriteGroupID(spriteGroupID), _spriteInterpolation(0),
-		  _drawBehindParent(drawBehindParent), _transformOnly(transformOnly) {}
+		SceneNode(const Hash& id, bool drawBehindParent = false, bool transformOnly = false) :
+			_drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _id(id), _translation(Vector::Zero), _scale(Vector(1.0f, 1.0f)),
+			_rotation(0.0f), _isMirrored(false), _textureTranslation(Vector::Zero), _spriteGroupID(Hash::INVALID), _spriteInterpolation(0.0f) {}
 		~SceneNode();
 
-		const bool drawBehindParent() const { return _drawBehindParent; }
 		const Hash& getID() const { return _id; }
-		const Hash& getSpriteGroupID() const { return _spriteGroupID; }
-		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
-		float getSpriteInterpolation() const { return _spriteInterpolation; }
-		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
+
+		const bool drawBehindParent() const { return _drawBehindParent; }
+		bool isTransformOnly() const { return _transformOnly; }
+		
 		const Vector& getTranslation() const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
+		const Vector& getScale() const { return _scale; }
+		void setScale(const Vector& scale) { _scale = scale; }
 		float getRotation() const { return _rotation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 		bool isMirrored() const { return _isMirrored; }
 		void setMirrored(bool isMirrored) { _isMirrored = isMirrored; }
-		bool isTransformOnly() const { return _transformOnly; }
+		const Vector& getTextureTranslation() const { return _textureTranslation; }
+		void setTextureTranslation(const Vector& textureTranslation) { _textureTranslation = textureTranslation; }
+
+		const Hash& getSpriteGroupID() const { return _spriteGroupID; }
+		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
+		float getSpriteInterpolation() const { return _spriteInterpolation; }
+		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
+
 		const SceneNodeCollection& getChildren() const { return _children; }
 
 		void add(SceneNode* child) { _children.push_back(child); }
@@ -42,11 +51,14 @@ namespace Temporal
 	private:
 		const Hash _id;
 
-		bool _drawBehindParent;		
+		bool _drawBehindParent;	
 		bool _transformOnly;
+
 		Vector _translation;
+		Vector _scale;
 		float _rotation;
 		bool _isMirrored;
+		Vector _textureTranslation;
 
 		Hash _spriteGroupID;
 		float _spriteInterpolation;

@@ -5,26 +5,26 @@
 
 namespace Temporal
 {
-	static const NumericPairSerializer OVERRIDE_SERIALIZER("DRW_POS_OVERRIDE");
+	static const VectorSerializer OVERRIDE_SERIALIZER("DRW_POS_OVERRIDE");
 
 	void DrawPosition::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_DRAW_POSITION)
 		{
-			Point* outParam = static_cast<Point*>(message.getParam());
-			if(_override != Point::Zero)
+			Vector* outParam = static_cast<Vector*>(message.getParam());
+			if(_override != Vector::Zero)
 			{
 				*outParam = _override;
 			}
 			else
 			{
-				const Point& position = getPosition(*this);
+				const Vector& position = getPosition(*this);
 				*outParam = position + _offset;
 			}
 		}
 		else if(message.getID() == MessageID::SET_DRAW_POSITION_OVERRIDE)
 		{
-			_override = *static_cast<Point*>(message.getParam());
+			_override = *static_cast<Vector*>(message.getParam());
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{

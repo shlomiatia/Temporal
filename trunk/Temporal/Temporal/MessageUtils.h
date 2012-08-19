@@ -8,7 +8,7 @@ namespace Temporal
 {
 	class Component;
 	class Message;
-	class Point;
+	class Vector;
 	class Vector;
 	class Serialization;
 
@@ -33,20 +33,20 @@ namespace Temporal
 	class SensorCollisionParams
 	{
 	public:
-		SensorCollisionParams(const Hash& sensorID, const Point* point) : _sensorID(sensorID), _point(point) {}
+		SensorCollisionParams(const Hash& sensorID, const Vector* point) : _sensorID(sensorID), _point(point) {}
 
 		const Hash& getSensorID() const { return _sensorID; }
-		const Point* getPoint() const { return _point; }
+		const Vector* getPoint() const { return _point; }
 	
 	private:
 		const Hash _sensorID;
-		const Point* _point;
+		const Vector* _point;
 
 		SensorCollisionParams(const SensorCollisionParams&);
 		SensorCollisionParams& operator=(const SensorCollisionParams&);
 	};
 
-	const Point& getPosition(const Component& component);
+	const Vector& getPosition(const Component& component);
 	Side::Enum getOrientation(const Component& component);
 
 	const Hash& getHashParam(void* data);

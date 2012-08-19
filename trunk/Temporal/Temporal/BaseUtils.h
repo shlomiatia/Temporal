@@ -2,7 +2,7 @@
 #define BASEUTILS_H
 
 #include "Hash.h"
-#include "NumericPair.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -10,19 +10,19 @@ namespace Temporal
 
 	Hash createKey(const char* prefix, const char* name);
 
-	class NumericPairSerializer
+	class VectorSerializer
 	{
 	public:
-		explicit NumericPairSerializer(const char* prefix) : _n1Key(createKey(prefix, "_N1")), _n2Key(createKey(prefix, "_N2")) {}
+		explicit VectorSerializer(const char* prefix) : _n1Key(createKey(prefix, "_N1")), _n2Key(createKey(prefix, "_N2")) {}
 
-		void serialize(Serialization& serialization, const NumericPair& pair) const;
-		void deserialize(const Serialization& deserialization, NumericPair& pair) const;
+		void serialize(Serialization& serialization, const Vector& pair) const;
+		void deserialize(const Serialization& deserialization, Vector& pair) const;
 	private:
 		const Hash _n1Key;
 		const Hash _n2Key;
 
-		NumericPairSerializer(const NumericPairSerializer&);
-		NumericPairSerializer& operator=(const NumericPairSerializer&);
+		VectorSerializer(const VectorSerializer&);
+		VectorSerializer& operator=(const VectorSerializer&);
 	};
 }
 

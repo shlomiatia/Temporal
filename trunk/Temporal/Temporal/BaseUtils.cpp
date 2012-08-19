@@ -13,14 +13,14 @@ namespace Temporal
 		return Hash(key);
 	}
 
-	void NumericPairSerializer::serialize(Serialization& serialization, const NumericPair& pair) const
+	void VectorSerializer::serialize(Serialization& serialization, const Vector& pair) const
 	{
-		serialization.serialize(_n1Key, pair.getN1());
-		serialization.serialize(_n2Key, pair.getN2());
+		serialization.serialize(_n1Key, pair.getX());
+		serialization.serialize(_n2Key, pair.getY());
 	}
-	void NumericPairSerializer::deserialize(const Serialization& deserialization, NumericPair& pair) const
+	void VectorSerializer::deserialize(const Serialization& deserialization, Vector& pair) const
 	{
-		pair.setN1(deserialization.deserializeFloat(_n1Key));
-		pair.setN2(deserialization.deserializeFloat(_n2Key));
+		pair.setX(deserialization.deserializeFloat(_n1Key));
+		pair.setY(deserialization.deserializeFloat(_n2Key));
 	}
 }

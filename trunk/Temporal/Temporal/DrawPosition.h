@@ -2,7 +2,7 @@
 #define DRAWPOSITION_H
 
 #include "EntitySystem.h"
-#include "NumericPair.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -17,7 +17,7 @@ namespace Temporal
 	private:
 		const Vector _offset;
 
-		Point _override;
+		Vector _override;
 	};
 }
 #endif

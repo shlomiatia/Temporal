@@ -3,7 +3,7 @@
 #include "Graphics.h"
 #include "ShapeOperations.h"
 #include "Fixture.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "CollisionFilter.h"
 #include <algorithm>
 
@@ -11,7 +11,7 @@ namespace Temporal
 {
 	AABB Grid::getTileAABB(int i, int j) const
 	{
-		return AABB(Point(getTileAxisCenter(i), getTileAxisCenter(j)), Size(_tileSize, _tileSize));
+		return AABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Size(_tileSize, _tileSize));
 	}
 
 	void Grid::init(const Size& worldSize, float tileSize)
@@ -134,12 +134,12 @@ namespace Temporal
 			return _grid[index];
 	}
 
-	bool Grid::cast(const Point& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask, int group) const
+	bool Grid::cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask, int group) const
 	{
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
-		const Point& origin = ray.getOrigin();
-		const Point& destination = ray.getTarget();
+		const Vector& origin = ray.getOrigin();
+		const Vector& destination = ray.getTarget();
 		float x1 = origin.getX();
 		float y1 = origin.getY();
 		float x2 = destination.getX();
@@ -181,7 +181,7 @@ namespace Temporal
 			if(bodies != NULL)
 			{
 				float distance = 0;
-				Point pointOfIntersection = Point::Zero;
+				Vector pointOfIntersection = Vector::Zero;
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
 					const Fixture& body = **iterator;
@@ -195,7 +195,7 @@ namespace Temporal
 						minDistance = distance;
 					}
 				}
-				if(result.getPoint() != Point::Zero)
+				if(result.getPoint() != Vector::Zero)
 				{
 					return true;
 				}

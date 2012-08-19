@@ -30,7 +30,7 @@ namespace Temporal
 	
 	void Renderer::draw() const
 	{
-		Point position = Vector::Zero;
+		Vector position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		raiseMessage(getDrawPosition);
 		if(position == Vector::Zero)

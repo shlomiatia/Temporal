@@ -37,13 +37,13 @@ namespace Temporal
 	void cutArea(Side::Enum direction, float cutAmount, const YABP& area, YABPCollection& areas, YABPIterator& iterator)
 	{
 		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
-		float length = cutAmount / normalizedSlopedVector.getVx();
+		float length = cutAmount / normalizedSlopedVector.getX();
 		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
 
 		// Move center in the opposite direction
-		Point center = area.getCenter() + static_cast<float>(Side::getOpposite(direction)) * cutRadius;
+		Vector center = area.getCenter() + static_cast<float>(Side::getOpposite(direction)) * cutRadius;
 		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
-		if(slopedRadius.getVx() > 0.0f)
+		if(slopedRadius.getX() > 0.0f)
 		{
 			const YABP nodeAfterCut = YABP(center, slopedRadius, area.getYRadius());
 			iterator = areas.insert(iterator, nodeAfterCut);
@@ -72,10 +72,10 @@ namespace Temporal
 		return Segment(yabp.getCenter() - yabp.getYVector(), yabp.getSlopedRadius());
 	}
 
-	void updateMinMax(const Point& point, const Vector& segmentVector, const Vector& slopedRadius, float& val1, float& val2)
+	void updateMinMax(const Vector& point, const Vector& segmentVector, const Vector& slopedRadius, float& val1, float& val2)
 	{
 		if(point != Vector::Zero)
-		if(segmentVector.getVy() > 0.0f || (segmentVector.getVy() == 0.0f && slopedRadius.getVy() < 0.0f))
+		if(segmentVector.getY() > 0.0f || (segmentVector.getY() == 0.0f && slopedRadius.getY() < 0.0f))
 			val1 = point.getX();
 		else
 			val2 = point.getX();	
@@ -98,8 +98,8 @@ namespace Temporal
 					DirectedSegment upperSlope = DirectedSegment(upperSeg.getNaturalOrigin(), upperSeg.getNaturalVector());
 					Segment lowerSeg = getLowerSegment(area);
 					DirectedSegment lowerSlope = DirectedSegment(lowerSeg.getNaturalOrigin(), lowerSeg.getNaturalVector());
-					Point upperSlopePoint = Point::Zero;
-					Point lowerSlopePoint = Point::Zero;
+					Vector upperSlopePoint = Vector::Zero;
+					Vector lowerSlopePoint = Vector::Zero;
 					intersects(upperSlope, platform, &upperSlopePoint);
 					intersects(lowerSlope, platform, &lowerSlopePoint);
 					float min = platform.getLeft();
@@ -195,7 +195,7 @@ namespace Temporal
 				continue;
 
 			// Create area
-			Point center = Point(segment.getCenterX(), segment.getCenterY() + 1.0f + MIN_AREA_SIZE.getHeight() / 2.0f);
+			Vector center = Vector(segment.getCenterX(), segment.getCenterY() + 1.0f + MIN_AREA_SIZE.getHeight() / 2.0f);
 			Vector slopedRadius = vector / 2.0f;
 			float yRadius = MIN_AREA_SIZE.getHeight() / 2.0f;
 			YABP area = YABP(center, slopedRadius, yRadius);
@@ -225,10 +225,10 @@ namespace Temporal
 		float y1 = lowerSegment1.getY(x);
 		float y2 = lowerSegment2.getY(x);
 		float verticalDistance = y1 - y2;
-		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy(), verticalDistance);
+		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 		NavigationEdgeType::Enum type;
-		DirectedSegment fallArea = DirectedSegment(Point::Zero, Vector::Zero);
+		DirectedSegment fallArea = DirectedSegment(Vector::Zero, Vector::Zero);
 
 		if(distance < minFallDistance)
 		{
@@ -246,7 +246,7 @@ namespace Temporal
 			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
 
 			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy()) + 80.0f;
+			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Side::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
 		}
@@ -261,7 +261,7 @@ namespace Temporal
 		float y1low = area1.getCenterY() + area1.getSlopedRadiusVy() - area1.getYRadius();
 		float y2low = area2.getCenterY() - area2.getSlopedRadiusVy() - area2.getYRadius();
 		float y2high = area2.getCenterY() - area2.getSlopedRadiusVy() + area2.getYRadius();
-		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
+		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
 			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1low - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
@@ -395,7 +395,7 @@ namespace Temporal
 				{
 					color = Color::Magenta;
 				}
-				Graphics::get().draw(Segment(Point(x1, y1), Point(x2, y2)), color);
+				Graphics::get().draw(SegmentPP(Vector(x1, y1), Vector(x2, y2)), color);
 			}
 		}
 	}

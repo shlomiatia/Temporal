@@ -93,7 +93,7 @@ namespace Temporal
 
 	void Graphics::translate(const Vector& translation) const
 	{
-		glTranslatef(translation.getVx(), translation.getVy(), 0.0f);
+		glTranslatef(translation.getX(), translation.getY(), 0.0f);
 	}
 
 	void Graphics::bindTexture(unsigned int id) const
@@ -129,7 +129,7 @@ namespace Temporal
 				const Sprite& sprite = spriteGroup.get(spriteIndex);
 				const AABB& texturePart = sprite.getBounds();
 
-				Point offset(-sprite.getOffset().getVx(), -sprite.getOffset().getVy());
+				Vector offset(-sprite.getOffset().getX(), -sprite.getOffset().getY());
 				draw(offset, texture, texturePart, color);
 			}
 
@@ -142,12 +142,12 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const Point& position, const Texture& texture, const Color& color) const
+	void Graphics::draw(const Vector& position, const Texture& texture, const Color& color) const
 	{
-		draw(position, texture, AABB(texture.getSize() / 2.0f, texture.getSize()), color);
+		draw(position, texture, AABB(texture.getSize().toVector() / 2.0f, texture.getSize()), color);
 	}
 
-	void Graphics::draw(const Point& position, const Texture& texture, const AABB& texturePart, const Color& color) const
+	void Graphics::draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color) const
 	{
 		glPushMatrix();
 		{
@@ -234,10 +234,10 @@ namespace Temporal
 			Vector plusRadius = slopedArea.getSlopedRadius() + yRadius;
 			Vector minusRadius = slopedArea.getSlopedRadius() - yRadius;
 
-			GLfloat vertices[] = {-plusRadius.getVx(), -plusRadius.getVy(),
-								  -minusRadius.getVx(), -minusRadius.getVy(),
-								   plusRadius.getVx(), plusRadius.getVy(),
-								   minusRadius.getVx(), minusRadius.getVy()};
+			GLfloat vertices[] = {-plusRadius.getX(), -plusRadius.getY(),
+								  -minusRadius.getX(), -minusRadius.getY(),
+								   plusRadius.getX(), plusRadius.getY(),
+								   minusRadius.getX(), minusRadius.getY()};
  
 			glEnableClientState(GL_VERTEX_ARRAY);
  

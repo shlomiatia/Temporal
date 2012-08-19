@@ -1,7 +1,7 @@
 #ifndef ACTIONCONTROLLER_H
 #define ACTIONCONTROLLER_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Hash.h"
 #include "BaseEnums.h"
 #include "StateMachineComponent.h"
@@ -86,13 +86,13 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper() : _point(Point::Zero) {}
+		HangDescendHelper() : _point(Vector::Zero) {}
 
 		void setPoint(const SensorCollisionParams& params);
-		const Point& getPoint() const { return _point; }
-		void setPoint(const Point& point) { _point = point; }
+		const Vector& getPoint() const { return _point; }
+		void setPoint(const Vector& point) { _point = point; }
 	private:
-		Point _point;
+		Vector _point;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);

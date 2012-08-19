@@ -3,7 +3,7 @@
 
 #include "Hash.h"
 #include "BaseEnums.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "EntitySystem.h"
 
 namespace Temporal
@@ -68,7 +68,7 @@ namespace Temporal
 	{
 	public:
 		LedgeDetector(const Hash& id, float rangeCenter, float rangeSize)
-			: _id(id), _point(Point::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize), _isBlocked(false) {}
+			: _id(id), _point(Vector::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize), _isBlocked(false) {}
 
 		void start();
 		void handle(const Contact& contact);
@@ -78,7 +78,7 @@ namespace Temporal
 		const Hash _id;
 		const float _rangeCenter;
 		const float _rangeSize;
-		Point _point;
+		Vector _point;
 		bool _isBlocked;
 	};
 }

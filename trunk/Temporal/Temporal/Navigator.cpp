@@ -21,8 +21,8 @@ namespace Temporal
 		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 
-		static const NumericPairSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
-		static const NumericPairSerializer DESTINATION_RADIUS_SERIALIZER("NAV_SER_SIZE");
+		static const VectorSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
+		static const VectorSerializer DESTINATION_RADIUS_SERIALIZER("NAV_SER_SIZE");
 
 		Navigator& getNavigator(StateMachineComponent& stateMachine)
 		{
@@ -57,7 +57,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Point& position = getPosition(*_stateMachine);
+				const Vector& position = getPosition(*_stateMachine);
 				float sourceX = position.getX();
 				Navigator& navigator = getNavigator(*_stateMachine);
 				NavigationEdgeCollection* path = navigator.getPath();
@@ -229,7 +229,7 @@ namespace Temporal
 			_path->clear();
 		}
 		
-		Point center = Point::Zero;
+		Vector center = Vector::Zero;
 		DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
 		Vector radius = Vector::Zero;
 		DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
@@ -241,7 +241,7 @@ namespace Temporal
 
 	void Navigator::debugDraw() const
 	{
-		Point currentPoint = getPosition(*this);
+		Vector currentPoint = getPosition(*this);
 		NavigationEdgeCollection* path = getPath();
 			
 		if(path != NULL)
@@ -250,8 +250,8 @@ namespace Temporal
 			{
 				const NavigationEdge& edge = **i;
 				const NavigationNode& next = edge.getTarget();
-				Point nextPoint = next.getArea().getCenter();
-				Segment segment = Segment(currentPoint, nextPoint);
+				Vector nextPoint = next.getArea().getCenter();
+				Segment segment = SegmentPP(currentPoint, nextPoint);
 				Graphics::get().draw(segment, Color::Cyan);
 				currentPoint = nextPoint;
 			}

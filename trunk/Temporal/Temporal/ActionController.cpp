@@ -3,7 +3,7 @@
 #include "MessageUtils.h"
 #include "Serialization.h"
 #include "BaseUtils.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Shapes.h"
 #include "Math.h"
 #include "DynamicBody.h"
@@ -46,7 +46,7 @@ namespace Temporal
 
 	static const Hash JUMP_INFO_SERIALIZATION = Hash("ACT_SER_JUMP_INFO");
 	static const Hash LEDGE_DIRECTED_SERIALIZATION = Hash("ACT_SER_LEDGE_DIRECTED");
-	static const NumericPairSerializer HANG_DESCEND_POINT_SERIALIZATION("ACT_SER_HANG_DESCEND_POINT");
+	static const VectorSerializer HANG_DESCEND_POINT_SERIALIZATION("ACT_SER_HANG_DESCEND_POINT");
 
 	/**********************************************************************************************
 	 * Helpers
@@ -76,7 +76,7 @@ namespace Temporal
 
 	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
-		_point = params.getPoint() == NULL ? Point::Zero : *params.getPoint();
+		_point = params.getPoint() == NULL ? Vector::Zero : *params.getPoint();
 	}
 
 	/**********************************************************************************************
@@ -118,7 +118,7 @@ namespace Temporal
 			const Serialization& serialization = getSerializationParam(message.getParam());
 			getJumpHelper().setAngle(serialization.deserializeFloat(JUMP_INFO_SERIALIZATION));
 			getJumpHelper().setLedgeDirected(serialization.deserializeBool(LEDGE_DIRECTED_SERIALIZATION));
-			Point point = Point::Zero;
+			Vector point = Vector::Zero;
 			HANG_DESCEND_POINT_SERIALIZATION.deserialize(serialization, point);
 			getHangDescendHelper().setPoint(point);
 		}
@@ -132,7 +132,7 @@ namespace Temporal
 		const Vector& groundVector = getVectorParam(component->raiseMessage(Message(MessageID::GET_GROUND_VECTOR)));
 		Side::Enum orientation = getOrientation(*component);
 
-		return !sameSign(static_cast<float>(orientation), groundVector.getVy()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
+		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
 	void Stand::enter() const
@@ -194,7 +194,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = getVectorParam(message.getParam());
-			if(collision.getVy() < 0.0f)
+			if(collision.getY() < 0.0f)
 				_stateMachine->changeState(STAND_STATE);
 		}
 	}
@@ -228,7 +228,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = getVectorParam(message.getParam());
-			if(collision.getVy() >= 0.0f)
+			if(collision.getY() >= 0.0f)
 				_stateMachine->setTempFlag2(true);
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -273,7 +273,7 @@ namespace Temporal
 	void PrepareToJump::handleJumpSensor(Message &message) const
 	{
 		const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
-		const Point* point = params.getPoint();
+		const Vector* point = params.getPoint();
 		Side::Enum orientation = getOrientation(*_stateMachine);
 		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float target = point->getX();
@@ -296,7 +296,7 @@ namespace Temporal
 		{
 			float angle = i->first;
 			const JumpInfo* jumpInfo = i->second;
-			float height = getJumpHeight(angle, JUMP_FORCE_PER_SECOND, gravity.getVy(), distance);
+			float height = getJumpHeight(angle, JUMP_FORCE_PER_SECOND, gravity.getY(), distance);
 			if(max < height)
 			{
 				max = height;
@@ -383,7 +383,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = getVectorParam(message.getParam());
-			if(collision.getVy() < 0.0f)
+			if(collision.getY() < 0.0f)
 				_stateMachine->changeState(JUMP_END_STATE);
 		}
 	}
@@ -405,7 +405,7 @@ namespace Temporal
 	void PrepareToHang::update() const
 	{
 		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
+		const Vector& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformTop = point.getY();
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
@@ -422,7 +422,7 @@ namespace Temporal
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
-			Point drawPosition(personCenterX, platformTop);
+			Vector drawPosition(personCenterX, platformTop);
 			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(HANG_STATE);
 		}
@@ -451,7 +451,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
-			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<Vector*>(&Vector::Zero)));
 			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
 			bool gravityEnabled = true;
 			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
@@ -476,7 +476,7 @@ namespace Temporal
 
 	void Climb::exit() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<NumericPair*>(&Point::Zero)));
+		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<Vector*>(&Vector::Zero)));
 		bool gravityEnabled = true;
 		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 	}
@@ -493,7 +493,7 @@ namespace Temporal
 	{
 		Side::Enum orientation = getOrientation(*_stateMachine);
 		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		const Point& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
+		const Vector& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
 		float moveX = (platformEdge - entityFront) * orientation;
@@ -507,7 +507,7 @@ namespace Temporal
 		{
 			float personCenterX = personBounds.getCenterX();
 			float platformTop = point.getY();
-			Point drawPosition(personCenterX, platformTop);
+			Vector drawPosition(personCenterX, platformTop);
 			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(DESCEND_STATE);
 		}

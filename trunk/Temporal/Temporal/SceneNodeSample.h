@@ -1,7 +1,7 @@
 #ifndef SCENENODESAMPLE_H
 #define SCENENODESAMPLE_H
 
-#include "NumericPair.h"
+#include "Vector.h"
 #include "Hash.h"
 
 namespace Temporal

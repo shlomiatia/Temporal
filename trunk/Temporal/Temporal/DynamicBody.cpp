@@ -16,7 +16,7 @@ namespace Temporal
 	static const int COLLISION_MASK = FilterType::OBSTACLE;
 
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
-	static const NumericPairSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
+	static const VectorSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
 	const Vector DynamicBody::GRAVITY(0.0f, -4350.0f);
 
@@ -57,22 +57,22 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
-			Vector impulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
+			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
 
 			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
-			if(impulse.getVy() == 0.0f && impulse.getVx() != 0.0f && _groundVector != Vector::Zero)
+			if(impulse.getY() == 0.0f && impulse.getX() != 0.0f && _groundVector != Vector::Zero)
 			{
-				impulse = (impulse.getVx() > 0.0f ? _groundVector : -_groundVector) * impulse.getLength();
+				impulse = (impulse.getX() > 0.0f ? _groundVector : -_groundVector) * impulse.getLength();
 			}
 
 			// We never want to accumalate horizontal speed from the outside. However, vertical speed need to be accumalted on steep slopes
-			_velocity.setVx(0.0f);
+			_velocity.setX(0.0f);
 			_velocity += impulse;
 		}
 		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
-			_absoluteImpulse = Vector(param.getVx() * getOrientation(*this), param.getVy());
+			_absoluteImpulse = Vector(param.getX() * getOrientation(*this), param.getY());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
@@ -155,8 +155,8 @@ namespace Temporal
 			else
 			{
 				float ratio = MAX_MOVEMENT_STEP_SIZE / movementAmount;
-				stepMovement.setVx(movement.getVx() * ratio);
-				stepMovement.setVy(movement.getVy() * ratio);
+				stepMovement.setX(movement.getX() * ratio);
+				stepMovement.setY(movement.getY() * ratio);
 			}
 			
 			movement -= stepMovement;
@@ -171,7 +171,7 @@ namespace Temporal
 			if(collision != Vector::Zero)
 				break;
 		}
-		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Point*>(&dynamicBodyBounds.getCenter())));
+		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
 		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 		_fixture->update();
 		Grid::get().update(previous, _fixture);
@@ -200,9 +200,9 @@ namespace Temporal
 		modifyVelocity(dynamicBodyBounds, segment, correction, platformVector, isSteepSlope);
 
 		// If got collision from below, calculate ground vector. Only do this for moderate slopes
-		if(correction.getVy() >= 0.0f && isModerateSlope)
+		if(correction.getY() >= 0.0f && isModerateSlope)
 		{
-			if(_groundVector == Vector::Zero || platformVector.getVy() == 0.0f)
+			if(_groundVector == Vector::Zero || platformVector.getY() == 0.0f)
 				_groundVector = platformVector;
 		}
 
@@ -221,7 +221,7 @@ namespace Temporal
 		bool canModifyCorrection = isModerateSlope || isOnPlatformTopSide;
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-		if(canModifyCorrection && abs(_velocity.getVx()) < EPSILON && correction.getVx() != 0.0f) 
+		if(canModifyCorrection && abs(_velocity.getX()) < EPSILON && correction.getX() != 0.0f) 
 		{	
 			float y = 0.0f;
 
@@ -247,10 +247,10 @@ namespace Temporal
 	void DynamicBody::modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope)
 	{
 		// Stop the actor where the correction was applied. Also, stop actor horizontal movement if on the floor
-		if(differentSign(correction.getVx(), _velocity.getVx()) || correction.getVy() > 0.0f)
-			_velocity.setVx(0.0f);
-		if(differentSign(correction.getVy(), _velocity.getVy()))
-			_velocity.setVy(0.0f);
+		if(differentSign(correction.getX(), _velocity.getX()) || correction.getY() > 0.0f)
+			_velocity.setX(0.0f);
+		if(differentSign(correction.getY(), _velocity.getY()))
+			_velocity.setY(0.0f);
 
 		// BRODER
 		bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&
@@ -260,7 +260,7 @@ namespace Temporal
 		// Slide on steep slopes
 		if(isSteepSlope && isOnPlatform)
 		{
-			Vector directedPlatformVector = platformVector.getVy() > 0.0f ? -platformVector : platformVector;
+			Vector directedPlatformVector = platformVector.getY() > 0.0f ? -platformVector : platformVector;
 
 			// BRODER
 			_velocity = directedPlatformVector * 500.0f;

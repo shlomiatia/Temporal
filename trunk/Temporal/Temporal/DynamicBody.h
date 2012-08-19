@@ -2,7 +2,7 @@
 #define DYNAMICBODY_H
 
 #include <vector>
-#include "NumericPair.h"
+#include "Vector.h"
 #include "EntitySystem.h"
 
 namespace Temporal

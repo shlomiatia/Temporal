@@ -36,9 +36,6 @@
     <ClInclude Include="Math.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="NumericPair.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="ShapeOperations.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -165,6 +162,9 @@
     <ClInclude Include="Fixture.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -197,9 +197,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Math.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="NumericPair.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ShapeOperations.cpp">
@@ -309,6 +306,9 @@
     </ClCompile>
     <ClCompile Include="Fixture.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

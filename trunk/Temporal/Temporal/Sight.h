@@ -3,7 +3,7 @@
 
 #include "Hash.h"
 #include "BaseEnums.h"
-#include "NumericPair.h"
+#include "Vector.h"
 #include "EntitySystem.h"
 
 namespace Temporal
@@ -24,11 +24,11 @@ namespace Temporal
 		const float _sightSize;
 		const CollisionFilter& _collisionFilter;
 
-		Point _pointOfIntersection;
+		Vector _pointOfIntersection;
 		bool _isSeeing;
 
 		void checkLineOfSight();
-		void drawFieldOfView(const Point& sourcePosition, Side::Enum sourceSide) const;
+		void drawFieldOfView(const Vector& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo() const;
 	};
 }

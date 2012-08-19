@@ -5,9 +5,9 @@ namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
-	const Point& getPosition(const Component& component)
+	const Vector& getPosition(const Component& component)
 	{
-		return *static_cast<Point*>(component.raiseMessage(Message(MessageID::GET_POSITION)));
+		return *static_cast<Vector*>(component.raiseMessage(Message(MessageID::GET_POSITION)));
 	}
 
 	Side::Enum getOrientation(const Component& component)
