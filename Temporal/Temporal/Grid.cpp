@@ -4,6 +4,7 @@
 #include "ShapeOperations.h"
 #include "Fixture.h"
 #include "NumericPair.h"
+#include "CollisionFilter.h"
 #include <algorithm>
 
 namespace Temporal
@@ -186,8 +187,8 @@ namespace Temporal
 					const Fixture& body = **iterator;
 					if(body.getFilter().canCollide(mask, group) &&
 					   intersects(ray, body.getGlobalShape(), &pointOfIntersection, &distance) &&
-					   tile.contains(pointOfIntersection) &&
-					   distance < minDistance)
+					   distance < minDistance &&
+					   tile.contains(pointOfIntersection))
 					{
 						result.setFixture(&body);
 						result.SetPoint(pointOfIntersection);

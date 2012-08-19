@@ -33,12 +33,14 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		explicit Animator(const AnimationCollection& animations, SceneNode& root);
+		explicit Animator(const AnimationCollection& animations);
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 
 		void handleMessage(Message& message);
 		void update(float framePeriodInMillis);
+
+		Component* clone() const;
 
 	private:
 		const AnimationCollection& _animations;

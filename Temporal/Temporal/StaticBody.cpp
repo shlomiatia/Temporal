@@ -7,7 +7,6 @@ namespace Temporal
 {
 	StaticBody::StaticBody(Fixture* fixture) : _fixture(fixture)
 	{
-		Grid::get().add(fixture);
 	}
 	StaticBody::~StaticBody()
 	{
@@ -16,7 +15,13 @@ namespace Temporal
 
 	void StaticBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::DEBUG_DRAW)
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			_fixture->init(*this);
+			Grid::get().add(_fixture);
+
+		}
+		else if(message.getID() == MessageID::DEBUG_DRAW)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(0.5f, 0.25f, 0.125f));
 		}

@@ -8,9 +8,9 @@ namespace Temporal
 	class CollisionFilter : public Component
 	{
 	public:
-		explicit CollisionFilter(int filter = -1, int group = -1);
+		explicit CollisionFilter(int category = -1, int group = -1);
 
-		int getFilter() const { return _filter; }
+		int getCategory() const { return _category; }
 		int getGroup() const { return _group; }
 
 		ComponentType::Enum getType() const { return ComponentType::COLLISION_FILTER; }
@@ -19,7 +19,7 @@ namespace Temporal
 		bool canCollide(int mask, int group) const;
 
 	private:
-		const int _filter;
+		const int _category;
 		int _group;
 	};
 }

@@ -8,6 +8,7 @@
 #include "ViewManager.h"
 #include "Fixture.h"
 #include "MessageUtils.h"
+#include "PhysicsEnums.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -80,7 +81,7 @@ namespace Temporal
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
-		FixtureCollection result = Grid::get().iterateTiles(lightAABB);
+		FixtureCollection result = Grid::get().iterateTiles(lightAABB, FilterType::OBSTACLE);
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());

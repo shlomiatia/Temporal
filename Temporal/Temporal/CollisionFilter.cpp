@@ -3,8 +3,8 @@
 
 namespace Temporal
 {
-	CollisionFilter::CollisionFilter(int filter, int group)
-		: _filter(filter), _group(group) {}
+	CollisionFilter::CollisionFilter(int category, int group)
+		: _category(category), _group(group) {}
 
 	void CollisionFilter::handleMessage(Message& message)
 	{
@@ -21,7 +21,7 @@ namespace Temporal
 
 	bool CollisionFilter::canCollide(int mask, int group) const
 	{
-		return (mask & _filter) != 0 &&
+		return (mask & _category) != 0 &&
 			   (_group == -1 ||
 			    group == -1 ||
 			    _group == group);

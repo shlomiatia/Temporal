@@ -37,7 +37,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION, false, true)));
 		}
 
 		void See::handleMessage(Message& message) const
@@ -84,7 +84,7 @@ namespace Temporal
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
 		}
 
 		void Acquire::update() const
@@ -99,9 +99,9 @@ namespace Temporal
 				
 				int blinkIndex = static_cast<int>(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
 				if(blinkIndex % 2 == 1)
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
 				else
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION, false, true)));
 			}
 		}
 

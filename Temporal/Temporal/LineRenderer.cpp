@@ -71,10 +71,10 @@ namespace Temporal
 										 length, textureHeight,
 										 -length, textureHeight};
 
-			GLfloat textureVertices[] = { -length, 0.0f,
-										  length, 0.0f,
-										  length, 1.0f, 
-										  -length, 1.0f};
+			GLfloat textureVertices[] = { 0.0f, 0.0f,
+										  1.0f, 0.0f,
+										  1.0f, 1.0f, 
+										  0.0f, 1.0f};
  
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);

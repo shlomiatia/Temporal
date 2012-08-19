@@ -14,7 +14,7 @@ namespace Temporal
 	class TemporalEcho : public Component
 	{
 	public:
-		explicit TemporalEcho(Entity* echo) : _echo(echo), _echoReady(false) {}
+		explicit TemporalEcho() : _echo(NULL), _echoReady(false) {}
 		~TemporalEcho();
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_ECHO; }
