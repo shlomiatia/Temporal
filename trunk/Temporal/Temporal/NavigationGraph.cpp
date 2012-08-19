@@ -10,6 +10,7 @@
 #include "Fixture.h"
 #include "Graphics.h"
 #include "PhysicsEnums.h"
+#include "CollisionFilter.h"
 
 namespace Temporal
 {
@@ -319,7 +320,7 @@ namespace Temporal
 
 	void addPlatform(StaticBody& body, ShapeCollection& platforms) 
 	{
-		if(body.getFixture().getFilter().getFilter() == FilterType::OBSTACLE)
+		if(body.getFixture().getFilter().getCategory() == FilterType::OBSTACLE)
 		{
 			const Shape& platform = body.getFixture().getGlobalShape();
 			platforms.push_back(&platform);

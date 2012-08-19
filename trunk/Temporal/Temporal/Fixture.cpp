@@ -2,24 +2,31 @@
 #include "NumericPair.h"
 #include "Shapes.h"
 #include "Transform.h"
+#include "CollisionFilter.h"
 
 namespace Temporal
 {
-	Fixture::Fixture(const Transform& transform, const CollisionFilter& filter, const Shape* shape)
-			: _transform(transform), _filter(filter), _localShape(shape), _globalShape(shape->clone())
+	Fixture::Fixture(const Shape* shape)
+			: _localShape(shape), _globalShape(shape->clone())
 	{
+	}
+
+	void Fixture::init(const Component& parent)
+	{
+		_transform = static_cast<const Transform*>(parent.getEntity().get(ComponentType::TRANSFORM));
+		_filter = static_cast<const CollisionFilter*>(parent.getEntity().get(ComponentType::COLLISION_FILTER));
 		update();
 	}
 
 	void Fixture::update()
 	{
 		_globalShape->setCenter(_localShape->getCenter());
-		_globalShape->rotate(_transform.getOrientation());
-		_globalShape->translate(_transform.getPosition());
+		_globalShape->rotate(_transform->getOrientation());
+		_globalShape->translate(_transform->getPosition());
 	}
 
 	const Hash& Fixture::getEntityId() const
 	{
-		return _transform.getEntity().getId();
+		return _transform->getEntity().getId();
 	}
 }

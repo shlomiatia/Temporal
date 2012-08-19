@@ -7,6 +7,7 @@
 #include "Fixture.h"
 #include "Shapes.h"
 #include "PhysicsEnums.h"
+#include "CollisionFilter.h"
 #include <algorithm>
 
 namespace Temporal
@@ -34,7 +35,11 @@ namespace Temporal
 
 	void Sensor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			_fixture->init(*this);
+		}
+		else if(message.getID() == MessageID::UPDATE)
 		{
 			update();
 		}

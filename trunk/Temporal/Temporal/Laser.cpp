@@ -8,9 +8,12 @@
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Fixture.h"
+#include "PhysicsEnums.h"
 
 namespace Temporal
 {
+	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::PLAYER;
+
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const Hash DIRECTION_SERIALIZATION = Hash("LAS_SER_DIR");
 
@@ -67,7 +70,8 @@ namespace Temporal
 		Point newPosition = position + movement;
 		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		RayCastResult result;
-		if(Grid::get().cast(newPosition, laserVector, result))
+		int group = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		if(Grid::get().cast(newPosition, laserVector, result, COLLISION_MASK, group))
 		{
 			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
 			raiseMessage(Message(MessageID::SET_COLOR, &color));

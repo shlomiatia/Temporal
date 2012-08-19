@@ -1,29 +1,31 @@
 #ifndef FIXTURE_H
 #define FIXTURE_H
 
-#include "CollisionFilter.h"
-
 namespace Temporal
 {
 	class Hash;
+	class Component;
+	class CollisionFilter;
 	class Transform;
 	class Shape;
 
 	class Fixture
 	{
 	public:
-		Fixture(const Transform& transform, const CollisionFilter& filter, const Shape* shape);
+		Fixture(const Shape* shape);
 		~Fixture() { delete _globalShape; }
+
+		void init(const Component& parent);
 
 		const Shape& getLocalShape() const { return *_localShape; }
 		const Shape& getGlobalShape() const { return *_globalShape; }
-		const CollisionFilter& getFilter() const { return _filter; }
+		const CollisionFilter& getFilter() const { return *_filter; }
 		const Hash& getEntityId() const;
 
 		void update();
 	private:
-		const Transform& _transform;
-		const CollisionFilter& _filter;
+		const Transform* _transform;
+		const CollisionFilter* _filter;
 		const Shape* _localShape; 
 		Shape* _globalShape;
 	};

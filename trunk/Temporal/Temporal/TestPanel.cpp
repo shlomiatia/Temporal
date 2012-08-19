@@ -38,68 +38,14 @@
 
 namespace Temporal
 {
+	bool _lights = false;
+	bool _temporalPeriod = false;
+	bool _temporalEcho = false;
+	bool _particles = false;
+	bool _skeleton = false;
+
 	static const Size ENTITY_SIZE(20.0f, 80.0f);
 	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
-
-	void addJumpSensor(Entity& entity)
-	{
-		// Jump sensor
-		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
-		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
-		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
-		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
-		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
-		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
-		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
-		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE));
-		entity.add(sensor);
-	}
-
-	void addHangSensor(Entity& entity)
-	{
-		// Hang Sensor
-		float hangSensorBackOffset = ENTITY_SIZE.getWidth() - 1.0f;
-		const float HANG_SENSOR_SIZE = 20.0f;
-		Size sensorSize = Size(hangSensorBackOffset + HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
-		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
-		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, sensorSize));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addBackEdgeSensor(Entity& entity)
-	{
-		// Back Edge Sensor
-		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addFrontEdgeSensor(Entity& entity)
-	{
-		// Front edge sensor
-		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture((const Transform&)*entity.get(ComponentType::TRANSFORM), (const CollisionFilter&)*entity.get(ComponentType::COLLISION_FILTER), new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addSensors(Entity& entity)
-	{
-		addJumpSensor(entity);
-		addHangSensor(entity);
-		addBackEdgeSensor(entity);
-		addFrontEdgeSensor(entity);
-	}
 
 	SceneNode* createDefaultSceneGraph()
 	{
@@ -117,47 +63,91 @@ namespace Temporal
 		animation->add(sceneNodeID, spriteGroupID, duration, translation, rotation);
 	}
 
-	void createTemporalEcho(Entity* entity, AnimationCollection* animations = NULL)
+	void addJumpSensor(Entity& entity)
 	{
-		const Component* transform = entity->get(ComponentType::TRANSFORM);
-		const Component* drawPosition = entity->get(ComponentType::DRAW_POSITION);
-		const Component* renderer = entity->get(ComponentType::RENDERER);
-		
-		Entity* echoEntity = new Entity();
-		if(transform != NULL)
-			echoEntity->add(transform->clone());
-		if(drawPosition != NULL)
-			echoEntity->add(drawPosition->clone());
-		if(renderer != NULL)
-		{
-			Component* rendererClone = renderer->clone();
-			if(animations != NULL)
-			{
-				Animator* animator = new Animator(*animations, ((Renderer*)rendererClone)->getRoot());
-				echoEntity->add(animator);
-			}
-			echoEntity->add(rendererClone);
-		}
+		// Jump sensor
+		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
+		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
+		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
+		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getVy());
+		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
+		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
+		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
+		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
+		Fixture* fixture = new Fixture(new AABB(sensorOffset, sensorSize));
+		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE));
+		entity.add(sensor);
+	}
 
-		TemporalEcho* temporalEcho = new TemporalEcho(echoEntity);
+	void addHangSensor(Entity& entity)
+	{
+		// Hang Sensor
+		float hangSensorBackOffset = ENTITY_SIZE.getWidth() - 1.0f;
+		const float HANG_SENSOR_SIZE = 20.0f;
+		Size sensorSize = Size(hangSensorBackOffset + HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
+		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
+		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Fixture* fixture = new Fixture(new AABB(sensorOffset, sensorSize));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
+		entity.add(sensor);
+	}
+
+	void addBackEdgeSensor(Entity& entity)
+	{
+		// Back Edge Sensor
+		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Fixture* fixture = new Fixture(new AABB(sensorOffset, EDGE_SENSOR_SIZE));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
+		entity.add(sensor);
+	}
+
+	void addFrontEdgeSensor(Entity& entity)
+	{
+		// Front edge sensor
+		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
+		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
+		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
+		Fixture* fixture = new Fixture(new AABB(sensorOffset, EDGE_SENSOR_SIZE));
+		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
+		entity.add(sensor);
+	}
+
+	void addSensors(Entity& entity)
+	{
+		addJumpSensor(entity);
+		addHangSensor(entity);
+		addBackEdgeSensor(entity);
+		addFrontEdgeSensor(entity);
+	}
+	
+	void createTemporalEcho(Entity* entity)
+	{
+		if(!_temporalEcho)
+			return;
+
+		TemporalEcho* temporalEcho = new TemporalEcho();
 		entity->add(temporalEcho);
 	}
 
 	void createPlayer(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
+		const Texture* texture = Texture::load("bubble.png");
+		SceneNode* root = createDefaultSceneGraph();
+
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::PLAYER);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		InputController* controller = new InputController();
-		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
-		SceneNode* root = createDefaultSceneGraph();
-		Animator* animator = new Animator(*animations, *root);
+		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
 		LightGem* lightGem = new LightGem();
-		const Texture* texture = Texture::load("bubble.png");
 		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 3000.0f, 2);
 
 		Entity* entity = new Entity();
@@ -170,21 +160,25 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(particleEmitter);
-		//entity->add(lightGem);
-		//entity->add(temporalPeriod);
+		if(_particles)
+			entity->add(particleEmitter);
+		if(_lights)
+			entity->add(lightGem);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
 	void createSentry(SpriteSheet* spritesheet)
 	{
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		Transform* transform = new Transform(Point(100.0f, 550.0f), Side::RIGHT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
-		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(Hash("POP_ANM_STAND"));
+
+		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
+		Transform* transform = new Transform(Point(100.0f, 550.0f), Side::RIGHT);
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
+		Sentry* sentry = new Sentry();
+		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
 
@@ -195,11 +189,12 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		//createTemporalEcho(entity);
-		//entity->add(temporalPeriod);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
+	// TODO: blink
 	void createCamera()
 	{
 		const Texture* texture = Texture::load("camera.png");
@@ -217,7 +212,6 @@ namespace Temporal
 		spritesheet->add(animationID, spriteGroup);
 		spriteGroup->add(new Sprite(AABB(19, 19, 24, 32), Vector(4, 16)));
 		addAnimation(animations, animationID, sceneNodeID, animationID);
-		root->setSpriteGroupID(animationID);
 		// See - 1
 		spriteGroup = new SpriteGroup();
 		animationID = Hash("CAM_ANM_SEE");
@@ -238,7 +232,7 @@ namespace Temporal
 		Camera* camera = new Camera();
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
-		Animator* animator = new Animator(*animations, *root);
+		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 
@@ -249,22 +243,24 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		//createTemporalEcho(entity);
-		//entity->add(temporalPeriod);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
 	}
 
 	void createPatrol(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
+		SceneNode* root = createDefaultSceneGraph();
+		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
+
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Point(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Patrol* patrol = new Patrol();
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
-		SceneNode* root = createDefaultSceneGraph();
-		Animator* animator = new Animator(*animations, *root);
+		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
@@ -281,23 +277,46 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(light);
-		//entity->add(temporalPeriod);
-		//createTemporalEcho(entity, animations);
+		if(_lights)
+			entity->add(light);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
+		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
+	}
+
+	void createLaser()
+	{
+		Transform* transform = new Transform(Point(100.0f, 100.0f));
+		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
+		const Texture* texture = Texture::load("laser.png");
+		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
+		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
+		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
+
+		Entity* entity = new Entity();
+		entity->add(transform);
+		entity->add(collisionFilter);
+		entity->add(laser);
+		entity->add(renderer);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
+		createTemporalEcho(entity);
+
+		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
 	}
 
 	void createChaser(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
 		Transform* transform = new Transform(Point(512.0f, 768.0f), Side::LEFT);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -(ENTITY_SIZE.getHeight() - 1.0f) / 2.0f));
+		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Navigator* navigator = new Navigator();
-		Fixture* info = new Fixture(*transform, *collisionFilter, new AABB(Point::Zero, ENTITY_SIZE));
+		Fixture* info = new Fixture(new AABB(Point::Zero, ENTITY_SIZE));
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
-		Animator* animator = new Animator(*animations, *root);
+		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
 
@@ -311,26 +330,28 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		//entity->add(temporalPeriod);
-		//createTemporalEcho(entity);
+		if(_temporalPeriod)
+			entity->add(temporalPeriod);
+		createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
 	}
 
-	static int platformID = 0;
+	static int sequence = 0;
 	void createPlatform(Shape* shape, SpriteSheet* spritesheet, int filter = FilterType::OBSTACLE) 
 	{
 		Transform* transform = new Transform(shape->getCenter());
 		shape->setCenter(Point::Zero);
 		CollisionFilter* collisionFilter = new CollisionFilter(filter);
-		Fixture* fixture = new Fixture(*transform, *collisionFilter, shape);
+		Fixture* fixture = new Fixture(shape);
 		StaticBody* staticBody = new StaticBody(fixture);
 		Entity* entity = new Entity();
 		entity->add(transform);
 		entity->add(collisionFilter);
 		entity->add(staticBody);
+
 		std::ostringstream animationID;
-		animationID << "ENT_PLATFORM" << platformID++;
+		animationID << "ENT_PLATFORM" << sequence++;
 		EntitiesManager::get().add(Hash(animationID.str().c_str()), entity);
 		
 	}
@@ -444,6 +465,7 @@ namespace Temporal
 		#pragma endregion
 	}
 
+	// TODO: Draw texture
 	void createBackground(const Point& position)
 	{
 		const Texture* texture = Texture::load("bg.png");
@@ -455,6 +477,7 @@ namespace Temporal
 		spriteGroup->add(new Sprite(AABB(size / 2.0f, size), Vector::Zero));
 		SceneNode* root = createDefaultSceneGraph();
 		root->setSpriteGroupID(spriteGroupID);
+
 		Transform* transform = new Transform(position);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND, root);
 
@@ -462,30 +485,14 @@ namespace Temporal
 		entity->add(transform);
 		entity->add(renderer);
 		std::ostringstream animationID;
-		animationID << "ENT_BACKGROUND" << platformID++;
+		animationID << "ENT_BACKGROUND" << sequence++;
 		EntitiesManager::get().add(Hash(animationID.str().c_str()), entity);
-	}
-
-	void createLaser()
-	{
-		Transform* transform = new Transform(Point(100.0f, 100.0f));
-		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
-		const Texture* texture = Texture::load("laser.png");
-		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(laser);
-		entity->add(renderer);
-		//entity->add(temporalPeriod);
-
-		//createTemporalEcho(entity);
-		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
 	}
 
 	void createSkeleton()
 	{
+		if(!_skeleton)
+			return;
 		const Texture* texture = Texture::load("skeleton.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
@@ -602,27 +609,31 @@ namespace Temporal
 		addAnimation(animations, animationID, SCN_SHADOW_ID, SCN_SHADOW_ID, 0.0f, Vector(-5,-101));
 
 		Transform* transform = new Transform(Point(300.0f, 300.0f), Side::RIGHT);
-		Animator* animator = new Animator(*animations, *root);
+		Animator* animator = new Animator(*animations);
 		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
 		entity->add(animator);
 		entity->add(renderer);
-		//createTemporalEcho(entity, animations);
+		//createTemporalEcho(entity);
 		entity->handleMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animationID, true, true)));
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 
 	void createLight(const Point& point)
 	{
+		if(!_lights)
+			return;
 		Transform* transform = new Transform(point);
 		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
+
 		Entity* entity = new Entity();
 		entity->add(transform);
 		entity->add(light);
+
 		std::ostringstream lightID;
-		lightID << "ENT_LIGHT" << platformID++;
+		lightID << "ENT_LIGHT" << sequence++;
 		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
 	}
 
@@ -642,7 +653,6 @@ namespace Temporal
 
 		#pragma region Player Spritesheet
 		
-		addAnimation(animations, animationID, sceneNodeID, animationID, 0.0f);
 		// POP_ANM_JUMP_FORWARD
 		spriteGroup = new SpriteGroup();
 		animationID = Hash("POP_ANM_JUMP_FORWARD");
@@ -796,17 +806,18 @@ namespace Temporal
 
 		#pragma endregion
 
-		//createSkeleton();
 		createPlayer(spritesheet, animations);
-		createLaser();
+		
 		//createSentry(spritesheet);
 		//createCamera();
-		createPatrol(spritesheet, animations);
+		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
+		createLaser();
 		createPlatforms();
 		createBackground(Point(512.0f, 384.0f));
 		createBackground(Point(1536.0f, 384.0f));
-		//createLight(Point(500.0f, 300.0f));
-		//createLight(Point(1500.0f, 300.0f));
+		createSkeleton();
+		createLight(Point(700.0f, 300.0f));
+		createLight(Point(1500.0f, 300.0f));
 	}
 }

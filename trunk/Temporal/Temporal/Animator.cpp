@@ -3,6 +3,7 @@
 #include "Serialization.h"
 #include "SceneNode.h"
 #include "MessageUtils.h"
+#include "Renderer.h"
 #include <math.h>
 
 namespace Temporal
@@ -21,15 +22,19 @@ namespace Temporal
 		}
 	}
 
-	Animator::Animator(const AnimationCollection& animations, SceneNode& root) :
+	Animator::Animator(const AnimationCollection& animations) :
 		_animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false)
 	{
-		bindSceneNodes(_bindings, root);
 	}
 
 	void Animator::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::RESET_ANIMATION)
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(ComponentType::RENDERER));
+			bindSceneNodes(_bindings, renderer.getRoot());
+		}
+		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{
 			const ResetAnimationParams& resetAnimationParams = getResetAnimationParams(message.getParam());
 			reset(resetAnimationParams);
@@ -115,5 +120,10 @@ namespace Temporal
 		_rewind = resetAnimationParams.getRewind();
 		_repeat = resetAnimationParams.getRepeat();
 		update(0.0f);
+	}
+
+	Component* Animator::clone() const
+	{
+		return new Animator(_animations);
 	}
 }

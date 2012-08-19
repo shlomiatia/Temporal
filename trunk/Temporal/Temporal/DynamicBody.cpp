@@ -32,12 +32,16 @@ namespace Temporal
 		: _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero),
 		MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*fixture)) 
 	{
-		Grid::get().add(_fixture);
 	}
 
 	void DynamicBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::GET_SHAPE)
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			_fixture->init(*this);
+			Grid::get().add(_fixture);
+		}
+		else if(message.getID() == MessageID::GET_SHAPE)
 		{
 			Shape* shape = const_cast<Shape*>(&_fixture->getGlobalShape());
 			message.setParam(shape);

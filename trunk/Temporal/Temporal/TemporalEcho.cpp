@@ -73,6 +73,21 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_CREATED)
 		{
+			const Component* transform = getEntity().get(ComponentType::TRANSFORM);
+			const Component* drawPosition = getEntity().get(ComponentType::DRAW_POSITION);
+			const Component* renderer = getEntity().get(ComponentType::RENDERER);
+			const Component* animator = getEntity().get(ComponentType::ANIMATOR);
+		
+			_echo = new Entity();
+			if(transform != NULL)
+				_echo->add(transform->clone());
+			if(drawPosition != NULL)
+				_echo->add(drawPosition->clone());
+			if(renderer != NULL)
+				_echo->add(renderer->clone());
+			if(animator != NULL)
+				_echo->add(animator->clone());
+			_echo->handleMessage(message);
 			float alpha = 0.2f;
 			_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
