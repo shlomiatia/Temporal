@@ -20,7 +20,6 @@ namespace Temporal
 		clone->setScale(getScale());
 		clone->setRotation(getRotation());
 		clone->setMirrored(isMirrored());
-		clone->setTextureTranslation(getTextureTranslation());
 
 		clone->setSpriteGroupID(getSpriteGroupID());
 		clone->setSpriteInterpolation(getSpriteInterpolation());
