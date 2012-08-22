@@ -287,10 +287,20 @@ namespace Temporal
 
 	void createLaser()
 	{
-		Transform* transform = new Transform(Vector(100.0f, 100.0f));
+		Transform* transform = new Transform(Vector::Zero);
 		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
 		const Texture* texture = Texture::load("laser.png");
-		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
+		SpriteSheet* spritesheet = new SpriteSheet(texture);
+		SpriteGroup* spriteGroup = new SpriteGroup();
+		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
+		spritesheet->add(spriteGroupID, spriteGroup);
+		Size size = texture->getSize();
+		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
+		SceneNode* root = new SceneNode(Hash("SCN_ROOT"), false, true);
+		SceneNode* laserNode = new SceneNode(Hash("SCN_LASER"));
+		root->setSpriteGroupID(spriteGroupID);
+		//LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
+		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 

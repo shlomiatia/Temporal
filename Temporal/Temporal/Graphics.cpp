@@ -131,7 +131,6 @@ namespace Temporal
 				const AABB& texturePart = sprite.getBounds();
 
 				Vector offset(-sprite.getOffset());
-				offset += sceneNode.getTextureTranslation();
 				draw(offset, texture, texturePart, color);
 			}
 
