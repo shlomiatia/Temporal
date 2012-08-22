@@ -110,6 +110,7 @@ namespace Temporal
 		glPushMatrix();
 		{	
 			translate(sceneNode.getTranslation());
+			glScalef(sceneNode.getScale().getX(), sceneNode.getScale().getY(), 1.0f);
 			if(sceneNode.isMirrored())
 				glScalef(-1.0f, 1.0f, 1.0f);
 			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
@@ -129,7 +130,8 @@ namespace Temporal
 				const Sprite& sprite = spriteGroup.get(spriteIndex);
 				const AABB& texturePart = sprite.getBounds();
 
-				Vector offset(-sprite.getOffset().getX(), -sprite.getOffset().getY());
+				Vector offset(-sprite.getOffset());
+				offset += sceneNode.getTextureTranslation();
 				draw(offset, texture, texturePart, color);
 			}
 

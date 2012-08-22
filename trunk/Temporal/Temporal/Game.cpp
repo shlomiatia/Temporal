@@ -17,8 +17,9 @@ namespace Temporal
 	{
 		_running = true;
 
+		handlePanelsSwitch();
+		_panel->update(FRAME_PERIOD_IN_MILLIS);
 		_lastFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
-
 		while (isRunning())
 		{
 			handlePanelsSwitch();
@@ -29,7 +30,6 @@ namespace Temporal
 				{
 					update();
 					draw();
-
 				}
 			}
 		}
