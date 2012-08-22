@@ -9,8 +9,6 @@ namespace Temporal
 	// ASSUME: When trying to walk on a flat floor where the ceiling is sloped so there's no room, the entity will go down a bit *\
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
-	// TODO: yabp/vector
-
 	// General
 	// TODO: Text
 	// TODO: Files
