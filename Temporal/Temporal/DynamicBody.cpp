@@ -251,6 +251,10 @@ namespace Temporal
 			_velocity.setX(0.0f);
 		if(differentSign(correction.getY(), _velocity.getY()))
 			_velocity.setY(0.0f);
+		else if(_velocity.getY() != 0.0f)
+		{
+			int i = 0;
+		}
 
 		// BRODER
 		bool isOnPlatform = dynamicBodyBounds.getRight() > segment.getLeft() &&

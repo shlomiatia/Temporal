@@ -17,8 +17,8 @@ namespace Temporal
 	void Grid::init(const Size& worldSize, float tileSize)
 	{
 		_tileSize = tileSize;
-		_gridWidth = getAxisIndex(worldSize.getWidth());
-		_gridHeight = getAxisIndex(worldSize.getHeight());
+		_gridWidth = getAxisIndex(worldSize.getWidth()) + 1;
+		_gridHeight = getAxisIndex(worldSize.getHeight()) + 1;
 		
 		int size = getSize();
 		_grid = new FixtureCollection*[size];

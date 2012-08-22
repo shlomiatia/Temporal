@@ -17,8 +17,8 @@ namespace Temporal
 {
 	void BasePanel::init()
 	{
-		Size screenSize = Size(1024.0f, 768.0f);
-		ViewManager::get().init(screenSize, 768.0f);
+		Size screenSize = Size(1280.0f, 720.0f);
+		ViewManager::get().init(screenSize, 720.0f);
 		LightSystem::get().init(screenSize);
 		Size worldSize = Size(screenSize.getWidth() * 2.0f, screenSize.getHeight());
 		ViewManager::get().setLevelBounds(worldSize);

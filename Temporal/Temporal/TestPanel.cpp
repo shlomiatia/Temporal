@@ -812,7 +812,7 @@ namespace Temporal
 		//createCamera();
 		//createPatrol(spritesheet, animations);
 		//createChaser(spritesheet, animations);
-		//createLaser();
+		createLaser();
 		createPlatforms();
 		createBackground(Vector(512.0f, 384.0f));
 		createBackground(Vector(1536.0f, 384.0f));
