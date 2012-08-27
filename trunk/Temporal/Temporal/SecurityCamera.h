@@ -1,11 +1,11 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef SECURITYCAMERA_H
+#define SECURITYCAMERA_H
 
 #include "StateMachineComponent.h"
 
 namespace Temporal
 {
-	namespace CameraStates
+	namespace SecurityCameraStates
 	{
 		class Search : public ComponentState
 		{
@@ -50,10 +50,10 @@ namespace Temporal
 		};
 	}
 
-	class Camera : public StateMachineComponent
+	class SecurityCamera : public StateMachineComponent
 	{
 	public:
-		Camera() : StateMachineComponent(getStates(), "CAM") {}
+		SecurityCamera() : StateMachineComponent(getStates(), "CAM") {}
 
 		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
 

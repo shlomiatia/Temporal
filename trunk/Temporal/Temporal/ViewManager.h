@@ -15,19 +15,16 @@ namespace Temporal
 		}
 
 		const Vector& getCameraBottomLeft() const { return _cameraBottomLeft; }
-		void setLevelBounds(const Size& levelBounds) { _levelBounds = levelBounds; }
+		void setLevelSize(const Size& levelSize) { _levelSize = levelSize; }
 
-		void init(const Size& resolution, float logicalHeight, bool fullScreen = false);
-		void setVideoMode(const Size& resolution, bool fullScreen = false);
 		void update();
 
 		
 	private:
 		Vector _cameraBottomLeft;
-		Size _levelBounds;
-		Size _cameraSize;
+		Size _levelSize;
 
-		ViewManager() : _levelBounds(Size::Zero), _cameraSize(Size::Zero), _cameraBottomLeft(Vector::Zero) {}
+		ViewManager() : _levelSize(Size::Zero), _cameraBottomLeft(Vector::Zero) {}
 		ViewManager(const ViewManager&);
 		ViewManager& operator=(const ViewManager&);
 	};

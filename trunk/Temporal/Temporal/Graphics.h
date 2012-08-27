@@ -23,10 +23,12 @@ namespace Temporal
 			return (instance);
 		}
 
-		void init(const Size& resolution, const Size& viewSize, bool fullScreen = false);
+		const Size& getResolution() const { return _resolution; }
+		const Size& getLogicalView() const { return _logicalView; }
+
+		void init(const Size& resolution, float logicalViewHeight, bool fullScreen = false);
 		void dispose() const;
 
-		void setVideoMode(const Size& resolution, const Size& viewSize, bool fullScreen = false) const;
 		void setTitle(const char* title) const;
 
 		void prepareForDrawing() const;
@@ -35,22 +37,24 @@ namespace Temporal
 		void validate() const;
 
 		void translate(const Vector& translation) const;
-		void draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color = Color::White) const;
-		void draw(const Vector& position, const Texture& texture, const Color& color = Color::White) const;
-		void draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color = Color::White) const;
-		void draw(const AABB& rect, const Color& color = Color::White) const;
-		void draw(const YABP& slopedArea, const Color& color = Color::White) const;
-		void draw(const Segment& segment, const Color& color = Color::White) const;
-		void draw(const Shape& shape, const Color& color = Color::White) const;
+		void draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color = Color::White);
+		void draw(const Vector& position, const Texture& texture, const Color& color = Color::White);
+		void draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color = Color::White);
+		void draw(const AABB& rect, const Color& color = Color::White);
+		void draw(const YABP& slopedArea, const Color& color = Color::White);
+		void draw(const Segment& segment, const Color& color = Color::White);
+		void draw(const Shape& shape, const Color& color = Color::White);
 
-		void bindTexture(unsigned int id) const;
+		void bindTexture(unsigned int id);
 
 	private:
 		static const int BIT_DEPTH = 32;
 
-		mutable unsigned int _lastTextureId;
+		unsigned int _lastTextureId;
+		Size _resolution;
+		Size _logicalView;
 
-		Graphics() : _lastTextureId(0) {}
+		Graphics() : _lastTextureId(0), _resolution(Size::Zero), _logicalView(Size::Zero) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

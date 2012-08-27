@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Camera.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="NavigationGraph.h">
       <Filter>AI</Filter>
     </ClInclude>
@@ -159,12 +156,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="TestLevel.h" />
+    <ClInclude Include="SecurityCamera.h">
+      <Filter>AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Camera.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="NavigationGraph.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -301,6 +298,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="TestLevel.cpp" />
+    <ClCompile Include="SecurityCamera.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">

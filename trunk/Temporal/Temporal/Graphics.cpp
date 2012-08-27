@@ -13,19 +13,17 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::init(const Size& resolution, const Size& viewSize, bool fullScreen)
+	void Graphics::init(const Size& resolution, float logicalViewHeight, bool fullScreen)
 	{
+		float logicalViewWidth = logicalViewHeight * resolution.getWidth() / resolution.getHeight();
+		_logicalView = Size(logicalViewWidth, logicalViewHeight);
+
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO) != 0))
 		{
 			exit(1);
 			// ERROR: Error Failed initializing SDL video
 		}
 
-		setVideoMode(resolution, viewSize, fullScreen);
-	}
-
-	void Graphics::setVideoMode(const Size& resolution, const Size& viewSize, bool fullScreen) const
-	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
 			// ERROR: Error Failed setting SDL OpenGL double buffering attribute
@@ -41,10 +39,10 @@ namespace Temporal
 		}
 		
 		glViewport(0, 0, static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()));
-		
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0f, viewSize.getWidth(), 0.0f, viewSize.getHeight(), -1.0f, 1.0f);
+		glOrtho(0.0f, _logicalView.getWidth(), 0.0f, _logicalView.getHeight(), -1.0f, 1.0f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -96,7 +94,7 @@ namespace Temporal
 		glTranslatef(translation.getX(), translation.getY(), 0.0f);
 	}
 
-	void Graphics::bindTexture(unsigned int id) const
+	void Graphics::bindTexture(unsigned int id)
 	{
 		if(id != _lastTextureId)
 		{
@@ -105,7 +103,7 @@ namespace Temporal
 		}
 	}
 
-	void Graphics::draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color) const
+	void Graphics::draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color)
 	{
 		glPushMatrix();
 		{	
@@ -143,12 +141,12 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const Vector& position, const Texture& texture, const Color& color) const
+	void Graphics::draw(const Vector& position, const Texture& texture, const Color& color)
 	{
 		draw(position, texture, AABB(texture.getSize().toVector() / 2.0f, texture.getSize()), color);
 	}
 
-	void Graphics::draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color) const
+	void Graphics::draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color)
 	{
 		glPushMatrix();
 		{
@@ -195,7 +193,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const AABB& rect, const Color& color) const
+	void Graphics::draw(const AABB& rect, const Color& color)
 	{
 		bindTexture(0);
 
@@ -221,7 +219,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const YABP& slopedArea, const Color& color) const
+	void Graphics::draw(const YABP& slopedArea, const Color& color)
 	{
 		bindTexture(0);
 
@@ -251,7 +249,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const Segment& segment, const Color& color) const
+	void Graphics::draw(const Segment& segment, const Color& color)
 	{
 		bindTexture(0);
 
@@ -274,7 +272,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void Graphics::draw(const Shape& shape, const Color& color) const
+	void Graphics::draw(const Shape& shape, const Color& color)
 	{
 		if(shape.getType() == ShapeType::AABB)
 		{
