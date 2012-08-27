@@ -37,7 +37,6 @@
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="BaseLevel.h" />
     <ClInclude Include="DrawPosition.h" />
     <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="GameEnums.h" />
@@ -91,7 +90,6 @@
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="BaseLevel.cpp" />
     <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="MovementUtils.cpp" />

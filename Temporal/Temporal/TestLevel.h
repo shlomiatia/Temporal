@@ -1,7 +1,7 @@
 #ifndef TESTLEVEL_H
 #define TESTLEVEL_H
 
-#include "BaseLevel.h"
+#include "Game.h"
 
 namespace Temporal
 {
@@ -44,10 +44,14 @@ namespace Temporal
 	// TODO: Culling
 	// TODO: Delete spritesheets, singletons, static stl containers
 	// TODO: Cache shadows/display list/FBO/save texture
-	class TestLevel : public BaseLevel
+	class TestLevel : public Level
 	{
 	public:
-	protected:
+		void init();
+		void update(float framePeriodInMillis);
+		virtual void draw() const;
+		void dispose();
+	private:
 		void createEntities();
 	};
 }
