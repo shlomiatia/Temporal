@@ -35,7 +35,7 @@
 #include "CollisionFilter.h"
 #include "PhysicsEnums.h"
 #include "Input.h"
-#include "ViewManager.h"
+#include "Camera.h"
 #include "DebugInfo.h"
 #include <sstream>
 
@@ -58,7 +58,7 @@ namespace Temporal
 
 		Graphics::get().init(resolution, relativeHeight);
 		LightSystem::get().init(resolution);
-		ViewManager::get().setLevelSize(levelSize);
+		Camera::get().setLevelSize(levelSize);
 		Grid::get().init(levelSize, 128.0f);
 		DebugInfo::get().setShowingFPS(true);
 
@@ -105,7 +105,7 @@ namespace Temporal
 
 	void TestLevel::draw() const
 	{
-		ViewManager::get().update();
+		Camera::get().update();
 		DebugInfo::get().draw();
 
 		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)

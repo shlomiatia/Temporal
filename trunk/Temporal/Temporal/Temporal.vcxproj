@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseUtils.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="Color.h" />
@@ -44,7 +45,6 @@
     <ClInclude Include="StateMachineComponent.h" />
     <ClInclude Include="MessageUtils.h" />
     <ClInclude Include="TemporalEcho.h" />
-    <ClInclude Include="ViewManager.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="Fixture.cpp" />
@@ -96,7 +97,6 @@
     <ClCompile Include="StateMachineComponent.cpp" />
     <ClCompile Include="MessageUtils.cpp" />
     <ClCompile Include="TemporalEcho.cpp" />
-    <ClCompile Include="ViewManager.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Animator.cpp" />
