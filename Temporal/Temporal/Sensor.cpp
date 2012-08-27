@@ -4,7 +4,6 @@
 #include "ShapeOperations.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
-#include "Fixture.h"
 #include "Shapes.h"
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"

@@ -1,13 +1,14 @@
 #ifndef FIXTURE_H
 #define FIXTURE_H
 
+#include "Shapes.h"
+
 namespace Temporal
 {
 	class Hash;
 	class Component;
 	class CollisionFilter;
 	class Transform;
-	class Shape;
 
 	class Fixture
 	{
