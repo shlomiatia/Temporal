@@ -43,8 +43,7 @@ namespace Temporal
 	class LightLayer : public Layer
 	{
 	public:
-		LightLayer(const Color& ambientColor) : AMBIENT_COLOR(ambientColor) {}
-		void init();
+		LightLayer(const Color& ambientColor);
 		void draw();
 
 	private:
