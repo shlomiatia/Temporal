@@ -123,9 +123,16 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void LightLayer::init()
+	LightLayer::LightLayer(const Color& ambientColor) : AMBIENT_COLOR(ambientColor)
 	{
 		_texture = Texture::load(Graphics::get().getLogicalView());
+	}
+
+	void LightLayer::draw()
+	{
+		preDraw();
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
+		postDraw();
 	}
 
 	void LightLayer::preDraw() const

@@ -60,6 +60,7 @@ namespace Temporal
 
 		LayersManager::get().add(new Camera(levelSize));
 		LayersManager::get().add(new SpriteLayer());
+		//LayersManager::get().add(new LightLayer(Color(0.1f, 0.1f, 0.1f)));
 		LayersManager::get().add(new DebugLayer());
 
 		Grid::get().init(levelSize, 128.0f);
@@ -114,7 +115,6 @@ namespace Temporal
 	void TestLevel::dispose()
 	{
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
-		JumpInfoProvider::get().dispose();
 		HashToString::get().dispose();
 		EntitiesManager::get().dispose();
 		Graphics::get().dispose();
