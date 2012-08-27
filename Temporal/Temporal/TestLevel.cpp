@@ -36,7 +36,7 @@
 #include "PhysicsEnums.h"
 #include "Input.h"
 #include "Camera.h"
-#include "DebugInfo.h"
+#include "Layer.h"
 #include <sstream>
 
 namespace Temporal
@@ -57,10 +57,12 @@ namespace Temporal
 		float relativeHeight = 720.0f;
 
 		Graphics::get().init(resolution, relativeHeight);
-		LightSystem::get().init(resolution);
-		Camera::get().setLevelSize(levelSize);
+
+		LayersManager::get().add(new Camera(levelSize));
+		LayersManager::get().add(new SpriteLayer());
+		LayersManager::get().add(new DebugLayer());
+
 		Grid::get().init(levelSize, 128.0f);
-		DebugInfo::get().setShowingFPS(true);
 
 		createEntities();
 
@@ -105,23 +107,8 @@ namespace Temporal
 
 	void TestLevel::draw() const
 	{
-		Camera::get().update();
-		DebugInfo::get().draw();
-
-		for(int i = VisualLayer::FARTHEST; i <= VisualLayer::NEAREST; ++i)
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
-
-		/*LightSystem::get().preDraw();
-		VisualLayer::Enum lightLayer = VisualLayer::LIGHT;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &lightLayer));
-		LightSystem::get().postDraw();*/
-
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
-
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DEBUG_DRAW), filter);
+		LayersManager::get().draw();
 		
-		//Grid::get().draw();
-		//NavigationGraph::get().draw();
 	}
 
 	void TestLevel::dispose()
@@ -133,6 +120,7 @@ namespace Temporal
 		Graphics::get().dispose();
 		Grid::get().dispose();
 		NavigationGraph::get().dispose();
+		LayersManager::get().dispose();
 	}
 
 	SceneNode* createDefaultSceneGraph()
@@ -233,7 +221,7 @@ namespace Temporal
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
 		LightGem* lightGem = new LightGem();
 		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 3000.0f, 2);
@@ -267,7 +255,7 @@ namespace Temporal
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Sentry* sentry = new Sentry();
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
 
 		Entity* entity = new Entity();
@@ -320,7 +308,7 @@ namespace Temporal
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
 		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 
 		Entity* entity = new Entity();
@@ -348,7 +336,7 @@ namespace Temporal
 		DynamicBody* dynamicBody = new DynamicBody(info);
 		ActionController* actionController = new ActionController();
 		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
 		Light* light = new Light(Color::White, 500.0f, ANGLE_0_IN_RADIANS, ANGLE_30_IN_RADIANS);
@@ -386,8 +374,8 @@ namespace Temporal
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"), false, true);
 		SceneNode* laserNode = new SceneNode(Hash("SCN_LASER"));
 		root->setSpriteGroupID(spriteGroupID);
-		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
-		//Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		LineRenderer* renderer = new LineRenderer(LayerType::NPC, *texture);
+		//Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 
@@ -414,7 +402,7 @@ namespace Temporal
 		ActionController* actionController = new ActionController();
 		SceneNode* root = createDefaultSceneGraph();
 		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::PC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::PC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
 
 		Entity* entity = new Entity();
@@ -576,7 +564,7 @@ namespace Temporal
 		root->setSpriteGroupID(spriteGroupID);
 
 		Transform* transform = new Transform(position);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::BACKGROUND, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::BACKGROUND, root);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
@@ -707,7 +695,7 @@ namespace Temporal
 
 		Transform* transform = new Transform(Vector(300.0f, 300.0f), Side::RIGHT);
 		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 
 		Entity* entity = new Entity();
 		entity->add(transform);

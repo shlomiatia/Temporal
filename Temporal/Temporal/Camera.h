@@ -2,29 +2,19 @@
 #define CAMERA_H
 
 #include "Vector.h"
+#include "Layer.h"
 
 namespace Temporal
 {
-	class Camera
+	class Camera : public Layer
 	{
 	public:
-		static Camera& get()
-		{
-			static Camera instance;
-			return (instance);
-		}
-
-		const Vector& getCameraBottomLeft() const { return _cameraBottomLeft; }
-		void setLevelSize(const Size& levelSize) { _levelSize = levelSize; }
-
-		void update();
-
+		Camera(const Size& levelSize) : _levelSize(levelSize) {}
+		void draw();
 		
 	private:
-		Vector _cameraBottomLeft;
 		Size _levelSize;
 
-		Camera() : _levelSize(Size::Zero), _cameraBottomLeft(Vector::Zero) {}
 		Camera(const Camera&);
 		Camera& operator=(const Camera&);
 	};

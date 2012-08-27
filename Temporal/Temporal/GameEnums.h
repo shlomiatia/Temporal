@@ -42,7 +42,8 @@ namespace Temporal
 
 			UPDATE,
 			DRAW,
-			DEBUG_DRAW,
+			DRAW_DEBUG,
+			DRAW_LIGHTS,
 
 			SERIALIZE,
 			DESERIALIZE,
@@ -90,22 +91,6 @@ namespace Temporal
 			SET_LIT,
 			IS_LIT
 		};
-	}
-
-	namespace VisualLayer
-	{
-		enum Enum
-		{
-			LIGHT,
-			BACKGROUND,
-			STATIC,
-			PC,
-			COVER,
-			NPC
-		};
-
-		static const int FARTHEST = BACKGROUND;
-		static const int NEAREST = NPC;
 	}
 }
 #endif

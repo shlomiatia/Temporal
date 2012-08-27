@@ -272,7 +272,7 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			deserialize(serialization);
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}

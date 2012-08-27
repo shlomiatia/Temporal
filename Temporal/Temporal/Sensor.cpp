@@ -42,7 +42,7 @@ namespace Temporal
 		{
 			update();
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape());
 		}

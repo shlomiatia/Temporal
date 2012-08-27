@@ -9,6 +9,7 @@
 #include "Fixture.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
+#include "Graphics.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -31,11 +32,9 @@ namespace Temporal
 
 	void Light::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::DRAW)
+		if(message.getID() == MessageID::DRAW_LIGHTS)
 		{
-			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
-			if(layer == VisualLayer::LIGHT)
-				draw();
+			draw();
 		}
 	}
 
@@ -124,12 +123,12 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	void LightSystem::init(const Size& size)
+	void LightLayer::init()
 	{
-		_texture = Texture::load(size);
+		_texture = Texture::load(Graphics::get().getLogicalView());
 	}
 
-	void LightSystem::preDraw() const
+	void LightLayer::preDraw() const
 	{
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
@@ -140,10 +139,13 @@ namespace Temporal
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void LightSystem::postDraw() const
+	void LightLayer::postDraw() const
 	{
 		const Vector& playerPosition = *static_cast<Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
-		Vector relativePosition = playerPosition - Camera::get().getCameraBottomLeft();
+		float matrix[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+		Vector translation = Vector(matrix[12], matrix[13]);
+		Vector relativePosition = playerPosition + translation;
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;

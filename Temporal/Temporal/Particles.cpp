@@ -4,9 +4,9 @@
 #include "Math.h"
 #include "Texture.h"
 #include "MessageUtils.h"
+#include "Layer.h"
 #include <cstdlib>
 #include <SDL_opengl.h>
-
 
 namespace Temporal
 {
@@ -93,8 +93,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
-			if(layer == VisualLayer::NPC)
+			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
+			if(layer == LayerType::NPC)
 			{
 				int length = getLength();
 				glBindTexture(GL_TEXTURE_2D, _texture->getID());
