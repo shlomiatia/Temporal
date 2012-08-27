@@ -1,10 +1,10 @@
-#include "ViewManager.h"
+#include "Camera.h"
 #include "Graphics.h"
 #include "EntitySystem.h"
 
 namespace Temporal
 {
-	void ViewManager::update()
+	void Camera::update()
 	{
 		const Vector& position = *static_cast<const Vector*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
 		const Size& cameraSize = Graphics::get().getLogicalView();

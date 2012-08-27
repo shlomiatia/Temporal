@@ -1,16 +1,16 @@
-#ifndef VIEWMANAGER_H
-#define VIEWMANAGER_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include "Vector.h"
 
 namespace Temporal
 {
-	class ViewManager
+	class Camera
 	{
 	public:
-		static ViewManager& get()
+		static Camera& get()
 		{
-			static ViewManager instance;
+			static Camera instance;
 			return (instance);
 		}
 
@@ -24,9 +24,9 @@ namespace Temporal
 		Vector _cameraBottomLeft;
 		Size _levelSize;
 
-		ViewManager() : _levelSize(Size::Zero), _cameraBottomLeft(Vector::Zero) {}
-		ViewManager(const ViewManager&);
-		ViewManager& operator=(const ViewManager&);
+		Camera() : _levelSize(Size::Zero), _cameraBottomLeft(Vector::Zero) {}
+		Camera(const Camera&);
+		Camera& operator=(const Camera&);
 	};
 }
 

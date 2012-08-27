@@ -86,9 +86,6 @@
     <ClInclude Include="Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManager.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -158,6 +155,9 @@
     <ClInclude Include="TestLevel.h" />
     <ClInclude Include="SecurityCamera.h">
       <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +234,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManager.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
@@ -300,6 +297,9 @@
     <ClCompile Include="TestLevel.cpp" />
     <ClCompile Include="SecurityCamera.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

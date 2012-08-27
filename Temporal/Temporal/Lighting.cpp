@@ -5,7 +5,7 @@
 #include "StaticBody.h"
 #include "Shapes.h"
 #include "Texture.h"
-#include "ViewManager.h"
+#include "Camera.h"
 #include "Fixture.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
@@ -143,7 +143,7 @@ namespace Temporal
 	void LightSystem::postDraw() const
 	{
 		const Vector& playerPosition = *static_cast<Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
-		Vector relativePosition = playerPosition - ViewManager::get().getCameraBottomLeft();
+		Vector relativePosition = playerPosition - Camera::get().getCameraBottomLeft();
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
