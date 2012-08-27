@@ -158,9 +158,6 @@
     <ClInclude Include="Vector.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="BaseLevel.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="TestLevel.h" />
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="Vector.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseLevel.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="TestLevel.cpp" />
   </ItemGroup>

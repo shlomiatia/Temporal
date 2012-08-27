@@ -26,13 +26,12 @@ namespace Temporal
 	{
 		float currFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
 		float framesDifference = currFrameMillis - _lastFrameMillis;
-		if(framesDifference > FRAME_PERIOD_IN_MILLIS)
-			_lastFrameMillis = currFrameMillis - FRAME_PERIOD_IN_MILLIS;
-		while(_lastFrameMillis < currFrameMillis )
-		{
-			_level->update(FRAME_PERIOD_IN_MILLIS);
-			_lastFrameMillis += FRAME_PERIOD_IN_MILLIS;
-		}
+		_level->update(FRAME_PERIOD_IN_MILLIS);
+		float sleepTime = FRAME_PERIOD_IN_MILLIS - framesDifference;
+		if(sleepTime >= 0.0f)
+			Thread::sleep(static_cast<unsigned int>(sleepTime));
+		_lastFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
+		
 	}
 
 	void Game::draw() const
