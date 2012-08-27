@@ -1,9 +1,9 @@
-#include "Camera.h"
+#include "SecurityCamera.h"
 #include "MessageUtils.h"
 
 namespace Temporal
 {
-	namespace CameraStates
+	namespace SecurityCameraStates
 	{
 		static const Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
 		static const Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
@@ -118,9 +118,9 @@ namespace Temporal
 		}
 	}
 
-	using namespace CameraStates;
+	using namespace SecurityCameraStates;
 
-	StateCollection Camera::getStates() const
+	StateCollection SecurityCamera::getStates() const
 	{
 		StateCollection states;
 		states[SEARCH_STATE] = new Search();
@@ -130,7 +130,7 @@ namespace Temporal
 		return states;
 	}
 
-	Hash Camera::getInitialState() const
+	Hash SecurityCamera::getInitialState() const
 	{
 		return SEARCH_STATE;
 	}

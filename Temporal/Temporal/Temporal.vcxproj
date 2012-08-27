@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseUtils.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="BaseEnums.h" />
@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="Color.cpp" />

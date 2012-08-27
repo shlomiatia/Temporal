@@ -26,7 +26,7 @@
 #include "Navigator.h"
 #include "Sentry.h"
 #include "Patrol.h"
-#include "Camera.h"
+#include "SecurityCamera.h"
 #include "Laser.h"
 #include "MessageUtils.h"
 #include "Lighting.h"
@@ -52,12 +52,14 @@ namespace Temporal
 
 	void TestLevel::init()
 	{
-		Size screenSize = Size(1280.0f, 720.0f);
-		ViewManager::get().init(screenSize, 720.0f);
-		LightSystem::get().init(screenSize);
-		Size worldSize = Size(screenSize.getWidth() * 2.0f, screenSize.getHeight());
-		ViewManager::get().setLevelBounds(worldSize);
-		Grid::get().init(worldSize, 128.0f);
+		Size resolution = Size(1280.0f, 720.0f);
+		Size levelSize = Size(2048.0f, 720.0f);
+		float relativeHeight = 720.0f;
+
+		Graphics::get().init(resolution, relativeHeight);
+		LightSystem::get().init(resolution);
+		ViewManager::get().setLevelSize(levelSize);
+		Grid::get().init(levelSize, 128.0f);
 		DebugInfo::get().setShowingFPS(true);
 
 		createEntities();
@@ -314,7 +316,7 @@ namespace Temporal
 		#pragma endregion
 
 		Transform* transform = new Transform(Vector(383.0f, 383.0f), Side::LEFT);
-		Camera* camera = new Camera();
+		SecurityCamera* camera = new SecurityCamera();
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
 		Animator* animator = new Animator(*animations);
