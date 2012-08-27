@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="BaseUtils.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="Color.h" />
@@ -52,7 +53,6 @@
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="DynamicBody.h" />
-    <ClInclude Include="DebugInfo.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Sensor.h" />
@@ -69,6 +69,7 @@
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="Fixture.cpp" />
@@ -104,7 +105,6 @@
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="DynamicBody.cpp" />
-    <ClCompile Include="DebugInfo.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />

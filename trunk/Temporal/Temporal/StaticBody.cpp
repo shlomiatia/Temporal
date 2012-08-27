@@ -21,7 +21,7 @@ namespace Temporal
 			Grid::get().add(_fixture);
 
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(0.5f, 0.25f, 0.125f));
 		}

@@ -38,9 +38,6 @@
     <ClInclude Include="ActionController.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="DebugInfo.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -159,6 +156,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -193,9 +193,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ActionController.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugInfo.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -299,6 +296,9 @@
       <Filter>AI</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

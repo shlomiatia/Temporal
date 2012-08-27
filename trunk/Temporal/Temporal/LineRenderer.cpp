@@ -30,7 +30,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			VisualLayer::Enum layer = *static_cast<VisualLayer::Enum*>(message.getParam());
+			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
 			if(_layer == layer)
 				draw();			
 		}

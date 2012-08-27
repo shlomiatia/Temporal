@@ -21,7 +21,7 @@ namespace Temporal
 		{
 			checkLineOfSight();
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			drawDebugInfo();
 		}

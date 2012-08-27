@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Math.h"
+#include "Layer.h"
 
 namespace Temporal
 {
@@ -39,27 +40,22 @@ namespace Temporal
 		void draw() const;
 	};
 
-	class LightSystem
+	class LightLayer : public Layer
 	{
 	public:
-		static LightSystem& get()
-		{
-			static LightSystem instance;
-			return instance;
-		}
+		LightLayer(const Color& ambientColor) : AMBIENT_COLOR(ambientColor) {}
+		void init();
+		void draw();
 
-		void init(const Size& size);
-		void preDraw() const;
-		void postDraw() const;
 	private:
 		const Color AMBIENT_COLOR;
 		const Texture* _texture;
 
-		LightSystem()
-			: AMBIENT_COLOR(0.1f, 0.1f, 0.1f) {}
+		void preDraw() const;
+		void postDraw() const;
 
-		LightSystem(const LightSystem&);
-		LightSystem& operator=(const LightSystem&);
+		LightLayer(const LightLayer&);
+		LightLayer& operator=(const LightLayer&);
 	};
 }
 

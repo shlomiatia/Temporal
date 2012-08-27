@@ -46,7 +46,7 @@ namespace Temporal
 			Shape* shape = const_cast<Shape*>(&_fixture->getGlobalShape());
 			message.setParam(shape);
 		}
-		else if(message.getID() == MessageID::DEBUG_DRAW)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}

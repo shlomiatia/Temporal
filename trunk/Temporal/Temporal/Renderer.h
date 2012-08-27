@@ -3,6 +3,7 @@
 #include "Hash.h"
 #include "Color.h"
 #include "EntitySystem.h"
+#include "Layer.h"
 
 namespace Temporal
 {
@@ -12,7 +13,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		Renderer(const SpriteSheet& spritesheet, VisualLayer::Enum layer, SceneNode* root, Color color = Color::White) :
+		Renderer(const SpriteSheet& spritesheet, LayerType::Enum layer, SceneNode* root, Color color = Color::White) :
 		  _spritesheet(spritesheet), _layer(layer), _root(root), _color(color) {};
 
 		SceneNode& getRoot() const { return *_root; }
@@ -22,7 +23,7 @@ namespace Temporal
 		Component* clone() const;
 	private:
 		const SpriteSheet& _spritesheet;
-		const VisualLayer::Enum _layer;
+		const LayerType::Enum _layer;
 
 		SceneNode* _root;
 		Color _color;
