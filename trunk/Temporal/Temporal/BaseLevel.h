@@ -1,11 +1,11 @@
-#ifndef BASEPANEL_H
-#define BASEPANEL_H
+#ifndef BASELEVEL_H
+#define BASELEVEL_H
 
-#include "Panel.h"
+#include "Game.h"
 
 namespace Temporal
 {
-	class BasePanel : public Panel
+	class BaseLevel : public Level
 	{
 	public:
 		void init();

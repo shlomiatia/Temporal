@@ -1,4 +1,4 @@
-#include "TestPanel.h"
+#include "TestLevel.h"
 #include "Vector.h"
 #include "Shapes.h"
 #include "Math.h"
@@ -646,12 +646,7 @@ namespace Temporal
 		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
 	}
 
-	void TestPanel::draw() const 
-	{
-		BasePanel::draw();
-	}
-
-	void TestPanel::createEntities()
+	void TestLevel::createEntities()
 	{
 		const Texture* texture = Texture::load("pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::RIGHT);

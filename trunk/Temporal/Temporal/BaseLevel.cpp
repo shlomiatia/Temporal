@@ -1,4 +1,4 @@
-#include "BasePanel.h"
+#include "BaseLevel.h"
 #include "DebugInfo.h"
 #include "EntitySystem.h"
 #include "Game.h"
@@ -15,7 +15,7 @@
 
 namespace Temporal
 {
-	void BasePanel::init()
+	void BaseLevel::init()
 	{
 		Size screenSize = Size(1280.0f, 720.0f);
 		ViewManager::get().init(screenSize, 720.0f);
@@ -39,7 +39,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
 	}
 
-	void BasePanel::update(float framePeriodInMillis)
+	void BaseLevel::update(float framePeriodInMillis)
 	{
 		Input::get().update();
 		
@@ -66,7 +66,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
-	void BasePanel::draw() const
+	void BaseLevel::draw() const
 	{
 		ViewManager::get().update();
 		DebugInfo::get().draw();
@@ -87,7 +87,7 @@ namespace Temporal
 		//NavigationGraph::get().draw();
 	}
 
-	void BasePanel::dispose()
+	void BaseLevel::dispose()
 	{
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
 		JumpInfoProvider::get().dispose();
