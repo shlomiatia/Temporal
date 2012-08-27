@@ -37,7 +37,7 @@
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="BasePanel.h" />
+    <ClInclude Include="BaseLevel.h" />
     <ClInclude Include="DrawPosition.h" />
     <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="GameEnums.h" />
@@ -58,7 +58,6 @@
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Panel.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Main.h" />
@@ -66,7 +65,7 @@
     <ClInclude Include="Sight.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="StaticBody.h" />
-    <ClInclude Include="TestPanel.h" />
+    <ClInclude Include="TestLevel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseUtils.cpp" />
@@ -92,7 +91,7 @@
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="BasePanel.cpp" />
+    <ClCompile Include="BaseLevel.cpp" />
     <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="MovementUtils.cpp" />
@@ -117,7 +116,7 @@
     <ClCompile Include="Sight.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="StaticBody.cpp" />
-    <ClCompile Include="TestPanel.cpp" />
+    <ClCompile Include="TestLevel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA48D0FC-FC62-43C4-95A0-520220DD4DB6}</ProjectGuid>

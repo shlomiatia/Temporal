@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="TestPanel.h" />
     <ClInclude Include="Camera.h">
       <Filter>AI</Filter>
     </ClInclude>
@@ -42,9 +41,6 @@
     <ClInclude Include="ActionController.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="BasePanel.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="DebugInfo.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -58,9 +54,6 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="MovementUtils.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Panel.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="StateMachineComponent.h">
@@ -165,10 +158,13 @@
     <ClInclude Include="Vector.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="BaseLevel.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLevel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TestPanel.cpp" />
     <ClCompile Include="Camera.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -203,9 +199,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ActionController.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="BasePanel.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="DebugInfo.cpp">
@@ -310,6 +303,10 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="BaseLevel.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">

@@ -1,7 +1,7 @@
-#ifndef TESTPANEL_H
-#define TESTPANEL_H
+#ifndef TESTLEVEL_H
+#define TESTLEVEL_H
 
-#include "BasePanel.h"
+#include "BaseLevel.h"
 
 namespace Temporal
 {
@@ -44,10 +44,9 @@ namespace Temporal
 	// TODO: Culling
 	// TODO: Delete spritesheets, singletons, static stl containers
 	// TODO: Cache shadows/display list/FBO/save texture
-	class TestPanel : public BasePanel
+	class TestLevel : public BaseLevel
 	{
 	public:
-		void draw() const;
 	protected:
 		void createEntities();
 	};
