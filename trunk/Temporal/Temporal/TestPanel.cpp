@@ -194,7 +194,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
-	// TODO: blink
 	void createCamera()
 	{
 		const Texture* texture = Texture::load("camera.png");
@@ -299,8 +298,8 @@ namespace Temporal
 		SceneNode* root = new SceneNode(Hash("SCN_ROOT"), false, true);
 		SceneNode* laserNode = new SceneNode(Hash("SCN_LASER"));
 		root->setSpriteGroupID(spriteGroupID);
-		//LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
-		Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
+		LineRenderer* renderer = new LineRenderer(VisualLayer::NPC, *texture);
+		//Renderer* renderer = new Renderer(*spritesheet, VisualLayer::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
 		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
 

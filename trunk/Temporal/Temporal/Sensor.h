@@ -5,11 +5,10 @@
 #include "BaseEnums.h"
 #include "Vector.h"
 #include "EntitySystem.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
-	class Fixture;
-
 	class Contact
 	{
 	public:
