@@ -18,8 +18,15 @@ namespace Temporal
 
 		bool canCollide(int mask, int group) const;
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("category", _category);
+			serializer.serialize("group", _group);
+		}
+
 	private:
-		const int _category;
+		int _category;
 		int _group;
 	};
 }

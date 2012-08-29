@@ -9,7 +9,7 @@ namespace Temporal
 	class Transform : public Component
 	{
 	public:
-		explicit Transform(const Vector& position, const Side::Enum orientation = Side::RIGHT) : _position(position), _orientation(orientation) {}
+		explicit Transform(const Vector& position = Vector::Zero, const Side::Enum orientation = Side::RIGHT) : _position(position), _orientation(orientation) {}
 
 		const Vector& getPosition() const { return _position; }
 		Side::Enum getOrientation() const { return _orientation; }
@@ -17,6 +17,13 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::TRANSFORM; }
 		void handleMessage(Message& message);
 		Component* clone() const;
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("position", _position);
+			serializer.serialize("orientation", (int&)_orientation);
+		}
 	private:
 		Vector _position;
 		Side::Enum _orientation;

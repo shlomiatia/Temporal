@@ -47,6 +47,7 @@
     <ClInclude Include="MessageUtils.h" />
     <ClInclude Include="TemporalEcho.h" />
     <ClInclude Include="InputController.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Animator.h" />
@@ -87,10 +88,12 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SceneNodeSample.cpp" />
     <ClCompile Include="Sentry.cpp" />
+    <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
@@ -165,7 +168,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sdl_image.lib;OpenGL32.lib;sdl.lib;sdlmain.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <ShowProgress>NotSet</ShowProgress>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>

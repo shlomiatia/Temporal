@@ -21,7 +21,8 @@ namespace Temporal
 	class Shape
 	{
 	public:
-		Shape(const Vector& center) : _center(center) {}
+		Shape() {}
+		explicit Shape(const Vector& center) : _center(center) {}
 		Shape(float centerX, float centerY) : _center(centerX, centerY) {}
 		virtual ~Shape() {}
 		
@@ -88,6 +89,13 @@ namespace Temporal
 
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("center", _center);	
+			serializer.serialize("size", _size);
+		}
 		
 	private:
 		Vector _radius;
@@ -107,6 +115,7 @@ namespace Temporal
 	public:
 		static const Segment Zero;
 
+		Segment() {}
 		Segment(float x1, float y1, float x2, float y2) : Shape((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
 		Segment(const Vector& center, const Vector& radius);
 		// No need for virtual destructor
@@ -137,6 +146,13 @@ namespace Temporal
 		float getHeight() const { return getRadiusVy() * 2.0f; }
 
 		Shape* clone() const { return new Segment(_center, _radius); }
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("center", _center);	
+			serializer.serialize("radius", _radius);
+		}
 
 	private:
 		Vector _radius;

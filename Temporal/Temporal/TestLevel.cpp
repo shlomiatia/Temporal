@@ -37,16 +37,12 @@
 #include "Input.h"
 #include "Camera.h"
 #include "Layer.h"
+#include "Serialization.h"
 #include <sstream>
+#include "tinyxml2.h"
 
 namespace Temporal
 {
-	bool _lights = false;
-	bool _temporalPeriod = false;
-	bool _temporalEcho = false;
-	bool _particles = false;
-	bool _skeleton = false;
-
 	static const Size ENTITY_SIZE(20.0f, 80.0f);
 	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
 
@@ -73,17 +69,13 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
 	}
 
-	void ChangePeriod(Period::Enum period)
-	{
-		EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
-	}
+	
 
 	void TestLevel::update(float framePeriodInMillis)
 	{
 		Input::get().update();
 		
-		if(Input::get().isQuit())
+		/*if(Input::get().isQuit())
 		{
 			Game::get().stop();
 		}
@@ -102,7 +94,7 @@ namespace Temporal
 		if(Input::get().isE())
 		{
 			ChangePeriod(Period::FUTURE);
-		}
+		}*/
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
@@ -122,7 +114,11 @@ namespace Temporal
 		NavigationGraph::get().dispose();
 		LayersManager::get().dispose();
 	}
-
+	/*void ChangePeriod(Period::Enum period)
+	{
+		EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
+	}
 	SceneNode* createDefaultSceneGraph()
 	{
 		return new SceneNode(Hash("SCN_ROOT"));
@@ -201,9 +197,6 @@ namespace Temporal
 	
 	void createTemporalEcho(Entity* entity)
 	{
-		if(!_temporalEcho)
-			return;
-
 		TemporalEcho* temporalEcho = new TemporalEcho();
 		entity->add(temporalEcho);
 	}
@@ -236,12 +229,9 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		if(_particles)
-			entity->add(particleEmitter);
-		if(_lights)
-			entity->add(lightGem);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(particleEmitter);
+		//entity->add(lightGem);
+		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
@@ -265,8 +255,7 @@ namespace Temporal
 		entity->add(sentry);
 		entity->add(sight);
 		entity->add(renderer);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
 	}
 
@@ -318,8 +307,7 @@ namespace Temporal
 		entity->add(sight);
 		entity->add(animator);
 		entity->add(renderer);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
 	}
@@ -352,10 +340,8 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		if(_lights)
-			entity->add(light);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(light);
+		//entity->add(temporalPeriod);
 		createTemporalEcho(entity);
 		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
@@ -384,8 +370,7 @@ namespace Temporal
 		entity->add(collisionFilter);
 		entity->add(laser);
 		entity->add(renderer);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
@@ -415,8 +400,7 @@ namespace Temporal
 		entity->add(actionController);
 		entity->add(animator);
 		entity->add(renderer);
-		if(_temporalPeriod)
-			entity->add(temporalPeriod);
+		//entity->add(temporalPeriod);
 		createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
@@ -576,8 +560,6 @@ namespace Temporal
 
 	void createSkeleton()
 	{
-		if(!_skeleton)
-			return;
 		const Texture* texture = Texture::load("skeleton.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
 		SpriteGroup* spriteGroup;
@@ -708,8 +690,6 @@ namespace Temporal
 
 	void createLight(const Vector& point)
 	{
-		if(!_lights)
-			return;
 		Transform* transform = new Transform(point);
 		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
 
@@ -720,11 +700,51 @@ namespace Temporal
 		std::ostringstream lightID;
 		lightID << "ENT_LIGHT" << sequence++;
 		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
-	}
+	}*/
 
 	void TestLevel::createEntities()
-	{
-		const Texture* texture = Texture::load("pop.png");
+	{	
+		tinyxml2::XMLDocument document;
+		document.LoadFile("1.xml");
+		for(tinyxml2::XMLElement* entityElement = document.FirstChildElement("entity"); entityElement != NULL; entityElement = entityElement->NextSiblingElement())
+		{
+			XmlDeserializer entityDeserializer(entityElement);
+			Entity* entity = new Entity();
+			entity->serialize(entityDeserializer);
+			for(tinyxml2::XMLElement* componentElement = entityElement->FirstChildElement(); componentElement != NULL; componentElement = componentElement->NextSiblingElement())
+			{
+				XmlDeserializer componentDeserializer(componentElement);
+				if(strcmp(componentElement->Name(), "transform") == 0)
+				{
+					Transform* transform = new Transform();
+					transform->serialize(componentDeserializer);
+					entity->add(transform);
+				}
+				else if(strcmp(componentElement->Name(), "collision-filter") == 0)
+				{
+					CollisionFilter* collisionFilter = new CollisionFilter();
+					collisionFilter->serialize(componentDeserializer);
+					entity->add(collisionFilter);
+				}
+				else if(strcmp(componentElement->Name(), "static-body") == 0)
+				{
+					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
+					XmlDeserializer shapeDeserializer(shapeElement);
+
+					if(strcmp(shapeElement->Name(), "segment") == 0)
+					{
+						Segment* segment = new Segment();
+						segment->serialize(shapeDeserializer);
+						Fixture* fixture = new Fixture(segment);
+						StaticBody* staticBody = new StaticBody(fixture);
+						entity->add(staticBody);
+					}
+				}
+			}
+			EntitiesManager::get().add(entity);
+		}
+		
+		/*const Texture* texture = Texture::load("pop.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::RIGHT);
 		SpriteGroup* spriteGroup;
 		AnimationCollection* animations = new AnimationCollection();
@@ -888,16 +908,16 @@ namespace Temporal
 
 		createPlayer(spritesheet, animations);
 		
-		//createSentry(spritesheet);
-		//createCamera();
-		//createPatrol(spritesheet, animations);
-		//createChaser(spritesheet, animations);
+		createSentry(spritesheet);
+		createCamera();
+		createPatrol(spritesheet, animations);
+		createChaser(spritesheet, animations);
 		createLaser();
 		createPlatforms();
 		createBackground(Vector(512.0f, 384.0f));
 		createBackground(Vector(1536.0f, 384.0f));
 		createSkeleton();
 		createLight(Vector(700.0f, 300.0f));
-		createLight(Vector(1500.0f, 300.0f));
+		createLight(Vector(1500.0f, 300.0f));*/
 	}
 }

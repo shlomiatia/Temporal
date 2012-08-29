@@ -6,7 +6,7 @@ namespace Temporal
 {
 	void Camera::draw()
 	{
-		const Vector& position = *static_cast<const Vector*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
+		/*const Vector& position = *static_cast<const Vector*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
 		const Size& cameraSize = Graphics::get().getLogicalView();
 		float cameraWidth = cameraSize.getWidth();
 		float cameraHeight = cameraSize.getHeight();
@@ -20,6 +20,6 @@ namespace Temporal
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
 		Vector cameraBottomLeft = Vector(cameraLeftPosition, cameraBottomPosition);
 		Vector translation = -cameraBottomLeft;
-		Graphics::get().translate(translation);
+		Graphics::get().translate(translation);*/
 	}
 }

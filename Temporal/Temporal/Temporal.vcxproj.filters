@@ -159,6 +159,9 @@
     <ClInclude Include="Layer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -300,6 +303,12 @@
     </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

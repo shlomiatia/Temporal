@@ -86,6 +86,11 @@ namespace Temporal
 		HashToString::get().save(*this, string);
 	}
 
+	const char* Hash::getString() const
+	{
+		return HashToString::get().getString(*this);
+	}
+
 	void HashToString::dispose() const
 	{
 		for(HashIterator i = _hashStrings.begin(); i != _hashStrings.end(); ++i)

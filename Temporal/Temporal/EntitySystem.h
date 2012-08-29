@@ -64,6 +64,11 @@ namespace Temporal
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("id", _id);
+		}
 	private:
 		Hash _id;
 		ComponentCollection _components;
@@ -82,7 +87,7 @@ namespace Temporal
 		}
 
 		void dispose();
-		void add(const Hash& id, Entity* entity);
+		void add(Entity* entity);
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;

@@ -5,14 +5,13 @@
 
 namespace Temporal
 {
-	// Abstract
 	class Vector
 	{
 	public:
 		static const Vector Zero;
 
+		Vector() : _x(0.0f), _y(0.0f) {}
 		Vector(float x, float y) : _x(x), _y(y) {}
-		// No virtual destructor
 
 		float getX() const { return (_x); }
 		void setX(float x) { _x = x; }
@@ -22,16 +21,21 @@ namespace Temporal
 		float getAxis(Axis::Enum axis) const { return axis == Axis::X ? getX() : getY(); }
 		void setAxis(Axis::Enum axis, float value) { if(axis == Axis::X) setX(value); else setY(value); }
 
-		float getLength() const;
-
 		// Angle is between -180 to 180 (-PI to PI)
 		float getAngle() const;
+		float getLength() const;
 		Vector normalize() const;
 		Vector getLeftNormal() const { return Vector(-getY(), getX()); }
 		Vector getRightNormal() const { return Vector(getY(), -getX()); }
-
-
 		Vector absolute() const;
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("x", _x);
+			serializer.serialize("y", _y);
+		}
+
 		Vector operator-() const { return Vector(-getX(), -getY()); }
 		bool operator==(const Vector& vector) const { return ((getX() == vector.getX()) && (getY() == vector.getY())); }
 		bool operator!=(const Vector& vector) const { return !(*this == vector); }
@@ -71,8 +75,6 @@ namespace Temporal
 			return *this *= (1.0f / scalar);
 		}
 
-		//friend inline Vector operator+(const Vector& vector, float scalar);
-		//friend inline Vector operator*(const Vector& vector, float scalar);
 	private:
 		float _x;
 		float _y;

@@ -1,6 +1,7 @@
 #ifndef SERIALIZATION_H
 #define SERIALIZATION_H
 #include "Hash.h"
+#include "tinyxml2.h"
 #include <unordered_map>
 
 namespace Temporal
@@ -44,6 +45,31 @@ namespace Temporal
 
 		Serialization(const Serialization&);
 		Serialization& operator=(const Serialization&);
+	};
+
+	class XmlDeserializer
+	{
+	public:
+		XmlDeserializer(tinyxml2::XMLNode* root) : _current(root) {};
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			_current = _current->FirstChildElement(key);
+			value.serialize(*this);
+			_current = _current->Parent();
+		}
+
+		void serialize(const char* key, int& value);
+		void serialize(const char* key, unsigned int& value);
+		void serialize(const char* key, float& value);
+		void serialize(const char* key, bool& value);
+		void serialize(const char* key, Hash& value);
+	private:
+		tinyxml2::XMLNode* _current;
+
+		XmlDeserializer(const XmlDeserializer&);
+		XmlDeserializer& operator=(const XmlDeserializer&);
 	};
 }
 #endif
