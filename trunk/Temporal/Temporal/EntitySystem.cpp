@@ -49,10 +49,9 @@ namespace Temporal
 			delete (*i).second;
 	}
 
-	void EntitiesManager::add(const Hash& id, Entity* entity)
+	void EntitiesManager::add(Entity* entity)
 	{
-		entity->setId(id);
-		_entities[id] = entity;
+		_entities[entity->getId()] = entity;
 		entity->handleMessage(Message(MessageID::ENTITY_CREATED));
 	}
 

@@ -13,8 +13,8 @@ namespace Temporal
 	class Fixture
 	{
 	public:
-		Fixture(const Shape* shape);
-		~Fixture() { delete _globalShape; }
+		explicit Fixture(const Shape* shape);
+		~Fixture() { delete _localShape; delete _globalShape; }
 
 		void init(const Component& parent);
 

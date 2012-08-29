@@ -13,8 +13,11 @@ namespace Temporal
 		explicit Hash(const char* string);		
 		explicit Hash(unsigned int value) : _value(value) {}
 
+		const char* getString() const;
+
 		operator unsigned int() const { return _value; }
 		bool operator==(const Hash& other) const { return _value == other._value; }
+
 	private:
 		unsigned int _value;
 	};

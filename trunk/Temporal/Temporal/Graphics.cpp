@@ -24,6 +24,8 @@ namespace Temporal
 			// ERROR: Error Failed initializing SDL video
 		}
 
+		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
 			// ERROR: Error Failed setting SDL OpenGL double buffering attribute
