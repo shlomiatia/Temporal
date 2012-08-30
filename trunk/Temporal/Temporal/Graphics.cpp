@@ -124,7 +124,7 @@ namespace Temporal
 			if(!sceneNode.isTransformOnly())
 			{
 				const Texture& texture = spritesheet.getTexture();
-				const Hash& spriteGroupID = sceneNode.getSpriteGroupID();
+				Hash spriteGroupID = sceneNode.getSpriteGroupID();
 				const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
 				int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 				const Sprite& sprite = spriteGroup.get(spriteIndex);

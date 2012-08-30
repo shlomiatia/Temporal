@@ -147,7 +147,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = getHashParam(message.getParam());
+				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_FALL_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -161,7 +161,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = getHashParam(message.getParam());
+				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_CLIMB_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -181,7 +181,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
-				const Hash& state = getHashParam(message.getParam());
+				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
@@ -191,7 +191,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::STATE_ENTERED)
 			{
-				const Hash& state = getHashParam(message.getParam());
+				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_FALL_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}

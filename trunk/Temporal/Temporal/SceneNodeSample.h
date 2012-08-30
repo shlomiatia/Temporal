@@ -11,15 +11,15 @@ namespace Temporal
 
 	typedef std::vector<const SceneNodeSample*> SceneNodeSampleCollection;
 	typedef SceneNodeSampleCollection::const_iterator SceneNodeSampleIterator;
-	typedef std::unordered_map<const Hash, const SceneNodeSampleCollection*> SceneGraphSampleCollection;
+	typedef std::unordered_map<Hash, const SceneNodeSampleCollection*> SceneGraphSampleCollection;
 	typedef SceneGraphSampleCollection::const_iterator SceneGraphSampleIterator;
-	typedef std::unordered_map<const Hash, const Animation*> AnimationCollection;
+	typedef std::unordered_map<Hash, const Animation*> AnimationCollection;
 	typedef AnimationCollection::const_iterator AnimationIterator;
 
 	class SceneNodeSample
 	{
 	public:
-		SceneNodeSample(const Hash& spriteGroupId, float startTime = 0.0f, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
+		SceneNodeSample(Hash spriteGroupId, float startTime = 0.0f, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
 		  _translation(translation), _rotation(rotation), _spriteGroupId(spriteGroupId), _startTime(startTime), _duration(duration) {}
 
 		float getStartTime() const { return _startTime; }
@@ -45,8 +45,8 @@ namespace Temporal
 		Animation() : _duration(0.0f) {}
 		
 		float getDuration() const { return _duration; }
-		void add(const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
-		const SceneNodeSampleCollection& get(const Hash& sceneNodeID) const { return *_sceneGraphSamples.at(sceneNodeID); }
+		void add(Hash sceneNodeID, Hash spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
+		const SceneNodeSampleCollection& get(Hash sceneNodeID) const { return *_sceneGraphSamples.at(sceneNodeID); }
 
 	private:
 		SceneGraphSampleCollection _sceneGraphSamples;

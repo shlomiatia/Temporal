@@ -66,7 +66,7 @@ namespace Temporal
 	class LedgeDetector : public ContactListener
 	{
 	public:
-		LedgeDetector(const Hash& id, float rangeCenter, float rangeSize)
+		LedgeDetector(Hash id, float rangeCenter, float rangeSize)
 			: _id(id), _point(Vector::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize), _isBlocked(false) {}
 
 		void start();

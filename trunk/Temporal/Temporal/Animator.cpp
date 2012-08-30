@@ -82,7 +82,7 @@ namespace Temporal
 		}
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
-			const Hash& sceneNodeID = i->first;
+			Hash sceneNodeID = i->first;
 			SceneNodeBinding& binding = *i->second;
 			if(binding.getSceneNode().isTransformOnly())
 				continue;

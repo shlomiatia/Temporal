@@ -15,9 +15,9 @@ namespace Temporal
 	class ResetAnimationParams
 	{
 	public:
-		explicit ResetAnimationParams(const Hash& animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
+		explicit ResetAnimationParams(Hash animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
 
-		const Hash& getAnimationID() const { return _animationID; }
+		Hash getAnimationID() const { return _animationID; }
 		bool getRewind() const { return _rewind; }
 		bool getRepeat() const { return _repeat; }
 
@@ -33,9 +33,9 @@ namespace Temporal
 	class SensorCollisionParams
 	{
 	public:
-		SensorCollisionParams(const Hash& sensorID, const Vector* point) : _sensorID(sensorID), _point(point) {}
+		SensorCollisionParams(Hash sensorID, const Vector* point) : _sensorID(sensorID), _point(point) {}
 
-		const Hash& getSensorID() const { return _sensorID; }
+		Hash getSensorID() const { return _sensorID; }
 		const Vector* getPoint() const { return _point; }
 	
 	private:
@@ -49,7 +49,7 @@ namespace Temporal
 	const Vector& getPosition(const Component& component);
 	Side::Enum getOrientation(const Component& component);
 
-	const Hash& getHashParam(void* data);
+	Hash getHashParam(void* data);
 	Serialization& getSerializationParam(void* data);
 	const Serialization& getConstSerializationParam(void* data);
 	const ResetAnimationParams& getResetAnimationParams(void* data);
@@ -60,7 +60,7 @@ namespace Temporal
 	inline bool getBoolParam(void* data) { return *static_cast<bool*>(data); }
 
 	void sendDirectionAction(const Component& component, Side::Enum direction);
-	bool isSensorCollisionMessage(Message& message, const Hash& sensorID);
+	bool isSensorCollisionMessage(Message& message, Hash sensorID);
 
 }
 #endif

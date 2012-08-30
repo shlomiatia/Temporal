@@ -20,7 +20,7 @@ namespace Temporal
 	class JumpInfo
 	{
 	public:
-		JumpInfo(const Hash& startAnimation, const Hash& jumpAnimation, const Hash& endAnimation)
+		JumpInfo(Hash startAnimation, Hash jumpAnimation, Hash endAnimation)
 			: _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
 
 		Hash getStartAnimation() const { return _startAnimation; }

@@ -21,7 +21,7 @@ namespace Temporal
 		const Shape& getLocalShape() const { return *_localShape; }
 		const Shape& getGlobalShape() const { return *_globalShape; }
 		const CollisionFilter& getFilter() const { return *_filter; }
-		const Hash& getEntityId() const;
+		Hash getEntityId() const;
 
 		void update();
 	private:

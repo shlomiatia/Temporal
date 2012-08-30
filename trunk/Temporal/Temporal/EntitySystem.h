@@ -58,8 +58,8 @@ namespace Temporal
 		Entity() : _id(Hash::INVALID) {}
 		~Entity();
 
-		const Hash& getId() const { return _id; }
-		void setId(const Hash& id) { _id = id; }
+		Hash getId() const { return _id; }
+		void setId(Hash id) { _id = id; }
 		void add(Component* component);
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
@@ -74,7 +74,7 @@ namespace Temporal
 		ComponentCollection _components;
 	};
 
-	typedef std::unordered_map<const Hash, Entity*> EntityCollection;
+	typedef std::unordered_map<Hash, Entity*> EntityCollection;
 	typedef EntityCollection::const_iterator EntityIterator;
 
 	class EntitiesManager
@@ -91,7 +91,7 @@ namespace Temporal
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
-		void* sendMessageToEntity(const Hash& id, Message& message) const;
+		void* sendMessageToEntity(Hash id, Message& message) const;
 		const EntityCollection& getEntities() const { return _entities; }
 	private:
 		EntityCollection _entities;

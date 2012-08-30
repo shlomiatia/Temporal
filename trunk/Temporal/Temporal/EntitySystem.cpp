@@ -66,7 +66,7 @@ namespace Temporal
 			(*(*i).second).handleMessage(message, filter);
 	}
 
-	void* EntitiesManager::sendMessageToEntity(const Hash& id, Message& message) const
+	void* EntitiesManager::sendMessageToEntity(Hash id, Message& message) const
 	{
 		return _entities.at(id)->handleMessage(message);
 	}

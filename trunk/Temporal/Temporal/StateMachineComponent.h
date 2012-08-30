@@ -31,7 +31,7 @@ namespace Temporal
 		ComponentState& operator=(const ComponentState&);
 	};
 
-	typedef std::unordered_map<const Hash, ComponentState*> StateCollection;
+	typedef std::unordered_map<Hash, ComponentState*> StateCollection;
 	typedef StateCollection::const_iterator StateIterator;
 
 	class StateMachineComponent : public Component
@@ -40,7 +40,7 @@ namespace Temporal
 		explicit StateMachineComponent(StateCollection states, const char* prefix);
 		virtual ~StateMachineComponent();
 
-		void changeState(const Hash& stateID);
+		void changeState(Hash stateID);
 		virtual void handleMessage(Message& message);
 
 		// Temp flags. Used when some messages combinations make something happen, or if during update we need to check if someting didn't happen. 
@@ -74,7 +74,7 @@ namespace Temporal
 		bool _tempFlag3;
 
 		void resetTempState() { _tempFlag1 = _tempFlag2 = _tempFlag3 = false; }
-		void setState(const Hash& stateID);
+		void setState(Hash stateID);
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);

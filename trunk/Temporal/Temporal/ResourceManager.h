@@ -21,7 +21,7 @@ namespace Temporal
 		}
 
 		void init();
-		const SpriteSheet* getSpritesheet(const Hash& id);
+		const SpriteSheet* getSpritesheet(Hash id);
 		void dispose();
 
 	private:
