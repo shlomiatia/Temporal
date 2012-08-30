@@ -162,6 +162,9 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -309,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="Serialization.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

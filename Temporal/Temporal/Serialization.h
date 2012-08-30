@@ -55,15 +55,20 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			_current = _current->FirstChildElement(key);
-			value.serialize(*this);
-			_current = _current->Parent();
+			tinyxml2::XMLNode* current = _current->FirstChildElement(key);
+			if(current != NULL)
+			{
+				_current = current;
+				value.serialize(*this);
+				_current = _current->Parent();
+			}
 		}
 
 		void serialize(const char* key, int& value);
 		void serialize(const char* key, unsigned int& value);
 		void serialize(const char* key, float& value);
 		void serialize(const char* key, bool& value);
+		void serialize(const char* key, const char** value);
 		void serialize(const char* key, Hash& value);
 	private:
 		tinyxml2::XMLNode* _current;

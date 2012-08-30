@@ -22,9 +22,15 @@ namespace Temporal
 		value = _current->ToElement()->BoolAttribute(key);
 	}
 
+	void XmlDeserializer::serialize(const char* key, const char** value)
+	{
+		*value = _current->ToElement()->Attribute(key);
+	}
+
 	void XmlDeserializer::serialize(const char* key, Hash& value)
 	{
 		const char* str = _current->ToElement()->Attribute(key);
-		value = Hash(str);
+		if(str)
+			value = Hash(str);
 	}
 }

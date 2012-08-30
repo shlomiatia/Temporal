@@ -28,6 +28,14 @@ namespace Temporal
 
 		void setColor(const Color& color);
 		
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("r", _r);	
+			serializer.serialize("g", _g);
+			serializer.serialize("b", _b);
+			serializer.serialize("a", _a);
+		}
 	private:
 		float _r;
 		float _g;

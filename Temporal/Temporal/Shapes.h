@@ -94,7 +94,7 @@ namespace Temporal
 		void serialize(T& serializer)
 		{
 			serializer.serialize("center", _center);	
-			serializer.serialize("size", _size);
+			serializer.serialize("radius", _radius);
 		}
 		
 	private:
