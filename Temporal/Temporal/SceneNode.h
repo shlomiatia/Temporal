@@ -18,9 +18,10 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		SceneNode(Hash id, bool drawBehindParent = false, bool transformOnly = false) :
-			_id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero), _scale(Vector(1.0f, 1.0f)),
-			_rotation(0.0f), _isMirrored(false), _spriteGroupID(Hash::INVALID), _spriteInterpolation(0.0f) {}
+		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteSheetId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false,
+						   bool transformOnly = false) : _id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero),
+						   _rotation(0.0f), _isMirrored(false), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) 
+			{ init(); }
 		~SceneNode();
 
 		Hash getID() const { return _id; }
@@ -30,15 +31,14 @@ namespace Temporal
 		
 		const Vector& getTranslation() const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
-		const Vector& getScale() const { return _scale; }
-		void setScale(const Vector& scale) { _scale = scale; }
-		float getRotation() const { return _rotation; }
-		void setRotation(float rotation) { _rotation = rotation; }
 		bool isMirrored() const { return _isMirrored; }
 		void setMirrored(bool isMirrored) { _isMirrored = isMirrored; }
+		float getRotation() const { return _rotation; }
+		void setRotation(float rotation) { _rotation = rotation; }
 
-		Hash getSpriteGroupID() const { return _spriteGroupID; }
-		void setSpriteGroupID(Hash spriteGroupID) { _spriteGroupID = spriteGroupID; }
+		const SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
+		Hash getSpriteSheetId() const { return _spriteSheetId; }
+		Hash getSpriteGroupId() const { return _spriteGroupId; }
 		float getSpriteInterpolation() const { return _spriteInterpolation; }
 		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
 
@@ -46,21 +46,32 @@ namespace Temporal
 
 		void add(SceneNode* child) { _children.push_back(child); }
 		SceneNode* clone() const;
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("sprite-sheet", _spriteSheetId);
+			serializer.serialize("sprite-group", _spriteGroupId);
+			init();
+		}
 	private:
-		const Hash _id;
+		Hash _id;
 
 		bool _drawBehindParent;	
 		bool _transformOnly;
 
 		Vector _translation;
-		Vector _scale;
 		float _rotation;
 		bool _isMirrored;
 
-		Hash _spriteGroupID;
+		const SpriteSheet* _spriteSheet;
+		Hash _spriteSheetId;
+		Hash _spriteGroupId;
 		float _spriteInterpolation;
 
 		SceneNodeCollection _children;
+
+		void init();
 
 		SceneNode(const SceneNode&);
 		SceneNode& operator=(const SceneNode&);

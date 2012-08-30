@@ -238,30 +238,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
-	void createSentry(SpriteSheet* spritesheet)
-	{
-		SceneNode* root = createDefaultSceneGraph();
-		root->setSpriteGroupID(Hash("POP_ANM_STAND"));
-
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		Transform* transform = new Transform(Vector(100.0f, 550.0f), Side::RIGHT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
-		Sentry* sentry = new Sentry();
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(drawPosition);
-		entity->add(sentry);
-		entity->add(sight);
-		entity->add(renderer);
-		//entity->add(temporalPeriod);
-		EntitiesManager::get().add(Hash("ENT_SENTRY"), entity);
-	}
-
 	void createCamera()
 	{
 		const Texture* texture = Texture::load("camera.png");
@@ -409,25 +385,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
 	}
 
-	static int sequence = 0;
-	void createPlatform(Shape* shape, SpriteSheet* spritesheet, int filter = FilterType::OBSTACLE) 
-	{
-		Transform* transform = new Transform(shape->getCenter());
-		shape->setCenter(Vector::Zero);
-		CollisionFilter* collisionFilter = new CollisionFilter(filter);
-		Fixture* fixture = new Fixture(shape);
-		StaticBody* staticBody = new StaticBody(fixture);
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(staticBody);
-
-		std::ostringstream animationID;
-		animationID << "ENT_PLATFORM" << sequence++;
-		EntitiesManager::get().add(Hash(animationID.str().c_str()), entity);
-		
-	}
-
 	void createPlatforms()
 	{
 		#pragma region Platforms
@@ -534,30 +491,6 @@ namespace Temporal
 		createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet);
 
 		#pragma endregion
-	}
-
-	// TODO: Draw texture
-	void createBackground(const Vector& position)
-	{
-		const Texture* texture = Texture::load("bg.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture);
-		SpriteGroup* spriteGroup = new SpriteGroup();
-		Hash spriteGroupID = Hash("ANM_DEFAULT");
-		spritesheet->add(spriteGroupID, spriteGroup);
-		Size size = texture->getSize();
-		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
-		SceneNode* root = createDefaultSceneGraph();
-		root->setSpriteGroupID(spriteGroupID);
-
-		Transform* transform = new Transform(position);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::BACKGROUND, root);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(renderer);
-		std::ostringstream animationID;
-		animationID << "ENT_BACKGROUND" << sequence++;
-		EntitiesManager::get().add(Hash(animationID.str().c_str()), entity);
 	}
 
 	void createSkeleton()
@@ -728,6 +661,35 @@ namespace Temporal
 					collisionFilter->serialize(componentDeserializer);
 					entity->add(collisionFilter);
 				}
+				else if(strcmp(componentElement->Name(), "draw-position") == 0)
+				{
+					DrawPosition* drawPosition = new DrawPosition();
+					drawPosition->serialize(componentDeserializer);
+					entity->add(drawPosition);
+				}
+				else if(strcmp(componentElement->Name(), "draw-position") == 0)
+				{
+					DrawPosition* drawPosition = new DrawPosition();
+					drawPosition->serialize(componentDeserializer);
+					entity->add(drawPosition);
+				}
+				else if(strcmp(componentElement->Name(), "sight") == 0)
+				{
+					Sight* sight = new Sight();
+					sight->serialize(componentDeserializer);
+					entity->add(sight);
+				}
+				else if(strcmp(componentElement->Name(), "renderer") == 0)
+				{
+					Renderer* renderer = new Renderer();
+					renderer->serialize(componentDeserializer);
+					entity->add(renderer);
+				}
+				else if(strcmp(componentElement->Name(), "senry") == 0)
+				{
+					Sentry* sentry = new Sentry();
+					entity->add(sentry);
+				}
 				else if(strcmp(componentElement->Name(), "static-body") == 0)
 				{
 					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
@@ -741,12 +703,6 @@ namespace Temporal
 						StaticBody* staticBody = new StaticBody(fixture);
 						entity->add(staticBody);
 					}
-				}
-				else if(strcmp(componentElement->Name(), "renderer") == 0)
-				{
-					Renderer* renderer = new Renderer();
-					renderer->serialize(componentDeserializer);
-					entity->add(renderer);
 				}
 			}
 			EntitiesManager::get().add(entity);

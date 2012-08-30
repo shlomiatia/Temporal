@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	void Animation::add(Hash sceneNodeID, Hash spriteGroupID, float duration, const Vector& translation, float rotation)
+	void Animation::add(Hash sceneNodeID, float duration, const Vector& translation, float rotation)
 	{
 		SceneNodeSampleCollection* sceneNodeAnimation = const_cast<SceneNodeSampleCollection*>(_sceneGraphSamples[sceneNodeID]);
 		if(sceneNodeAnimation == NULL)
@@ -14,7 +14,7 @@ namespace Temporal
 		int size = sceneNodeAnimation->size();
 		if(size > 0)
 			startTime = sceneNodeAnimation->at(size - 1)->getEndTime();
-		SceneNodeSample* sceneNodeSample = new SceneNodeSample(spriteGroupID, startTime, duration, translation, rotation);
+		SceneNodeSample* sceneNodeSample = new SceneNodeSample(startTime, duration, translation, rotation);
 		sceneNodeAnimation->push_back(sceneNodeSample);
 		float jointAnimationDuration = startTime + duration;
 		if(_duration < jointAnimationDuration)

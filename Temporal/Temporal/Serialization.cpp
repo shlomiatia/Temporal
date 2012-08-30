@@ -4,22 +4,22 @@ namespace Temporal
 {
 	void XmlDeserializer::serialize(const char* key, int& value)
 	{
-		value = _current->ToElement()->IntAttribute(key);
+		_current->ToElement()->QueryIntAttribute(key, &value);
 	}
 
 	void XmlDeserializer::serialize(const char* key, unsigned int& value)
 	{
-		value = _current->ToElement()->UnsignedAttribute(key);
+		_current->ToElement()->QueryUnsignedAttribute(key, &value);
 	}
 
 	void XmlDeserializer::serialize(const char* key, float& value)
 	{
-		value = _current->ToElement()->FloatAttribute(key);
+		_current->ToElement()->QueryFloatAttribute(key, &value);
 	}
 
 	void XmlDeserializer::serialize(const char* key, bool& value)
 	{
-		value = _current->ToElement()->BoolAttribute(key);
+		_current->ToElement()->QueryBoolAttribute(key, &value);
 	}
 
 	void XmlDeserializer::serialize(const char* key, const char** value)

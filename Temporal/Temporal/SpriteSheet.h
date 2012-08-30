@@ -23,7 +23,7 @@ namespace Temporal
 		void serialize(T& serializer)
 		{
 			serializer.serialize("bounds", _bounds);
-			serializer.serialize("bounds", _offset);
+			serializer.serialize("offset", _offset);
 		}
 	private:
 		AABB _bounds;
