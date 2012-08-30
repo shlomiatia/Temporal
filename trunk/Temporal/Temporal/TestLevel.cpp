@@ -38,6 +38,7 @@
 #include "Camera.h"
 #include "Layer.h"
 #include "Serialization.h"
+#include "ResourceManager.h"
 #include <sstream>
 #include "tinyxml2.h"
 
@@ -60,13 +61,14 @@ namespace Temporal
 		LayersManager::get().add(new DebugLayer());
 
 		Grid::get().init(levelSize, 128.0f);
+		ResourceManager::get().init();
 
 		createEntities();
 
 		NavigationGraph::get().init();
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
-		Period::Enum period = Period::PRESENT;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
+		/*Period::Enum period = Period::PRESENT;
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));*/
 	}
 
 	
@@ -75,11 +77,11 @@ namespace Temporal
 	{
 		Input::get().update();
 		
-		/*if(Input::get().isQuit())
+		if(Input::get().isQuit())
 		{
 			Game::get().stop();
 		}
-		if(Input::get().isQ())
+		/*if(Input::get().isQ())
 		{
 			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
@@ -107,6 +109,7 @@ namespace Temporal
 	void TestLevel::dispose()
 	{
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
+		ResourceManager::get().dispose();
 		HashToString::get().dispose();
 		EntitiesManager::get().dispose();
 		Graphics::get().dispose();
@@ -427,7 +430,6 @@ namespace Temporal
 
 	void createPlatforms()
 	{
-		SpriteSheet* spritesheet = NULL;
 		#pragma region Platforms
 
 		// Edges
@@ -705,7 +707,7 @@ namespace Temporal
 	void TestLevel::createEntities()
 	{	
 		tinyxml2::XMLDocument document;
-		document.LoadFile("1.xml");
+		document.LoadFile("entities.xml");
 		for(tinyxml2::XMLElement* entityElement = document.FirstChildElement("entity"); entityElement != NULL; entityElement = entityElement->NextSiblingElement())
 		{
 			XmlDeserializer entityDeserializer(entityElement);
@@ -739,6 +741,12 @@ namespace Temporal
 						StaticBody* staticBody = new StaticBody(fixture);
 						entity->add(staticBody);
 					}
+				}
+				else if(strcmp(componentElement->Name(), "renderer") == 0)
+				{
+					Renderer* renderer = new Renderer();
+					renderer->serialize(componentDeserializer);
+					entity->add(renderer);
 				}
 			}
 			EntitiesManager::get().add(entity);

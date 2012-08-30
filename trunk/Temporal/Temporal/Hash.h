@@ -17,7 +17,6 @@ namespace Temporal
 
 		operator unsigned int() const { return _value; }
 		bool operator==(const Hash& other) const { return _value == other._value; }
-
 	private:
 		unsigned int _value;
 	};

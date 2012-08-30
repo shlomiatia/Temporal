@@ -13,14 +13,21 @@ namespace Temporal
 	class Sprite
 	{
 	public:
-		Sprite(const AABB& bounds, const Vector& offset) 
+		explicit Sprite(const AABB& bounds = AABB::Zero, const Vector& offset = Vector::Zero) 
 			: _bounds(bounds), _offset(offset) {}
 
 		const AABB& getBounds() const { return _bounds; }
 		const Vector& getOffset() const { return _offset; }
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("bounds", _bounds);
+			serializer.serialize("bounds", _offset);
+		}
 	private:
-		const AABB _bounds;
-		const Vector _offset;
+		AABB _bounds;
+		Vector _offset;
 
 		Sprite(const Sprite&);
 		Sprite& operator=(const Sprite&);
@@ -32,14 +39,22 @@ namespace Temporal
 	class SpriteGroup
 	{
 	public:
-		SpriteGroup() {}
+		explicit SpriteGroup(Hash id = Hash::INVALID) : _id(id) {}
 		~SpriteGroup();
 
-		void add(const Sprite* sprite);
+		Hash getId() const { return _id; }
 
+		void add(const Sprite* sprite);
 		const Sprite& get(int spriteID) const;
 		int getSize() const;
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("id", _id);
+		}
 	private:
+		Hash _id;
 		SpriteCollection _sprites;
 
 		SpriteGroup(const SpriteGroup&);
@@ -53,17 +68,30 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		SpriteSheet(const Texture* texture, Side::Enum orientation = Side::RIGHT) : _texture(texture), _orientation(orientation) {}
+		explicit SpriteSheet(const Texture* texture = NULL, Side::Enum orientation = Side::RIGHT) : _id(Hash::INVALID), _texture(texture), _orientation(orientation) {}
 		~SpriteSheet();
-		void add(const Hash& id, const SpriteGroup* element);
+		void add(const SpriteGroup* spriteGroup);
 
+		Hash getId() const { return _id; }
 		const Texture& getTexture() const { return *_texture; }
 		Side::Enum getOrientation() const { return _orientation; }
 		const SpriteGroup& get(const Hash& spriteGroupID) const;
-		const Hash& getFirstSpriteGroupID() const;
+
+		void init();
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			const char* file = NULL;
+			serializer.serialize("texture", &file);
+			serializer.serialize("orientation", (int&)_orientation);
+			_id = Hash(file);
+			_texture = Texture::load(file);
+		}
 	private:
+		Hash _id;
 		const Texture* _texture;
-		const Side::Enum _orientation;
+		Side::Enum _orientation;
 		SpriteGroupCollection _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);

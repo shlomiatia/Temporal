@@ -33,9 +33,9 @@ namespace Temporal
 			delete i->second;
 	}
 
-	void SpriteSheet::add(const Hash& id, const SpriteGroup* sprite)
+	void SpriteSheet::add(const SpriteGroup* spriteGroup)
 	{
-		_spriteGroups[id] = sprite;
+		_spriteGroups[spriteGroup->getId()] = spriteGroup;
 	}
 
 	const SpriteGroup& SpriteSheet::get(const Hash& spriteGroupID) const
@@ -43,8 +43,15 @@ namespace Temporal
 		return *_spriteGroups.at(spriteGroupID);
 	}
 
-	const Hash& SpriteSheet::getFirstSpriteGroupID() const
+	void SpriteSheet::init()
 	{
-		return _spriteGroups.begin()->first;
+		if(_spriteGroups.size() == 0)
+		{
+			SpriteGroup* spriteGroup = new SpriteGroup();
+			add(spriteGroup);
+			Vector radius = _texture->getSize().toVector() / 2.0f;
+			Sprite* sprite = new Sprite(AABB(radius, radius));
+			spriteGroup->add(sprite);
+		}
 	}
 }

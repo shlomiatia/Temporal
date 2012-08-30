@@ -14,6 +14,7 @@
     <ClInclude Include="BaseUtils.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="Color.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="BaseUtils.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="Fixture.cpp" />

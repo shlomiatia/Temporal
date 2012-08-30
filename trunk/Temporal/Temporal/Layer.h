@@ -9,11 +9,11 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			BACKGROUND,
-			STATIC,
-			PC,
-			COVER,
-			NPC
+			BACKGROUND = 0,
+			STATIC = 1,
+			PC = 2,
+			COVER = 3,
+			NPC = 4
 		};
 
 		static const int FARTHEST = BACKGROUND;
