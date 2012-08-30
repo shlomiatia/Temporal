@@ -18,12 +18,12 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		SceneNode(const Hash& id, bool drawBehindParent = false, bool transformOnly = false) :
+		SceneNode(Hash id, bool drawBehindParent = false, bool transformOnly = false) :
 			_id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero), _scale(Vector(1.0f, 1.0f)),
 			_rotation(0.0f), _isMirrored(false), _spriteGroupID(Hash::INVALID), _spriteInterpolation(0.0f) {}
 		~SceneNode();
 
-		const Hash& getID() const { return _id; }
+		Hash getID() const { return _id; }
 
 		const bool drawBehindParent() const { return _drawBehindParent; }
 		bool isTransformOnly() const { return _transformOnly; }
@@ -37,8 +37,8 @@ namespace Temporal
 		bool isMirrored() const { return _isMirrored; }
 		void setMirrored(bool isMirrored) { _isMirrored = isMirrored; }
 
-		const Hash& getSpriteGroupID() const { return _spriteGroupID; }
-		void setSpriteGroupID(const Hash& spriteGroupID) { _spriteGroupID = spriteGroupID; }
+		Hash getSpriteGroupID() const { return _spriteGroupID; }
+		void setSpriteGroupID(Hash spriteGroupID) { _spriteGroupID = spriteGroupID; }
 		float getSpriteInterpolation() const { return _spriteInterpolation; }
 		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
 

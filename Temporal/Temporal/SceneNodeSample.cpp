@@ -2,7 +2,7 @@
 
 namespace Temporal
 {
-	void Animation::add(const Hash& sceneNodeID, const Hash& spriteGroupID, float duration, const Vector& translation, float rotation)
+	void Animation::add(Hash sceneNodeID, Hash spriteGroupID, float duration, const Vector& translation, float rotation)
 	{
 		SceneNodeSampleCollection* sceneNodeAnimation = const_cast<SceneNodeSampleCollection*>(_sceneGraphSamples[sceneNodeID]);
 		if(sceneNodeAnimation == NULL)

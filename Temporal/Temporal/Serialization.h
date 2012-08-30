@@ -24,22 +24,22 @@ namespace Temporal
 		};
 	};
 
-	typedef std::unordered_map<const Hash, Variant> SerializationCollection;
+	typedef std::unordered_map<Hash, Variant> SerializationCollection;
 
 	class Serialization
 	{
 	public:
 		Serialization() {};
 
-		void serialize(const Hash& key, int value) { _serialization[key] = value; }
-		void serialize(const Hash& key, unsigned int value) { _serialization[key] = value; }
-		void serialize(const Hash& key, float value) { _serialization[key] = value; }
-		void serialize(const Hash& key, bool value) { _serialization[key] = value; }
+		void serialize(Hash key, int value) { _serialization[key] = value; }
+		void serialize(Hash key, unsigned int value) { _serialization[key] = value; }
+		void serialize(Hash key, float value) { _serialization[key] = value; }
+		void serialize(Hash key, bool value) { _serialization[key] = value; }
 
-		int deserializeInt(const Hash& key) const { return _serialization.at(key).Int; }
-		unsigned int deserializeUInt(const Hash& key) const { return _serialization.at(key).UInt; }
-		float deserializeFloat(const Hash& key) const { return _serialization.at(key).Float; }
-		bool deserializeBool(const Hash& key) const { return _serialization.at(key).Bool; }
+		int deserializeInt(Hash key) const { return _serialization.at(key).Int; }
+		unsigned int deserializeUInt(Hash key) const { return _serialization.at(key).UInt; }
+		float deserializeFloat(Hash key) const { return _serialization.at(key).Float; }
+		bool deserializeBool(Hash key) const { return _serialization.at(key).Bool; }
 	private:
 		SerializationCollection _serialization;
 

@@ -18,7 +18,7 @@ namespace Temporal
 			delete (*i).second;
 	}
 
-	void StateMachineComponent::changeState(const Hash& stateID)
+	void StateMachineComponent::changeState(Hash stateID)
 	{
 		if(_currentState != NULL)
 		{
@@ -59,7 +59,7 @@ namespace Temporal
 		}
 	}
 
-	void StateMachineComponent::setState(const Hash& stateID)
+	void StateMachineComponent::setState(Hash stateID)
 	{
 		_currentState = _states[stateID];
 		_currentStateID = stateID;

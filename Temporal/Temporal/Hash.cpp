@@ -99,7 +99,7 @@ namespace Temporal
 		}
 	}
 
-	void HashToString::save(const Hash& key, const char* string)
+	void HashToString::save(Hash key, const char* string)
 	{
 		HashIterator i = _hashStrings.find(key);
 		if(i == _hashStrings.end())
@@ -117,7 +117,7 @@ namespace Temporal
 		}
 	}
 
-	const char* HashToString::getString(const Hash& hash) const
+	const char* HashToString::getString(Hash hash) const
 	{
 		return _hashStrings.at(hash);
 	}

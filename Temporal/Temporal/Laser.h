@@ -11,7 +11,7 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		Laser(const Hash& platformID) 
+		Laser(Hash platformID) 
 			: _platformID(platformID), _isPositiveDirection(true) {}
 
 		Hash getPlatformId() const { return _platformID; }

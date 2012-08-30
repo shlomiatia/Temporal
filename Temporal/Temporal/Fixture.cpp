@@ -24,7 +24,7 @@ namespace Temporal
 		_globalShape->translate(_transform->getPosition());
 	}
 
-	const Hash& Fixture::getEntityId() const
+	Hash Fixture::getEntityId() const
 	{
 		return _transform->getEntity().getId();
 	}

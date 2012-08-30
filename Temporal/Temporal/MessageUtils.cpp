@@ -15,9 +15,9 @@ namespace Temporal
 		return *static_cast<Side::Enum*>(component.raiseMessage(Message(MessageID::GET_ORIENTATION)));
 	}
 
-	const Hash& getHashParam(void* data)
+	Hash getHashParam(void* data)
 	{
-		return *static_cast<const Hash*>(data);
+		return *static_cast<Hash*>(data);
 	}
 
 	Serialization& getSerializationParam(void* data)
@@ -54,7 +54,7 @@ namespace Temporal
 			component.raiseMessage(Message(MessageID::ACTION_BACKWARD));
 	}
 
-	bool isSensorCollisionMessage(Message& message, const Hash& sensorID)
+	bool isSensorCollisionMessage(Message& message, Hash sensorID)
 	{
 		if(message.getID() == MessageID::SENSOR_COLLISION)
 		{

@@ -35,7 +35,7 @@ namespace Temporal
 		}
 	}
 
-	const SpriteSheet* ResourceManager::getSpritesheet(const Hash& id)
+	const SpriteSheet* ResourceManager::getSpritesheet(Hash id)
 	{
 		return _spritesheets.at(id);
 	}

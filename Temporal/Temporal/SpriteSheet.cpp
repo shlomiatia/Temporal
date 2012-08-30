@@ -38,7 +38,7 @@ namespace Temporal
 		_spriteGroups[spriteGroup->getId()] = spriteGroup;
 	}
 
-	const SpriteGroup& SpriteSheet::get(const Hash& spriteGroupID) const
+	const SpriteGroup& SpriteSheet::get(Hash spriteGroupID) const
 	{
 		return *_spriteGroups.at(spriteGroupID);
 	}

@@ -127,7 +127,7 @@ namespace Temporal
 		return new SceneNode(Hash("SCN_ROOT"));
 	}
 
-	void addAnimation(AnimationCollection* animations, const Hash& animationID, const Hash& sceneNodeID, const Hash& spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
+	void addAnimation(AnimationCollection* animations, Hash animationID, Hash sceneNodeID, Hash spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
 	{
 		Animation* animation = (Animation*)(*animations)[animationID];
 		if(animation == NULL)
@@ -356,7 +356,7 @@ namespace Temporal
 		const Texture* texture = Texture::load("laser.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
 		SpriteGroup* spriteGroup = new SpriteGroup();
-		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
+		Hash spriteGroupID = Hash("ANM_DEFAULT");
 		spritesheet->add(spriteGroupID, spriteGroup);
 		Size size = texture->getSize();
 		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
@@ -542,7 +542,7 @@ namespace Temporal
 		const Texture* texture = Texture::load("bg.png");
 		SpriteSheet* spritesheet = new SpriteSheet(texture);
 		SpriteGroup* spriteGroup = new SpriteGroup();
-		const Hash& spriteGroupID = Hash("ANM_DEFAULT");
+		Hash spriteGroupID = Hash("ANM_DEFAULT");
 		spritesheet->add(spriteGroupID, spriteGroup);
 		Size size = texture->getSize();
 		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
