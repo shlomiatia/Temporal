@@ -1,6 +1,7 @@
 #ifndef SIGHT_H
 #define SIGHT_H
 
+#include "Math.h"
 #include "Hash.h"
 #include "BaseEnums.h"
 #include "Vector.h"
@@ -13,17 +14,25 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		Sight(float sightCenter, float sightSize, const CollisionFilter& collisionFilter) :
-		  _sightCenter(sightCenter), _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false), _collisionFilter(collisionFilter) {};
+		explicit Sight(float sightCenter = 0.0f, float sightSize = 0.0f) :
+		  _sightCenter(sightCenter), _sightSize(sightSize), _filter(NULL), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("center", _sightCenter);
+			_sightCenter = toRadians(_sightCenter);
+			serializer.serialize("size", _sightSize);
+			_sightSize = toRadians(_sightSize);
+		}
 	private:
-		const float _sightCenter;
-		const float _sightSize;
-		const CollisionFilter& _collisionFilter;
-
+		const CollisionFilter* _filter;
+		float _sightCenter;
+		float _sightSize;
+		
 		Vector _pointOfIntersection;
 		bool _isSeeing;
 

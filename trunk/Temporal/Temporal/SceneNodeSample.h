@@ -19,19 +19,17 @@ namespace Temporal
 	class SceneNodeSample
 	{
 	public:
-		SceneNodeSample(Hash spriteGroupId, float startTime = 0.0f, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _translation(translation), _rotation(rotation), _spriteGroupId(spriteGroupId), _startTime(startTime), _duration(duration) {}
+		SceneNodeSample(float startTime = 0.0f, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
+		  _translation(translation), _rotation(rotation), _startTime(startTime), _duration(duration) {}
 
 		float getStartTime() const { return _startTime; }
 		float getEndTime() const { return getStartTime() + getDuration(); }
 		float getDuration() const { return _duration; }
 		const Vector& getTranslation() const { return _translation; }
 		float getRotation() const { return _rotation; }
-		Hash getSpriteGroupId() const { return _spriteGroupId; }
 	private:
 		const Vector _translation;
 		const float _rotation;
-		const Hash _spriteGroupId;
 		const float _startTime;
 		const float _duration;
 
@@ -45,7 +43,7 @@ namespace Temporal
 		Animation() : _duration(0.0f) {}
 		
 		float getDuration() const { return _duration; }
-		void add(Hash sceneNodeID, Hash spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
+		void add(Hash sceneNodeID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f);
 		const SceneNodeSampleCollection& get(Hash sceneNodeID) const { return *_sceneGraphSamples.at(sceneNodeID); }
 
 	private:

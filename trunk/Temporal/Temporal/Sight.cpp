@@ -17,9 +17,13 @@ namespace Temporal
 
 	void Sight::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::ENTITY_CREATED)
 		{
-			checkLineOfSight();
+			_filter = static_cast<const CollisionFilter*>(getEntity().get(ComponentType::COLLISION_FILTER));
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			//checkLineOfSight();
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
@@ -59,14 +63,12 @@ namespace Temporal
 		if(distance > _sightSize / 2.0f) return;
 
 		RayCastResult result;
-		if(Grid::get().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _collisionFilter.getGroup()))
+		if(Grid::get().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
 		{
 			_pointOfIntersection = result.getPoint();
 			if(result.getFixture().getEntityId() == PLAYER_ENTITY)
 				_isSeeing = true;
-			
 		}
-		
 		
 		if(_isSeeing)
 			raiseMessage(Message(MessageID::LINE_OF_SIGHT));

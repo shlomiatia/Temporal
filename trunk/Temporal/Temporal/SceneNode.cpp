@@ -1,6 +1,7 @@
 #include "SceneNode.h"
 #include "Graphics.h"
 #include "SpriteSheet.h"
+#include "ResourceManager.h"
 
 namespace Temporal
 {
@@ -14,20 +15,25 @@ namespace Temporal
 
 	SceneNode* SceneNode::clone() const
 	{
-		SceneNode* clone = new SceneNode(_id, _drawBehindParent, _transformOnly);
+		SceneNode* clone = new SceneNode(_id, _spriteSheetId, _spriteGroupId, _drawBehindParent, _transformOnly);
 
-		clone->setTranslation(getTranslation());
-		clone->setScale(getScale());
-		clone->setRotation(getRotation());
-		clone->setMirrored(isMirrored());
+		clone->_translation = _translation;
+		clone->_rotation = _rotation;
+		clone->_isMirrored = _isMirrored;
 
-		clone->setSpriteGroupID(getSpriteGroupID());
-		clone->setSpriteInterpolation(getSpriteInterpolation());
+		clone->_spriteInterpolation = _spriteInterpolation;
 
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
 		{
 			clone->add((**i).clone());
 		}
+		clone->init();
 		return clone;
+	}
+
+	void SceneNode::init()
+	{
+		if(_spriteSheetId != Hash::INVALID)
+			_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetId);
 	}
 }

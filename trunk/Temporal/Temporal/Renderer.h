@@ -13,8 +13,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(Hash spritesheetId = Hash::INVALID, Hash sceneGraphId = Hash::INVALID, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White) :
-			_spritesheet(NULL), _root(NULL), _spritesheetId(spritesheetId), _sceneGraphId(sceneGraphId), _layer(layer), _color(color) {}
+		explicit Renderer(LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White) : _root(NULL), _layer(layer), _color(color) {}
 		~Renderer();
 
 		SceneNode& getRoot() const { return *_root; }
@@ -26,17 +25,13 @@ namespace Temporal
 		template<class T>
 		void serialize(T& serializer)
 		{
-			serializer.serialize("sprite-sheet", _spritesheetId);
-			serializer.serialize("scene-graph", _sceneGraphId);
 			serializer.serialize("layer", (int&)_layer);
 			serializer.serialize("color", _color);
+			_root = new SceneNode();
+			serializer.serialize("scene-node", *_root);
 		}
 	private:
-		const SpriteSheet* _spritesheet;
 		SceneNode* _root;
-
-		Hash _spritesheetId;
-		Hash _sceneGraphId;
 
 		LayerType::Enum _layer;
 		Color _color;

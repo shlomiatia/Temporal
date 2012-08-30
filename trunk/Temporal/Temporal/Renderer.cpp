@@ -16,13 +16,7 @@ namespace Temporal
 
 	void Renderer::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
-		{
-			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetId);
-			if(_sceneGraphId == Hash::INVALID)
-				_root = new SceneNode(_sceneGraphId);
-		}
-		else if(message.getID() == MessageID::SET_COLOR)
+		if(message.getID() == MessageID::SET_COLOR)
 		{
 			const Color& color = *static_cast<Color*>(message.getParam());
 			_color.setColor(color);
@@ -48,17 +42,16 @@ namespace Temporal
 		if(position == Vector::Zero)
 			position = getPosition(*this);
 
-		Side::Enum spritesheetOrientation = _spritesheet->getOrientation();
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 
-		_root->setMirrored(entityOrientation != spritesheetOrientation);
 		_root->setTranslation(position);
-		Graphics::get().draw(*_spritesheet, *_root, _color);
+		_root->setMirrored(entityOrientation != Side::RIGHT);
+		Graphics::get().draw(*_root, _color);
 	}
 
 	Component* Renderer::clone() const
 	{
-		return new Renderer(_spritesheetId, _sceneGraphId, _layer, _color);
+		return new Renderer(_layer, _color);
 	}
 
 }

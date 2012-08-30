@@ -105,12 +105,11 @@ namespace Temporal
 		}
 	}
 
-	void Graphics::draw(const SpriteSheet& spritesheet, const SceneNode& sceneNode, const Color& color)
+	void Graphics::draw(const SceneNode& sceneNode, const Color& color)
 	{
 		glPushMatrix();
 		{	
 			translate(sceneNode.getTranslation());
-			glScalef(sceneNode.getScale().getX(), sceneNode.getScale().getY(), 1.0f);
 			if(sceneNode.isMirrored())
 				glScalef(-1.0f, 1.0f, 1.0f);
 			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
@@ -118,15 +117,23 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if((**i).drawBehindParent())
-					draw(spritesheet, **i, color);
+					draw(**i, color);
 			}
 
 			if(!sceneNode.isTransformOnly())
 			{
+				const SpriteSheet& spritesheet = sceneNode.getSpriteSheet();
 				const Texture& texture = spritesheet.getTexture();
-				Hash spriteGroupID = sceneNode.getSpriteGroupID();
+				Hash spriteGroupID = sceneNode.getSpriteGroupId();
 				const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
-				int spriteIndex = sceneNode.getSpriteInterpolation() == 1.0f ? spriteGroup.getSize() - 1 : static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+				float spriteInterpolation = sceneNode.getSpriteInterpolation();
+				int spriteIndex;
+				if(spriteInterpolation < 0.0f)
+					spriteIndex = 0;
+				else if(spriteInterpolation >= 1.0f)
+					spriteIndex = spriteGroup.getSize() - 1;
+				else
+					spriteIndex = static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 				const Sprite& sprite = spriteGroup.get(spriteIndex);
 				const AABB& texturePart = sprite.getBounds();
 
@@ -137,7 +144,7 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if(!(**i).drawBehindParent())
-					draw(spritesheet, **i, color);
+					draw(**i, color);
 			}
 		}
 		glPopMatrix();

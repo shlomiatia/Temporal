@@ -16,13 +16,13 @@ namespace Temporal
 			XmlDeserializer spritesheetDeserializer(spritesheetElement);
 			SpriteSheet* spritesheet = new SpriteSheet();
 			spritesheet->serialize(spritesheetDeserializer);
-			for(tinyxml2::XMLElement* spritegroupElement = document.FirstChildElement("sprite-group"); spritegroupElement != NULL; spritegroupElement = spritegroupElement->NextSiblingElement())
+			for(tinyxml2::XMLElement* spritegroupElement = spritesheetElement->FirstChildElement("sprite-group"); spritegroupElement != NULL; spritegroupElement = spritegroupElement->NextSiblingElement())
 			{
 				XmlDeserializer spritegroupDeserializer(spritegroupElement);
 				SpriteGroup* spritegroup = new SpriteGroup();
 				spritegroup->serialize(spritegroupDeserializer);
 				spritesheet->add(spritegroup);
-				for(tinyxml2::XMLElement* spriteElement = document.FirstChildElement("sprite"); spriteElement != NULL; spriteElement = spriteElement->NextSiblingElement())
+				for(tinyxml2::XMLElement* spriteElement = spritegroupElement->FirstChildElement("sprite"); spriteElement != NULL; spriteElement = spriteElement->NextSiblingElement())
 				{
 					XmlDeserializer spriteDeserializer(spriteElement);
 					Sprite* sprite = new Sprite();

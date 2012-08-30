@@ -109,7 +109,6 @@ namespace Temporal
 			sceneNode.setTranslation(translation);
 			sceneNode.setRotation(rotation);
 			sceneNode.setSpriteInterpolation(interpolation);
-			sceneNode.setSpriteGroupID(currentSample->getSpriteGroupId());
 		}
 	}
 
