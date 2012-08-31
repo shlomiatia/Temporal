@@ -4,13 +4,13 @@
 #include "SceneNode.h"
 #include "MessageUtils.h"
 #include "Renderer.h"
+#include "ResourceManager.h"
 #include <math.h>
 
 namespace Temporal
 {
 	static const Hash ANIMATION_ID_SERIALIZATION = Hash("ANM_SER_ANIMATION_ID");
 	static const Hash TIMER_SERIALIZATION = Hash("ANM_SER_TIMER");
-	static const Hash REPEAT_SERIALIZATION = Hash("ANM_SER_REPEAT");
 	static const Hash REWIND_SERIALIZATION = Hash("ANM_SER_REWIND");
 
 	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
@@ -20,11 +20,6 @@ namespace Temporal
 		{
 			bindSceneNodes(bindings, **i);
 		}
-	}
-
-	Animator::Animator(const AnimationCollection& animations) :
-		_animations(animations), _animationId(Hash::INVALID), _rewind(false), _repeat(false)
-	{
 	}
 
 	void Animator::handleMessage(Message& message)
@@ -49,7 +44,6 @@ namespace Temporal
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
-			serialization.serialize(REPEAT_SERIALIZATION, _repeat);
 			serialization.serialize(REWIND_SERIALIZATION, _rewind);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
@@ -57,7 +51,6 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
-			_repeat = serialization.deserializeBool(REPEAT_SERIALIZATION);
 			_rewind = serialization.deserializeBool(REWIND_SERIALIZATION);
 		}
 	}
@@ -66,9 +59,9 @@ namespace Temporal
 	{
 		_timer.update(framePeriodInMillis);
 		float totalPeriod = _timer.getElapsedTimeInMillis();
-		const Animation& animation = *_animations.at(_animationId);
+		const Animation& animation = _animationSet->get(_animationId);
 		float animationDuration = animation.getDuration();
-		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !_repeat)
+		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !animation.isRepeat())
 		{
 			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
 			return;
@@ -87,25 +80,26 @@ namespace Temporal
 			if(binding.getSceneNode().isTransformOnly())
 				continue;
 			int index = binding.getIndex();
-			const SceneNodeSampleCollection& sceneNodeSamples = animation.get(sceneNodeID);
-			int size = sceneNodeSamples.size();
-			const SceneNodeSample* currentSample = sceneNodeSamples.at(index);
+			const SampleCollection& sampleSet = animation.get(sceneNodeID).get();
+			int size = sampleSet.size();
+			const Sample* currentSample = sampleSet.at(index);
 			while(currentSample->getEndTime() != 0.0f && (currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod))
 			{
 				index = (size + index + offset) % size;
 				binding.setIndex(index);
 
-				currentSample = sceneNodeSamples.at(index);
+				currentSample = sampleSet.at(index);
 			}
 			int nextIndex = (size + index + 1) % size;
-			const SceneNodeSample& nextSample = *sceneNodeSamples.at(nextIndex);
+			const Sample* nextSample = sampleSet.at(nextIndex);
 			float samplePeriod = relativePeriod - currentSample->getStartTime();
 			float sampleDuration = currentSample->getDuration();
 			float interpolation = sampleDuration == 0.0f ? 0.0f : samplePeriod / sampleDuration;
 			
-			Vector translation = currentSample->getTranslation() * (1 - interpolation) + nextSample.getTranslation() * interpolation;
-			float rotation = currentSample->getRotation() * (1 - interpolation) + nextSample.getRotation() * interpolation;
+			Vector translation = currentSample->getTranslation() * (1 - interpolation) + nextSample->getTranslation() * interpolation;
+			float rotation = currentSample->getRotation() * (1 - interpolation) + nextSample->getRotation() * interpolation;
 			SceneNode& sceneNode = binding.getSceneNode();
+			sceneNode.setSpriteGroupId(currentSample->getSpriteGroupId());
 			sceneNode.setTranslation(translation);
 			sceneNode.setRotation(rotation);
 			sceneNode.setSpriteInterpolation(interpolation);
@@ -117,12 +111,17 @@ namespace Temporal
 		_timer.reset();
 		_animationId = resetAnimationParams.getAnimationID();
 		_rewind = resetAnimationParams.getRewind();
-		_repeat = resetAnimationParams.getRepeat();
 		update(0.0f);
 	}
 
 	Component* Animator::clone() const
 	{
-		return new Animator(_animations);
+		return new Animator(_animationSetId);
+	}
+
+	void Animator::init()
+	{
+		if(_animationSetId != Hash::INVALID)
+			_animationSet = ResourceManager::get().getAnimationSet(_animationSetId);
 	}
 }

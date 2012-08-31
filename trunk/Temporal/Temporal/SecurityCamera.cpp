@@ -8,6 +8,7 @@ namespace Temporal
 		static const Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
 		static const Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
 		static const Hash TURN_ANIMATION = Hash("CAM_ANM_TURN");
+		static const Hash ACQUIRE_ANIMATION = Hash("CAM_ANM_ACQUIRE");
 
 		static const Hash SEARCH_STATE = Hash("CAM_STT_SEARCH");
 		static const Hash SEE_STATE = Hash("CAM_STT_SEE");
@@ -18,7 +19,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
 		}
 
 		void Search::handleMessage(Message& message) const
@@ -37,7 +38,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION, false, true)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
 		}
 
 		void See::handleMessage(Message& message) const
@@ -78,13 +79,12 @@ namespace Temporal
 		}
 
 		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
-		const float Acquire::BLINK_TIME_IN_MILLIS(200.0f);
 
 		void Acquire::enter() const
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(ACQUIRE_ANIMATION)));
 		}
 
 		void Acquire::update() const
@@ -94,15 +94,6 @@ namespace Temporal
 				_stateMachine->changeState(SEARCH_STATE);
 			else if(elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
 				_stateMachine->changeState(SEE_STATE);
-			else
-			{
-				
-				int blinkIndex = static_cast<int>(elapsedTimeInMillis / BLINK_TIME_IN_MILLIS);
-				if(blinkIndex % 2 == 1)
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION, false, true)));
-				else
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION, false, true)));
-			}
 		}
 
 		void Acquire::handleMessage(Message& message) const

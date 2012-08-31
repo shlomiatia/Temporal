@@ -137,7 +137,7 @@ namespace Temporal
 
 	void Stand::enter() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION)));
 	}
 
 	void Stand::handleMessage(Message& message) const
@@ -175,7 +175,7 @@ namespace Temporal
 	void Fall::enter() const
 	{
 		// Not setting force because we want to continue the momentum
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION)));
 	}
 
 	void Fall::handleMessage(Message& message) const
@@ -203,7 +203,7 @@ namespace Temporal
 	{
 		// TempFlag 1 - still walking
 		_stateMachine->setTempFlag1(true);
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION)));
 	}
 
 	// BRODER
@@ -364,7 +364,7 @@ namespace Temporal
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
 		_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		Hash animation = jumpHelper.getInfo().getJumpAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
 	}
 
 	void Jump::handleMessage(Message& message) const
@@ -444,7 +444,7 @@ namespace Temporal
 
 	void Hang::enter() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION, false, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION)));
 	}
 
 	void Hang::handleMessage(Message& message) const
