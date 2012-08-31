@@ -15,16 +15,14 @@ namespace Temporal
 	class ResetAnimationParams
 	{
 	public:
-		explicit ResetAnimationParams(Hash animationID, bool rewind = false, bool repeat = false) : _animationID(animationID), _rewind(rewind), _repeat(repeat) {}
+		explicit ResetAnimationParams(Hash animationID, bool rewind = false) : _animationID(animationID), _rewind(rewind) {}
 
 		Hash getAnimationID() const { return _animationID; }
 		bool getRewind() const { return _rewind; }
-		bool getRepeat() const { return _repeat; }
 
 	private:
 		const Hash _animationID;
 		const bool _rewind;
-		const bool _repeat;
 
 		ResetAnimationParams(const ResetAnimationParams&);
 		ResetAnimationParams& operator=(const ResetAnimationParams&);

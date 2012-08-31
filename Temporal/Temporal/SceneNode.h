@@ -39,6 +39,7 @@ namespace Temporal
 		const SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
 		Hash getSpriteSheetId() const { return _spriteSheetId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
+		void setSpriteGroupId(Hash spriteGroupId) { _spriteGroupId = spriteGroupId; }
 		float getSpriteInterpolation() const { return _spriteInterpolation; }
 		void setSpriteInterpolation(float spriteInterpolation) { _spriteInterpolation = spriteInterpolation; }
 

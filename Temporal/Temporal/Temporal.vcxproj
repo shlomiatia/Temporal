@@ -32,7 +32,7 @@
     <ClInclude Include="CollisionFilter.h" />
     <ClInclude Include="PhysicsEnums.h" />
     <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="SceneNodeSample.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sentry.h" />
     <ClInclude Include="Serialization.h" />
@@ -88,7 +88,7 @@
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
-    <ClCompile Include="SceneNodeSample.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />

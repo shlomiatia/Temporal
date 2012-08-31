@@ -7,9 +7,12 @@
 namespace Temporal
 {
 	class SpriteSheet;
+	class AnimationSet;
 
 	typedef std::unordered_map<Hash, const SpriteSheet*> SpriteSheetCollection;
 	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
+	typedef std::unordered_map<Hash, const AnimationSet*> AnimationSetCollection;
+	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
 
 	class ResourceManager
 	{
@@ -21,11 +24,16 @@ namespace Temporal
 		}
 
 		void init();
-		const SpriteSheet* getSpritesheet(Hash id);
+		const SpriteSheet* getSpritesheet(Hash id) const { return _spritesheets.at(id); }
+		const AnimationSet* getAnimationSet(Hash id) const { return _animationSets.at(id); }
 		void dispose();
 
 	private:
 		SpriteSheetCollection _spritesheets;
+		AnimationSetCollection _animationSets;
+
+		void initSpritesheets();
+		void initAnimationSets();
 
 		ResourceManager() {}
 		ResourceManager(const ResourceManager&);

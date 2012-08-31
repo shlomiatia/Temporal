@@ -4,12 +4,11 @@
 #include "Timer.h"
 #include "EntitySystem.h"
 #include "Hash.h"
-#include "SceneNodeSample.h"
+#include "Animation.h"
 
 namespace Temporal
 {
 	class ResetAnimationParams;
-
 	class SceneNode;
 
 	class SceneNodeBinding
@@ -33,24 +32,29 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		explicit Animator(const AnimationCollection& animations);
+		explicit Animator(Hash animationSetId = Hash::INVALID) :
+			_animationSetId(animationSetId), _animationSet(NULL), _animationId(Hash::INVALID), _rewind(false) { init(); }
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
-
 		void handleMessage(Message& message);
-		void update(float framePeriodInMillis);
-
 		Component* clone() const;
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("animation-set", _animationSetId);
+			init();
+		}
 	private:
-		const AnimationCollection& _animations;
-
+		Hash _animationSetId;
+		const AnimationSet* _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
 		bool _rewind;
-		bool _repeat;
 		Timer _timer;
 
+		void init();
+		void update(float framePeriodInMillis);
 		void reset(const ResetAnimationParams& resetAnimationParams);
 	};
 }

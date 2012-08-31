@@ -44,7 +44,6 @@ namespace Temporal
 
 		private:
 			static const float ACQUIRE_TIME_IN_MILLIS;
-			static const float BLINK_TIME_IN_MILLIS;
 
 			void update() const;
 		};
