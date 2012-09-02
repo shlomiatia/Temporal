@@ -19,7 +19,6 @@ namespace Temporal
 	static const float ANGLE_150_IN_RADIANS = 5.0f * PI / 6.0f; // 120 = 10 * PI / 12 = 5 * PI / 6
 	static const float ANGLE_165_IN_RADIANS = 11.0f * PI / 12.0f; // 120 = 11 * PI / 12 = 2 * PI /3
 	static const float ANGLE_180_IN_RADIANS = PI; // 120 = 12 * PI / 12 = PI
-	extern const float FLOAT_MAX;
 
 	inline bool sameSign(float a, float b) { return (a < 0.0f && b < 0.0f) || (a > 0.0f && b > 0.0f); }
 	inline bool differentSign(float a, float b) { return (a < 0.0f && b > 0.0f) || (a > 0.0f && b < 0.0f); }
