@@ -122,82 +122,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
 	}
-	SceneNode* createDefaultSceneGraph()
-	{
-		return new SceneNode(Hash("SCN_ROOT"));
-	}
 
-	void addAnimation(AnimationCollection* animations, Hash animationID, Hash sceneNodeID, Hash spriteGroupID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f )
-	{
-		Animation* animation = (Animation*)(*animations)[animationID];
-		if(animation == NULL)
-		{
-			animation = new Animation();
-			(*animations)[animationID] = animation;
-		}
-		animation->add(sceneNodeID, spriteGroupID, duration, translation, rotation);
-	}
-
-	void addJumpSensor(Entity& entity)
-	{
-		// Jump sensor
-		float jumpSensorBackOffset = ENTITY_SIZE.getWidth() / 2.0f - 1.0f;
-		float maxJumpDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
-		float jumpSensorWidth = maxJumpDistance / 2.0f + jumpSensorBackOffset; 
-		float jumpSensorHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
-		float sensorOffsetX = jumpSensorWidth / 2.0f - jumpSensorBackOffset;
-		float sensorOffsetY =  (ENTITY_SIZE.getHeight() + jumpSensorHeight) / 2.0f;
-		Vector sensorOffset(sensorOffsetX, sensorOffsetY);
-		Size sensorSize(jumpSensorWidth, jumpSensorHeight);
-		Fixture* fixture = new Fixture(new AABB(sensorOffset, sensorSize));
-		Sensor* sensor(new Sensor(fixture, new LedgeDetector(Hash("SNS_JUMP") ,-ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE));
-		entity.add(sensor);
-	}
-
-	void addHangSensor(Entity& entity)
-	{
-		// Hang Sensor
-		float hangSensorBackOffset = ENTITY_SIZE.getWidth() - 1.0f;
-		const float HANG_SENSOR_SIZE = 20.0f;
-		Size sensorSize = Size(hangSensorBackOffset + HANG_SENSOR_SIZE, HANG_SENSOR_SIZE);
-		float sensorOffsetX = sensorSize.getWidth() / 2.0f - (hangSensorBackOffset / 2.0f);
-		float sensorOffsetY = (ENTITY_SIZE.getHeight() + sensorSize.getHeight()) / 2.0f;
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture(new AABB(sensorOffset, sensorSize));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_HANG"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addBackEdgeSensor(Entity& entity)
-	{
-		// Back Edge Sensor
-		float sensorOffsetX = -(EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture(new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_BACK_EDGE"), -ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addFrontEdgeSensor(Entity& entity)
-	{
-		// Front edge sensor
-		float sensorOffsetX = (EDGE_SENSOR_SIZE.getWidth() - ENTITY_SIZE.getWidth()) / 2.0f;
-		float sensorOffsetY = -(ENTITY_SIZE.getHeight() / 2.0f) -(EDGE_SENSOR_SIZE.getHeight() /2.0f);
-		Vector sensorOffset = Vector(sensorOffsetX, sensorOffsetY);
-		Fixture* fixture = new Fixture(new AABB(sensorOffset, EDGE_SENSOR_SIZE));
-		Sensor* sensor = new Sensor(fixture, new LedgeDetector(Hash("SNS_FRONT_EDGE"), -ANGLE_135_IN_RADIANS - ANGLE_45_IN_RADIANS / 2.0f, ANGLE_135_IN_RADIANS), FilterType::OBSTACLE);
-		entity.add(sensor);
-	}
-
-	void addSensors(Entity& entity)
-	{
-		addJumpSensor(entity);
-		addHangSensor(entity);
-		addBackEdgeSensor(entity);
-		addFrontEdgeSensor(entity);
-	}
-	
 	void createTemporalEcho(Entity* entity)
 	{
 		TemporalEcho* temporalEcho = new TemporalEcho();
@@ -236,40 +161,6 @@ namespace Temporal
 		//entity->add(lightGem);
 		//entity->add(temporalPeriod);
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
-	}
-
-	void createPatrol(SpriteSheet* spritesheet, AnimationCollection* animations)
-	{
-		SceneNode* root = createDefaultSceneGraph();
-		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
-
-		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
-		Patrol* patrol = new Patrol();
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		DynamicBody* dynamicBody = new DynamicBody(info);
-		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
-		Sight* sight = new Sight(ANGLE_0_IN_RADIANS, ANGLE_60_IN_RADIANS, *collisionFilter);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
-		Light* light = new Light(Color::White, 500.0f, ANGLE_0_IN_RADIANS, ANGLE_30_IN_RADIANS);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(drawPosition);
-		entity->add(patrol);
-		entity->add(dynamicBody);
-		entity->add(sight);
-		addFrontEdgeSensor(*entity);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		//entity->add(light);
-		//entity->add(temporalPeriod);
-		createTemporalEcho(entity);
-		EntitiesManager::get().add(Hash("ENT_PATROL"), entity);
 	}
 
 	void createLaser()
@@ -330,114 +221,6 @@ namespace Temporal
 		createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
-	}
-
-	void createPlatforms()
-	{
-		#pragma region Platforms
-
-		// Edges
-		createPlatform(new Segment(0.0f, 0.0f, 0.0f, 767.0f), spritesheet);
-		createPlatform(new Segment(0.0f, 0.0f, 2047.0f, 0.0f), spritesheet);
-		createPlatform(new Segment(2047.0f, 0.0f, 2047.0f, 767.0f), spritesheet);
-
-		// Screen Splitter
-		createPlatform(new Segment(1023.0f, 0.0f, 1023.0f, 256.0f), spritesheet);
-		createPlatform(new Segment(1023.0f, 384.0f, 1023.0f, 767.0f), spritesheet);
-		
-		// Right lower platform
-		createPlatform(new Segment(723.0f, 0.0f, 723.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(723.0f, 128.0f, 1023.0f, 128.0f), spritesheet);
-
-		// Right upper platform
-		createPlatform(new Segment(896.0f, 128.0f, 896.0f, 256.0f), spritesheet);
-		createPlatform(new Segment(896.0f, 256.0f, 1023.0f, 256.0f), spritesheet);
-
-		// Right floater
-		createPlatform(new Segment(640.0f, 384.0f, 1023.0f, 384.0f), spritesheet);
-
-		// Right balcony
-		createPlatform(new Segment(767.0f, 512.0f, 1023.0f, 512.0f), spritesheet);
-		createPlatform(new Segment(896.0f, 384.0f, 896.0f, 512.0f), spritesheet);
-
-		// Right unreachable
-		createPlatform(new Segment(896.0f, 640.0f, 1023.0f, 640.0f), spritesheet);
-		createPlatform(new Segment(896.0f, 640.0f, 896.0f, 767.0f), spritesheet);
-		
-		// Left lower platform
-		createPlatform(new Segment(300, 0.0f, 300.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(0.0f, 128.0f, 300, 128.0f), spritesheet);
-
-		// Left upper platform
-		createPlatform(new Segment(128.0f, 128.0f, 128.0f, 256.0f), spritesheet);
-		createPlatform(new Segment(0.0f, 256.0f, 128.0f, 256.0f), spritesheet);
-
-		// Left floater
-		createPlatform(new Segment(0.0f, 384.0f, 384.0f, 384.0f), spritesheet);
-
-		// Left balcony
-		createPlatform(new Segment(0.0f, 512.0f, 256.0f, 512.0f), spritesheet);
-		createPlatform(new Segment(128, 384.0f, 128.0f, 512.0f), spritesheet);
-
-		// Left unrechable
-		createPlatform(new Segment(0.0f, 640.0f, 128.0f, 640.0f), spritesheet);
-		createPlatform(new Segment(128.0f, 640.0f, 128.0f, 767.0f), spritesheet);
-		
-		// Middle floaters
-		createPlatform(new Segment(384.0f, 128.0f, 640.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(384.0f, 256.0f, 640.0f, 256.0f), spritesheet);
-
-		// Cover
-		createPlatform(new AABB(AABBLB(640.0f, 384.0f, 256.0f, 64.0f)), spritesheet, FilterType::COVER);
-
-		// 30
-		createPlatform(new Segment(1088.0f, 0.0f, 1216.0f, 64.0f), spritesheet);
-		createPlatform(new Segment(1216.0f, 64.0f, 1280.0f, 64.0f), spritesheet);
-		createPlatform(new Segment(1280.0f, 64.0f, 1408.0f, 0.0f), spritesheet);
-
-		// 45
-		createPlatform(new Segment(1472.0f, 0.0f, 1536.0f, 64.0f), spritesheet);
-		createPlatform(new Segment(1536.0f, 64.0f, 1600.0f, 64.0f), spritesheet);
-		createPlatform(new Segment(1600.0f, 64.0f, 1664.0f, 0.0f), spritesheet);
-
-		// 60
-		createPlatform(new Segment(1728.0f, 0.0f, 1792.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(1792.0f, 128.0f, 1856.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(1856.0f, 128.0f, 1920.0f, 0.0f), spritesheet);
-		
-		// Torches
-		createPlatform(new Segment(1024.0f, 64.0f, 1088.0f, 128.0f), spritesheet);
-		createPlatform(new Segment(1024.0f, 128.0f, 1088.0f, 128.0f), spritesheet);
-		
-		createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 64.0f), spritesheet);
-		createPlatform(new Segment(1983.0f, 128.0f, 2047.0f, 128.0f), spritesheet);
-
-		// Platforms
-		createPlatform(new Segment(1088.0f, 256.0f, 1792.0f, 256.0f), spritesheet);
-		createPlatform(new Segment(1856.0f, 256.0f, 2047.0f, 256.0f), spritesheet);
-
-		// 30
-		createPlatform(new Segment(1088.0f, 384.0f, 1216.0f, 448.0f), spritesheet);
-		createPlatform(new Segment(1216.0f, 448.0f, 1344.0f, 384.0f), spritesheet);
-
-		// 45
-		createPlatform(new Segment(1408.0f, 384.0f, 1472.0f, 448.0f), spritesheet);
-		createPlatform(new Segment(1472.0f, 448.0f, 1536.0f, 384.0f), spritesheet);
-
-		// 60
-		createPlatform(new Segment(1600.0f, 384.0f, 1664.0f, 512.0f), spritesheet);
-		createPlatform(new Segment(1664.0f, 512.0f, 1728.0f, 384.0f), spritesheet);
-
-		// Platforms
-		createPlatform(new Segment(1855.0f, 384.0f, 2047.0f, 384.0f), spritesheet);
-		createPlatform(new Segment(1088.0f, 512.0f, 1983.0f, 512.0f), spritesheet);
-
-		// V
-		createPlatform(new Segment(1472.0f, 640.0f, 1536.0f, 512.0f), spritesheet);
-		createPlatform(new Segment(1536.0f, 512.0f, 1600.0f, 640.0f), spritesheet);
-		createPlatform(new Segment(1472.0f, 640.0f, 1600.0f, 640.0f), spritesheet);
-
-		#pragma endregion
 	}
 
 	void createSkeleton()
@@ -638,6 +421,11 @@ namespace Temporal
 					renderer->serialize(componentDeserializer);
 					entity->add(renderer);
 				}
+				else if(strcmp(componentElement->Name(), "input-controller") == 0)
+				{
+					InputController* inputController = new InputController();
+					entity->add(inputController);
+				}
 				else if(strcmp(componentElement->Name(), "senry") == 0)
 				{
 					Sentry* sentry = new Sentry();
@@ -696,22 +484,5 @@ namespace Temporal
 			}
 			EntitiesManager::get().add(entity);
 		}
-		
-		/*
-		#pragma endregion
-
-		createPlayer(spritesheet, animations);
-		
-		createSentry(spritesheet);
-		createCamera();
-		createPatrol(spritesheet, animations);
-		createChaser(spritesheet, animations);
-		createLaser();
-		createPlatforms();
-		createBackground(Vector(512.0f, 384.0f));
-		createBackground(Vector(1536.0f, 384.0f));
-		createSkeleton();
-		createLight(Vector(700.0f, 300.0f));
-		createLight(Vector(1500.0f, 300.0f));*/
 	}
 }

@@ -72,7 +72,7 @@ namespace Temporal
 	class Animation
 	{
 	public:
-		Animation() : _id(Hash::INVALID), _duration(0.0f), _repeat(false) {}
+		Animation() : _id(Hash::INVALID), _duration(0.0f), _repeat(false), _rewind(false) {}
 		
 		Hash getId() const { return _id; }
 		float getDuration() const { return _duration; }
