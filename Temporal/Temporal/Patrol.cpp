@@ -1,4 +1,5 @@
 #include "Patrol.h"
+#include "Vector.h"
 #include "MessageUtils.h"
 
 namespace Temporal
@@ -23,6 +24,14 @@ namespace Temporal
 			else if(isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
 			{
 				_stateMachine->changeState(WAIT_STATE);
+			}
+			else if(message.getID() == MessageID::BODY_COLLISION)
+			{
+				const Vector& collision = getVectorParam(message.getParam());
+				if(collision.getX() != 0.0f)
+				{
+					_stateMachine->changeState(WAIT_STATE);
+				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{

@@ -13,7 +13,7 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK = FilterType::OBSTACLE;
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
 
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
 	static const VectorSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");

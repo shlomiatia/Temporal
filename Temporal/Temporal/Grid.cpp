@@ -136,6 +136,8 @@ namespace Temporal
 
 	bool Grid::cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask, int group) const
 	{
+		if(rayDirection == Vector::Zero)
+			return false;
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
 		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
 		const Vector& origin = ray.getOrigin();

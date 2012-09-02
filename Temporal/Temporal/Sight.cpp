@@ -11,7 +11,7 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::COVER | FilterType::PLAYER;
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::COVER | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
@@ -23,7 +23,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			//checkLineOfSight();
+			checkLineOfSight();
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
