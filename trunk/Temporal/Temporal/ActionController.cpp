@@ -18,17 +18,17 @@ namespace Temporal
 	static const Hash JUMP_SENSOR_ID = Hash("SNS_JUMP");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
 
-	static const Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
-	static const Hash TURN_ANIMATION = Hash("POP_ANM_TURN");
-	static const Hash FALL_ANIMATION = Hash("POP_ANM_FALL");
-	static const Hash JUMP_UP_START_ANIMATION = Hash("POP_ANM_JUMP_UP_START");
-	static const Hash JUMP_UP_ANIMATION = Hash("POP_ANM_JUMP_UP");
-	static const Hash HANG_ANIMATION = Hash("POP_ANM_HANG");
-	static const Hash CLIMB_ANIMATION = Hash("POP_ANM_CLIMB");
-	static const Hash JUMP_FORWARD_START_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_START");
-	static const Hash JUMP_FORWARD_ANIMATION = Hash("POP_ANM_JUMP_FORWARD");
-	static const Hash JUMP_FORWARD_END_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_END");
-	static const Hash WALK_ANIMATION = Hash("POP_ANM_WALK");
+	static Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
+	static Hash TURN_ANIMATION = Hash("POP_ANM_TURN");
+	static Hash FALL_ANIMATION = Hash("POP_ANM_FALL");
+	static Hash JUMP_UP_START_ANIMATION = Hash("POP_ANM_JUMP_UP_START");
+	static Hash JUMP_UP_ANIMATION = Hash("POP_ANM_JUMP_UP");
+	static Hash HANG_ANIMATION = Hash("POP_ANM_HANG");
+	static Hash CLIMB_ANIMATION = Hash("POP_ANM_CLIMB");
+	static Hash JUMP_FORWARD_START_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_START");
+	static Hash JUMP_FORWARD_ANIMATION = Hash("POP_ANM_JUMP_FORWARD");
+	static Hash JUMP_FORWARD_END_ANIMATION = Hash("POP_ANM_JUMP_FORWARD_END");
+	static Hash WALK_ANIMATION = Hash("POP_ANM_WALK");
 
 	static const Hash STAND_STATE = Hash("ACT_STT_STAND");
 	static const Hash FALL_STATE = Hash("ACT_STT_FALL");
@@ -137,7 +137,7 @@ namespace Temporal
 
 	void Stand::enter() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(STAND_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &STAND_ANIMATION));
 	}
 
 	void Stand::handleMessage(Message& message) const
@@ -175,7 +175,7 @@ namespace Temporal
 	void Fall::enter() const
 	{
 		// Not setting force because we want to continue the momentum
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(FALL_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &FALL_ANIMATION));
 	}
 
 	void Fall::handleMessage(Message& message) const
@@ -203,7 +203,7 @@ namespace Temporal
 	{
 		// TempFlag 1 - still walking
 		_stateMachine->setTempFlag1(true);
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(WALK_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &WALK_ANIMATION));
 	}
 
 	// BRODER
@@ -258,7 +258,7 @@ namespace Temporal
 
 	void Turn::enter() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION));
 	}
 
 	void Turn::handleMessage(Message& message) const
@@ -331,7 +331,7 @@ namespace Temporal
 	void JumpStart::enter() const
 	{
 		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getStartAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
 	}
 
 	void JumpStart::handleMessage(Message& message) const
@@ -364,7 +364,7 @@ namespace Temporal
 		Vector jumpVector = Vector(jumpForceX, jumpForceY);
 		_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 		Hash animation = jumpHelper.getInfo().getJumpAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
 	}
 
 	void Jump::handleMessage(Message& message) const
@@ -391,7 +391,7 @@ namespace Temporal
 	void JumpEnd::enter() const
 	{
 		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getEndAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animation)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
 	}
 
 	void JumpEnd::handleMessage(Message& message) const
@@ -444,7 +444,7 @@ namespace Temporal
 
 	void Hang::enter() const
 	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(HANG_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &HANG_ANIMATION));
 	}
 
 	void Hang::handleMessage(Message& message) const
@@ -470,7 +470,7 @@ namespace Temporal
 		float climbForceY = shape.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
 
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION, true)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLIMB_ANIMATION));
 		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
 	}
 
@@ -534,7 +534,7 @@ namespace Temporal
 		float forceY = -(size.getHeight());
 
 		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(CLIMB_ANIMATION)));
+		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLIMB_ANIMATION));
 	}
 
 	void Descend::handleMessage(Message& message) const

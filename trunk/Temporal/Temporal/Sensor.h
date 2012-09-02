@@ -48,15 +48,20 @@ namespace Temporal
 	class Sensor : public Component
 	{
 	public:
-		Sensor(Fixture* fixture, ContactListener* listener, int collisionMask)
-			: _fixture(fixture), _listener(listener), _collisionMask(collisionMask) { _listener->setOwner(*this); }
+		Sensor(Fixture* fixture, ContactListener* listener)
+			: _fixture(fixture), _listener(listener), _categoryMask(0) { _listener->setOwner(*this); }
 		~Sensor() { delete _fixture; delete _listener; }
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("category-mask", _categoryMask);
+		}
 	private:
-		const int _collisionMask;
+		int _categoryMask;
 		Fixture* _fixture;
 		ContactListener* _listener;
 
@@ -66,17 +71,26 @@ namespace Temporal
 	class LedgeDetector : public ContactListener
 	{
 	public:
-		LedgeDetector(Hash id, float rangeCenter, float rangeSize)
+		explicit LedgeDetector(Hash id = Hash::INVALID, float rangeCenter = 0.0f, float rangeSize = 0.0f)
 			: _id(id), _point(Vector::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize), _isBlocked(false) {}
 
 		void start();
 		void handle(const Contact& contact);
 		void end();
 
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("id", _id);
+			serializer.serialize("center", _rangeCenter);
+			_rangeCenter = toRadians(_rangeCenter);
+			serializer.serialize("size", _rangeSize);
+			_rangeSize = toRadians(_rangeSize);
+		}
 	private:
-		const Hash _id;
-		const float _rangeCenter;
-		const float _rangeSize;
+		Hash _id;
+		float _rangeCenter;
+		float _rangeSize;
 		Vector _point;
 		bool _isBlocked;
 	};

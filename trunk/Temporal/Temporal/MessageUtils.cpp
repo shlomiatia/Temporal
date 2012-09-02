@@ -30,11 +30,6 @@ namespace Temporal
 		return *static_cast<const Serialization*>(data);
 	}
 
-	const ResetAnimationParams& getResetAnimationParams(void* data)
-	{
-		return *static_cast<const ResetAnimationParams*>(data);
-	}
-
 	const SensorCollisionParams& getSensorCollisionParams(void* data)
 	{
 		return *static_cast<const SensorCollisionParams*>(data);

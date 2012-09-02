@@ -5,10 +5,11 @@ namespace Temporal
 {
 	namespace SecurityCameraStates
 	{
-		static const Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
-		static const Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
-		static const Hash TURN_ANIMATION = Hash("CAM_ANM_TURN");
-		static const Hash ACQUIRE_ANIMATION = Hash("CAM_ANM_ACQUIRE");
+		static Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
+		static Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
+		static Hash TURN_ANIMATION = Hash("CAM_ANM_TURN");
+		static Hash TURN_ANIMATION2 = Hash("CAM_ANM_TURN2");
+		static Hash ACQUIRE_ANIMATION = Hash("CAM_ANM_ACQUIRE");
 
 		static const Hash SEARCH_STATE = Hash("CAM_STT_SEARCH");
 		static const Hash SEE_STATE = Hash("CAM_STT_SEE");
@@ -19,7 +20,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEARCH_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &SEARCH_ANIMATION));
 		}
 
 		void Search::handleMessage(Message& message) const
@@ -38,7 +39,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(SEE_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &SEE_ANIMATION));
 		}
 
 		void See::handleMessage(Message& message) const
@@ -58,7 +59,7 @@ namespace Temporal
 		void Turn::enter() const
 		{
 			_hasTurned = false;
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION));
 		}
 
 		void Turn::handleMessage(Message& message) const
@@ -72,7 +73,7 @@ namespace Temporal
 				else
 				{
 					_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(TURN_ANIMATION, true)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION2));
 					_hasTurned = true;
 				}
 			}
@@ -84,7 +85,7 @@ namespace Temporal
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(ACQUIRE_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ACQUIRE_ANIMATION));
 		}
 
 		void Acquire::update() const
