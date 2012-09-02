@@ -89,9 +89,9 @@ namespace Temporal
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
 		{
 			float originAxis = origin.getAxis(axis);
-			float vectorAxis = vector.getAxis(axis);
+			float directionAxis = direction.getAxis(axis);
 			Range rectAxis = rect.getAxis(axis);
-			if (abs(vectorAxis) < EPSILON) 
+			if (abs(directionAxis) < EPSILON) 
 			{
 				// Ray is parallel to slab. No hit if origin not within slab
 				if (originAxis < rectAxis.getMin() || originAxis > rectAxis.getMax()) 
@@ -100,7 +100,7 @@ namespace Temporal
 			else 
 			{
 				// Compute intersection t value of ray with near and far plane of slab
-				float ood = 1.0f / vectorAxis;
+				float ood = 1.0f / directionAxis;
 				float t1 = (rectAxis.getMin() - originAxis) * ood;
 				float t2 = (rectAxis.getMax() - originAxis) * ood;
 				// Make t1 be intersection with near plane, t2 with far plane
@@ -113,7 +113,7 @@ namespace Temporal
 			}
 		}
 		if(pointOfIntersection != NULL)
-			*pointOfIntersection = origin + vector * tmin;
+			*pointOfIntersection = origin + direction * tmin;
 		if(distance != NULL)
 			*distance = tmin;
 		return true;

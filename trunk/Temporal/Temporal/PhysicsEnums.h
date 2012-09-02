@@ -3,7 +3,7 @@
 
 namespace Temporal
 {
-	namespace FilterType
+	namespace CollisionCategory
 	{
 		enum Enum
 		{

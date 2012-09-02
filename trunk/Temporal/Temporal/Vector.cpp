@@ -23,6 +23,7 @@ namespace Temporal
 
 	Vector Vector::normalize() const
 	{
-		return *this / getLength();
+		float length = getLength();
+		return length == 0.0f ? Vector::Zero : *this / length;
 	}
 }

@@ -80,7 +80,7 @@ namespace Temporal
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
-		FixtureCollection result = Grid::get().iterateTiles(lightAABB, FilterType::OBSTACLE);
+		FixtureCollection result = Grid::get().iterateTiles(lightAABB, CollisionCategory::OBSTACLE);
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());

@@ -12,7 +12,7 @@
 
 namespace Temporal
 {
-	static const int COLLISION_MASK = FilterType::OBSTACLE | FilterType::PLAYER;
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const Hash DIRECTION_SERIALIZATION = Hash("LAS_SER_DIR");

@@ -135,7 +135,7 @@ namespace Temporal
 		SceneNode* root = createDefaultSceneGraph();
 
 		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::PLAYER);
+		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::PLAYER);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		InputController* controller = new InputController();
 		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
@@ -180,7 +180,7 @@ namespace Temporal
 		LineRenderer* renderer = new LineRenderer(LayerType::NPC, *texture);
 		//Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
 		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
+		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::CHARACTER);
 
 		Entity* entity = new Entity();
 		entity->add(transform);
@@ -196,7 +196,7 @@ namespace Temporal
 	void createChaser(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
 		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
+		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::CHARACTER);
 		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
 		Navigator* navigator = new Navigator();
 		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));

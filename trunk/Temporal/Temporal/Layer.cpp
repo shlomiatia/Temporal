@@ -28,7 +28,7 @@ namespace Temporal
 
 	void DebugLayer::draw()
 	{
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
 
 		//Grid::get().draw();
