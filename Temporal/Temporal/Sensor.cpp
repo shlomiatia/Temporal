@@ -15,7 +15,7 @@ namespace Temporal
 	{
 		_fixture->update();
 		const AABB& sensorShape = static_cast<const AABB&>(_fixture->getGlobalShape());
-		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _collisionMask, _fixture->getFilter().getGroup());
+		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
 		_listener->start();
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{

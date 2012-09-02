@@ -12,22 +12,6 @@ namespace Temporal
 	class Vector;
 	class Serialization;
 
-	class ResetAnimationParams
-	{
-	public:
-		explicit ResetAnimationParams(Hash animationID, bool rewind = false) : _animationID(animationID), _rewind(rewind) {}
-
-		Hash getAnimationID() const { return _animationID; }
-		bool getRewind() const { return _rewind; }
-
-	private:
-		const Hash _animationID;
-		const bool _rewind;
-
-		ResetAnimationParams(const ResetAnimationParams&);
-		ResetAnimationParams& operator=(const ResetAnimationParams&);
-	};
-
 	class SensorCollisionParams
 	{
 	public:
@@ -50,7 +34,6 @@ namespace Temporal
 	Hash getHashParam(void* data);
 	Serialization& getSerializationParam(void* data);
 	const Serialization& getConstSerializationParam(void* data);
-	const ResetAnimationParams& getResetAnimationParams(void* data);
 	const SensorCollisionParams& getSensorCollisionParams(void* data);
 	const Vector& getVectorParam(void* data);
 	inline float getFloatParam(void* data) { return *static_cast<float*>(data); }

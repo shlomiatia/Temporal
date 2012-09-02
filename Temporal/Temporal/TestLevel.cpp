@@ -238,59 +238,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
 	}
 
-	void createCamera()
-	{
-		const Texture* texture = Texture::load("camera.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture, Side::LEFT);
-		SpriteGroup* spriteGroup;
-		AnimationCollection* animations = new AnimationCollection();
-		Hash animationID = Hash::INVALID;
-		Hash sceneNodeID = Hash("SCN_ROOT");
-		SceneNode* root = new SceneNode(sceneNodeID);
-		
-		#pragma region Camera spriteGroup
-		// Search - 0
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("CAM_ANM_SEARCH");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(19, 19, 24, 32), Vector(4, 16)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// See - 1
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("CAM_ANM_SEE");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(19, 59, 24, 32), Vector(4, 16)));
-		addAnimation(animations, animationID, sceneNodeID, animationID);
-		// Turn - 2
-		spriteGroup = new SpriteGroup();
-		animationID = Hash("CAM_ANM_TURN");
-		spritesheet->add(animationID, spriteGroup);
-		spriteGroup->add(new Sprite(AABB(50.5, 19.5, 17, 33), Vector(2, 16)));
-		spriteGroup->add(new Sprite(AABB(76, 19.5, 12, 33), Vector(1, 16)));
-		spriteGroup->add(new Sprite(AABB(98, 19.5, 12, 33), Vector(0, 16)));
-		addAnimation(animations, animationID, sceneNodeID, animationID, 200.0f);
-		#pragma endregion
-
-		Transform* transform = new Transform(Vector(383.0f, 383.0f), Side::LEFT);
-		SecurityCamera* camera = new SecurityCamera();
-		CollisionFilter* collisionFilter = new CollisionFilter(FilterType::CHARACTER);
-		Sight* sight = new Sight(-ANGLE_30_IN_RADIANS, ANGLE_30_IN_RADIANS, *collisionFilter);
-		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(camera);
-		entity->add(sight);
-		entity->add(animator);
-		entity->add(renderer);
-		//entity->add(temporalPeriod);
-		createTemporalEcho(entity);
-		EntitiesManager::get().add(Hash("ENT_CAMERA"), entity);
-	}
-
 	void createPatrol(SpriteSheet* spritesheet, AnimationCollection* animations)
 	{
 		SceneNode* root = createDefaultSceneGraph();
@@ -701,19 +648,50 @@ namespace Temporal
 					SecurityCamera* sentry = new SecurityCamera();
 					entity->add(sentry);
 				}
+				else if(strcmp(componentElement->Name(), "action-controller") == 0)
+				{
+					ActionController* actionController = new ActionController();
+					entity->add(actionController);
+				}
+				else if(strcmp(componentElement->Name(), "patrol") == 0)
+				{
+					Patrol* patrol = new Patrol();
+					entity->add(patrol);
+				}
+				else if(strcmp(componentElement->Name(), "sensor") == 0)
+				{
+					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement("aabb");
+					XmlDeserializer shapeDeserializer(shapeElement);
+					AABB* aabb = new AABB();
+					aabb->serialize(shapeDeserializer);
+					Fixture* fixture = new Fixture(aabb);
+					tinyxml2::XMLElement* ledgeDetectorElement = componentElement->FirstChildElement("ledge-detector");
+					XmlDeserializer ledgeDetectorDeserializer(ledgeDetectorElement);
+					LedgeDetector* ledgeDetector = new LedgeDetector();
+					ledgeDetector->serialize(ledgeDetectorDeserializer);
+					Sensor* sensor = new Sensor(fixture, ledgeDetector);
+					sensor->serialize(componentDeserializer);
+					entity->add(sensor);
+				}
+				else if(strcmp(componentElement->Name(), "dynamic-body") == 0)
+				{
+					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
+					XmlDeserializer shapeDeserializer(shapeElement);
+					AABB* aabb = new AABB();
+					aabb->serialize(shapeDeserializer);
+					Fixture* fixture = new Fixture(aabb);
+					DynamicBody* dynamicBody = new DynamicBody(fixture);
+					entity->add(dynamicBody);
+				}
 				else if(strcmp(componentElement->Name(), "static-body") == 0)
 				{
 					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
 					XmlDeserializer shapeDeserializer(shapeElement);
-
-					if(strcmp(shapeElement->Name(), "segment") == 0)
-					{
-						Segment* segment = new Segment();
-						segment->serialize(shapeDeserializer);
-						Fixture* fixture = new Fixture(segment);
-						StaticBody* staticBody = new StaticBody(fixture);
-						entity->add(staticBody);
-					}
+					Segment* segment = new Segment();
+					segment->serialize(shapeDeserializer);
+					Fixture* fixture = new Fixture(segment);
+					StaticBody* staticBody = new StaticBody(fixture);
+					entity->add(staticBody);
 				}
 			}
 			EntitiesManager::get().add(entity);

@@ -33,7 +33,7 @@ namespace Temporal
 	{
 	public:
 		explicit Animator(Hash animationSetId = Hash::INVALID) :
-			_animationSetId(animationSetId), _animationSet(NULL), _animationId(Hash::INVALID), _rewind(false) { init(); }
+			_animationSetId(animationSetId), _animationSet(NULL), _animationId(Hash::INVALID) { init(); }
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);
@@ -50,12 +50,11 @@ namespace Temporal
 		const AnimationSet* _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
-		bool _rewind;
 		Timer _timer;
 
 		void init();
 		void update(float framePeriodInMillis);
-		void reset(const ResetAnimationParams& resetAnimationParams);
+		void reset(Hash animationId);
 	};
 }
 #endif

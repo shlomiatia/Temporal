@@ -62,6 +62,7 @@ namespace Temporal
 	public:
 		static const AABB Zero;
 
+		AABB() {}
 		AABB(float centerX, float centerY, float width, float height);
 		AABB(const Vector& center, const Size& size);
 		AABB(const Vector& center, const Vector& radius);

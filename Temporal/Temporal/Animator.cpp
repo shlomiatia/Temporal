@@ -31,8 +31,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			const ResetAnimationParams& resetAnimationParams = getResetAnimationParams(message.getParam());
-			reset(resetAnimationParams);
+			Hash animationId = getHashParam(message.getParam());
+			reset(animationId);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -44,14 +44,12 @@ namespace Temporal
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
 			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
-			serialization.serialize(REWIND_SERIALIZATION, _rewind);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
-			_rewind = serialization.deserializeBool(REWIND_SERIALIZATION);
 		}
 	}
 
@@ -61,18 +59,12 @@ namespace Temporal
 		float totalPeriod = _timer.getElapsedTimeInMillis();
 		const Animation& animation = _animationSet->get(_animationId);
 		float animationDuration = animation.getDuration();
-		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !animation.isRepeat())
+		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !animation.Repeat())
 		{
 			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
 			return;
 		}
-		float relativePeriod =  fmod(totalPeriod, animationDuration);
-		int offset = 1;
-		if(_rewind)
-		{
-			offset = -1;
-			relativePeriod = animationDuration - relativePeriod;
-		}
+		
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
 			Hash sceneNodeID = i->first;
@@ -83,6 +75,13 @@ namespace Temporal
 			const SampleCollection& sampleSet = animation.get(sceneNodeID).get();
 			int size = sampleSet.size();
 			const Sample* currentSample = sampleSet.at(index);
+			float relativePeriod =  fmod(totalPeriod, animationDuration);
+			int offset = 1;
+			if(animation.Rewind())
+			{
+				offset = -1;
+				relativePeriod = animationDuration - relativePeriod;
+			}
 			while(currentSample->getEndTime() != 0.0f && (currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod))
 			{
 				index = (size + index + offset) % size;
@@ -106,11 +105,10 @@ namespace Temporal
 		}
 	}
 
-	void Animator::reset(const ResetAnimationParams& resetAnimationParams)
+	void Animator::reset(Hash animationId)
 	{
 		_timer.reset();
-		_animationId = resetAnimationParams.getAnimationID();
-		_rewind = resetAnimationParams.getRewind();
+		_animationId = animationId;
 		update(0.0f);
 	}
 

@@ -76,7 +76,8 @@ namespace Temporal
 		
 		Hash getId() const { return _id; }
 		float getDuration() const { return _duration; }
-		bool isRepeat() const { return _repeat; }
+		bool Repeat() const { return _repeat; }
+		bool Rewind() const { return _rewind; }
 		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
 		void add(const SampleSet* sampleSet);
 
@@ -85,10 +86,12 @@ namespace Temporal
 		{
 			serializer.serialize("id", _id);
 			serializer.serialize("repeat", _repeat);
+			serializer.serialize("rewind", _rewind);
 		}
 	private:
 		Hash _id;
 		bool _repeat;
+		bool _rewind;
 		SampleSetCollection _sampleSets;
 		float _duration;
 
