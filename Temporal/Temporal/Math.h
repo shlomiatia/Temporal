@@ -4,7 +4,7 @@
 namespace Temporal
 {
 	static const float PI = 3.14159265358979f;
-	static const float EPSILON = 0.1f;
+	extern const float EPSILON;
 
 	static const float ANGLE_0_IN_RADIANS = 0.0f;
 	static const float ANGLE_15_IN_RADIANS = PI / 12.0f; // 15 = 1 * PI / 12 

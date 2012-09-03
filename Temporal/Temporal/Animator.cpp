@@ -109,7 +109,10 @@ namespace Temporal
 	{
 		_timer.reset();
 		_animationId = animationId;
-		update(0.0f);
+		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
+		{
+			i->second->setIndex(0);
+		}
 	}
 
 	Component* Animator::clone() const

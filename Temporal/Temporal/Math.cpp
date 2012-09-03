@@ -4,6 +4,8 @@
 
 namespace Temporal
 {
+	const float EPSILON = std::numeric_limits<float>::epsilon();
+
 	void assertAngle(float angle, float range)
 	{
 		assert(angle >= -range);

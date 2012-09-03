@@ -29,7 +29,7 @@ namespace Temporal
 		_level->update(FRAME_PERIOD_IN_MILLIS);
 		float sleepTime = FRAME_PERIOD_IN_MILLIS - framesDifference;
 		if(sleepTime >= 0.0f)
-			Thread::sleep(static_cast<unsigned int>(sleepTime));
+			//Thread::sleep(static_cast<unsigned int>(sleepTime));
 		_lastFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
 		
 	}
