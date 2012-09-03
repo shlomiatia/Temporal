@@ -113,6 +113,7 @@ namespace Temporal
 		{
 			i->second->setIndex(0);
 		}
+		update(0.0f);
 	}
 
 	Component* Animator::clone() const
