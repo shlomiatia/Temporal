@@ -57,6 +57,6 @@ namespace Temporal
 			title << "FPS: " << (1000.0f * MAX_SAMPLES) / sum;
 		}
 		lastTick = Thread::getElapsedTimeInMillis();
-		Graphics::get().setTitle(title.str().c_str());
+		//Graphics::get().setTitle(title.str().c_str());
 	}
 }

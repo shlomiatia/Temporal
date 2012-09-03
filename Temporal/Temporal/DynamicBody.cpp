@@ -130,8 +130,6 @@ namespace Temporal
 			
 			movement = _velocity * interpolation;
 		}
-		
-		
 		return movement;
 	}
 

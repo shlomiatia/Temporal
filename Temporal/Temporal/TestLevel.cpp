@@ -81,14 +81,14 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		/*if(Input::get().isQ())
+		if(Input::get().isQ())
 		{
-			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			ChangePeriod(Period::PAST);
+			const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
+			//ChangePeriod(Period::PAST);
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
-		}
+		}/*
 		if(Input::get().isW())
 		{
 			ChangePeriod(Period::PRESENT);
@@ -129,40 +129,6 @@ namespace Temporal
 		entity->add(temporalEcho);
 	}
 
-	void createPlayer(SpriteSheet* spritesheet, AnimationCollection* animations)
-	{
-		const Texture* texture = Texture::load("bubble.png");
-		SceneNode* root = createDefaultSceneGraph();
-
-		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
-		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::PLAYER);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
-		InputController* controller = new InputController();
-		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
-		DynamicBody* dynamicBody = new DynamicBody(info);
-		ActionController* actionController = new ActionController();
-		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::PC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PRESENT);
-		LightGem* lightGem = new LightGem();
-		ParticleEmitter* particleEmitter = new ParticleEmitter(texture, 3000.0f, 2);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(drawPosition);
-		entity->add(controller);
-		entity->add(dynamicBody);
-		addSensors(*entity);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		//entity->add(particleEmitter);
-		//entity->add(lightGem);
-		//entity->add(temporalPeriod);
-		EntitiesManager::get().add(Hash("ENT_PLAYER"), entity);
-	}
-
 	void createLaser()
 	{
 		Transform* transform = new Transform(Vector::Zero);
@@ -191,36 +157,6 @@ namespace Temporal
 		createTemporalEcho(entity);
 
 		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
-	}
-
-	void createChaser(SpriteSheet* spritesheet, AnimationCollection* animations)
-	{
-		Transform* transform = new Transform(Vector(512.0f, 768.0f), Side::LEFT);
-		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::CHARACTER);
-		DrawPosition* drawPosition = new DrawPosition(Vector(0.0f, -ENTITY_SIZE.getHeight() / 2.0f));
-		Navigator* navigator = new Navigator();
-		Fixture* info = new Fixture(new AABB(Vector::Zero, ENTITY_SIZE));
-		DynamicBody* dynamicBody = new DynamicBody(info);
-		ActionController* actionController = new ActionController();
-		SceneNode* root = createDefaultSceneGraph();
-		Animator* animator = new Animator(*animations);
-		Renderer* renderer = new Renderer(*spritesheet, LayerType::PC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::PAST);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(drawPosition);
-		entity->add(navigator);
-		entity->add(dynamicBody);
-		addSensors(*entity);
-		entity->add(actionController);
-		entity->add(animator);
-		entity->add(renderer);
-		//entity->add(temporalPeriod);
-		createTemporalEcho(entity);
-
-		EntitiesManager::get().add(Hash("ENT_CHASER"), entity);
 	}
 
 	void createSkeleton()
@@ -352,20 +288,7 @@ namespace Temporal
 		entity->handleMessage(Message(MessageID::RESET_ANIMATION, &ResetAnimationParams(animationID, true, true)));
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
-
-	void createLight(const Vector& point)
-	{
-		Transform* transform = new Transform(point);
-		Light* light = new Light(Color(1.0f, 1.0f, 1.0f), 300.0f);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(light);
-
-		std::ostringstream lightID;
-		lightID << "ENT_LIGHT" << sequence++;
-		EntitiesManager::get().add(Hash(lightID.str().c_str()), entity);
-	}*/
+*/
 
 	void TestLevel::createEntities()
 	{	
@@ -421,6 +344,12 @@ namespace Temporal
 					renderer->serialize(componentDeserializer);
 					entity->add(renderer);
 				}
+				else if(strcmp(componentElement->Name(), "light") == 0)
+				{
+					Light* light = new Light();
+					light->serialize(componentDeserializer);
+					entity->add(light);
+				}
 				else if(strcmp(componentElement->Name(), "input-controller") == 0)
 				{
 					InputController* inputController = new InputController();
@@ -435,6 +364,11 @@ namespace Temporal
 				{
 					SecurityCamera* sentry = new SecurityCamera();
 					entity->add(sentry);
+				}
+				else if(strcmp(componentElement->Name(), "navigator") == 0)
+				{
+					Navigator* navigator = new Navigator();
+					entity->add(navigator);
 				}
 				else if(strcmp(componentElement->Name(), "action-controller") == 0)
 				{
