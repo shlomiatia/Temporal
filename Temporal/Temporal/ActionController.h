@@ -12,7 +12,7 @@ namespace Temporal
 
 	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 250.0f;
-	static const float JUMP_FORCE_PER_SECOND = 900.0f;
+	static const float JUMP_FORCE_PER_SECOND = 450.0f;
 
 	/**********************************************************************************************
 	 * Jump Helpers

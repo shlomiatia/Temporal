@@ -18,7 +18,7 @@ namespace Temporal
 	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
 	static const VectorSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
-	const Vector DynamicBody::GRAVITY(0.0f, -4350.0f);
+	const Vector DynamicBody::GRAVITY(0.0f, -1500.0f);
 
 	float getMaxMovementStepSize(const Fixture& fixture)
 	{
@@ -58,6 +58,9 @@ namespace Temporal
 		{
 			const Vector& param = getVectorParam(message.getParam());
 			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
+
+			if(impulse.getY() != 0.0f)
+				_velocity.setY(0.0f);
 
 			// If moving horizontally on the ground, we adjust to movement according to the ground vector, because we do want no slow downs on moderate slopes
 			if(impulse.getY() == 0.0f && impulse.getX() != 0.0f && _groundVector != Vector::Zero)
@@ -221,7 +224,7 @@ namespace Temporal
 		bool canModifyCorrection = isModerateSlope || isOnPlatformTopSide;
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-		if(canModifyCorrection && abs(_velocity.getX()) < EPSILON && correction.getX() != 0.0f) 
+		if(canModifyCorrection && abs(_velocity.getX()) < 0.1f && correction.getX() != 0.0f) 
 		{	
 			float y = 0.0f;
 
