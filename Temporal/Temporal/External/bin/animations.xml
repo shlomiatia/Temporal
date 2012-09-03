@@ -1,0 +1,90 @@
+<animation-set id="CAM_ANM_SET">
+    <animation id="CAM_ANM_SEARCH" repeat="1">
+        <sample-set>
+            <sample sprite-group="CAM_ANM_SEARCH" />
+        </sample-set>
+    </animation>
+    <animation id="CAM_ANM_SEE" repeat="1">
+        <sample-set>
+            <sample sprite-group="CAM_ANM_SEE" />
+        </sample-set>
+    </animation>
+    <animation id="CAM_ANM_TURN">
+        <sample-set>
+            <sample sprite-group="CAM_ANM_TURN" duration="200" />
+        </sample-set>
+    </animation>
+    <animation id="CAM_ANM_TURN2" rewind="1">
+        <sample-set>
+            <sample sprite-group="CAM_ANM_TURN" duration="200" />
+        </sample-set>
+    </animation>
+    <animation id="CAM_ANM_ACQUIRE" repeat="1">
+        <sample-set>
+            <sample sprite-group="CAM_ANM_SEARCH" duration="200" />  
+            <sample sprite-group="CAM_ANM_SEE" duration="200" />
+        </sample-set>
+    </animation>
+</animation-set>
+<animation-set id="POP_ANM_SET">
+    <animation id="POP_ANM_STAND" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_STAND" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_TURN">
+        <sample-set>
+            <sample sprite-group="POP_ANM_TURN" duration="363" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_FALL" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_FALL" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_JUMP_UP_START">
+        <sample-set>
+            <sample sprite-group="POP_ANM_JUMP_UP_START" duration="528" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_JUMP_UP" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_JUMP_UP" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_HANG" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_HANG" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_CLIMB" rewind="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_CLIMB" duration="792" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_DESCEND">
+        <sample-set>
+            <sample sprite-group="POP_ANM_CLIMB" duration="792" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_JUMP_FORWARD_START">
+        <sample-set>
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="330" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_JUMP_FORWARD" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_JUMP_FORWARD" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_JUMP_FORWARD_END">
+        <sample-set>
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_END" duration="264" />
+        </sample-set>
+    </animation>
+    <animation id="POP_ANM_WALK" repeat="1">
+        <sample-set>
+            <sample sprite-group="POP_ANM_WALK" duration="396" />
+        </sample-set>
+    </animation>
+</animation-set>
