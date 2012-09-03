@@ -26,16 +26,25 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		Light(const Color& color, float radius, float beamCenter = 0.0f, float beamSize = 2 * PI)
+		explicit Light(const Color& color = Color::White, float radius = 300.0f, float beamCenter = 0.0f, float beamSize = 2 * PI)
 			: _color(color), _radius(radius), _beamCenter(beamCenter), _beamSize(beamSize) {}
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("color", _color);
+			serializer.serialize("radius", _radius);
+			serializer.serialize("center", _beamCenter);
+			serializer.serialize("size", _beamSize);
+		}
 	private:
-		const Color _color;
-		const float _radius;
-		const float _beamCenter;
-		const float _beamSize;
+		Color _color;
+		float _radius;
+		float _beamCenter;
+		float _beamSize;
 
 		void draw() const;
 	};

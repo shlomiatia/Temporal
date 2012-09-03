@@ -2,6 +2,8 @@
 #include "Serialization.h"
 #include "BaseUtils.h"
 #include "MessageUtils.h"
+#include "Graphics.h"
+#include <sstream>
 
 namespace Temporal
 {
@@ -16,7 +18,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = *static_cast<Vector*>(message.getParam());
+			Vector position = *static_cast<Vector*>(message.getParam());
+			std::ostringstream title;
+			title << (position.getX() - _position.getX());
+			Graphics::get().setTitle(title.str().c_str());
+			_position = position;
+			
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
