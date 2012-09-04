@@ -10,6 +10,9 @@
 
 namespace Temporal
 {
+	Renderer::Renderer(SceneNode* root, LayerType::Enum layer, Color color) :
+		_root(root), _layer(layer), _color(color) { _root->init(); }
+
 	Renderer::~Renderer()
 	{
 		delete _root;
@@ -57,7 +60,7 @@ namespace Temporal
 
 	Component* Renderer::clone() const
 	{
-		return new Renderer(_layer, _color, _root->clone());
+		return new Renderer(_root->clone(), _layer, _color);
 	}
 
 }

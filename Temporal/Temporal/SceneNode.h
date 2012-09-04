@@ -20,8 +20,7 @@ namespace Temporal
 	public:
 		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteSheetId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false,
 						   bool transformOnly = false) : _id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero),
-						   _rotation(0.0f), _scale(Vector(1.0f, 1.0f)), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) 
-			{ init(); }
+						   _rotation(0.0f), _scale(Vector(1.0f, 1.0f)), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) {}
 		~SceneNode();
 
 		Hash getID() const { return _id; }
@@ -45,19 +44,21 @@ namespace Temporal
 
 		const SceneNodeCollection& getChildren() const { return _children; }
 
-		void add(SceneNode* child) { _children.push_back(child); }
+		void add(SceneNode* child) { _children.push_back(child);}
 		SceneNode* clone() const;
+		void init();
 
 		template<class T>
 		void serialize(T& serializer)
 		{
+			serializer.serialize("id", _id);
+			serializer.serialize("behind-parent", _drawBehindParent);
+			serializer.serialize("transform", _transformOnly);
 			serializer.serialize("sprite-sheet", _spriteSheetId);
 			serializer.serialize("sprite-group", _spriteGroupId);
-			init();
 		}
 	private:
 		Hash _id;
-
 		bool _drawBehindParent;	
 		bool _transformOnly;
 
@@ -71,8 +72,6 @@ namespace Temporal
 		float _spriteInterpolation;
 
 		SceneNodeCollection _children;
-
-		void init();
 
 		SceneNode(const SceneNode&);
 		SceneNode& operator=(const SceneNode&);

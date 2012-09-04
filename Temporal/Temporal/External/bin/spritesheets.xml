@@ -1,4 +1,5 @@
 <sprite-sheet texture="bg.png" />
+<sprite-sheet texture="laser.png" />
 <sprite-sheet texture="camera.png">
     <sprite-group id="CAM_ANM_SEARCH">
         <sprite>
@@ -39,6 +40,98 @@
                 <radius x="6.5" y="17" />
             </bounds>
             <offset x="1" y="-17" />
+        </sprite>
+    </sprite-group>
+</sprite-sheet>
+<sprite-sheet texture="skeleton.png">
+    <sprite-group id="SCN_RIGHT_FOOT">
+        <sprite>
+            <bounds>
+                <center x="92.5" y="33.5" />
+                <radius x="19" y="27" />
+            </bounds>
+            <offset x="11" y="20" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_LEFT_FOOT">
+        <sprite>
+            <bounds>
+                <center x="140.5" y="33.5" />
+                <radius x="19" y="27" />
+            </bounds>
+            <offset x="10" y="19" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_LEFT_LEG">
+        <sprite>
+            <bounds>
+                <center x="234.5" y="31.5" />
+                <radius x="21" y="23" />
+            </bounds>
+            <offset x="-8" y="13" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_RIGHT_LEG">
+        <sprite>
+            <bounds>
+                <center x="186" y="31.5" />
+                <radius x="18.5" y="28" />
+            </bounds>
+            <offset x="2" y="18" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_RIGHT_HAND">
+        <sprite>
+            <bounds>
+                <center x="101.5" y="98" />
+                <radius x="18" y="23.5" />
+            </bounds>
+            <offset x="9" y="17" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_RIGHT_PALM">
+        <sprite>
+            <bounds>
+                <center x="147.5" y="197.5" />
+                <radius x="30" y="30" />
+            </bounds>
+            <offset x="-24" y="23" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_LEFT_PALM">
+        <sprite>
+            <bounds>
+                <center x="162" y="103" />
+                <radius x="28.5" y="29.5" />
+            </bounds>
+            <offset x="-21" y="5" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_LEFT_HAND">
+        <sprite>
+            <bounds>
+                <center x="48.5" y="102" />
+                <radius x="14" y="21.5" />
+            </bounds>
+            <offset x="-7" y="14" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_BODY">
+        <sprite>
+            <bounds>
+                <center x="227.5" y="100.5" />
+                <radius x="28" y="38" />
+            </bounds>
+            <offset x="0" y="0" />
+        </sprite>
+    </sprite-group>
+    <sprite-group id="SCN_HEAD">
+        <sprite>
+            <bounds>
+                <center x="216.5" y="195" />
+                <radius x="37" y="31.5" />
+            </bounds>
+            <offset x="-25" y="-4" />
         </sprite>
     </sprite-group>
 </sprite-sheet>

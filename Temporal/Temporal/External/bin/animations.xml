@@ -21,8 +21,69 @@
     </animation>
     <animation id="CAM_ANM_ACQUIRE" repeat="1">
         <sample-set>
-            <sample sprite-group="CAM_ANM_SEARCH" duration="200" />  
+            <sample sprite-group="CAM_ANM_SEARCH" duration="200" />
             <sample sprite-group="CAM_ANM_SEE" duration="200" />
+        </sample-set>
+    </animation>
+</animation-set>
+<animation-set id="SKL_ANM_SET">
+    <animation id="SKL_ANM_FIGHT" repeat="1">
+        <sample-set scene-node-id="SCN_BODY">
+            <sample sprite-group="SCN_BODY" />
+        </sample-set>
+        <sample-set scene-node-id="SCN_HEAD">
+            <sample sprite-group="SCN_HEAD">
+                <translation x="9" y="31" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_RIGHT_HAND">
+            <sample sprite-group="SCN_RIGHT_HAND" duration="500" >
+                <translation x="-4" y="19" />
+            </sample>
+            <sample sprite-group="SCN_RIGHT_HAND" duration="500" rotation="90">
+                <translation x="-4" y="19" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_RIGHT_PALM">
+            <sample sprite-group="SCN_RIGHT_PALM">
+                <translation x="-19" y="-38" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_LEFT_HAND">
+            <sample sprite-group="SCN_LEFT_HAND" duration="250" rotation="45">
+                <translation x="28" y="28" />
+            </sample>
+            <sample sprite-group="SCN_LEFT_HAND" duration="500" rotation="90">
+                <translation x="28" y="28" />
+            </sample>
+            <sample sprite-group="SCN_LEFT_HAND" duration="250">
+                <translation x="28" y="28" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_LEFT_PALM">
+            <sample sprite-group="SCN_LEFT_PALM">
+                <translation x="10" y="-26" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_RIGHT_LEG">
+            <sample sprite-group="SCN_RIGHT_LEG">
+                <translation x="-10" y="-29" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_RIGHT_FOOT">
+            <sample sprite-group="SCN_RIGHT_FOOT">
+                <translation x="3" y="-42" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_LEFT_LEG">
+            <sample sprite-group="SCN_LEFT_LEG">
+                <translation x="7" y="-35" />
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_LEFT_FOOT">
+            <sample sprite-group="SCN_LEFT_FOOT">
+                <translation x="21" y="-29" />
+            </sample>
         </sample-set>
     </animation>
 </animation-set>
