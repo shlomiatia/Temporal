@@ -13,8 +13,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White, SceneNode* root = NULL) :
-		_root(root), _layer(layer), _color(color) {}
+		explicit Renderer(SceneNode* root = NULL, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
 		~Renderer();
 
 		SceneNode& getRoot() const { return *_root; }
@@ -28,8 +27,6 @@ namespace Temporal
 		{
 			serializer.serialize("layer", (int&)_layer);
 			serializer.serialize("color", _color);
-			_root = new SceneNode();
-			serializer.serialize("scene-node", *_root);
 		}
 	private:
 		SceneNode* _root;

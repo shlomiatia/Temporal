@@ -27,13 +27,18 @@ namespace Temporal
 		{
 			clone->add((**i).clone());
 		}
-		clone->init();
 		return clone;
 	}
 
 	void SceneNode::init()
 	{
-		if(_spriteSheetId != Hash::INVALID)
-			_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetId);
+		_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetId);
+		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
+		{
+			SceneNode& child = **i;
+			if(child._spriteSheetId == Hash::INVALID)
+				child._spriteSheetId = _spriteSheetId;
+			child.init();
+		}
 	}
 }

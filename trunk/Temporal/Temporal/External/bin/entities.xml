@@ -63,8 +63,8 @@
     <sight size="60" />
     <sensor category-mask="1">
         <aabb>
-            <center x="10" y="-50" />
-            <radius x="20" y="10" />
+            <center x="0" y="-50" />
+            <radius x="10" y="10" />
         </aabb>
         <ledge-detector id="SNS_FRONT_EDGE" center="-157" size="135" />
     </sensor>
@@ -72,6 +72,14 @@
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
+    </renderer>
+</entity>
+<entity id="ENT_LASER">
+    <transform />
+    <collision-filter category="4" />
+    <laser platform="ENT_30_LEFT2" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="laser.png" />
     </renderer>
 </entity>
 <entity id="ENT_CHASER">
@@ -120,6 +128,29 @@
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
+    </renderer>
+</entity>
+<entity id="ENT_SKELETON">
+    <transform orientation="1">
+        <position x="300" y="300" />
+    </transform>
+    <animator animation-set="SKL_ANM_SET" animation="SKL_ANM_FIGHT" />
+    <renderer layer="4">
+        <scene-node id="SCN_BODY" sprite-sheet="skeleton.png">
+            <scene-node id="SCN_LEFT_LEG" behind-parent="1">
+                <scene-node id="SCN_LEFT_FOOT" />
+            </scene-node>
+            <scene-node id="SCN_LEFT_HAND" behind-parent="1">
+                <scene-node id="SCN_LEFT_PALM" />
+            </scene-node>
+            <scene-node id="SCN_HEAD" />
+            <scene-node id="SCN_RIGHT_LEG">
+                <scene-node id="SCN_RIGHT_FOOT" />
+            </scene-node>
+            <scene-node id="SCN_RIGHT_HAND" >
+                    <scene-node id="SCN_RIGHT_PALM" />
+            </scene-node>
+        </scene-node>
     </renderer>
 </entity>-->
 <entity id="ENT_PLAYER">

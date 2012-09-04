@@ -43,6 +43,7 @@ namespace Temporal
 		void serialize(T& serializer)
 		{
 			serializer.serialize("animation-set", _animationSetId);
+			serializer.serialize("animation", _animationId);
 			init();
 		}
 	private:
