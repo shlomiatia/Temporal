@@ -1,14 +1,14 @@
 #include "Laser.h"
-#include "Graphics.h"
 #include "Shapes.h"
 #include "Grid.h"
 #include "Math.h"
-#include "ShapeOperations.h"
 #include "Vector.h"
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Fixture.h"
 #include "PhysicsEnums.h"
+#include "Renderer.h"
+#include "SceneNode.h"
 
 namespace Temporal
 {
@@ -19,7 +19,12 @@ namespace Temporal
 
 	void Laser::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::LEVEL_CREATED)
+		if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			Renderer* renderer = static_cast<Renderer*>(getEntity().get(ComponentType::RENDERER));
+			_root = &renderer->getRoot();
+		}
+		else if(message.getID() == MessageID::LEVEL_CREATED)
 		{
 			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 			Vector position = segment.getNaturalOrigin();
@@ -47,8 +52,7 @@ namespace Temporal
 	{
 		const Vector& position = getPosition(*this);
 		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
-		Vector directionVector = segment.getNaturalVector().normalize();
-		Vector laserVector = directionVector.getRightNormal();
+		Vector platformDirection = segment.getNaturalVector().normalize();
 		float movementAmount = LASER_SPEED_PER_SECOND * framePeriodInMillis / 1000.0f;
 		Vector maxPoint = Vector::Zero;
 		if(_isPositiveDirection)
@@ -58,24 +62,29 @@ namespace Temporal
 		else
 		{
 			maxPoint = segment.getNaturalOrigin();
-			directionVector = -directionVector;
+			platformDirection = -platformDirection;
 		}
-		Vector movement = directionVector * movementAmount;
+		Vector movement = platformDirection * movementAmount;
 		Vector currDiff = maxPoint - position;
 		Vector nextDiff = currDiff + movement;
 		if(!sameSign(currDiff.getX(), nextDiff.getX()) || !sameSign(currDiff.getY(), nextDiff.getY()))
 		{
 			_isPositiveDirection = !_isPositiveDirection;
+			movement *= -1.0f;
 		}
 		Vector newPosition = position + movement;
 		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		RayCastResult result;
 		int group = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		if(Grid::get().cast(newPosition, laserVector, result, COLLISION_MASK, group))
+		if(Grid::get().cast(newPosition, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
+			float crap = result.getPoint().getY();
 			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
 			raiseMessage(Message(MessageID::SET_COLOR, &color));
-			raiseMessage(Message(MessageID::SET_TARGET, const_cast<Vector*>(&result.getPoint())));
+			float vector = (result.getPoint().getY() - position.getY());
+			_root->setTranslation(Vector(0.0f, vector / 2.0f));
+			_root->setScale(Vector(1.0f, abs(vector)));
+
 		}
 	}
 }

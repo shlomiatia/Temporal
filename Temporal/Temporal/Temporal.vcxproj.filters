@@ -110,9 +110,6 @@
     <ClInclude Include="Laser.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="LineRenderer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="TemporalPeriod.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -260,9 +257,6 @@
     </ClCompile>
     <ClCompile Include="Laser.cpp">
       <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="LineRenderer.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="TemporalPeriod.cpp">
       <Filter>Game</Filter>

@@ -6,6 +6,7 @@
 #include "SceneNode.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
+#include <SDL_opengl.h>
 
 namespace Temporal
 {
@@ -44,9 +45,14 @@ namespace Temporal
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 
-		_root->setTranslation(position);
-		_root->setMirrored(entityOrientation != Side::RIGHT);
-		Graphics::get().draw(*_root, _color);
+		glPushMatrix();
+		{
+			glTranslatef(position.getX(), position.getY(), 0.0f);
+			if(entityOrientation != Side::RIGHT)
+				glScalef(-1.0f, 1.0f, 1.0f);
+			Graphics::get().draw(*_root, _color);
+		}
+		glPopMatrix();
 	}
 
 	Component* Renderer::clone() const

@@ -222,7 +222,7 @@ namespace Temporal
 		bool canModifyCorrection = isModerateSlope || isOnPlatformTopSide;
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent sliding in slopes, and falling from edges
-		if(canModifyCorrection && abs(_velocity.getX()) < 0.1f && correction.getX() != 0.0f) 
+		if(canModifyCorrection && abs(_velocity.getX()) < EPSILON && correction.getX() != 0.0f) 
 		{	
 			float y = 0.0f;
 

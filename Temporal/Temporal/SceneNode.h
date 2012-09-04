@@ -20,7 +20,7 @@ namespace Temporal
 	public:
 		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteSheetId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false,
 						   bool transformOnly = false) : _id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero),
-						   _rotation(0.0f), _isMirrored(false), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) 
+						   _rotation(0.0f), _scale(Vector(1.0f, 1.0f)), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) 
 			{ init(); }
 		~SceneNode();
 
@@ -31,8 +31,8 @@ namespace Temporal
 		
 		const Vector& getTranslation() const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
-		bool isMirrored() const { return _isMirrored; }
-		void setMirrored(bool isMirrored) { _isMirrored = isMirrored; }
+		const Vector& getScale() const { return _scale; }
+		void setScale(const Vector& scale) { _scale = scale; }
 		float getRotation() const { return _rotation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 
@@ -63,7 +63,7 @@ namespace Temporal
 
 		Vector _translation;
 		float _rotation;
-		bool _isMirrored;
+		Vector _scale;
 
 		const SpriteSheet* _spriteSheet;
 		Hash _spriteSheetId;

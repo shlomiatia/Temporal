@@ -19,8 +19,8 @@ namespace Temporal
 
 		clone->_translation = _translation;
 		clone->_rotation = _rotation;
-		clone->_isMirrored = _isMirrored;
-
+		clone->_scale = _scale;
+		
 		clone->_spriteInterpolation = _spriteInterpolation;
 
 		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
