@@ -51,7 +51,7 @@ namespace Temporal
 
 	Component* Renderer::clone() const
 	{
-		return new Renderer(_layer, _color);
+		return new Renderer(_layer, _color, _root->clone());
 	}
 
 }

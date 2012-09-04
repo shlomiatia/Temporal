@@ -15,13 +15,38 @@ namespace Temporal
 		};
 	}
 
-	class TemporalPeriod : public Component
+	class PlayerPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period) : _period(period) {}
+		explicit PlayerPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("period", (int&)_period);
+		}
+	private:
+		Period::Enum _period;
+
+		void changePeriod(Period::Enum period);
+	};
+
+	class TemporalPeriod : public Component
+	{
+	public:
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
+
+		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
+		void handleMessage(Message& message);
+
+		template<class T>
+		void serialize(T& serializer)
+		{
+			serializer.serialize("period", (int&)_period);
+		}
 	private:
 		Period::Enum _period;
 	};

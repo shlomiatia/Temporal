@@ -53,22 +53,19 @@ namespace Temporal
 		Size levelSize = Size(2048.0f, 720.0f);
 		float relativeHeight = 720.0f;
 
+		Grid::get().init(levelSize, 128.0f);
 		Graphics::get().init(resolution, relativeHeight);
+		ResourceManager::get().init();
 
 		LayersManager::get().add(new Camera(levelSize));
 		LayersManager::get().add(new SpriteLayer());
 		//LayersManager::get().add(new LightLayer(Color(0.1f, 0.1f, 0.1f)));
 		LayersManager::get().add(new DebugLayer());
 
-		Grid::get().init(levelSize, 128.0f);
-		ResourceManager::get().init();
-
 		createEntities();
 
 		NavigationGraph::get().init();
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
-		/*Period::Enum period = Period::PRESENT;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));*/
 	}
 
 	
@@ -83,20 +80,10 @@ namespace Temporal
 		}
 		if(Input::get().isQ())
 		{
-			const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			//ChangePeriod(Period::PAST);
+			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-
-		}/*
-		if(Input::get().isW())
-		{
-			ChangePeriod(Period::PRESENT);
 		}
-		if(Input::get().isE())
-		{
-			ChangePeriod(Period::FUTURE);
-		}*/
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
@@ -109,25 +96,15 @@ namespace Temporal
 	void TestLevel::dispose()
 	{
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
-		ResourceManager::get().dispose();
-		HashToString::get().dispose();
+		NavigationGraph::get().dispose();
 		EntitiesManager::get().dispose();
+		LayersManager::get().dispose();
+		ResourceManager::get().dispose();
 		Graphics::get().dispose();
 		Grid::get().dispose();
-		NavigationGraph::get().dispose();
-		LayersManager::get().dispose();
+		HashToString::get().dispose();
 	}
-	/*void ChangePeriod(Period::Enum period)
-	{
-		EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::SET_PERIOD, &period));
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_CURRENT_PERIOD, &period));
-	}
-
-	void createTemporalEcho(Entity* entity)
-	{
-		TemporalEcho* temporalEcho = new TemporalEcho();
-		entity->add(temporalEcho);
-	}
+	/*
 
 	void createLaser()
 	{
@@ -320,12 +297,6 @@ namespace Temporal
 					drawPosition->serialize(componentDeserializer);
 					entity->add(drawPosition);
 				}
-				else if(strcmp(componentElement->Name(), "draw-position") == 0)
-				{
-					DrawPosition* drawPosition = new DrawPosition();
-					drawPosition->serialize(componentDeserializer);
-					entity->add(drawPosition);
-				}
 				else if(strcmp(componentElement->Name(), "sight") == 0)
 				{
 					Sight* sight = new Sight();
@@ -379,6 +350,23 @@ namespace Temporal
 				{
 					Patrol* patrol = new Patrol();
 					entity->add(patrol);
+				}
+				else if(strcmp(componentElement->Name(), "temporal-echo") == 0)
+				{
+					TemporalEcho* temporalEcho = new TemporalEcho();
+					entity->add(temporalEcho);
+				}
+				else if(strcmp(componentElement->Name(), "temporal-period") == 0)
+				{
+					TemporalPeriod* temporalPeriod = new TemporalPeriod();
+					temporalPeriod->serialize(componentDeserializer);
+					entity->add(temporalPeriod);
+				}
+				else if(strcmp(componentElement->Name(), "player-period") == 0)
+				{
+					PlayerPeriod* playerPeriod = new PlayerPeriod();
+					playerPeriod->serialize(componentDeserializer);
+					entity->add(playerPeriod);
 				}
 				else if(strcmp(componentElement->Name(), "sensor") == 0)
 				{

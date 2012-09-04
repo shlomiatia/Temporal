@@ -13,7 +13,8 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White) : _root(NULL), _layer(layer), _color(color) {}
+		explicit Renderer(LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White, SceneNode* root = NULL) :
+		_root(root), _layer(layer), _color(color) {}
 		~Renderer();
 
 		SceneNode& getRoot() const { return *_root; }
