@@ -40,7 +40,7 @@ namespace Temporal
 	// TODO: Request sight
 	// TODO: Cache ray properties/global shape
 	// TODO: Do not process collision twice
-	// TODO: Less temporal echo memory
+	// TODO: Less temporal echo memory. Use array instead of list
 	// TODO: Culling
 	// TODO: Delete spritesheets, singletons, static stl containers
 	// TODO: Cache shadows/display list/FBO/save texture
