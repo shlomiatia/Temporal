@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const float Game::FRAME_PERIOD_IN_MILLIS(1000.0f / /*FPS*/ 15.0f);
+	const float Game::FRAME_PERIOD_IN_MILLIS(1000.0f / /*FPS*/ 60.0f);
 
 	void Game::run()
 	{
