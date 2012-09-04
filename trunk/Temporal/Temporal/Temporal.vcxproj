@@ -23,7 +23,6 @@
     <ClInclude Include="Hash.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Lighting.h" />
-    <ClInclude Include="LineRenderer.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
     <ClInclude Include="Particles.h" />
@@ -80,7 +79,6 @@
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Lighting.cpp" />
-    <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
     <ClCompile Include="Navigator.cpp" />

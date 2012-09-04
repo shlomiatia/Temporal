@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const float EPSILON = std::numeric_limits<float>::epsilon();
+	const float EPSILON = std::numeric_limits<float>::epsilon() * 256.0f;
 
 	void assertAngle(float angle, float range)
 	{

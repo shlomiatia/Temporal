@@ -1,6 +1,7 @@
 #include "Shapes.h"
 #include <assert.h>
 #include <math.h>
+#include "Math.h"
 
 namespace Temporal
 {
@@ -36,9 +37,8 @@ namespace Temporal
 	bool AABB::contains(const Vector& point) const
 	{
 		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
-		{
-			if(abs(getCenter().getAxis(axis) - point.getAxis(axis)) > getRadius().getAxis(axis)) return false;
-		}
+			if(abs(getCenter().getAxis(axis) - point.getAxis(axis)) - getRadius().getAxis(axis) > EPSILON)
+				return false;
 		return true;
 	}
 

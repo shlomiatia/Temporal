@@ -22,7 +22,6 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "Renderer.h"
-#include "LineRenderer.h"
 #include "Navigator.h"
 #include "Sentry.h"
 #include "Patrol.h"
@@ -44,9 +43,6 @@
 
 namespace Temporal
 {
-	static const Size ENTITY_SIZE(20.0f, 80.0f);
-	static const Size EDGE_SENSOR_SIZE(ENTITY_SIZE.getWidth() + 20.0f, 20.0f);
-
 	void TestLevel::init()
 	{
 		Size resolution = Size(1280.0f, 720.0f);
@@ -68,8 +64,6 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
 	}
 
-	
-
 	void TestLevel::update(float framePeriodInMillis)
 	{
 		Input::get().update();
@@ -82,8 +76,9 @@ namespace Temporal
 		{
 			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 		}
+
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
 	}
 
@@ -105,36 +100,6 @@ namespace Temporal
 		HashToString::get().dispose();
 	}
 	/*
-
-	void createLaser()
-	{
-		Transform* transform = new Transform(Vector::Zero);
-		Laser* laser = new Laser(Hash("ENT_PLATFORM23"));
-		const Texture* texture = Texture::load("laser.png");
-		SpriteSheet* spritesheet = new SpriteSheet(texture);
-		SpriteGroup* spriteGroup = new SpriteGroup();
-		Hash spriteGroupID = Hash("ANM_DEFAULT");
-		spritesheet->add(spriteGroupID, spriteGroup);
-		Size size = texture->getSize();
-		spriteGroup->add(new Sprite(AABB(size.toVector() / 2.0f, size), Vector::Zero));
-		SceneNode* root = new SceneNode(Hash("SCN_ROOT"), false, true);
-		SceneNode* laserNode = new SceneNode(Hash("SCN_LASER"));
-		root->setSpriteGroupID(spriteGroupID);
-		LineRenderer* renderer = new LineRenderer(LayerType::NPC, *texture);
-		//Renderer* renderer = new Renderer(*spritesheet, LayerType::NPC, root);
-		TemporalPeriod* temporalPeriod = new TemporalPeriod(Period::FUTURE);
-		CollisionFilter* collisionFilter = new CollisionFilter(CollisionCategory::CHARACTER);
-
-		Entity* entity = new Entity();
-		entity->add(transform);
-		entity->add(collisionFilter);
-		entity->add(laser);
-		entity->add(renderer);
-		//entity->add(temporalPeriod);
-		createTemporalEcho(entity);
-
-		EntitiesManager::get().add(Hash("ENT_LASER"), entity);
-	}
 
 	void createSkeleton()
 	{
@@ -266,7 +231,6 @@ namespace Temporal
 		EntitiesManager::get().add(Hash("ENT_SKELETON"), entity);
 	}
 */
-
 	void TestLevel::createEntities()
 	{	
 		tinyxml2::XMLDocument document;
@@ -340,6 +304,12 @@ namespace Temporal
 				{
 					Navigator* navigator = new Navigator();
 					entity->add(navigator);
+				}
+				else if(strcmp(componentElement->Name(), "laser") == 0)
+				{
+					Laser* laser = new Laser();
+					laser->serialize(componentDeserializer);
+					entity->add(laser);
 				}
 				else if(strcmp(componentElement->Name(), "action-controller") == 0)
 				{
