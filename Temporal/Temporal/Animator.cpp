@@ -24,8 +24,9 @@ namespace Temporal
 
 	void Animator::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			init();
 			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(ComponentType::RENDERER));
 			bindSceneNodes(_bindings, renderer.getRoot());
 		}

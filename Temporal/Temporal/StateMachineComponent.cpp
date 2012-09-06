@@ -32,6 +32,8 @@ namespace Temporal
 
 	void StateMachineComponent::handleMessage(Message& message)
 	{
+		if(_currentState != NULL)
+			_currentState->handleMessage(message);
 		if(message.getID() == MessageID::ENTITY_CREATED)
 		{
 			setState(getInitialState());
@@ -50,8 +52,7 @@ namespace Temporal
 			Hash stateID = Hash(serialization.deserializeUInt(STATE_SERIALIZATION));
 			setState(stateID);
 		}
-		_currentState->handleMessage(message);
-		if(message.getID() == MessageID::UPDATE)
+		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriodInMillis = getFloatParam(message.getParam());
 			_timer.update(framePeriodInMillis);

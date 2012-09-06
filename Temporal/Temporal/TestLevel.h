@@ -11,12 +11,7 @@ namespace Temporal
 
 	// General
 	// TODO: Text
-	// TODO: Files
-	// TODO: Resources
 	// TODO: Input
-	// TODO: systems
-	// TODO: games states/panels
-	// TODO: animations
 	// TODO: Deal with component order
 
 	// Physics

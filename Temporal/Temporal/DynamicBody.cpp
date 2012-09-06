@@ -36,7 +36,7 @@ namespace Temporal
 
 	void DynamicBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_fixture->init(*this);
 			Grid::get().add(_fixture);

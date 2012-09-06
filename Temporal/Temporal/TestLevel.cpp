@@ -165,6 +165,12 @@ namespace Temporal
 					light->serialize(componentDeserializer);
 					entity->add(light);
 				}
+				else if(strcmp(componentElement->Name(), "particle-emitter") == 0)
+				{
+					ParticleEmitter* particleEmitter = new ParticleEmitter();
+					particleEmitter->serialize(componentDeserializer);
+					entity->add(particleEmitter);
+				}
 				else if(strcmp(componentElement->Name(), "input-controller") == 0)
 				{
 					InputController* inputController = new InputController();
