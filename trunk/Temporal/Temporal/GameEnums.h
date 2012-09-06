@@ -34,6 +34,7 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			ENTITY_INIT,
 			ENTITY_CREATED,
 			ENTITY_DESTROYED,
 

@@ -32,8 +32,8 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		explicit Animator(Hash animationSetId = Hash::INVALID) :
-			_animationSetId(animationSetId), _animationSet(NULL), _animationId(Hash::INVALID) { init(); }
+		 Animator(Hash animationSetId = Hash::INVALID, Hash animationId = Hash::INVALID) :
+			_animationSetId(animationSetId), _animationSet(NULL), _animationId(animationId) {}
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);
@@ -44,7 +44,6 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", _animationSetId);
 			serializer.serialize("animation", _animationId);
-			init();
 		}
 	private:
 		Hash _animationSetId;

@@ -14,7 +14,7 @@ namespace Temporal
 
 	void PlayerPeriod::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
@@ -41,7 +41,7 @@ namespace Temporal
 
 	void TemporalPeriod::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
