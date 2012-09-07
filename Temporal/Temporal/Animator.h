@@ -52,8 +52,7 @@ namespace Temporal
 		Hash _animationId;
 		Timer _timer;
 
-		void init();
-		void update(float framePeriodInMillis);
+		void update(float framePeriod);
 		void reset(Hash animationId);
 	};
 }

@@ -22,7 +22,7 @@ namespace Temporal
 			}
 		}
 
-		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
+		const float Acquire::ACQUIRE_TIME(1.0f);
 
 		void Acquire::enter() const
 		{
@@ -41,7 +41,7 @@ namespace Temporal
 			{
 				if(!_stateMachine->getTempFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
-				else if(_stateMachine->getTimer().getElapsedTimeInMillis() >= ACQUIRE_TIME_IN_MILLIS)
+				else if(_stateMachine->getTimer().getElapsedTime() >= ACQUIRE_TIME)
 					_stateMachine->changeState(SEE_STATE);
 			}
 		}

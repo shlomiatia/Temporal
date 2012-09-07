@@ -26,7 +26,11 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			init();
+			if(_animationSetId != Hash::INVALID)
+				_animationSet = ResourceManager::get().getAnimationSet(_animationSetId);
+		}
+		else if(message.getID() == MessageID::ENTITY_CREATED)
+		{
 			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(ComponentType::RENDERER));
 			bindSceneNodes(_bindings, renderer.getRoot());
 		}
@@ -37,13 +41,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
-			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
+			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTime());
 			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
@@ -54,10 +58,10 @@ namespace Temporal
 		}
 	}
 
-	void Animator::update(float framePeriodInMillis)
+	void Animator::update(float framePeriod)
 	{
-		_timer.update(framePeriodInMillis);
-		float totalPeriod = _timer.getElapsedTimeInMillis();
+		_timer.update(framePeriod);
+		float totalPeriod = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
 		float animationDuration = animation.getDuration();
 		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !animation.Repeat())
@@ -120,11 +124,5 @@ namespace Temporal
 	Component* Animator::clone() const
 	{
 		return new Animator(_animationSetId);
-	}
-
-	void Animator::init()
-	{
-		if(_animationSetId != Hash::INVALID)
-			_animationSet = ResourceManager::get().getAnimationSet(_animationSetId);
 	}
 }

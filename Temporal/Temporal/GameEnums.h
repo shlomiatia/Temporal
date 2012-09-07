@@ -34,11 +34,12 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			ENTITY_INIT,
-			ENTITY_CREATED,
+			ENTITY_PRE_INIT, // All components exist but uninitialized
+			ENTITY_INIT, // Initialize component
+			ENTITY_CREATED, // Initialize component based on other components
 			ENTITY_DESTROYED,
 
-			LEVEL_CREATED,
+			LEVEL_CREATED, // Initialize component based on other entities
 			LEVEL_DESTROYED,
 
 			UPDATE,

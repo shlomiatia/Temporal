@@ -5,7 +5,7 @@
 
 namespace Temporal
 {
-	const float TemporalEcho::ECHO_READY_TIME_IN_MILLIS = 4500.0f;
+	const float TemporalEcho::ECHO_READY_TIME = 4.5f;
 
 	TemporalEcho::~TemporalEcho()
 	{
@@ -16,12 +16,12 @@ namespace Temporal
 		}
 	}
 
-	void TemporalEcho::update(float framePeriodInMillis)
+	void TemporalEcho::update(float framePeriod)
 	{
 		if(!_echoReady)
 		{
-			float echoLifetimeInMillis = _echoesData.size() * framePeriodInMillis;
-			if(echoLifetimeInMillis > ECHO_READY_TIME_IN_MILLIS)
+			float echoLifetime = _echoesData.size() * framePeriod;
+			if(echoLifetime > ECHO_READY_TIME)
 				_echoReady = true;
 		}
 		if(_echoReady)
@@ -57,8 +57,8 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 			if(_echoReady)
 				_echo->handleMessage(message);
 		}
@@ -71,7 +71,7 @@ namespace Temporal
 			if(_echoReady)
 				_echo->handleMessage(message);
 		}
-		else if(message.getID() == MessageID::ENTITY_CREATED)
+		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
 			const Component* transform = getEntity().get(ComponentType::TRANSFORM);
 			const Component* drawPosition = getEntity().get(ComponentType::DRAW_POSITION);
@@ -87,9 +87,16 @@ namespace Temporal
 				_echo->add(renderer->clone());
 			if(animator != NULL)
 				_echo->add(animator->clone());
-			_echo->handleMessage(message);
 			float alpha = 0.2f;
 			_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+		}
+		else if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			_echo->handleMessage(message);
+		}
+		else if(message.getID() == MessageID::ENTITY_CREATED)
+		{
+			_echo->handleMessage(message);
 		}
 	}
 }

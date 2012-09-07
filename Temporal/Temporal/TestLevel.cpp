@@ -63,7 +63,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
 	}
 
-	void TestLevel::update(float framePeriodInMillis)
+	void TestLevel::update(float framePeriod)
 	{
 		Input::get().update();
 		
@@ -73,12 +73,12 @@ namespace Temporal
 		}
 		if(Input::get().isQ())
 		{
-			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
+			const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
 			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 		}
 
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriodInMillis));		
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));		
 	}
 
 	void TestLevel::draw() const
@@ -176,7 +176,7 @@ namespace Temporal
 					InputController* inputController = new InputController();
 					entity->add(inputController);
 				}
-				else if(strcmp(componentElement->Name(), "senry") == 0)
+				else if(strcmp(componentElement->Name(), "sentry") == 0)
 				{
 					Sentry* sentry = new Sentry();
 					entity->add(sentry);

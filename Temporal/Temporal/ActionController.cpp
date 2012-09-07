@@ -208,7 +208,7 @@ namespace Temporal
 	}
 
 	// BRODER
-	const float Walk::NO_FLOOR_TIME_TO_FALL_IN_MILLIS = 75.0f;
+	const float Walk::NO_FLOOR_TIME_TO_FALL = 0.075f;
 
 	void Walk::handleMessage(Message& message) const
 	{
@@ -239,7 +239,7 @@ namespace Temporal
 
 			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. 
 			// Therefore we only fall when some time has passed
-			if(_stateMachine->getTimer().getElapsedTimeInMillis() >= NO_FLOOR_TIME_TO_FALL_IN_MILLIS)
+			if(_stateMachine->getTimer().getElapsedTime() >= NO_FLOOR_TIME_TO_FALL)
 			{
 				_stateMachine->changeState(FALL_STATE);
 			}

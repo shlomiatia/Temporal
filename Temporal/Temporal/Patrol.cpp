@@ -73,7 +73,7 @@ namespace Temporal
 			}
 		}
 
-		const float Wait::WAIT_TIME_IN_MILLIS(5000.0f);
+		const float Wait::WAIT_TIME(5.0f);
 
 		void Wait::handleMessage(Message& message) const
 		{
@@ -83,7 +83,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= WAIT_TIME_IN_MILLIS)
+				if(_stateMachine->getTimer().getElapsedTime() >= WAIT_TIME)
 				{
 					_stateMachine->changeState(TURN_STATE);
 				}

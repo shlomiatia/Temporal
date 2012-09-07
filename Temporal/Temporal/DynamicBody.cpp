@@ -85,8 +85,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
@@ -102,17 +102,15 @@ namespace Temporal
 		}
 	}
 
-	void DynamicBody::update(float framePeriodInMillis)
+	void DynamicBody::update(float framePeriod)
 	{
 		_fixture->update();
-		Vector movement = determineMovement(framePeriodInMillis);
+		Vector movement = determineMovement(framePeriod);
 		executeMovement(movement);
 	}
 
-	Vector DynamicBody::determineMovement(float framePeriodInMillis)
+	Vector DynamicBody::determineMovement(float framePeriod)
 	{
-		float interpolation = framePeriodInMillis / 1000.0f;
-
 		// Determine movement
 		Vector movement = Vector::Zero;
 		
@@ -125,10 +123,10 @@ namespace Temporal
 			// Apply gravity if needed
 			if(_gravityEnabled)
 			{
-				_velocity += GRAVITY * interpolation;
+				_velocity += GRAVITY * framePeriod;
 			}
 			
-			movement = _velocity * interpolation;
+			movement = _velocity * framePeriod;
 		}
 		return movement;
 	}

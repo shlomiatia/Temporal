@@ -146,7 +146,7 @@ namespace Temporal
 		void handleMessage(Message& message) const;
 
 	private:
-		static const float NO_FLOOR_TIME_TO_FALL_IN_MILLIS;
+		static const float NO_FLOOR_TIME_TO_FALL;
 	};
 
 	class Turn : public ComponentState

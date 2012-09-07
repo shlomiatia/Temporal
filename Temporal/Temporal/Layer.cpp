@@ -37,11 +37,11 @@ namespace Temporal
 
 		std::ostringstream title;
 		static const int MAX_SAMPLES = 100;
-		static int samples[MAX_SAMPLES];
-		static float sum = 0.0f;
+		static float samples[MAX_SAMPLES];
 		static int sampleIndex = 0;
-		static int lastTick = 0;
-		static int newSample = 0;
+		static float sum = 0.0f;
+		static float lastTick = 0.0f;
+		static float newSample = 0;
 
 		if (lastTick == 0)
 		{
@@ -50,14 +50,14 @@ namespace Temporal
 		}
 		else
 		{
-			newSample = Thread::getElapsedTimeInMillis() - lastTick;
+			newSample = Thread::getElapsedTime() - lastTick;
 			sum += newSample - samples[sampleIndex];
 			samples[sampleIndex] = newSample;
 			sampleIndex = (sampleIndex + 1) % MAX_SAMPLES;
 
-			title << "FPS: " << (1000.0f * MAX_SAMPLES) / sum;
+			title << "FPS: " << MAX_SAMPLES / sum;
 		}
-		lastTick = Thread::getElapsedTimeInMillis();
+		lastTick = Thread::getElapsedTime();
 		Graphics::get().setTitle(title.str().c_str());
 	}
 }

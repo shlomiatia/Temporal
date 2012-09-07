@@ -21,7 +21,7 @@ namespace Temporal
 			void handleMessage(Message& message) const;
 
 		private:
-			static const float ACQUIRE_TIME_IN_MILLIS;
+			static const float ACQUIRE_TIME;
 		};
 
 		class See : public ComponentState

@@ -43,7 +43,7 @@ namespace Temporal
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(STATE_SERIALIZATION, _currentStateID);
-			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTimeInMillis());
+			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTime());
 		}
 		else if(message.getID() == MessageID::DESERIALIZE)
 		{
@@ -54,8 +54,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			_timer.update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			_timer.update(framePeriod);
 			resetTempState();
 		}
 	}

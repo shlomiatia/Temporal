@@ -52,6 +52,7 @@ namespace Temporal
 	void EntitiesManager::add(Entity* entity)
 	{
 		_entities[entity->getId()] = entity;
+		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_CREATED));
 	}

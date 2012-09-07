@@ -34,8 +34,8 @@ namespace Temporal
 		Vector _absoluteImpulse;
 		Vector _groundVector;
 
-		void update(float framePeriodInMillis);
-		Vector determineMovement(float framePeriodInMillis);
+		void update(float framePeriod);
+		Vector determineMovement(float framePeriod);
 		void executeMovement(Vector movement);
 		void detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision);
 		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);

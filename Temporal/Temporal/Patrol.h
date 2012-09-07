@@ -33,7 +33,7 @@ namespace Temporal
 			void handleMessage(Message& message) const;
 
 		private:
-			static const float WAIT_TIME_IN_MILLIS;
+			static const float WAIT_TIME;
 		};
 	}
 
