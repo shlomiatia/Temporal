@@ -20,68 +20,6 @@
     </transform>
     <light />
 </entity>
-<entity id="ENT_SENTRY">
-    <transform>
-        <position x="512" y="384" />
-    </transform>
-    <collision-filter category="4" />
-    <draw-position>
-        <offset y="-40" />
-    </draw-position>
-    <sentry />
-    <sight size="60" />
-    <renderer layer="4">
-        <scene-node sprite-sheet="pop.png" sprite-group="POP_ANM_STAND" />
-    </renderer>
-</entity>
-<entity id="ENT_CAMERA">
-    <transform>
-        <position x="256" y="350" />
-    </transform>
-    <collision-filter category="4" />
-    <security-camera />
-    <sight center="-30" size="30" />
-    <animator animation-set="CAM_ANM_SET" />
-    <renderer layer="4">
-        <scene-node sprite-sheet="camera.png" />
-    </renderer>
-</entity>
-<entity id="ENT_PATROL">
-    <transform>
-        <position x="768" y="384" />
-    </transform>
-    <collision-filter category="4" />
-    <draw-position>
-        <offset y="-40" />
-    </draw-position>
-    <patrol />
-    <dynamic-body>
-        <aabb>
-            <radius x="10" y="40" />
-        </aabb>
-    </dynamic-body>
-    <sight size="60" />
-    <sensor category-mask="1">
-        <aabb>
-            <center x="0" y="-50" />
-            <radius x="10" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_FRONT_EDGE" center="-157" size="135" />
-    </sensor>
-    <action-controller />
-    <animator animation-set="POP_ANM_SET" />
-    <renderer layer="4">
-        <scene-node sprite-sheet="pop.png" />
-    </renderer>
-</entity>
-<entity id="ENT_LASER">
-    <transform />
-    <collision-filter category="4" />
-    <laser platform="ENT_30_LEFT2" />
-    <renderer layer="4">
-        <scene-node sprite-sheet="laser.png" />
-    </renderer>
-</entity>
 <entity id="ENT_CHASER">
     <transform>
         <position x="768" y="384" />
@@ -152,7 +90,72 @@
             </scene-node>
         </scene-node>
     </renderer>
+</entity>
+<entity id="ENT_SENTRY">
+    <transform>
+        <position x="512" y="384" />
+    </transform>
+    <collision-filter category="4" />
+    <draw-position>
+        <offset y="-40" />
+    </draw-position>
+    <sentry />
+    <sight size="60" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="pop.png" sprite-group="POP_ANM_STAND" />
+    </renderer>
+</entity>
+<entity id="ENT_CAMERA">
+    <transform>
+        <position x="256" y="350" />
+    </transform>
+    <collision-filter category="4" />
+    <security-camera />
+    <sight center="-30" size="30" />
+    <animator animation-set="CAM_ANM_SET" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="camera.png" />
+    </renderer>
 </entity>-->
+<entity id="ENT_PATROL">
+    <transform>
+        <position x="768" y="384" />
+    </transform>
+    <collision-filter category="4" />
+    <draw-position>
+        <offset y="-40" />
+    </draw-position>
+    <patrol />
+    <dynamic-body>
+        <aabb>
+            <radius x="10" y="40" />
+        </aabb>
+    </dynamic-body>
+    <sight size="60" />
+    <sensor category-mask="1">
+        <aabb>
+            <center x="0" y="-50" />
+            <radius x="10" y="10" />
+        </aabb>
+        <ledge-detector id="SNS_FRONT_EDGE" center="-157" size="135" />
+    </sensor>
+    <action-controller />
+    <animator animation-set="POP_ANM_SET" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="pop.png" />
+    </renderer>
+    <temporal-echo />
+    <!--<temporal-period period="1" />-->
+</entity>
+<entity id="ENT_LASER">
+    <transform />
+    <collision-filter category="4" />
+    <laser platform="ENT_30_LEFT2" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="laser.png" />
+    </renderer>
+    <!--<temporal-period period="2" />-->
+</entity>
 <entity id="ENT_PLAYER">
     <transform>
         <position x="512" y="384" />
@@ -200,6 +203,8 @@
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
     </renderer>
+    <!--<particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
+    <player-period period="2" />-->
 </entity>
 <entity id="ENT_LEFT_WALL">
 	<transform>
