@@ -20,9 +20,9 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_ECHO; }
 		void handleMessage(Message& message);
 	private:
-		static const float ECHO_READY_TIME_IN_MILLIS;
+		static const float ECHO_READY_TIME;
 
-		void update(float framePeriodInMillis);
+		void update(float framePeriod);
 		void mergeToTemporalEchoes();
 
 		EchoCollection _echoesData;

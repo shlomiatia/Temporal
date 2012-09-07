@@ -9,7 +9,7 @@ namespace Temporal
 	{
 	public:
 		virtual void init() = 0;
-		virtual void update(float framePeriodInMillis) = 0;
+		virtual void update(float framePeriod) = 0;
 		virtual void draw() const = 0;
 		virtual void dispose() = 0;
 
@@ -36,17 +36,17 @@ namespace Temporal
 		void stop() { _running = false; }
 
 	private:
-		static const float FRAME_PERIOD_IN_MILLIS;
+		static const float FRAME_PERIOD;
 
 		Level* _level;
 		bool _running;
 		bool _paused;
-		float _lastFrameMillis;
+		float _lastFrameTime;
 
 		void update();
 		void draw() const;
 
-		Game() : _level(NULL), _running(false), _paused(false), _lastFrameMillis(0.0f) {}
+		Game() : _level(NULL), _running(false), _paused(false), _lastFrameTime(0.0f) {}
 		Game(const Game&);
 		Game& operator=(const Game&);
 	};

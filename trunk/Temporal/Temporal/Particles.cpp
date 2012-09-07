@@ -15,7 +15,7 @@ namespace Temporal
 	void Particle::update(float time)
 	{
 		_ageTimer.update(time);
-		_position += _velocity * time/ 1000.0f;
+		_position += _velocity * time;
 	}
 
 	ParticleEmitter::~ParticleEmitter()
@@ -25,7 +25,7 @@ namespace Temporal
 		delete[] _texCoords;
 	}
 
-	int ParticleEmitter::getLength() { return static_cast<int>(_lifetimeInMillis / _birthThresholdInMillis); }
+	int ParticleEmitter::getLength() { return static_cast<int>(_lifetime / _birthThreshold); }
 	
 	void ParticleEmitter::handleMessage(Message& message)
 	{
@@ -35,8 +35,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
@@ -80,7 +80,7 @@ namespace Temporal
 		return static_cast<float>(random(max)) / static_cast<float>(max);
 	}
 
-	void ParticleEmitter::update(float framePeriodInMillis)
+	void ParticleEmitter::update(float framePeriod)
 	{
 		int length = getLength();
 		for(int i = 0; i < length; ++i)
@@ -88,26 +88,26 @@ namespace Temporal
 			Particle& particle = _particles[i];
 			if(particle.isAlive())
 			{
-				particle.update(framePeriodInMillis);
-				if(particle.getAge() > _lifetimeInMillis)
+				particle.update(framePeriod);
+				if(particle.getAge() > _lifetime)
 				{
 					particle.setAlive(false);	
 				}
 			}
 		}
-		_birthTimer.update(framePeriodInMillis);
-		float timeSinceLastBirth = _birthTimer.getElapsedTimeInMillis();
-		if(timeSinceLastBirth > _birthThresholdInMillis)
+		_birthTimer.update(framePeriod);
+		float timeSinceLastBirth = _birthTimer.getElapsedTime();
+		if(timeSinceLastBirth > _birthThreshold)
 		{
 			_birthTimer.reset();
 			const Vector& emitterPosition = *static_cast<const Vector*>(raiseMessage(Message(MessageID::GET_POSITION)));
 
-			int bornParticles = static_cast<int>(timeSinceLastBirth / _birthThresholdInMillis);
+			int bornParticles = static_cast<int>(timeSinceLastBirth / _birthThreshold);
 			for(int i = 0; i < bornParticles; ++i)
 			{
 				float angle = randomF(1000) * _directionSize + _directionCenter - _directionSize / 2.0f;
-				Vector position = emitterPosition + Vector(randomF(1000) * _birthRadius, randomF(1000) * _birthRadius);
-				Vector velocity = Vector(_velocityPerSecond * cos(angle), _velocityPerSecond * sin(angle));
+				Vector position = emitterPosition + Vector(-_birthRadius + randomF(1000) * _birthRadius * 2.0f, -_birthRadius + randomF(1000) * _birthRadius * 2.0f);
+				Vector velocity = Vector(_velocity * cos(angle), _velocity * sin(angle));
 				_particles[_birthIndex].setAlive(true);
 				_particles[_birthIndex].setPosition(position);
 				_particles[_birthIndex].setVelocity(velocity);

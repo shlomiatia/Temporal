@@ -14,7 +14,7 @@ namespace Temporal
 			void handleMessage(Message& message) const;
 
 		private:
-			static const float SEARCH_TIME_FOR_SIDE_IN_MILLIS;
+			static const float SEARCH_TIME;
 		};
 
 		class See : public ComponentState
@@ -43,7 +43,7 @@ namespace Temporal
 			void handleMessage(Message& message) const;
 
 		private:
-			static const float ACQUIRE_TIME_IN_MILLIS;
+			static const float ACQUIRE_TIME;
 
 			void update() const;
 		};

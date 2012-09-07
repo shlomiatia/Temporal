@@ -16,7 +16,7 @@ namespace Temporal
 		static const Hash TURN_STATE = Hash("CAM_STT_TURN");
 		static const Hash ACQUIRE_STATE = Hash("CAM_STT_ACQUIRE");
 
-		const float Search::SEARCH_TIME_FOR_SIDE_IN_MILLIS(5000.0f);
+		const float Search::SEARCH_TIME(5.0f);
 
 		void Search::enter() const
 		{
@@ -31,8 +31,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				float framePeriodInMillis = getFloatParam(message.getParam());
-				if(_stateMachine->getTimer().getElapsedTimeInMillis() >= SEARCH_TIME_FOR_SIDE_IN_MILLIS)
+				if(_stateMachine->getTimer().getElapsedTime() >= SEARCH_TIME)
 					_stateMachine->changeState(TURN_STATE);
 			}
 		}
@@ -79,7 +78,7 @@ namespace Temporal
 			}
 		}
 
-		const float Acquire::ACQUIRE_TIME_IN_MILLIS(1000.0f);
+		const float Acquire::ACQUIRE_TIME(1.0f);
 
 		void Acquire::enter() const
 		{
@@ -90,10 +89,10 @@ namespace Temporal
 
 		void Acquire::update() const
 		{
-			float elapsedTimeInMillis = _stateMachine->getTimer().getElapsedTimeInMillis();
+			float elapsedTime = _stateMachine->getTimer().getElapsedTime();
 			if(!_stateMachine->getTempFlag1())
 				_stateMachine->changeState(SEARCH_STATE);
-			else if(elapsedTimeInMillis >= ACQUIRE_TIME_IN_MILLIS)
+			else if(elapsedTime >= ACQUIRE_TIME)
 				_stateMachine->changeState(SEE_STATE);
 		}
 

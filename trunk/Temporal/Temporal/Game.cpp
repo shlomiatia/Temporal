@@ -4,28 +4,28 @@
 
 namespace Temporal
 {
-	const float Game::FRAME_PERIOD_IN_MILLIS(1000.0f / /*FPS*/ 60.0f);
+	const float Game::FRAME_PERIOD(1.0f / /*FPS*/ 60.0f);
 
 	void Game::run()
 	{
 		_running = true;
 		_level->init();
-		_level->update(FRAME_PERIOD_IN_MILLIS);
-		_lastFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
+		_level->update(FRAME_PERIOD);
+		_lastFrameTime = Thread::getElapsedTime();
 		while (isRunning())
 		{
 			if (!isPaused())
 				update();
 			draw();
-			float currentFrameMillis = static_cast<float>(Thread::getElapsedTimeInMillis());
-			float framesDifference = currentFrameMillis - _lastFrameMillis;
-			float sleepTime = FRAME_PERIOD_IN_MILLIS - framesDifference;
+			float currentFrameTime = Thread::getElapsedTime();
+			float framesDifference = currentFrameTime - _lastFrameTime;
+			float sleepTime = FRAME_PERIOD - framesDifference;
 			if(sleepTime >= 0)
 				Thread::sleep(sleepTime);
 
-			_lastFrameMillis += FRAME_PERIOD_IN_MILLIS;
-			if(_lastFrameMillis < currentFrameMillis)
-				_lastFrameMillis = currentFrameMillis;
+			_lastFrameTime += FRAME_PERIOD;
+			if(_lastFrameTime < currentFrameTime)
+				_lastFrameTime = currentFrameTime;
 		}
 		_level->dispose();
 		delete _level;
@@ -33,7 +33,7 @@ namespace Temporal
 
 	void Game::update()
 	{
-		_level->update(FRAME_PERIOD_IN_MILLIS);
+		_level->update(FRAME_PERIOD);
 		
 	}
 

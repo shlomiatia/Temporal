@@ -6,8 +6,8 @@ namespace Temporal
 	class Thread
 	{
 	public:
-		static void sleep(unsigned int millis);
-		static unsigned long getElapsedTimeInMillis();
+		static void sleep(float seconds);
+		static float getElapsedTime();
 	private:
 		Thread() {}
 		Thread(const Thread&);

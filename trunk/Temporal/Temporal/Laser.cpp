@@ -33,8 +33,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriodInMillis = getFloatParam(message.getParam());
-			update(framePeriodInMillis);
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::SERIALIZE)
 		{
@@ -48,12 +48,12 @@ namespace Temporal
 		}
 	}
 
-	void Laser::update(float framePeriodInMillis)
+	void Laser::update(float framePeriod)
 	{
 		const Vector& position = getPosition(*this);
 		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 		Vector platformDirection = segment.getNaturalVector().normalize();
-		float movementAmount = LASER_SPEED_PER_SECOND * framePeriodInMillis / 1000.0f;
+		float movementAmount = LASER_SPEED_PER_SECOND * framePeriod;
 		Vector maxPoint = Vector::Zero;
 		if(_isPositiveDirection)
 		{

@@ -31,7 +31,7 @@ namespace Temporal
 		bool _isPositiveDirection;
 		SceneNode* _root;
 
-		void update(float framePeriodInMillis);
+		void update(float framePeriod);
 	};
 }
 

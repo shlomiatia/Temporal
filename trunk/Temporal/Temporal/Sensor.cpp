@@ -34,7 +34,7 @@ namespace Temporal
 
 	void Sensor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_fixture->init(*this);
 		}

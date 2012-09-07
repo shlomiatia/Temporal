@@ -6,15 +6,15 @@ namespace Temporal
 	class Timer
 	{
 	public:
-		Timer() : _elapsedTimeInMillis(0.0f) {}
+		Timer() : _elapsedTime(0.0f) {}
 
-		float getElapsedTimeInMillis() const { return _elapsedTimeInMillis; }
-		void reset() { _elapsedTimeInMillis = 0.0f; }
-		void reset(float elapsedTimeInMillis) { _elapsedTimeInMillis = elapsedTimeInMillis; }
-		void update(float updateTimeInMillis) { _elapsedTimeInMillis += updateTimeInMillis; }
+		float getElapsedTime() const { return _elapsedTime; }
+		void reset() { _elapsedTime = 0.0f; }
+		void reset(float seconds) { _elapsedTime = seconds; }
+		void update(float seconds) { _elapsedTime += seconds; }
 
 	private:
-		float _elapsedTimeInMillis;
+		float _elapsedTime;
 
 		Timer(const Timer&);
 		Timer& operator=(const Timer&);

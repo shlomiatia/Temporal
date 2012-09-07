@@ -3,13 +3,15 @@
 
 namespace Temporal
 {
-	void Thread::sleep(unsigned int millis)
+	void Thread::sleep(float seconds)
 	{
+		unsigned int millis = static_cast<unsigned int>(seconds * 1000.0f);
 		SDL_Delay(millis);
 	}
 
-	unsigned long Thread::getElapsedTimeInMillis()
+	float Thread::getElapsedTime()
 	{
-		return SDL_GetTicks();
+		unsigned long millis = SDL_GetTicks();
+		return millis / 1000.0f;
 	}
 }
