@@ -11,18 +11,18 @@
     </animation>
     <animation id="CAM_ANM_TURN">
         <sample-set>
-            <sample sprite-group="CAM_ANM_TURN" duration="200" />
+            <sample sprite-group="CAM_ANM_TURN" duration="0.2" />
         </sample-set>
     </animation>
     <animation id="CAM_ANM_TURN2" rewind="1">
         <sample-set>
-            <sample sprite-group="CAM_ANM_TURN" duration="200" />
+            <sample sprite-group="CAM_ANM_TURN" duration="0.2" />
         </sample-set>
     </animation>
     <animation id="CAM_ANM_ACQUIRE" repeat="1">
         <sample-set>
-            <sample sprite-group="CAM_ANM_SEARCH" duration="200" />
-            <sample sprite-group="CAM_ANM_SEE" duration="200" />
+            <sample sprite-group="CAM_ANM_SEARCH" duration="0.2" />
+            <sample sprite-group="CAM_ANM_SEE" duration="0.2" />
         </sample-set>
     </animation>
 </animation-set>
@@ -37,10 +37,10 @@
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_RIGHT_HAND">
-            <sample sprite-group="SCN_RIGHT_HAND" duration="500" >
+            <sample sprite-group="SCN_RIGHT_HAND" duration="0.5" >
                 <translation x="-4" y="19" />
             </sample>
-            <sample sprite-group="SCN_RIGHT_HAND" duration="500" rotation="90">
+            <sample sprite-group="SCN_RIGHT_HAND" duration="0.5" rotation="90">
                 <translation x="-4" y="19" />
             </sample>
         </sample-set>
@@ -50,13 +50,13 @@
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_LEFT_HAND">
-            <sample sprite-group="SCN_LEFT_HAND" duration="250" rotation="45">
+            <sample sprite-group="SCN_LEFT_HAND" duration="0.25" rotation="45">
                 <translation x="28" y="28" />
             </sample>
-            <sample sprite-group="SCN_LEFT_HAND" duration="500" rotation="90">
+            <sample sprite-group="SCN_LEFT_HAND" duration="0.5" rotation="90">
                 <translation x="28" y="28" />
             </sample>
-            <sample sprite-group="SCN_LEFT_HAND" duration="250">
+            <sample sprite-group="SCN_LEFT_HAND" duration="0.25">
                 <translation x="28" y="28" />
             </sample>
         </sample-set>
@@ -95,7 +95,7 @@
     </animation>
     <animation id="POP_ANM_TURN">
         <sample-set>
-            <sample sprite-group="POP_ANM_TURN" duration="181" />
+            <sample sprite-group="POP_ANM_TURN" duration="0.181" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_FALL" repeat="1">
@@ -105,7 +105,7 @@
     </animation>
     <animation id="POP_ANM_JUMP_UP_START">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_UP_START" duration="264" />
+            <sample sprite-group="POP_ANM_JUMP_UP_START" duration="0.264" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_UP" repeat="1">
@@ -120,17 +120,17 @@
     </animation>
     <animation id="POP_ANM_CLIMB" rewind="1">
         <sample-set>
-            <sample sprite-group="POP_ANM_CLIMB" duration="396" />
+            <sample sprite-group="POP_ANM_CLIMB" duration="0.396" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_DESCEND">
         <sample-set>
-            <sample sprite-group="POP_ANM_CLIMB" duration="396" />
+            <sample sprite-group="POP_ANM_CLIMB" duration="0.396" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD_START">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="165" />
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="0.165" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD" repeat="1">
@@ -140,12 +140,12 @@
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD_END">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_FORWARD_END" duration="132" />
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_END" duration="0.132" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_WALK" repeat="1">
         <sample-set>
-            <sample sprite-group="POP_ANM_WALK" duration="396" />
+            <sample sprite-group="POP_ANM_WALK" duration="0.396" />
         </sample-set>
     </animation>
 </animation-set>

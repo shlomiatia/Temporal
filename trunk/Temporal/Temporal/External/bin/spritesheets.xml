@@ -1,5 +1,6 @@
 <sprite-sheet texture="bg.png" />
 <sprite-sheet texture="laser.png" />
+<sprite-sheet texture="bubble.png" />
 <sprite-sheet texture="camera.png">
     <sprite-group id="CAM_ANM_SEARCH">
         <sprite>
