@@ -1,4 +1,5 @@
 #include "Serialization.h"
+#include "Math.h"
 
 namespace Temporal
 {
@@ -32,5 +33,12 @@ namespace Temporal
 		const char* str = _current->ToElement()->Attribute(key);
 		if(str)
 			value = Hash(str);
+	}
+
+	void XmlDeserializer::serializeRadians(const char* key, float& value)
+	{
+		float degrees = 0.0f;
+		serialize(key, degrees);
+		value = toRadians(degrees);
 	}
 }

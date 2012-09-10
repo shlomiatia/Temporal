@@ -52,10 +52,8 @@ namespace Temporal
 			serializer.serialize("sprite-sheet", _spritesheetId);
 			serializer.serialize("birth-radius", _birthRadius);
 			serializer.serialize("velocity", _velocity);
-			serializer.serialize("center", _directionCenter);
-			_directionCenter = toRadians(_directionCenter);
-			serializer.serialize("size", _directionSize);
-			_directionSize = toRadians(_directionSize);
+			serializer.serializeRadians("center", _directionCenter);
+			serializer.serializeRadians("size", _directionSize);
 		}
 	private:
 		float _lifetime;

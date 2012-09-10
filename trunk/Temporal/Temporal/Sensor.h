@@ -82,10 +82,8 @@ namespace Temporal
 		void serialize(T& serializer)
 		{
 			serializer.serialize("id", _id);
-			serializer.serialize("center", _rangeCenter);
-			_rangeCenter = toRadians(_rangeCenter);
-			serializer.serialize("size", _rangeSize);
-			_rangeSize = toRadians(_rangeSize);
+			serializer.serializeRadians("center", _rangeCenter);
+			serializer.serializeRadians("size", _rangeSize);
 		}
 	private:
 		Hash _id;
