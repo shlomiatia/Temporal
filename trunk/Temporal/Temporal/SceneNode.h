@@ -56,6 +56,7 @@ namespace Temporal
 			serializer.serialize("transform", _transformOnly);
 			serializer.serialize("sprite-sheet", _spriteSheetId);
 			serializer.serialize("sprite-group", _spriteGroupId);
+			serializer.serialize("scene-node", _children);
 		}
 	private:
 		Hash _id;

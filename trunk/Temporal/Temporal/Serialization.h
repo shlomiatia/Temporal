@@ -3,6 +3,8 @@
 #include "Hash.h"
 #include "tinyxml2.h"
 #include <unordered_map>
+#include <vector>
+#include <unordered_map>
 
 namespace Temporal
 {
@@ -62,6 +64,32 @@ namespace Temporal
 				value.serialize(*this);
 				_current = _current->Parent();
 			}
+		}
+
+		template<typename T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			tinyxml2::XMLNode* parent = _current;
+			for(_current = _current->FirstChildElement(key); _current != NULL; _current = _current->NextSiblingElement())
+			{
+				T* object = new T();
+				object->serialize(*this);
+				value.push_back(object);
+			}
+			_current = parent;
+		}
+
+		template<typename K, typename V>
+		void serialize(const char* key, std::unordered_map<K, V*>& value)
+		{
+			tinyxml2::XMLNode* parent = _current;
+			for(_current = _current->FirstChildElement(key); _current != NULL; _current = _current->NextSiblingElement())
+			{
+				V* object = new V();
+				object->serialize(*this);
+				value[object->getId()] = object;
+			}
+			_current = parent;
 		}
 
 		void serialize(const char* key, int& value);

@@ -39,7 +39,7 @@ namespace Temporal
 		Sample& operator=(const Sample&);
 	};
 
-	typedef std::vector<const Sample*> SampleCollection;
+	typedef std::vector<Sample*> SampleCollection;
 	typedef SampleCollection::const_iterator SampleIterator;
 	
 	class SampleSet
@@ -47,26 +47,29 @@ namespace Temporal
 	public:
 		SampleSet() : _sceneNodeId(Hash::INVALID), _duration(0.0f) {}
 
-		Hash getSceneNodeId() const { return _sceneNodeId; }
+		Hash getId() const { return _sceneNodeId; }
 		float getDuration() const { return _duration; }
-		void add(Sample* sample);
 		const SampleCollection& get() const { return _samples; }
 
 		template<class T>
 		void serialize(T& serializer)
 		{
 			serializer.serialize("scene-node-id", _sceneNodeId);
+			serializer.serialize("sample", _samples);
+			init();
 		}
 	private:
 		Hash _sceneNodeId;
 		SampleCollection _samples;
 		float _duration;
 
+		void init();
+
 		SampleSet(const SampleSet&);
 		SampleSet& operator=(const SampleSet&);
 	};
 
-	typedef std::unordered_map<Hash, const SampleSet*> SampleSetCollection;
+	typedef std::unordered_map<Hash, SampleSet*> SampleSetCollection;
 	typedef SampleSetCollection::const_iterator SampleSetIterator;
 
 	class Animation
@@ -79,7 +82,6 @@ namespace Temporal
 		bool Repeat() const { return _repeat; }
 		bool Rewind() const { return _rewind; }
 		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
-		void add(const SampleSet* sampleSet);
 
 		template<class T>
 		void serialize(T& serializer)
@@ -87,6 +89,8 @@ namespace Temporal
 			serializer.serialize("id", _id);
 			serializer.serialize("repeat", _repeat);
 			serializer.serialize("rewind", _rewind);
+			serializer.serialize("sample-set", _sampleSets);
+			init();
 		}
 	private:
 		Hash _id;
@@ -95,11 +99,14 @@ namespace Temporal
 		SampleSetCollection _sampleSets;
 		float _duration;
 
+		void init();
+
+
 		Animation(const Animation&);
 		Animation& operator=(const Animation&);
 	};
 
-	typedef std::unordered_map<Hash, const Animation*> AnimationCollection;
+	typedef std::unordered_map<Hash, Animation*> AnimationCollection;
 	typedef AnimationCollection::const_iterator AnimationIterator;
 
 	class AnimationSet
@@ -108,13 +115,14 @@ namespace Temporal
 		AnimationSet() : _id(Hash::INVALID) {}
 
 		Hash getId() const { return _id; }
-		void add(const Animation* animation) { _animations[animation->getId()] = animation; }
+		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		const Animation& get(Hash id) const { return *_animations.at(id); }
 
 		template<class T>
 		void serialize(T& serializer)
 		{
 			serializer.serialize("id", _id);
+			serializer.serialize("animation", _animations);
 		}
 	private:
 		Hash _id;

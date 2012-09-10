@@ -33,7 +33,7 @@ namespace Temporal
 		Sprite& operator=(const Sprite&);
 	};
 
-	typedef std::vector<const Sprite*> SpriteCollection;
+	typedef std::vector<Sprite*> SpriteCollection;
 	typedef SpriteCollection::const_iterator SpriteIterator;
 
 	class SpriteGroup
@@ -44,7 +44,7 @@ namespace Temporal
 
 		Hash getId() const { return _id; }
 
-		void add(const Sprite* sprite);
+		void add(Sprite* sprite);
 		const Sprite& get(int spriteID) const;
 		int getSize() const;
 
@@ -52,6 +52,7 @@ namespace Temporal
 		void serialize(T& serializer)
 		{
 			serializer.serialize("id", _id);
+			serializer.serialize("sprite", _sprites);
 		}
 	private:
 		Hash _id;
@@ -62,7 +63,7 @@ namespace Temporal
 	};
 
 	class Texture;
-	typedef std::unordered_map<Hash, const SpriteGroup*> SpriteGroupCollection;
+	typedef std::unordered_map<Hash, SpriteGroup*> SpriteGroupCollection;
 	typedef SpriteGroupCollection::const_iterator SpriteGroupIterator;
 
 	class SpriteSheet
@@ -70,7 +71,7 @@ namespace Temporal
 	public:
 		explicit SpriteSheet(const Texture* texture = NULL, Side::Enum orientation = Side::RIGHT) : _id(Hash::INVALID), _texture(texture), _orientation(orientation) {}
 		~SpriteSheet();
-		void add(const SpriteGroup* spriteGroup);
+		void add(SpriteGroup* spriteGroup);
 
 		Hash getId() const { return _id; }
 		const Texture& getTexture() const { return *_texture; }
@@ -85,8 +86,10 @@ namespace Temporal
 			const char* file = NULL;
 			serializer.serialize("texture", &file);
 			serializer.serialize("orientation", (int&)_orientation);
+			serializer.serialize("sprite-group", _spriteGroups);
 			_id = Hash(file);
 			_texture = Texture::load(file);
+			init();
 		}
 	private:
 		Hash _id;
