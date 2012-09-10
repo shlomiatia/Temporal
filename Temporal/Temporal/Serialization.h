@@ -98,6 +98,7 @@ namespace Temporal
 		void serialize(const char* key, bool& value);
 		void serialize(const char* key, const char** value);
 		void serialize(const char* key, Hash& value);
+		void serializeRadians(const char* key, float& value);
 	private:
 		tinyxml2::XMLNode* _current;
 

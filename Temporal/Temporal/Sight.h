@@ -23,10 +23,8 @@ namespace Temporal
 		template<class T>
 		void serialize(T& serializer)
 		{
-			serializer.serialize("center", _sightCenter);
-			_sightCenter = toRadians(_sightCenter);
-			serializer.serialize("size", _sightSize);
-			_sightSize = toRadians(_sightSize);
+			serializer.serializeRadians("center", _sightCenter);
+			serializer.serializeRadians("size", _sightSize);
 		}
 	private:
 		const CollisionFilter* _filter;
