@@ -10,7 +10,7 @@ namespace Temporal
 			delete *i;
 	}
 
-	void SpriteGroup::add(const Sprite* sprite)
+	void SpriteGroup::add(Sprite* sprite)
 	{
 		_sprites.push_back(sprite);
 	}
@@ -33,7 +33,7 @@ namespace Temporal
 			delete i->second;
 	}
 
-	void SpriteSheet::add(const SpriteGroup* spriteGroup)
+	void SpriteSheet::add(SpriteGroup* spriteGroup)
 	{
 		_spriteGroups[spriteGroup->getId()] = spriteGroup;
 	}

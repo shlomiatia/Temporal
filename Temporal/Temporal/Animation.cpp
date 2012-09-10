@@ -3,20 +3,25 @@
 
 namespace Temporal
 {
-	void SampleSet::add(Sample* sample)
+	void SampleSet::init()
 	{
-		float startTime = 0.0f;
-		int size = _samples.size();
-		if(size > 0)
-			startTime = _samples[size - 1]->getEndTime();
-		sample->setStartTime(startTime);
-		_samples.push_back(sample);
-		_duration += sample->getDuration();
+		for(SampleIterator i = _samples.begin(); i != _samples.end(); ++i)
+		{
+			Sample& sample = **i;
+			if(i != _samples.begin())
+			{
+				sample.setStartTime((**(i - 1)).getEndTime());
+			}
+			_duration += sample.getDuration();
+		
+		}
 	}
 	
-	void Animation::add(const SampleSet* sampleSet)
+	void Animation::init()
 	{
-		_duration = std::max(_duration, sampleSet->getDuration());
-		_sampleSets[sampleSet->getSceneNodeId()] = sampleSet;
+		for(SampleSetIterator i = _sampleSets.begin(); i != _sampleSets.end(); ++i)
+		{
+			_duration = std::max(_duration, (*i->second).getDuration());
+		}
 	}
 }

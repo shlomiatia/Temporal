@@ -27,6 +27,9 @@ namespace Temporal
 		{
 			serializer.serialize("layer", (int&)_layer);
 			serializer.serialize("color", _color);
+			_root = new SceneNode();
+			serializer.serialize("scene-node", *_root);
+			_root->init();
 		}
 	private:
 		SceneNode* _root;

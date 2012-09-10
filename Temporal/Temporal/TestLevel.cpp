@@ -98,18 +98,6 @@ namespace Temporal
 		HashToString::get().dispose();
 	}
 
-	SceneNode* deserializeSceneNode(tinyxml2::XMLElement* element)
-	{
-		SceneNode* sceneNode = new SceneNode();
-		XmlDeserializer deserializer(element);
-		sceneNode->serialize(deserializer);
-		for(tinyxml2::XMLElement* child = element->FirstChildElement("scene-node"); child != NULL; child = child->NextSiblingElement())
-		{
-			sceneNode->add(deserializeSceneNode(child));
-		}
-		return sceneNode;
-	}
-
 	void TestLevel::createEntities()
 	{
 		tinyxml2::XMLDocument document;
@@ -154,8 +142,7 @@ namespace Temporal
 				}
 				else if(strcmp(componentElement->Name(), "renderer") == 0)
 				{
-					SceneNode* root = deserializeSceneNode(componentElement->FirstChildElement("scene-node"));
-					Renderer* renderer = new Renderer(root);
+					Renderer* renderer = new Renderer();
 					renderer->serialize(componentDeserializer);
 					entity->add(renderer);
 				}

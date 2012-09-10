@@ -9,9 +9,9 @@ namespace Temporal
 	class SpriteSheet;
 	class AnimationSet;
 
-	typedef std::unordered_map<Hash, const SpriteSheet*> SpriteSheetCollection;
+	typedef std::unordered_map<Hash, SpriteSheet*> SpriteSheetCollection;
 	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
-	typedef std::unordered_map<Hash, const AnimationSet*> AnimationSetCollection;
+	typedef std::unordered_map<Hash, AnimationSet*> AnimationSetCollection;
 	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
 
 	class ResourceManager
