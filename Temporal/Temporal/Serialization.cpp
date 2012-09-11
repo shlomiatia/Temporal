@@ -3,6 +3,47 @@
 
 namespace Temporal
 {
+	void MemoryStream::write(int value)
+	{
+		_buffer.write((const char*)&value, sizeof(int));
+	}
+	void MemoryStream::write(unsigned int value)
+	{
+		_buffer.write((const char*)&value, sizeof(unsigned int));
+	}
+	void MemoryStream::write(float value)
+	{
+		_buffer.write((const char*)&value, sizeof(float));
+	}
+	void MemoryStream::write(bool value)
+	{
+		_buffer.write((const char*)&value, sizeof(bool));
+	}
+	int MemoryStream::readInt()
+	{
+		int value;
+		_buffer.read((char*)&value, sizeof(int));
+		return value;
+	}
+	unsigned int MemoryStream::readUInt()
+	{
+		unsigned int value;
+		_buffer.read((char*)&value, sizeof(unsigned int));
+		return value;
+	}
+	float MemoryStream::readFloat()
+	{
+		float value;
+		_buffer.read((char*)&value, sizeof(float));
+		return value;
+	}
+	bool MemoryStream::readBool()
+	{
+		bool value;
+		_buffer.read((char*)&value, sizeof(bool));
+		return value;
+	}
+
 	void XmlDeserializer::serialize(const char* key, int& value)
 	{
 		_current->ToElement()->QueryIntAttribute(key, &value);

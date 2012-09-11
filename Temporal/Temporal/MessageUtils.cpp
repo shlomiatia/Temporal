@@ -20,16 +20,6 @@ namespace Temporal
 		return *static_cast<Hash*>(data);
 	}
 
-	Serialization& getSerializationParam(void* data)
-	{
-		return *static_cast<Serialization*>(data);
-	}
-
-	const Serialization& getConstSerializationParam(void* data)
-	{
-		return *static_cast<const Serialization*>(data);
-	}
-
 	const SensorCollisionParams& getSensorCollisionParams(void* data)
 	{
 		return *static_cast<const SensorCollisionParams*>(data);

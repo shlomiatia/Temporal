@@ -48,7 +48,6 @@ namespace Temporal
 			DRAW_LIGHTS,
 
 			SERIALIZE,
-			DESERIALIZE,
 
 			GET_POSITION,
 			SET_POSITION,

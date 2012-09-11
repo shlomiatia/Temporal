@@ -10,7 +10,6 @@ namespace Temporal
 	class Message;
 	class Vector;
 	class Vector;
-	class Serialization;
 
 	class SensorCollisionParams
 	{
@@ -32,8 +31,6 @@ namespace Temporal
 	Side::Enum getOrientation(const Component& component);
 
 	Hash getHashParam(void* data);
-	Serialization& getSerializationParam(void* data);
-	const Serialization& getConstSerializationParam(void* data);
 	const SensorCollisionParams& getSensorCollisionParams(void* data);
 	const Vector& getVectorParam(void* data);
 	inline float getFloatParam(void* data) { return *static_cast<float*>(data); }

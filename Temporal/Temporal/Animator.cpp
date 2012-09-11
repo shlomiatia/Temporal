@@ -9,10 +9,6 @@
 
 namespace Temporal
 {
-	static const Hash ANIMATION_ID_SERIALIZATION = Hash("ANM_SER_ANIMATION_ID");
-	static const Hash TIMER_SERIALIZATION = Hash("ANM_SER_TIMER");
-	static const Hash REWIND_SERIALIZATION = Hash("ANM_SER_REWIND");
-
 	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
 	{
 		bindings[node.getID()] = new SceneNodeBinding(node);
@@ -44,7 +40,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SERIALIZE)
+		/*else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTime());
@@ -55,7 +51,7 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
-		}
+		}*/
 	}
 
 	void Animator::update(float framePeriod)

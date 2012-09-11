@@ -1,6 +1,5 @@
 #include "DynamicBody.h"
 #include "Grid.h"
-#include "BaseUtils.h"
 #include "Serialization.h"
 #include "Math.h"
 #include "Shapes.h"
@@ -14,9 +13,6 @@
 namespace Temporal
 {
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
-
-	static const Hash IS_GRAVITY_ENABLED_SERIALIZATION = Hash("DYN_SER_IS_GRAVITY_ENABLED");
-	static const VectorSerializer VELOCITY_SERIALIZER("DYN_SER_VELOCITY");
 
 	const Vector DynamicBody::GRAVITY(0.0f, -1500.0f);
 
@@ -88,7 +84,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SERIALIZE)
+		/*else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(IS_GRAVITY_ENABLED_SERIALIZATION, _gravityEnabled);
@@ -99,7 +95,7 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_gravityEnabled = serialization.deserializeBool(IS_GRAVITY_ENABLED_SERIALIZATION);
 			VELOCITY_SERIALIZER.deserialize(serialization, _velocity);
-		}
+		}*/
 	}
 
 	void DynamicBody::update(float framePeriod)

@@ -15,7 +15,6 @@ namespace Temporal
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	static const Hash DIRECTION_SERIALIZATION = Hash("LAS_SER_DIR");
 
 	void Laser::handleMessage(Message& message)
 	{
@@ -36,7 +35,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SERIALIZE)
+		/*else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(DIRECTION_SERIALIZATION, _isPositiveDirection);
@@ -45,7 +44,7 @@ namespace Temporal
 		{
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			_isPositiveDirection = serialization.deserializeBool(DIRECTION_SERIALIZATION);
-		}
+		}*/
 	}
 
 	void Laser::update(float framePeriod)
