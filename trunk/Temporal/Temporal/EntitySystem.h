@@ -34,8 +34,8 @@ namespace Temporal
 		Component() : _entity(NULL) {}
 		virtual ~Component() {}
 
-		const Entity& getEntity() const { return *_entity; }
-		void setEntity(const Entity* entity) { _entity = entity; }
+		Entity& getEntity() const { return *_entity; }
+		void setEntity(Entity* entity) { _entity = entity; }
 		virtual ComponentType::Enum getType() const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
@@ -43,7 +43,7 @@ namespace Temporal
 		void* raiseMessage(Message& message) const;
 
 	private:
-		const Entity* _entity;
+		Entity* _entity;
 
 		Component(const Component&);
 		Component& operator=(const Component&);

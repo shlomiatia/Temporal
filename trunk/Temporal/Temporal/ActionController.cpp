@@ -2,7 +2,6 @@
 #include "MovementUtils.h"
 #include "MessageUtils.h"
 #include "Serialization.h"
-#include "BaseUtils.h"
 #include "Vector.h"
 #include "Shapes.h"
 #include "Math.h"
@@ -44,10 +43,6 @@ namespace Temporal
 	static const Hash CLIMB_STATE = Hash("ACT_STT_CLIMB");
 	static const Hash PREPARE_TO_DESCEND_STATE = Hash("ACT_STT_PREPARE_TO_DESCEND");
 	static const Hash DESCEND_STATE = Hash("ACT_STT_DESCEND");
-
-	static const Hash JUMP_INFO_SERIALIZATION = Hash("ACT_SER_JUMP_INFO");
-	static const Hash LEDGE_DIRECTED_SERIALIZATION = Hash("ACT_SER_LEDGE_DIRECTED");
-	static const VectorSerializer HANG_DESCEND_POINT_SERIALIZATION("ACT_SER_HANG_DESCEND_POINT");
 
 	/**********************************************************************************************
 	 * Helpers
@@ -107,7 +102,7 @@ namespace Temporal
 	void ActionController::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if(message.getID() == MessageID::SERIALIZE)
+		/*if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(JUMP_INFO_SERIALIZATION, getJumpHelper().getAngle());
@@ -122,7 +117,7 @@ namespace Temporal
 			Vector point = Vector::Zero;
 			HANG_DESCEND_POINT_SERIALIZATION.deserialize(serialization, point);
 			getHangDescendHelper().setPoint(point);
-		}
+		}*/
 	}
 
 	/**********************************************************************************************

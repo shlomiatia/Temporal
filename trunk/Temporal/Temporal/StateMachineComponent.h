@@ -59,8 +59,6 @@ namespace Temporal
 		virtual Hash getInitialState() const = 0;
 
 	private:
-		const Hash STATE_SERIALIZATION;
-		const Hash TIMER_SERIALIZATION;
 		StateCollection _states;
 
 		// Persistent state

@@ -1,12 +1,11 @@
 #include "StateMachineComponent.h"
 #include "Serialization.h"
-#include "BaseUtils.h"
 #include "MessageUtils.h"
 
 namespace Temporal
 {
 	StateMachineComponent::StateMachineComponent(StateCollection states, const char* prefix)
-		: _states(states), _currentState(NULL), _currentStateID(Hash::INVALID), STATE_SERIALIZATION(createKey(prefix, "_STATE")), TIMER_SERIALIZATION(createKey(prefix, "_TIMER"))
+		: _states(states), _currentState(NULL), _currentStateID(Hash::INVALID)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			(*(*i).second).setStateMachine(this);
@@ -39,7 +38,7 @@ namespace Temporal
 			setState(getInitialState());
 			_currentState->enter();
 		}
-		else if(message.getID() == MessageID::SERIALIZE)
+		/*else if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			serialization.serialize(STATE_SERIALIZATION, _currentStateID);
@@ -51,7 +50,7 @@ namespace Temporal
 			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
 			Hash stateID = Hash(serialization.deserializeUInt(STATE_SERIALIZATION));
 			setState(stateID);
-		}
+		}*/
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());

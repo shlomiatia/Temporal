@@ -2,57 +2,131 @@
 #define SERIALIZATION_H
 #include "Hash.h"
 #include "tinyxml2.h"
-#include <unordered_map>
 #include <vector>
 #include <unordered_map>
+#include <sstream>
 
 namespace Temporal
 {
-	class Variant
+	class MemoryStream
 	{
 	public:
-		Variant() : Int(0) {}
-		Variant(int value) : Int(value) {}
-		Variant(unsigned int value) : UInt(value) {}
-		Variant(float value) : Float(value) {}
-		Variant(bool value) : Bool(value) {}
+		MemoryStream() {};
 
-		union
-		{
-			int Int;
-			unsigned int UInt;
-			float Float;
-			bool Bool;
-		};
+		void write(int value);
+		void write(unsigned int value);
+		void write(float value);
+		void write(bool value);
+		int readInt();
+		unsigned int readUInt();
+		float readFloat();
+		bool readBool();
+	private:
+		std::stringstream _buffer;
+
+		MemoryStream(const MemoryStream&);
+		MemoryStream& operator=(const MemoryStream&);
 	};
 
-	typedef std::unordered_map<Hash, Variant> SerializationCollection;
+	class Serializer;
 
-	class Serialization
+	class Serializable
+	{
+		public:
+			virtual void serialize(Serializer& serializer) = 0;
+	};
+
+	class Serializer
 	{
 	public:
-		Serialization() {};
+		virtual void serialize(const char* key, int& value) = 0;
+		virtual void serialize(const char* key, unsigned int& value) = 0;
+		virtual void serialize(const char* key, float& value) = 0;
+		virtual void serialize(const char* key, bool& value) = 0;
+		virtual void serialize(const char* key, Hash& value) = 0;
+		virtual void serializeRadians(const char* key, float& value) = 0;
+		virtual void serialize(const char* key, const char** value) = 0;
 
-		void serialize(Hash key, int value) { _serialization[key] = value; }
-		void serialize(Hash key, unsigned int value) { _serialization[key] = value; }
-		void serialize(Hash key, float value) { _serialization[key] = value; }
-		void serialize(Hash key, bool value) { _serialization[key] = value; }
+		virtual void serialize(const char* key, Serializable& value) = 0;
 
-		int deserializeInt(Hash key) const { return _serialization.at(key).Int; }
-		unsigned int deserializeUInt(Hash key) const { return _serialization.at(key).UInt; }
-		float deserializeFloat(Hash key) const { return _serialization.at(key).Float; }
-		bool deserializeBool(Hash key) const { return _serialization.at(key).Bool; }
+	};
+
+	class MemorySerializer
+	{
+	public:
+		MemorySerializer(MemoryStream* buffer) : _buffer(buffer) {};
+
+		void serialize(const char* key, int& value) { _buffer->write(value); }
+		void serialize(const char* key, unsigned int& value) { _buffer->write(value); }
+		void serialize(const char* key, float& value) { _buffer->write(value); }
+		void serialize(const char* key, bool& value) { _buffer->write(value); }
+		void serialize(const char* key, Hash& value) { _buffer->write(value); }
+		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			value.serialize(*this);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			typedef std::vector<T*>::const_iterator TIterator;
+			for(TIterator i = value.begin(); i != value.end(); ++i)
+				(**i).serialize(*this);
+		}
 	private:
-		SerializationCollection _serialization;
+		MemoryStream* _buffer;
 
-		Serialization(const Serialization&);
-		Serialization& operator=(const Serialization&);
+		MemorySerializer(const MemorySerializer&);
+		MemorySerializer& operator=(const MemorySerializer&);
+	};
+
+	class MemoryDeserializer
+	{
+	public:
+		MemoryDeserializer(MemoryStream* buffer) : _buffer(buffer) {};
+
+		void serialize(const char* key, int& value) { value = _buffer->readInt(); }
+		void serialize(const char* key, unsigned int& value) { value = _buffer->readUInt(); }
+		void serialize(const char* key, float& value) { value = _buffer->readFloat(); }
+		void serialize(const char* key, bool& value) { value = _buffer->readBool(); }
+		void serialize(const char* key, Hash& value)  { value = Hash(_buffer->readUInt()); }
+		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			value.serialize(*this);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			typedef std::vector<T*>::const_iterator TIterator;
+			for(TIterator i = value.begin(); i != value.end(); ++i)
+				(**i).serialize(*this);
+		}
+	private:
+		MemoryStream* _buffer;
+
+		MemoryDeserializer(const MemoryDeserializer&);
+		MemoryDeserializer& operator=(const MemoryDeserializer&);
 	};
 
 	class XmlDeserializer
 	{
 	public:
 		XmlDeserializer(tinyxml2::XMLNode* root) : _current(root) {};
+
+		void serialize(const char* key, int& value);
+		void serialize(const char* key, unsigned int& value);
+		void serialize(const char* key, float& value);
+		void serialize(const char* key, bool& value);
+		void serialize(const char* key, Hash& value);
+		void serializeRadians(const char* key, float& value);
+		void serialize(const char* key, const char** value);
 
 		template<class T>
 		void serialize(const char* key, T& value)
@@ -92,13 +166,7 @@ namespace Temporal
 			_current = parent;
 		}
 
-		void serialize(const char* key, int& value);
-		void serialize(const char* key, unsigned int& value);
-		void serialize(const char* key, float& value);
-		void serialize(const char* key, bool& value);
-		void serialize(const char* key, const char** value);
-		void serialize(const char* key, Hash& value);
-		void serializeRadians(const char* key, float& value);
+		
 	private:
 		tinyxml2::XMLNode* _current;
 

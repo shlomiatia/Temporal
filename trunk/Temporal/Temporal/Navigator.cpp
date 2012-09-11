@@ -1,5 +1,4 @@
 #include "Navigator.h"
-#include "BaseUtils.h"
 #include "Serialization.h"
 #include "Segment.h"
 #include "MessageUtils.h"
@@ -20,9 +19,6 @@ namespace Temporal
 		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
 		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
-
-		static const VectorSerializer DESTINATION_CENTER_SERIALIZER("NAV_SER_CENTER");
-		static const VectorSerializer DESTINATION_RADIUS_SERIALIZER("NAV_SER_SIZE");
 
 		Navigator& getNavigator(StateMachineComponent& stateMachine)
 		{
@@ -229,14 +225,14 @@ namespace Temporal
 			_path->clear();
 		}
 		
-		Vector center = Vector::Zero;
+		/*Vector center = Vector::Zero;
 		DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
 		Vector radius = Vector::Zero;
 		DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
 		AABB destination = AABB(center, radius);
 			
 		if(destination != AABB::Zero)
-			plotPath(*this, destination);
+			plotPath(*this, destination);*/
 	}
 
 	void Navigator::debugDraw() const
@@ -261,7 +257,7 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if(message.getID() == MessageID::SERIALIZE)
+		/*if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
@@ -272,7 +268,7 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			deserialize(serialization);
 		}
-		else if(message.getID() == MessageID::DRAW_DEBUG)
+		else */if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}

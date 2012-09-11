@@ -7,8 +7,8 @@
 namespace Temporal
 {
 	class Entity;
-	class Serialization;
-	typedef std::vector<Serialization*> EchoCollection;
+	class MemoryStream;
+	typedef std::vector<MemoryStream*> EchoCollection;
 	typedef EchoCollection::const_iterator EchoIterator;
 	
 	class TemporalEcho : public Component
@@ -22,6 +22,7 @@ namespace Temporal
 	private:
 		static const float ECHO_READY_TIME;
 
+		void init();
 		void update(float framePeriod);
 		void mergeToTemporalEchoes();
 

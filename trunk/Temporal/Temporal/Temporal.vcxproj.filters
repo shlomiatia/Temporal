@@ -20,9 +20,6 @@
     <ClInclude Include="BaseEnums.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="BaseUtils.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -55,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="TemporalEcho.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Serialization.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Common</Filter>
@@ -162,6 +156,9 @@
     <ClInclude Include="Animation.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -179,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="Sentry.cpp">
       <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseUtils.cpp">
-      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Common</Filter>
@@ -301,14 +295,14 @@
     <ClCompile Include="tinyxml2.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Serialization.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
