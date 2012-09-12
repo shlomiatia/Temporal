@@ -20,7 +20,7 @@ namespace Temporal
 	public:
 		explicit PlayerPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
 
-		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
+		ComponentType::Enum getType() const { return ComponentType::PLAYER_PERIOD; }
 		void handleMessage(Message& message);
 	private:
 		Period::Enum _period;

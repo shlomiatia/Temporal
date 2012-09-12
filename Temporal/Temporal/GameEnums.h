@@ -7,24 +7,36 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			INPUT_CONTROLLER = 1,
-			AI_CONTROLLER = 2,
-			TRANSFORM = 4,
-			DRAW_POSITION = 8,
-			COLLISION_FILTER = 16,
-			DYNAMIC_BODY = 32,
-			STATIC_BODY = 64,
-			SENSOR = 128,
-			SIGHT = 256,
-			ACTION_CONTROLLER = 512,
-			ANIMATOR = 1024,
-			RENDERER = 2048,
-			TEMPORAL_ECHO = 4096,
-			TEMPORAL_PERIOD = 8192,
+			TRANSFORM = 1,
 
-			OTHER = 1048576,
+			INPUT_CONTROLLER = 2,
 
-			ALL = 2097151
+			DRAW_POSITION = 4,
+			ANIMATOR = 8,
+			RENDERER = 16,
+			LIGHT = 32,
+			LIGHT_GEM = 64,
+			PARTICLE_EMITTER = 128,
+
+			COLLISION_FILTER = 256,
+			DYNAMIC_BODY = 512,
+			STATIC_BODY = 1024,
+			SENSOR = 2048,
+			SIGHT = 4096,
+
+			ACTION_CONTROLLER = 8192,
+			
+			TEMPORAL_ECHO = 16384,
+			TEMPORAL_PERIOD = 32768,
+			PLAYER_PERIOD = 65536,
+
+			SENTRY = 131072,
+			SECURITY_CAMERA = 262144,
+			PATROL = 524288,
+			LASER = 1048576,
+			NAVIGATOR = 2097152,
+
+			ALL = 4194303
 		};
 	}
 	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) | static_cast<int>(b)); }

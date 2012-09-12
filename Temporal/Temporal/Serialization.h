@@ -9,6 +9,15 @@
 
 namespace Temporal
 {
+	namespace SerializationType
+	{
+		enum Enum
+		{
+			SERIALIZATION,
+			DESERIALIZATION
+		};
+	}
+
 	class MemoryStream
 	{
 	public:
@@ -42,6 +51,7 @@ namespace Temporal
 		virtual void serialize(const char* key, Hash& value) = 0;
 		virtual void serialize(const char* key, Timer& value) = 0;
 		virtual void serializeRadians(const char* key, float& value) = 0;
+		virtual SerializationType::Enum type() = 0;
 
 		template<class T>
 		void serialize(const char* key, T*& value)
@@ -83,6 +93,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value) { _buffer->write(value); }
 		void serialize(const char* key, Timer& value) { _buffer->write(value.getElapsedTime()); }
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
+		SerializationType::Enum type() { return SerializationType::SERIALIZATION; };
 		
 		template<class T>
 		void serialize(const char* key, T*& value)
@@ -115,6 +126,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value)  { value = Hash(_buffer->readUInt()); }
 		void serialize(const char* key, Timer& value) { value.reset(_buffer->readFloat()); }
 		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
+		SerializationType::Enum type() { return SerializationType::DESERIALIZATION; };
 
 		template<class T>
 		void serialize(const char* key, T*& value)
@@ -147,6 +159,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
+		SerializationType::Enum type() { return SerializationType::DESERIALIZATION; };
 
 		template<class T>
 		void serialize(const char* key, T*& value)

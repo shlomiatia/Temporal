@@ -99,27 +99,6 @@ namespace Temporal
 
 	Hash ActionController::getInitialState() const { return STAND_STATE; }
 
-	void ActionController::handleMessage(Message& message)
-	{
-		StateMachineComponent::handleMessage(message);
-		/*if(message.getID() == MessageID::SERIALIZE)
-		{
-			Serialization& serialization = getSerializationParam(message.getParam());
-			serialization.serialize(JUMP_INFO_SERIALIZATION, getJumpHelper().getAngle());
-			serialization.serialize(LEDGE_DIRECTED_SERIALIZATION, getJumpHelper().isLedgeDirected());
-			HANG_DESCEND_POINT_SERIALIZATION.serialize(serialization, getHangDescendHelper().getPoint());
-		}
-		else if(message.getID() == MessageID::DESERIALIZE)
-		{
-			const Serialization& serialization = getSerializationParam(message.getParam());
-			getJumpHelper().setAngle(serialization.deserializeFloat(JUMP_INFO_SERIALIZATION));
-			getJumpHelper().setLedgeDirected(serialization.deserializeBool(LEDGE_DIRECTED_SERIALIZATION));
-			Vector point = Vector::Zero;
-			HANG_DESCEND_POINT_SERIALIZATION.deserialize(serialization, point);
-			getHangDescendHelper().setPoint(point);
-		}*/
-	}
-
 	/**********************************************************************************************
 	 * States
 	 *********************************************************************************************/

@@ -18,7 +18,7 @@ namespace Temporal
 
 		Hash getPlatformId() const { return _platformID; }
 		
-		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::LASER; }
 		void handleMessage(Message& message);
 	private:
 		Hash _platformID;

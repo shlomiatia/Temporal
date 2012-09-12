@@ -76,6 +76,8 @@ namespace Temporal
 
 		StateMachineComponent(const StateMachineComponent&);
 		StateMachineComponent& operator=(const StateMachineComponent&);
+
+		friend class SerializationAccess;
 	};
 }
 

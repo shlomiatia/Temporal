@@ -35,16 +35,6 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		/*else if(message.getID() == MessageID::SERIALIZE)
-		{
-			Serialization& serialization = getSerializationParam(message.getParam());
-			serialization.serialize(DIRECTION_SERIALIZATION, _isPositiveDirection);
-		}
-		else if(message.getID() == MessageID::DESERIALIZE)
-		{
-			const Serialization& serialization = getConstSerializationParam(message.getParam());
-			_isPositiveDirection = serialization.deserializeBool(DIRECTION_SERIALIZATION);
-		}*/
 	}
 
 	void Laser::update(float framePeriod)

@@ -151,16 +151,16 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, DrawPosition& drawPosition, T& serializer)
 		{
-			serializer.serialize("offset", drawPosition._offset);
-			serializer.serialize("override", drawPosition._override);
+			serializer.serialize("offset", drawPosition._offset); // xml
+			serializer.serialize("override", drawPosition._override); // memory
 		}
 
 		template<class T>
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
-			serializer.serialize("animation-set", animator._animationSetId);
+			serializer.serialize("animation-set", animator._animationSetId); // xml
 			serializer.serialize("animation", animator._animationId); 
-			serializer.serialize("timer", animator._timer);
+			serializer.serialize("timer", animator._timer); // memory
 		}
 
 		template<class T>
@@ -228,7 +228,9 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, DynamicBody& dynamicBody, T& serializer)
 		{
-			serializer.serialize("fixture", dynamicBody._fixture);
+			serializer.serialize("fixture", dynamicBody._fixture); // xml
+			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // memory
+			serializer.serialize("velocity", dynamicBody._velocity); // memory
 		}
 
 		template<class T>
@@ -248,7 +250,8 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Laser& laser, T& serializer)
 		{
-			serializer.serialize("platform", laser._platformID);
+			serializer.serialize("platform", laser._platformID); // xml
+			serializer.serialize("direction", laser._isPositiveDirection); // memory
 		}
 
 		template<class T>
@@ -263,14 +266,56 @@ namespace Temporal
 			serializer.serialize("period", (int&)playerPeriod._period);
 		}
 
+		template<class T>
+		static void serialize(const char* key, StateMachineComponent& stateMachineComponent, T& serializer)
+		{
+			serializer.serialize("state", stateMachineComponent._currentStateID);
+			if(serializer.type() == SerializationType::DESERIALIZATION)
+				stateMachineComponent.setState(stateMachineComponent._currentStateID);
+			serializer.serialize("timer", stateMachineComponent._timer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, ActionController& actionController, T& serializer)
+		{
+			serializer.serialize("jump-angle", actionController.getJumpHelper()._angle);
+			serializer.serialize("jump-ledge-directed", actionController.getJumpHelper()._ledgeDirected);
+			serializer.serialize("hand-descend-point", actionController.getHangDescendHelper()._point);
+			serialize(key, (StateMachineComponent&)actionController, serializer);
+		}
+
+		static void serialize(const char* key, Fixture*& component, MemorySerialization& serializer)
+		{
+		}
+
 		static void serialize(const char* key, Component*& component, MemorySerialization& serializer)
 		{
-			if(component->getType() == ComponentType::TRANSFORM)
+			switch(component->getType())
+			{
+			case(ComponentType::TRANSFORM):
 				serialize(key, *(Transform*&)component, serializer);
-			else if(component->getType() == ComponentType::DRAW_POSITION)
+				break;
+			case(ComponentType::DRAW_POSITION):
 				serialize(key, *(DrawPosition*&)component, serializer);
-			else if(component->getType() == ComponentType::ANIMATOR)
+				break;
+			case(ComponentType::ANIMATOR):
 				serialize(key, *(Animator*&)component, serializer);
+				break;
+			case(ComponentType::ACTION_CONTROLLER):
+				serialize(key, *(ActionController*&)component, serializer);
+				break;
+			case(ComponentType::DYNAMIC_BODY):
+				serialize(key, *(DynamicBody*&)component, serializer);
+				break;
+			case(ComponentType::LASER):
+				serialize(key, *(Laser*&)component, serializer);
+				break;
+			case(ComponentType::SENTRY):
+			case(ComponentType::PATROL):
+			case(ComponentType::SECURITY_CAMERA):
+				serialize(key, *(StateMachineComponent*&)component, serializer);
+				break;
+			}
 		}
 
 		static void serialize(const char* key, Fixture*& fixture, XmlDeserializer& serializer)
