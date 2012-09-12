@@ -152,13 +152,15 @@ namespace Temporal
 		static void serialize(const char* key, DrawPosition& drawPosition, T& serializer)
 		{
 			serializer.serialize("offset", drawPosition._offset);
+			serializer.serialize("override", drawPosition._override);
 		}
 
 		template<class T>
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
 			serializer.serialize("animation-set", animator._animationSetId);
-			serializer.serialize("animation", animator._animationId);
+			serializer.serialize("animation", animator._animationId); 
+			serializer.serialize("timer", animator._timer);
 		}
 
 		template<class T>
@@ -235,32 +237,12 @@ namespace Temporal
 			serializer.serialize("fixture", staticBody._fixture);
 		}
 
-		static void serialize(const char* key, Fixture*& fixture, XmlDeserializer& serializer)
-		{
-			Shape* shape = NULL;
-			if(strcmp(key, "aabb") == 0)
-				serialize(key, (AABB*&)shape, serializer);
-			else if(strcmp(key, "segment") == 0)
-				serialize(key, (Segment*&)shape, serializer);
-			else
-				abort();
-			fixture = new Fixture(shape);
-		}
-
 		template<class T>
 		static void serialize(const char* key, LedgeDetector& ledgeDetector, T& serializer)
 		{
 			serializer.serialize("id", ledgeDetector._id);
 			serializer.serializeRadians("center", ledgeDetector._rangeCenter);
 			serializer.serializeRadians("size", ledgeDetector._rangeSize);
-		}
-
-		static void serialize(const char* key, ContactListener*& contactListener, XmlDeserializer& serializer)
-		{
-			if(strcmp(key, "ledge-detector") == 0)
-				serialize(key, (LedgeDetector*&)contactListener, serializer);
-			else
-				abort();
 		}
 
 		template<class T>
@@ -279,6 +261,36 @@ namespace Temporal
 		static void serialize(const char* key, PlayerPeriod& playerPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)playerPeriod._period);
+		}
+
+		static void serialize(const char* key, Component*& component, MemorySerialization& serializer)
+		{
+			if(component->getType() == ComponentType::TRANSFORM)
+				serialize(key, *(Transform*&)component, serializer);
+			else if(component->getType() == ComponentType::DRAW_POSITION)
+				serialize(key, *(DrawPosition*&)component, serializer);
+			else if(component->getType() == ComponentType::ANIMATOR)
+				serialize(key, *(Animator*&)component, serializer);
+		}
+
+		static void serialize(const char* key, Fixture*& fixture, XmlDeserializer& serializer)
+		{
+			Shape* shape = NULL;
+			if(strcmp(key, "aabb") == 0)
+				serialize(key, (AABB*&)shape, serializer);
+			else if(strcmp(key, "segment") == 0)
+				serialize(key, (Segment*&)shape, serializer);
+			else
+				abort();
+			fixture = new Fixture(shape);
+		}
+
+		static void serialize(const char* key, ContactListener*& contactListener, XmlDeserializer& serializer)
+		{
+			if(strcmp(key, "ledge-detector") == 0)
+				serialize(key, (LedgeDetector*&)contactListener, serializer);
+			else
+				abort();
 		}
 
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer)

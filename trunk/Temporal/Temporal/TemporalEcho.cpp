@@ -1,5 +1,6 @@
 #include "TemporalEcho.h"
 #include "Serialization.h"
+#include "SerializationAccess.h"
 #include "Color.h"
 #include "MessageUtils.h"
 
@@ -29,13 +30,13 @@ namespace Temporal
 			EchoIterator first = _echoesData.begin();
 			MemoryStream* deserialization = *first;
 			MemoryDeserializer deserializer(deserialization);
-			_echo->handleMessage(Message(MessageID::SERIALIZE, &deserializer));
+			deserializer.serialize("entity", _echo);
 			delete deserialization;
 			_echoesData.erase(first);
 		}
 		MemoryStream* serialization = new MemoryStream();
 		MemorySerializer serializer(serialization);
-		_echo->handleMessage(Message(MessageID::SERIALIZE, &serializer));
+		serializer.serialize("entity", getEntity());
 		_echoesData.push_back(serialization);
 	}
 
@@ -46,7 +47,7 @@ namespace Temporal
 			EchoIterator first = _echoesData.begin();
 			MemoryStream* deserialization = *first;
 			MemoryDeserializer deserializer(deserialization);
-			raiseMessage(Message(MessageID::SERIALIZE, &deserializer));
+			deserializer.serialize("entity", _echo);
 			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
 			{
 				delete *i;

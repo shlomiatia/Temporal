@@ -1,6 +1,7 @@
 #ifndef SERIALIZATION_H
 #define SERIALIZATION_H
 #include "Hash.h"
+#include "Timer.h"
 #include "tinyxml2.h"
 #include <vector>
 #include <unordered_map>
@@ -33,10 +34,19 @@ namespace Temporal
 	class MemorySerialization
 	{
 	public:
+		virtual ~MemorySerialization() {}
+		virtual void serialize(const char* key, int& value) = 0;
+		virtual void serialize(const char* key, unsigned int& value) = 0;
+		virtual void serialize(const char* key, float& value) = 0;
+		virtual void serialize(const char* key, bool& value) = 0;
+		virtual void serialize(const char* key, Hash& value) = 0;
+		virtual void serialize(const char* key, Timer& value) = 0;
+		virtual void serializeRadians(const char* key, float& value) = 0;
+
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			SerializationAccess::serialize(key, *value, *this);
+			SerializationAccess::serialize(key, value, *this);
 		}
 
 		template<class T>
@@ -48,9 +58,9 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			typedef std::vector<T*>::const_iterator TIterator;
+			typedef std::vector<T*>::iterator TIterator;
 			for(TIterator i = value.begin(); i != value.end(); ++i)
-				SerializationAccess::serialize(key, **i, *this);
+				SerializationAccess::serialize(key, *i, *this);
 		}
 	protected:
 		MemorySerialization(MemoryStream* buffer) : _buffer(buffer) {}
@@ -71,7 +81,26 @@ namespace Temporal
 		void serialize(const char* key, float& value) { _buffer->write(value); }
 		void serialize(const char* key, bool& value) { _buffer->write(value); }
 		void serialize(const char* key, Hash& value) { _buffer->write(value); }
+		void serialize(const char* key, Timer& value) { _buffer->write(value.getElapsedTime()); }
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
+		
+		template<class T>
+		void serialize(const char* key, T*& value)
+		{
+			MemorySerialization::serialize(key,*value);
+		}
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			MemorySerialization::serialize(key, value);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			MemorySerialization::serialize(key, value);
+		}
 	};
 
 	class MemoryDeserializer : public MemorySerialization
@@ -84,7 +113,26 @@ namespace Temporal
 		void serialize(const char* key, float& value) { value = _buffer->readFloat(); }
 		void serialize(const char* key, bool& value) { value = _buffer->readBool(); }
 		void serialize(const char* key, Hash& value)  { value = Hash(_buffer->readUInt()); }
+		void serialize(const char* key, Timer& value) { value.reset(_buffer->readFloat()); }
 		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
+
+		template<class T>
+		void serialize(const char* key, T*& value)
+		{
+			MemorySerialization::serialize(key,*value);
+		}
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			MemorySerialization::serialize(key, value);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			MemorySerialization::serialize(key, value);
+		}
 	};
 
 	class XmlDeserializer
@@ -97,8 +145,8 @@ namespace Temporal
 		void serialize(const char* key, float& value);
 		void serialize(const char* key, bool& value);
 		void serialize(const char* key, Hash& value);
+		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
-		void serialize(const char* key, const char** value);
 
 		template<class T>
 		void serialize(const char* key, T*& value)

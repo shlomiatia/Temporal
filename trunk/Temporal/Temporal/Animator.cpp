@@ -40,18 +40,6 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		/*else if(message.getID() == MessageID::SERIALIZE)
-		{
-			Serialization& serialization = getSerializationParam(message.getParam());
-			serialization.serialize(TIMER_SERIALIZATION, _timer.getElapsedTime());
-			serialization.serialize(ANIMATION_ID_SERIALIZATION, _animationId);
-		}
-		else if(message.getID() == MessageID::DESERIALIZE)
-		{
-			const Serialization& serialization = getConstSerializationParam(message.getParam());
-			_timer.reset(serialization.deserializeFloat(TIMER_SERIALIZATION));
-			_animationId = Hash(serialization.deserializeUInt(ANIMATION_ID_SERIALIZATION));
-		}*/
 	}
 
 	void Animator::update(float framePeriod)
