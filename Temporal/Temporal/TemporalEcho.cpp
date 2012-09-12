@@ -102,7 +102,7 @@ namespace Temporal
 		{
 			_echo->handleMessage(message);
 		}
-		else if(message.getID() == MessageID::ENTITY_CREATED)
+		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_echo->handleMessage(message);
 		}

@@ -1,4 +1,6 @@
 #include "EntitySystem.h"
+#include "Serialization.h"
+#include "SerializationAccess.h"
 
 namespace Temporal
 {
@@ -14,9 +16,14 @@ namespace Temporal
 			delete *i;
 	}
 
+	void Entity::init()
+	{
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+			(**i).setEntity(this);
+	}
+
 	void Entity::add(Component* component)
 	{
-		component->setEntity(this);
 		_components.push_back(component);
 	}
 
@@ -49,12 +56,20 @@ namespace Temporal
 			delete (*i).second;
 	}
 
+	void EntitiesManager::init()
+	{
+		XmlDeserializer deserializer("entities.xml");
+		deserializer.serialize("entity", _entities);
+		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+			i->second->init();
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_PRE_INIT));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
+	}
+
 	void EntitiesManager::add(Entity* entity)
 	{
 		_entities[entity->getId()] = entity;
-		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
-		entity->handleMessage(Message(MessageID::ENTITY_INIT));
-		entity->handleMessage(Message(MessageID::ENTITY_CREATED));
 	}
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message) const

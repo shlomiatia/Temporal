@@ -45,6 +45,7 @@ namespace Temporal
 
 	void SpriteSheet::init()
 	{
+		_texture = Texture::load(_id.getString());
 		if(_spriteGroups.size() == 0)
 		{
 			SpriteGroup* spriteGroup = new SpriteGroup();
@@ -53,5 +54,6 @@ namespace Temporal
 			Sprite* sprite = new Sprite(AABB(radius, radius));
 			spriteGroup->add(sprite);
 		}
+
 	}
 }

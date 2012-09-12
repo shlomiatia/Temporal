@@ -17,16 +17,11 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::TRANSFORM; }
 		void handleMessage(Message& message);
 		Component* clone() const;
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("position", _position);
-			serializer.serialize("orientation", (int&)_orientation);
-		}
 	private:
 		Vector _position;
 		Side::Enum _orientation;
+
+		friend class SerializationAccess;
 	};
 }
 #endif

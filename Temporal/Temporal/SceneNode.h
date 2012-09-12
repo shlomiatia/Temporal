@@ -48,17 +48,6 @@ namespace Temporal
 		SceneNode* clone() const;
 		void init();
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-			serializer.serialize("behind-parent", _drawBehindParent);
-			serializer.serialize("transform", _transformOnly);
-			serializer.serialize("sprite-sheet", _spriteSheetId);
-			serializer.serialize("sprite-group", _spriteGroupId);
-			serializer.serialize("scene-node", _children);
-		}
-	private:
 		Hash _id;
 		bool _drawBehindParent;	
 		bool _transformOnly;
@@ -76,6 +65,8 @@ namespace Temporal
 
 		SceneNode(const SceneNode&);
 		SceneNode& operator=(const SceneNode&);
+
+		friend class SerializationAccess;
 	};
 }
 #endif

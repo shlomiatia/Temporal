@@ -22,16 +22,12 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("period", (int&)_period);
-		}
 	private:
 		Period::Enum _period;
 
 		void changePeriod(Period::Enum period);
+
+		friend class SerializationAccess;
 	};
 
 	class TemporalPeriod : public Component
@@ -41,14 +37,10 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("period", (int&)_period);
-		}
 	private:
 		Period::Enum _period;
+
+		friend class SerializationAccess;
 	};
 
 	

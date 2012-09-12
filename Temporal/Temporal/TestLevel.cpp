@@ -57,10 +57,10 @@ namespace Temporal
 		//LayersManager::get().add(new LightLayer(Color(0.1f, 0.1f, 0.1f)));
 		LayersManager::get().add(new DebugLayer());
 
-		createEntities();
+		EntitiesManager::get().init();
 
 		NavigationGraph::get().init();
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_CREATED));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
 	void TestLevel::update(float framePeriod)
@@ -88,7 +88,7 @@ namespace Temporal
 
 	void TestLevel::dispose()
 	{
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DESTROYED));
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::LEVEL_DISPOSED));
 		NavigationGraph::get().dispose();
 		EntitiesManager::get().dispose();
 		LayersManager::get().dispose();
@@ -96,158 +96,5 @@ namespace Temporal
 		Graphics::get().dispose();
 		Grid::get().dispose();
 		HashToString::get().dispose();
-	}
-
-	void TestLevel::createEntities()
-	{
-		tinyxml2::XMLDocument document;
-		document.LoadFile("entities.xml");
-		for(tinyxml2::XMLElement* entityElement = document.FirstChildElement("entity"); entityElement != NULL; entityElement = entityElement->NextSiblingElement())
-		{
-			XmlDeserializer entityDeserializer(entityElement);
-			Entity* entity = new Entity();
-			entity->serialize(entityDeserializer);
-			for(tinyxml2::XMLElement* componentElement = entityElement->FirstChildElement(); componentElement != NULL; componentElement = componentElement->NextSiblingElement())
-			{
-				XmlDeserializer componentDeserializer(componentElement);
-				if(strcmp(componentElement->Name(), "transform") == 0)
-				{
-					Transform* transform = new Transform();
-					transform->serialize(componentDeserializer);
-					entity->add(transform);
-				}
-				else if(strcmp(componentElement->Name(), "collision-filter") == 0)
-				{
-					CollisionFilter* collisionFilter = new CollisionFilter();
-					collisionFilter->serialize(componentDeserializer);
-					entity->add(collisionFilter);
-				}
-				else if(strcmp(componentElement->Name(), "draw-position") == 0)
-				{
-					DrawPosition* drawPosition = new DrawPosition();
-					drawPosition->serialize(componentDeserializer);
-					entity->add(drawPosition);
-				}
-				else if(strcmp(componentElement->Name(), "sight") == 0)
-				{
-					Sight* sight = new Sight();
-					sight->serialize(componentDeserializer);
-					entity->add(sight);
-				}
-				else if(strcmp(componentElement->Name(), "animator") == 0)
-				{
-					Animator* animator = new Animator();
-					animator->serialize(componentDeserializer);
-					entity->add(animator);
-				}
-				else if(strcmp(componentElement->Name(), "renderer") == 0)
-				{
-					Renderer* renderer = new Renderer();
-					renderer->serialize(componentDeserializer);
-					entity->add(renderer);
-				}
-				else if(strcmp(componentElement->Name(), "light") == 0)
-				{
-					Light* light = new Light();
-					light->serialize(componentDeserializer);
-					entity->add(light);
-				}
-				else if(strcmp(componentElement->Name(), "particle-emitter") == 0)
-				{
-					ParticleEmitter* particleEmitter = new ParticleEmitter();
-					particleEmitter->serialize(componentDeserializer);
-					entity->add(particleEmitter);
-				}
-				else if(strcmp(componentElement->Name(), "input-controller") == 0)
-				{
-					InputController* inputController = new InputController();
-					entity->add(inputController);
-				}
-				else if(strcmp(componentElement->Name(), "sentry") == 0)
-				{
-					Sentry* sentry = new Sentry();
-					entity->add(sentry);
-				}
-				else if(strcmp(componentElement->Name(), "security-camera") == 0)
-				{
-					SecurityCamera* sentry = new SecurityCamera();
-					entity->add(sentry);
-				}
-				else if(strcmp(componentElement->Name(), "navigator") == 0)
-				{
-					Navigator* navigator = new Navigator();
-					entity->add(navigator);
-				}
-				else if(strcmp(componentElement->Name(), "laser") == 0)
-				{
-					Laser* laser = new Laser();
-					laser->serialize(componentDeserializer);
-					entity->add(laser);
-				}
-				else if(strcmp(componentElement->Name(), "action-controller") == 0)
-				{
-					ActionController* actionController = new ActionController();
-					entity->add(actionController);
-				}
-				else if(strcmp(componentElement->Name(), "patrol") == 0)
-				{
-					Patrol* patrol = new Patrol();
-					entity->add(patrol);
-				}
-				else if(strcmp(componentElement->Name(), "temporal-echo") == 0)
-				{
-					TemporalEcho* temporalEcho = new TemporalEcho();
-					entity->add(temporalEcho);
-				}
-				else if(strcmp(componentElement->Name(), "temporal-period") == 0)
-				{
-					TemporalPeriod* temporalPeriod = new TemporalPeriod();
-					temporalPeriod->serialize(componentDeserializer);
-					entity->add(temporalPeriod);
-				}
-				else if(strcmp(componentElement->Name(), "player-period") == 0)
-				{
-					PlayerPeriod* playerPeriod = new PlayerPeriod();
-					playerPeriod->serialize(componentDeserializer);
-					entity->add(playerPeriod);
-				}
-				else if(strcmp(componentElement->Name(), "sensor") == 0)
-				{
-					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement("aabb");
-					XmlDeserializer shapeDeserializer(shapeElement);
-					AABB* aabb = new AABB();
-					aabb->serialize(shapeDeserializer);
-					Fixture* fixture = new Fixture(aabb);
-					tinyxml2::XMLElement* ledgeDetectorElement = componentElement->FirstChildElement("ledge-detector");
-					XmlDeserializer ledgeDetectorDeserializer(ledgeDetectorElement);
-					LedgeDetector* ledgeDetector = new LedgeDetector();
-					ledgeDetector->serialize(ledgeDetectorDeserializer);
-					Sensor* sensor = new Sensor(fixture, ledgeDetector);
-					sensor->serialize(componentDeserializer);
-					entity->add(sensor);
-				}
-				else if(strcmp(componentElement->Name(), "dynamic-body") == 0)
-				{
-					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
-					XmlDeserializer shapeDeserializer(shapeElement);
-					AABB* aabb = new AABB();
-					aabb->serialize(shapeDeserializer);
-					Fixture* fixture = new Fixture(aabb);
-					DynamicBody* dynamicBody = new DynamicBody(fixture);
-					entity->add(dynamicBody);
-				}
-				else if(strcmp(componentElement->Name(), "static-body") == 0)
-				{
-					tinyxml2::XMLElement* shapeElement = componentElement->FirstChildElement();
-					XmlDeserializer shapeDeserializer(shapeElement);
-					Segment* segment = new Segment();
-					segment->serialize(shapeDeserializer);
-					Fixture* fixture = new Fixture(segment);
-					StaticBody* staticBody = new StaticBody(fixture);
-					entity->add(staticBody);
-				}
-			}
-			EntitiesManager::get().add(entity);
-		}
 	}
 }

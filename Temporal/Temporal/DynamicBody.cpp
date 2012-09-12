@@ -24,18 +24,13 @@ namespace Temporal
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
-	DynamicBody::DynamicBody(Fixture* fixture)
-		: _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _groundVector(Vector::Zero),
-		MAX_MOVEMENT_STEP_SIZE(getMaxMovementStepSize(*fixture)) 
-	{
-	}
-
 	void DynamicBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_INIT)
+		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_fixture->init(*this);
 			Grid::get().add(_fixture);
+			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
@@ -142,14 +137,14 @@ namespace Temporal
 			float movementAmount = movement.getLength();
 
 			// Absolute impulses are done in one stroke
-			if(movementAmount <= MAX_MOVEMENT_STEP_SIZE || _absoluteImpulse != Vector::Zero)
+			if(movementAmount <= _maxMovementStepSize || _absoluteImpulse != Vector::Zero)
 			{
 				stepMovement = movement;
 			}
 			// Calculate step movement
 			else
 			{
-				float ratio = MAX_MOVEMENT_STEP_SIZE / movementAmount;
+				float ratio = _maxMovementStepSize / movementAmount;
 				stepMovement.setX(movement.getX() * ratio);
 				stepMovement.setY(movement.getY() * ratio);
 			}

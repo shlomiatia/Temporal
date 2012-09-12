@@ -17,13 +17,14 @@ namespace Temporal
 		// BRODER
 		static const Vector GRAVITY;
 
-		explicit DynamicBody(Fixture* fixture);
+		explicit DynamicBody(Fixture* fixture = NULL) : _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true),
+			_groundVector(Vector::Zero), _maxMovementStepSize(0.0f) {}
 
 		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
 
 	private:
-		const float MAX_MOVEMENT_STEP_SIZE;
+		float _maxMovementStepSize;
 		Fixture* _fixture;
 		
 		// Persistent state
@@ -41,6 +42,8 @@ namespace Temporal
 		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
 		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
 		void modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
+
+		friend class SerializationAccess;
 	};
 }
 #endif

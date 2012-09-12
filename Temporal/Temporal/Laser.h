@@ -20,18 +20,14 @@ namespace Temporal
 		
 		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
 		void handleMessage(Message& message);
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("platform", _platformID);
-		}
 	private:
 		Hash _platformID;
 		bool _isPositiveDirection;
 		SceneNode* _root;
 
 		void update(float framePeriod);
+
+		friend class SerializationAccess;
 	};
 }
 

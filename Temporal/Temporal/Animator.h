@@ -39,18 +39,14 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const;
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("animation-set", _animationSetId);
-			serializer.serialize("animation", _animationId);
-		}
 	private:
 		Hash _animationSetId;
 		const AnimationSet* _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
 		Timer _timer;
+
+		friend class SerializationAccess;
 
 		void update(float framePeriod);
 		void reset(Hash animationId);

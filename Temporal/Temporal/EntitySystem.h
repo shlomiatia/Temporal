@@ -60,18 +60,15 @@ namespace Temporal
 
 		Hash getId() const { return _id; }
 		void setId(Hash id) { _id = id; }
+		void init();
 		void add(Component* component);
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-		}
 	private:
 		Hash _id;
 		ComponentCollection _components;
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::unordered_map<Hash, Entity*> EntityCollection;
@@ -86,6 +83,7 @@ namespace Temporal
 			return instance;
 		}
 
+		void init();
 		void dispose();
 		void add(Entity* entity);
 

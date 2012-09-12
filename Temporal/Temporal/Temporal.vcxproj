@@ -34,6 +34,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sentry.h" />
     <ClInclude Include="Serialization.h" />
+    <ClInclude Include="SerializationAccess.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="TemporalPeriod.h" />

@@ -5,9 +5,6 @@
 
 namespace Temporal
 {
-	StaticBody::StaticBody(Fixture* fixture) : _fixture(fixture)
-	{
-	}
 	StaticBody::~StaticBody()
 	{
 		delete _fixture;
@@ -15,7 +12,7 @@ namespace Temporal
 
 	void StaticBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_fixture->init(*this);
 			Grid::get().add(_fixture);

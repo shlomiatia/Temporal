@@ -37,6 +37,8 @@ namespace Temporal
 
 		Sample(const Sample&);
 		Sample& operator=(const Sample&);
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::vector<Sample*> SampleCollection;
@@ -67,6 +69,8 @@ namespace Temporal
 
 		SampleSet(const SampleSet&);
 		SampleSet& operator=(const SampleSet&);
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::unordered_map<Hash, SampleSet*> SampleSetCollection;
@@ -101,9 +105,10 @@ namespace Temporal
 
 		void init();
 
-
 		Animation(const Animation&);
 		Animation& operator=(const Animation&);
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::unordered_map<Hash, Animation*> AnimationCollection;
@@ -130,6 +135,8 @@ namespace Temporal
 
 		AnimationSet(const AnimationSet&);
 		AnimationSet& operator=(const AnimationSet&);
+
+		friend class SerializationAccess;
 	};
 }
 #endif

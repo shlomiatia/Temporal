@@ -37,6 +37,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_fixture->init(*this);
+			_listener->setOwner(*this);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{

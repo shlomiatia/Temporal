@@ -159,6 +159,9 @@
     <ClInclude Include="Serialization.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="SerializationAccess.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

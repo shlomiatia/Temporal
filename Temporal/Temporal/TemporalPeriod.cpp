@@ -18,7 +18,7 @@ namespace Temporal
 		{
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
-		else if(message.getID() == MessageID::LEVEL_CREATED)
+		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
 		}

@@ -18,19 +18,14 @@ namespace Temporal
 
 		const AABB& getBounds() const { return _bounds; }
 		const Vector& getOffset() const { return _offset; }
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("bounds", _bounds);
-			serializer.serialize("offset", _offset);
-		}
 	private:
 		AABB _bounds;
 		Vector _offset;
 
 		Sprite(const Sprite&);
 		Sprite& operator=(const Sprite&);
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::vector<Sprite*> SpriteCollection;
@@ -48,18 +43,14 @@ namespace Temporal
 		const Sprite& get(int spriteID) const;
 		int getSize() const;
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-			serializer.serialize("sprite", _sprites);
-		}
 	private:
 		Hash _id;
 		SpriteCollection _sprites;
 
 		SpriteGroup(const SpriteGroup&);
 		SpriteGroup& operator=(const SpriteGroup&);
+
+		friend class SerializationAccess;
 	};
 
 	class Texture;
@@ -80,17 +71,6 @@ namespace Temporal
 
 		void init();
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			const char* file = NULL;
-			serializer.serialize("texture", &file);
-			serializer.serialize("orientation", (int&)_orientation);
-			serializer.serialize("sprite-group", _spriteGroups);
-			_id = Hash(file);
-			_texture = Texture::load(file);
-			init();
-		}
 	private:
 		Hash _id;
 		const Texture* _texture;
@@ -99,6 +79,8 @@ namespace Temporal
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);
+
+		friend class SerializationAccess;
 	};
 }
 #endif
