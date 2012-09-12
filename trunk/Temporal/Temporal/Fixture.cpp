@@ -5,15 +5,11 @@
 
 namespace Temporal
 {
-	Fixture::Fixture(const Shape* shape)
-			: _localShape(shape), _globalShape(shape->clone())
-	{
-	}
-
 	void Fixture::init(const Component& parent)
 	{
 		_transform = static_cast<const Transform*>(parent.getEntity().get(ComponentType::TRANSFORM));
 		_filter = static_cast<const CollisionFilter*>(parent.getEntity().get(ComponentType::COLLISION_FILTER));
+		_globalShape = _localShape->clone();
 		update();
 	}
 

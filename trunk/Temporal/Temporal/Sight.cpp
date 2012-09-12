@@ -17,7 +17,7 @@ namespace Temporal
 
 	void Sight::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_filter = static_cast<const CollisionFilter*>(getEntity().get(ComponentType::COLLISION_FILTER));
 		}

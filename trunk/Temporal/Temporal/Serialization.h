@@ -27,34 +27,44 @@ namespace Temporal
 		MemoryStream(const MemoryStream&);
 		MemoryStream& operator=(const MemoryStream&);
 	};
+	
+	class SerializationAccess;
 
-	class Serializer;
-
-	class Serializable
-	{
-		public:
-			virtual void serialize(Serializer& serializer) = 0;
-	};
-
-	class Serializer
+	class MemorySerialization
 	{
 	public:
-		virtual void serialize(const char* key, int& value) = 0;
-		virtual void serialize(const char* key, unsigned int& value) = 0;
-		virtual void serialize(const char* key, float& value) = 0;
-		virtual void serialize(const char* key, bool& value) = 0;
-		virtual void serialize(const char* key, Hash& value) = 0;
-		virtual void serializeRadians(const char* key, float& value) = 0;
-		virtual void serialize(const char* key, const char** value) = 0;
+		template<class T>
+		void serialize(const char* key, T*& value)
+		{
+			SerializationAccess::serialize(key, *value, *this);
+		}
 
-		virtual void serialize(const char* key, Serializable& value) = 0;
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			SerializationAccess::serialize(key, value, *this);
+		}
 
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			typedef std::vector<T*>::const_iterator TIterator;
+			for(TIterator i = value.begin(); i != value.end(); ++i)
+				SerializationAccess::serialize(key, **i, *this);
+		}
+	protected:
+		MemorySerialization(MemoryStream* buffer) : _buffer(buffer) {}
+
+		MemoryStream* _buffer;		
+	private:
+		MemorySerialization(const MemorySerialization&);
+		MemorySerialization& operator=(const MemorySerialization&);
 	};
 
-	class MemorySerializer
+	class MemorySerializer : public MemorySerialization
 	{
 	public:
-		MemorySerializer(MemoryStream* buffer) : _buffer(buffer) {};
+		MemorySerializer(MemoryStream* buffer) : MemorySerialization(buffer) {};
 
 		void serialize(const char* key, int& value) { _buffer->write(value); }
 		void serialize(const char* key, unsigned int& value) { _buffer->write(value); }
@@ -62,31 +72,12 @@ namespace Temporal
 		void serialize(const char* key, bool& value) { _buffer->write(value); }
 		void serialize(const char* key, Hash& value) { _buffer->write(value); }
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
-
-		template<class T>
-		void serialize(const char* key, T& value)
-		{
-			value.serialize(*this);
-		}
-
-		template<class T>
-		void serialize(const char* key, std::vector<T*>& value)
-		{
-			typedef std::vector<T*>::const_iterator TIterator;
-			for(TIterator i = value.begin(); i != value.end(); ++i)
-				(**i).serialize(*this);
-		}
-	private:
-		MemoryStream* _buffer;
-
-		MemorySerializer(const MemorySerializer&);
-		MemorySerializer& operator=(const MemorySerializer&);
 	};
 
-	class MemoryDeserializer
+	class MemoryDeserializer : public MemorySerialization
 	{
 	public:
-		MemoryDeserializer(MemoryStream* buffer) : _buffer(buffer) {};
+		MemoryDeserializer(MemoryStream* buffer) : MemorySerialization(buffer) {};
 
 		void serialize(const char* key, int& value) { value = _buffer->readInt(); }
 		void serialize(const char* key, unsigned int& value) { value = _buffer->readUInt(); }
@@ -94,31 +85,12 @@ namespace Temporal
 		void serialize(const char* key, bool& value) { value = _buffer->readBool(); }
 		void serialize(const char* key, Hash& value)  { value = Hash(_buffer->readUInt()); }
 		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
-
-		template<class T>
-		void serialize(const char* key, T& value)
-		{
-			value.serialize(*this);
-		}
-
-		template<class T>
-		void serialize(const char* key, std::vector<T*>& value)
-		{
-			typedef std::vector<T*>::const_iterator TIterator;
-			for(TIterator i = value.begin(); i != value.end(); ++i)
-				(**i).serialize(*this);
-		}
-	private:
-		MemoryStream* _buffer;
-
-		MemoryDeserializer(const MemoryDeserializer&);
-		MemoryDeserializer& operator=(const MemoryDeserializer&);
 	};
 
 	class XmlDeserializer
 	{
 	public:
-		XmlDeserializer(tinyxml2::XMLNode* root) : _current(root) {};
+		XmlDeserializer(const char * path) : _current(NULL) { _doc.LoadFile(path); _current = _doc.GetDocument(); };
 
 		void serialize(const char* key, int& value);
 		void serialize(const char* key, unsigned int& value);
@@ -129,13 +101,25 @@ namespace Temporal
 		void serialize(const char* key, const char** value);
 
 		template<class T>
+		void serialize(const char* key, T*& value)
+		{
+			tinyxml2::XMLNode* current = _current->FirstChildElement(key);
+			if(current != NULL)
+			{
+				_current = current;
+				SerializationAccess::serialize(_current->ToElement()->Attribute("type"), value, *this);
+				_current = _current->Parent();
+			}
+		}
+
+		template<class T>
 		void serialize(const char* key, T& value)
 		{
 			tinyxml2::XMLNode* current = _current->FirstChildElement(key);
 			if(current != NULL)
 			{
 				_current = current;
-				value.serialize(*this);
+				SerializationAccess::serialize(_current->Value(), value, *this);
 				_current = _current->Parent();
 			}
 		}
@@ -144,23 +128,23 @@ namespace Temporal
 		void serialize(const char* key, std::vector<T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			for(_current = _current->FirstChildElement(key); _current != NULL; _current = _current->NextSiblingElement())
+			for(_current = _current->FirstChildElement(); _current != NULL; _current = _current->NextSiblingElement())
 			{
-				T* object = new T();
-				object->serialize(*this);
+				T* object = NULL;
+				SerializationAccess::serialize(_current->Value(), object, *this);
 				value.push_back(object);
 			}
 			_current = parent;
 		}
 
-		template<typename K, typename V>
-		void serialize(const char* key, std::unordered_map<K, V*>& value)
+		template<typename T>
+		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			for(_current = _current->FirstChildElement(key); _current != NULL; _current = _current->NextSiblingElement())
+			for(_current = _current->FirstChildElement(); _current != NULL; _current = _current->NextSiblingElement())
 			{
-				V* object = new V();
-				object->serialize(*this);
+				T* object = NULL;
+				SerializationAccess::serialize(_current->Value(), object, *this);
 				value[object->getId()] = object;
 			}
 			_current = parent;
@@ -168,6 +152,7 @@ namespace Temporal
 
 		
 	private:
+		tinyxml2::XMLDocument _doc; 
 		tinyxml2::XMLNode* _current;
 
 		XmlDeserializer(const XmlDeserializer&);

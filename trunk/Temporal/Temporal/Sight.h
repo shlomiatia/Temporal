@@ -20,12 +20,6 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serializeRadians("center", _sightCenter);
-			serializer.serializeRadians("size", _sightSize);
-		}
 	private:
 		const CollisionFilter* _filter;
 		float _sightCenter;
@@ -37,6 +31,8 @@ namespace Temporal
 		void checkLineOfSight();
 		void drawFieldOfView(const Vector& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo() const;
+
+		friend class SerializationAccess;
 	};
 }
 #endif

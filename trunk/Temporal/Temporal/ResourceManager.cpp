@@ -2,8 +2,9 @@
 #include "Texture.h"
 #include "SpriteSheet.h"
 #include "Animation.h"
-#include "tinyxml2.h"
 #include "Serialization.h"
+#include "SerializationAccess.h"
+
 
 namespace Temporal
 {
@@ -15,17 +16,13 @@ namespace Temporal
 
 	void ResourceManager::initSpritesheets()
 	{
-		tinyxml2::XMLDocument document;
-		document.LoadFile("spritesheets.xml");
-		XmlDeserializer deserializer(document.GetDocument());
+		XmlDeserializer deserializer("spritesheets.xml");
 		deserializer.serialize("sprite-sheet", _spritesheets);
 	}
 
 	void ResourceManager::initAnimationSets()
 	{
-		tinyxml2::XMLDocument document;
-		document.LoadFile("animations.xml");
-		XmlDeserializer deserializer(document.GetDocument());
+		XmlDeserializer deserializer("animations.xml");
 		deserializer.serialize("animation-set", _animationSets);
 	}
 

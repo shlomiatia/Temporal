@@ -22,15 +22,6 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const;
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("layer", (int&)_layer);
-			serializer.serialize("color", _color);
-			_root = new SceneNode();
-			serializer.serialize("scene-node", *_root);
-			_root->init();
-		}
 	private:
 		SceneNode* _root;
 
@@ -39,6 +30,7 @@ namespace Temporal
 
 		void draw() const;
 
+		friend class SerializationAccess;
 	};
 }
 #endif

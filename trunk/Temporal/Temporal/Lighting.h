@@ -32,14 +32,6 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("color", _color);
-			serializer.serialize("radius", _radius);
-			serializer.serialize("center", _beamCenter);
-			serializer.serialize("size", _beamSize);
-		}
 	private:
 		Color _color;
 		float _radius;
@@ -47,6 +39,8 @@ namespace Temporal
 		float _beamSize;
 
 		void draw() const;
+
+		friend class SerializationAccess;
 	};
 
 	class LightLayer : public Layer

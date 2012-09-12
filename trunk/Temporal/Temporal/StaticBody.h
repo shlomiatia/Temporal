@@ -10,7 +10,7 @@ namespace Temporal
 	class StaticBody : public Component
 	{
 	public:
-		StaticBody(Fixture* fixture);
+		StaticBody(Fixture* fixture = NULL)  : _fixture(fixture) {}
 		~StaticBody();
 
 		Fixture& getFixture() { return *_fixture; }
@@ -20,6 +20,8 @@ namespace Temporal
 
 	private:
 		Fixture* _fixture;
+
+		friend class SerializationAccess;
 	};
 }
 #endif

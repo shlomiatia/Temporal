@@ -2,6 +2,7 @@
 #define FIXTURE_H
 
 #include "Shapes.h"
+#include <stdio.h>
 
 namespace Temporal
 {
@@ -13,7 +14,7 @@ namespace Temporal
 	class Fixture
 	{
 	public:
-		explicit Fixture(const Shape* shape);
+		explicit Fixture(const Shape* shape = NULL) : _localShape(shape), _transform(NULL), _filter(NULL), _globalShape(NULL) {}
 		~Fixture() { delete _localShape; delete _globalShape; }
 
 		void init(const Component& parent);

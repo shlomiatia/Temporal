@@ -25,7 +25,7 @@ namespace Temporal
 			if(_animationSetId != Hash::INVALID)
 				_animationSet = ResourceManager::get().getAnimationSet(_animationSetId);
 		}
-		else if(message.getID() == MessageID::ENTITY_CREATED)
+		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(ComponentType::RENDERER));
 			bindSceneNodes(_bindings, renderer.getRoot());

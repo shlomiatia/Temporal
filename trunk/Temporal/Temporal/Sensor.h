@@ -48,24 +48,20 @@ namespace Temporal
 	class Sensor : public Component
 	{
 	public:
-		Sensor(Fixture* fixture, ContactListener* listener)
-			: _fixture(fixture), _listener(listener), _categoryMask(0) { _listener->setOwner(*this); }
+		explicit Sensor(Fixture* fixture = NULL, ContactListener* listener = NULL, int categoryMask = -1)
+			: _fixture(fixture), _listener(listener), _categoryMask(categoryMask) {}
 		~Sensor() { delete _fixture; delete _listener; }
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("category-mask", _categoryMask);
-		}
 	private:
 		int _categoryMask;
 		Fixture* _fixture;
 		ContactListener* _listener;
 
 		void update();
+
+		friend class SerializationAccess;
 	};
 
 	class LedgeDetector : public ContactListener
@@ -77,20 +73,14 @@ namespace Temporal
 		void start();
 		void handle(const Contact& contact);
 		void end();
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-			serializer.serializeRadians("center", _rangeCenter);
-			serializer.serializeRadians("size", _rangeSize);
-		}
 	private:
 		Hash _id;
 		float _rangeCenter;
 		float _rangeSize;
 		Vector _point;
 		bool _isBlocked;
+
+		friend class SerializationAccess;
 	};
 }
 

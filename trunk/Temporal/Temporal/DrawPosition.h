@@ -15,15 +15,11 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const;
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("offset", _offset);
-		}
 	private:
 		Vector _offset;
-
 		Vector _override;
+
+		friend class SerializationAccess;
 	};
 }
 #endif

@@ -18,12 +18,12 @@ namespace Temporal
 
 	void Laser::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			Renderer* renderer = static_cast<Renderer*>(getEntity().get(ComponentType::RENDERER));
 			_root = &renderer->getRoot();
 		}
-		else if(message.getID() == MessageID::LEVEL_CREATED)
+		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 			Vector position = segment.getNaturalOrigin();

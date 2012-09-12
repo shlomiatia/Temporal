@@ -18,6 +18,8 @@ namespace Temporal
 		};
 	}
 
+	class SerializationAccess;
+
 	class Shape
 	{
 	public:
@@ -102,6 +104,8 @@ namespace Temporal
 		Vector _radius;
 
 		void validate() const;
+
+		friend class SerializationAccess;
 	};
 
 	inline AABB AABBLB(float left, float bottom, float width, float height) { return AABB(left + width / 2.0f, bottom + height / 2.0f, width, height); }
@@ -159,6 +163,8 @@ namespace Temporal
 		Vector _radius;
 
 		float get(Axis::Enum axis, float otherAxisValue) const;
+
+		friend class SerializationAccess;
 	};
 
 	inline Segment SegmentPP(const Vector& p1, const Vector& p2) { return Segment(p1.getX(), p1.getY(), p2.getX(), p2.getY()); }

@@ -47,8 +47,6 @@ namespace Temporal
 		void update(float framePeriod);
 		virtual void draw() const;
 		void dispose();
-	private:
-		void createEntities();
 	};
 }
 

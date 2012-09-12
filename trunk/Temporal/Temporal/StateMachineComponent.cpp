@@ -33,7 +33,7 @@ namespace Temporal
 	{
 		if(_currentState != NULL)
 			_currentState->handleMessage(message);
-		if(message.getID() == MessageID::ENTITY_CREATED)
+		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			setState(getInitialState());
 			_currentState->enter();

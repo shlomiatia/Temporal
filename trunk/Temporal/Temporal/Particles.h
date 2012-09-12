@@ -44,17 +44,6 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("lifetime", _lifetime);
-			serializer.serialize("birth-threshold", _birthThreshold);
-			serializer.serialize("sprite-sheet", _spritesheetId);
-			serializer.serialize("birth-radius", _birthRadius);
-			serializer.serialize("velocity", _velocity);
-			serializer.serializeRadians("center", _directionCenter);
-			serializer.serializeRadians("size", _directionSize);
-		}
 	private:
 		float _lifetime;
 		float _birthThreshold;
@@ -75,6 +64,8 @@ namespace Temporal
 		void update(float framePeriod);
 		void draw();
 		int getLength();
+
+		friend class SerializationAccess;
 	};
 }
 

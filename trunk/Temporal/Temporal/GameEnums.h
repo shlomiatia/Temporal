@@ -36,11 +36,11 @@ namespace Temporal
 		{
 			ENTITY_PRE_INIT, // All components exist but uninitialized
 			ENTITY_INIT, // Initialize component
-			ENTITY_CREATED, // Initialize component based on other components
-			ENTITY_DESTROYED,
+			ENTITY_POST_INIT, // Initialize component based on other components
+			ENTITY_DISPOSED,
 
-			LEVEL_CREATED, // Initialize component based on other entities
-			LEVEL_DESTROYED,
+			LEVEL_INIT, // Initialize component based on other entities
+			LEVEL_DISPOSED,
 
 			UPDATE,
 			DRAW,

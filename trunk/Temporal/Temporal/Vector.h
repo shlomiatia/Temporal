@@ -5,6 +5,8 @@
 
 namespace Temporal
 {
+	class SerializationAccess;
+
 	class Vector
 	{
 	public:
@@ -78,6 +80,8 @@ namespace Temporal
 	private:
 		float _x;
 		float _y;
+
+		friend class SerializationAccess;
 	};
 
 	inline Vector operator+(const Vector& vector, float scalar) { return Vector(vector.getX() + scalar, vector.getY() + scalar); }
