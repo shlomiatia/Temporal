@@ -42,7 +42,7 @@ namespace Temporal
 	public:
 		Patrol() : StateMachineComponent(getStates(), "PAT") {}
 
-		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::PATROL; }
 
 	protected:
 		Hash getInitialState() const;

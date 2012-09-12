@@ -54,7 +54,7 @@ namespace Temporal
 	public:
 		SecurityCamera() : StateMachineComponent(getStates(), "CAM") {}
 
-		ComponentType::Enum getType() const { return ComponentType::AI_CONTROLLER; }
+		ComponentType::Enum getType() const { return ComponentType::SECURITY_CAMERA; }
 
 	protected:
 		Hash getInitialState() const;

@@ -78,6 +78,8 @@ namespace Temporal
 
 		JumpHelper(const JumpHelper&);
 		JumpHelper& operator=(const JumpHelper&);
+
+		friend class SerializationAccess;
 	};
 
 	/**********************************************************************************************
@@ -96,6 +98,8 @@ namespace Temporal
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
+
+		friend class SerializationAccess;
 	};
 
 	/**********************************************************************************************
@@ -109,8 +113,6 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
 		HangDescendHelper& getHangDescendHelper() { return _hangDescendHelper; }
-
-		void handleMessage(Message& message);
 
 	protected:
 		Hash getInitialState() const;
