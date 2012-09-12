@@ -64,16 +64,18 @@ namespace Temporal
 		_current->ToElement()->QueryBoolAttribute(key, &value);
 	}
 
-	void XmlDeserializer::serialize(const char* key, const char** value)
-	{
-		*value = _current->ToElement()->Attribute(key);
-	}
-
 	void XmlDeserializer::serialize(const char* key, Hash& value)
 	{
 		const char* str = _current->ToElement()->Attribute(key);
 		if(str)
 			value = Hash(str);
+	}
+
+	void XmlDeserializer::serialize(const char* key, Timer& value)
+	{
+		float time = 0.0f;
+		serialize(key, time);
+		value.reset(time);
 	}
 
 	void XmlDeserializer::serializeRadians(const char* key, float& value)

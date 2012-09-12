@@ -47,8 +47,6 @@ namespace Temporal
 			DRAW_DEBUG,
 			DRAW_LIGHTS,
 
-			SERIALIZE,
-
 			GET_POSITION,
 			SET_POSITION,
 			GET_ORIENTATION,

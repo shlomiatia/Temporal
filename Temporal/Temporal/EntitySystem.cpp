@@ -25,6 +25,7 @@ namespace Temporal
 	void Entity::add(Component* component)
 	{
 		_components.push_back(component);
+		component->setEntity(this);
 	}
 
 	Component* Entity::get(ComponentType::Enum type) const
