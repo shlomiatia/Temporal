@@ -24,6 +24,13 @@ namespace Temporal
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
+	DynamicBody::~DynamicBody()
+	{
+		delete _fixture;
+	}
+
+	Component* DynamicBody::clone() const { return new DynamicBody(_fixture->clone()); }
+
 	void DynamicBody::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)

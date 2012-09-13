@@ -26,6 +26,8 @@ namespace Temporal
 		Hash getEntityId() const;
 
 		void update();
+
+		Fixture* clone() const;
 	private:
 		const Transform* _transform;
 		const CollisionFilter* _filter;

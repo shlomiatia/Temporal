@@ -39,7 +39,7 @@ namespace Temporal
 		virtual ComponentType::Enum getType() const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
-		virtual Component* clone() const { return NULL; }
+		virtual Component* clone() const = 0;
 		void* raiseMessage(Message& message) const;
 
 	private:
@@ -64,6 +64,7 @@ namespace Temporal
 		void add(Component* component);
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
+		Entity* clone() const;
 	private:
 		Hash _id;
 		ComponentCollection _components;

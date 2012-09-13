@@ -39,6 +39,16 @@ namespace Temporal
 		return NULL;
 	}
 
+	Entity* Entity::clone() const
+	{
+		Entity* clone = new Entity();
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			clone->add((**i).clone());
+		}
+		return clone;
+	}
+
 	void* Entity::handleMessage(Message& message, ComponentType::Enum filter) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)

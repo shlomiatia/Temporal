@@ -19,6 +19,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::LIGHT_GEM; }
 		void handleMessage(Message& message);
+
+		Component* clone() const { return new LightGem(); }
 	private:
 		bool _isLit;
 	};
@@ -31,6 +33,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::LIGHT; }
 		void handleMessage(Message& message);
+
+		Component* clone() const { return new Light(_color, _radius, _beamCenter, _beamSize); }
 
 	private:
 		Color _color;

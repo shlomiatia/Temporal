@@ -20,6 +20,8 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);
 
+		Component* clone() const { return new Sight(_sightCenter, _sightSize); }
+
 	private:
 		const CollisionFilter* _filter;
 		float _sightCenter;

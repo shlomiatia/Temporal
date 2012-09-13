@@ -10,6 +10,8 @@ namespace Temporal
 		delete _fixture;
 	}
 
+	Component* StaticBody::clone() const { return new StaticBody(_fixture->clone()); }
+
 	void StaticBody::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)

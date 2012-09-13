@@ -104,9 +104,4 @@ namespace Temporal
 		}
 		update(0.0f);
 	}
-
-	Component* Animator::clone() const
-	{
-		return new Animator(_animationSetId);
-	}
 }

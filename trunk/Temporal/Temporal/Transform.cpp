@@ -24,9 +24,4 @@ namespace Temporal
 			_orientation = _orientation == Side::LEFT ? Side::RIGHT : Side::LEFT;
 		}
 	}
-
-	Component* Transform::clone() const
-	{
-		return new Transform(_position, _orientation);
-	}
 }

@@ -18,6 +18,7 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
 		void handleMessage(Message& message);
 
+		Component* clone() const;
 	private:
 		Fixture* _fixture;
 

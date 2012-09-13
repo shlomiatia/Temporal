@@ -24,4 +24,9 @@ namespace Temporal
 	{
 		return _transform->getEntity().getId();
 	}
+
+	Fixture* Fixture::clone() const
+	{
+		return new Fixture(_localShape->clone());
+	}
 }

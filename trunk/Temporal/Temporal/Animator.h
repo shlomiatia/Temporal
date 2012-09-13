@@ -37,7 +37,8 @@ namespace Temporal
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);
-		Component* clone() const;
+		
+		Component* clone() const { return new Animator(_animationSetId, _animationId); }
 
 	private:
 		Hash _animationSetId;

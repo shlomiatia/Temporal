@@ -39,6 +39,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::SENTRY; }
 
+		Component* clone() const { return new Sentry(); }
+
 	protected:
 		Hash getInitialState() const;
 

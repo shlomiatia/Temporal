@@ -20,6 +20,7 @@ namespace Temporal
 		
 		ComponentType::Enum getType() const { return ComponentType::LASER; }
 		void handleMessage(Message& message);
+		Component* clone() const { return new Laser(_platformID); };
 	private:
 		Hash _platformID;
 		bool _isPositiveDirection;

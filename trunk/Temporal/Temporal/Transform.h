@@ -16,7 +16,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::TRANSFORM; }
 		void handleMessage(Message& message);
-		Component* clone() const;
+		
+		Component* clone() const { return new Transform(_position, _orientation); }
 	private:
 		Vector _position;
 		Side::Enum _orientation;

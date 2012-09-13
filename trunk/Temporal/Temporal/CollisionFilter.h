@@ -17,7 +17,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 		bool canCollide(int mask, int group) const;
-
+		Component* clone() const { return new CollisionFilter(_category, _group); }
 	private:
 		int _category;
 		int _group;

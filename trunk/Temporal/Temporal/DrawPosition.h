@@ -13,7 +13,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::DRAW_POSITION; }
 		void handleMessage(Message& message);
-		Component* clone() const;
+		
+		Component* clone() const { return new DrawPosition(_offset); }
 
 	private:
 		Vector _offset;

@@ -114,6 +114,8 @@ namespace Temporal
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
 		HangDescendHelper& getHangDescendHelper() { return _hangDescendHelper; }
 
+		Component* clone() const { return new ActionController(); }
+
 	protected:
 		Hash getInitialState() const;
 
