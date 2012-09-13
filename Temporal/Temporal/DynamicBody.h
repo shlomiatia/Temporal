@@ -20,8 +20,12 @@ namespace Temporal
 		explicit DynamicBody(Fixture* fixture = NULL) : _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true),
 			_groundVector(Vector::Zero), _maxMovementStepSize(0.0f) {}
 
+		~DynamicBody();
+
 		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
+
+		Component* clone() const;
 
 	private:
 		float _maxMovementStepSize;

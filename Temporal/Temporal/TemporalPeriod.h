@@ -22,6 +22,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::PLAYER_PERIOD; }
 		void handleMessage(Message& message);
+
+		Component* clone() const { return new PlayerPeriod(_period); }
 	private:
 		Period::Enum _period;
 
@@ -37,6 +39,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
+
+		Component* clone() const { return new TemporalPeriod(_period); }
 	private:
 		Period::Enum _period;
 

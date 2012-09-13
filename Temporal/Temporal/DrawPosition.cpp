@@ -24,9 +24,4 @@ namespace Temporal
 			_override = *static_cast<Vector*>(message.getParam());
 		}
 	}
-
-	Component* DrawPosition::clone() const
-	{
-		return new DrawPosition(_offset);
-	}
 }

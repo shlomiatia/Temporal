@@ -6,6 +6,7 @@
 
 namespace Temporal
 {
+	const static ComponentType::Enum filter = ComponentType::TRANSFORM | ComponentType::DRAW_POSITION | ComponentType::RENDERER | ComponentType::ANIMATOR;
 	const float TemporalEcho::ECHO_READY_TIME = 4.5f;
 
 	TemporalEcho::~TemporalEcho()
@@ -47,7 +48,7 @@ namespace Temporal
 			EchoIterator first = _echoesData.begin();
 			MemoryStream* deserialization = *first;
 			MemoryDeserializer deserializer(deserialization);
-			deserializer.serialize("entity", _echo);
+			deserializer.serialize("entity", getEntity());
 			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
 			{
 				delete *i;
@@ -59,7 +60,7 @@ namespace Temporal
 
 	void TemporalEcho::init()
 	{
-		const Component* transform = getEntity().get(ComponentType::TRANSFORM);
+		/*const Component* transform = getEntity().get(ComponentType::TRANSFORM);
 		const Component* drawPosition = getEntity().get(ComponentType::DRAW_POSITION);
 		const Component* renderer = getEntity().get(ComponentType::RENDERER);
 		const Component* animator = getEntity().get(ComponentType::ANIMATOR);
@@ -72,7 +73,8 @@ namespace Temporal
 		if(renderer != NULL)
 			_echo->add(renderer->clone());
 		if(animator != NULL)
-			_echo->add(animator->clone());
+			_echo->add(animator->clone());*/
+		_echo = getEntity().clone();
 		float alpha = 0.2f;
 		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 	}
@@ -84,7 +86,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 			if(_echoReady)
-				_echo->handleMessage(message);
+				_echo->handleMessage(message, filter);
 		}
 		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
 		{
@@ -93,7 +95,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::DRAW) 
 		{
 			if(_echoReady)
-				_echo->handleMessage(message);
+				_echo->handleMessage(message, filter);
 		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
@@ -101,11 +103,11 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_echo->handleMessage(message);
+			_echo->handleMessage(message, filter);
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			_echo->handleMessage(message);
+			_echo->handleMessage(message, filter);
 		}
 	}
 }

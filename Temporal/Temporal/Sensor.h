@@ -35,6 +35,7 @@ namespace Temporal
 		virtual void start() {}
 		virtual void handle(const Contact& contact) = 0;
 		virtual void end() {}
+		virtual ContactListener* clone() const = 0;
 
 	protected:
 		const Component& getOwner() { return *_owner; }
@@ -54,6 +55,8 @@ namespace Temporal
 		
 		void handleMessage(Message& message);
 		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
+
+		Component* clone() const;
 	private:
 		int _categoryMask;
 		Fixture* _fixture;
@@ -73,6 +76,8 @@ namespace Temporal
 		void start();
 		void handle(const Contact& contact);
 		void end();
+
+		ContactListener* clone() const { return new LedgeDetector(_id, _rangeCenter, _rangeSize); }
 	private:
 		Hash _id;
 		float _rangeCenter;

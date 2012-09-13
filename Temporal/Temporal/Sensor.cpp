@@ -11,6 +11,11 @@
 
 namespace Temporal
 {
+	Component* Sensor::clone() const
+	{
+		return new Sensor(_fixture->clone(), _listener->clone(), _categoryMask);
+	}
+
 	void Sensor::update()
 	{
 		_fixture->update();

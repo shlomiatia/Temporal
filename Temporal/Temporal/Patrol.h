@@ -44,6 +44,8 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::PATROL; }
 
+		Component* clone() const { return new Patrol(); }
+
 	protected:
 		Hash getInitialState() const;
 

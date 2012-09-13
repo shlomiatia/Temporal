@@ -44,6 +44,8 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
 		void handleMessage(Message& message);
 
+		Component* clone() const { return new ParticleEmitter(); }
+
 	private:
 		float _lifetime;
 		float _birthThreshold;

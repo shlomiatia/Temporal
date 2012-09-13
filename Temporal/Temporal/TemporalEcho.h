@@ -19,6 +19,9 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_ECHO; }
 		void handleMessage(Message& message);
+
+		Component* clone() const { return new TemporalEcho(); }
+
 	private:
 		static const float ECHO_READY_TIME;
 
