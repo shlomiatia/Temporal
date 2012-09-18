@@ -10,7 +10,6 @@ namespace Temporal
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
 	// General
-	// TODO: Serialize temp
 	// TODO: Text
 	// TODO: Input
 	// TODO: Deal with component order
@@ -36,7 +35,7 @@ namespace Temporal
 	// TODO: Request sight
 	// TODO: Cache ray properties/global shape
 	// TODO: Do not process collision twice
-	// TODO: Less temporal echo memory. Use array instead of list
+	// TODO: Continues temporal echo memory
 	// TODO: Culling
 	// TODO: Delete spritesheets, singletons, static stl containers
 	// TODO: Cache shadows/display list/FBO/save texture

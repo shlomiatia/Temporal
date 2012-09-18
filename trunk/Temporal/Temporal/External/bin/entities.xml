@@ -30,37 +30,37 @@
     </draw-position>
     <navigator />
     <dynamic-body>
-        <aabb>
+        <fixture type="aabb">
             <radius x="10" y="40" />
-        </aabb>
+        </fixture>
     </dynamic-body>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="50" y="90" />
             <radius x="60" y="50" />
-        </aabb>
-        <ledge-detector id="SNS_JUMP" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_JUMP" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="10" y="50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_HANG" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_HANG" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="-10" y="-50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_BACK_EDGE" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_BACK_EDGE" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="10" y="-50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_FRONT_EDGE" center="157.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="157.5" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -127,17 +127,17 @@
     </draw-position>
     <patrol />
     <dynamic-body>
-        <aabb>
+        <fixture type="aabb">
             <radius x="10" y="40" />
-        </aabb>
+        </fixture>
     </dynamic-body>
     <sight size="60" />
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="0" y="-50" />
             <radius x="10" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_FRONT_EDGE" center="-157" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -147,7 +147,7 @@
     <temporal-echo />
     <!--<temporal-period period="1" />-->
 </entity>
-<entity id="ENT_LASER">
+<!--<entity id="ENT_LASER">
     <transform />
     <collision-filter category="4" />
     <laser platform="ENT_30_LEFT2" />
@@ -155,7 +155,7 @@
         <scene-node sprite-sheet="laser.png" />
     </renderer>
     <!--<temporal-period period="2" />-->
-</entity>
+<!--</entity>-->
 <entity id="ENT_PLAYER">
     <transform>
         <position x="512" y="384" />
@@ -166,37 +166,37 @@
     </draw-position>
     <input-controller />
     <dynamic-body>
-        <aabb>
+        <fixture type="aabb">
             <radius x="10" y="40" />
-        </aabb>
+        </fixture>
     </dynamic-body>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="50" y="90" />
             <radius x="60" y="50" />
-        </aabb>
-        <ledge-detector id="SNS_JUMP" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_JUMP" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="10" y="50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_HANG" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_HANG" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="-10" y="-50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_BACK_EDGE" center="-22.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_BACK_EDGE" center="-22.5" size="135" />
     </sensor>
     <sensor category-mask="1">
-        <aabb>
+        <fixture type="aabb">
             <center x="10" y="-50" />
             <radius x="20" y="10" />
-        </aabb>
-        <ledge-detector id="SNS_FRONT_EDGE" center="157.5" size="135" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="157.5" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -212,9 +212,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="383.5" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_FLOOR">
@@ -223,9 +223,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="1023.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_WALL">
@@ -234,9 +234,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="383.5" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_BOTTOM_SPLITTER">
@@ -245,9 +245,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="128" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_TOP_SPLITTER">
@@ -256,9 +256,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="191.5" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_LOWER_WALL">
@@ -267,9 +267,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_LOWER_PLATFORM">
@@ -278,9 +278,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="150" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_UPPER_WALL">
@@ -289,9 +289,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_UPPER_PLATFORM">
@@ -300,9 +300,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="63.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_FLOATER">
@@ -311,9 +311,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="191.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_BALCONY_PLATFORM">
@@ -322,9 +322,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="128" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_BALCONY_WALL">
@@ -333,9 +333,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_UNREACABLE_PLATFORM">
@@ -344,9 +344,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="63.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_UNREACABLE_WALL">
@@ -355,9 +355,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="63.5" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_LOWER_WALL">
@@ -366,9 +366,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_LOWER_PLATFORM">
@@ -377,9 +377,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="150" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_UPPER_WALL">
@@ -388,9 +388,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_UPPER_PLATFORM">
@@ -399,9 +399,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_FLOATER">
@@ -410,9 +410,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="192" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_BALCONY_PLATFORM">
@@ -421,9 +421,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="128" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_BALCONY_WALL">
@@ -432,9 +432,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_UNREACHABLE_PLATFORM">
@@ -443,9 +443,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_UNREACHABLE_WALL">
@@ -454,9 +454,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="0" y="63.5" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LOWER_MIDDLE_FLOATER">
@@ -465,9 +465,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="128" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_UPPER_MIDDLE_FLOATER">
@@ -476,9 +476,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="128" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_30_LEFT">
@@ -487,9 +487,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_30_MIDDLE">
@@ -498,9 +498,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_30_RIGHT">
@@ -509,9 +509,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="-32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_45_LEFT">
@@ -520,9 +520,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_45_MIDDLE">
@@ -531,9 +531,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_45_RIGHT">
@@ -542,9 +542,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_60_LEFT">
@@ -553,9 +553,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_60_MIDDLE">
@@ -564,9 +564,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_60_RIGHT">
@@ -575,9 +575,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_TORCH_WALL">
@@ -586,9 +586,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_LEFT_TORCH_PLATFORM">
@@ -597,9 +597,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_TORCH_WALL">
@@ -608,9 +608,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_RIGHT_TORCH_PLATFORM">
@@ -619,9 +619,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_MISC_PLATFORM1">
@@ -630,9 +630,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="352" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_MISC_PLATFORM2">
@@ -641,9 +641,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="95.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_30_LEFT2">
@@ -652,9 +652,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_30_RIGHT2">
@@ -663,9 +663,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="-32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_45_LEFT2">
@@ -674,9 +674,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_45_RIGHT2">
@@ -685,9 +685,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-32" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_60_LEFT2">
@@ -696,9 +696,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_60_RIGHT2">
@@ -707,9 +707,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_MISC_PLATFORM3">
@@ -718,9 +718,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="96" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_MISC_PLATFORM4">
@@ -729,9 +729,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="447.5" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_V_LEFT_WALL">
@@ -740,9 +740,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="-64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_V_RIGHT_WALL">
@@ -751,9 +751,9 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="32" y="64" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>
 <entity id="ENT_V_PLATFORM">
@@ -762,8 +762,8 @@
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
-		<segment>
+		<fixture type="segment">
 			<radius x="64" y="0" />
-		</segment>
+		</fixture>
 	</static-body>
 </entity>

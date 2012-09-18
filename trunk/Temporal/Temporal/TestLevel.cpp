@@ -3,47 +3,23 @@
 #include "Shapes.h"
 #include "Math.h"
 #include "EntitySystem.h"
-#include "Transform.h"
-#include "DrawPosition.h"
-#include "ActionController.h"
-#include "MovementUtils.h"
-#include "TemporalEcho.h"
-#include "TemporalPeriod.h"
-#include "StaticBody.h"
-#include "DynamicBody.h"
 #include "Grid.h"
-#include "Sensor.h"
-#include "Sight.h"
-#include "InputController.h"
-#include "SpriteSheet.h"
-#include "SceneNode.h"
-#include "Texture.h"
 #include "Graphics.h"
-#include "Animator.h"
-#include "Animation.h"
-#include "Renderer.h"
-#include "Navigator.h"
-#include "Sentry.h"
-#include "Patrol.h"
-#include "SecurityCamera.h"
-#include "Laser.h"
-#include "MessageUtils.h"
-#include "Lighting.h"
-#include "Particles.h"
-#include "Fixture.h"
-#include "CollisionFilter.h"
 #include "PhysicsEnums.h"
 #include "Input.h"
 #include "Camera.h"
 #include "Layer.h"
-#include "Serialization.h"
+#include "Navigator.h"
 #include "ResourceManager.h"
 #include "tinyxml2.h"
-
+#include <ftgl/ftgl.h>
 namespace Temporal
 {
+		FTGLPixmapFont font("c:/windows/fonts/Arial.ttf");
+
 	void TestLevel::init()
 	{
+		font.FaceSize(72);
 		Size resolution = Size(1280.0f, 720.0f);
 		Size levelSize = Size(2048.0f, 720.0f);
 		float relativeHeight = 720.0f;
@@ -84,6 +60,7 @@ namespace Temporal
 	void TestLevel::draw() const
 	{
 		LayersManager::get().draw();
+		font.Render("Hello World!");
 	}
 
 	void TestLevel::dispose()
