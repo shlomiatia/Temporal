@@ -24,15 +24,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(Input::get().isQ())
+			if(Input::get().key(Key::Q))
 			{
 				changePeriod(Period::PAST);
 			}
-			if(Input::get().isW())
+			if(Input::get().key(Key::W))
 			{
 				changePeriod(Period::PRESENT);
 			}
-			if(Input::get().isE())
+			if(Input::get().key(Key::E))
 			{
 				changePeriod(Period::FUTURE);
 			}

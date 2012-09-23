@@ -10,7 +10,6 @@ namespace Temporal
 	// ASSUME: When trying to walk on a sloped floor where the ceiling is flat so there's no room, the entity will shake */
 
 	// General
-	// TODO: Text
 	// TODO: Input
 	// TODO: Deal with component order
 

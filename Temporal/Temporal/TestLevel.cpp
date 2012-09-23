@@ -43,11 +43,11 @@ namespace Temporal
 	{
 		Input::get().update();
 		
-		if(Input::get().isQuit())
+		if(Input::get().key(Key::ESC))
 		{
 			Game::get().stop();
 		}
-		if(Input::get().isQ())
+		if(Input::get().key(Key::Q))
 		{
 			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
