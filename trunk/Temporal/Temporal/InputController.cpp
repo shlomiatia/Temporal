@@ -9,19 +9,19 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(Input::get().isUp())
+			if(Input::get().key(Key::UP))
 			{
 				raiseMessage(Message(MessageID::ACTION_UP));
 			}
-			if(Input::get().isDown())
+			if(Input::get().key(Key::DOWN))
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
-			if(Input::get().isLeft())
+			if(Input::get().key(Key::LEFT))
 			{
 				sendDirectionAction(*this, Side::LEFT);
 			}
-			if(Input::get().isRight())
+			if(Input::get().key(Key::RIGHT))
 			{
 				sendDirectionAction(*this, Side::RIGHT);
 			}
