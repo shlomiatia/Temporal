@@ -31,7 +31,7 @@ namespace Temporal
 			const AABB& startPosition = *static_cast<AABB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
-			if(start != NULL && goal != NULL)
+			if(start && goal)
 			{
 				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
 				navigator.setDestination(goalPosition);
@@ -59,7 +59,7 @@ namespace Temporal
 				NavigationEdgeCollection* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
-				if(path == NULL)
+				if(!path)
 				{
 					const AABB& destination = navigator.getDestination();
 					targetX = destination.getCenterX();
@@ -119,7 +119,7 @@ namespace Temporal
 					path->erase(path->begin());
 					if(path->size() == 0)
 					{
-						navigator.setPath(NULL);
+						navigator.setPath(0);
 					}
 					if(edge->getType() == NavigationEdgeType::DESCEND)
 						navigator.changeState(DESCEND_STATE);
@@ -220,7 +220,7 @@ namespace Temporal
 
 	void Navigator::deserialize(const Serialization& serialization)
 	{
-		if(_path != NULL)
+		if(_path)
 		{
 			_path->clear();
 		}
@@ -240,7 +240,7 @@ namespace Temporal
 		Vector currentPoint = getPosition(*this);
 		NavigationEdgeCollection* path = getPath();
 			
-		if(path != NULL)
+		if(path)
 		{	
 			for(NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
 			{

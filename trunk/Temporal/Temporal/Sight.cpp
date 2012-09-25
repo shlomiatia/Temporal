@@ -52,7 +52,7 @@ namespace Temporal
 			return;
 
 		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
-		if(isLit != NULL && !getBoolParam(isLit))
+		if(isLit && !getBoolParam(isLit))
 			return;
 
 		// Check field of view

@@ -36,7 +36,7 @@ namespace Temporal
 			if(component->getType() == type)
 				return component;
 		}
-		return NULL;
+		return 0;
 	}
 
 	Entity* Entity::clone() const

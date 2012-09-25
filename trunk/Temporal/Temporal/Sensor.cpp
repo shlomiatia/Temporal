@@ -64,7 +64,7 @@ namespace Temporal
 	{
 		if(_point != Vector::Zero)
 		{
-			getOwner().raiseMessage(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? NULL : &_point)));
+			getOwner().raiseMessage(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? 0 : &_point)));
 		}
 	}
 

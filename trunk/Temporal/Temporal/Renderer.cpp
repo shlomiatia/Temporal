@@ -13,7 +13,7 @@ namespace Temporal
 	Renderer::Renderer(SceneNode* root, LayerType::Enum layer, Color color) :
 		_root(root), _layer(layer), _color(color) 
 	{
-		if(root != NULL)
+		if(root)
 			_root->init(); 
 	}
 

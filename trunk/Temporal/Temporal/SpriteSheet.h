@@ -60,7 +60,7 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
-		explicit SpriteSheet(const Texture* texture = NULL, Side::Enum orientation = Side::RIGHT) : _id(Hash::INVALID), _texture(texture), _orientation(orientation) {}
+		explicit SpriteSheet(const Texture* texture = 0, Side::Enum orientation = Side::RIGHT) : _id(Hash::INVALID), _texture(texture), _orientation(orientation) {}
 		~SpriteSheet();
 		void add(SpriteGroup* spriteGroup);
 

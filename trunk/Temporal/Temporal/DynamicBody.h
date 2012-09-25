@@ -17,8 +17,8 @@ namespace Temporal
 		// BRODER
 		static const Vector GRAVITY;
 
-		explicit DynamicBody(Fixture* fixture = NULL) : _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true),
-			_groundVector(Vector::Zero), _maxMovementStepSize(0.0f) {}
+		explicit DynamicBody(Fixture* fixture = 0) : _fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true),
+			_ground(0), _maxMovementStepSize(0.0f) {}
 
 		~DynamicBody();
 
@@ -37,15 +37,15 @@ namespace Temporal
 
 		// Temp state
 		Vector _absoluteImpulse;
-		Vector _groundVector;
+		const Segment* _ground;
 
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
 		void executeMovement(Vector movement);
-		void detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision);
-		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision);
-		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction, bool isModerateSlope);
-		void modifyVelocity(const Shape& dynamicBodyBounds, const Segment& segment, const Vector& correction, const Vector& platformVector, bool isSteepSlope);
+		void detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision, bool& detectingGround);
+		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision, bool& detectingGround);
+		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction);
+		void modifyVelocity(const Vector& correction);
 
 		friend class SerializationAccess;
 	};

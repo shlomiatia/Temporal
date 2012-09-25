@@ -179,7 +179,7 @@ namespace Temporal
 			if(intersects(node->getArea(),  aabb))
 				return node;
 		}
-		return NULL;
+		return 0;
 	}
 
 	void NavigationGraph::createNodes(ShapeCollection& platforms)
@@ -335,7 +335,7 @@ namespace Temporal
 		{
 			const Entity& entity = (*(*i).second);
 			const Component* component = entity.get(ComponentType::STATIC_BODY);
-			if(component != NULL)
+			if(component)
 				addPlatform((StaticBody&)(*component), platforms);
 		}
 		createNodes(platforms);

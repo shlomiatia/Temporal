@@ -148,9 +148,6 @@ namespace Temporal
 	public:
 		void enter() const;
 		void handleMessage(Message& message) const;
-
-	private:
-		static const float NO_FLOOR_TIME_TO_FALL;
 	};
 
 	class Turn : public ComponentState

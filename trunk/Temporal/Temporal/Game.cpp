@@ -34,7 +34,6 @@ namespace Temporal
 	void Game::update()
 	{
 		_level->update(FRAME_PERIOD);
-		
 	}
 
 	void Game::draw() const

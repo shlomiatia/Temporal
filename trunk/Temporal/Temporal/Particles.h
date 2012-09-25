@@ -37,8 +37,8 @@ namespace Temporal
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(NULL), _vertices(NULL), _texCoords(NULL), _birthIndex(0),
-			_spritesheetId(Hash::INVALID), _spritesheet(NULL), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
+		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _vertices(0), _texCoords(0), _birthIndex(0),
+			_spritesheetId(Hash::INVALID), _spritesheet(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
 		~ParticleEmitter();
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }

@@ -15,7 +15,7 @@
 #include <ftgl/ftgl.h>
 namespace Temporal
 {
-		FTGLPixmapFont font("c:/windows/fonts/Arial.ttf");
+	FTGLPixmapFont font("c:/windows/fonts/Arial.ttf");
 
 	void TestLevel::init()
 	{
