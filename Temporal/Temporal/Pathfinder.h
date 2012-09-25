@@ -9,7 +9,7 @@ namespace Temporal
 	{
 	public:
 		PathNode(const NavigationNode& navigationNode, const NavigationNode& goal) 
-			: _navigationNode(navigationNode), _costFromStart(0.0f), _previous(NULL), _edge(NULL), _heuristicCostToGoal(calculateHeuristicCost(goal)) {}
+			: _navigationNode(navigationNode), _costFromStart(0.0f), _previous(0), _edge(0), _heuristicCostToGoal(calculateHeuristicCost(goal)) {}
 
 		const NavigationNode& getNavigationNode() const { return _navigationNode; }
 		void setCostFromStart(float costFromStart) { _costFromStart = costFromStart; }

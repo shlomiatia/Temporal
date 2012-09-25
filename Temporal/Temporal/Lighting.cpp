@@ -71,7 +71,7 @@ namespace Temporal
 	{
 		const Vector& position = getPosition(*this);
 		Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
-		bool isFlipped = orientation != NULL && *orientation == Side::LEFT;
+		bool isFlipped = orientation != 0 && *orientation == Side::LEFT;
 
 		glDisable(GL_BLEND);
 		glColorMask(false, false, false, true);

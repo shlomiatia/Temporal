@@ -34,7 +34,7 @@ namespace Temporal
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
 
-		if (SDL_SetVideoMode(static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()), BIT_DEPTH, flags) == NULL)
+		if (!SDL_SetVideoMode(static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()), BIT_DEPTH, flags))
 		{
 			// ERROR: Error Failed setting video mode
 			exit(1);

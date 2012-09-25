@@ -33,7 +33,7 @@ namespace Temporal
 	{
 	public:
 		 Animator(Hash animationSetId = Hash::INVALID, Hash animationId = Hash::INVALID) :
-			_animationSetId(animationSetId), _animationSet(NULL), _animationId(animationId) {}
+			_animationSetId(animationSetId), _animationSet(0), _animationId(animationId) {}
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);

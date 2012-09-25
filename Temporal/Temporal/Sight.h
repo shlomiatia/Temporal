@@ -15,7 +15,7 @@ namespace Temporal
 	{
 	public:
 		explicit Sight(float sightCenter = 0.0f, float sightSize = 0.0f) :
-		  _sightCenter(sightCenter), _sightSize(sightSize), _filter(NULL), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
+		  _sightCenter(sightCenter), _sightSize(sightSize), _filter(0), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
 		void handleMessage(Message& message);

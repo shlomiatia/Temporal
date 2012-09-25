@@ -72,7 +72,7 @@ namespace Temporal
 
 	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
 	{
-		_point = params.getPoint() == NULL ? Vector::Zero : *params.getPoint();
+		_point = !params.getPoint() ? Vector::Zero : *params.getPoint();
 	}
 
 	/**********************************************************************************************
@@ -104,10 +104,11 @@ namespace Temporal
 	 *********************************************************************************************/
 	bool canJumpForward(StateMachineComponent* component)
 	{
-		const Vector& groundVector = getVectorParam(component->raiseMessage(Message(MessageID::GET_GROUND_VECTOR)));
+		/*const Vector& groundVector = getVectorParam(component->raiseMessage(Message(MessageID::GET_GROUND_VECTOR)));
 		Side::Enum orientation = getOrientation(*component);
 
-		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
+		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;*/
+		return true;
 	}
 
 	void Stand::enter() const
@@ -181,9 +182,6 @@ namespace Temporal
 		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &WALK_ANIMATION));
 	}
 
-	// BRODER
-	const float Walk::NO_FLOOR_TIME_TO_FALL = 0.075f;
-
 	void Walk::handleMessage(Message& message) const
 	{
 		if(message.getID() == MessageID::ACTION_UP)
@@ -208,12 +206,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{			
-			if(!_stateMachine->getTempFlag2())
-				_stateMachine->getTimer().reset();
-
-			// When climbing on a slope, it is possible to be off the ground for some time when transitioning to a more moderate slope. 
-			// Therefore we only fall when some time has passed
-			if(_stateMachine->getTimer().getElapsedTime() >= NO_FLOOR_TIME_TO_FALL)
+			if(_stateMachine->getTempFlag2())
 			{
 				_stateMachine->changeState(FALL_STATE);
 			}
@@ -224,7 +217,6 @@ namespace Temporal
 			else
 			{
 				// We need to apply this every update because the ground has infinite restitution. 
-				// Also, if we're in the midair (explained how it can happen in the previous comment), this will maintain a steady speed
 				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
 				_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 			}

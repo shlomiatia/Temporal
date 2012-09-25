@@ -27,7 +27,7 @@ namespace Temporal
 				minCorrection.setAxis(axis, delta < 0.0f ? penetration : -penetration);
 			}
 		}
-		if(correction != NULL)
+		if(correction)
 			*correction = minCorrection;
 		return true;
 	}
@@ -72,7 +72,7 @@ namespace Temporal
 			minCorrection = penetration * normal;
 
 		// No separating axis found; segment must be overlapping AABB
-		if(correction != NULL)
+		if(correction)
 			*correction = minCorrection;
 		return true;
 	}
@@ -112,9 +112,9 @@ namespace Temporal
 				if (tmin > tmax) return false;
 			}
 		}
-		if(pointOfIntersection != NULL)
+		if(pointOfIntersection)
 			*pointOfIntersection = origin + direction * tmin;
-		if(distance != NULL)
+		if(distance)
 			*distance = tmin;
 		return true;
 	}
@@ -141,9 +141,9 @@ namespace Temporal
 			if(length1 >= 0.0f && length1 <= 1.0f && length2 >= 0.0f && length2 <= 1.0f)
 			{
 				Vector ray = length2 * dirSegVec;
-				if(pointOfIntersection != NULL)
+				if(pointOfIntersection)
 					*pointOfIntersection = dirSegOrigin + ray;
-				if(distance != NULL)
+				if(distance)
 					*distance = ray.getLength();
 				return true;
 			}
@@ -158,7 +158,7 @@ namespace Temporal
 				Vector centersVector = Vector(dirSegCenter - seg.getCenterX());
 				if(centersVector.getLength() <= dirSeg.getVector().getLength() + seg.getRadius().getLength())
 				{
-					if(pointOfIntersection != NULL)
+					if(pointOfIntersection)
 					{
 						Vector vector1 = segOrigin - dirSegOrigin;
 						Vector segTarget = seg.getNaturalTarget();
@@ -189,7 +189,7 @@ namespace Temporal
 							}
 						}
 						
-						if(distance != NULL)
+						if(distance)
 							*distance = tempDistance;
 					}
 					return true;

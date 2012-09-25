@@ -18,7 +18,7 @@ namespace Temporal
 	class RayCastResult
 	{
 	public:
-		RayCastResult() : _fixture(NULL), _point(Vector::Zero) {}
+		RayCastResult() : _fixture(0), _point(Vector::Zero) {}
 
 		const Fixture& getFixture() const { return *_fixture; }
 		void setFixture(const Fixture* fixture) { _fixture = fixture; }

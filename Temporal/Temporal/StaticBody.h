@@ -10,7 +10,7 @@ namespace Temporal
 	class StaticBody : public Component
 	{
 	public:
-		StaticBody(Fixture* fixture = NULL)  : _fixture(fixture) {}
+		StaticBody(Fixture* fixture = 0)  : _fixture(fixture) {}
 		~StaticBody();
 
 		Fixture& getFixture() { return *_fixture; }

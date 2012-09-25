@@ -18,7 +18,6 @@ namespace Temporal
 		{
 			_fixture->init(*this);
 			Grid::get().add(_fixture);
-
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{

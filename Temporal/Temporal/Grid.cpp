@@ -23,14 +23,14 @@ namespace Temporal
 		int size = getSize();
 		_grid = new FixtureCollection*[size];
 		for(int i = 0; i < size; ++i)
-			_grid[i] = NULL;
+			_grid[i] = 0;
 	}
 
 	void Grid::dispose()
 	{
 		int size = getSize();
 		for(int i = 0; i < size; ++i)
-			if(_grid[i] != NULL)
+			if(_grid[i])
 				delete _grid[i];
 		delete _grid;
 	}
@@ -42,7 +42,7 @@ namespace Temporal
 			for(int j = 0; j < _gridHeight; ++j)
 			{
 				FixtureCollection* fixtures = getTile(i, j);
-				if(fixtures != NULL && fixtures->size() != 0)
+				if(fixtures && fixtures->size() != 0)
 				{
 					Graphics::get().draw(getTileAABB(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
 				}
@@ -54,7 +54,7 @@ namespace Temporal
 	{
 		int index = getIndex(i, j);
 		FixtureCollection* bodies = getTile(i, j);
-		if(bodies == NULL)
+		if(!bodies)
 		{
 			bodies = new FixtureCollection();
 			_grid[index] = bodies;
@@ -101,7 +101,7 @@ namespace Temporal
 				if(i >= leftIndex && i <= rightIndex && j >= bottomIndex && j <= topIndex)
 					continue;
 				FixtureCollection* bodies = getTile(i, j);
-				if(bodies == NULL)
+				if(!bodies)
 					continue;
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
@@ -129,7 +129,7 @@ namespace Temporal
 	{
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
-			return NULL;
+			return 0;
 		else
 			return _grid[index];
 	}
@@ -180,7 +180,7 @@ namespace Temporal
 		{
 			FixtureCollection* bodies = getTile(i, j);
 			AABB tile = getTileAABB(i, j);
-			if(bodies != NULL)
+			if(bodies)
 			{
 				float distance = 0;
 				Vector pointOfIntersection = Vector::Zero;
@@ -232,7 +232,7 @@ namespace Temporal
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				FixtureCollection* bodies = getTile(i, j);
-				if(bodies != NULL)
+				if(bodies)
 				{
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{

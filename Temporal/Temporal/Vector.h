@@ -31,13 +31,6 @@ namespace Temporal
 		Vector getRightNormal() const { return Vector(getY(), -getX()); }
 		Vector absolute() const;
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("x", _x);
-			serializer.serialize("y", _y);
-		}
-
 		Vector operator-() const { return Vector(-getX(), -getY()); }
 		bool operator==(const Vector& vector) const { return ((getX() == vector.getX()) && (getY() == vector.getY())); }
 		bool operator!=(const Vector& vector) const { return !(*this == vector); }

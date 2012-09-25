@@ -131,8 +131,9 @@ namespace Temporal
 		float getRadiusVx() const { return getRadius().getX(); }
 		float getRadiusVy() const { return getRadius().getY(); }
 
-		Vector getLeftPoint() const { return getCenter() + (getRadiusVx() <= 0.0f ? getRadius() : -getRadius()); }
-		Vector getRightPoint() const { return getCenter() + (getRadiusVx() > 0.0f ? getRadius() : -getRadius()); }
+		Vector getLeftPoint() const { return getCenter() + (getRadiusVx() < 0.0f ? getRadius() : -getRadius()); }
+		Vector getRightPoint() const { return getCenter() + (getRadiusVx() >= 0.0f ? getRadius() : -getRadius()); }
+		Vector getPoint(Side::Enum side) const { return side == Side::LEFT ? getLeftPoint() : getRightPoint(); }
 		Vector getBottomPoint() const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
 		Vector getTopPoint() const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
 		Vector getNaturalOrigin() const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }

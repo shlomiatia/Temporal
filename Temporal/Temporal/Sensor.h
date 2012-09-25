@@ -27,7 +27,7 @@ namespace Temporal
 	class ContactListener
 	{
 	public:
-		ContactListener() : _owner(NULL) {};
+		ContactListener() : _owner(0) {};
 		virtual ~ContactListener() {};
 	
 		void setOwner(const Component& owner) { _owner = &owner; }
@@ -49,7 +49,7 @@ namespace Temporal
 	class Sensor : public Component
 	{
 	public:
-		explicit Sensor(Fixture* fixture = NULL, ContactListener* listener = NULL, int categoryMask = -1)
+		explicit Sensor(Fixture* fixture = 0, ContactListener* listener = 0, int categoryMask = -1)
 			: _fixture(fixture), _listener(listener), _categoryMask(categoryMask) {}
 		~Sensor() { delete _fixture; delete _listener; }
 		

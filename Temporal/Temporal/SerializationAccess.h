@@ -320,7 +320,7 @@ namespace Temporal
 
 		static void serialize(const char* key, Fixture*& fixture, XmlDeserializer& serializer)
 		{
-			Shape* shape = NULL;
+			Shape* shape = 0;
 			if(strcmp(key, "aabb") == 0)
 				serialize(key, (AABB*&)shape, serializer);
 			else if(strcmp(key, "segment") == 0)

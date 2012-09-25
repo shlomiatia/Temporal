@@ -150,7 +150,7 @@ namespace Temporal
 	class XmlDeserializer
 	{
 	public:
-		XmlDeserializer(const char * path) : _current(NULL) { _doc.LoadFile(path); _current = _doc.GetDocument(); };
+		XmlDeserializer(const char * path) : _current(0) { _doc.LoadFile(path); _current = _doc.GetDocument(); };
 
 		void serialize(const char* key, int& value);
 		void serialize(const char* key, unsigned int& value);
@@ -165,7 +165,7 @@ namespace Temporal
 		void serialize(const char* key, T*& value)
 		{
 			tinyxml2::XMLNode* current = _current->FirstChildElement(key);
-			if(current != NULL)
+			if(current)
 			{
 				_current = current;
 				SerializationAccess::serialize(_current->ToElement()->Attribute("type"), value, *this);
@@ -177,7 +177,7 @@ namespace Temporal
 		void serialize(const char* key, T& value)
 		{
 			tinyxml2::XMLNode* current = _current->FirstChildElement(key);
-			if(current != NULL)
+			if(current)
 			{
 				_current = current;
 				SerializationAccess::serialize(_current->Value(), value, *this);
@@ -189,9 +189,9 @@ namespace Temporal
 		void serialize(const char* key, std::vector<T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			for(_current = _current->FirstChildElement(); _current != NULL; _current = _current->NextSiblingElement())
+			for(_current = _current->FirstChildElement(); _current; _current = _current->NextSiblingElement())
 			{
-				T* object = NULL;
+				T* object = 0;
 				SerializationAccess::serialize(_current->Value(), object, *this);
 				value.push_back(object);
 			}
@@ -202,9 +202,9 @@ namespace Temporal
 		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			for(_current = _current->FirstChildElement(); _current != NULL; _current = _current->NextSiblingElement())
+			for(_current = _current->FirstChildElement(); _current; _current = _current->NextSiblingElement())
 			{
-				T* object = NULL;
+				T* object = 0;
 				SerializationAccess::serialize(_current->Value(), object, *this);
 				value[object->getId()] = object;
 			}

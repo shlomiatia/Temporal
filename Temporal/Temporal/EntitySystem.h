@@ -5,14 +5,13 @@
 #include "Hash.h"
 #include <unordered_map>
 #include <vector>
-#include <stdio.h>
 
 namespace Temporal
 {
 	class Message
 	{
 	public:
-		explicit Message(MessageID::Enum id, void* param = NULL) : _id(id), _param(param) {}
+		explicit Message(MessageID::Enum id, void* param = 0) : _id(id), _param(param) {}
 
 		MessageID::Enum getID() const { return _id; }
 		void* getParam() { return _param; }
@@ -31,7 +30,7 @@ namespace Temporal
 	class Component
 	{
 	public:
-		Component() : _entity(NULL) {}
+		Component() : _entity(0) {}
 		virtual ~Component() {}
 
 		Entity& getEntity() const { return *_entity; }

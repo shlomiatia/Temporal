@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <stdio.h>
-
 namespace Temporal
 {
 	class Level
@@ -46,7 +44,7 @@ namespace Temporal
 		void update();
 		void draw() const;
 
-		Game() : _level(NULL), _running(false), _paused(false), _lastFrameTime(0.0f) {}
+		Game() : _level(0), _running(false), _paused(false), _lastFrameTime(0.0f) {}
 		Game(const Game&);
 		Game& operator=(const Game&);
 	};

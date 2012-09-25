@@ -21,7 +21,7 @@ namespace Temporal
 		NavigationEdgeCollection* result = new NavigationEdgeCollection();
 
 		const PathNode* current = &pathNode;
-		while(current->getEdge() != NULL)
+		while(current->getEdge())
 		{
 			result->insert(result->begin(), current->getEdge());
 			current = current->getPrevious();
@@ -39,7 +39,7 @@ namespace Temporal
 				return current;
 			}
 		}
-		return NULL;
+		return 0;
 	}
 
 	void remove(PathNodeCollection& where, const PathNode* what)
@@ -78,7 +78,7 @@ namespace Temporal
 		assert(goal);
 
 		if (start == goal)
-			return NULL;
+			return 0;
 
 		PathNodeCollection open;
 		PathNodeCollection closed;
@@ -110,7 +110,7 @@ namespace Temporal
 				const NavigationNode& navigationNeighbour = edge.getTarget();
 
 				// Don't explore closed neighbours
-				if(find(closed, &navigationNeighbour) != NULL)
+				if(find(closed, &navigationNeighbour))
 					continue;
 
 				// Find cost from start through current edge
@@ -118,7 +118,7 @@ namespace Temporal
 
 				// If node wasn't explore, we use the current edge
 				PathNode* pathNeighbour = find(open, &navigationNeighbour);
-				if(pathNeighbour == NULL)
+				if(!pathNeighbour)
 				{
 					pathNeighbour = new PathNode(navigationNeighbour, *goal);
 				}
@@ -140,6 +140,6 @@ namespace Temporal
 		}
 		deleteCollection(open);
 		deleteCollection(closed);
-		return NULL;
+		return 0;
 	}
 }

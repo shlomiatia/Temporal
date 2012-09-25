@@ -5,7 +5,7 @@
 namespace Temporal
 {
 	StateMachineComponent::StateMachineComponent(StateCollection states, const char* prefix)
-		: _states(states), _currentState(NULL), _currentStateID(Hash::INVALID)
+		: _states(states), _currentState(0), _currentStateID(Hash::INVALID)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			(*(*i).second).setStateMachine(this);
@@ -19,7 +19,7 @@ namespace Temporal
 
 	void StateMachineComponent::changeState(Hash stateID)
 	{
-		if(_currentState != NULL)
+		if(_currentState)
 		{
 			_currentState->exit();
 			raiseMessage(Message(MessageID::STATE_EXITED, &_currentStateID));
@@ -31,7 +31,7 @@ namespace Temporal
 
 	void StateMachineComponent::handleMessage(Message& message)
 	{
-		if(_currentState != NULL)
+		if(_currentState)
 			_currentState->handleMessage(message);
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{

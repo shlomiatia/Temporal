@@ -11,6 +11,7 @@ namespace Temporal
 			RIGHT = 1 
 		};
 		inline Side::Enum getOpposite(Side::Enum value) { return value == LEFT ? RIGHT : LEFT; }
+		inline Side::Enum get(float value) { return value > 0.0f ? RIGHT : LEFT; }
 	}
 
 	namespace Axis
