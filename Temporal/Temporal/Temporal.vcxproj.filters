@@ -77,9 +77,6 @@
     <ClInclude Include="Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicBody.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -162,6 +159,9 @@
     <ClInclude Include="SerializationAccess.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="DynamicBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -230,9 +230,6 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicBody.cpp">
-      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Physics</Filter>
@@ -306,6 +303,9 @@
     </ClCompile>
     <ClCompile Include="Serialization.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicBody.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

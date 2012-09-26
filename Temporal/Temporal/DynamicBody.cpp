@@ -84,16 +84,25 @@ namespace Temporal
 			_ground = 0;
 			executeMovement(_absoluteImpulse);
 		}
+		else if(_ground && isSteepAngle(_ground->getNaturalVector().getAngle()))
+		{
+			_velocity = _ground->getNaturalVector().normalize() * 500.0f;
+			if(_velocity .getY() > 0.0f)
+				_velocity = -_velocity;
+			_ground = 0;
+			executeMovement(determineMovement(framePeriod));
+		}
 		else if(_ground && _velocity.getY() == 0.0f)
 		{
 			if(_velocity.getX() == 0)
 				return;
-			float movementAmount = _velocity.getLength() * framePeriod;
+			float movementAmount = _velocity.getLength();
 			const AABB& dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
 			Side::Enum side = Side::get(_velocity.getX());
 			Side::Enum oppositeSide = Side::getOpposite(side);
 			Vector direction = _ground->getNaturalVector().normalize() * side;
-			Vector movement = direction * movementAmount;
+			_velocity = direction * movementAmount;
+			Vector movement = _velocity * framePeriod;
 			
 			Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
 			Vector dest = curr + movement;
@@ -117,12 +126,12 @@ namespace Temporal
 				
 				if(!_ground)
 				{
-					executeMovement(determineMovement(framePeriod));
+					executeMovement(movement);
 				}
 				else
 				{
 					Vector oldMovement = max - curr;
-					float movementLeft = movementAmount - oldMovement.getLength();
+					float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
 					Vector newDirection = _ground->getNaturalVector().normalize() * side;
 					Vector newMovement = movementLeft * newDirection;
 					movement = newMovement + oldMovement;
