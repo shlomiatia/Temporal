@@ -48,10 +48,11 @@ namespace Temporal
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
-		/*else if(message.getID() == MessageID::GET_GROUND_VECTOR)
+		else if(message.getID() == MessageID::GET_GROUND)
 		{
-			message.setParam(&_ground);
-		}*/
+			if(_ground)
+				message.setParam(const_cast<Segment*>(_ground));
+		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
@@ -137,7 +138,7 @@ namespace Temporal
 					Vector oldMovement = max - curr;
 					float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
 					Vector newDirection = _ground->getNaturalVector().normalize() * side;
-					if(differentSign(oldMovement.getY(), newDirection.getY()))
+					if(differentSign(direction.getY(), newDirection.getY()))
 					{
 						newDirection = Vector(side, 0.0f);
 					}
@@ -206,10 +207,6 @@ namespace Temporal
 		}
 		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
 		
-		if(collision.getY() > EPSILON)
-		{
-			//_ground = 0;
-		}
 		if(_ground)
 		{
 			collision = Vector(0.0f, -1.0f);
