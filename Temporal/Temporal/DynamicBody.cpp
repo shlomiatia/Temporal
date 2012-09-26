@@ -209,7 +209,6 @@ namespace Temporal
 		
 		if(_ground)
 		{
-			collision = Vector(0.0f, -1.0f);
 			_velocity = Vector::Zero;
 		}
 		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
@@ -249,18 +248,23 @@ namespace Temporal
 
 	void DynamicBody::modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction)
 	{
-		// BRODER
-		bool isOnPlatformTopSide = (dynamicBodyBounds.getLeft() <= segment.getLeft() ||
-									dynamicBodyBounds.getRight() >= segment.getRight()) &&
-									dynamicBodyBounds.getBottom() + 20.0f >= segment.getTop();
+		bool isOnPlatformLeft = dynamicBodyBounds.getLeft() <= segment.getLeft();
+		bool isOnPlatformRight = dynamicBodyBounds.getRight() >= segment.getRight();
+		bool isOnPlatformSide = isOnPlatformLeft || isOnPlatformRight;
 
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent falling from edges
-		if(isOnPlatformTopSide && abs(_velocity.getX()) < EPSILON && correction.getX() != 0.0f) 
+		if(isOnPlatformSide && abs(_velocity.getY()) > EPSILON && correction.getX() != 0.0f) 
 		{	
-			// Wall or flat floor - Take top
-			float y = segment.getTop();
+			float y = 0.0f;
+			if(segment.getLeft() == segment.getRight())
+				y = segment.getTop();
+			else
+				y = isOnPlatformLeft ? segment.getLeftPoint().getY() : segment.getRightPoint().getY();
 			float yCorrection = y - dynamicBodyBounds.getBottom();
-			correction = Vector(0, yCorrection);
+
+			// BRODER
+			if(yCorrection > 0.0f && yCorrection < 10.0f)
+				correction = Vector(0, yCorrection);
 		}
 	}
 
