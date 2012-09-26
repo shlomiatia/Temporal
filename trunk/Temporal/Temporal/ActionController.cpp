@@ -104,11 +104,13 @@ namespace Temporal
 	 *********************************************************************************************/
 	bool canJumpForward(StateMachineComponent* component)
 	{
-		/*const Vector& groundVector = getVectorParam(component->raiseMessage(Message(MessageID::GET_GROUND_VECTOR)));
+		const Segment* ground = static_cast<const Segment*>(component->raiseMessage(Message(MessageID::GET_GROUND)));
+		if(!ground)
+			return true;
+		Vector groundVector = ground->getNaturalVector().normalize();
 		Side::Enum orientation = getOrientation(*component);
 
-		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;*/
-		return true;
+		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
 	}
 
 	void Stand::enter() const
@@ -199,8 +201,14 @@ namespace Temporal
 			if(canJumpForward(_stateMachine))
 			{
 				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(JUMP_START_STATE);
 			}
+			else
+			{
+				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
+
+			}
+			_stateMachine->changeState(JUMP_START_STATE);
+
 		}
 		// TempFlag 1 - still walking
 		// TempFlag 2 - no floor
@@ -210,13 +218,14 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
-			const Vector& collision = getVectorParam(message.getParam());
+			/*const Vector& collision = getVectorParam(message.getParam());
 			if(collision.getY() >= 0.0f)
-				_stateMachine->setTempFlag2(true);
+				_stateMachine->setTempFlag2(true);*/
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{			
-			if(_stateMachine->getTempFlag2())
+			const Segment* ground = static_cast<const Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+			if(!ground)
 			{
 				_stateMachine->changeState(FALL_STATE);
 			}
