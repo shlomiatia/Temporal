@@ -104,7 +104,7 @@ namespace Temporal
 
 			// Check distance
 			float distance = minAnglesDistance(rangeCenter, angle);
-			if(distance <= _rangeSize / 2.0f)
+			if(distance - _rangeSize / 2.0f <= EPSILON)
 			{
 				isSensing = true;
 			}

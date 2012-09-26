@@ -60,7 +60,7 @@
             <center x="10" y="-50" />
             <radius x="20" y="10" />
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="157.5" size="135" />
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -137,7 +137,7 @@
             <center x="0" y="-50" />
             <radius x="10" y="10" />
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157" size="135" />
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -196,7 +196,7 @@
             <center x="10" y="-50" />
             <radius x="20" y="10" />
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="157.5" size="135" />
+        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
