@@ -105,7 +105,7 @@
     </animation>
     <animation id="POP_ANM_JUMP_UP_START">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_UP_START" duration="0.264" />
+            <sample sprite-group="POP_ANM_JUMP_UP_START" duration="0" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_UP" repeat="1">
@@ -130,7 +130,7 @@
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD_START">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="0.165" />
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="0" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD" repeat="1">
