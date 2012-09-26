@@ -86,9 +86,9 @@ namespace Temporal
 		}
 		else if(_ground && _velocity.getY() == 0.0f)
 		{
-			float movementAmount = _velocity.getLength() * framePeriod;
 			if(_velocity.getX() == 0)
 				return;
+			float movementAmount = _velocity.getLength() * framePeriod;
 			const AABB& dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
 			Side::Enum side = Side::get(_velocity.getX());
 			Side::Enum oppositeSide = Side::getOpposite(side);
@@ -104,15 +104,14 @@ namespace Temporal
 			}
 			else
 			{
-				const Segment* previous = _ground;
 				_ground = 0;
-				Vector startPoint = max + Vector(side, 1.0f);
 				AABB checker(max, Vector(1.0f, 1.0f));
 				FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
 				for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 				{
 					const Segment* next = static_cast<const Segment*>(&(**i).getGlobalShape());
-					if(previous != next && (next->getSide(side) - max.getX()) * side > 0.0f  && intersects(checker, *next))
+					Vector newDirection = next->getNaturalVector().normalize() * side;
+					if(!differentSign(direction.getY(), newDirection.getY()) && (next->getSide(side) - max.getX()) * side > 0.0f  && intersects(checker, *next))
 						_ground = next;
 				}
 				
@@ -122,11 +121,11 @@ namespace Temporal
 				}
 				else
 				{
-					Vector movement1 = max - curr;
-					float movementLeft = movementAmount - movement1.getLength();
-					Vector direction2 = _ground->getNaturalVector().normalize() * side;
-					Vector movement2 = movementLeft * direction2;
-					movement = movement1 + movement2;
+					Vector oldMovement = max - curr;
+					float movementLeft = movementAmount - oldMovement.getLength();
+					Vector newDirection = _ground->getNaturalVector().normalize() * side;
+					Vector newMovement = movementLeft * newDirection;
+					movement = newMovement + oldMovement;
 					executeMovement(movement);
 				}
 			}
@@ -191,10 +190,12 @@ namespace Temporal
 		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
 		
 		if(collision.getY() > EPSILON)
-			_ground = 0;
+		{
+			//_ground = 0;
+		}
 		if(_ground)
 		{
-			collision += Vector(0.0f, -1.0f);
+			collision = Vector(0.0f, -1.0f);
 			_velocity = Vector::Zero;
 		}
 		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));

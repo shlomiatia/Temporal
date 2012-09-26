@@ -116,7 +116,7 @@
     <renderer layer="4">
         <scene-node sprite-sheet="camera.png" />
     </renderer>
-</entity>-->
+</entity>
 <entity id="ENT_PATROL">
     <transform>
         <position x="768" y="384" />
@@ -146,7 +146,7 @@
     </renderer>
     <temporal-echo />
     <!--<temporal-period period="1" />-->
-</entity>
+<!--</entity>-->
 <!--<entity id="ENT_LASER">
     <transform />
     <collision-filter category="4" />
@@ -712,6 +712,72 @@
 		</fixture>
 	</static-body>
 </entity>
+<entity id="ENT_30_LEFT3">
+	<transform>
+		<position x="1152" y="544" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="64" y="32" />
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_30_RIGHT3">
+	<transform>
+		<position x="1280" y="544" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="64" y="-32" />
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_45_LEFT3">
+	<transform>
+		<position x="1376" y="544" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="32" y="32" />
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_45_RIGHT3">
+	<transform>
+		<position x="1440" y="544" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="32" y="-32" />
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_60_LEFT3">
+	<transform>
+		<position x="1504" y="576" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="32" y="64" />
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_60_RIGHT3">
+	<transform>
+		<position x="1568" y="576" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture type="segment">
+			<radius x="32" y="-64" />
+		</fixture>
+	</static-body>
+</entity>
 <entity id="ENT_MISC_PLATFORM3">
 	<transform>
 		<position x="1951" y="384" />
@@ -736,7 +802,7 @@
 </entity>
 <entity id="ENT_V_LEFT_WALL">
 	<transform>
-		<position x="1504" y="576" />
+		<position x="1664" y="576" />
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
@@ -747,7 +813,7 @@
 </entity>
 <entity id="ENT_V_RIGHT_WALL">
 	<transform>
-		<position x="1568" y="576" />
+		<position x="1728" y="576" />
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
@@ -758,7 +824,7 @@
 </entity>
 <entity id="ENT_V_PLATFORM">
 	<transform>
-		<position x="1536" y="640" />
+		<position x="1696" y="640" />
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
