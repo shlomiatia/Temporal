@@ -141,6 +141,9 @@ namespace Temporal
 	public:
 		void enter() const;
 		void handleMessage(Message& message) const;
+
+	private:
+		static const float ALLOW_JUMP_TIME;
 	};
 
 	class Walk : public ComponentState
