@@ -11,7 +11,7 @@ namespace Temporal
 		static const Hash INVALID;
 
 		explicit Hash(const char* string);		
-		explicit Hash(unsigned int value) : _value(value) {}
+		explicit Hash(unsigned int value = 0) : _value(value) {}
 
 		const char* getString() const;
 
