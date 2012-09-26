@@ -9,13 +9,13 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(Input::get().key(Key::LEFT))
-			{
-				sendDirectionAction(*this, Side::LEFT);
-			}
 			if(Input::get().key(Key::RIGHT))
 			{
 				sendDirectionAction(*this, Side::RIGHT);
+			}
+			if(Input::get().key(Key::LEFT))
+			{
+				sendDirectionAction(*this, Side::LEFT);
 			}
 			if(Input::get().key(Key::UP))
 			{
