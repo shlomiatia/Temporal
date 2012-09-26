@@ -95,7 +95,7 @@
     </animation>
     <animation id="POP_ANM_TURN">
         <sample-set>
-            <sample sprite-group="POP_ANM_TURN" duration="0.181" />
+            <sample sprite-group="POP_ANM_TURN" duration="0.0905" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_FALL" repeat="1">
