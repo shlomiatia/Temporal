@@ -148,6 +148,8 @@ namespace Temporal
 		}
 	}
 
+	const float Fall::ALLOW_JUMP_TIME = 0.075f;
+
 	void Fall::enter() const
 	{
 		// Not setting force because we want to continue the momentum
@@ -159,7 +161,15 @@ namespace Temporal
 		// TempFlag 1 - want to hang
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			_stateMachine->setTempFlag1(true);
+			if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
+			{
+				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
+				_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
+			}
+			else
+			{
+				_stateMachine->setTempFlag1(true);
+			}
 		}
 		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{

@@ -84,7 +84,7 @@ namespace Temporal
 			_ground = 0;
 			executeMovement(_absoluteImpulse);
 		}
-		else if(_ground && isSteepAngle(_ground->getNaturalVector().getAngle()))
+		else if(_ground && !isModerateAngle(_ground->getNaturalVector().getAngle()))
 		{
 			_velocity = _ground->getNaturalVector().normalize() * 500.0f;
 			if(_velocity .getY() > 0.0f)
@@ -99,12 +99,16 @@ namespace Temporal
 			float movementAmount = _velocity.getLength();
 			const AABB& dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
 			Side::Enum side = Side::get(_velocity.getX());
-			Side::Enum oppositeSide = Side::getOpposite(side);
 			Vector direction = _ground->getNaturalVector().normalize() * side;
-			_velocity = direction * movementAmount;
-			Vector movement = _velocity * framePeriod;
-			
-			Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
+			Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(Side::getOpposite(side)), dynamicBodyBounds.getBottom());
+
+			Vector velocity = _velocity;
+			if(direction.getY() >= 0.0 || (curr.getX() - _ground->getSide(Side::getOpposite(side))) * side >= 0.0f)
+				velocity = direction * movementAmount;
+			if(direction.getY() <= 0.0f )
+				_velocity = velocity;
+
+			Vector movement = velocity * framePeriod;						
 			Vector dest = curr + movement;
 			Vector max = _ground->getPoint(side);
 			if((dest.getX() - max.getX()) * side <= 0.0f)
@@ -120,7 +124,7 @@ namespace Temporal
 				{
 					const Segment* next = static_cast<const Segment*>(&(**i).getGlobalShape());
 					Vector newDirection = next->getNaturalVector().normalize() * side;
-					if(!differentSign(direction.getY(), newDirection.getY()) && (next->getSide(side) - max.getX()) * side > 0.0f  && intersects(checker, *next))
+					if((next->getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()) && intersects(checker, *next))
 						_ground = next;
 				}
 				
@@ -133,6 +137,10 @@ namespace Temporal
 					Vector oldMovement = max - curr;
 					float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
 					Vector newDirection = _ground->getNaturalVector().normalize() * side;
+					if(differentSign(oldMovement.getY(), newDirection.getY()))
+					{
+						newDirection = Vector(side, 0.0f);
+					}
 					Vector newMovement = movementLeft * newDirection;
 					movement = newMovement + oldMovement;
 					executeMovement(movement);
