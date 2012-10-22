@@ -39,6 +39,7 @@ namespace Temporal
 		Vector _absoluteImpulse;
 		const Segment* _ground;
 
+		void walk(float framePeriod);
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
 		void executeMovement(Vector movement);

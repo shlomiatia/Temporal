@@ -80,11 +80,14 @@ namespace Temporal
 	void DynamicBody::update(float framePeriod)
 	{
 		_fixture->update();
+
+		// Absolute impulse
 		if(_absoluteImpulse != Vector::Zero)
 		{
 			_ground = 0;
 			executeMovement(_absoluteImpulse);
 		}
+		// Slide
 		else if(_ground && !isModerateAngle(_ground->getNaturalVector().getAngle()))
 		{
 			_velocity = _ground->getNaturalVector().normalize() * 500.0f;
@@ -93,65 +96,83 @@ namespace Temporal
 			_ground = 0;
 			executeMovement(determineMovement(framePeriod));
 		}
+		// Walk
 		else if(_ground && _velocity.getY() == 0.0f)
 		{
-			if(_velocity.getX() == 0)
+			walk(framePeriod);
+		}
+		// Air
+		else
+		{
+			_ground = 0;
+			executeMovement(determineMovement(framePeriod));
+		}
+	}
+
+	void DynamicBody::walk(float framePeriod)
+	{
+		if(_velocity.getX() == 0)
 				return;
-			float movementAmount = _velocity.getLength();
-			const AABB& dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
-			Side::Enum side = Side::get(_velocity.getX());
-			Vector direction = _ground->getNaturalVector().normalize() * side;
-			Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(Side::getOpposite(side)), dynamicBodyBounds.getBottom());
+		
+		// Calculate platform touch point, or front if flat
+		const AABB& dynamicBodyBounds = static_cast<const AABB&>(_fixture->getGlobalShape());
+		Side::Enum side = Side::get(_velocity.getX());
+		Vector direction = _ground->getNaturalVector().normalize() * static_cast<float>(side);
+		Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(Side::getOpposite(side)), dynamicBodyBounds.getBottom());
 
-			Vector velocity = _velocity;
-			if(direction.getY() >= 0.0 || (curr.getX() - _ground->getSide(Side::getOpposite(side))) * side >= 0.0f)
-				velocity = direction * movementAmount;
-			if(direction.getY() <= 0.0f )
-				_velocity = velocity;
+		float movementAmount = _velocity.getLength();
+		Vector velocity = _velocity;
+		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
+		if(direction.getY() >= 0.0 || (curr.getX() - _ground->getSide(Side::getOpposite(side))) * side >= 0.0f)
+			velocity = direction * movementAmount;
 
-			Vector movement = velocity * framePeriod;						
-			Vector dest = curr + movement;
-			Vector max = _ground->getPoint(side);
-			if((dest.getX() - max.getX()) * side <= 0.0f)
+		// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
+		if(direction.getY() <= 0.0f )
+			_velocity = velocity;
+
+		Vector movement = velocity * framePeriod;						
+		Vector dest = curr + movement;
+		Vector max = _ground->getPoint(side);
+
+		// Still on platform
+		if((dest.getX() - max.getX()) * side <= 0.0f)
+		{
+			executeMovement(movement);
+		}
+		else
+		{
+			// Find next platform
+			_ground = 0;
+			AABB checker(max, Vector(1.0f, 1.0f));
+			FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
+			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
+			{
+				const Segment* next = static_cast<const Segment*>(&(**i).getGlobalShape());
+				Vector newDirection = next->getNaturalVector().normalize() * static_cast<float>(side);
+				if((next->getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()) && intersects(checker, *next))
+					_ground = next;
+			}
+
+
+			if(!_ground)
 			{
 				executeMovement(movement);
 			}
 			else
 			{
-				_ground = 0;
-				AABB checker(max, Vector(1.0f, 1.0f));
-				FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
-				for(FixtureIterator i = info.begin(); i != info.end(); ++i)
+				Vector oldMovement = max - curr;
+				float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
+				Vector newDirection = _ground->getNaturalVector().normalize() * static_cast<float>(side);
+
+				// /\ \/ Fix of this transitions
+				if(differentSign(direction.getY(), newDirection.getY()))
 				{
-					const Segment* next = static_cast<const Segment*>(&(**i).getGlobalShape());
-					Vector newDirection = next->getNaturalVector().normalize() * side;
-					if((next->getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()) && intersects(checker, *next))
-						_ground = next;
+					newDirection = Vector(static_cast<float>(side), 0.0f);
 				}
-				
-				if(!_ground)
-				{
-					executeMovement(movement);
-				}
-				else
-				{
-					Vector oldMovement = max - curr;
-					float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
-					Vector newDirection = _ground->getNaturalVector().normalize() * side;
-					if(differentSign(direction.getY(), newDirection.getY()))
-					{
-						newDirection = Vector(side, 0.0f);
-					}
-					Vector newMovement = movementLeft * newDirection;
-					movement = newMovement + oldMovement;
-					executeMovement(movement);
-				}
+				Vector newMovement = movementLeft * newDirection;
+				movement = newMovement + oldMovement;
+				executeMovement(movement);
 			}
-		}
-		else
-		{
-			_ground = 0;
-			executeMovement(determineMovement(framePeriod));
 		}
 	}
 
