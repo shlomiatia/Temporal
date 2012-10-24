@@ -7,8 +7,7 @@
 
 namespace Temporal
 {
-	class Shape;
-	class Segment;
+	class YABP;
 	class Fixture;
 
 	class DynamicBody : public Component
@@ -37,15 +36,15 @@ namespace Temporal
 
 		// Temp state
 		Vector _absoluteImpulse;
-		const Segment* _ground;
+		const YABP* _ground;
 
 		void walk(float framePeriod);
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
 		void executeMovement(Vector movement);
-		void detectCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& collision, bool& detectingGround);
-		void correctCollision(Shape& dynamicBodyBounds, const Shape& staticBodyBounds, Vector& correction, Vector& collision, bool& detectingGround);
-		void modifyCorrection(const Shape& dynamicBodyBounds, const Segment& segment, Vector& correction);
+		void detectCollision(YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& collision, bool& detectingGround);
+		void correctCollision(YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& correction, Vector& collision, bool& detectingGround);
+		void modifyCorrection(const YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& correction);
 		void modifyVelocity(const Vector& correction);
 
 		friend class SerializationAccess;

@@ -25,10 +25,11 @@ namespace Temporal
 			return static_cast<Navigator&>(stateMachine);
 		}
 
-		void plotPath(StateMachineComponent& stateMachine, const AABB& goalPosition)
+		void plotPath(StateMachineComponent& stateMachine, const YABP& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const AABB& startPosition = *static_cast<AABB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
+			// TODO:
+			const YABP& startPosition = *static_cast<YABP*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
 			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
 			if(start && goal)
@@ -44,7 +45,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const AABB& goalPosition = *static_cast<const AABB*>(message.getParam());
+				const YABP& goalPosition = *static_cast<const YABP*>(message.getParam());
 				plotPath(*_stateMachine, goalPosition); 
 			}
 		}
@@ -61,7 +62,7 @@ namespace Temporal
 				bool reachedTargetPlatform;
 				if(!path)
 				{
-					const AABB& destination = navigator.getDestination();
+					const YABP& destination = navigator.getDestination();
 					targetX = destination.getCenterX();
 					reachedTargetPlatform = true;
 				}
@@ -79,7 +80,7 @@ namespace Temporal
 				{
 					if(reachedTargetPlatform)
 					{
-						navigator.setDestination(AABB::Zero);
+						navigator.setDestination(YABP::Zero);
 						_stateMachine->changeState(WAIT_STATE);
 					}
 					else
@@ -218,22 +219,22 @@ namespace Temporal
 		return WAIT_STATE;
 	}
 
-	void Navigator::deserialize(const Serialization& serialization)
+	/*void Navigator::deserialize(const Serialization& serialization)
 	{
 		if(_path)
 		{
 			_path->clear();
 		}
 		
-		/*Vector center = Vector::Zero;
+		Vector center = Vector::Zero;
 		DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
 		Vector radius = Vector::Zero;
 		DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
 		AABB destination = AABB(center, radius);
 			
 		if(destination != AABB::Zero)
-			plotPath(*this, destination);*/
-	}
+			plotPath(*this, destination);
+	}*/
 
 	void Navigator::debugDraw() const
 	{

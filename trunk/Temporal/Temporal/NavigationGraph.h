@@ -8,7 +8,6 @@
 
 namespace Temporal
 {
-	class Shape;
 	class AABB;
 	class NavigationEdge;
 
@@ -75,7 +74,7 @@ namespace Temporal
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
 	typedef std::vector<const YABP> YABPCollection;
 	typedef YABPCollection::const_iterator YABPIterator;
-	typedef std::vector<const Shape*> ShapeCollection;
+	typedef std::vector<const YABP*> ShapeCollection;
 	typedef ShapeCollection::const_iterator ShapeIterator;
 
 	class NavigationGraph
@@ -89,7 +88,7 @@ namespace Temporal
 
 		void init();
 		void dispose();
-		const NavigationNode* getNodeByAABB(const AABB& aabb) const;
+		const NavigationNode* getNodeByAABB(const YABP& aabb) const;
 		void draw() const;
 
 	private:

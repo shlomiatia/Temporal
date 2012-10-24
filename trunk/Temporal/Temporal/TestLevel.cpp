@@ -11,6 +11,7 @@
 #include "Layer.h"
 #include "Navigator.h"
 #include "ResourceManager.h"
+#include "Lighting.h"
 #include "tinyxml2.h"
 #include <ftgl/ftgl.h>
 namespace Temporal
@@ -49,9 +50,9 @@ namespace Temporal
 		}
 		if(Input::get().key(Key::Q))
 		{
-			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
+			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 		}
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));		
@@ -60,7 +61,7 @@ namespace Temporal
 	void TestLevel::draw() const
 	{
 		LayersManager::get().draw();
-		font.Render("Hello World!");
+		//font.Render("Hello World!");
 	}
 
 	void TestLevel::dispose()

@@ -85,7 +85,7 @@ namespace Temporal
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
-			const Shape& platform = **i;
+			const YABP& platform = **i;
 			for(YABPIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
 				const YABP area = *j;
@@ -104,8 +104,7 @@ namespace Temporal
 					intersects(lowerSlope, platform, &lowerSlopePoint);
 					float min = platform.getLeft();
 					float max = platform.getRight();
-					const Segment& segment = static_cast<const Segment&>(platform);
-					Vector segmentVector = segment.getNaturalVector();
+					Vector segmentVector = platform.getSlopedRadius();
 					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
 					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
 					if(max >= area.getLeft() && max <= area.getRight())
@@ -125,7 +124,7 @@ namespace Temporal
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
-			const Shape& platform = **i;
+			const YABP& platform = **i;
 			if(intersects(area, platform))
 			{
 				return true;
@@ -171,7 +170,7 @@ namespace Temporal
 		}
 	}
 
-	const NavigationNode* NavigationGraph::getNodeByAABB(const AABB& aabb) const
+	const NavigationNode* NavigationGraph::getNodeByAABB(const YABP& aabb) const
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -187,18 +186,16 @@ namespace Temporal
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			// Create area from platform
-			const Shape& platform = **i;
-			const Segment& segment = static_cast<const Segment&>(platform);
-			Vector vector = segment.getNaturalVector();
+			const YABP& platform = **i;
+			Vector vector = platform.getSlopedRadius();
 			float angle = vector.getAngle();
 			if(!isModerateAngle(angle))
 				continue;
-
+			
 			// Create area
-			Vector center = Vector(segment.getCenterX(), segment.getCenterY() + 1.0f + MIN_AREA_SIZE.getHeight() / 2.0f);
-			Vector slopedRadius = vector / 2.0f;
+			Vector center = Vector(platform.getCenterX(), platform.getCenterY() + platform.getYRadius() + 1.0f + MIN_AREA_SIZE.getHeight() / 2.0f);
 			float yRadius = MIN_AREA_SIZE.getHeight() / 2.0f;
-			YABP area = YABP(center, slopedRadius, yRadius);
+			YABP area = YABP(center, vector, yRadius);
 
 			YABPCollection areas;
 			areas.push_back(area);
@@ -322,7 +319,7 @@ namespace Temporal
 	{
 		if(body.getFixture().getFilter().getCategory() == CollisionCategory::OBSTACLE)
 		{
-			const Shape& platform = body.getFixture().getGlobalShape();
+			const YABP& platform = body.getFixture().getGlobalShape();
 			platforms.push_back(&platform);
 		}
 	}

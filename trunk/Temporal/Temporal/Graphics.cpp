@@ -279,22 +279,4 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-
-	void Graphics::draw(const Shape& shape, const Color& color)
-	{
-		if(shape.getType() == ShapeType::AABB)
-		{
-			const AABB& rect = static_cast<const AABB&>(shape);
-			draw(rect, color);
-		}
-		else if(shape.getType() == ShapeType::SEGMENT)
-		{
-			const Segment& seg = static_cast<const Segment&>(shape);
-			draw(seg, color);
-		}
-		else
-		{
-			exit(1);
-		}
-	}
 }

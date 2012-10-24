@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="NavigationGraph.h" />
+    <ClInclude Include="Navigator.h" />
+    <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
@@ -22,10 +25,7 @@
     <ClInclude Include="Hash.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Lighting.h" />
-    <ClInclude Include="NavigationGraph.h" />
-    <ClInclude Include="Navigator.h" />
     <ClInclude Include="Particles.h" />
-    <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="Patrol.h" />
     <ClInclude Include="CollisionFilter.h" />
     <ClInclude Include="PhysicsEnums.h" />
@@ -70,6 +70,9 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="NavigationGraph.cpp" />
+    <ClCompile Include="Navigator.cpp" />
+    <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
@@ -79,10 +82,7 @@
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Math.cpp" />
-    <ClCompile Include="NavigationGraph.cpp" />
-    <ClCompile Include="Navigator.cpp" />
     <ClCompile Include="Particles.cpp" />
-    <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Animation.cpp" />

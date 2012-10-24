@@ -30,9 +30,6 @@ distribution.
 #include <cstring>
 #include <cstdarg>
 
-/* 
-   TODO: intern strings instead of allocation.
-*/
 /*
 	gcc: g++ -Wall tinyxml2.cpp xmltest.cpp -o gccxmltest.exe
 */

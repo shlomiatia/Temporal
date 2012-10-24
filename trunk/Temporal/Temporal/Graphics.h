@@ -8,7 +8,6 @@ namespace Temporal
 {
 	class SceneNode;
 	class SpriteSheet;
-	class Shape;
 	class AABB;
 	class Segment;
 	class YABP;

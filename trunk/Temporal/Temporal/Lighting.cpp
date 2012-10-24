@@ -37,26 +37,79 @@ namespace Temporal
 			draw();
 		}
 	}
-
-	void drawShadow(const Vector& lightCenter, const Shape& shape)
+	
+	void drawShadow(const Vector& lightCenter, const YABP& shape)
 	{
 		float shadowSize = 10000.0f;
-		const Segment& segment = static_cast<const Segment&>(shape);
-		Vector leftPoint = segment.getLeftPoint();
-		Vector rightPoint = segment.getRightPoint();
-		Vector vector1 = Vector(leftPoint - lightCenter).normalize();
-		Vector vector2 = Vector(rightPoint - lightCenter).normalize();
+		Vector point1;
+		Vector point2;
+		float angle = -shape.getSlopedRadius().getAngle();
+		Vector center = lightCenter - shape.getCenter();
+		float y = center.getX() * sin(angle) + center.getY() * cos(angle);
+		if(lightCenter.getX() < shape.getLeft())
+		{
+			if(y < -shape.getYRadius())
+			{
+				point1 = shape.getTopLeft();
+				point2 = shape.getBottomRight();
+			}
+			else if(y > shape.getYRadius())
+			{
+				point1 = shape.getBottomLeft();
+				point2 = shape.getTopRight();
+			}
+			else
+			{
+				point1 = shape.getBottomLeft();
+				point2 = shape.getTopLeft();
+			}
+		}
+		else if(lightCenter.getX() > shape.getRight())
+		{
+			if(y < -shape.getYRadius())
+			{
+				point1 = shape.getBottomLeft();
+				point2 = shape.getTopRight();
+			}
+			else if(y > shape.getYRadius())
+			{
+				point1 = shape.getTopLeft();
+				point2 = shape.getBottomRight();
+			}
+			else
+			{
+				point1 = shape.getBottomRight();
+				point2 = shape.getTopRight();
+			}
+		}
+		else
+		{
+			if(y < -shape.getYRadius())
+			{
+				point1 = shape.getBottomLeft();
+				point2 = shape.getBottomRight();
+				
+			}
+			else
+			{
+				point1 = shape.getTopLeft();
+				point2 = shape.getTopRight();
+			}
+		}
+		
+		Vector vector1 = Vector(point1 - lightCenter).normalize();
+		Vector vector2 = Vector(point2 - lightCenter).normalize();
 
 		float vertices[8];
 			
-		vertices[0] = leftPoint.getX() + vector1.getX() * shadowSize;
-		vertices[1] = leftPoint.getY() + vector1.getY() * shadowSize;
-		vertices[2] = leftPoint.getX();
-		vertices[3] = leftPoint.getY();
-		vertices[4] = rightPoint.getX();
-		vertices[5] = rightPoint.getY();
-		vertices[6] = rightPoint.getX() + vector2.getX() * shadowSize;
-		vertices[7] = rightPoint.getY() + vector2.getY() * shadowSize;
+		vertices[0] = point1.getX() + vector1.getX() * shadowSize;
+		vertices[1] = point1.getY() + vector1.getY() * shadowSize;
+		vertices[2] = point1.getX();
+		vertices[3] = point1.getY();
+		vertices[4] = point2.getX();
+		vertices[5] = point2.getY();
+		vertices[6] = point2.getX() + vector2.getX() * shadowSize;
+		vertices[7] = point2.getY() + vector2.getY() * shadowSize;
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -79,7 +132,9 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		AABB lightAABB = AABB(position.getX(), position.getY(), _radius * 2.0f, _radius * 2.0f);
+		// TODO:
+		YABP lightAABB = YABP(position, Vector(_radius, 0.0f), _radius);
+		// TODO: Performance
 		FixtureCollection result = Grid::get().iterateTiles(lightAABB, CollisionCategory::OBSTACLE);
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{

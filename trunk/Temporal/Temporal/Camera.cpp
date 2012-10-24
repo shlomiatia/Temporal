@@ -4,9 +4,11 @@
 
 namespace Temporal
 {
+	static const Hash PLAYER = Hash("ENT_PLAYER");
+
 	void Camera::draw()
 	{
-		const Vector& position = *static_cast<const Vector*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_POSITION)));
+		const Vector& position = *static_cast<const Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER, Message(MessageID::GET_POSITION)));
 		const Size& cameraSize = Graphics::get().getLogicalView();
 		float cameraWidth = cameraSize.getWidth();
 		float cameraHeight = cameraSize.getHeight();

@@ -8,7 +8,6 @@
 namespace Temporal
 {
 	class Vector;
-	class Vector;
 	class Fixture;
 	class DirectedSegment;
 
@@ -43,10 +42,10 @@ namespace Temporal
 		void dispose();
 
 		void add(const Fixture* body);
-		void update(const Shape& previous, const Fixture* body);
+		void update(const YABP& previous, const Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
-		FixtureCollection iterateTiles(const Shape& shape, int mask = -1, int group = -1) const;
+		FixtureCollection iterateTiles(const YABP& shape, int mask = -1, int group = -1) const;
 
 		void draw() const;
 

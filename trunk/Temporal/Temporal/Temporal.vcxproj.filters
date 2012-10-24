@@ -2,15 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="NavigationGraph.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Navigator.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Pathfinder.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="Patrol.h">
       <Filter>AI</Filter>
     </ClInclude>
@@ -162,18 +153,18 @@
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Pathfinder.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGraph.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Navigator.h">
+      <Filter>AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="NavigationGraph.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Navigator.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Pathfinder.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Patrol.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -306,6 +297,15 @@
     </ClCompile>
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGraph.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Navigator.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinder.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
