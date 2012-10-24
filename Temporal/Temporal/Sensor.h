@@ -66,27 +66,6 @@ namespace Temporal
 
 		friend class SerializationAccess;
 	};
-
-	class LedgeDetector : public ContactListener
-	{
-	public:
-		explicit LedgeDetector(Hash id = Hash::INVALID, float rangeCenter = 0.0f, float rangeSize = 0.0f)
-			: _id(id), _point(Vector::Zero), _rangeCenter(rangeCenter), _rangeSize(rangeSize), _isBlocked(false) {}
-
-		void start();
-		void handle(const Contact& contact);
-		void end();
-
-		ContactListener* clone() const { return new LedgeDetector(_id, _rangeCenter, _rangeSize); }
-	private:
-		Hash _id;
-		float _rangeCenter;
-		float _rangeSize;
-		Vector _point;
-		bool _isBlocked;
-
-		friend class SerializationAccess;
-	};
 }
 
 #endif

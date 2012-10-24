@@ -6,49 +6,12 @@
 namespace Temporal
 {
 	/**********************************************************************************************
-	 * AABB
-	 *********************************************************************************************/
-	const AABB AABB::Zero(Vector::Zero, Vector(Vector::Zero));
-
-	AABB::AABB(float centerX, float centerY, float width, float height)
-		: Shape(centerX, centerY), _radius(width / 2.0f, height / 2.0f)
-	{
-		validate();
-	}
-
-	AABB::AABB(const Vector& center, const Size& size)
-		: Shape(center), _radius(size.toVector() / 2.0f)
-	{
-		validate();
-	}
-
-	AABB::AABB(const Vector& center, const Vector& radius)
-		: Shape(center), _radius(radius)
-	{
-		validate();
-	}
-
-	void AABB::validate() const
-	{
-		assert(getRadiusVx() >= 0);
-		assert(getRadiusVy() >= 0);
-	}
-
-	bool AABB::contains(const Vector& point) const
-	{
-		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
-			if(abs(getCenter().getAxis(axis) - point.getAxis(axis)) - getRadius().getAxis(axis) > EPSILON)
-				return false;
-		return true;
-	}
-
-	/**********************************************************************************************
 	 * Segment
 	 *********************************************************************************************/
-	const Segment Segment::Zero(Vector::Zero, Vector(Vector::Zero));
+	const Segment Segment::Zero(Vector::Zero, Vector::Zero);
 
 	Segment::Segment(const Vector& center, const Vector& radius) 
-		: Shape(center), _radius(radius) 
+		: _center(center), _radius(radius) 
 	{
 		assert(getRadiusVx() >= 0.0f);
 	}
@@ -68,15 +31,59 @@ namespace Temporal
 	}
 
 	/**********************************************************************************************
+	 * AABB
+	 *********************************************************************************************/
+	const AABB AABB::Zero(Vector::Zero, Vector::Zero);
+
+	AABB::AABB(float centerX, float centerY, float width, float height)
+		: _center(centerX, centerY), _radius(width / 2.0f, height / 2.0f)
+	{
+		validate();
+	}
+
+	AABB::AABB(const Vector& center, const Size& size)
+		: _center(center), _radius(size.toVector() / 2.0f)
+	{
+		validate();
+	}
+
+	AABB::AABB(const Vector& center, const Vector& radius)
+		: _center(center), _radius(radius)
+	{
+		validate();
+	}
+
+	void AABB::validate() const
+	{
+		assert(getRadiusVx() >= 0);
+		assert(getRadiusVy() >= 0);
+	}
+
+	bool AABB::contains(const Vector& point) const
+	{
+		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
+			if(abs(getCenter().getAxis(axis) - point.getAxis(axis)) - getRadius().getAxis(axis) > EPSILON)
+				return false;
+		return true;
+	}
+
+	/**********************************************************************************************
 	 * YABP
 	 *********************************************************************************************/
+	const YABP YABP::Zero(Vector::Zero, Vector::Zero, 0.0f);
+
 	YABP::YABP(const Vector& center, const Vector& slopedRadius, float yRadius)
 		: _center(center), _slopedRadius(slopedRadius), _yRadius(yRadius)
+	{
+		validate();
+	}
+	
+	float YABP::getTop() const { return getCenterY() + getYRadius() + abs(getSlopedRadiusVy()); }
+	float YABP::getBottom() const { return getCenterY() - getYRadius() - abs(getSlopedRadiusVy()); }
+
+	void YABP::validate() const
 	{
 		assert(getSlopedRadiusVx() >= 0.0f);
 		assert(getYRadius() >= 0.0f);
 	}
-
-	float YABP::getTop() const { return getCenterY() + getYRadius() + abs(getSlopedRadiusVy()); }
-	float YABP::getBottom() const { return getCenterY() - getYRadius() - abs(getSlopedRadiusVy()); }
 }

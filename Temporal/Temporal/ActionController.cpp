@@ -451,7 +451,7 @@ namespace Temporal
 
 	void Climb::enter() const
 	{
-		const Shape& shape = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+		const YABP& shape = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float climbForceX = 1.0f;
 		float climbForceY = shape.getHeight();
 		Vector climbForce(climbForceX, climbForceY);
@@ -478,7 +478,7 @@ namespace Temporal
 	void PrepareToDescend::update() const
 	{
 		Side::Enum orientation = getOrientation(*_stateMachine);
-		const Shape& personBounds = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+		const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		const Vector& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
 		float platformEdge = point.getX();
 		float entityFront = personBounds.getSide(orientation);
@@ -515,7 +515,7 @@ namespace Temporal
 
 	void Descend::enter() const
 	{
-		const Shape& size = *static_cast<Shape*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+		const YABP& size = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 		float forceX = 0.0f;
 		float forceY = -(size.getHeight());
 

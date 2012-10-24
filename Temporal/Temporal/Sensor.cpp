@@ -19,13 +19,13 @@ namespace Temporal
 	void Sensor::update()
 	{
 		_fixture->update();
-		const AABB& sensorShape = static_cast<const AABB&>(_fixture->getGlobalShape());
+		const YABP& sensorShape = _fixture->getGlobalShape();
 		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
 		_listener->start();
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
 			const Fixture& fixture = **i;
-			const Shape& shape = fixture.getGlobalShape();
+			const YABP& shape = fixture.getGlobalShape();
 
 			// First check for basic intersection
 			if(intersects(sensorShape, shape))
@@ -52,71 +52,5 @@ namespace Temporal
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
-	}
-
-	void LedgeDetector::start()
-	{
-		_point = Vector::Zero;
-		_isBlocked = false;
-	}
-
-	void LedgeDetector::end()
-	{
-		if(_point != Vector::Zero)
-		{
-			getOwner().raiseMessage(Message(MessageID::SENSOR_COLLISION, &SensorCollisionParams(_id, _point == Vector::Zero ? 0 : &_point)));
-		}
-	}
-
-	void LedgeDetector::handle(const Contact& contact)
-	{
-		if(_isBlocked)
-			return;
-
-		bool isSensing = false;
-
-		const AABB& sensorShape = static_cast<const AABB&>(contact.getSource().getGlobalShape());
-		const Segment& segment = static_cast<const Segment&>(contact.getTarget().getGlobalShape());
-
-		// Then check if contain one of the edges
-		Vector point = Vector::Zero;
-		Vector leftPoint = segment.getLeftPoint();
-		Vector rightPoint = segment.getRightPoint();
-		if(sensorShape.contains(leftPoint))
-			point = leftPoint;
-		else if(sensorShape.contains(rightPoint))
-			point = rightPoint;
-		if(point != Vector::Zero)
-		{
-			Vector vector = segment.getNaturalVector();
-					
-			// Modify the angle according to relative position
-			if((vector.getX() == 0.0f && segment.getTop() == point.getY()) ||
-				(vector.getX() != 0.0f && segment.getRight() == point.getX())) 
-			{
-				vector = -vector;
-			}
-			float angle = vector.getAngle();
-			Side::Enum orientation = getOrientation(getOwner());
-
-			// Flip the range if looking backwards
-			float rangeCenter = orientation == Side::RIGHT ? _rangeCenter : mirroredAngle( _rangeCenter);
-
-			// Check distance
-			float distance = minAnglesDistance(rangeCenter, angle);
-			if(distance - _rangeSize / 2.0f <= EPSILON)
-			{
-				isSensing = true;
-			}
-		}
-		if(isSensing)
-		{
-			_point = point;
-		}
-		else
-		{
-			_isBlocked = true;
-			_point = Vector::Zero;
-		}		
 	}
 }

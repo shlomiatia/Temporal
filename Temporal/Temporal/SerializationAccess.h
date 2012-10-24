@@ -222,7 +222,7 @@ namespace Temporal
 		{
 			serializer.serialize("category-mask", sensor._categoryMask);
 			serializer.serialize("fixture", sensor._fixture);
-			serializer.serialize("contact-listener", sensor._listener);
+			//serializer.serialize("contact-listener", sensor._listener);
 		}
 
 		template<class T>
@@ -239,13 +239,13 @@ namespace Temporal
 			serializer.serialize("fixture", staticBody._fixture);
 		}
 
-		template<class T>
+		/*template<class T>
 		static void serialize(const char* key, LedgeDetector& ledgeDetector, T& serializer)
 		{
 			serializer.serialize("id", ledgeDetector._id);
 			serializer.serializeRadians("center", ledgeDetector._rangeCenter);
 			serializer.serializeRadians("size", ledgeDetector._rangeSize);
-		}
+		}*/
 
 		template<class T>
 		static void serialize(const char* key, Laser& laser, T& serializer)
@@ -320,23 +320,41 @@ namespace Temporal
 
 		static void serialize(const char* key, Fixture*& fixture, XmlDeserializer& serializer)
 		{
-			Shape* shape = 0;
+			YABP* shape = new YABP();
 			if(strcmp(key, "aabb") == 0)
-				serialize(key, (AABB*&)shape, serializer);
+			{
+				serializer.serialize("center", shape->_center);
+				Vector radius;
+				serializer.serialize("radius", radius);
+				shape->setSlopedRadius(Vector(radius.getX(), 0.0f));
+				shape->setYRadius(radius.getY());
+			}
 			else if(strcmp(key, "segment") == 0)
-				serialize(key, (Segment*&)shape, serializer);
+			{
+				serializer.serialize("center", shape->_center);
+				serializer.serialize("radius", shape->_slopedRadius);
+				if(shape->_slopedRadius.getX() == 0.0f)
+				{
+					shape->setYRadius(shape->getSlopedRadius().getY());
+					shape->setSlopedRadius(Vector(1.0f, 0.0f));
+				}
+				else
+				{
+					shape->setYRadius(1.0f);
+				}
+			}
 			else
 				abort();
 			fixture = new Fixture(shape);
 		}
 
-		static void serialize(const char* key, ContactListener*& contactListener, XmlDeserializer& serializer)
+		/*static void serialize(const char* key, ContactListener*& contactListener, XmlDeserializer& serializer)
 		{
 			if(strcmp(key, "ledge-detector") == 0)
 				serialize(key, (LedgeDetector*&)contactListener, serializer);
 			else
 				abort();
-		}
+		}*/
 
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 		{

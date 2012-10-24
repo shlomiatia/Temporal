@@ -64,7 +64,7 @@ namespace Temporal
 
 	void Grid::add(const Fixture* body)
 	{
-		const Shape& shape = body->getGlobalShape();
+		const YABP& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
@@ -75,15 +75,16 @@ namespace Temporal
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
 				AABB tile = getTileAABB(i, j);
-				if(intersects(tile, body->getGlobalShape()))
+				// TODO:
+				if(intersects(YABP(tile.getCenter(), Vector(tile.getRadiusVx(), 0.0f), tile.getRadiusVy()), body->getGlobalShape()))
 					add(body, i, j);
 			}
 		}
 	}
 
-	void Grid::update(const Shape& previous, const Fixture* body)
+	void Grid::update(const YABP& previous, const Fixture* body)
 	{
-		const Shape& shape = body->getGlobalShape();
+		const YABP& shape = body->getGlobalShape();
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
@@ -129,7 +130,7 @@ namespace Temporal
 	{
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
-			return 0;
+			abort();
 		else
 			return _grid[index];
 	}
@@ -218,7 +219,7 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureCollection Grid::iterateTiles(const Shape& shape, int mask, int group) const
+	FixtureCollection Grid::iterateTiles(const YABP& shape, int mask, int group) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());

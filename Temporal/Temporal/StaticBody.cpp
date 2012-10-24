@@ -25,7 +25,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
-			Shape* shape = const_cast<Shape*>(&_fixture->getGlobalShape());
+			YABP* shape = &_fixture->getGlobalShape();
 			message.setParam(shape);
 		}
 	}

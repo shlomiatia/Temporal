@@ -57,13 +57,13 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(AABB::Zero), _path(0) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(YABP::Zero), _path(0) {}
 
 		ComponentType::Enum getType() const { return ComponentType::NAVIGATOR; }
 		void handleMessage(Message& message);
 
-		const AABB& getDestination() const { return _destination; }
-		void setDestination(const AABB& destination) { _destination = destination; }
+		const YABP& getDestination() const { return _destination; }
+		void setDestination(const YABP& destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath() const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { if(_path) delete _path; _path = path; }
 		Component* clone() const { return new Navigator(); }
@@ -71,10 +71,10 @@ namespace Temporal
 		Hash getInitialState() const;
 
 	private:
-		AABB _destination;
+		YABP _destination;
 		NavigationEdgeCollection* _path;
 
-		void deserialize(const Serialization& serialization);
+		//void deserialize(const Serialization& serialization);
 		void debugDraw() const;
 
 		StateCollection getStates() const;

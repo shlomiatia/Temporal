@@ -6,11 +6,9 @@
 namespace Temporal
 {
 	// General
-	// TODO: Input
 	// TODO: Deal with component order
 
 	// Physics
-	// TODO: moving platforms
 	// TODO: Store YABP in grid
 
 	// Graphics

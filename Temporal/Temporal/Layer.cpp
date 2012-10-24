@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Thread.h"
 #include "Grid.h"
+#include "NavigationGraph.h"
 #include <sstream>
 
 namespace Temporal
@@ -29,9 +30,9 @@ namespace Temporal
 
 	void DebugLayer::draw()
 	{
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
+		ComponentType::Enum filter = ComponentType::STATIC_BODY | ComponentType::SIGHT;
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
-
+		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 
