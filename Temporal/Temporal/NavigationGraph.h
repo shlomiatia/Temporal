@@ -8,7 +8,6 @@
 
 namespace Temporal
 {
-	class AABB;
 	class NavigationEdge;
 
 	namespace NavigationEdgeType
@@ -88,7 +87,7 @@ namespace Temporal
 
 		void init();
 		void dispose();
-		const NavigationNode* getNodeByAABB(const YABP& aabb) const;
+		const NavigationNode* getNode(const YABP& shape) const;
 		void draw() const;
 
 	private:

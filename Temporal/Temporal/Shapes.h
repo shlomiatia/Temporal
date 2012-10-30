@@ -114,15 +114,11 @@ namespace Temporal
 		float getWidth() const { return getRadiusVx() * 2.0f; }
 		float getHeight() const { return getRadiusVy() * 2.0f; }
 
-		Range getAxis(Axis::Enum axis) const { return axis == Axis::X ? Range(getLeft(), getRight()) : Range(getBottom(), getTop()); }
-
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }
 
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
-
-		bool contains(const Vector& point) const;
 
 		template<class T>
 		void serialize(T& serializer)
@@ -178,13 +174,15 @@ namespace Temporal
 		float getWidth() const { return getSlopedRadiusVx() * 2.0f; }
 		float getHeight() const { return (getSlopedRadiusVy() + getYRadius()) * 2.0f; }
 
-		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
-		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-
 		Vector getTopLeft() const { return getCenter() - getSlopedRadius() + getYVector(); }
 		Vector getBottomLeft() const { return getCenter() - getSlopedRadius() - getYVector(); }
 		Vector getTopRight() const { return getCenter() + getSlopedRadius() + getYVector(); }
 		Vector getBottomRight() const { return getCenter() + getSlopedRadius() - getYVector(); }
+
+		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
+		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
+		Vector getTop(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
+		Vector getBottom(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
 
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
@@ -199,6 +197,8 @@ namespace Temporal
 
 		friend class SerializationAccess;
 	};
+
+	inline YABP YABPAABB(const Vector& center, const Vector& radius) { return YABP(center, Vector(radius.getX(), 0.0f), radius.getY()); }
 
 	/**********************************************************************************************
 	 * Directed segment

@@ -59,14 +59,6 @@ namespace Temporal
 		assert(getRadiusVy() >= 0);
 	}
 
-	bool AABB::contains(const Vector& point) const
-	{
-		for(Axis::Enum axis = Axis::X; axis <= Axis::Y; axis++) 
-			if(abs(getCenter().getAxis(axis) - point.getAxis(axis)) - getRadius().getAxis(axis) > EPSILON)
-				return false;
-		return true;
-	}
-
 	/**********************************************************************************************
 	 * YABP
 	 *********************************************************************************************/

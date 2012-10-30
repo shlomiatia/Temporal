@@ -42,7 +42,6 @@ namespace Temporal
 		void draw(const AABB& rect, const Color& color = Color::White);
 		void draw(const YABP& slopedArea, const Color& color = Color::White);
 		void draw(const Segment& segment, const Color& color = Color::White);
-		void draw(const Shape& shape, const Color& color = Color::White);
 
 		void bindTexture(unsigned int id);
 

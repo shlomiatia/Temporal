@@ -37,16 +37,10 @@ namespace Temporal
 			draw();
 		}
 	}
-	
-	void drawShadow(const Vector& lightCenter, const YABP& shape)
+
+	void getPoints(float x, float y, const YABP& shape, Vector& point1, Vector& point2)
 	{
-		float shadowSize = 10000.0f;
-		Vector point1;
-		Vector point2;
-		float angle = -shape.getSlopedRadius().getAngle();
-		Vector center = lightCenter - shape.getCenter();
-		float y = center.getX() * sin(angle) + center.getY() * cos(angle);
-		if(lightCenter.getX() < shape.getLeft())
+		if(x < shape.getLeft())
 		{
 			if(y < -shape.getYRadius())
 			{
@@ -64,7 +58,7 @@ namespace Temporal
 				point2 = shape.getTopLeft();
 			}
 		}
-		else if(lightCenter.getX() > shape.getRight())
+		else if(x > shape.getRight())
 		{
 			if(y < -shape.getYRadius())
 			{
@@ -96,9 +90,28 @@ namespace Temporal
 				point2 = shape.getTopRight();
 			}
 		}
+	}
+	
+	void drawShadow(const Vector& lightCenter, const YABP& shape)
+	{
+		// BRODER
+		float shadowSize = 10000.0f;
+
+		// Translate light and shape to origin
+		const Vector& slopedRadius = shape.getSlopedRadius();
+		float angle = -slopedRadius.getAngle();
+		Vector relativeCenter = lightCenter - shape.getCenter();
+		float rotatedY = relativeCenter.getX() * sin(angle) + relativeCenter.getY() * cos(angle);
 		
-		Vector vector1 = Vector(point1 - lightCenter).normalize();
-		Vector vector2 = Vector(point2 - lightCenter).normalize();
+		Vector point1;
+		Vector point2;
+		getPoints(lightCenter.getX(), rotatedY, shape, point1, point2);
+
+		Vector relativePoint1 = point1 - lightCenter;
+		Vector relativePoint2 = point2 - lightCenter;
+
+		Vector vector1 = relativePoint1.normalize();
+		Vector vector2 = relativePoint2.normalize();
 
 		float vertices[8];
 			
@@ -132,10 +145,9 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		// TODO:
-		YABP lightAABB = YABP(position, Vector(_radius, 0.0f), _radius);
-		// TODO: Performance
-		FixtureCollection result = Grid::get().iterateTiles(lightAABB, CollisionCategory::OBSTACLE);
+		YABP lightBounds = YABPAABB(position, Vector(_radius, _radius));
+
+		FixtureCollection result = Grid::get().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());

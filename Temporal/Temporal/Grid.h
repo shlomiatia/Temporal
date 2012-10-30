@@ -56,7 +56,7 @@ namespace Temporal
 		int _gridHeight;
 
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
-		AABB getTileAABB(int i, int j) const;
+		YABP getTileShape(int i, int j) const;
 		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }
