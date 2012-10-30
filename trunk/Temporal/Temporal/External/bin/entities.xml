@@ -14,9 +14,45 @@
         <scene-node sprite-sheet="bg.png" />
     </renderer>
 </entity>
+<entity id="ENT_PLAYER">
+    <transform>
+        <position x="512" y="684" />
+    </transform>
+    <collision-filter category="8" />
+    <draw-position>
+        <offset y="-40" />
+    </draw-position>
+    <input-controller />
+    <dynamic-body>
+        <fixture type="aabb">
+            <radius x="10" y="40" />
+        </fixture>
+    </dynamic-body>
+    <sensor category-mask="1">
+        <fixture type="aabb">
+            <center x="0" y="40.5" />
+            <radius x="10" y="1" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_HANG" />
+    </sensor>
+    <sensor category-mask="1">
+        <fixture type="aabb">
+            <center x="0" y="-40.5" />
+            <radius x="10" y="1" />
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_DESCEND" />
+    </sensor>
+    <action-controller />
+    <animator animation-set="POP_ANM_SET" />
+    <renderer layer="4">
+        <scene-node sprite-sheet="pop.png" />
+    </renderer>
+    <!--<particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
+    <player-period period="2" />-->
+</entity>
 <!--<entity id="ENT_LIGHT">
     <transform>
-        <position x="512" y="384" />
+        <position x="512" y="300" />
     </transform>
     <light />
 </entity>
@@ -34,34 +70,6 @@
             <radius x="10" y="40" />
         </fixture>
     </dynamic-body>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="50" y="90" />
-            <radius x="60" y="50" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_JUMP" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="10" y="50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_HANG" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="-10" y="-50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_BACK_EDGE" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="10" y="-50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
-    </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
@@ -132,13 +140,7 @@
         </fixture>
     </dynamic-body>
     <sight size="60" />
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="0" y="-50" />
-            <radius x="10" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
-    </sensor>
+
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
@@ -155,68 +157,18 @@
         <scene-node sprite-sheet="laser.png" />
     </renderer>
     <!--<temporal-period period="2" />-->
-<!--</entity>-->
-<entity id="ENT_PLAYER">
-    <transform>
-        <position x="512" y="384" />
-    </transform>
-    <collision-filter category="8" />
-    <draw-position>
-        <offset y="-40" />
-    </draw-position>
-    <input-controller />
-    <dynamic-body>
-        <fixture type="aabb">
-            <radius x="10" y="40" />
-        </fixture>
-    </dynamic-body>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="50" y="90" />
-            <radius x="60" y="50" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_JUMP" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="10" y="50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_HANG" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="-10" y="-50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_BACK_EDGE" center="-22.5" size="135" />
-    </sensor>
-    <sensor category-mask="1">
-        <fixture type="aabb">
-            <center x="10" y="-50" />
-            <radius x="20" y="10" />
-        </fixture>
-        <contact-listener type="ledge-detector" id="SNS_FRONT_EDGE" center="-157.5" size="135" />
-    </sensor>
-    <action-controller />
-    <animator animation-set="POP_ANM_SET" />
-    <renderer layer="4">
-        <scene-node sprite-sheet="pop.png" />
-    </renderer>
-    <!--<particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
-    <player-period period="2" />-->
-</entity>
+<!--</entity>
 <entity id="ENT_LEFT_WALL">
 	<transform>
-		<position x="0" y="383.5" />
+		<position x="0" y="359.5" />
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
 		<fixture type="segment">
-			<radius x="0" y="383.5" />
+			<radius x="0" y="359.5" />
 		</fixture>
 	</static-body>
-</entity>
+</entity>-->
 <entity id="ENT_FLOOR">
 	<transform>
 		<position x="1023.5" y="0" />
@@ -230,12 +182,12 @@
 </entity>
 <entity id="ENT_RIGHT_WALL">
 	<transform>
-		<position x="2047" y="383.5" />
+		<position x="2047" y="359.5" />
 	</transform>
 	<collision-filter category="1" />
 	<static-body>
 		<fixture type="segment">
-			<radius x="0" y="383.5" />
+			<radius x="0" y="359.5" />
 		</fixture>
 	</static-body>
 </entity>
@@ -257,7 +209,7 @@
 	<collision-filter category="1" />
 	<static-body>
 		<fixture type="segment">
-			<radius x="0" y="191.5" />
+			<radius x="0" y="143.5" />
 		</fixture>
 	</static-body>
 </entity>
@@ -356,7 +308,7 @@
 	<collision-filter category="1" />
 	<static-body>
 		<fixture type="segment">
-			<radius x="0" y="63.5" />
+			<radius x="0" y="15.5" />
 		</fixture>
 	</static-body>
 </entity>
@@ -455,7 +407,7 @@
 	<collision-filter category="1" />
 	<static-body>
 		<fixture type="segment">
-			<radius x="0" y="63.5" />
+			<radius x="0" y="15.5" />
 		</fixture>
 	</static-body>
 </entity>
