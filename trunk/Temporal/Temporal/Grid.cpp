@@ -9,9 +9,9 @@
 
 namespace Temporal
 {
-	AABB Grid::getTileAABB(int i, int j) const
+	YABP Grid::getTileShape(int i, int j) const
 	{
-		return AABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Size(_tileSize, _tileSize));
+		return YABPAABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Vector(_tileSize, _tileSize) / 2.0f);
 	}
 
 	void Grid::init(const Size& worldSize, float tileSize)
@@ -44,7 +44,7 @@ namespace Temporal
 				FixtureCollection* fixtures = getTile(i, j);
 				if(fixtures && fixtures->size() != 0)
 				{
-					Graphics::get().draw(getTileAABB(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					Graphics::get().draw(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
 				}
 			}
 		}
@@ -74,9 +74,8 @@ namespace Temporal
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				AABB tile = getTileAABB(i, j);
-				// TODO:
-				if(intersects(YABP(tile.getCenter(), Vector(tile.getRadiusVx(), 0.0f), tile.getRadiusVy()), body->getGlobalShape()))
+				YABP tile = getTileShape(i, j);
+				if(intersects(tile, body->getGlobalShape()))
 					add(body, i, j);
 			}
 		}
@@ -180,7 +179,7 @@ namespace Temporal
 		while(true)
 		{
 			FixtureCollection* bodies = getTile(i, j);
-			AABB tile = getTileAABB(i, j);
+			YABP tile = getTileShape(i, j);
 			if(bodies)
 			{
 				float distance = 0;
@@ -191,7 +190,7 @@ namespace Temporal
 					if(body.getFilter().canCollide(mask, group) &&
 					   intersects(ray, body.getGlobalShape(), &pointOfIntersection, &distance) &&
 					   distance < minDistance &&
-					   tile.contains(pointOfIntersection))
+					   intersects(tile, pointOfIntersection))
 					{
 						result.setFixture(&body);
 						result.SetPoint(pointOfIntersection);

@@ -102,20 +102,5 @@ namespace Temporal
 		float _width;
 		float _height;
 	};
-
-	class Range
-	{
-	public:
-		Range(float min, float max) : _min(min), _max(max) {}
-
-		float getMin() const { return _min; }
-		void setMin(float min) { _min = min; }
-		float getMax() const { return _max; }
-		void setMax(float max) { _max = max; }
-
-	private:
-		float _min;
-		float _max;
-	};
 }
 #endif

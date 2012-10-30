@@ -132,8 +132,7 @@ namespace Temporal
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
-		// TODO:
-		Vector max = Vector(_ground->getSide(side), _ground->getCenterY() + side * _ground->getSlopedRadiusVy() + _ground->getYRadius());
+		Vector max = _ground->getTop(side);
 
 		// Still on platform
 		if((dest.getX() - max.getX()) * side <= 0.0f)
@@ -144,8 +143,7 @@ namespace Temporal
 		{
 			// Find next platform
 			_ground = 0;
-			// TODO:
-			YABP checker(max, Vector(1.0f, 0.0f), 1.0f);
+			YABP checker = YABPAABB(max, Vector(1.0f, 1.0f));
 			FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
@@ -154,7 +152,6 @@ namespace Temporal
 				if((next->getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()) && intersects(checker, *next))
 					_ground = next;
 			}
-
 
 			if(!_ground)
 			{
@@ -277,12 +274,7 @@ namespace Temporal
 		if(isOnPlatformSide && abs(_velocity.getY()) > EPSILON && correction.getX() != 0.0f) 
 		{	
 			float y = 0.0f;
-			// TODO:
-			if(staticBodyBounds.getLeft() == staticBodyBounds.getRight())
-				y = staticBodyBounds.getTop();
-			else
-				// TODO:
-				y = staticBodyBounds.getCenterY() + staticBodyBounds.getYRadius() + isOnPlatformLeft ? -staticBodyBounds.getSlopedRadiusVy() : staticBodyBounds.getSlopedRadiusVy();
+			y = isOnPlatformLeft ? staticBodyBounds.getTopLeft().getY() : staticBodyBounds.getTopRight().getY();
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 
 			// BRODER

@@ -28,10 +28,9 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const YABP& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			// TODO:
 			const YABP& startPosition = *static_cast<YABP*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
-			const NavigationNode* start = NavigationGraph::get().getNodeByAABB(startPosition);
-			const NavigationNode* goal = NavigationGraph::get().getNodeByAABB(goalPosition);
+			const NavigationNode* start = NavigationGraph::get().getNode(startPosition);
+			const NavigationNode* goal = NavigationGraph::get().getNode(goalPosition);
 			if(start && goal)
 			{
 				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);

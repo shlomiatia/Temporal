@@ -170,12 +170,12 @@ namespace Temporal
 		}
 	}
 
-	const NavigationNode* NavigationGraph::getNodeByAABB(const YABP& aabb) const
+	const NavigationNode* NavigationGraph::getNode(const YABP& shape) const
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode* node = *i;
-			if(intersects(node->getArea(),  aabb))
+			if(intersects(node->getArea(),  shape))
 				return node;
 		}
 		return 0;
