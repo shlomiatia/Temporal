@@ -12,6 +12,10 @@ namespace Temporal
 	{
 		Vector normal = yabp1.getSlopedRadius().normalize().getLeftNormal();
 
+		// TODO:
+		if(normal == Vector::Zero)
+			return true;
+
 		Vector yabpMinPoint1 = yabp1.getCenter() - yabp1.getYVector();
 		Vector yabpMaxPoint1 = yabp1.getCenter() + yabp1.getYVector();
 

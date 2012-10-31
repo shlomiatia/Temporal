@@ -8,30 +8,30 @@ namespace Temporal
 {
 	class Component;
 	class Message;
-	class Vector;
+	class YABP;
 	class Vector;
 
-	class SensorCollisionParams
+	class LedgeDetectionParams
 	{
 	public:
-		SensorCollisionParams(Hash sensorID, const Vector* point) : _sensorID(sensorID), _point(point) {}
+		LedgeDetectionParams(Hash sensorID, const YABP* platform) : _sensorID(sensorID), _platform(platform) {}
 
 		Hash getSensorID() const { return _sensorID; }
-		const Vector* getPoint() const { return _point; }
+		const YABP* getPlatform() const { return _platform; }
 	
 	private:
 		const Hash _sensorID;
-		const Vector* _point;
+		const YABP* _platform;
 
-		SensorCollisionParams(const SensorCollisionParams&);
-		SensorCollisionParams& operator=(const SensorCollisionParams&);
+		LedgeDetectionParams(const LedgeDetectionParams&);
+		LedgeDetectionParams& operator=(const LedgeDetectionParams&);
 	};
 
 	const Vector& getPosition(const Component& component);
 	Side::Enum getOrientation(const Component& component);
 
 	Hash getHashParam(void* data);
-	const SensorCollisionParams& getSensorCollisionParams(void* data);
+	const LedgeDetectionParams& getLedgeDetectionParams(void* data);
 	const Vector& getVectorParam(void* data);
 	inline float getFloatParam(void* data) { return *static_cast<float*>(data); }
 	inline int getIntParam(void* data) { return *static_cast<int*>(data); }

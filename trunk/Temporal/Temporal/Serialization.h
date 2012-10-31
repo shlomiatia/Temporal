@@ -160,7 +160,7 @@ namespace Temporal
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
 		SerializationType::Enum type() { return SerializationType::DESERIALIZATION; };
-
+		
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{

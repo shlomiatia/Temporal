@@ -8,7 +8,8 @@
 
 namespace Temporal
 {
-	class SensorCollisionParams;
+	class YABP;
+	class LedgeDetectionParams;
 
 	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 250.0f;
@@ -65,16 +66,13 @@ namespace Temporal
 	class JumpHelper
 	{
 	public:
-		JumpHelper() : _angle(0.0f), _ledgeDirected(false) {}
+		JumpHelper() : _angle(0.0f) {}
 
 		float getAngle() const { return _angle; }
 		void setAngle(float angle) { _angle = angle; }
 		const JumpInfo& getInfo() const { return *JumpInfoProvider::get().getData().at(getAngle()); }
-		bool isLedgeDirected() const { return _ledgeDirected; }
-		void setLedgeDirected(bool ledgeDirected) { _ledgeDirected = ledgeDirected; }
 	private:
 		float _angle;
-		bool _ledgeDirected;
 
 		JumpHelper(const JumpHelper&);
 		JumpHelper& operator=(const JumpHelper&);
@@ -88,13 +86,12 @@ namespace Temporal
 	class HangDescendHelper
 	{
 	public:
-		HangDescendHelper() : _point(Vector::Zero) {}
+		HangDescendHelper() : _platform(0) {}
 
-		void setPoint(const SensorCollisionParams& params);
-		const Vector& getPoint() const { return _point; }
-		void setPoint(const Vector& point) { _point = point; }
+		const YABP* get() const { return _platform; }
+		void set(const YABP* platform) { _platform = platform; }
 	private:
-		Vector _point;
+		const YABP* _platform;
 
 		HangDescendHelper(const HangDescendHelper&);
 		HangDescendHelper& operator=(const HangDescendHelper&);
@@ -158,16 +155,6 @@ namespace Temporal
 	public:
 		void enter() const;
 		void handleMessage(Message& message) const;
-	};
-
-	class PrepareToJump : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-
-	private:
-		void handleJumpSensor(Message &message) const;
 	};
 
 	class JumpStart : public ComponentState
