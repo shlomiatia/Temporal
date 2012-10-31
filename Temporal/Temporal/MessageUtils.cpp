@@ -20,9 +20,9 @@ namespace Temporal
 		return *static_cast<Hash*>(data);
 	}
 
-	const SensorCollisionParams& getSensorCollisionParams(void* data)
+	const LedgeDetectionParams& getLedgeDetectionParams(void* data)
 	{
-		return *static_cast<const SensorCollisionParams*>(data);
+		return *static_cast<const LedgeDetectionParams*>(data);
 	}
 
 	const Vector& getVectorParam(void* data)
@@ -41,9 +41,9 @@ namespace Temporal
 
 	bool isSensorCollisionMessage(Message& message, Hash sensorID)
 	{
-		if(message.getID() == MessageID::SENSOR_COLLISION)
+		if(message.getID() == MessageID::LEDGE_DETECTED)
 		{
-			const SensorCollisionParams& params = *static_cast<SensorCollisionParams*>(message.getParam());
+			const LedgeDetectionParams& params = *static_cast<LedgeDetectionParams*>(message.getParam());
 			if(params.getSensorID() == sensorID)
 				return true;
 		}

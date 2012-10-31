@@ -3,6 +3,7 @@
 
 #include "BaseEnums.h"
 #include "Vector.h"
+#include <math.h>
 
 namespace Temporal
 {
@@ -13,17 +14,17 @@ namespace Temporal
 	 * Segment
 	 *********************************************************************************************/
 	class Segment
-	{
+	{ 
 	public:
 		static const Segment Zero;
-
+		 
 		Segment() {}
 		Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
 		Segment(const Vector& center, const Vector& radius);
-
+		
 		const Vector& getCenter() const { return _center; }
 		void setCenter(const Vector& center) { _center = center; }
-
+		
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
 
@@ -172,7 +173,7 @@ namespace Temporal
 		float getBottom() const;
 
 		float getWidth() const { return getSlopedRadiusVx() * 2.0f; }
-		float getHeight() const { return (getSlopedRadiusVy() + getYRadius()) * 2.0f; }
+		float getHeight() const { return (abs(getSlopedRadiusVy()) + getYRadius()) * 2.0f; }
 
 		Vector getTopLeft() const { return getCenter() - getSlopedRadius() + getYVector(); }
 		Vector getBottomLeft() const { return getCenter() - getSlopedRadius() - getYVector(); }

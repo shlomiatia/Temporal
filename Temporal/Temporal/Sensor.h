@@ -66,6 +66,24 @@ namespace Temporal
 
 		friend class SerializationAccess;
 	};
+
+	class LedgeDetector : public ContactListener
+	{
+	public:
+		explicit LedgeDetector(Hash id = Hash::INVALID)
+			: _id(id) {}
+
+		void start();
+		void handle(const Contact& contact);
+		void end();
+
+		ContactListener* clone() const { return new LedgeDetector(_id); }
+	private:
+		Hash _id;
+		const YABP* _platform;
+
+		friend class SerializationAccess;
+	};
 }
 
 #endif

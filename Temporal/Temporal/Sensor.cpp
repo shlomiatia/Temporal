@@ -53,4 +53,24 @@ namespace Temporal
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
 	}
+
+	void LedgeDetector::start()
+	{
+		_platform = 0;
+	}
+
+	void LedgeDetector::end()
+	{
+		if(_platform)
+		{
+			getOwner().raiseMessage(Message(MessageID::LEDGE_DETECTED, &LedgeDetectionParams(_id, _platform)));
+		}
+	}
+
+	void LedgeDetector::handle(const Contact& contact)
+	{
+		const YABP& platform = static_cast<const YABP&>(contact.getTarget().getGlobalShape());
+		if(platform.getHeight() <= 1.0f)
+			_platform = &platform;
+	}
 }

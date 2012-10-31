@@ -12,9 +12,7 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Constants
 	 *********************************************************************************************/
-	static const Hash BACK_EDGE_SENSOR_ID = Hash("SNS_BACK_EDGE");
-	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
-	static const Hash JUMP_SENSOR_ID = Hash("SNS_JUMP");
+	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
 
 	static Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
@@ -34,7 +32,6 @@ namespace Temporal
 	static const Hash FALL_STATE = Hash("ACT_STT_FALL");
 	static const Hash WALK_STATE = Hash("ACT_STT_WALK");
 	static const Hash TURN_STATE = Hash("ACT_STT_TURN");
-	static const Hash PREPARE_TO_JUMP_STATE = Hash("ACT_STT_PREPARE_TO_JUMP");
 	static const Hash JUMP_START_STATE = Hash("ACT_STT_JUMP_START");
 	static const Hash JUMP_STATE = Hash("ACT_STT_JUMP");
 	static const Hash JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
@@ -55,10 +52,7 @@ namespace Temporal
 	JumpInfoProvider::JumpInfoProvider()
 	{
 		_data[ANGLE_45_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
-		_data[ANGLE_60_IN_RADIANS] = new JumpInfo(JUMP_FORWARD_START_ANIMATION, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
-		_data[ANGLE_75_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 		_data[ANGLE_90_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, JUMP_FORWARD_END_ANIMATION);
-		_data[ANGLE_105_IN_RADIANS] = new JumpInfo(JUMP_UP_START_ANIMATION, JUMP_UP_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 	}
 
 	void JumpInfoProvider::dispose() const
@@ -70,11 +64,6 @@ namespace Temporal
 	float JumpInfoProvider::getFarthest() const { return ANGLE_45_IN_RADIANS; }
 	float JumpInfoProvider::getHighest() const { return ANGLE_90_IN_RADIANS; }
 
-	void HangDescendHelper::setPoint(const SensorCollisionParams& params)
-	{
-		_point = !params.getPoint() ? Vector::Zero : *params.getPoint();
-	}
-
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
@@ -85,7 +74,6 @@ namespace Temporal
 		states[FALL_STATE] = new Fall();
 		states[WALK_STATE] = new Walk();
 		states[TURN_STATE] = new Turn();
-		states[PREPARE_TO_JUMP_STATE] = new PrepareToJump();
 		states[JUMP_START_STATE] = new JumpStart();
 		states[JUMP_STATE] = new Jump();
 		states[JUMP_END_STATE] = new JumpEnd();
@@ -131,22 +119,18 @@ namespace Temporal
 		else if(message.getID() == MessageID::ACTION_UP)
 		{
 			getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
-			_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
+			_stateMachine->changeState(JUMP_START_STATE);
 		}
 		// TempFlag1 - Is descending
 		else if(message.getID() == MessageID::ACTION_DOWN)
 		{
 			_stateMachine->setTempFlag1(true);
 		}
-		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, BACK_EDGE_SENSOR_ID))
+		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, DESCEND_SENSOR_ID))
 		{
-			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
-			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
+			const LedgeDetectionParams& params = getLedgeDetectionParams(message.getParam());
+			getActionController(_stateMachine).getHangDescendHelper().set(params.getPlatform());
 			_stateMachine->changeState(PREPARE_TO_DESCEND_STATE);
-		}
-		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
-		{
-			_stateMachine->changeState(TURN_STATE);
 		}
 	}
 
@@ -166,19 +150,19 @@ namespace Temporal
 			if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
 			{
 				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
-				_stateMachine->changeState(PREPARE_TO_JUMP_STATE);
+				_stateMachine->changeState(JUMP_START_STATE);
 			}
 			else
 			{
 				_stateMachine->setTempFlag1(true);
 			}
 		}
-		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		/*else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
 			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
 			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
-		}
+		}*/
 		else if(message.getID() == MessageID::BODY_COLLISION)
 		{
 			const Vector& collision = getVectorParam(message.getParam());
@@ -256,64 +240,6 @@ namespace Temporal
 		}
 	}
 
-	void PrepareToJump::handleJumpSensor(Message &message) const
-	{
-		const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
-		const Vector* point = params.getPoint();
-		Side::Enum orientation = getOrientation(*_stateMachine);
-		const AABB& personBounds =  *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		float target = point->getX();
-		float front = personBounds.getSide(orientation);
-		float distance = (target - front) * orientation;
-		JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
-
-		float max = 0.0f;
-		const Vector& gravity = DynamicBody::GRAVITY;
-
-		// Broder
-		if(distance >= 0 && distance < 20.0f)
-		{
-			jumpHelper.setAngle(JumpInfoProvider::get().getHighest());
-			jumpHelper.setLedgeDirected(true);
-			return;
-		}
-		const JumpInfoCollection& data = JumpInfoProvider::get().getData();
-		for(JumpInfoIterator i = data.begin(); i != data.end(); ++i)
-		{
-			float angle = i->first;
-			const JumpInfo* jumpInfo = i->second;
-			float height = getJumpHeight(angle, JUMP_FORCE_PER_SECOND, gravity.getY(), distance);
-			if(max < height)
-			{
-				max = height;
-				jumpHelper.setAngle(angle);
-				jumpHelper.setLedgeDirected(true);
-			}
-		}
-	}
-
-	void PrepareToJump::enter() const
-	{
-		getActionController(_stateMachine).getJumpHelper().setLedgeDirected(false);
-	}
-
-	void PrepareToJump::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ACTION_FORWARD && canJumpForward(_stateMachine))
-		{
-			getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
-			_stateMachine->changeState(JUMP_START_STATE);
-		}
-		else if(isSensorCollisionMessage(message, JUMP_SENSOR_ID))
-		{
-			handleJumpSensor(message);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{
-			_stateMachine->changeState(JUMP_START_STATE);
-		}
-	}
-
 	void JumpStart::enter() const
 	{
 		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getStartAnimation();
@@ -325,7 +251,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
 			JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
-			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest() && !jumpHelper.isLedgeDirected() && canJumpForward(_stateMachine))
+			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest() && canJumpForward(_stateMachine))
 			{
 				jumpHelper.setAngle(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(JUMP_START_STATE);
@@ -362,8 +288,8 @@ namespace Temporal
 		}
 		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
 		{
-			const SensorCollisionParams& params = getSensorCollisionParams(message.getParam());
-			getActionController(_stateMachine).getHangDescendHelper().setPoint(params);
+			const LedgeDetectionParams& params = getLedgeDetectionParams(message.getParam());
+			getActionController(_stateMachine).getHangDescendHelper().set(params.getPlatform());
 			_stateMachine->changeState(PREPARE_TO_HANG_STATE);
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)
@@ -390,17 +316,13 @@ namespace Temporal
 
 	void PrepareToHang::update() const
 	{
-		const AABB& personBounds = *static_cast<AABB*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		const Vector& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
-		float platformTop = point.getY();
+		const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+		const YABP* platform = getActionController(_stateMachine).getHangDescendHelper().get();
+		float platformTop = platform->getTop();
 		float entityTop = personBounds.getTop();
 		float movementY = platformTop - entityTop;
 
-		Side::Enum orientation = getOrientation(*_stateMachine);
-		float platformEdge = point.getX();
-		float entityFront = personBounds.getSide(orientation);
-		float movementX = (platformEdge - entityFront) * orientation;
-		Vector movement(movementX, movementY);
+		Vector movement(0.0f, movementY);
 		if(movement != Vector::Zero)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
@@ -479,12 +401,10 @@ namespace Temporal
 	{
 		Side::Enum orientation = getOrientation(*_stateMachine);
 		const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		const Vector& point = getActionController(_stateMachine).getHangDescendHelper().getPoint();
-		float platformEdge = point.getX();
-		float entityFront = personBounds.getSide(orientation);
-		float moveX = (platformEdge - entityFront) * orientation;
-		float moveY = point.getY() - personBounds.getBottom();
-		Vector movement = Vector(moveX, moveY);
+		const YABP* platform = getActionController(_stateMachine).getHangDescendHelper().get();
+		float platformTop = platform->getTop();
+		float moveY = platformTop - personBounds.getBottom();
+		Vector movement = Vector(0.0f, moveY);
 		if(movement != Vector::Zero)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &movement));
@@ -492,7 +412,6 @@ namespace Temporal
 		else
 		{
 			float personCenterX = personBounds.getCenterX();
-			float platformTop = point.getY();
 			Vector drawPosition(personCenterX, platformTop);
 			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
 			_stateMachine->changeState(DESCEND_STATE);

@@ -252,7 +252,7 @@ namespace Temporal
 	{
 		modifyCorrection(dynamicBodyBounds, staticBodyBounds, correction);
 		modifyVelocity(correction);
-
+		
 		// If got collision from below, calculate ground vector
 		if(correction.getY() > 0.0f/* || (detectingGround && correction.getY() >= 0.0f && _ground->getBottom() < staticBodyBounds.getBottom())*/)
 		{

@@ -17,12 +17,12 @@
 namespace Temporal
 {
 	FTGLPixmapFont font("c:/windows/fonts/Arial.ttf");
-
+	
 	void TestLevel::init()
 	{
 		font.FaceSize(72);
 		Size resolution = Size(1280.0f, 720.0f);
-		Size levelSize = Size(2048.0f, 720.0f);
+		Size levelSize = Size(3840.0f, 720.0f);
 		float relativeHeight = 720.0f;
 
 		Grid::get().init(levelSize, 128.0f);

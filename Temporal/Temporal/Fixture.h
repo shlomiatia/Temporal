@@ -13,7 +13,7 @@ namespace Temporal
 	class Fixture
 	{
 	public:
-		explicit Fixture(const YABP* shape = 0) : _localShape(shape), _transform(0), _filter(0), _globalShape(0) {}
+		explicit Fixture(YABP* shape = 0) : _localShape(shape), _transform(0), _filter(0), _globalShape(0) {}
 		~Fixture() { delete _localShape; delete _globalShape; }
 
 		void init(const Component& parent);
@@ -30,8 +30,10 @@ namespace Temporal
 	private:
 		const Transform* _transform;
 		const CollisionFilter* _filter;
-		const YABP* _localShape; 
+		YABP* _localShape; 
 		YABP* _globalShape;
+
+		friend class SerializationAccess;
 	};
 }
 
