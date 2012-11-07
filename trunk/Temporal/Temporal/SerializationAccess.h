@@ -1,6 +1,7 @@
 #ifndef SERIALIZATIONACCESS_H
 #define SERIALIZATIONACCESS_H
 
+#include "MovingPlatform.h"
 #include "Transform.h"
 #include "DrawPosition.h"
 #include "Animator.h"
@@ -277,9 +278,16 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
-			serializer.serialize("jump-angle", actionController.getJumpHelper()._angle);
+			//serializer.serialize("jump-angle", actionController.getJumpHelper()._angle);
 			//serializer.serialize("hand-descend-point", actionController.getHangDescendHelper()._point);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, MovingPlatform& component, T& serializer)
+		{
+			serializer.serialize("point1", component._point1);
+			serializer.serialize("point2", component._point2);
 		}
 
 		static void serialize(const char* key, Fixture*& component, MemorySerialization& serializer)
@@ -352,6 +360,8 @@ namespace Temporal
 				serialize(key, (ParticleEmitter*&)component, serializer);
 			else if(strcmp(key, "input-controller") == 0)
 				component  = new InputController();
+			else if(strcmp(key, "moving-platform") == 0)
+				serialize(key, (MovingPlatform*&)component, serializer);
 			else if(strcmp(key, "action-controller") == 0)
 				component = new ActionController();
 			else if(strcmp(key, "collision-filter") == 0)

@@ -13,7 +13,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			_position = *static_cast<Vector*>(message.getParam());			
+			_position = *static_cast<Vector*>(message.getParam());		
 		}
 		else if(message.getID() == MessageID::GET_ORIENTATION)
 		{

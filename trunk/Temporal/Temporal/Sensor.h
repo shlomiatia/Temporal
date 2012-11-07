@@ -71,7 +71,7 @@ namespace Temporal
 	{
 	public:
 		explicit LedgeDetector(Hash id = Hash::INVALID)
-			: _id(id) {}
+			: _id(id), _platform(0), _isFailed(false) {}
 
 		void start();
 		void handle(const Contact& contact);
@@ -81,6 +81,7 @@ namespace Temporal
 	private:
 		Hash _id;
 		const YABP* _platform;
+		bool _isFailed;
 
 		friend class SerializationAccess;
 	};

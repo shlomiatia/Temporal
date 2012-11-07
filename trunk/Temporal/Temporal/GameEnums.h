@@ -36,7 +36,9 @@ namespace Temporal
 			LASER = 1048576,
 			NAVIGATOR = 2097152,
 
-			ALL = 4194303
+			OTHER = 4194304,
+
+			ALL = 8388607
 		};
 	}
 	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) | static_cast<int>(b)); }

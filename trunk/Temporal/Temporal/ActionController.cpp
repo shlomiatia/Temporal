@@ -90,17 +90,6 @@ namespace Temporal
 	/**********************************************************************************************
 	 * States
 	 *********************************************************************************************/
-	bool canJumpForward(StateMachineComponent* component)
-	{
-		const Segment* ground = static_cast<const Segment*>(component->raiseMessage(Message(MessageID::GET_GROUND)));
-		if(!ground)
-			return true;
-		Vector groundVector = ground->getNaturalVector().normalize();
-		Side::Enum orientation = getOrientation(*component);
-
-		return !sameSign(static_cast<float>(orientation), groundVector.getY()) || abs(groundVector.getAngle()) <= ANGLE_30_IN_RADIANS;
-	}
-
 	void Stand::enter() const
 	{
 		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &STAND_ANIMATION));
@@ -182,15 +171,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTION_UP)
 		{
-			if(canJumpForward(_stateMachine))
-			{
-				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
-			}
-			else
-			{
-				getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getHighest());
-
-			}
+			getActionController(_stateMachine).getJumpHelper().setAngle(JumpInfoProvider::get().getFarthest());
 			_stateMachine->changeState(JUMP_START_STATE);
 
 		}
@@ -208,7 +189,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{			
-			const Segment* ground = static_cast<const Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+			void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
 			if(!ground)
 			{
 				_stateMachine->changeState(FALL_STATE);
@@ -251,7 +232,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_FORWARD)
 		{
 			JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
-			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest() && canJumpForward(_stateMachine))
+			if(jumpHelper.getAngle() != JumpInfoProvider::get().getFarthest())
 			{
 				jumpHelper.setAngle(JumpInfoProvider::get().getFarthest());
 				_stateMachine->changeState(JUMP_START_STATE);
@@ -360,7 +341,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ACTION_DOWN)
 		{	
 			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<Vector*>(&Vector::Zero)));
-			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(1.0f, -1.0f)));
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(0.0f, -1.0f)));
 			bool gravityEnabled = true;
 			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			_stateMachine->changeState(FALL_STATE);

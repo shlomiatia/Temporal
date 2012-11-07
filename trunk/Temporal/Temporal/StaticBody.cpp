@@ -28,5 +28,9 @@ namespace Temporal
 			YABP* shape = &_fixture->getGlobalShape();
 			message.setParam(shape);
 		}
+		else if(message.getID() == MessageID::SET_POSITION)
+		{
+			Grid::get().update(_fixture);
+		}
 	}
 }

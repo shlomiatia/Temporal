@@ -81,18 +81,20 @@ namespace Temporal
 		}
 	}
 
-	void Grid::update(const YABP& previous, const Fixture* body)
+	void Grid::update(Fixture* body)
 	{
-		const YABP& shape = body->getGlobalShape();
-		int leftIndex = getAxisIndex(shape.getLeft());
-		int rightIndex = getAxisIndex(shape.getRight());
-		int topIndex = getAxisIndex(shape.getTop());
-		int bottomIndex = getAxisIndex(shape.getBottom());
-
+		const YABP& previous = body->getGlobalShape();
 		int leftRemoveIndex = getAxisIndex(previous.getLeft());
 		int rightRemoveIndex = getAxisIndex(previous.getRight());
 		int topRemoveIndex = getAxisIndex(previous.getTop());
 		int bottomRemoveIndex = getAxisIndex(previous.getBottom());
+
+		body->update();
+		const YABP& current = body->getGlobalShape();
+		int leftIndex = getAxisIndex(current.getLeft());
+		int rightIndex = getAxisIndex(current.getRight());
+		int topIndex = getAxisIndex(current.getTop());
+		int bottomIndex = getAxisIndex(current.getBottom());		
 
 		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
 		{
@@ -129,7 +131,8 @@ namespace Temporal
 	{
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
-			abort();
+			// TODO:
+			return 0;
 		else
 			return _grid[index];
 	}
