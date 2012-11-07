@@ -10,6 +10,9 @@ namespace Temporal
 
 	// Physics
 	// TODO: Store YABP in grid
+	// TODO: Fall from sloped cliff */[ ]
+	// TODO: Walk/jump towards steep slope _*/ _*\ (May hang if descend after jump)
+	
 
 	// Graphics
 	// TODO: Scene graph attachment (draw position, eyes)

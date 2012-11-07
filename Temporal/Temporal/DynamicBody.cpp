@@ -51,7 +51,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::GET_GROUND)
 		{
 			if(_ground)
-				message.setParam(const_cast<YABP*>(_ground));
+				message.setParam(const_cast<Fixture*>(_ground));
 		}
 		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
 		{
@@ -75,6 +75,10 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
+		else if(message.getID() == MessageID::SET_POSITION)
+		{
+			Grid::get().update(_fixture);
+		}
 	}
 
 	void DynamicBody::update(float framePeriod)
@@ -88,9 +92,10 @@ namespace Temporal
 			executeMovement(_absoluteImpulse);
 		}
 		// Slide
-		else if(_ground && !isModerateAngle(_ground->getSlopedRadius().getAngle()))
+		else if(_ground && !isModerateAngle(_ground->getGlobalShape().getSlopedRadius().getAngle()))
 		{
-			_velocity = _ground->getSlopedRadius().normalize() * 500.0f;
+			// TODO: Broder
+			_velocity = _ground->getGlobalShape().getSlopedRadius().normalize() * 250.0f;
 			if(_velocity .getY() > 0.0f)
 				_velocity = -_velocity;
 			_ground = 0;
@@ -111,20 +116,33 @@ namespace Temporal
 
 	void DynamicBody::walk(float framePeriod)
 	{
+		const YABP& dynamicBodyBounds = _fixture->getGlobalShape();
+		const YABP& staticBodyBounds = _ground->getGlobalShape();
+
+		if(staticBodyBounds.getCenter() != _previousGroundCenter)
+		{
+			Vector newPosition = dynamicBodyBounds.getCenter() + staticBodyBounds.getCenter() - _previousGroundCenter;
+			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
+		}
+		
 		if(_velocity.getX() == 0)
-				return;
+		{
+			_ground = 0;
+			executeMovement(determineMovement(framePeriod));
+			return;
+		}
 		
 		// Calculate platform touch point, or front if flat
-		const YABP& dynamicBodyBounds = _fixture->getGlobalShape();
 		Side::Enum side = Side::get(_velocity.getX());
-		Vector direction = _ground->getSlopedRadius().normalize() * static_cast<float>(side);
+		Vector direction = _ground->getGlobalShape().getSlopedRadius().normalize() * static_cast<float>(side);
 		Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(Side::getOpposite(side)), dynamicBodyBounds.getBottom());
 
 		float movementAmount = _velocity.getLength();
 		Vector velocity = _velocity;
 		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
-		if(direction.getY() >= 0.0 || (curr.getX() - _ground->getSide(Side::getOpposite(side))) * side >= 0.0f)
+		if(direction.getY() >= 0.0 || (curr.getX() - _ground->getGlobalShape().getSide(Side::getOpposite(side))) * side >= 0.0f)
 			velocity = direction * movementAmount;
+		
 
 		// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
 		if(direction.getY() <= 0.0f )
@@ -132,7 +150,7 @@ namespace Temporal
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
-		Vector max = _ground->getTop(side);
+		Vector max = _ground->getGlobalShape().getTop(side);
 
 		// Still on platform
 		if((dest.getX() - max.getX()) * side <= 0.0f)
@@ -147,10 +165,14 @@ namespace Temporal
 			FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
-				const YABP* next = &(**i).getGlobalShape();
-				Vector newDirection = next->getSlopedRadius().normalize() * static_cast<float>(side);
-				if((next->getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()) && intersects(checker, *next))
+				const Fixture* next = *i;
+				Vector newDirection = next->getGlobalShape().getSlopedRadius().normalize() * static_cast<float>(side);
+				if((next->getGlobalShape().getSide(side) - max.getX()) * side > 0.0f &&
+					isModerateAngle(newDirection.getAngle()) && intersects(checker, next->getGlobalShape()))
+				{
 					_ground = next;
+				}
+					
 			}
 
 			if(!_ground)
@@ -161,7 +183,7 @@ namespace Temporal
 			{
 				Vector oldMovement = max - curr;
 				float movementLeft = movementAmount * framePeriod - oldMovement.getLength();
-				Vector newDirection = _ground->getSlopedRadius().normalize() * static_cast<float>(side);
+				Vector newDirection = _ground->getGlobalShape().getSlopedRadius().normalize() * static_cast<float>(side);
 
 				// /\ \/ Fix of this transitions
 				if(differentSign(direction.getY(), newDirection.getY()))
@@ -189,13 +211,11 @@ namespace Temporal
 	void DynamicBody::executeMovement(Vector movement)
 	{
 		Vector collision = Vector::Zero;
-		bool detectingGround = false;
-
 		YABP dynamicBodyBounds = _fixture->getGlobalShape();
 		YABP previous = dynamicBodyBounds;
 
 		// If the movement is too big, we'll divide it to smaller steps
-		while(movement != Vector::Zero)
+		do
 		{
 			Vector stepMovement = Vector::Zero;
 			float movementAmount = movement.getLength();
@@ -219,67 +239,77 @@ namespace Temporal
 			FixtureCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
-				const YABP& staticBodyBounds = (**i).getGlobalShape();
-				detectCollision(dynamicBodyBounds, staticBodyBounds, collision, detectingGround);
+				const Fixture* fixture = *i;
+				detectCollision(dynamicBodyBounds, fixture, collision, stepMovement);
 			}
 			if(collision != Vector::Zero)
 				break;
 		}
+		while(movement != Vector::Zero);
+
 		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
 		
 		if(_ground)
 		{
 			_velocity = Vector::Zero;
+			_previousGroundCenter = _ground->getGlobalShape().getCenter();
 		}
 		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
-		_fixture->update();
-		Grid::get().update(previous, _fixture);
 
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
 	}
 
-	void DynamicBody::detectCollision(YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& collision, bool& detectingGround)
+	void DynamicBody::detectCollision(YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
 	{
 		Vector correction = Vector::Zero;
-		if(intersects(dynamicBodyBounds, staticBodyBounds, &correction))
+		if(intersects(dynamicBodyBounds, staticBodyBounds->getGlobalShape(), &correction))
 		{
-			correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision, detectingGround);
+			correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision, movement);
 		}
 	}
 
-	void DynamicBody::correctCollision(YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& correction, Vector& collision, bool& detectingGround)
+	void DynamicBody::correctCollision(YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement)
 	{
-		modifyCorrection(dynamicBodyBounds, staticBodyBounds, correction);
+		modifyCorrection(dynamicBodyBounds, staticBodyBounds, correction, movement);
 		modifyVelocity(correction);
 		
+		Side::Enum side = getOrientation(*this);
+
 		// If got collision from below, calculate ground vector
-		if(correction.getY() > 0.0f/* || (detectingGround && correction.getY() >= 0.0f && _ground->getBottom() < staticBodyBounds.getBottom())*/)
+		if(correction.getY() > 0.0f ||
+		   (correction.getY() >= 0.0f &&
+		    _ground &&
+			(staticBodyBounds->getGlobalShape().getSide(side) - _ground->getGlobalShape().getSide(side)) * side > 0.0f) &&
+			isModerateAngle(staticBodyBounds->getGlobalShape().getSlopedRadius().getAngle()))
 		{
-			detectingGround = true;
-			_ground = &staticBodyBounds;
+			_ground = staticBodyBounds;
 		}
 
 		dynamicBodyBounds.translate(correction);
 		collision -= correction;
 	}
 
-	void DynamicBody::modifyCorrection(const YABP& dynamicBodyBounds, const YABP& staticBodyBounds, Vector& correction)
+	void DynamicBody::modifyCorrection(const YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& movement)
 	{
-		bool isOnPlatformLeft = dynamicBodyBounds.getLeft() <= staticBodyBounds.getLeft();
-		bool isOnPlatformRight = dynamicBodyBounds.getRight() >= staticBodyBounds.getRight();
-		bool isOnPlatformSide = isOnPlatformLeft || isOnPlatformRight;
-
 		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent falling from edges
-		if(isOnPlatformSide && abs(_velocity.getY()) > EPSILON && correction.getX() != 0.0f) 
+		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON) 
 		{	
-			float y = 0.0f;
-			y = isOnPlatformLeft ? staticBodyBounds.getTopLeft().getY() : staticBodyBounds.getTopRight().getY();
+			const YABP& shape = staticBodyBounds->getGlobalShape();
+			Vector normalizedRadius = shape.getSlopedRadius().normalize();
+			float x = normalizedRadius.getY() >= 0.0f ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
+			float length = (x - shape.getCenter().getX()) / normalizedRadius.getX();
+			float y = shape.getCenter().getY() + shape.getYRadius() + normalizedRadius.getY() * length;
+			
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 
 			// BRODER
 			if(yCorrection > 0.0f && yCorrection < 10.0f)
 				correction = Vector(0, yCorrection);
+		}
+		else if(correction.getY() < -EPSILON && _ground)
+		{
+			correction = -movement;
 		}
 	}
 

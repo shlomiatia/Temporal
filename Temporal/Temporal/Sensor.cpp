@@ -57,6 +57,7 @@ namespace Temporal
 	void LedgeDetector::start()
 	{
 		_platform = 0;
+		_isFailed = false;
 	}
 
 	void LedgeDetector::end()
@@ -70,7 +71,14 @@ namespace Temporal
 	void LedgeDetector::handle(const Contact& contact)
 	{
 		const YABP& platform = static_cast<const YABP&>(contact.getTarget().getGlobalShape());
-		if(platform.getHeight() <= 1.0f)
+		if(platform.getHeight() == 0.0f && 
+		   (contact.getSource().getGlobalShape().getTop() == contact.getTarget().getGlobalShape().getTop() ||
+		   contact.getSource().getGlobalShape().getBottom() == contact.getTarget().getGlobalShape().getBottom()) && !_isFailed)
 			_platform = &platform;
+		else
+		{
+			_isFailed = true;
+			_platform = 0;
+		}
 	}
 }

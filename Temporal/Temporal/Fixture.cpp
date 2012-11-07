@@ -9,15 +9,17 @@ namespace Temporal
 	{
 		_transform = static_cast<const Transform*>(parent.getEntity().get(ComponentType::TRANSFORM));
 		_filter = static_cast<const CollisionFilter*>(parent.getEntity().get(ComponentType::COLLISION_FILTER));
-		_globalShape = _localShape->clone();
+		_globalShape = _localShape;
 		update();
 	}
 
 	void Fixture::update()
 	{
-		_globalShape->setCenter(_localShape->getCenter());
-		_globalShape->rotate(_transform->getOrientation());
-		_globalShape->translate(_transform->getPosition());
+		_globalShape.setCenter(_localShape.getCenter());
+
+		// TODO:
+		_globalShape.rotate(_transform->getOrientation());
+		_globalShape.translate(_transform->getPosition());
 	}
 
 	Hash Fixture::getEntityId() const
@@ -27,6 +29,6 @@ namespace Temporal
 
 	Fixture* Fixture::clone() const
 	{
-		return new Fixture(_localShape->clone());
+		return new Fixture(_localShape);
 	}
 }

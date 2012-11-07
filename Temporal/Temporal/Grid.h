@@ -42,7 +42,7 @@ namespace Temporal
 		void dispose();
 
 		void add(const Fixture* body);
-		void update(const YABP& previous, const Fixture* body);
+		void update(Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
 		FixtureCollection iterateTiles(const YABP& shape, int mask = -1, int group = -1) const;

@@ -162,6 +162,9 @@
     <ClInclude Include="Navigator.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -306,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="Pathfinder.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
