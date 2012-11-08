@@ -24,7 +24,7 @@
 </entity>
 <entity id="ENT_PLAYER">
     <transform>
-        <position x="3000" y="684" />
+        <position x="3000" y="512" />
     </transform>
     <collision-filter category="8" />
     <draw-position>
@@ -40,18 +40,18 @@
     </dynamic-body>
     <sensor category-mask="1">
         <fixture>
-            <yabp y-radius="1">
-                <center y="40.5" />
-                <sloped-radius x="10" />
+            <yabp y-radius="40.5">
+                <center y="80.5" />
+                <sloped-radius x="9" />
             </yabp>
         </fixture>
         <contact-listener type="ledge-detector" id="SNS_HANG" />
     </sensor>
     <sensor category-mask="1">
         <fixture>
-            <yabp y-radius="1">
-                <center y="-40.5" />
-                <sloped-radius x="10" />
+            <yabp y-radius="40.5">
+                <center y="-80.5" />
+                <sloped-radius x="9" />
             </yabp>
         </fixture>
         <contact-listener type="ledge-detector" id="SNS_DESCEND" />
@@ -717,4 +717,21 @@
             </yabp>
 		</fixture>
 	</static-body>
+</entity>
+<entity id="ENT_ELEVATOR">
+	<transform>
+		<position x="2624" y="384" />
+	</transform>
+	<collision-filter category="1" />
+	<static-body>
+		<fixture>
+            <yabp y-radius="1">
+                <sloped-radius x="64" y="0" />
+            </yabp>
+		</fixture>
+	</static-body>
+    <moving-platform>
+        <point1 x="2024" y="384" />
+        <point2 x="2924" y="384" />
+    </moving-platform>
 </entity>
