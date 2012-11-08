@@ -119,12 +119,14 @@ namespace Temporal
 		const YABP& dynamicBodyBounds = _fixture->getGlobalShape();
 		const YABP& staticBodyBounds = _ground->getGlobalShape();
 
+		// Moving platform
 		if(staticBodyBounds.getCenter() != _previousGroundCenter)
 		{
 			Vector newPosition = dynamicBodyBounds.getCenter() + staticBodyBounds.getCenter() - _previousGroundCenter;
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		}
 		
+		// Fix when static
 		if(_velocity.getX() == 0)
 		{
 			_ground = 0;
@@ -139,6 +141,7 @@ namespace Temporal
 
 		float movementAmount = _velocity.getLength();
 		Vector velocity = _velocity;
+
 		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
 		if(direction.getY() >= 0.0 || (curr.getX() - _ground->getGlobalShape().getSide(Side::getOpposite(side))) * side >= 0.0f)
 			velocity = direction * movementAmount;
@@ -175,6 +178,7 @@ namespace Temporal
 					
 			}
 
+			// Fall
 			if(!_ground)
 			{
 				executeMovement(movement);
@@ -276,9 +280,9 @@ namespace Temporal
 		
 		Side::Enum side = getOrientation(*this);
 
-		// If got collision from below, calculate ground vector
+		// If got collision from below, calculate ground vector. Take front ground when there is a dellima
 		if(correction.getY() > 0.0f ||
-		   (correction.getY() >= 0.0f &&
+			(correction.getY() >= 0.0f &&
 		    _ground &&
 			(staticBodyBounds->getGlobalShape().getSide(side) - _ground->getGlobalShape().getSide(side)) * side > 0.0f) &&
 			isModerateAngle(staticBodyBounds->getGlobalShape().getSlopedRadius().getAngle()))
@@ -307,6 +311,7 @@ namespace Temporal
 			if(yCorrection > 0.0f && yCorrection < 10.0f)
 				correction = Vector(0, yCorrection);
 		}
+		// Don't allow to fix into ground _* \ 
 		else if(correction.getY() < -EPSILON && _ground)
 		{
 			correction = -movement;

@@ -8,9 +8,6 @@
 
 namespace Temporal
 {
-	class YABP;
-	class LedgeDetectionParams;
-
 	// BRODER
 	static const float WALK_FORCE_PER_SECOND = 250.0f;
 	static const float JUMP_FORCE_PER_SECOND = 450.0f;
@@ -21,15 +18,15 @@ namespace Temporal
 	class JumpInfo
 	{
 	public:
-		JumpInfo(Hash startAnimation, Hash jumpAnimation, Hash endAnimation)
-			: _startAnimation(startAnimation), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
+		JumpInfo(float angle, Hash jumpAnimation, Hash endAnimation)
+			: _angle(angle), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
 
-		Hash getStartAnimation() const { return _startAnimation; }
+		float getAngle() const { return _angle; }
 		Hash getJumpAnimation() const { return _jumpAnimation; }
 		Hash getEndAnimation() const { return _endAnimation; }
 
 	private:
-		Hash _startAnimation;
+		float _angle;
 		Hash _jumpAnimation;
 		Hash _endAnimation;
 
@@ -37,64 +34,31 @@ namespace Temporal
 		JumpInfo& operator=(const JumpInfo&);
 	};
 
-	typedef std::unordered_map<float, const JumpInfo*> JumpInfoCollection;
-	typedef JumpInfoCollection::const_iterator JumpInfoIterator;
-
-	class JumpInfoProvider
+	namespace JumpType
 	{
-	public:
-		static const JumpInfoProvider& get()
+		enum Enum
 		{
-			static JumpInfoProvider instance;
-			return instance;
-		}
-
-		const JumpInfoCollection& getData() const { return _data; }
-		float getFarthest() const;
-		float getHighest() const;
-
-		void dispose() const;
-		
-	private:
-		JumpInfoCollection _data;
-
-		JumpInfoProvider();
-		JumpInfoProvider(const JumpInfoProvider&);
-		JumpInfoProvider& operator=(const JumpInfoProvider&);
-	};
+			UP,
+			FORWARD
+		};
+	}
 
 	class JumpHelper
 	{
 	public:
-		JumpHelper() : _angle(0.0f) {}
+		JumpHelper() : _type(JumpType::UP) {}
 
-		float getAngle() const { return _angle; }
-		void setAngle(float angle) { _angle = angle; }
-		const JumpInfo& getInfo() const { return *JumpInfoProvider::get().getData().at(getAngle()); }
+		JumpType::Enum getType() const { return _type; }
+		void setType(JumpType::Enum type) { _type = type; }
+		const JumpInfo& getInfo() const { return _type == JumpType::UP ? JUMP_UP_INFO : JUMP_FORWARD_INFO; }
 	private:
-		float _angle;
+		static const JumpInfo JUMP_UP_INFO;
+		static const JumpInfo JUMP_FORWARD_INFO;
+
+		JumpType::Enum _type;
 
 		JumpHelper(const JumpHelper&);
 		JumpHelper& operator=(const JumpHelper&);
-
-		friend class SerializationAccess;
-	};
-
-	/**********************************************************************************************
-	 * Hang descend helper
-	 *********************************************************************************************/
-	class HangDescendHelper
-	{
-	public:
-		HangDescendHelper() : _platform(0) {}
-
-		const YABP* get() const { return _platform; }
-		void set(const YABP* platform) { _platform = platform; }
-	private:
-		const YABP* _platform;
-
-		HangDescendHelper(const HangDescendHelper&);
-		HangDescendHelper& operator=(const HangDescendHelper&);
 
 		friend class SerializationAccess;
 	};
@@ -109,7 +73,6 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
-		HangDescendHelper& getHangDescendHelper() { return _hangDescendHelper; }
 
 		Component* clone() const { return new ActionController(); }
 
@@ -118,7 +81,6 @@ namespace Temporal
 
 	private:
 		JumpHelper _jumpHelper;
-		HangDescendHelper _hangDescendHelper;
 
 		StateCollection getStates() const;
 	};
@@ -157,13 +119,6 @@ namespace Temporal
 		void handleMessage(Message& message) const;
 	};
 
-	class JumpStart : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
-
 	class Jump : public ComponentState
 	{
 	public:
@@ -176,16 +131,6 @@ namespace Temporal
 	public:
 		void enter() const;
 		void handleMessage(Message& message) const;
-	};
-
-	class PrepareToHang : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-
-	private:
-		void update() const;
 	};
 
 	class Hang : public ComponentState
@@ -201,16 +146,6 @@ namespace Temporal
 		void enter() const;
 		void exit() const;
 		void handleMessage(Message& message) const;
-	};
-
-	class PrepareToDescend : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-
-	private:
-		void update() const;
 	};
 
 	class Descend : public ComponentState
