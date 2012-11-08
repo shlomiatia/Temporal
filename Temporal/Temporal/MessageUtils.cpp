@@ -20,11 +20,6 @@ namespace Temporal
 		return *static_cast<Hash*>(data);
 	}
 
-	const LedgeDetectionParams& getLedgeDetectionParams(void* data)
-	{
-		return *static_cast<const LedgeDetectionParams*>(data);
-	}
-
 	const Vector& getVectorParam(void* data)
 	{
 		return *static_cast<const Vector*>(data);
