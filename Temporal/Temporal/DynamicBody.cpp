@@ -94,7 +94,7 @@ namespace Temporal
 		// Slide
 		else if(_ground && !isModerateAngle(_ground->getGlobalShape().getSlopedRadius().getAngle()))
 		{
-			// TODO: Broder
+			// BRODER
 			_velocity = _ground->getGlobalShape().getSlopedRadius().normalize() * 250.0f;
 			if(_velocity .getY() > 0.0f)
 				_velocity = -_velocity;
@@ -170,8 +170,7 @@ namespace Temporal
 			{
 				const Fixture* next = *i;
 				Vector newDirection = next->getGlobalShape().getSlopedRadius().normalize() * static_cast<float>(side);
-				if((next->getGlobalShape().getSide(side) - max.getX()) * side > 0.0f &&
-					isModerateAngle(newDirection.getAngle()) && intersects(checker, next->getGlobalShape()))
+				if((next->getGlobalShape().getSide(side) - max.getX()) * side > 0.0f && isModerateAngle(newDirection.getAngle()))
 				{
 					_ground = next;
 				}
@@ -240,7 +239,7 @@ namespace Temporal
 			movement -= stepMovement;
 			dynamicBodyBounds.translate(stepMovement);
 			
-			FixtureCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK);
+			FixtureCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK, -1, false);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* fixture = *i;

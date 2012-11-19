@@ -9,9 +9,10 @@ namespace Temporal
 	// TODO: Deal with component order
 
 	// Physics
-	// TODO: Store YABP in grid
+	// TODO: Store YABP in grid. Raise events
 	// TODO: Fall from sloped cliff */[ ]
-	// TODO: Walk/jump towards steep slope _*/ _*\ (May hang if descend after jump)
+	// TODO: Walk/jump towards steep slope _*/ _*\
+	// TODO: Jump while slide
 	
 
 	// Graphics

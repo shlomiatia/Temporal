@@ -12,18 +12,11 @@ namespace Temporal
 	{
 		Vector normal = yabp1.getSlopedRadius().normalize().getLeftNormal();
 
-		// TODO:
-		if(normal == Vector::Zero)
-			return true;
-
 		Vector yabpMinPoint1 = yabp1.getCenter() - yabp1.getYVector();
 		Vector yabpMaxPoint1 = yabp1.getCenter() + yabp1.getYVector();
 
 		float yabpMinProjection1 = normal * yabpMinPoint1;
 		float yabpMaxProjection1 = normal * yabpMaxPoint1;
-
-		float center1 = (yabpMaxProjection1 + yabpMinProjection1) / 2.0f;
-		float radius1 = (yabpMaxProjection1 - yabpMinProjection1) / 2.0f;
 
 		// We need project c +/- yr +/- sr to n. Instead, we'll project  c * n +/- (abs(sr * n) + yr * abs(n))
 		float centerProjection2 = yabp2.getCenter() * normal;
@@ -33,17 +26,21 @@ namespace Temporal
 		float yabpMinProjection2 = centerProjection2 - slopedRadiusProjection2 - yRadiusProjection2;
 		float yabpMaxProjection2 = centerProjection2  + slopedRadiusProjection2 + yRadiusProjection2;
 		
-		float center2 = (yabpMaxProjection2 + yabpMinProjection2) / 2.0f;
-		float radius2 = (yabpMaxProjection2 - yabpMinProjection2) / 2.0f;
+		float radius = yabpMaxProjection2 - yabpMinProjection2 + yabpMaxProjection1 - yabpMinProjection1;
+		
+		float differenceA = yabpMaxProjection1 - yabpMinProjection2;
+		float differenceB = yabpMaxProjection2 - yabpMinProjection1;
 
-		float delta = center1 - center2;
-		float penetration = radius1 + radius2 - abs(delta);
-		if(penetration < 0.0f) return false;
+		if((differenceA < 0.0f ||  differenceA > radius) &&
+		   (differenceB < 0.0f ||  differenceB > radius))
+			return false;
 
-		if(correction && penetration < correction->getLength())
+		float difference = std::min(differenceA, differenceB);
+		if(correction && difference < correction->getLength())
 		{
-			*correction = normal * ((delta < 0.0f) ^ flip ? -penetration : penetration);
+			*correction = normal * ((difference == differenceA) ^ flip ? -difference : difference);
 		}
+
 		return true;
 	}
 	

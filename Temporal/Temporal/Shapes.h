@@ -29,16 +29,18 @@ namespace Temporal
 		float getCenterY() const { return getCenter().getY(); }
 
 		const Vector& getRadius() const { return _radius; }
-		float getRadiusVx() const { return getRadius().getX(); }
-		float getRadiusVy() const { return getRadius().getY(); }
+		float getRadiusX() const { return getRadius().getX(); }
+		float getRadiusY() const { return getRadius().getY(); }
 
-		Vector getLeftPoint() const { return getCenter() + (getRadiusVx() < 0.0f ? getRadius() : -getRadius()); }
-		Vector getRightPoint() const { return getCenter() + (getRadiusVx() >= 0.0f ? getRadius() : -getRadius()); }
+		Vector getLeftPoint() const { return getCenter() + (getRadiusX() < 0.0f ? getRadius() : -getRadius()); }
+		Vector getRightPoint() const { return getCenter() + (getRadiusX() >= 0.0f ? getRadius() : -getRadius()); }
+		Vector getBottomPoint() const { return getCenter() + (getRadiusY() <= 0.0f ? getRadius() : -getRadius()); }
+		Vector getTopPoint() const { return getCenter() + (getRadiusY() > 0.0f ? getRadius() : -getRadius()); }
+
 		Vector getPoint(Side::Enum side) const { return side == Side::LEFT ? getLeftPoint() : getRightPoint(); }
-		Vector getBottomPoint() const { return getCenter() + (getRadiusVy() <= 0.0f ? getRadius() : -getRadius()); }
-		Vector getTopPoint() const { return getCenter() + (getRadiusVy() > 0.0f ? getRadius() : -getRadius()); }
-		Vector getNaturalOrigin() const { return getRadiusVx() == 0.0f ? getBottomPoint() : getLeftPoint(); }
-		Vector getNaturalTarget() const { return getRadiusVx() == 0.0f ? getTopPoint() : getRightPoint(); }
+
+		Vector getNaturalOrigin() const { return getRadiusX() == 0.0f ? getBottomPoint() : getLeftPoint(); }
+		Vector getNaturalTarget() const { return getRadiusX() == 0.0f ? getTopPoint() : getRightPoint(); }
 		Vector getNaturalVector() const { return getNaturalTarget() - getNaturalOrigin(); }
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
@@ -49,11 +51,12 @@ namespace Temporal
 		float getBottom() const { return getBottomPoint().getY(); }
 		float getTop() const { return getTopPoint().getY(); }
 		float getLength() const;
+
 		float getY(float x) const { return get(Axis::Y, x); }
 		float getX(float y) const  { return get(Axis::X, y); }
 
-		float getWidth() const { return getRadiusVx() * 2.0f; }
-		float getHeight() const { return getRadiusVy() * 2.0f; }
+		float getWidth() const { return getRadiusX() * 2.0f; }
+		float getHeight() const { return getRadiusY() * 2.0f; }
 
 		Segment* clone() const { return new Segment(_center, _radius); }
 

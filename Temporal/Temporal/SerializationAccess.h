@@ -278,8 +278,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
-			//serializer.serialize("jump-angle", actionController.getJumpHelper()._angle);
-			//serializer.serialize("hand-descend-point", actionController.getHangDescendHelper()._point);
+			serializer.serialize("jump-type", (int&)actionController.getJumpHelper()._type);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}
 
