@@ -5,6 +5,7 @@
 #include "Fixture.h"
 #include "Vector.h"
 #include "CollisionFilter.h"
+#include "Math.h"
 #include <algorithm>
 
 namespace Temporal
@@ -68,7 +69,7 @@ namespace Temporal
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
-		int bottomIndex = getAxisIndex(shape.getBottom());
+		int bottomIndex = getAxisIndex(shape.getBottom());	
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
@@ -94,7 +95,7 @@ namespace Temporal
 		int leftIndex = getAxisIndex(current.getLeft());
 		int rightIndex = getAxisIndex(current.getRight());
 		int topIndex = getAxisIndex(current.getTop());
-		int bottomIndex = getAxisIndex(current.getBottom());		
+		int bottomIndex = getAxisIndex(current.getBottom());	
 
 		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
 		{
@@ -221,7 +222,7 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureCollection Grid::iterateTiles(const YABP& shape, int mask, int group) const
+	FixtureCollection Grid::iterateTiles(const YABP& shape, int mask, int group, bool checkIntersection) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
@@ -240,7 +241,7 @@ namespace Temporal
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						const Fixture* body = *i;
-						if(body->getFilter().canCollide(mask, group))
+						if(body->getFilter().canCollide(mask, group) && (!checkIntersection || intersects(shape, body->getGlobalShape())))
 							result.push_back(body);
 					}
 				}

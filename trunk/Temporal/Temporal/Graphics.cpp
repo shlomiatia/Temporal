@@ -267,7 +267,7 @@ namespace Temporal
 
 			glTranslatef(segment.getCenterX(), segment.getCenterY(), 0.0f);
 
-			GLfloat vertices[] = { -segment.getRadiusVx(), -segment.getRadiusVy(), segment.getRadiusVx(), segment.getRadiusVy() };
+			GLfloat vertices[] = { -segment.getRadiusX(), -segment.getRadiusY(), segment.getRadiusX(), segment.getRadiusY() };
 
 			glEnableClientState(GL_VERTEX_ARRAY);
  

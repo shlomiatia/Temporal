@@ -34,5 +34,7 @@ namespace Temporal
 	bool isModerateAngle(float angle);
 	bool isRightAngle(float angle);
 	inline bool isSteepAngle(float angle) { return !isModerateAngle(angle) && !isRightAngle(angle); }
+
+	bool equals(float a, float b);
 }
 #endif

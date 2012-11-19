@@ -27,12 +27,8 @@ namespace Temporal
 			const Fixture& fixture = **i;
 			const YABP& shape = fixture.getGlobalShape();
 
-			// First check for basic intersection
-			if(intersects(sensorShape, shape))
-			{
-				Contact contact(*_fixture, fixture);
-				_listener->handle(contact);
-			}
+			Contact contact(*_fixture, fixture);
+			_listener->handle(contact);
 		}
 		_listener->end();
 	}
@@ -70,11 +66,14 @@ namespace Temporal
 
 	void LedgeDetector::handle(const Contact& contact)
 	{
-		const YABP& platform = static_cast<const YABP&>(contact.getTarget().getGlobalShape());
+		const YABP& actor = contact.getSource().getGlobalShape();
+		const YABP& platform = contact.getTarget().getGlobalShape();
 		if(platform.getHeight() == 0.0f && 
-		   (contact.getSource().getGlobalShape().getTop() == contact.getTarget().getGlobalShape().getTop() ||
-		   contact.getSource().getGlobalShape().getBottom() == contact.getTarget().getGlobalShape().getBottom()) && !_isFailed)
+		   (equals(actor.getTop(), platform.getTop()) || equals(actor.getBottom() ,platform.getBottom())) &&
+		   !_isFailed)
+		{
 			_platform = &platform;
+		}
 		else
 		{
 			_isFailed = true;

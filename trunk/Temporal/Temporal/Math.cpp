@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const float EPSILON = std::numeric_limits<float>::epsilon() * 256.0f;
+	const float EPSILON = std::numeric_limits<float>::epsilon() * 512.0f;
 
 	void assertAngle(float angle, float range)
 	{
@@ -36,5 +36,12 @@ namespace Temporal
 	bool isRightAngle(float angle)
 	{
 		return abs(angle) == ANGLE_90_IN_RADIANS;
+	}
+
+	bool equals(float a, float b)
+	{
+		float e = EPSILON;
+		bool bb = abs(a - b) < EPSILON; 
+		return bb;
 	}
 }
