@@ -42,7 +42,7 @@ namespace Temporal
 
 		if(correction && penetration < correction->getLength())
 		{
-			*correction = normal * (delta < 0.0f ^ flip ? -penetration : penetration);
+			*correction = normal * ((delta < 0.0f) ^ flip ? -penetration : penetration);
 		}
 		return true;
 	}
@@ -88,9 +88,11 @@ namespace Temporal
 			if (t1 > tmin) tmin = t1;
 			if (t2 < tmax) tmax = t2;
 			// Exit with no collision as soon as slab intersection becomes empty
-			if (tmin > tmax) return false;
+			if (tmin > tmax) 
+				return false;
 		}
-		
+
+		return true;
 	}
 
 	bool intersects(const DirectedSegment& seg, const YABP& yabp, Vector* pointOfIntersection, float* distance)
