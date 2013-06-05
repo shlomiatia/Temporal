@@ -38,24 +38,27 @@ namespace Temporal
 		}
 	}
 
-	void getPoints(float x, float y, const YABP& shape, Vector& point1, Vector& point2)
+	void getPoints(float x, float y, const YABP& shape, Vector& point1, Vector& point2, Vector& point3)
 	{
 		if(x < shape.getLeft())
 		{
 			if(y < -shape.getYRadius())
 			{
 				point1 = shape.getTopLeft();
-				point2 = shape.getBottomRight();
+				point2 = shape.getBottomLeft();
+				point3 = shape.getBottomRight();
 			}
 			else if(y > shape.getYRadius())
 			{
 				point1 = shape.getBottomLeft();
-				point2 = shape.getTopRight();
+				point2 = shape.getTopLeft();
+				point3 = shape.getTopRight();
 			}
 			else
 			{
 				point1 = shape.getBottomLeft();
 				point2 = shape.getTopLeft();
+				point3 = shape.getTopLeft();
 			}
 		}
 		else if(x > shape.getRight())
@@ -63,17 +66,20 @@ namespace Temporal
 			if(y < -shape.getYRadius())
 			{
 				point1 = shape.getBottomLeft();
-				point2 = shape.getTopRight();
+				point2 = shape.getBottomRight();
+				point3 = shape.getTopRight();
 			}
 			else if(y > shape.getYRadius())
 			{
 				point1 = shape.getTopLeft();
-				point2 = shape.getBottomRight();
+				point2 = shape.getTopRight();
+				point3 = shape.getBottomRight();
 			}
 			else
 			{
 				point1 = shape.getBottomRight();
 				point2 = shape.getTopRight();
+				point3 = shape.getTopRight();
 			}
 		}
 		else
@@ -82,12 +88,13 @@ namespace Temporal
 			{
 				point1 = shape.getBottomLeft();
 				point2 = shape.getBottomRight();
-				
+				point3 = shape.getBottomRight();				
 			}
 			else
 			{
 				point1 = shape.getTopLeft();
 				point2 = shape.getTopRight();
+				point3 = shape.getTopRight();
 			}
 		}
 	}
@@ -105,30 +112,39 @@ namespace Temporal
 		
 		Vector point1;
 		Vector point2;
-		getPoints(lightCenter.getX(), rotatedY, shape, point1, point2);
+		Vector point3;
+		getPoints(lightCenter.getX(), rotatedY, shape, point1, point2, point3);
 
 		Vector relativePoint1 = point1 - lightCenter;
 		Vector relativePoint2 = point2 - lightCenter;
+		Vector relativePoint3 = point3 - lightCenter;
 
 		Vector vector1 = relativePoint1.normalize();
 		Vector vector2 = relativePoint2.normalize();
+		Vector vector3 = relativePoint3.normalize();
 
-		float vertices[8];
-			
-		vertices[0] = point1.getX() + vector1.getX() * shadowSize;
-		vertices[1] = point1.getY() + vector1.getY() * shadowSize;
-		vertices[2] = point1.getX();
-		vertices[3] = point1.getY();
+		float vertices[12];
+		
+		vertices[0] = point1.getX();
+		vertices[1] = point1.getY();
+		vertices[2] = point1.getX() + vector1.getX() * shadowSize;
+		vertices[3] = point1.getY() + vector1.getY() * shadowSize;
 		vertices[4] = point2.getX();
 		vertices[5] = point2.getY();
 		vertices[6] = point2.getX() + vector2.getX() * shadowSize;
 		vertices[7] = point2.getY() + vector2.getY() * shadowSize;
+		vertices[8] = point3.getX();
+		vertices[9] = point3.getY();
+		vertices[10] = point3.getX() + vector3.getX() * shadowSize;
+		vertices[11] = point3.getY() + vector3.getY() * shadowSize;
+		
+		
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
 		glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-		glDrawArrays(GL_QUADS, 0, 4);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
  
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
@@ -197,13 +213,9 @@ namespace Temporal
 
 	void LightLayer::draw()
 	{
-		unsigned long start = SDL_GetTicks();
 		preDraw();
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
 		postDraw();
-		unsigned long end = SDL_GetTicks();
-		unsigned long period = end - start;
-		unsigned long millis = period / 1000;
 	}
 
 	void LightLayer::preDraw() const
