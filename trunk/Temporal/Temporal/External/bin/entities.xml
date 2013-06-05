@@ -24,7 +24,7 @@
 </entity>
 <entity id="ENT_PLAYER">
     <transform>
-        <position x="3000" y="512" />
+        <position x="256" y="512" />
     </transform>
     <collision-filter category="8" />
     <draw-position>
@@ -40,8 +40,8 @@
     </dynamic-body>
     <sensor category-mask="1">
         <fixture>
-            <yabp y-radius="40.5">
-                <center y="80.5" />
+            <yabp y-radius="40">
+                <center y="80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
@@ -49,8 +49,8 @@
     </sensor>
     <sensor category-mask="1">
         <fixture>
-            <yabp y-radius="40.5">
-                <center y="-80.5" />
+            <yabp y-radius="40">
+                <center y="-80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
@@ -61,7 +61,8 @@
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
     </renderer>
-    <!--<particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
+	<!--<light />
+    <particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
     <player-period period="2" />-->
 </entity>
 <!--<entity id="ENT_LIGHT">
@@ -69,10 +70,10 @@
         <position x="512" y="300" />
     </transform>
     <light />
-</entity>
+</entity>-->
 <entity id="ENT_CHASER">
     <transform>
-        <position x="768" y="384" />
+        <position x="3000" y="512" />
     </transform>
     <collision-filter category="4" />
     <draw-position>
@@ -80,17 +81,37 @@
     </draw-position>
     <navigator />
     <dynamic-body>
-        <fixture type="aabb">
-            <radius x="10" y="40" />
+        <fixture>
+            <yabp y-radius="40">
+                <sloped-radius x="10" />
+            </yabp>
         </fixture>
     </dynamic-body>
+	<sensor category-mask="1">
+        <fixture>
+            <yabp y-radius="40">
+                <center y="80" />
+                <sloped-radius x="9" />
+            </yabp>
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_HANG" />
+    </sensor>
+    <sensor category-mask="1">
+        <fixture>
+            <yabp y-radius="40">
+                <center y="-80" />
+                <sloped-radius x="9" />
+            </yabp>
+        </fixture>
+        <contact-listener type="ledge-detector" id="SNS_DESCEND" />
+    </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
     </renderer>
 </entity>
-<entity id="ENT_SKELETON">
+<!--<entity id="ENT_SKELETON">
     <transform orientation="1">
         <position x="300" y="300" />
     </transform>
@@ -129,7 +150,7 @@
 </entity>
 <entity id="ENT_CAMERA">
     <transform>
-        <position x="256" y="350" />
+        <position x="256" y="384" />
     </transform>
     <collision-filter category="4" />
     <security-camera />
@@ -141,7 +162,7 @@
 </entity>
 <entity id="ENT_PATROL">
     <transform>
-        <position x="768" y="384" />
+        <position x="3000" y="512" />
     </transform>
     <collision-filter category="4" />
     <draw-position>
@@ -149,29 +170,30 @@
     </draw-position>
     <patrol />
     <dynamic-body>
-        <fixture type="aabb">
-            <radius x="10" y="40" />
+        <fixture>
+            <yabp y-radius="40">
+                <sloped-radius x="10" />
+            </yabp>
         </fixture>
     </dynamic-body>
     <sight size="60" />
-
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
     <renderer layer="4">
         <scene-node sprite-sheet="pop.png" />
     </renderer>
-    <temporal-echo />
-    <!--<temporal-period period="1" />-->
-<!--</entity>-->
-<!--<entity id="ENT_LASER">
+    <!--<temporal-echo />
+    <temporal-period period="1" />
+</entity>
+<entity id="ENT_LASER">
     <transform />
     <collision-filter category="4" />
-    <laser platform="ENT_30_LEFT2" />
+    <laser platform="ENT_LOWER_MIDDLE_PLATFORM" />
     <renderer layer="4">
         <scene-node sprite-sheet="laser.png" />
     </renderer>
-    <!--<temporal-period period="2" />-->
-<!--</entity>-->
+    <!--<temporal-period period="2" />
+</entity>-->
 <entity id="ENT_FLOOR">
 	<transform>
 		<position x="1920" y="32" />

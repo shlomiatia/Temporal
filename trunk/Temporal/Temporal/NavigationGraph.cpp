@@ -105,8 +105,8 @@ namespace Temporal
 					float min = platform.getLeft();
 					float max = platform.getRight();
 					Vector segmentVector = platform.getSlopedRadius();
-					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
-					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
+//					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
+//					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
 					if(max >= area.getLeft() && max <= area.getRight())
 						cutAreaLeft(max + 1.0f, area, areas, j);
 					if(min >= area.getLeft() && min <= area.getRight())
@@ -224,28 +224,52 @@ namespace Temporal
 		float verticalDistance = y1 - y2;
 		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
-		NavigationEdgeType::Enum type;
-		DirectedSegment fallArea = DirectedSegment(Vector::Zero, Vector::Zero);
 
-		if(distance < minFallDistance)
+		if(distance >= minFallDistance)
 		{
-			type = NavigationEdgeType::DESCEND;
-			fallArea = DirectedSegment(x + orientation, y1, x, y2);
+			DirectedSegment fallArea = DirectedSegment(x + orientation, y1, x + orientation, y2);
+			if(!intersectWithPlatform(fallArea, platforms))
+			{
+				node1.addEdge(new NavigationEdge(node1, node2, x, orientation, NavigationEdgeType::FALL));
+			}
+		}
+	}
+
+	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms)
+	{
+		float x;
+		if(node1.getArea().getLeft() < node2.getArea().getLeft())
+		{
+			if(node1.getArea().getRight() < node2.getArea().getRight())
+				x = (node1.getArea().getRight() + node2.getArea().getLeft()) / 2.0f;
+			else
+				x = (node2.getArea().getRight() + node2.getArea().getLeft()) / 2.0f;
 		}
 		else
 		{
-			type = NavigationEdgeType::FALL;
-			fallArea = DirectedSegment(x + orientation, y1, x + orientation, y2);
+			if(node1.getArea().getLeft() > node2.getArea().getLeft())	
+				x = (node1.getArea().getLeft() + node2.getArea().getRight()) / 2.0f;
+			else
+				x = (node1.getArea().getRight() + node1.getArea().getLeft()) / 2.0f;
 		}
+		const YABP& area1 = node1.getArea();
+		const YABP& area2 = node2.getArea();
+		Segment lowerSegment1 = getLowerSegment(area1);
+		Segment lowerSegment2 = getLowerSegment(area2);
+		float y1 = lowerSegment1.getY(x);
+		float y2 = lowerSegment2.getY(x);
+		float verticalDistance = y1 - y2;
+
+		DirectedSegment fallArea = DirectedSegment(x, y1 - 2.0f, x, y2);
 		
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
-			node1.addEdge(new NavigationEdge(node1, node2, x, orientation, type));
+			node1.addEdge(new NavigationEdge(node1, node2, x, Side::LEFT, NavigationEdgeType::DESCEND));
 
 			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
-				node2.addEdge(new NavigationEdge(node2, node1, x, Side::getOpposite(orientation), NavigationEdgeType::JUMP_UP));
+				node2.addEdge(new NavigationEdge(node2, node1, x, Side::LEFT, NavigationEdgeType::JUMP_UP));
 		}
 	}
 
@@ -294,7 +318,12 @@ namespace Temporal
 						node2.addEdge(new NavigationEdge(node2, node1, area1.getRight(), Side::LEFT, NavigationEdgeType::WALK));
 					}
 				}
-				// check fall/jump up
+				// check jump up/descend
+				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() <= area2.getRight() && area1.getRight() >= area2.getLeft())
+				{
+					checkVerticalEdges(node1, node2, platforms);
+				}
+				// check fall
 				// BRODER
 				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() -20.f <= area2.getRight() && area1.getRight() + 20.0f >= area2.getLeft())
 				{
@@ -308,6 +337,8 @@ namespace Temporal
 				{
 					checkHorizontalEdges(node1, node2, platforms);
 				}
+				
+
 			}
 		}
 
