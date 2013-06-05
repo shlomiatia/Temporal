@@ -67,7 +67,6 @@ namespace Temporal
 		int group = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if(Grid::get().cast(newPosition, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
-			float crap = result.getPoint().getY();
 			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
 			raiseMessage(Message(MessageID::SET_COLOR, &color));
 			float vector = (result.getPoint().getY() - position.getY());

@@ -132,7 +132,6 @@ namespace Temporal
 	{
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
-			// TODO:
 			return 0;
 		else
 			return _grid[index];

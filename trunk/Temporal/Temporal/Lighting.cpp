@@ -197,9 +197,13 @@ namespace Temporal
 
 	void LightLayer::draw()
 	{
+		unsigned long start = SDL_GetTicks();
 		preDraw();
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
 		postDraw();
+		unsigned long end = SDL_GetTicks();
+		unsigned long period = end - start;
+		unsigned long millis = period / 1000;
 	}
 
 	void LightLayer::preDraw() const

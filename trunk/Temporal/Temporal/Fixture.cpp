@@ -16,8 +16,6 @@ namespace Temporal
 	void Fixture::update()
 	{
 		_globalShape.setCenter(_localShape.getCenter());
-
-		// TODO:
 		_globalShape.rotate(_transform->getOrientation());
 		_globalShape.translate(_transform->getPosition());
 	}

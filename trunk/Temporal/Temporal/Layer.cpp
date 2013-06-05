@@ -34,7 +34,7 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
 		
 		//Grid::get().draw();
-		//NavigationGraph::get().draw();
+		NavigationGraph::get().draw();
 
 		std::ostringstream title;
 		static const int MAX_SAMPLES = 100;
