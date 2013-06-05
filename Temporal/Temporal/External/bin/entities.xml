@@ -38,23 +38,23 @@
             </yabp>
         </fixture>
     </dynamic-body>
-    <sensor category-mask="1">
+    <sensor id="SNS_HANG" category-mask="1">
         <fixture>
             <yabp y-radius="40">
                 <center y="80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_HANG" />
+		<contact-listener type="ledge-detector" />
     </sensor>
-    <sensor category-mask="1">
+    <sensor id="SNS_DESCEND" category-mask="1">
         <fixture>
             <yabp y-radius="40">
                 <center y="-80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_DESCEND" />
+        <contact-listener type="ledge-detector" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -70,7 +70,7 @@
         <position x="512" y="300" />
     </transform>
     <light />
-</entity>-->
+</entity>
 <entity id="ENT_CHASER">
     <transform>
         <position x="3000" y="512" />
@@ -87,23 +87,23 @@
             </yabp>
         </fixture>
     </dynamic-body>
-	<sensor category-mask="1">
+	<sensor id="SNS_HANG" category-mask="1">
         <fixture>
             <yabp y-radius="40">
                 <center y="80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_HANG" />
     </sensor>
-    <sensor category-mask="1">
+	<contact-listener type="ledge-detector" />
+    <sensor id="SNS_DESCEND" category-mask="1">
         <fixture>
             <yabp y-radius="40">
                 <center y="-80" />
                 <sloped-radius x="9" />
             </yabp>
         </fixture>
-        <contact-listener type="ledge-detector" id="SNS_DESCEND" />
+        <contact-listener type="ledge-detector" />
     </sensor>
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -111,7 +111,7 @@
         <scene-node sprite-sheet="pop.png" />
     </renderer>
 </entity>
-<!--<entity id="ENT_SKELETON">
+<entity id="ENT_SKELETON">
     <transform orientation="1">
         <position x="300" y="300" />
     </transform>
@@ -159,7 +159,7 @@
     <renderer layer="4">
         <scene-node sprite-sheet="camera.png" />
     </renderer>
-</entity>
+</entity>-->
 <entity id="ENT_PATROL">
     <transform>
         <position x="3000" y="512" />
@@ -176,6 +176,15 @@
             </yabp>
         </fixture>
     </dynamic-body>
+	<sensor id="SNS_FRONT_EDGE" category-mask="1">
+		<fixture>
+			<yabp y-radius="1">
+				<center x="30" y="-40" />
+				<sloped-radius x="10" />
+			</yabp>
+		</fixture>
+        <contact-listener type="edge-detector" />
+    </sensor>
     <sight size="60" />
     <action-controller />
     <animator animation-set="POP_ANM_SET" />
@@ -183,9 +192,9 @@
         <scene-node sprite-sheet="pop.png" />
     </renderer>
     <!--<temporal-echo />
-    <temporal-period period="1" />
+    <temporal-period period="1" />-->
 </entity>
-<entity id="ENT_LASER">
+<!--<entity id="ENT_LASER">
     <transform />
     <collision-filter category="4" />
     <laser platform="ENT_LOWER_MIDDLE_PLATFORM" />

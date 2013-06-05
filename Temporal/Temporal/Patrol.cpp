@@ -21,7 +21,7 @@ namespace Temporal
 			{
 				_stateMachine->changeState(SEE_STATE);
 			}
-			else if(isSensorCollisionMessage(message, FRONT_EDGE_SENSOR_ID))
+			else if(message.getID() == MessageID::EDGE_DETECTED)
 			{
 				_stateMachine->changeState(WAIT_STATE);
 			}

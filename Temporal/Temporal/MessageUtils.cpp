@@ -33,15 +33,4 @@ namespace Temporal
 		else
 			component.raiseMessage(Message(MessageID::ACTION_BACKWARD));
 	}
-
-	bool isSensorCollisionMessage(Message& message, Hash sensorID)
-	{
-		if(message.getID() == MessageID::LEDGE_DETECTED)
-		{
-			const LedgeDetectionParams& params = *static_cast<LedgeDetectionParams*>(message.getParam());
-			if(params.getSensorID() == sensorID)
-				return true;
-		}
-		return false;
-	}
 }
