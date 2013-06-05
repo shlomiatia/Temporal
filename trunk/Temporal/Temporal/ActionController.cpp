@@ -44,6 +44,17 @@ namespace Temporal
 		return *static_cast<ActionController*>(stateMachine);
 	}
 
+	bool isLedgeDetectionMessage(Message& message, Hash sensorID)
+	{
+		if(message.getID() == MessageID::LEDGE_DETECTED)
+		{
+			const Hash& id = getHashParam(message.getParam());
+			if(id == sensorID)
+				return true;
+		}
+		return false;
+	}
+
 	const JumpInfo JumpHelper::JUMP_UP_INFO(ANGLE_90_IN_RADIANS, JUMP_UP_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 	const JumpInfo JumpHelper::JUMP_FORWARD_INFO(ANGLE_45_IN_RADIANS, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 
@@ -95,7 +106,7 @@ namespace Temporal
 		{
 			_stateMachine->setTempFlag1(true);
 		}
-		else if(_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, DESCEND_SENSOR_ID))
+		else if(_stateMachine->getTempFlag1() && isLedgeDetectionMessage(message, DESCEND_SENSOR_ID))
 		{
 			_stateMachine->changeState(DESCEND_STATE);
 		}
@@ -205,7 +216,7 @@ namespace Temporal
 		{
 			_stateMachine->setTempFlag1(true);
 		}
-		else if (_stateMachine->getTempFlag1() && isSensorCollisionMessage(message, HANG_SENSOR_ID))
+		else if (_stateMachine->getTempFlag1() && isLedgeDetectionMessage(message, HANG_SENSOR_ID))
 		{
 			_stateMachine->changeState(HANG_STATE);
 		}

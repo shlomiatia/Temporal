@@ -11,22 +11,6 @@ namespace Temporal
 	class YABP;
 	class Vector;
 
-	class LedgeDetectionParams
-	{
-	public:
-		LedgeDetectionParams(Hash sensorID, const YABP* platform) : _sensorID(sensorID), _platform(platform) {}
-
-		Hash getSensorID() const { return _sensorID; }
-		const YABP* getPlatform() const { return _platform; }
-	
-	private:
-		const Hash _sensorID;
-		const YABP* _platform;
-
-		LedgeDetectionParams(const LedgeDetectionParams&);
-		LedgeDetectionParams& operator=(const LedgeDetectionParams&);
-	};
-
 	const Vector& getPosition(const Component& component);
 	Side::Enum getOrientation(const Component& component);
 
@@ -37,7 +21,6 @@ namespace Temporal
 	inline bool getBoolParam(void* data) { return *static_cast<bool*>(data); }
 
 	void sendDirectionAction(const Component& component, Side::Enum direction);
-	bool isSensorCollisionMessage(Message& message, Hash sensorID);
 
 }
 #endif

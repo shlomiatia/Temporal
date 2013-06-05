@@ -13,7 +13,7 @@ namespace Temporal
 {
 	Component* Sensor::clone() const
 	{
-		return new Sensor(_fixture->clone(), _listener->clone(), _categoryMask);
+		return new Sensor(_id, _fixture->clone(), _listener->clone(), _categoryMask);
 	}
 
 	void Sensor::update()
@@ -60,7 +60,8 @@ namespace Temporal
 	{
 		if(_platform)
 		{
-			getOwner().raiseMessage(Message(MessageID::LEDGE_DETECTED, &LedgeDetectionParams(_id, _platform)));
+			Hash id = getOwner().getId();
+			getOwner().raiseMessage(Message(MessageID::LEDGE_DETECTED, &id));
 		}
 	}
 
@@ -79,5 +80,21 @@ namespace Temporal
 			_isFailed = true;
 			_platform = 0;
 		}
+	}
+
+	void EdgeDetector::start()
+	{
+		_isDetected = true;
+	}
+
+	void EdgeDetector::end()
+	{
+		if(_isDetected)
+			getOwner().raiseMessage(Message(MessageID::EDGE_DETECTED));
+	}
+
+	void EdgeDetector::handle(const Contact& contact)
+	{
+		_isDetected = false;
 	}
 }
