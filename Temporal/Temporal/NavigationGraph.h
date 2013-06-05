@@ -97,6 +97,7 @@ namespace Temporal
 
 		void createNodes(ShapeCollection& platforms);
 		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeCollection& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void createEdges(ShapeCollection& platforms);
 
