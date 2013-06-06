@@ -2,6 +2,8 @@
 #include "Graphics.h"
 #include "Fixture.h"
 #include "Grid.h"
+#include "MessageUtils.h"
+#include "CollisionFilter.h"
 
 namespace Temporal
 {

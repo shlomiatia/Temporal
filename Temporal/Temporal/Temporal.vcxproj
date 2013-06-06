@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationGraph.h" />
@@ -70,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
