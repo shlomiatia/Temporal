@@ -3,8 +3,6 @@
 
 namespace Temporal
 {
-	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-
 	const Vector& getPosition(const Component& component)
 	{
 		return *static_cast<Vector*>(component.raiseMessage(Message(MessageID::GET_POSITION)));

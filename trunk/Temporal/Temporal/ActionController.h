@@ -5,6 +5,7 @@
 #include "Hash.h"
 #include "BaseEnums.h"
 #include "StateMachineComponent.h"
+#include "Sensor.h"
 
 namespace Temporal
 {
@@ -63,17 +64,38 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
+	class LedgeDetector : public ContactListener
+	{
+	public:
+		explicit LedgeDetector(Hash sensorId)
+			: ContactListener(sensorId), _isFailed(false), _isFound(false) {}
+
+		bool isFound() const { return _isFound; }
+
+	protected:
+		void start();
+		void handle(const Contact& contact);
+
+	private:
+		bool _isFound;
+		bool _isFailed;
+	};
+
+
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController() : StateMachineComponent(getStates(), "ACT") {}
+		ActionController();
 
 		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
+		const LedgeDetector& getHangDetector() const { return _hangDetector; }
+		const LedgeDetector& getDescendDetector() const { return _descendDetector; }
 
+		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
 
 	protected:
@@ -81,6 +103,8 @@ namespace Temporal
 
 	private:
 		JumpHelper _jumpHelper;
+		LedgeDetector _hangDetector;
+		LedgeDetector _descendDetector;
 
 		StateCollection getStates() const;
 	};
@@ -88,72 +112,75 @@ namespace Temporal
 	/**********************************************************************************************
 	 * States
 	 *********************************************************************************************/
-	class Stand : public ComponentState
+	namespace ActionControllerStates
 	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Stand : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Fall : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
+		class Fall : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
 
-	private:
-		static const float ALLOW_JUMP_TIME;
-	};
+		private:
+			static const float ALLOW_JUMP_TIME;
+		};
 
-	class Walk : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Walk : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Turn : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Turn : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Jump : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Jump : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class JumpEnd : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class JumpEnd : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Hang : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Hang : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Climb : public ComponentState
-	{
-	public:
-		void enter() const;
-		void exit() const;
-		void handleMessage(Message& message) const;
-	};
+		class Climb : public ComponentState
+		{
+		public:
+			void enter() const;
+			void exit() const;
+			void handleMessage(Message& message) const;
+		};
 
-	class Descend : public ComponentState
-	{
-	public:
-		void enter() const;
-		void handleMessage(Message& message) const;
-	};
+		class Descend : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
+	}
 }
 
 #endif

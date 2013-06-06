@@ -4,26 +4,60 @@
 
 namespace Temporal
 {
+	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
+
+	static const Hash WALK_STATE = Hash("PAT_STT_WALK");
+	static const Hash SEE_STATE = Hash("PAT_STT_SEE");
+	static const Hash TURN_STATE = Hash("PAT_STT_TURN");
+	static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
+
+	static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
+
+	void EdgeDetector::start()
+	{
+		_isFound = true;
+	}
+
+	void EdgeDetector::handle(const Contact& contact)
+	{
+		_isFound = false;
+	}
+
+	Patrol::Patrol() : 
+		StateMachineComponent(getStates(), "PAT"),
+		_edgeDetector(FRONT_EDGE_SENSOR_ID)
+		{}
+
+	void Patrol::handleMessage(Message& message)
+	{
+		_edgeDetector.handleMessage(message);
+		StateMachineComponent::handleMessage(message);
+	}
+
+	Hash Patrol::getInitialState() const
+	{
+		return WALK_STATE;
+	}
+
+	StateCollection Patrol::getStates() const
+	{
+		using namespace PatrolStates;
+		StateCollection states;
+		
+		states[WALK_STATE] = new Walk();
+		states[SEE_STATE] = new See();
+		states[TURN_STATE] = new Turn();
+		states[WAIT_STATE] = new Wait();
+		return states;
+	}
+
 	namespace PatrolStates
 	{
-		static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
-
-		static const Hash WALK_STATE = Hash("PAT_STT_WALK");
-		static const Hash SEE_STATE = Hash("PAT_STT_SEE");
-		static const Hash TURN_STATE = Hash("PAT_STT_TURN");
-		static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
-
-		static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
-
 		void Walk::handleMessage(Message& message) const
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_stateMachine->changeState(SEE_STATE);
-			}
-			else if(message.getID() == MessageID::EDGE_DETECTED)
-			{
-				_stateMachine->changeState(WAIT_STATE);
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
@@ -35,7 +69,11 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
+				const Patrol& patrol = *static_cast<Patrol*>(_stateMachine);
+				if(patrol.getEdgeDetector().isFound())
+					_stateMachine->changeState(WAIT_STATE);
+				else
+					_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 
@@ -89,22 +127,5 @@ namespace Temporal
 				}
 			}
 		}
-	}
-	using namespace PatrolStates;
-
-	StateCollection Patrol::getStates() const
-	{
-		StateCollection states;
-		
-		states[WALK_STATE] = new Walk();
-		states[SEE_STATE] = new See();
-		states[TURN_STATE] = new Turn();
-		states[WAIT_STATE] = new Wait();
-		return states;
-	}
-
-	Hash Patrol::getInitialState() const
-	{
-		return WALK_STATE;
 	}
 }

@@ -44,25 +44,50 @@ namespace Temporal
 		return *static_cast<ActionController*>(stateMachine);
 	}
 
-	bool isLedgeDetectionMessage(Message& message, Hash sensorID)
-	{
-		if(message.getID() == MessageID::LEDGE_DETECTED)
-		{
-			const Hash& id = getHashParam(message.getParam());
-			if(id == sensorID)
-				return true;
-		}
-		return false;
-	}
-
 	const JumpInfo JumpHelper::JUMP_UP_INFO(ANGLE_90_IN_RADIANS, JUMP_UP_ANIMATION, JUMP_FORWARD_END_ANIMATION);
 	const JumpInfo JumpHelper::JUMP_FORWARD_INFO(ANGLE_45_IN_RADIANS, JUMP_FORWARD_ANIMATION, JUMP_FORWARD_END_ANIMATION);
+
+	void LedgeDetector::start()
+	{
+		_isFound = false;
+		_isFailed = false;
+	}
+
+	void LedgeDetector::handle(const Contact& contact)
+	{
+		const YABP& actor = contact.getSource().getGlobalShape();
+		const YABP& platform = contact.getTarget().getGlobalShape();
+		if(platform.getHeight() == 0.0f && 
+		   (equals(actor.getTop(), platform.getTop()) || equals(actor.getBottom() ,platform.getBottom())) &&
+		   !_isFailed)
+		{
+			_isFound = true;
+		}
+		else
+		{
+			_isFailed = true;
+			_isFound = false;
+		}
+	}
 
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
+	ActionController::ActionController() :
+		StateMachineComponent(getStates(), "ACT"),
+		_hangDetector(HANG_SENSOR_ID),
+		_descendDetector(DESCEND_SENSOR_ID) {}
+
+	void ActionController::handleMessage(Message& message)
+	{
+		_hangDetector.handleMessage(message);
+		_descendDetector.handleMessage(message);
+		StateMachineComponent::handleMessage(message);
+	}
+
 	StateCollection ActionController::getStates() const
 	{
+		using namespace ActionControllerStates;
 		StateCollection states;
 		states[STAND_STATE] = new Stand();
 		states[FALL_STATE] = new Fall();
@@ -81,242 +106,247 @@ namespace Temporal
 	/**********************************************************************************************
 	 * States
 	 *********************************************************************************************/
-	void Stand::enter() const
-	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &STAND_ANIMATION));
-	}
 
-	void Stand::handleMessage(Message& message) const
+	namespace ActionControllerStates
 	{
-		if(message.getID() == MessageID::ACTION_FORWARD)
+		void Stand::enter() const
 		{
-			_stateMachine->changeState(WALK_STATE);
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &STAND_ANIMATION));
 		}
-		else if(message.getID() == MessageID::ACTION_BACKWARD)
+
+		void Stand::handleMessage(Message& message) const
 		{
-			_stateMachine->changeState(TURN_STATE);
+			if(message.getID() == MessageID::ACTION_FORWARD)
+			{
+				_stateMachine->changeState(WALK_STATE);
+			}
+			else if(message.getID() == MessageID::ACTION_BACKWARD)
+			{
+				_stateMachine->changeState(TURN_STATE);
+			}
+			else if(message.getID() == MessageID::ACTION_UP)
+			{
+				getActionController(_stateMachine).getJumpHelper().setType(JumpType::UP);
+				_stateMachine->changeState(JUMP_STATE);
+			}
+			// TempFlag1 - Is descending
+			else if(message.getID() == MessageID::ACTION_DOWN)
+			{
+				_stateMachine->setTempFlag1(true);
+			}
+			else if(message.getID() == MessageID::UPDATE)
+			{
+				if(_stateMachine->getTempFlag1() && getActionController(_stateMachine).getDescendDetector().isFound())
+					_stateMachine->changeState(DESCEND_STATE);
+			}
 		}
-		else if(message.getID() == MessageID::ACTION_UP)
+
+		const float Fall::ALLOW_JUMP_TIME = 0.075f;
+
+		void Fall::enter() const
 		{
-			getActionController(_stateMachine).getJumpHelper().setType(JumpType::UP);
-			_stateMachine->changeState(JUMP_STATE);
+			// Not setting force because we want to continue the momentum
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &FALL_ANIMATION));
 		}
-		// TempFlag1 - Is descending
-		else if(message.getID() == MessageID::ACTION_DOWN)
+
+		void Fall::handleMessage(Message& message) const
 		{
+			// TempFlag 1 - want to hang
+			if(message.getID() == MessageID::ACTION_UP)
+			{
+				if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
+				{
+					getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);
+					_stateMachine->changeState(JUMP_STATE);
+				}
+				else
+				{
+					_stateMachine->setTempFlag1(true);
+				}
+			}
+			else if(message.getID() == MessageID::BODY_COLLISION)
+			{
+				const Vector& collision = getVectorParam(message.getParam());
+				if(collision.getY() < 0.0f)
+					_stateMachine->changeState(STAND_STATE);
+			}
+		}
+
+		void Walk::enter() const
+		{
+			// TempFlag 1 - still walking
 			_stateMachine->setTempFlag1(true);
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &WALK_ANIMATION));
 		}
-		else if(_stateMachine->getTempFlag1() && isLedgeDetectionMessage(message, DESCEND_SENSOR_ID))
+
+		void Walk::handleMessage(Message& message) const
 		{
-			_stateMachine->changeState(DESCEND_STATE);
-		}
-	}
-
-	const float Fall::ALLOW_JUMP_TIME = 0.075f;
-
-	void Fall::enter() const
-	{
-		// Not setting force because we want to continue the momentum
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &FALL_ANIMATION));
-	}
-
-	void Fall::handleMessage(Message& message) const
-	{
-		// TempFlag 1 - want to hang
-		if(message.getID() == MessageID::ACTION_UP)
-		{
-			if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
+			if(message.getID() == MessageID::ACTION_UP)
 			{
 				getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);
 				_stateMachine->changeState(JUMP_STATE);
 			}
-			else
+			// TempFlag 1 - still walking
+			// TempFlag 2 - no floor
+			else if(message.getID() == MessageID::ACTION_FORWARD)
 			{
 				_stateMachine->setTempFlag1(true);
 			}
+			else if(message.getID() == MessageID::UPDATE)
+			{			
+				void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
+				if(!ground)
+				{
+					_stateMachine->changeState(FALL_STATE);
+				}
+				else if(!_stateMachine->getTempFlag1())
+				{
+					_stateMachine->changeState(STAND_STATE);
+				}
+				else
+				{
+					// We need to apply this every update because the ground has infinite restitution. 
+					Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
+					_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
+				}
+			}
 		}
-		else if(message.getID() == MessageID::BODY_COLLISION)
-		{
-			const Vector& collision = getVectorParam(message.getParam());
-			if(collision.getY() < 0.0f)
-				_stateMachine->changeState(STAND_STATE);
-		}
-	}
 
-	void Walk::enter() const
-	{
-		// TempFlag 1 - still walking
-		_stateMachine->setTempFlag1(true);
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &WALK_ANIMATION));
-	}
+		void Turn::enter() const
+		{
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION));
+		}
 
-	void Walk::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ACTION_UP)
+		void Turn::handleMessage(Message& message) const
 		{
-			getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);
-			_stateMachine->changeState(JUMP_STATE);
-		}
-		// TempFlag 1 - still walking
-		// TempFlag 2 - no floor
-		else if(message.getID() == MessageID::ACTION_FORWARD)
-		{
-			_stateMachine->setTempFlag1(true);
-		}
-		else if(message.getID() == MessageID::UPDATE)
-		{			
-			void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
-			if(!ground)
+			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
+				_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+				_stateMachine->changeState(STAND_STATE);
+			}
+		}
+
+		void Jump::enter() const
+		{
+			const JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
+			float angle = jumpHelper.getInfo().getAngle();
+			float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
+			float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
+			Vector jumpVector = Vector(jumpForceX, jumpForceY);
+			_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
+			Hash animation = jumpHelper.getInfo().getJumpAnimation();
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
+		}
+
+		void Jump::handleMessage(Message& message) const
+		{
+			// TempFlag 1 - Want to hang
+			if(message.getID() == MessageID::ACTION_UP)
+			{
+				_stateMachine->setTempFlag1(true);
+			}
+			else if (message.getID() == MessageID::UPDATE)
+			{
+				if(_stateMachine->getTempFlag1() && getActionController(_stateMachine).getHangDetector().isFound())
+					_stateMachine->changeState(HANG_STATE);
+			}
+			else if(message.getID() == MessageID::BODY_COLLISION)
+			{
+				const Vector& collision = getVectorParam(message.getParam());
+				if(collision.getY() < 0.0f)
+					_stateMachine->changeState(JUMP_END_STATE);
+			}
+		}
+
+		void JumpEnd::enter() const
+		{
+			Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getEndAnimation();
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
+		}
+
+		void JumpEnd::handleMessage(Message& message) const
+		{
+			if(message.getID() == MessageID::ANIMATION_ENDED)
+			{
+				_stateMachine->changeState(STAND_STATE);
+			}
+		}
+
+		void Hang::enter() const
+		{
+			const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+			float personCenterX = personBounds.getCenterX();
+			Vector drawPosition(personCenterX, personBounds.getTop());
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
+			bool gravityEnabled = false;
+			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &HANG_ANIMATION));
+		}
+
+		void Hang::handleMessage(Message& message) const
+		{
+			if(message.getID() == MessageID::ACTION_DOWN)
+			{	
+				Vector zero = Vector::Zero;
+				_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &zero));
+				bool gravityEnabled = true;
+				_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 				_stateMachine->changeState(FALL_STATE);
 			}
-			else if(!_stateMachine->getTempFlag1())
+			else if(message.getID() == MessageID::ACTION_UP)
+			{	
+				_stateMachine->changeState(CLIMB_STATE);
+			}
+		}
+
+		void Climb::enter() const
+		{
+			const YABP& shape = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+			float climbForceY = shape.getHeight();
+			Vector climbForce(0.0f, climbForceY);
+
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLIMB_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
+		}
+
+		void Climb::exit() const
+		{
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<Vector*>(&Vector::Zero)));
+			bool gravityEnabled = true;
+			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+		}
+
+		void Climb::handleMessage(Message& message) const
+		{
+			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
 				_stateMachine->changeState(STAND_STATE);
 			}
-			else
+		}
+
+		void Descend::enter() const
+		{
+			const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+			float personBottom = personBounds.getBottom();
+			float personCenterX = personBounds.getCenterX();
+			Vector drawPosition(personCenterX, personBottom);
+			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
+			bool gravityEnabled = false;
+			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			const YABP& size = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+			float forceX = 0.0f;
+			float forceY = -(size.getHeight());
+
+			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &DESCEND_ANIMATION));
+		}
+
+		void Descend::handleMessage(Message& message) const
+		{
+			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
-				// We need to apply this every update because the ground has infinite restitution. 
-				Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
-				_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
+				_stateMachine->changeState(HANG_STATE);
 			}
 		}
 	}
-
-	void Turn::enter() const
-	{
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION));
-	}
-
-	void Turn::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
-			_stateMachine->changeState(STAND_STATE);
-		}
-	}
-
-	void Jump::enter() const
-	{
-		const JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
-		float angle = jumpHelper.getInfo().getAngle();
-		float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
-		float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
-		Vector jumpVector = Vector(jumpForceX, jumpForceY);
-		_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
-		Hash animation = jumpHelper.getInfo().getJumpAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
-	}
-
-	void Jump::handleMessage(Message& message) const
-	{
-		// TempFlag 1 - Want to hang
-		if(message.getID() == MessageID::ACTION_UP)
-		{
-			_stateMachine->setTempFlag1(true);
-		}
-		else if (_stateMachine->getTempFlag1() && isLedgeDetectionMessage(message, HANG_SENSOR_ID))
-		{
-			_stateMachine->changeState(HANG_STATE);
-		}
-		else if(message.getID() == MessageID::BODY_COLLISION)
-		{
-			const Vector& collision = getVectorParam(message.getParam());
-			if(collision.getY() < 0.0f)
-				_stateMachine->changeState(JUMP_END_STATE);
-		}
-	}
-
-	void JumpEnd::enter() const
-	{
-		Hash animation = getActionController(_stateMachine).getJumpHelper().getInfo().getEndAnimation();
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
-	}
-
-	void JumpEnd::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine->changeState(STAND_STATE);
-		}
-	}
-
-	void Hang::enter() const
-	{
-		const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		float personCenterX = personBounds.getCenterX();
-		Vector drawPosition(personCenterX, personBounds.getTop());
-		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
-		bool gravityEnabled = false;
-		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &HANG_ANIMATION));
-	}
-
-	void Hang::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ACTION_DOWN)
-		{	
-			Vector zero = Vector::Zero;
-			_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &zero));
-			bool gravityEnabled = true;
-			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-			_stateMachine->changeState(FALL_STATE);
-		}
-		else if(message.getID() == MessageID::ACTION_UP)
-		{	
-			_stateMachine->changeState(CLIMB_STATE);
-		}
-	}
-
-	void Climb::enter() const
-	{
-		const YABP& shape = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		float climbForceY = shape.getHeight();
-		Vector climbForce(0.0f, climbForceY);
-
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLIMB_ANIMATION));
-		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));
-	}
-
-	void Climb::exit() const
-	{
-		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, const_cast<Vector*>(&Vector::Zero)));
-		bool gravityEnabled = true;
-		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-	}
-
-	void Climb::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine->changeState(STAND_STATE);
-		}
-	}
-
-	void Descend::enter() const
-	{
-		const YABP& personBounds = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		float personBottom = personBounds.getBottom();
-		float personCenterX = personBounds.getCenterX();
-		Vector drawPosition(personCenterX, personBottom);
-		_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &drawPosition));
-		bool gravityEnabled = false;
-		_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
-		const YABP& size = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-		float forceX = 0.0f;
-		float forceY = -(size.getHeight());
-
-		_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &Vector(forceX, forceY)));
-		_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &DESCEND_ANIMATION));
-	}
-
-	void Descend::handleMessage(Message& message) const
-	{
-		if(message.getID() == MessageID::ANIMATION_ENDED)
-		{
-			_stateMachine->changeState(HANG_STATE);
-		}
-	}
-
 }
