@@ -24,6 +24,7 @@
 #include "SceneNode.h"
 #include "InputController.h"
 #include "Shapes.h"
+#include "Door.h"
 
 namespace Temporal
 {
@@ -388,6 +389,8 @@ namespace Temporal
 				component = new Patrol();
 			else if(strcmp(key, "navigator") == 0)
 				component = new Navigator();
+			else if(strcmp(key, "door") == 0)
+				component = new Door();
 			else if(strcmp(key, "laser") == 0)
 				serialize(key, (Laser*&)component, serializer);
 			else if(strcmp(key, "temporal-echo") == 0)

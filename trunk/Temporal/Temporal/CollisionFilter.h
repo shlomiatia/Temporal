@@ -12,6 +12,7 @@ namespace Temporal
 
 		int getCategory() const { return _category; }
 		int getGroup() const { return _group; }
+		bool isEnabled() const { return _isEnabled; }
 
 		ComponentType::Enum getType() const { return ComponentType::COLLISION_FILTER; }
 		void handleMessage(Message& message);
@@ -21,6 +22,7 @@ namespace Temporal
 	private:
 		int _category;
 		int _group;
+		bool _isEnabled;
 
 		friend class SerializationAccess;
 	};

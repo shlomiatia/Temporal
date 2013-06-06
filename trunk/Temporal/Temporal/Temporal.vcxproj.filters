@@ -165,6 +165,9 @@
     <ClInclude Include="MovingPlatform.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -311,6 +314,9 @@
       <Filter>AI</Filter>
     </ClCompile>
     <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

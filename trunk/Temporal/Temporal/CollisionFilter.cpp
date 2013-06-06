@@ -4,7 +4,7 @@
 namespace Temporal
 {
 	CollisionFilter::CollisionFilter(int category, int group)
-		: _category(category), _group(group) {}
+		: _category(category), _group(group), _isEnabled(true) {}
 
 	void CollisionFilter::handleMessage(Message& message)
 	{
@@ -17,11 +17,17 @@ namespace Temporal
 		{
 			message.setParam(&_group);
 		}
+		else if(message.getID() == MessageID::SET_BODY_ENABLED)
+		{
+			bool value = getBoolParam(message.getParam());
+			_isEnabled = value;
+		}
 	}
 
 	bool CollisionFilter::canCollide(int mask, int group) const
 	{
-		return (mask & _category) != 0 &&
+		return _isEnabled &&
+				(mask & _category) != 0 &&
 			   (_group == -1 ||
 			    group == -1 ||
 			    _group == group);

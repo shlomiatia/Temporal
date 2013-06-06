@@ -75,6 +75,7 @@ namespace Temporal
 			ACTION_BACKWARD,
 			
 			GET_GROUND,
+			SET_BODY_ENABLED,
 			SET_GRAVITY_ENABLED,
 			SET_TIME_BASED_IMPULSE,
 			SET_ABSOLUTE_IMPULSE,
@@ -100,7 +101,9 @@ namespace Temporal
 			MERGE_TO_TEMPORAL_ECHOES,
 
 			SET_LIT,
-			IS_LIT
+			IS_LIT,
+
+			ACTIVATE
 		};
 	}
 }
