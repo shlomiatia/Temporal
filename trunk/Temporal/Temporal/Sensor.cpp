@@ -49,7 +49,6 @@ namespace Temporal
 		}
 	}
 
-
 	void ContactListener::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::SENSOR_START)

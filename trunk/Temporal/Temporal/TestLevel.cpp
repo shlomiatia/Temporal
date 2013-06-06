@@ -20,7 +20,7 @@ namespace Temporal
 	
 	void TestLevel::init()
 	{
-		font.FaceSize(72);
+		//font.FaceSize(72);
 		Size resolution = Size(1280.0f, 720.0f);
 		Size levelSize = Size(3840.0f, 720.0f);
 		float relativeHeight = 720.0f;
@@ -53,7 +53,6 @@ namespace Temporal
 			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
 			//EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-			EntitiesManager::get().sendMessageToEntity(Hash("ENT_DOOR"), Message(MessageID::ACTIVATE));
 		}
 
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));		

@@ -9,7 +9,7 @@ namespace Temporal
 	class Button : public Component
 	{
 	public:
-		Button(const Hash& target) : _target(target) {}
+		Button(const Hash& target = Hash::INVALID) : _target(target) {}
 
 		ComponentType::Enum getType() const { return ComponentType::OTHER; }
 		void handleMessage(Message& message);

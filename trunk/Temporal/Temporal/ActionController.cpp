@@ -6,6 +6,7 @@
 #include "Shapes.h"
 #include "Math.h"
 #include "DynamicBody.h"
+#include "Input.h"
 
 namespace Temporal
 {
@@ -14,6 +15,7 @@ namespace Temporal
 	 *********************************************************************************************/
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
+	static const Hash ACTIVATE_SENSOR_ID = Hash("SNS_ACTIVATE");
 
 	static Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
 	static Hash TURN_ANIMATION = Hash("POP_ANM_TURN");
@@ -138,6 +140,15 @@ namespace Temporal
 			{
 				if(_stateMachine->getTempFlag1() && getActionController(_stateMachine).getDescendDetector().isFound())
 					_stateMachine->changeState(DESCEND_STATE);
+			}
+			else if(Input::get().key(Key::Q) && message.getID() == MessageID::SENSOR_SENSE)
+			{
+				const SensorParams& params = getSensorParams(message.getParam());
+				if(params.getSensorId() == ACTIVATE_SENSOR_ID)
+				{
+					Hash entityId = params.getContact().getTarget().getEntityId();
+					EntitiesManager::get().sendMessageToEntity(entityId, Message(MessageID::ACTIVATE));
+				}
 			}
 		}
 

@@ -24,6 +24,7 @@
 #include "SceneNode.h"
 #include "InputController.h"
 #include "Shapes.h"
+#include "Button.h"
 #include "Door.h"
 
 namespace Temporal
@@ -284,6 +285,12 @@ namespace Temporal
 			serializer.serialize("point2", component._point2);
 		}
 
+		template<class T>
+		static void serialize(const char* key, Button& button, T& serializer)
+		{
+			serializer.serialize("target", button._target);
+		}
+
 		static void serialize(const char* key, Fixture*& component, MemorySerialization& serializer)
 		{
 		}
@@ -370,6 +377,8 @@ namespace Temporal
 				component = new Navigator();
 			else if(strcmp(key, "door") == 0)
 				component = new Door();
+			else if(strcmp(key, "button") == 0)
+				serialize(key, (Button*&)component, serializer);
 			else if(strcmp(key, "laser") == 0)
 				serialize(key, (Laser*&)component, serializer);
 			else if(strcmp(key, "temporal-echo") == 0)

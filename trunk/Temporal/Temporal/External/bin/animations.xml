@@ -149,3 +149,25 @@
         </sample-set>
     </animation>
 </animation-set>
+<animation-set id="DOR_ANM_SET">
+	<animation id="DOR_ANM_OPEN" repeat="1">
+        <sample-set>
+            <sample sprite-group="DOR_ANM_OPEN" />
+        </sample-set>
+    </animation>
+	<animation id="DOR_ANM_OPENING">
+        <sample-set>
+            <sample sprite-group="DOR_ANM_OPENING" duration="1.366" />
+        </sample-set>
+	</animation>
+	<animation id="DOR_ANM_CLOSING" rewind="1">
+        <sample-set>
+            <sample sprite-group="DOR_ANM_OPENING" duration="1.366" />
+        </sample-set>
+    </animation>
+	<animation id="DOR_ANM_CLOSE" repeat="1">
+        <sample-set>
+            <sample sprite-group="DOR_ANM_CLOSE" />
+        </sample-set>
+    </animation>
+</animation-set>
