@@ -168,6 +168,9 @@
     <ClInclude Include="Door.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -317,6 +320,9 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Door.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

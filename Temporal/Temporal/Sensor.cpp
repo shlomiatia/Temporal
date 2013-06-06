@@ -13,7 +13,7 @@ namespace Temporal
 {
 	Component* Sensor::clone() const
 	{
-		return new Sensor(_id, _fixture->clone(), _listener->clone(), _categoryMask);
+		return new Sensor(_id, _fixture->clone(), _categoryMask);
 	}
 
 	void Sensor::update()
@@ -21,16 +21,16 @@ namespace Temporal
 		_fixture->update();
 		const YABP& sensorShape = _fixture->getGlobalShape();
 		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
-		_listener->start();
+		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
 			const Fixture& fixture = **i;
 			const YABP& shape = fixture.getGlobalShape();
 
 			Contact contact(*_fixture, fixture);
-			_listener->handle(contact);
+			raiseMessage(Message(MessageID::SENSOR_SENSE, &SensorParams(_id, &contact)));
 		}
-		_listener->end();
+		raiseMessage(Message(MessageID::SENSOR_END, &_id));
 	}
 
 	void Sensor::handleMessage(Message& message)
@@ -38,7 +38,6 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_fixture->init(*this);
-			_listener->setOwner(*this);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -50,51 +49,26 @@ namespace Temporal
 		}
 	}
 
-	void LedgeDetector::start()
-	{
-		_platform = 0;
-		_isFailed = false;
-	}
 
-	void LedgeDetector::end()
+	void ContactListener::handleMessage(Message& message)
 	{
-		if(_platform)
+		if(message.getID() == MessageID::SENSOR_START)
 		{
-			Hash id = getOwner().getId();
-			getOwner().raiseMessage(Message(MessageID::LEDGE_DETECTED, &id));
+			Hash sensorId = getHashParam(message.getParam());
+			if(_sensorId == sensorId)
+				start();
 		}
-	}
-
-	void LedgeDetector::handle(const Contact& contact)
-	{
-		const YABP& actor = contact.getSource().getGlobalShape();
-		const YABP& platform = contact.getTarget().getGlobalShape();
-		if(platform.getHeight() == 0.0f && 
-		   (equals(actor.getTop(), platform.getTop()) || equals(actor.getBottom() ,platform.getBottom())) &&
-		   !_isFailed)
+		else if(message.getID() == MessageID::SENSOR_SENSE)
 		{
-			_platform = &platform;
+			const SensorParams& params = getSensorParams(message.getParam());
+			if(_sensorId == params.getSensorId())
+				handle(params.getContact());
 		}
-		else
+		else if(message.getID() == MessageID::SENSOR_END)
 		{
-			_isFailed = true;
-			_platform = 0;
+			Hash sensorId = getHashParam(message.getParam());
+			if(_sensorId == sensorId)
+				end();
 		}
-	}
-
-	void EdgeDetector::start()
-	{
-		_isDetected = true;
-	}
-
-	void EdgeDetector::end()
-	{
-		if(_isDetected)
-			getOwner().raiseMessage(Message(MessageID::EDGE_DETECTED));
-	}
-
-	void EdgeDetector::handle(const Contact& contact)
-	{
-		_isDetected = false;
 	}
 }

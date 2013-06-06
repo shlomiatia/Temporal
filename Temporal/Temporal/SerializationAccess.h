@@ -226,7 +226,6 @@ namespace Temporal
 			serializer.serialize("id", sensor._id);
 			serializer.serialize("category-mask", sensor._categoryMask);
 			serializer.serialize("fixture", sensor._fixture);
-			serializer.serialize("contact-listener", sensor._listener);
 		}
 
 		template<class T>
@@ -241,16 +240,6 @@ namespace Temporal
 		static void serialize(const char* key, StaticBody& staticBody, T& serializer)
 		{
 			serializer.serialize("fixture", staticBody._fixture);
-		}
-
-		template<class T>
-		static void serialize(const char* key, LedgeDetector& ledgeDetector, T& serializer)
-		{
-		}
-
-		template<class T>
-		static void serialize(const char* key, EdgeDetector& ledgeDetector, T& serializer)
-		{
 		}
 
 		template<class T>
@@ -339,16 +328,6 @@ namespace Temporal
 		static void serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer)
 		{
 			serializer.serialize("yabp", fixture._localShape);
-		}
-
-		static void serialize(const char* key, ContactListener*& contactListener, XmlDeserializer& serializer)
-		{
-			if(strcmp(key, "ledge-detector") == 0)
-				serialize(key, (LedgeDetector*&)contactListener, serializer);
-			else if(strcmp(key, "edge-detector") == 0)
-				serialize(key, (EdgeDetector*&)contactListener, serializer);
-			else
-				abort();
 		}
 
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer)
