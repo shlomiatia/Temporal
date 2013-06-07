@@ -106,6 +106,12 @@
 	</static-body>
 	<button target="ENT_DOOR" />
 </entity>
+<entity id="ENT_TEXT">
+	<transform>
+        <position x="768" y="600" />
+    </transform>
+	<text font-family="c:/windows/fonts/Arial.ttf" font-size="12" text="my text" />
+</entity>
 <!--<entity id="ENT_LIGHT">
     <transform>
         <position x="512" y="300" />

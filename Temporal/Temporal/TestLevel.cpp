@@ -13,14 +13,10 @@
 #include "ResourceManager.h"
 #include "Lighting.h"
 #include "tinyxml2.h"
-#include <ftgl/ftgl.h>
 namespace Temporal
-{
-	FTGLPixmapFont font("c:/windows/fonts/Arial.ttf");
-	
+{	
 	void TestLevel::init()
 	{
-		//font.FaceSize(72);
 		Size resolution = Size(1280.0f, 720.0f);
 		Size levelSize = Size(3840.0f, 720.0f);
 		float relativeHeight = 720.0f;
@@ -61,7 +57,6 @@ namespace Temporal
 	void TestLevel::draw() const
 	{
 		LayersManager::get().draw();
-		//font.Render("Hello World!");
 	}
 
 	void TestLevel::dispose()

@@ -26,6 +26,7 @@
 #include "Shapes.h"
 #include "Button.h"
 #include "Door.h"
+#include "Text.h"
 
 namespace Temporal
 {
@@ -208,6 +209,14 @@ namespace Temporal
 		}
 
 		template<class T>
+		static void serialize(const char* key, Text& text, T& serializer)
+		{
+			serializer.serialize("font-family", text._fontFamily);
+			serializer.serialize("font-size", text._fontSize);
+			serializer.serialize("text", text._text);
+		}
+
+		template<class T>
 		static void serialize(const char* key, CollisionFilter& collisionnFilter, T& serializer)
 		{
 			serializer.serialize("category", collisionnFilter._category);
@@ -351,6 +360,8 @@ namespace Temporal
 				serialize(key, (Light*&)component, serializer);
 			else if(strcmp(key, "particle-emitter") == 0)
 				serialize(key, (ParticleEmitter*&)component, serializer);
+			else if(strcmp(key, "text") == 0)
+				serialize(key, (Text*&)component, serializer);
 			else if(strcmp(key, "input-controller") == 0)
 				component  = new InputController();
 			else if(strcmp(key, "moving-platform") == 0)

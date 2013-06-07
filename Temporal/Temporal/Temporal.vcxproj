@@ -41,6 +41,7 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="TemporalPeriod.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="DrawPosition.h" />
     <ClInclude Include="EntitySystem.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Vector.cpp" />
