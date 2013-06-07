@@ -1,5 +1,6 @@
 #include "Serialization.h"
 #include "Math.h"
+#include <cstring>
 
 namespace Temporal
 {
@@ -69,6 +70,13 @@ namespace Temporal
 		const char* str = _current->ToElement()->Attribute(key);
 		if(str)
 			value = Hash(str);
+	}
+
+	void XmlDeserializer::serialize(const char* key, char*& value)
+	{
+		const char* str = _current->ToElement()->Attribute(key);
+		value = new char[strlen(str)+1];
+		strcpy(value, str);
 	}
 
 	void XmlDeserializer::serialize(const char* key, Timer& value)

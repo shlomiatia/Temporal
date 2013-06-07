@@ -159,6 +159,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
+		void serialize(const char* key, char*& value);
 		SerializationType::Enum type() { return SerializationType::DESERIALIZATION; };
 		
 		template<class T>

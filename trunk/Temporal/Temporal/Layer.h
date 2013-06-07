@@ -14,11 +14,12 @@ namespace Temporal
 			PC = 2,
 			COVER = 3,
 			NPC = 4,
-			PARTICLES = 5
+			PARTICLES = 5,
+			GUI = 6
 		};
 
 		static const int FARTHEST = BACKGROUND;
-		static const int NEAREST = PARTICLES;
+		static const int NEAREST = GUI;
 	}
 
 	class Layer
