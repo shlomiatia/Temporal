@@ -7,12 +7,14 @@
 #include "Graphics.h"
 #include "PhysicsEnums.h"
 #include "Input.h"
+#include "Keyboard.h"
 #include "Camera.h"
 #include "Layer.h"
 #include "Navigator.h"
 #include "ResourceManager.h"
 #include "Lighting.h"
 #include "tinyxml2.h"
+
 namespace Temporal
 {	
 	void TestLevel::init()
@@ -23,6 +25,7 @@ namespace Temporal
 
 		Grid::get().init(levelSize, 128.0f);
 		Graphics::get().init(resolution, relativeHeight);
+		Input::get().init();
 		ResourceManager::get().init();
 
 		LayersManager::get().add(new Camera(levelSize));
@@ -40,11 +43,11 @@ namespace Temporal
 	{
 		Input::get().update();
 		
-		if(Input::get().key(Key::ESC))
+		if(Keyboard::get().getKey(Key::ESC) || Input::get().getGamepad().getButton(GamepadButton::FRONT_RIGHT))
 		{
 			Game::get().stop();
 		}
-		if(Input::get().key(Key::Q))
+		if(Keyboard::get().getKey(Key::Q))
 		{
 			//const AABB& bounds = *static_cast<AABB*>(EntitiesManager::get().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//EntitiesManager::get().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
@@ -66,6 +69,7 @@ namespace Temporal
 		EntitiesManager::get().dispose();
 		LayersManager::get().dispose();
 		ResourceManager::get().dispose();
+		Input::get().dispose();
 		Graphics::get().dispose();
 		Grid::get().dispose();
 		HashToString::get().dispose();

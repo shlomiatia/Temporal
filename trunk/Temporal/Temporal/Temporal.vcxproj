@@ -14,7 +14,10 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Gamepad.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
@@ -75,7 +78,10 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Gamepad.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
     <ClCompile Include="Navigator.cpp" />

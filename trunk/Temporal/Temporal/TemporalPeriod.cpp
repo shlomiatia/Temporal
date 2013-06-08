@@ -1,7 +1,7 @@
 #include "TemporalPeriod.h"
 #include "MessageUtils.h"
 #include "Color.h"
-#include "Input.h"
+#include "Keyboard.h"
 
 namespace Temporal
 {
@@ -24,15 +24,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(Input::get().key(Key::Q))
+			if(Keyboard::get().getKey(Key::Q))
 			{
 				changePeriod(Period::PAST);
 			}
-			if(Input::get().key(Key::W))
+			if(Keyboard::get().getKey(Key::W))
 			{
 				changePeriod(Period::PRESENT);
 			}
-			if(Input::get().key(Key::E))
+			if(Keyboard::get().getKey(Key::E))
 			{
 				changePeriod(Period::FUTURE);
 			}
