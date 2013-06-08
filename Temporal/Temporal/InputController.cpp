@@ -1,7 +1,8 @@
 #include "InputController.h"
-#include "Input.h"
+#include "Keyboard.h"
 #include "BaseEnums.h"
 #include "MessageUtils.h"
+#include "Input.h"
 
 namespace Temporal
 {
@@ -9,21 +10,25 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(Input::get().key(Key::RIGHT))
+			if(Keyboard::get().getKey(Key::RIGHT) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
 			{
 				sendDirectionAction(*this, Side::RIGHT);
 			}
-			if(Input::get().key(Key::LEFT))
+			if(Keyboard::get().getKey(Key::LEFT)  || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
 			{
 				sendDirectionAction(*this, Side::LEFT);
 			}
-			if(Input::get().key(Key::UP))
+			if(Keyboard::get().getKey(Key::UP) || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_UP));
 			}
-			if(Input::get().key(Key::DOWN))
+			if(Keyboard::get().getKey(Key::DOWN) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
+			}
+			if(Keyboard::get().getKey(Key::Q)  || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
+			{
+				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 			}
 		}
 	}
