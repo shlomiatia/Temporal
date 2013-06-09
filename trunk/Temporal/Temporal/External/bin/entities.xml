@@ -108,9 +108,9 @@
 </entity>
 <entity id="ENT_TEXT">
 	<transform>
-        <position x="768" y="600" />
+        <position x="0" y="700" />
     </transform>
-	<text font-family="c:/windows/fonts/Arial.ttf" font-size="12" text="my text" />
+	<text font-family="c:/windows/fonts/Arial.ttf" font-size="12" text="this is a very long line of text that will be wrapped in the middle" />
 </entity>
 <!--<entity id="ENT_LIGHT">
     <transform>

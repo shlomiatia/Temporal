@@ -2,6 +2,7 @@
 #define TEXT_H
 #include "EntitySystem.h"
 
+class FTSimpleLayout;
 class FTFont;
 
 namespace Temporal
@@ -9,8 +10,7 @@ namespace Temporal
 	class Text : public Component
 	{
 	public:
-		explicit Text(FTFont* font = 0, char* text = 0)
-			: _font(font), _text(text) {}
+		explicit Text(FTFont* font = 0, char* text = 0);
 		~Text() { delete[] _fontFamily; delete[] _text; }
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
@@ -19,6 +19,7 @@ namespace Temporal
 		Component* clone() const;
 
 	private:
+		FTSimpleLayout* _layout;
 		char* _fontFamily;
 		unsigned int _fontSize;
 		FTFont* _font;

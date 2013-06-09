@@ -8,6 +8,13 @@
 
 namespace Temporal
 {
+	Text::Text(FTFont* font, char* text)
+		: _font(font), _text(text) 
+	{
+		_layout = new FTSimpleLayout();
+		_layout->SetFont(_font);
+		//_layout->SetLineLength(50.0f);
+	}
 	void Text::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
@@ -24,6 +31,7 @@ namespace Temporal
 	
 	void Text::draw() const
 	{
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		Vector position = Vector::Zero;
 		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
 		raiseMessage(getDrawPosition);
@@ -35,7 +43,9 @@ namespace Temporal
 		glPushMatrix();
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
-			_font->Render(_text);
+			//_font->Render(_text);
+			FT_Error error = _layout->Error();
+			_layout->Render(_text);
 		}
 		glPopMatrix();
 	}
