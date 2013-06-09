@@ -19,7 +19,7 @@ namespace Temporal
 		};
 
 		static const int FARTHEST = BACKGROUND;
-		static const int NEAREST = GUI;
+		static const int NEAREST = PARTICLES;
 	}
 
 	class Layer
@@ -28,6 +28,7 @@ namespace Temporal
 		Layer() {}
 		virtual ~Layer() {};
 		virtual void draw() = 0;
+		virtual void drawGUI() {};
 
 	private:
 		Layer(const Layer&);
@@ -61,6 +62,7 @@ namespace Temporal
 	{
 	public:
 		void draw();
+		void drawGUI();
 	private:
 	};
 

@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "NavigationGraph.h"
 #include <sstream>
+#include <SDL_opengl.h>
 
 namespace Temporal
 {
@@ -12,6 +13,10 @@ namespace Temporal
 	{
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 			(**i).draw();
+		
+		glLoadIdentity();
+		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
+			(**i).drawGUI();
 	}
 
 	void LayersManager::dispose()
@@ -26,6 +31,12 @@ namespace Temporal
 	{
 		for(int i = LayerType::FARTHEST; i <= LayerType::NEAREST; ++i)
 			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+	}
+
+	void SpriteLayer::drawGUI()
+	{
+		LayerType::Enum guiLayer = LayerType::GUI;
+		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
 	}
 
 	void DebugLayer::draw()
