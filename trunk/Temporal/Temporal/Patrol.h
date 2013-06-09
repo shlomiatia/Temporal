@@ -12,11 +12,10 @@ namespace Temporal
 		explicit EdgeDetector(Hash sensorId)
 			: ContactListener(sensorId), _isFound(false) {}
 
-		bool isFound() const { return _isFound; }
-
 	protected:
 		void start();
 		void handle(const Contact& contact);
+		void end(Component& component);
 
 	private:
 		bool _isFound;
@@ -30,8 +29,6 @@ namespace Temporal
 		ComponentType::Enum getType() const { return ComponentType::PATROL; }
 		Component* clone() const { return new Patrol(); }
 		void handleMessage(Message& message);
-
-		const EdgeDetector& getEdgeDetector() const { return _edgeDetector; }
 
 	protected:
 		Hash getInitialState() const;

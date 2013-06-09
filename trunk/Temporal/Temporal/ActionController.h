@@ -67,16 +67,16 @@ namespace Temporal
 	class LedgeDetector : public ContactListener
 	{
 	public:
-		explicit LedgeDetector(Hash sensorId)
-			: ContactListener(sensorId), _isFailed(false), _isFound(false) {}
-
-		bool isFound() const { return _isFound; }
+		explicit LedgeDetector(Hash sensorId, MessageID::Enum messageId)
+			: ContactListener(sensorId), _messageId(messageId), _isFailed(false), _isFound(false) {}
 
 	protected:
 		void start();
 		void handle(const Contact& contact);
+		void end(Component& component);
 
 	private:
+		const MessageID::Enum _messageId;
 		bool _isFound;
 		bool _isFailed;
 	};
@@ -92,8 +92,6 @@ namespace Temporal
 
 		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
-		const LedgeDetector& getHangDetector() const { return _hangDetector; }
-		const LedgeDetector& getDescendDetector() const { return _descendDetector; }
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
