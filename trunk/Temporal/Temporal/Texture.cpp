@@ -12,7 +12,7 @@ namespace Temporal
 		SDL_Surface* image(IMG_Load(path));
 		if (!image)
 		{
-			exit(1);
+			abort();
 			// ERROR: Failed loading image
 		}
 		GLenum texture_format;
@@ -32,7 +32,7 @@ namespace Temporal
 		}
 		else
 		{
-			exit(1);
+			abort();
 			// ERROR: Invalid bytes per pixel
 		}
 
