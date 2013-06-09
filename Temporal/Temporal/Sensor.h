@@ -30,12 +30,12 @@ namespace Temporal
 		ContactListener(Hash sensorId) : _sensorId(sensorId) {};
 		virtual ~ContactListener() {};
 	
-		void handleMessage(Message& message);
+		void handleMessage(Component& component, Message& message);
 
 	protected:
 		virtual void start() {}
 		virtual void handle(const Contact& contact) = 0;
-		virtual void end() {}
+		virtual void end(Component& component) {}
 
 	private:
 		Hash _sensorId;

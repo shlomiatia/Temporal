@@ -23,6 +23,12 @@ namespace Temporal
 		_isFound = false;
 	}
 
+	void EdgeDetector::end(Component& component)
+	{
+		if(_isFound)
+			component.raiseMessage(Message(MessageID::SENSOR_FRONG_EDGE));
+	}
+
 	Patrol::Patrol() : 
 		StateMachineComponent(getStates(), "PAT"),
 		_edgeDetector(FRONT_EDGE_SENSOR_ID)
@@ -30,7 +36,7 @@ namespace Temporal
 
 	void Patrol::handleMessage(Message& message)
 	{
-		_edgeDetector.handleMessage(message);
+		_edgeDetector.handleMessage(*this, message);
 		StateMachineComponent::handleMessage(message);
 	}
 
@@ -67,13 +73,13 @@ namespace Temporal
 					_stateMachine->changeState(WAIT_STATE);
 				}
 			}
+			else if(message.getID() == MessageID::SENSOR_FRONG_EDGE)
+			{
+				_stateMachine->changeState(WAIT_STATE);
+			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				const Patrol& patrol = *static_cast<Patrol*>(_stateMachine);
-				if(patrol.getEdgeDetector().isFound())
-					_stateMachine->changeState(WAIT_STATE);
-				else
-					_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 

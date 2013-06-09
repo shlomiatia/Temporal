@@ -71,18 +71,24 @@ namespace Temporal
 		}
 	}
 
+	void LedgeDetector::end(Component& component)
+	{
+		if(_isFound)
+			component.raiseMessage(Message(_messageId));
+	}
+
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
 	ActionController::ActionController() :
 		StateMachineComponent(getStates(), "ACT"),
-		_hangDetector(HANG_SENSOR_ID),
-		_descendDetector(DESCEND_SENSOR_ID) {}
+		_hangDetector(HANG_SENSOR_ID, MessageID::SENSOR_HANG),
+		_descendDetector(DESCEND_SENSOR_ID, MessageID::SENSOR_DESCEND) {}
 
 	void ActionController::handleMessage(Message& message)
 	{
-		_hangDetector.handleMessage(message);
-		_descendDetector.handleMessage(message);
+		_hangDetector.handleMessage(*this, message);
+		_descendDetector.handleMessage(*this, message);
 		StateMachineComponent::handleMessage(message);
 	}
 
@@ -135,9 +141,9 @@ namespace Temporal
 			{
 				_stateMachine->setTempFlag1(true);
 			}
-			else if(message.getID() == MessageID::UPDATE)
+			else if(message.getID() == MessageID::SENSOR_DESCEND)
 			{
-				if(_stateMachine->getTempFlag1() && getActionController(_stateMachine).getDescendDetector().isFound())
+				if(_stateMachine->getTempFlag1())
 					_stateMachine->changeState(DESCEND_STATE);
 			}
 			// TempFlag2 - is activating
@@ -260,9 +266,9 @@ namespace Temporal
 			{
 				_stateMachine->setTempFlag1(true);
 			}
-			else if (message.getID() == MessageID::UPDATE)
+			else if (message.getID() == MessageID::SENSOR_HANG)
 			{
-				if(_stateMachine->getTempFlag1() && getActionController(_stateMachine).getHangDetector().isFound())
+				if(_stateMachine->getTempFlag1())
 					_stateMachine->changeState(HANG_STATE);
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
