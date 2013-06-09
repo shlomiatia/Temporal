@@ -54,6 +54,8 @@ namespace Temporal
 	void Grid::add(const Fixture* body, int i, int j)
 	{
 		int index = getIndex(i, j);
+		if(index < 0 || index >= getSize())
+			return;
 		FixtureCollection* bodies = getTile(i, j);
 		if(!bodies)
 		{

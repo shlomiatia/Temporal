@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "Graphics.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -6,7 +7,7 @@ namespace Temporal
 	void updatePosition(Vector& position, SDL_Event& e)
 	{
 		position.setX(e.button.x);
-		position.setY(768.0f - e.button.y);
+		position.setY(Graphics::get().getLogicalView().getHeight() - e.button.y);
 	}
 
 	Mouse::Mouse() : _position(Vector::Zero)

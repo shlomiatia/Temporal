@@ -24,7 +24,7 @@
 </entity>
 <entity id="ENT_PLAYER">
     <transform>
-        <position x="256" y="512" />
+        <position x="512" y="512" />
     </transform>
     <collision-filter category="8" />
     <draw-position>

@@ -20,7 +20,7 @@ namespace Temporal
 
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0))
 		{
-			exit(1);
+			abort();
 			// ERROR: Error Failed initializing SDL video
 		}
 
@@ -29,7 +29,7 @@ namespace Temporal
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == -1)
 		{
 			// ERROR: Error Failed setting SDL OpenGL double buffering attribute
-			exit(1);
+			abort();
 		}
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
@@ -37,7 +37,7 @@ namespace Temporal
 		if (!SDL_SetVideoMode(static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()), BIT_DEPTH, flags))
 		{
 			// ERROR: Error Failed setting video mode
-			exit(1);
+			abort();
 		}
 		
 		glViewport(0, 0, static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()));
@@ -87,7 +87,7 @@ namespace Temporal
 		if (error != GL_NO_ERROR)
 		{
 			// ERROR: Error OpenGL error
-			exit(1);
+			abort();
 		}
 	}
 

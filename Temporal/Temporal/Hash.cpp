@@ -112,7 +112,7 @@ namespace Temporal
 			if(strcmp(string, previousString) != 0)
 			{
 				// ERROR hash collision
-				exit(1);
+				abort();
 			}
 		}
 	}
