@@ -101,6 +101,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="Serialization.cpp" />
+    <ClCompile Include="SerializationAccess.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />

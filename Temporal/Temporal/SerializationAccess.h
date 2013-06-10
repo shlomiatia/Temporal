@@ -1,79 +1,95 @@
 #ifndef SERIALIZATIONACCESS_H
 #define SERIALIZATIONACCESS_H
 
-#include "MovingPlatform.h"
-#include "Transform.h"
-#include "DrawPosition.h"
-#include "Animator.h"
-#include "Renderer.h"
-#include "Particles.h"
-#include "Lighting.h"
-#include "CollisionFilter.h"
-#include "Sight.h"
-#include "StaticBody.h"
-#include "DynamicBody.h"
-#include "Sensor.h"
-#include "ActionController.h"
-#include "Laser.h"
-#include "Patrol.h"
-#include "Sentry.h"
-#include "SecurityCamera.h"
-#include "Navigator.h"
-#include "TemporalEcho.h"
-#include "TemporalPeriod.h"
-#include "SceneNode.h"
-#include "InputController.h"
-#include "Shapes.h"
-#include "Button.h"
-#include "Door.h"
-#include "Text.h"
-
 namespace Temporal
 {
+	class XmlDeserializer;
+	class MemoryBaseSerializer;
+	class Component;
 	class Vector;
 	class AABB;
 	class Segment;
+	class YABP;
+	class Fixture;
+	class Color;
 	class Sprite;
 	class SpriteGroup;
 	class SpriteSheet;
 	class Sample;
+	class SceneNode;
 	class SampleSet;
 	class Animation;
 	class AnimationSet;
 	class Entity;
-	class Component;
+	class StateMachineComponent;
+	class Transform;
+	class DrawPosition;
+	class Animator;
+	class Renderer;
+	class Light;
+	class ParticleEmitter;
+	class Text;
+	class CollisionFilter;
+	class Sight;
+	class Sensor;
+	class DynamicBody;
+	class StaticBody;
+	class Laser;
+	class TemporalPeriod;
+	class PlayerPeriod;
+	class ActionController;
+	class MovingPlatform;
+	class Button;
 
 	class SerializationAccess
 	{
 	public:
+		// Factory methods
+		static void serialize(const char* key, Component*& component, MemoryBaseSerializer& serializer);
+
 		template<class T>
 		static void serialize(const char* key, T*& value, XmlDeserializer& serializer)
 		{
 			value = new T();
-			serialize(key, *value, serializer);
+			SerializationAccess::serialize(key, *value, serializer);
 		}
 
-		template<class T>
-		static void serialize(const char* key, AABB& aabb, T& serializer)
-		{
-			serializer.serialize("center", aabb._center);
-			serializer.serialize("radius", aabb._radius);
-		}
+		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 
-		template<class T>
-		static void serialize(const char* key, Segment& segment, T& serializer)
-		{
-			serializer.serialize("center", segment._center);
-			serializer.serialize("radius", segment._radius);
-		}
-
+		// Physics objects
 		template<class T>
 		static void serialize(const char* key, Vector& vector, T& serializer)
 		{
 			serializer.serialize("x", vector._x);
 			serializer.serialize("y", vector._y);
 		}
+		
+		template<class T>
+		static void serialize(const char* key, AABB& aabb, T& serializer)
+		{
+			serializer.serialize("center", aabb._center);
+			serializer.serialize("radius", aabb._radius);
+		}
+		
+		template<class T>
+		static void serialize(const char* key, Segment& segment, T& serializer)
+		{
+			serializer.serialize("center", segment._center);
+			serializer.serialize("radius", segment._radius);
+		}
+		
+		template<class T>
+		static void serialize(const char* key, YABP& yabp, T& serializer)
+		{
+			serializer.serialize("center", yabp._center);
+			serializer.serialize("sloped-radius", yabp._slopedRadius);
+			serializer.serialize("y-radius", yabp._yRadius);
+		}
+		
+		static void serialize(const char* key, Fixture& fixture, MemoryBaseSerializer& serializer);
+		static void serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer);
 
+		// Graphics objects
 		template<class T>
 		static void serialize(const char* key, Color& color, T& serializer)
 		{
@@ -82,21 +98,21 @@ namespace Temporal
 			serializer.serialize("b", color._b);
 			serializer.serialize("a", color._a);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Sprite& sprite, T& serializer)
 		{
 			serializer.serialize("bounds", sprite._bounds);
 			serializer.serialize("offset", sprite._offset);
 		}
-	
+		
 		template<class T>
 		static void serialize(const char* key, SpriteGroup& spritegroup, T& serializer)
 		{
 			serializer.serialize("id", spritegroup._id);
 			serializer.serialize("sprite", spritegroup._sprites);
 		}
-	
+		
 		template<class T>
 		static void serialize(const char* key, SpriteSheet& spritesheet, T& serializer)
 		{
@@ -105,7 +121,7 @@ namespace Temporal
 			serializer.serialize("sprite-group", spritesheet._spriteGroups);
 			spritesheet.init();
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Sample& sample, T& serializer)
 		{
@@ -114,60 +130,7 @@ namespace Temporal
 			serializer.serialize("rotation", sample._rotation);
 			serializer.serialize("duration", sample._duration);
 		}
-
-		template<class T>
-		static void serialize(const char* key, SampleSet& sampleSet, T& serializer)
-		{
-			serializer.serialize("scene-node-id", sampleSet._sceneNodeId);
-			serializer.serialize("sample", sampleSet._samples);
-			sampleSet.init();
-		}
-		template<class T>
-		static void serialize(const char* key, Animation& animation, T& serializer)
-		{
-			serializer.serialize("id", animation._id);
-			serializer.serialize("repeat", animation._repeat);
-			serializer.serialize("rewind", animation._rewind);
-			serializer.serialize("sample-set", animation._sampleSets);
-			animation.init();
-		}
-
-		template<class T>
-		static void serialize(const char* key, AnimationSet& animationSet, T& serializer)
-		{
-			serializer.serialize("id", animationSet._id);
-			serializer.serialize("animation", animationSet._animations);
-		}
-
-		template<class T>
-		static void serialize(const char* key, Entity& entity, T& serializer)
-		{
-			serializer.serialize("id", entity._id);
-			serializer.serialize("component", entity._components);
-		}
-
-		template<class T>
-		static void serialize(const char* key, Transform& transform, T& serializer)
-		{
-			serializer.serialize("position", transform._position);
-			serializer.serialize("orientation", (int&)transform._orientation);
-		}
-
-		template<class T>
-		static void serialize(const char* key, DrawPosition& drawPosition, T& serializer)
-		{
-			serializer.serialize("offset", drawPosition._offset); // xml
-			serializer.serialize("override", drawPosition._override); // memory
-		}
-
-		template<class T>
-		static void serialize(const char* key, Animator& animator, T& serializer)
-		{
-			serializer.serialize("animation-set", animator._animationSetId); // xml
-			serializer.serialize("animation", animator._animationId); 
-			serializer.serialize("timer", animator._timer); // memory
-		}
-
+		
 		template<class T>
 		static void serialize(const char* key, SceneNode& sceneNode, T& serializer)
 		{
@@ -178,6 +141,74 @@ namespace Temporal
 			serializer.serialize("sprite-group", sceneNode._spriteGroupId);
 			serializer.serialize("scene-node", sceneNode._children);
 		}
+		
+		// TODO:
+		template<class T>
+		static void serialize(const char* key, SampleSet& sampleSet, T& serializer)
+		{
+			serializer.serialize("scene-node-id", sampleSet._sceneNodeId);
+			serializer.serialize("sample", sampleSet._samples);
+			sampleSet.init();
+		}
+		
+		template<class T>
+		static void serialize(const char* key, Animation& animation, T& serializer)
+		{
+			serializer.serialize("id", animation._id);
+			serializer.serialize("repeat", animation._repeat);
+			serializer.serialize("rewind", animation._rewind);
+			serializer.serialize("sample-set", animation._sampleSets);
+			animation.init();
+		}
+		
+		template<class T>
+		static void serialize(const char* key, AnimationSet& animationSet, T& serializer)
+		{
+			serializer.serialize("id", animationSet._id);
+			serializer.serialize("animation", animationSet._animations);
+		}
+
+		// Entity objects
+		
+		template<class T>
+		static void serialize(const char* key, Entity& entity, T& serializer)
+		{
+			serializer.serialize("id", entity._id);
+			serializer.serialize("component", entity._components);
+		}
+		
+		// TODO:
+		template<class T>
+		static void serialize(const char* key, StateMachineComponent& stateMachineComponent, T& serializer)
+		{
+			serializer.serialize("state", stateMachineComponent._currentStateID);
+			if(serializer.type() == SerializationDirection::DESERIALIZATION)
+				stateMachineComponent.setState(stateMachineComponent._currentStateID);
+			serializer.serialize("timer", stateMachineComponent._timer);
+		}
+		
+		template<class T>
+		static void serialize(const char* key, Transform& transform, T& serializer)
+		{
+			serializer.serialize("position", transform._position);
+			serializer.serialize("orientation", (int&)transform._orientation);
+		}
+		
+		template<class T>
+		static void serialize(const char* key, DrawPosition& drawPosition, T& serializer)
+		{
+			serializer.serialize("offset", drawPosition._offset); // xml
+			serializer.serialize("override", drawPosition._override); // memory
+		}
+		
+		template<class T>
+		static void serialize(const char* key, Animator& animator, T& serializer)
+		{
+			serializer.serialize("animation-set", animator._animationSetId); // xml
+			serializer.serialize("animation", animator._animationId); 
+			serializer.serialize("timer", animator._timer); // memory
+		}
+		
 		template<class T>
 		static void serialize(const char* key, Renderer& renderer, T& serializer)
 		{
@@ -186,7 +217,7 @@ namespace Temporal
 			serializer.serialize("scene-node", renderer._root);
 			renderer._root->init();
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Light& light, T& serializer)
 		{
@@ -195,7 +226,7 @@ namespace Temporal
 			serializer.serialize("center", light._beamCenter);
 			serializer.serialize("size", light._beamSize);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, ParticleEmitter& particleEmitter, T& serializer)
 		{
@@ -207,7 +238,7 @@ namespace Temporal
 			serializer.serializeRadians("center", particleEmitter._directionCenter);
 			serializer.serializeRadians("size", particleEmitter._directionSize);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Text& text, T& serializer)
 		{
@@ -215,21 +246,21 @@ namespace Temporal
 			serializer.serialize("font-size", text._fontSize);
 			serializer.serialize("text", text._text);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, CollisionFilter& collisionnFilter, T& serializer)
 		{
 			serializer.serialize("category", collisionnFilter._category);
 			serializer.serialize("group", collisionnFilter._group);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Sight& sight, T& serializer)
 		{
 			serializer.serializeRadians("center", sight._sightCenter);
 			serializer.serializeRadians("size", sight._sightSize);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Sensor& sensor, T& serializer)
 		{
@@ -237,7 +268,7 @@ namespace Temporal
 			serializer.serialize("category-mask", sensor._categoryMask);
 			serializer.serialize("fixture", sensor._fixture);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, DynamicBody& dynamicBody, T& serializer)
 		{
@@ -245,161 +276,50 @@ namespace Temporal
 			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, StaticBody& staticBody, T& serializer)
 		{
 			serializer.serialize("fixture", staticBody._fixture);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Laser& laser, T& serializer)
 		{
 			serializer.serialize("platform", laser._platformID); // xml
 			serializer.serialize("direction", laser._isPositiveDirection); // memory
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, PlayerPeriod& playerPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)playerPeriod._period);
 		}
-
-		template<class T>
-		static void serialize(const char* key, StateMachineComponent& stateMachineComponent, T& serializer)
-		{
-			serializer.serialize("state", stateMachineComponent._currentStateID);
-			if(serializer.type() == SerializationType::DESERIALIZATION)
-				stateMachineComponent.setState(stateMachineComponent._currentStateID);
-			serializer.serialize("timer", stateMachineComponent._timer);
-		}
-
+		
 		template<class T>
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
 			serializer.serialize("jump-type", (int&)actionController.getJumpHelper()._type);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, MovingPlatform& component, T& serializer)
 		{
 			serializer.serialize("point1", component._point1);
 			serializer.serialize("point2", component._point2);
 		}
-
+		
 		template<class T>
 		static void serialize(const char* key, Button& button, T& serializer)
 		{
 			serializer.serialize("target", button._target);
-		}
-
-		static void serialize(const char* key, Fixture*& component, MemorySerialization& serializer)
-		{
-		}
-
-		static void serialize(const char* key, Component*& component, MemorySerialization& serializer)
-		{
-			switch(component->getType())
-			{
-			case(ComponentType::TRANSFORM):
-				serialize(key, *(Transform*&)component, serializer);
-				break;
-			case(ComponentType::DRAW_POSITION):
-				serialize(key, *(DrawPosition*&)component, serializer);
-				break;
-			case(ComponentType::ANIMATOR):
-				serialize(key, *(Animator*&)component, serializer);
-				break;
-			case(ComponentType::ACTION_CONTROLLER):
-				serialize(key, *(ActionController*&)component, serializer);
-				break;
-			case(ComponentType::DYNAMIC_BODY):
-				serialize(key, *(DynamicBody*&)component, serializer);
-				break;
-			case(ComponentType::LASER):
-				serialize(key, *(Laser*&)component, serializer);
-				break;
-			case(ComponentType::SENTRY):
-			case(ComponentType::PATROL):
-			case(ComponentType::SECURITY_CAMERA):
-				serialize(key, *(StateMachineComponent*&)component, serializer);
-				break;
-			}
-		}
-
-		static void serialize(const char* key, YABP& yabp, XmlDeserializer& serializer)
-		{
-			serializer.serialize("center", yabp._center);
-			serializer.serialize("sloped-radius", yabp._slopedRadius);
-			serializer.serialize("y-radius", yabp._yRadius);
-		}
-
-		static void serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer)
-		{
-			serializer.serialize("yabp", fixture._localShape);
-		}
-
-		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer)
-		{
-			if(strcmp(key, "transform") == 0)
-				serialize(key, (Transform*&)component, serializer);
-			else if(strcmp(key, "draw-position") == 0)
-				serialize(key, (DrawPosition*&)component, serializer);
-			else if(strcmp(key, "animator") == 0)
-				serialize(key, (Animator*&)component, serializer);
-			else if(strcmp(key, "renderer") == 0)
-				serialize(key, (Renderer*&)component, serializer);
-			else if(strcmp(key, "light") == 0)
-				serialize(key, (Light*&)component, serializer);
-			else if(strcmp(key, "particle-emitter") == 0)
-				serialize(key, (ParticleEmitter*&)component, serializer);
-			else if(strcmp(key, "text") == 0)
-				serialize(key, (Text*&)component, serializer);
-			else if(strcmp(key, "input-controller") == 0)
-				component  = new InputController();
-			else if(strcmp(key, "moving-platform") == 0)
-				serialize(key, (MovingPlatform*&)component, serializer);
-			else if(strcmp(key, "action-controller") == 0)
-				component = new ActionController();
-			else if(strcmp(key, "collision-filter") == 0)
-				serialize(key, (CollisionFilter*&)component, serializer);
-			else if(strcmp(key, "sight") == 0)
-				serialize(key, (Sight*&)component, serializer);
-			else if(strcmp(key, "sensor") == 0)
-				serialize(key, (Sensor*&)component, serializer);
-			else if(strcmp(key, "dynamic-body") == 0)
-				serialize(key, (DynamicBody*&)component, serializer);
-			else if(strcmp(key, "static-body") == 0)
-				serialize(key, (StaticBody*&)component, serializer);
-			else if(strcmp(key, "sentry") == 0)
-				component = new Sentry();
-			else if(strcmp(key, "security-camera") == 0)
-				component = new SecurityCamera();
-			else if(strcmp(key, "patrol") == 0)
-				component = new Patrol();
-			else if(strcmp(key, "navigator") == 0)
-				component = new Navigator();
-			else if(strcmp(key, "door") == 0)
-				component = new Door();
-			else if(strcmp(key, "button") == 0)
-				serialize(key, (Button*&)component, serializer);
-			else if(strcmp(key, "laser") == 0)
-				serialize(key, (Laser*&)component, serializer);
-			else if(strcmp(key, "temporal-echo") == 0)
-				component = new TemporalEcho();
-			else if(strcmp(key, "temporal-period") == 0)
-				serialize(key, (TemporalPeriod*&)component, serializer);
-			else if(strcmp(key, "player-period") == 0)
-				serialize(key, (PlayerPeriod*&)component, serializer);
-			else
-				abort();
 		}
 	};
 }
