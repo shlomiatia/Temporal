@@ -182,7 +182,7 @@
       <SubSystem>Console</SubSystem>
       <ShowProgress>NotSet</ShowProgress>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmtd.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>ftgl.lib;freetype.lib;sdl_image.lib;OpenGL32.lib;sdl.lib;sdlmain.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sdl_image.lib;OpenGL32.lib;sdl.lib;sdlmain.lib;freetype.lib;ftgl_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)External\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
