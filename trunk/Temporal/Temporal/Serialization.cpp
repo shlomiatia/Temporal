@@ -1,9 +1,14 @@
 #include "Serialization.h"
 #include "Math.h"
+#include "Hash.h"
+#include "Timer.h"
 #include <cstring>
 
 namespace Temporal
 {
+	/**********************************************************************************************
+	 * Memory serializer
+	 *********************************************************************************************/
 	void MemoryStream::write(int value)
 	{
 		_buffer.write((const char*)&value, sizeof(int));
@@ -44,6 +49,35 @@ namespace Temporal
 		_buffer.read((char*)&value, sizeof(bool));
 		return value;
 	}
+
+	void MemorySerializer::serialize(const char* key, Hash& value)
+	{
+		_buffer->write(value); 
+	}
+
+	void MemorySerializer::serialize(const char* key, Timer& value)
+	{
+		_buffer->write(value.getElapsedTime());
+	}
+
+	void MemoryDeserializer::serialize(const char* key, Hash& value)
+	{
+		value = Hash(_buffer->readUInt()); 
+	}
+
+	void MemoryDeserializer::serialize(const char* key, Timer& value)
+	{
+		value.reset(_buffer->readFloat()); 
+	}
+
+	/**********************************************************************************************
+	 * Xml serializer
+	 *********************************************************************************************/
+	XmlDeserializer::XmlDeserializer(const char * path) : _current(0) 
+	{
+		_doc.LoadFile(path);
+		_current = _doc.GetDocument(); 
+	};
 
 	void XmlDeserializer::serialize(const char* key, int& value)
 	{

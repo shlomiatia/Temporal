@@ -349,6 +349,9 @@
     <ClCompile Include="Gamepad.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="SerializationAccess.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
