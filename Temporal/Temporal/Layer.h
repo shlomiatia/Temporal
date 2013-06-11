@@ -70,6 +70,8 @@ namespace Temporal
 	{
 	public:
 		void draw();
+	private:
+		void drawFPS();
 	};
 }
 #endif

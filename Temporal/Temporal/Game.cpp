@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Thread.h"
+#include "Timer.h"
 #include "Graphics.h"
 
 namespace Temporal
@@ -11,13 +12,13 @@ namespace Temporal
 		_running = true;
 		_level->init();
 		_level->update(FRAME_PERIOD);
-		_lastFrameTime = Thread::getElapsedTime();
+		_lastFrameTime = Time::now();
 		while (isRunning())
 		{
 			if (!isPaused())
 				update();
 			draw();
-			float currentFrameTime = Thread::getElapsedTime();
+			float currentFrameTime = Time::now();
 			float framesDifference = currentFrameTime - _lastFrameTime;
 			float sleepTime = FRAME_PERIOD - framesDifference;
 			if(sleepTime >= 0)

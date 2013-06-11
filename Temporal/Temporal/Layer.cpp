@@ -4,11 +4,15 @@
 #include "Thread.h"
 #include "Grid.h"
 #include "NavigationGraph.h"
-#include <sstream>
+#include "Hash.h"
+#include "Timer.h"
+#include "Log.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
 {
+	static const Hash FPS_TIMER = Hash("TMR_FPS");
+
 	void LayersManager::draw()
 	{
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
@@ -39,6 +43,28 @@ namespace Temporal
 		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
 	}
 
+	void DebugLayer::drawFPS()
+	{
+		PerformanceTimer& timer = PerformanceTimerManager::get().getTimer(FPS_TIMER);
+		
+		if(!timer.isStarted())
+		{
+			timer.start();
+		}
+		else
+		{
+			timer.split();
+			float time = timer.getElapsedTime();
+			if(time >= 1.0f)
+			{
+				timer.stop();
+				float fps = timer.getSplits() / time;
+				Log::write("FPS: %f\n", fps);
+				timer.start();
+			}
+		}
+	}
+
 	void DebugLayer::draw()
 	{
 		ComponentType::Enum filter = ComponentType::STATIC_BODY;
@@ -47,29 +73,6 @@ namespace Temporal
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 
-		std::ostringstream title;
-		static const int MAX_SAMPLES = 100;
-		static float samples[MAX_SAMPLES];
-		static int sampleIndex = 0;
-		static float sum = 0.0f;
-		static float lastTick = 0.0f;
-		static float newSample = 0;
-
-		if (lastTick == 0)
-		{
-			for (int i = 0; i < MAX_SAMPLES; i++)
-				samples[i] = 0;
-		}
-		else
-		{
-			newSample = Thread::getElapsedTime() - lastTick;
-			sum += newSample - samples[sampleIndex];
-			samples[sampleIndex] = newSample;
-			sampleIndex = (sampleIndex + 1) % MAX_SAMPLES;
-
-			title << "FPS: " << MAX_SAMPLES / sum;
-		}
-		lastTick = Thread::getElapsedTime();
-		Graphics::get().setTitle(title.str().c_str());
+		drawFPS();
 	}
 }
