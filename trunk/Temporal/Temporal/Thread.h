@@ -7,7 +7,6 @@ namespace Temporal
 	{
 	public:
 		static void sleep(float seconds);
-		static float getElapsedTime();
 	private:
 		Thread() {}
 		Thread(const Thread&);

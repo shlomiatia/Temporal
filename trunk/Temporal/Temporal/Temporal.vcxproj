@@ -17,6 +17,7 @@
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationGraph.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
@@ -107,6 +109,7 @@
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="DrawPosition.cpp" />

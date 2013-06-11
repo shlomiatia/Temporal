@@ -183,6 +183,9 @@
     <ClInclude Include="Gamepad.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -351,6 +354,12 @@
     </ClCompile>
     <ClCompile Include="SerializationAccess.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
