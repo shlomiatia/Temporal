@@ -175,6 +175,7 @@ namespace Temporal
 			// TempFlag 1 - want to hang
 			if(message.getID() == MessageID::ACTION_UP)
 			{
+				// Need to be in start jump start, because can occur on fall from ledge
 				if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
 				{
 					getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);

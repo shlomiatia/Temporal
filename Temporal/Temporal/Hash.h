@@ -32,6 +32,8 @@ namespace Temporal
 			static HashToString instance;
 			return instance;
 		}
+
+		// TODO:
 		void dispose() const;
 
 		void save(Hash key, const char* value);

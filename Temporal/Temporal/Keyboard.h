@@ -44,6 +44,8 @@ namespace Temporal
 		bool getKey(Key::Enum key) const { return _keys[key]; }
 
 	private:
+
+		// TODO:
 		KeyCollection _keysMap;
 		bool _keys[Key::SIZE];
 
