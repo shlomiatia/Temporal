@@ -45,6 +45,8 @@ namespace Temporal
 		bool getButton(GamepadButton::Enum button) const { return _buttons[button]; }
 
 	private:
+
+		// TODO:
 		GamepadButtonCollection _buttonsMap;
 		SDL_Joystick* _joystick;
 

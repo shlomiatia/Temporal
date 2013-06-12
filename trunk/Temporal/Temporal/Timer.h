@@ -65,6 +65,7 @@ namespace Temporal
 		PerformanceTimer& getTimer(Hash id);
 
 	private:
+		// TODO:
 		PerformanceTimerCollection _timers;
 
 		PerformanceTimerManager() {};
