@@ -13,8 +13,12 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::init(const Size& resolution, float logicalViewHeight, bool fullScreen)
+	void Graphics::init()
 	{
+		// TODO: Settings
+		bool fullScreen = false;
+		Size resolution = Size(1280.0f, 720.0f);
+		float logicalViewHeight = 720.0f;
 		float logicalViewWidth = logicalViewHeight * resolution.getWidth() / resolution.getHeight();
 		_logicalView = Size(logicalViewWidth, logicalViewHeight);
 

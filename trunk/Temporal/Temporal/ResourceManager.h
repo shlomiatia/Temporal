@@ -28,10 +28,13 @@ namespace Temporal
 		}
 
 		void init();
+		void dispose();
+
+		void loadGameState(const char* gameState);
+
 		const SpriteSheet* getSpritesheet(Hash id) const { return _spritesheets.at(id); }
 		const AnimationSet* getAnimationSet(Hash id) const { return _animationSets.at(id); }
 		FTFont* getFont(const char* name, unsigned int size);
-		void dispose();
 
 	private:
 		SpriteSheetCollection _spritesheets;

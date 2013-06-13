@@ -20,6 +20,8 @@ namespace Temporal
 	class SampleSet;
 	class Animation;
 	class AnimationSet;
+	class GameState;
+	class EntitiesManager;
 	class Entity;
 	class StateMachineComponent;
 	class Transform;
@@ -169,7 +171,18 @@ namespace Temporal
 		}
 
 		// Entity objects
-		
+		template<class T>
+		static void serialize(const char* key, GameState& gameState, T& serializer)
+		{
+			serializer.serialize("entities-manager", *gameState._entitiesManager);
+		}
+
+		template<class T>
+		static void serialize(const char* key, EntitiesManager& entitiesManager, T& serializer)
+		{
+			serializer.serialize("entity", entitiesManager._entities);
+		}
+
 		template<class T>
 		static void serialize(const char* key, Entity& entity, T& serializer)
 		{

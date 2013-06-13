@@ -29,8 +29,9 @@ namespace Temporal
 		{
 			Navigator& navigator = getNavigator(stateMachine);
 			const YABP& startPosition = *static_cast<YABP*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
-			const NavigationNode* start = NavigationGraph::get().getNode(startPosition);
-			const NavigationNode* goal = NavigationGraph::get().getNode(goalPosition);
+			
+			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
+			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
 			if(start && goal)
 			{
 				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);

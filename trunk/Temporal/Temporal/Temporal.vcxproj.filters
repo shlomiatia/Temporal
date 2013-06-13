@@ -125,7 +125,6 @@
     <ClInclude Include="Vector.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="TestLevel.h" />
     <ClInclude Include="SecurityCamera.h">
       <Filter>AI</Filter>
     </ClInclude>
@@ -185,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,7 +299,6 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="TestLevel.cpp" />
     <ClCompile Include="SecurityCamera.cpp">
       <Filter>AI</Filter>
     </ClCompile>
@@ -360,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

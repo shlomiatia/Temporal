@@ -20,7 +20,7 @@ namespace Temporal
 	{
 		_fixture->update();
 		const YABP& sensorShape = _fixture->getGlobalShape();
-		FixtureCollection info = Grid::get().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
+		FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
 		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{

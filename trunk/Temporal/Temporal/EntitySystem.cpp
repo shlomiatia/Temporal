@@ -16,16 +16,11 @@ namespace Temporal
 			delete *i;
 	}
 
-	void Entity::init()
+	void Entity::init(EntitiesManager* manager)
 	{
+		_manager = manager;
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
-			(**i).setEntity(this);
-	}
-
-	void Entity::add(Component* component)
-	{
-		_components.push_back(component);
-		component->setEntity(this);
+			(**i).init(this);
 	}
 
 	Component* Entity::get(ComponentType::Enum type) const
@@ -39,9 +34,17 @@ namespace Temporal
 		return 0;
 	}
 
+	
+	void Entity::add(Component* component)
+	{
+		_components.push_back(component);
+		component->init(this);
+	}
+
 	Entity* Entity::clone() const
 	{
 		Entity* clone = new Entity();
+		clone->init(_manager);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			clone->add((**i).clone());
@@ -61,26 +64,23 @@ namespace Temporal
 		return message.getParam();
 	}
 
-	void EntitiesManager::dispose()
+	EntitiesManager::~EntitiesManager()
 	{
+		sendMessageToAllEntities(Message(MessageID::LEVEL_DISPOSED));
+		sendMessageToAllEntities(Message(MessageID::ENTITY_DISPOSED));
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
 	}
 
-	void EntitiesManager::init()
+	void EntitiesManager::init(GameState* gameState)
 	{
-		XmlDeserializer deserializer("entities.xml");
-		deserializer.serialize("entity", _entities);
+		GameStateComponent::init(gameState);
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
-			i->second->init();
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_PRE_INIT));
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
-	}
-
-	void EntitiesManager::add(Entity* entity)
-	{
-		_entities[entity->getId()] = entity;
+			i->second->init(this);
+		sendMessageToAllEntities(Message(MessageID::ENTITY_PRE_INIT));
+		sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
+		sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
+		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message) const

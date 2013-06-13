@@ -37,7 +37,7 @@ namespace Temporal
 		_isSeeing = false;
 
 		int sourceCollisionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		int targetCollisionGroup = *static_cast<int*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
+		int targetCollisionGroup = *static_cast<int*>(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
 		if(sourceCollisionGroup != -1 &&
 		   targetCollisionGroup != -1 &&
 		   sourceCollisionGroup != targetCollisionGroup)
@@ -45,13 +45,13 @@ namespace Temporal
 
 		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
-		const Vector& targetPosition = *static_cast<Vector*>(EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+		const Vector& targetPosition = *static_cast<Vector*>(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
 
 		// Check orientation
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
 			return;
 
-		void* isLit = EntitiesManager::get().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
+		void* isLit = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
 		if(isLit && !getBoolParam(isLit))
 			return;
 
@@ -63,7 +63,7 @@ namespace Temporal
 		if(distance > _sightSize / 2.0f) return;
 
 		RayCastResult result;
-		if(Grid::get().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
+		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
 		{
 			_pointOfIntersection = result.getPoint();
 			if(result.getFixture().getEntityId() == PLAYER_ENTITY)

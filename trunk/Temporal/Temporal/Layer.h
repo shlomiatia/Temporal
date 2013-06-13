@@ -1,6 +1,7 @@
 #ifndef LAYER_H
 #define LAYER_H
 
+#include "GameState.h"
 #include <vector>
 
 namespace Temporal
@@ -22,13 +23,19 @@ namespace Temporal
 		static const int NEAREST = PARTICLES;
 	}
 
+	class LayersManager;
+
 	class Layer
 	{
 	public:
-		Layer() {}
+		Layer() : _manager(0) {}
 		virtual ~Layer() {};
 		virtual void draw() = 0;
-		virtual void drawGUI() {};
+
+		void init(LayersManager* manager) { _manager = manager; }
+
+	protected:
+		LayersManager* _manager;
 
 	private:
 		Layer(const Layer&);
@@ -38,22 +45,18 @@ namespace Temporal
 	typedef std::vector<Layer*> LayerCollection;
 	typedef LayerCollection::const_iterator LayerIterator;
 
-	class LayersManager
+	class LayersManager : public GameStateComponent
 	{
 	public:
-		static LayersManager& get()
-		{
-			static LayersManager instance;
-			return (instance);
-		}
+		LayersManager() {};
+		~LayersManager();
 
-		void add(Layer* layer) { _layers.push_back(layer); }
+		void init(GameState* gameState);
+
 		void draw();
-		void dispose();
 	private:
 		LayerCollection _layers;
 
-		LayersManager() {}
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);
 	};
@@ -62,8 +65,12 @@ namespace Temporal
 	{
 	public:
 		void draw();
-		void drawGUI();
-	private:
+	};
+
+	class GUILayer : public Layer
+	{
+	public:
+		void draw();
 	};
 
 	class DebugLayer : public Layer

@@ -25,7 +25,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
-			const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
+			const Segment& segment = *static_cast<Segment*>(getEntity().getManager().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 			Vector position = segment.getNaturalOrigin();
 			position.setY(position.getY() - 1.0f);
 			raiseMessage(Message(MessageID::SET_POSITION, &position));
@@ -40,7 +40,7 @@ namespace Temporal
 	void Laser::update(float framePeriod)
 	{
 		const Vector& position = getPosition(*this);
-		const Segment& segment = *static_cast<Segment*>(EntitiesManager::get().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
+		const Segment& segment = *static_cast<Segment*>(getEntity().getManager().sendMessageToEntity(_platformID, Message(MessageID::GET_SHAPE)));
 		Vector platformDirection = segment.getNaturalVector().normalize();
 		float movementAmount = LASER_SPEED_PER_SECOND * framePeriod;
 		Vector maxPoint = Vector::Zero;
@@ -65,7 +65,7 @@ namespace Temporal
 		raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		RayCastResult result;
 		int group = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		if(Grid::get().cast(newPosition, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
+		if(getEntity().getManager().getGameState().getGrid().cast(newPosition, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
 			Color color = result.getFixture().getEntityId() == PLAYER_ENTITY ? Color::Green : Color::Red;
 			raiseMessage(Message(MessageID::SET_COLOR, &color));

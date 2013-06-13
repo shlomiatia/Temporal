@@ -15,6 +15,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Gamepad.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Log.h" />
@@ -73,13 +74,13 @@
     <ClInclude Include="Sight.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="StaticBody.h" />
-    <ClInclude Include="TestLevel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Gamepad.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Log.cpp" />
@@ -134,7 +135,6 @@
     <ClCompile Include="Sight.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="StaticBody.cpp" />
-    <ClCompile Include="TestLevel.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA48D0FC-FC62-43C4-95A0-520220DD4DB6}</ProjectGuid>
