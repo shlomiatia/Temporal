@@ -63,13 +63,13 @@ namespace Temporal
 			return (instance);
 		}
 
-		void init();
+		void init(const char* gameStateFile);
 		void dispose();
 
 		void update(float framePeriod);
 		void draw() const;
 
-		void gameStateReady(GameState* gameState);
+		void gameStateReady(GameState* next) { _next = next; }
 
 		void changeState(const char* gameState);
 		void pushState(const char* gameState);
@@ -77,8 +77,9 @@ namespace Temporal
 	private:
 		GameStateCollection _states;
 		bool _pop;
+		GameState* _next;
 
-		GameStateManager() : _pop(false) {};
+		GameStateManager() : _pop(false), _next(0) {};
 
 		GameState* getTopState() const;
 

@@ -23,7 +23,7 @@ namespace Temporal
 		bool _isRunning;
 		float _lastFrameTime;
 
-		void init();
+		void init(const char* gameState);
 		void dispose();
 		void update();
 		void draw() const;
