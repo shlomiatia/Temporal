@@ -1,6 +1,7 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
+#include "Thread.h"
 #include "Hash.h"
 #include <unordered_map>
 
@@ -8,6 +9,7 @@ class FTFont;
 
 namespace Temporal
 {
+	class GameState;
 	class SpriteSheet;
 	class AnimationSet;
 	
@@ -30,13 +32,22 @@ namespace Temporal
 		void init();
 		void dispose();
 
-		void loadGameState(const char* gameState);
+		void run();
+
+		void queueLoadGameState(const char* gameStateFile);
+		GameState* loadGameState(const char* gameStateFile);
 
 		const SpriteSheet* getSpritesheet(Hash id) const { return _spritesheets.at(id); }
 		const AnimationSet* getAnimationSet(Hash id) const { return _animationSets.at(id); }
 		FTFont* getFont(const char* name, unsigned int size);
 
 	private:
+		const char* _gameStateFile;
+		bool _isRunning;
+
+		Thread _thread;
+		Semaphore _semaphore;
+
 		SpriteSheetCollection _spritesheets;
 		AnimationSetCollection _animationSets;
 		FontCollection _fonts;
@@ -44,7 +55,7 @@ namespace Temporal
 		void initSpritesheets();
 		void initAnimationSets();
 
-		ResourceManager() {}
+		ResourceManager() : _gameStateFile(0), _isRunning(false) {}
 		ResourceManager(const ResourceManager&);
 		ResourceManager& operator=(const ResourceManager&);
 	};

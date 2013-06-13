@@ -42,6 +42,7 @@ namespace Temporal
 		}
 		if(Keyboard::get().getKey(Key::Q))
 		{
+			GameStateManager::get().changeState("entities.xml");
 			//const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
 			//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
@@ -59,8 +60,10 @@ namespace Temporal
 		return _states.back();
 	}
 
-	void GameStateManager::init()
+	void GameStateManager::init(const char* gameStateFile)
 	{
+		GameState* initial = ResourceManager::get().loadGameState(gameStateFile);
+		_states.push_back(initial);
 	}
 
 	void GameStateManager::dispose()
@@ -71,6 +74,13 @@ namespace Temporal
 
 	void GameStateManager::update(float framePeriod)
 	{
+		if(_next != 0)
+		{
+			if(_pop)
+				popState();
+			_states.push_back(_next);
+			_next = 0;
+		}
 		getTopState()->update(framePeriod);
 	}
 
@@ -82,25 +92,18 @@ namespace Temporal
 	void GameStateManager::changeState(const char* state)
 	{
 		_pop = true;
-		ResourceManager::get().loadGameState(state);
+		ResourceManager::get().queueLoadGameState(state);
 	}
 
 	void GameStateManager::pushState(const char* state)
 	{
 		_pop = false;
-		ResourceManager::get().loadGameState(state);
+		ResourceManager::get().queueLoadGameState(state);
 	}
 
 	void GameStateManager::popState()
 	{
 		delete getTopState();
 		_states.pop_back();
-	}
-
-	void GameStateManager::gameStateReady(GameState* gameState)
-	{
-		if(_pop)
-			popState();
-		_states.push_back(gameState);
 	}
 }

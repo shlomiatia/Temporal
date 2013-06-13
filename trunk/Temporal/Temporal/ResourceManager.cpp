@@ -10,19 +10,58 @@
 
 namespace Temporal
 {
+	int runCallback(void* param)
+	{
+		ResourceManager& resourceManager = *static_cast<ResourceManager*>(param);
+		resourceManager.run();
+		return 0;
+	}
+
+	void ResourceManager::run()
+	{
+		while(_isRunning)
+		{
+			_semaphore.wait();
+			if(!_isRunning)
+				break;
+			GameState* state = loadGameState(_gameStateFile);
+			GameStateManager::get().gameStateReady(state);
+		}
+	}
+
 	void ResourceManager::init()
 	{
 		initSpritesheets();
 		initAnimationSets();
+		_isRunning = true;
+		_thread.start(runCallback, this);
 	}
 
-	void ResourceManager::loadGameState(const char* gameStateFile)
+	void ResourceManager::dispose()
+	{
+		_isRunning = false;
+		_semaphore.notify();
+		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end(); ++i)
+			delete i->second;
+		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end(); ++i)
+			delete i->second;
+		for(FontIterator i = _fonts.begin(); i != _fonts.end(); ++i)
+			delete i->second;
+	}
+
+	GameState* ResourceManager::loadGameState(const char* gameStateFile)
 	{
 		XmlDeserializer deserializer(gameStateFile);
 		GameState* state = new GameState();
 		deserializer.serialize("game-state", *state);
 		state->init();
-		GameStateManager::get().gameStateReady(state);
+		return state;
+	}
+
+	void ResourceManager::queueLoadGameState(const char* gameStateFile)
+	{
+		_gameStateFile = gameStateFile;
+		_semaphore.notify();
 	}
 
 	void ResourceManager::initSpritesheets()
@@ -59,15 +98,5 @@ namespace Temporal
         _fonts[id] = font;
 
         return font;
-	}
-
-	void ResourceManager::dispose()
-	{
-		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end(); ++i)
-			delete i->second;
-		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end(); ++i)
-			delete i->second;
-		for(FontIterator i = _fonts.begin(); i != _fonts.end(); ++i)
-			delete i->second;
 	}
 }

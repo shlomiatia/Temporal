@@ -10,12 +10,12 @@ namespace Temporal
 {
 	const float Game::FRAME_PERIOD(1.0f / /*FPS*/ 60.0f);
 
-	void Game::init()
+	void Game::init(const char* gameState)
 	{
 		Graphics::get().init();
 		Input::get().init();
 		ResourceManager::get().init();
-		GameStateManager::get().init();
+		GameStateManager::get().init(gameState);
 	}
 
 	void Game::dispose()
@@ -28,10 +28,9 @@ namespace Temporal
 
 	void Game::run(const char* gameState)
 	{
-		init();
+		init(gameState);
 
 		_isRunning = true;
-		GameStateManager::get().pushState(gameState);
 
 		// Wait for initial state to load
 
