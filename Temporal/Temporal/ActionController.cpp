@@ -157,7 +157,7 @@ namespace Temporal
 				if(params.getSensorId() == ACTIVATE_SENSOR_ID)
 				{
 					Hash entityId = params.getContact().getTarget().getEntityId();
-					EntitiesManager::get().sendMessageToEntity(entityId, Message(MessageID::ACTIVATE));
+					_stateMachine->getEntity().getManager().sendMessageToEntity(entityId, Message(MessageID::ACTIVATE));
 				}
 			}
 		}

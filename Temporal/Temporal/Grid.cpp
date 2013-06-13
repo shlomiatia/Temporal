@@ -15,11 +15,14 @@ namespace Temporal
 		return YABPAABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Vector(_tileSize, _tileSize) / 2.0f);
 	}
 
-	void Grid::init(const Size& worldSize, float tileSize)
+	void Grid::init(GameState* gameState)
 	{
-		_tileSize = tileSize;
-		_gridWidth = getAxisIndex(worldSize.getWidth()) + 1;
-		_gridHeight = getAxisIndex(worldSize.getHeight()) + 1;
+		GameStateComponent::init(gameState);
+		// TODO: Settings
+		Size levelSize = Size(3840.0f, 720.0f);
+		_tileSize = 128.0f;
+		_gridWidth = getAxisIndex(levelSize.getWidth()) + 1;
+		_gridHeight = getAxisIndex(levelSize.getHeight()) + 1;
 		
 		int size = getSize();
 		_grid = new FixtureCollection*[size];
@@ -27,7 +30,7 @@ namespace Temporal
 			_grid[i] = 0;
 	}
 
-	void Grid::dispose()
+	Grid::~Grid()
 	{
 		int size = getSize();
 		for(int i = 0; i < size; ++i)
@@ -152,12 +155,12 @@ namespace Temporal
 		float x2 = destination.getX();
 		float y2 = destination.getY();
 		
-		int i = Grid::get().getAxisIndex(x1);
-		int j = Grid::get().getAxisIndex(y1);
+		int i = getAxisIndex(x1);
+		int j = getAxisIndex(y1);
 
 		// Determine end grid cell coordinates (iend, jend)
-		int iend = Grid::get().getAxisIndex(x2);
-		int jend = Grid::get().getAxisIndex(y2);
+		int iend = getAxisIndex(x2);
+		int jend = getAxisIndex(y2);
 
 		// Determine in which primary direction to step
 		int di = ((x1 < x2) ? 1 : ((x1 > x2) ? -1 : 0));

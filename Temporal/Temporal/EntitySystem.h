@@ -1,6 +1,7 @@
 #ifndef ENTITYSYSTEM_H
 #define ENTITYSYSTEM_H
 
+#include "GameState.h"
 #include "GameEnums.h"
 #include "Hash.h"
 #include <unordered_map>
@@ -34,7 +35,7 @@ namespace Temporal
 		virtual ~Component() {}
 
 		Entity& getEntity() const { return *_entity; }
-		void setEntity(Entity* entity) { _entity = entity; }
+		void init(Entity* entity) { _entity = entity; }
 		virtual ComponentType::Enum getType() const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
@@ -51,6 +52,8 @@ namespace Temporal
 	typedef std::vector<Component*> ComponentCollection;
 	typedef ComponentCollection::const_iterator ComponentIterator;
 
+	class EntitiesManager;
+
 	class Entity
 	{
 	public:
@@ -59,7 +62,9 @@ namespace Temporal
 
 		Hash getId() const { return _id; }
 		void setId(Hash id) { _id = id; }
-		void init();
+		EntitiesManager& getManager() { return *_manager; }
+
+		void init(EntitiesManager* manager);
 		void add(Component* component);
 		Component* get(ComponentType::Enum type) const;
 		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
@@ -68,24 +73,21 @@ namespace Temporal
 		Hash _id;
 		ComponentCollection _components;
 
+		EntitiesManager* _manager;
+
 		friend class SerializationAccess;
 	};
 
 	typedef std::unordered_map<Hash, Entity*> EntityCollection;
 	typedef EntityCollection::const_iterator EntityIterator;
 
-	class EntitiesManager
+	class EntitiesManager : public GameStateComponent
 	{
 	public:
-		static EntitiesManager& get()
-		{
-			static EntitiesManager instance;
-			return instance;
-		}
+		EntitiesManager() {};
+		~EntitiesManager();
 
-		void init();
-		void dispose();
-		void add(Entity* entity);
+		void init(GameState* gameState);
 
 		void sendMessageToAllEntities(Message& message) const;
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
@@ -93,10 +95,11 @@ namespace Temporal
 		const EntityCollection& getEntities() const { return _entities; }
 	private:
 		EntityCollection _entities;
-
-		EntitiesManager() {}
+		
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);
+
+		friend class SerializationAccess;
 	};
 }
 

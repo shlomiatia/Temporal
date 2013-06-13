@@ -25,7 +25,7 @@ namespace Temporal
 		const Size& getResolution() const { return _resolution; }
 		const Size& getLogicalView() const { return _logicalView; }
 
-		void init(const Size& resolution, float logicalViewHeight, bool fullScreen = false);
+		void init();
 		void dispose() const;
 
 		void setTitle(const char* title) const;

@@ -19,7 +19,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_fixture->init(*this);
-			Grid::get().add(_fixture);
+			getEntity().getManager().getGameState().getGrid().add(_fixture);
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
@@ -32,7 +32,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			Grid::get().update(_fixture);
+			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
 	}
 }

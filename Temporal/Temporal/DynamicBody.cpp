@@ -36,7 +36,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_fixture->init(*this);
-			Grid::get().add(_fixture);
+			getEntity().getManager().getGameState().getGrid().add(_fixture);
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
@@ -77,7 +77,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
-			Grid::get().update(_fixture);
+			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
 	}
 
@@ -165,7 +165,7 @@ namespace Temporal
 			// Find next platform
 			_ground = 0;
 			YABP checker = YABPAABB(max, Vector(1.0f, 1.0f));
-			FixtureCollection info = Grid::get().iterateTiles(checker, COLLISION_MASK);
+			FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(checker, COLLISION_MASK);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* next = *i;
@@ -239,7 +239,7 @@ namespace Temporal
 			movement -= stepMovement;
 			dynamicBodyBounds.translate(stepMovement);
 			
-			FixtureCollection info = Grid::get().iterateTiles(dynamicBodyBounds, COLLISION_MASK, -1, false);
+			FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(dynamicBodyBounds, COLLISION_MASK, -1, false);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* fixture = *i;

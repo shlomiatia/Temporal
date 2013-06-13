@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "Serialization.h"
 #include "SerializationAccess.h"
+#include "GameState.h"
+#include "EntitySystem.h"
 #include <ftgl/ftgl.h>
 
 namespace Temporal
@@ -12,6 +14,15 @@ namespace Temporal
 	{
 		initSpritesheets();
 		initAnimationSets();
+	}
+
+	void ResourceManager::loadGameState(const char* gameStateFile)
+	{
+		XmlDeserializer deserializer(gameStateFile);
+		GameState* state = new GameState();
+		deserializer.serialize("game-state", *state);
+		state->init();
+		GameStateManager::get().gameStateReady(state);
 	}
 
 	void ResourceManager::initSpritesheets()

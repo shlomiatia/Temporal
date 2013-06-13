@@ -6,7 +6,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ACTIVATE)
 		{
-			EntitiesManager::get().sendMessageToEntity(_target, Message(MessageID::ACTIVATE));
+			getEntity().getManager().sendMessageToEntity(_target, Message(MessageID::ACTIVATE));
 		}
 	}
 }

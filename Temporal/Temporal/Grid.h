@@ -2,6 +2,7 @@
 #define GRID_H
 
 #include "Shapes.h"
+#include "GameState.h"
 
 #include <vector>
 
@@ -29,17 +30,13 @@ namespace Temporal
 		Vector _point;
 	};
 
-	class Grid
+	class Grid : public GameStateComponent
 	{
 	public:
-		static Grid& get()
-		{
-			static Grid instance;
-			return instance;
-		}
+		Grid() {};
+		~Grid();
 
-		void init(const Size& worldSize, float tileSize);
-		void dispose();
+		virtual void init(GameState* gameState);
 
 		void add(const Fixture* body);
 		void update(Fixture* body);
@@ -64,7 +61,6 @@ namespace Temporal
 		void add(const Fixture* body, int i, int j);
 		FixtureCollection* getTile(int i, int j) const;
 
-		Grid() {};
 		Grid(const Grid&);
 		Grid& operator=(const Grid&);
 	};

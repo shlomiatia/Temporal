@@ -355,10 +355,11 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::init()
+	void NavigationGraph::init(GameState* gameState)
 	{
+		GameStateComponent::init(gameState);
 		ShapeCollection platforms;
-		const EntityCollection& entities = EntitiesManager::get().getEntities();
+		const EntityCollection& entities = getGameState().getEntitiesManager().getEntities();
 		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = (*(*i).second);
@@ -370,7 +371,7 @@ namespace Temporal
 		createEdges(platforms);
 	}
 
-	void NavigationGraph::dispose()
+	NavigationGraph::~NavigationGraph()
 	{
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{

@@ -7,23 +7,33 @@
 #include "Hash.h"
 #include "Timer.h"
 #include "Log.h"
+#include "Camera.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
 {
 	static const Hash FPS_TIMER = Hash("TMR_FPS");
 
-	void LayersManager::draw()
+	void LayersManager::init(GameState* gameState)
 	{
-		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
-			(**i).draw();
+		GameStateComponent::init(gameState);
+
+		// TODO: Settings
+		Size levelSize = Size(3840.0f, 720.0f);
 		
-		glLoadIdentity();
+		_layers.push_back(new Camera(levelSize));
+		_layers.push_back(new SpriteLayer());
+		//_layers.push_back(new LightLayer(Color(0.1f, 0.1f, 0.1f)));
+		_layers.push_back(new DebugLayer());
+		_layers.push_back(new GUILayer());
+
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
-			(**i).drawGUI();
+		{
+			(**i).init(this);
+		}
 	}
 
-	void LayersManager::dispose()
+	LayersManager::~LayersManager()
 	{
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
@@ -31,16 +41,24 @@ namespace Temporal
 		}
 	}
 
-	void SpriteLayer::draw()
+	void LayersManager::draw()
 	{
-		for(int i = LayerType::FARTHEST; i <= LayerType::NEAREST; ++i)
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
+			(**i).draw();
 	}
 
-	void SpriteLayer::drawGUI()
+	void SpriteLayer::draw()
 	{
+		
+		for(int i = LayerType::FARTHEST; i <= LayerType::NEAREST; ++i)
+			_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+	}
+
+	void GUILayer::draw()
+	{
+		glLoadIdentity();
 		LayerType::Enum guiLayer = LayerType::GUI;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
+		_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
 	}
 
 	void DebugLayer::drawFPS()
@@ -68,7 +86,7 @@ namespace Temporal
 	void DebugLayer::draw()
 	{
 		ComponentType::Enum filter = ComponentType::STATIC_BODY;
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
+		_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
 		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();

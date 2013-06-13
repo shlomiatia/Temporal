@@ -3,20 +3,7 @@
 
 namespace Temporal
 {
-	class Level
-	{
-	public:
-		virtual void init() = 0;
-		virtual void update(float framePeriod) = 0;
-		virtual void draw() const = 0;
-		virtual void dispose() = 0;
-
-		Level() {};
-		virtual ~Level() {}
-	private:
-		Level(const Level&);
-		Level& operator=(const Level&);
-	};
+	class GameState;
 
 	class Game
 	{
@@ -27,24 +14,21 @@ namespace Temporal
 			return (instance);
 		}
 
-		void setLevel(Level* level) { _level = level; }
-		bool isRunning() const { return _running; }
-		bool isPaused() const { return _paused; }
-		void run();
-		void stop() { _running = false; }
+		void run(const char* gameState);
+		void stop() { _isRunning = false; }
 
 	private:
 		static const float FRAME_PERIOD;
 
-		Level* _level;
-		bool _running;
-		bool _paused;
+		bool _isRunning;
 		float _lastFrameTime;
 
+		void init();
+		void dispose();
 		void update();
 		void draw() const;
 
-		Game() : _level(0), _running(false), _paused(false), _lastFrameTime(0.0f) {}
+		Game() : _isRunning(false), _lastFrameTime(0.0f) {}
 		Game(const Game&);
 		Game& operator=(const Game&);
 	};

@@ -9,7 +9,8 @@ namespace Temporal
 	{
 		_period = period;
 		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-		EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+		
+		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 	}
 
 	void PlayerPeriod::handleMessage(Message& message)
@@ -20,7 +21,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
-			EntitiesManager::get().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
