@@ -4,6 +4,7 @@
 #include "Thread.h"
 #include "Hash.h"
 #include <unordered_map>
+#include <memory>
 
 class FTFont;
 
@@ -12,12 +13,13 @@ namespace Temporal
 	class GameState;
 	class SpriteSheet;
 	class AnimationSet;
+	class Texture;
 	
-	typedef std::unordered_map<Hash, SpriteSheet*> SpriteSheetCollection;
+	typedef std::unordered_map<Hash, std::shared_ptr<SpriteSheet>> SpriteSheetCollection;
 	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
-	typedef std::unordered_map<Hash, AnimationSet*> AnimationSetCollection;
+	typedef std::unordered_map<Hash, std::shared_ptr<AnimationSet>> AnimationSetCollection;
 	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
-	typedef std::unordered_map<Hash, FTFont*> FontCollection;
+	typedef std::unordered_map<Hash, std::shared_ptr<FTFont>> FontCollection;
 	typedef FontCollection::const_iterator FontIterator;
 
 	class ResourceManager
@@ -37,9 +39,9 @@ namespace Temporal
 		void queueLoadGameState(const char* gameStateFile);
 		GameState* loadGameState(const char* gameStateFile);
 
-		const SpriteSheet* getSpritesheet(Hash id) const { return _spritesheets.at(id); }
-		const AnimationSet* getAnimationSet(Hash id) const { return _animationSets.at(id); }
-		FTFont* getFont(const char* name, unsigned int size);
+		const std::shared_ptr<SpriteSheet> getSpritesheet(const char* file);
+		const std::shared_ptr<AnimationSet> getAnimationSet(const char* file);
+		const std::shared_ptr<FTFont> getFont(const char* name, unsigned int size);
 
 	private:
 		const char* _gameStateFile;
@@ -51,9 +53,6 @@ namespace Temporal
 		SpriteSheetCollection _spritesheets;
 		AnimationSetCollection _animationSets;
 		FontCollection _fonts;
-
-		void initSpritesheets();
-		void initAnimationSets();
 
 		ResourceManager() : _gameStateFile(0), _isRunning(false) {}
 		ResourceManager(const ResourceManager&);

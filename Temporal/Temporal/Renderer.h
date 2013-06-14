@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Layer.h"
+#include <memory>
 
 namespace Temporal
 {
@@ -23,6 +24,8 @@ namespace Temporal
 		Component* clone() const;
 
 	private:
+		char* _spriteSheetFile;
+		std::shared_ptr<SpriteSheet> _spriteSheet;
 		SceneNode* _root;
 
 		LayerType::Enum _layer;

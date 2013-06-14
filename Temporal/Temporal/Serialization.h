@@ -59,6 +59,7 @@ namespace Temporal
 		virtual void serialize(const char* key, bool& value) = 0;
 		virtual void serialize(const char* key, Hash& value) = 0;
 		virtual void serialize(const char* key, Timer& value) = 0;
+		virtual void serialize(const char* key, char*& value) {};
 		virtual void serializeRadians(const char* key, float& value) = 0;
 		virtual SerializationDirection::Enum type() = 0;
 

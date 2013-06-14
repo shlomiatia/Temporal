@@ -12,7 +12,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_font = ResourceManager::get().getFont(_fontFamily, _fontSize);
-			_layout.SetFont(_font);
+			_layout.SetFont(_font.get());
 			//_layout->SetLineLength(64.0f);
 		}
 		else if(message.getID() == MessageID::DRAW)

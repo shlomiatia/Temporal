@@ -118,10 +118,9 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, SpriteSheet& spritesheet, T& serializer)
 		{
-			serializer.serialize("texture", spritesheet._id);
+			serializer.serialize("texture", spritesheet._textureFile);
 			serializer.serialize("orientation", (int&)spritesheet._orientation);
 			serializer.serialize("sprite-group", spritesheet._spriteGroups);
-			spritesheet.init();
 		}
 		
 		template<class T>
@@ -139,18 +138,15 @@ namespace Temporal
 			serializer.serialize("id", sceneNode._id);
 			serializer.serialize("behind-parent", sceneNode._drawBehindParent);
 			serializer.serialize("transform", sceneNode._transformOnly);
-			serializer.serialize("sprite-sheet", sceneNode._spriteSheetId);
 			serializer.serialize("sprite-group", sceneNode._spriteGroupId);
 			serializer.serialize("scene-node", sceneNode._children);
 		}
 		
-		// TODO:
 		template<class T>
 		static void serialize(const char* key, SampleSet& sampleSet, T& serializer)
 		{
 			serializer.serialize("scene-node-id", sampleSet._sceneNodeId);
 			serializer.serialize("sample", sampleSet._samples);
-			sampleSet.init();
 		}
 		
 		template<class T>
@@ -160,13 +156,11 @@ namespace Temporal
 			serializer.serialize("repeat", animation._repeat);
 			serializer.serialize("rewind", animation._rewind);
 			serializer.serialize("sample-set", animation._sampleSets);
-			animation.init();
 		}
 		
 		template<class T>
 		static void serialize(const char* key, AnimationSet& animationSet, T& serializer)
 		{
-			serializer.serialize("id", animationSet._id);
 			serializer.serialize("animation", animationSet._animations);
 		}
 
@@ -217,7 +211,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
-			serializer.serialize("animation-set", animator._animationSetId); // xml
+			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("animation", animator._animationId); 
 			serializer.serialize("timer", animator._timer); // memory
 		}
@@ -225,10 +219,10 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Renderer& renderer, T& serializer)
 		{
+			serializer.serialize("sprite-sheet", renderer._spriteSheetFile);
 			serializer.serialize("layer", (int&)renderer._layer);
 			serializer.serialize("color", renderer._color);
 			serializer.serialize("scene-node", renderer._root);
-			renderer._root->init();
 		}
 		
 		template<class T>
@@ -245,7 +239,7 @@ namespace Temporal
 		{
 			serializer.serialize("lifetime", particleEmitter._lifetime);
 			serializer.serialize("birth-threshold", particleEmitter._birthThreshold);
-			serializer.serialize("sprite-sheet", particleEmitter._spritesheetId);
+			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);
 			serializer.serialize("velocity", particleEmitter._velocity);
 			serializer.serializeRadians("center", particleEmitter._directionCenter);

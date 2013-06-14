@@ -1,0 +1,318 @@
+<sprite-sheet texture="resources/textures/door.png">
+	<sprite-group id="DOR_ANM_OPENING">
+		<sprite>
+			<bounds>
+				<center x="60" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="152" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="244" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="335" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="426" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="517" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="607" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="697" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="789" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="877" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="968" y="68.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="60" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="152" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="244" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="335" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="426" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="517" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="607" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="697" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="789" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="877" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="968" y="198.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="60" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="152" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="244" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="335" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="426" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="517" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="607" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="697" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="789" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="877" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="968" y="328.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="60" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="152" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="244" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="335" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="426" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="517" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="607" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+		<sprite>
+			<bounds>
+				<center x="697" y="461.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+	</sprite-group>
+	<sprite-group id="DOR_ANM_OPEN">
+		<sprite>
+			<bounds>
+				<center x="877" y="699.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+	</sprite-group>
+	<sprite-group id="DOR_ANM_CLOSE">
+		<sprite>
+			<bounds>
+				<center x="979" y="699.5" />
+				<radius x="30.5" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+	</sprite-group>
+	<sprite-group id="DOR_ANM_HINGE">
+		<sprite>
+			<bounds>
+				<center x="817.5" y="698.5" />
+				<radius x="15" y="60" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+	</sprite-group>
+</sprite-sheet>

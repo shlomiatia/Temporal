@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Timer.h"
+#include <memory>
 
 namespace Temporal
 {
@@ -38,7 +39,7 @@ namespace Temporal
 	{
 	public:
 		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _vertices(0), _texCoords(0), _birthIndex(0),
-			_spritesheetId(Hash::INVALID), _spritesheet(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
+			_spritesheetFile(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
 		~ParticleEmitter();
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
@@ -49,8 +50,8 @@ namespace Temporal
 	private:
 		float _lifetime;
 		float _birthThreshold;
-		Hash _spritesheetId;
-		const SpriteSheet* _spritesheet;
+		char* _spritesheetFile;
+		std::shared_ptr<SpriteSheet> _spritesheet;
 		float _birthRadius;
 		float _velocity;
 		float _directionCenter;

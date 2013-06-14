@@ -109,7 +109,7 @@ namespace Temporal
 		}
 	}
 
-	void Graphics::draw(const SceneNode& sceneNode, const Color& color)
+	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color)
 	{
 		glPushMatrix();
 		{	
@@ -120,12 +120,11 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if((**i).drawBehindParent())
-					draw(**i, color);
+					draw(**i, spritesheet, color);
 			}
 
 			if(!sceneNode.isTransformOnly())
 			{
-				const SpriteSheet& spritesheet = sceneNode.getSpriteSheet();
 				const Texture& texture = spritesheet.getTexture();
 				Hash spriteGroupID = sceneNode.getSpriteGroupId();
 				const SpriteGroup& spriteGroup = spritesheet.get(spriteGroupID);
@@ -147,7 +146,7 @@ namespace Temporal
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
 				if(!(**i).drawBehindParent())
-					draw(**i, color);
+					draw(**i, spritesheet, color);
 			}
 		}
 		glPopMatrix();

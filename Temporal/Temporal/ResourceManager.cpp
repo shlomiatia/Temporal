@@ -31,8 +31,6 @@ namespace Temporal
 
 	void ResourceManager::init()
 	{
-		initSpritesheets();
-		initAnimationSets();
 		_isRunning = true;
 		_thread.start(runCallback, this);
 	}
@@ -41,12 +39,6 @@ namespace Temporal
 	{
 		_isRunning = false;
 		_semaphore.notify();
-		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end(); ++i)
-			delete i->second;
-		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end(); ++i)
-			delete i->second;
-		for(FontIterator i = _fonts.begin(); i != _fonts.end(); ++i)
-			delete i->second;
 	}
 
 	GameState* ResourceManager::loadGameState(const char* gameStateFile)
@@ -64,19 +56,47 @@ namespace Temporal
 		_semaphore.notify();
 	}
 
-	void ResourceManager::initSpritesheets()
+	const std::shared_ptr<SpriteSheet> ResourceManager::getSpritesheet(const char* file)
 	{
-		XmlDeserializer deserializer("spritesheets.xml");
-		deserializer.serialize("sprite-sheet", _spritesheets);
+		Hash id = Hash(file);
+
+		SpriteSheetIterator result = _spritesheets.find(id);
+        if(result != _spritesheets.end())
+        {
+            return result->second;
+        }
+
+		XmlDeserializer deserializer(file);
+		SpriteSheet* spriteSheet = new SpriteSheet();
+		deserializer.serialize("sprite-sheet", *spriteSheet);
+		spriteSheet->init();
+		std::shared_ptr<SpriteSheet> spriteSheetP(spriteSheet);
+		_spritesheets[id] = spriteSheetP;
+
+		return spriteSheetP;
 	}
 
-	void ResourceManager::initAnimationSets()
+	const std::shared_ptr<AnimationSet> ResourceManager::getAnimationSet(const char* file)
 	{
-		XmlDeserializer deserializer("animations.xml");
-		deserializer.serialize("animation-set", _animationSets);
+		Hash id = Hash(file);
+
+		AnimationSetIterator result = _animationSets.find(id);
+        if(result != _animationSets.end())
+        {
+            return result->second;
+        }
+
+		XmlDeserializer deserializer(file);
+		AnimationSet* animationSet = new AnimationSet();
+		deserializer.serialize("animation-set", *animationSet);
+		animationSet->init();
+		std::shared_ptr<AnimationSet> animationSetP(animationSet);
+		_animationSets[id] = animationSetP;
+
+		return animationSetP;
 	}
 
-	FTFont* ResourceManager::getFont(const char* name, unsigned int size)
+	const std::shared_ptr<FTFont> ResourceManager::getFont(const char* name, unsigned int size)
 	{
 		std::ostringstream stream;
 		stream << name << size;
@@ -94,9 +114,9 @@ namespace Temporal
         {
             abort();
         }
+		std::shared_ptr<FTFont> fontP(font);
+        _fonts[id] = fontP;
 
-        _fonts[id] = font;
-
-        return font;
+        return fontP;
 	}
 }
