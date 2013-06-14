@@ -7,9 +7,14 @@
 #include "GameState.h"
 #include "EntitySystem.h"
 #include <ftgl/ftgl.h>
+#include <windows.h>
+#include <SDL_syswm.h>
 
 namespace Temporal
 {
+	static HDC hdc;
+	static HGLRC loaderContext;
+
 	int runCallback(void* param)
 	{
 		ResourceManager& resourceManager = *static_cast<ResourceManager*>(param);
@@ -19,6 +24,7 @@ namespace Temporal
 
 	void ResourceManager::run()
 	{
+		wglMakeCurrent(hdc, loaderContext);
 		while(_isRunning)
 		{
 			_semaphore.wait();
@@ -27,10 +33,24 @@ namespace Temporal
 			GameState* state = loadGameState(_gameStateFile);
 			GameStateManager::get().gameStateReady(state);
 		}
+		wglMakeCurrent(nullptr, nullptr);
+		wglDeleteContext(loaderContext);
 	}
 
 	void ResourceManager::init()
 	{
+		SDL_SysWMinfo wmInfo;
+		SDL_VERSION(&wmInfo.version);
+		if(SDL_GetWMInfo(&wmInfo) < 0)
+		{
+			abort();
+		}
+		HWND hwnd = wmInfo.window;
+		hdc = GetDC(hwnd);
+		HGLRC mainContext = wglGetCurrentContext();
+		loaderContext = wglCreateContext(hdc);
+		wglShareLists(loaderContext, mainContext);
+
 		_isRunning = true;
 		_thread.start(runCallback, this);
 	}
@@ -39,6 +59,27 @@ namespace Temporal
 	{
 		_isRunning = false;
 		_semaphore.notify();
+	}
+
+	void ResourceManager::collectGarbage()
+	{
+		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end(); ++i)
+		{
+			if(i->second.unique())
+				i = _spritesheets.erase(i);
+		}
+
+		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end(); ++i)
+		{
+			if(i->second.unique())
+				i = _animationSets.erase(i);
+		}
+
+		for(FontIterator i = _fonts.begin(); i != _fonts.end(); ++i)
+		{
+			if(i->second.unique())
+				i = _fonts.erase(i);
+		}
 	}
 
 	GameState* ResourceManager::loadGameState(const char* gameStateFile)
