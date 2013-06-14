@@ -5,6 +5,7 @@
 #include "EntitySystem.h"
 #include "Hash.h"
 #include "Animation.h"
+#include <memory>
 
 namespace Temporal
 {
@@ -32,17 +33,17 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		 Animator(Hash animationSetId = Hash::INVALID, Hash animationId = Hash::INVALID) :
-			_animationSetId(animationSetId), _animationSet(0), _animationId(animationId) {}
+		 Animator(const char* animationSetId = 0, Hash animationId = Hash::INVALID) :
+			_animationSetFile(_animationSetFile), _animationId(animationId) {}
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);
 		
-		Component* clone() const { return new Animator(_animationSetId, _animationId); }
+		Component* clone() const { return new Animator(_animationSetFile, _animationId); }
 
 	private:
-		Hash _animationSetId;
-		const AnimationSet* _animationSet;
+		char* _animationSetFile;
+		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
 		Timer _timer;

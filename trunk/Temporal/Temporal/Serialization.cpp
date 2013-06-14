@@ -75,7 +75,9 @@ namespace Temporal
 	 *********************************************************************************************/
 	XmlDeserializer::XmlDeserializer(const char * path) : _current(0) 
 	{
-		_doc.LoadFile(path);
+		int result = _doc.LoadFile(path);
+		if(result != 0)
+			abort();
 		_current = _doc.GetDocument(); 
 	};
 

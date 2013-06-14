@@ -1,6 +1,7 @@
 #ifndef TEXT_H
 #define TEXT_H
 #include "EntitySystem.h"
+#include <memory>
 #include <ftgl/ftgl.h>
 
 namespace Temporal
@@ -9,7 +10,7 @@ namespace Temporal
 	{
 	public:
 		
-		explicit Text(FTFont* font = 0, char* text = 0) : _font(font), _text(text)  {}
+		explicit Text(std::shared_ptr<FTFont> font = 0, char* text = 0) : _font(font), _text(text)  {}
 		~Text() { delete[] _fontFamily; delete[] _text; }
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
@@ -21,7 +22,7 @@ namespace Temporal
 		FTSimpleLayout _layout;
 		char* _fontFamily;
 		unsigned int _fontSize;
-		FTFont* _font;
+		std::shared_ptr<FTFont> _font;
 		char* _text;
 
 		void draw();

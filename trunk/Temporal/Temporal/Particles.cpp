@@ -54,8 +54,7 @@ namespace Temporal
 		_particles = new Particle[length];
 		_vertices = new float[length*8];
 		_texCoords = new float[length*8];
-		if(_spritesheetId != Hash::INVALID)
-			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetId);
+		_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile);
 		int j = 8;
 		for(int i = 0; i < length; ++i)
 		{

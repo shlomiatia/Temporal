@@ -18,9 +18,9 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteSheetId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false,
+		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false,
 						   bool transformOnly = false) : _id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero),
-						   _rotation(0.0f), _scale(Vector(1.0f, 1.0f)), _spriteSheetId(spriteSheetId), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) {}
+						   _rotation(0.0f), _scale(Vector(1.0f, 1.0f)), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) {}
 		~SceneNode();
 
 		Hash getID() const { return _id; }
@@ -35,8 +35,6 @@ namespace Temporal
 		float getRotation() const { return _rotation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 
-		const SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
-		Hash getSpriteSheetId() const { return _spriteSheetId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
 		void setSpriteGroupId(Hash spriteGroupId) { _spriteGroupId = spriteGroupId; }
 		float getSpriteInterpolation() const { return _spriteInterpolation; }
@@ -46,7 +44,6 @@ namespace Temporal
 
 		void add(SceneNode* child) { _children.push_back(child);}
 		SceneNode* clone() const;
-		void init();
 
 		Hash _id;
 		bool _drawBehindParent;	
@@ -56,8 +53,6 @@ namespace Temporal
 		float _rotation;
 		Vector _scale;
 
-		const SpriteSheet* _spriteSheet;
-		Hash _spriteSheetId;
 		Hash _spriteGroupId;
 		float _spriteInterpolation;
 

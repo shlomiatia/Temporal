@@ -13,8 +13,6 @@ namespace Temporal
 	Renderer::Renderer(SceneNode* root, LayerType::Enum layer, Color color) :
 		_root(root), _layer(layer), _color(color) 
 	{
-		if(root)
-			_root->init(); 
 	}
 
 	Renderer::~Renderer()
@@ -24,7 +22,13 @@ namespace Temporal
 
 	void Renderer::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::SET_COLOR)
+		if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile);
+			if(!_root)
+				_root = new SceneNode();
+		}
+		else if(message.getID() == MessageID::SET_COLOR)
 		{
 			const Color& color = *static_cast<Color*>(message.getParam());
 			_color.setColor(color);
@@ -57,7 +61,7 @@ namespace Temporal
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 			if(entityOrientation != Side::RIGHT)
 				glScalef(-1.0f, 1.0f, 1.0f);
-			Graphics::get().draw(*_root, _color);
+			Graphics::get().draw(*_root, *_spriteSheet.get(), _color);
 		}
 		glPopMatrix();
 	}

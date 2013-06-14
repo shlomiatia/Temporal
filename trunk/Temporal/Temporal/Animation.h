@@ -20,14 +20,6 @@ namespace Temporal
 		const Vector& getTranslation() const { return _translation; }
 		float getRotation() const { return _rotation; }
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("sprite-group", _spriteGroupId);
-			serializer.serialize("translation", _translation);
-			serializer.serialize("rotation", _rotation);
-			serializer.serialize("duration", _duration);
-		}
 	private:
 		Hash _spriteGroupId;
 		Vector _translation;
@@ -53,19 +45,12 @@ namespace Temporal
 		float getDuration() const { return _duration; }
 		const SampleCollection& get() const { return _samples; }
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("scene-node-id", _sceneNodeId);
-			serializer.serialize("sample", _samples);
-			init();
-		}
+		void init();
+
 	private:
 		Hash _sceneNodeId;
 		SampleCollection _samples;
 		float _duration;
-
-		void init();
 
 		SampleSet(const SampleSet&);
 		SampleSet& operator=(const SampleSet&);
@@ -87,23 +72,14 @@ namespace Temporal
 		bool Rewind() const { return _rewind; }
 		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-			serializer.serialize("repeat", _repeat);
-			serializer.serialize("rewind", _rewind);
-			serializer.serialize("sample-set", _sampleSets);
-			init();
-		}
+		void init();
+
 	private:
 		Hash _id;
 		bool _repeat;
 		bool _rewind;
 		SampleSetCollection _sampleSets;
 		float _duration;
-
-		void init();
 
 		Animation(const Animation&);
 		Animation& operator=(const Animation&);
@@ -117,20 +93,13 @@ namespace Temporal
 	class AnimationSet
 	{
 	public:
-		AnimationSet() : _id(Hash::INVALID) {}
+		AnimationSet() {}
 
-		Hash getId() const { return _id; }
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		const Animation& get(Hash id) const { return *_animations.at(id); }
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("id", _id);
-			serializer.serialize("animation", _animations);
-		}
+		void init();
+		
 	private:
-		Hash _id;
 		AnimationCollection _animations;
 
 		AnimationSet(const AnimationSet&);
