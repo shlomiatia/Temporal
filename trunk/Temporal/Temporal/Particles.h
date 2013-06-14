@@ -39,7 +39,7 @@ namespace Temporal
 	{
 	public:
 		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _vertices(0), _texCoords(0), _birthIndex(0),
-			_spritesheetFile(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
+			_spritesheetFile(0), _textureFile(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
 		~ParticleEmitter();
 
 		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
@@ -48,10 +48,13 @@ namespace Temporal
 		Component* clone() const { return new ParticleEmitter(); }
 
 	private:
-		float _lifetime;
-		float _birthThreshold;
+		char* _textureFile;
 		char* _spritesheetFile;
 		std::shared_ptr<SpriteSheet> _spritesheet;
+		
+		float _lifetime;
+		float _birthThreshold;
+		
 		float _birthRadius;
 		float _velocity;
 		float _directionCenter;

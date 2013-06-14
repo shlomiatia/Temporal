@@ -111,8 +111,11 @@ namespace Temporal
 	void XmlDeserializer::serialize(const char* key, char*& value)
 	{
 		const char* str = _current->ToElement()->Attribute(key);
-		value = new char[strlen(str)+1];
-		strcpy(value, str);
+		if(str)
+		{
+			value = new char[strlen(str)+1];
+			strcpy(value, str);
+		}
 	}
 
 	void XmlDeserializer::serialize(const char* key, Timer& value)

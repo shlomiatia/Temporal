@@ -42,10 +42,10 @@ namespace Temporal
 		}
 		if(Keyboard::get().getKey(Key::Q))
 		{
-			GameStateManager::get().changeState("resources/game-states/entities.xml");
+			//GameStateManager::get().changeState("resources/game-states/entities.xml");
 			//const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 		}	
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
 	}
