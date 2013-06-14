@@ -76,6 +76,24 @@ namespace Temporal
 		return spriteSheetP;
 	}
 
+	const std::shared_ptr<SpriteSheet> ResourceManager::getTexture(const char* file)
+	{
+		Hash id = Hash(file);
+
+		SpriteSheetIterator result = _spritesheets.find(id);
+        if(result != _spritesheets.end())
+        {
+            return result->second;
+        }
+
+		SpriteSheet* spriteSheet = new SpriteSheet(const_cast<char*>(file));
+		std::shared_ptr<SpriteSheet> spriteSheetP(spriteSheet);
+		_spritesheets[id] = spriteSheetP;
+
+		return spriteSheetP;
+	}
+
+
 	const std::shared_ptr<AnimationSet> ResourceManager::getAnimationSet(const char* file)
 	{
 		Hash id = Hash(file);

@@ -60,6 +60,7 @@ namespace Temporal
 	class SpriteSheet
 	{
 	public:
+		explicit SpriteSheet(char* textureFile);
 		explicit SpriteSheet(const Texture* texture = 0, Side::Enum orientation = Side::RIGHT) :
 			_textureFile(0), _texture(texture), _orientation(orientation) {}
 		~SpriteSheet();

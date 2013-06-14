@@ -26,6 +26,17 @@ namespace Temporal
 		return _sprites.size();
 	}
 
+	SpriteSheet::SpriteSheet(char* textureFile)
+	{
+		_textureFile = textureFile;
+		init();
+		SpriteGroup* spriteGroup = new SpriteGroup();
+		add(spriteGroup);
+		Vector radius = _texture->getSize().toVector() / 2.0f;
+		Sprite* sprite = new Sprite(AABB(radius, radius));
+		spriteGroup->add(sprite);
+	}
+
 	SpriteSheet::~SpriteSheet()
 	{
 		delete _texture;
@@ -46,13 +57,5 @@ namespace Temporal
 	void SpriteSheet::init()
 	{
 		_texture = Texture::load(_textureFile);
-		if(_spriteGroups.size() == 0)
-		{
-			SpriteGroup* spriteGroup = new SpriteGroup();
-			add(spriteGroup);
-			Vector radius = _texture->getSize().toVector() / 2.0f;
-			Sprite* sprite = new Sprite(AABB(radius, radius));
-			spriteGroup->add(sprite);
-		}
 	}
 }

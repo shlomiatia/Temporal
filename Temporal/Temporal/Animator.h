@@ -33,8 +33,8 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		 Animator(const char* animationSetId = 0, Hash animationId = Hash::INVALID) :
-			_animationSetFile(_animationSetFile), _animationId(animationId) {}
+		 Animator(char* animationSetFile = 0, Hash animationId = Hash::INVALID) :
+			_animationSetFile(animationSetFile), _animationId(animationId) {}
 		
 		ComponentType::Enum getType() const { return ComponentType::ANIMATOR; }
 		void handleMessage(Message& message);

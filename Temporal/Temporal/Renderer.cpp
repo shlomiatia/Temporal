@@ -10,8 +10,8 @@
 
 namespace Temporal
 {
-	Renderer::Renderer(SceneNode* root, LayerType::Enum layer, Color color) :
-		_root(root), _layer(layer), _color(color) 
+	Renderer::Renderer(char* textueFile, char* spritesheetFile, SceneNode* root, LayerType::Enum layer, Color color) :
+		_spriteSheetFile(spritesheetFile), _textureFile(textueFile), _spriteSheet(0), _root(root), _layer(layer), _color(color) 
 	{
 	}
 
@@ -24,7 +24,10 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile);
+			if(_spriteSheetFile)
+				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile);
+			else
+				_spriteSheet = ResourceManager::get().getTexture(_textureFile);
 			if(!_root)
 				_root = new SceneNode();
 		}
@@ -68,7 +71,8 @@ namespace Temporal
 
 	Component* Renderer::clone() const
 	{
-		return new Renderer(_root->clone(), _layer, _color);
+		SceneNode* sceneNodeClone = _root == 0 ? 0 : _root->clone();
+		return new Renderer(_textureFile, _spriteSheetFile, sceneNodeClone, _layer, _color);
 	}
 
 }

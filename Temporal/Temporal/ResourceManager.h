@@ -38,8 +38,10 @@ namespace Temporal
 
 		void queueLoadGameState(const char* gameStateFile);
 		GameState* loadGameState(const char* gameStateFile);
+		void collectGarbage();
 
 		const std::shared_ptr<SpriteSheet> getSpritesheet(const char* file);
+		const std::shared_ptr<SpriteSheet> getTexture(const char* file);
 		const std::shared_ptr<AnimationSet> getAnimationSet(const char* file);
 		const std::shared_ptr<FTFont> getFont(const char* name, unsigned int size);
 

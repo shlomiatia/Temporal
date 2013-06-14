@@ -14,7 +14,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
+		explicit Renderer(char* textueFile = 0, char* spritesheetFile = 0, SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
 		~Renderer();
 
 		SceneNode& getRoot() const { return *_root; }
@@ -24,6 +24,7 @@ namespace Temporal
 		Component* clone() const;
 
 	private:
+		char* _textureFile;
 		char* _spriteSheetFile;
 		std::shared_ptr<SpriteSheet> _spriteSheet;
 		SceneNode* _root;
