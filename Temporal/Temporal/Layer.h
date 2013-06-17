@@ -2,6 +2,8 @@
 #define LAYER_H
 
 #include "GameState.h"
+#include "Vector.h"
+#include "Color.h"
 #include <vector>
 
 namespace Temporal
@@ -48,17 +50,22 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() {};
+		LayersManager() : _cameraSize(Vector::Zero), _ambientColor(Color::White) {};
 		~LayersManager();
 
 		void init(GameState* gameState);
 
 		void draw();
 	private:
+		Vector _cameraSize;
+		Color _ambientColor;
+
 		LayerCollection _layers;
 
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);
+
+		friend class SerializationAccess;
 	};
 
 	class SpriteLayer : public Layer

@@ -45,7 +45,7 @@ namespace Temporal
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, image->format->BytesPerPixel, image->w, image->h, 0, texture_format, GL_UNSIGNED_BYTE, image->pixels);
-		Size size(static_cast<float>(image->w), static_cast<float>(image->h));
+		Vector size(static_cast<float>(image->w), static_cast<float>(image->h));
 		const Texture* result(new Texture(id, size));
 
 		Graphics::get().validate();
@@ -53,7 +53,7 @@ namespace Temporal
 		return result;
 	}
 
-	const Texture* Texture::load(const Size& size)
+	const Texture* Texture::load(const Vector& size)
 	{
 		GLuint id;
 		glGenTextures(1, &id);
@@ -63,8 +63,8 @@ namespace Temporal
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		unsigned int* data = new unsigned int[((static_cast<int>(size.getWidth()) * static_cast<int>(size.getHeight()))* 4 * sizeof(unsigned int))];
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, static_cast<int>(size.getWidth()), static_cast<int>(size.getHeight()), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		unsigned int* data = new unsigned int[((static_cast<int>(size.getX()) * static_cast<int>(size.getY()))* 4 * sizeof(unsigned int))];
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, static_cast<int>(size.getX()), static_cast<int>(size.getY()), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		const Texture* result(new Texture(id, size));
 		Graphics::get().validate();
 		delete data;

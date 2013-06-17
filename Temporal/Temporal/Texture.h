@@ -9,16 +9,16 @@ namespace Temporal
 	{
 	public:
 		static const Texture* load(const char* path);
-		static const Texture* load(const Size& size);
+		static const Texture* load(const Vector& size);
 		~Texture();
 
 		unsigned int getID() const { return _id; }
-		const Size& getSize() const { return _size; }
+		const Vector& getSize() const { return _size; }
 	private:
 		const unsigned int _id;
-		const Size _size;
+		const Vector _size;
 
-		Texture(unsigned int id, const Size& size) : _id(id), _size(size) {}
+		Texture(unsigned int id, const Vector& size) : _id(id), _size(size) {}
 
 		Texture(const Texture&);
 		Texture& operator=(const Texture&);

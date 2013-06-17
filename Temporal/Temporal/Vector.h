@@ -83,24 +83,5 @@ namespace Temporal
 	inline Vector operator*(const Vector& vector, float scalar) { return Vector(vector.getX() * scalar, vector.getY() * scalar); }
 	inline Vector operator*(float scalar, const Vector& vector) { return vector * scalar; }
 	inline Vector operator/(const Vector& vector, float scalar) { return vector * (1.0f / scalar); }
-
-	class Size
-	{
-	public:
-		static const Size Zero;
-
-		Size(float width, float height) : _width(width), _height(height) {}
-
-		float getWidth() const { return _width; }
-		void setWidth(float width) { _width = width; }
-		float getHeight() const { return _height; }
-		void setHeight(float height) { _height = height; }
-
-		Vector toVector() const { return Vector(getWidth(), getHeight()); }
-
-	private:
-		float _width;
-		float _height;
-	};
 }
 #endif

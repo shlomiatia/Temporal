@@ -26,7 +26,8 @@ namespace Temporal
 		float getA() const { return _a; }
 		void setA(float a) { _a = a; }
 
-		void setColor(const Color& color);
+		bool operator==(const Color& color) const { return getR() == color.getR() && getG() == color.getG() && getB() == color.getB() && getA() == color.getA(); }
+		bool operator!=(const Color& color) const { return !(*this == color); }
 		
 	private:
 		float _r;

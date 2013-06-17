@@ -10,11 +10,11 @@ namespace Temporal
 	{
 		void* result = _manager->getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
-		const Size& cameraSize = Graphics::get().getLogicalView();
-		float cameraWidth = cameraSize.getWidth();
-		float cameraHeight = cameraSize.getHeight();
-		float levelWidth = _levelSize.getWidth();
-		float levelHeight = _levelSize.getHeight();
+		const Vector& cameraSize = Graphics::get().getLogicalView();
+		float cameraWidth = cameraSize.getX();
+		float cameraHeight = cameraSize.getY();
+		float levelWidth = _levelSize.getX();
+		float levelHeight = _levelSize.getY();
 		float cameraLeftPosition = playerPosition.getX() -  cameraWidth/ 2.0f;
 		cameraLeftPosition = cameraLeftPosition + cameraWidth < levelWidth ? cameraLeftPosition : (levelWidth-cameraWidth);
 		cameraLeftPosition = cameraLeftPosition < 0.0f ? 0.0f : cameraLeftPosition;

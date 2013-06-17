@@ -1,26 +1,29 @@
 <game-state>
+	<layers-manager isCameraLayer="1" isLightLayer="1">
+		<camera-size x="3840.0" y="720.0" />
+	</layers-manager>
 	<entities-manager>
 		<entity id="ENT_BACKGROUND">
 			<transform>
 				<position x="640" y="360" />
 			</transform>
-			<renderer layer="0" sprite-sheet="resources/spritesheets/bg.xml" />
+			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
 		<entity id="ENT_BACKGROUND2">
 			<transform>
 				<position x="1920" y="360" />
 			</transform>
-			<renderer layer="0" sprite-sheet="resources/spritesheets/bg.xml" />
+			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
 		<entity id="ENT_BACKGROUND3">
 			<transform>
 				<position x="3200" y="360" />
 			</transform>
-			<renderer layer="0" sprite-sheet="resources/spritesheets/bg.xml" />
+			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="512" y="512" />
+				<position x="3000" y="512" />
 			</transform>
 			<collision-filter category="8" />
 			<draw-position>
@@ -62,7 +65,7 @@
 			<animator animation-set="resources/animations/pop.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/pop.xml" />
 			<!--<light />
-			<particle-emitter lifetime="3" birth-threshold="0.5" sprite-sheet="resources/spritesheets/bubble.xml" birth-radius="50" velocity="50" center="180" size="180" />
+			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
 			<player-period period="2" />-->
 		</entity>
 		<entity id="ENT_DOOR">
@@ -194,7 +197,7 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>
+		</entity>-->
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="3000" y="512" />
@@ -223,14 +226,14 @@
 			<action-controller />
 			<animator animation-set="resources/animations/pop.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/pop.xml" />
-			<!--<temporal-echo />
-			<temporal-period period="1" />
-		</entity>-->
+			<temporal-echo />
+			<!--<temporal-period period="1" />-->
+		</entity>
 		<!--<entity id="ENT_LASER">
 			<transform />
 			<collision-filter category="4" />
 			<laser platform="ENT_LOWER_MIDDLE_PLATFORM" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/laser.xml" />
+			<renderer layer="4" texture="resources/textures/laser.png" />
 			<!--<temporal-period period="2" />
 		</entity>-->
 		<entity id="ENT_FLOOR">

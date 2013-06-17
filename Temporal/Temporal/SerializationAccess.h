@@ -20,6 +20,7 @@ namespace Temporal
 	class SampleSet;
 	class Animation;
 	class AnimationSet;
+	class LayersManager;
 	class GameState;
 	class EntitiesManager;
 	class Entity;
@@ -65,7 +66,7 @@ namespace Temporal
 			serializer.serialize("x", vector._x);
 			serializer.serialize("y", vector._y);
 		}
-		
+
 		template<class T>
 		static void serialize(const char* key, AABB& aabb, T& serializer)
 		{
@@ -169,12 +170,20 @@ namespace Temporal
 		static void serialize(const char* key, GameState& gameState, T& serializer)
 		{
 			serializer.serialize("entities-manager", *gameState._entitiesManager);
+			serializer.serialize("layers-manager", *gameState._layersManager);
 		}
 
 		template<class T>
 		static void serialize(const char* key, EntitiesManager& entitiesManager, T& serializer)
 		{
 			serializer.serialize("entity", entitiesManager._entities);
+		}
+
+		template<class T>
+		static void serialize(const char* key, LayersManager& layersManager, T& serializer)
+		{
+			serializer.serialize("camera-size", layersManager._cameraSize);
+			serializer.serialize("ambient-color", layersManager._ambientColor);
 		}
 
 		template<class T>

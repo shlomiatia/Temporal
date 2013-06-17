@@ -8,7 +8,6 @@
 
 namespace Temporal
 {
-	class Size;
 	class Texture;
 
 	class LightGem : public Component

@@ -17,10 +17,10 @@ namespace Temporal
 	{
 		// TODO: Settings
 		bool fullScreen = false;
-		Size resolution = Size(1280.0f, 720.0f);
+		Vector resolution = Vector(1280.0f, 720.0f);
 		float logicalViewHeight = 720.0f;
-		float logicalViewWidth = logicalViewHeight * resolution.getWidth() / resolution.getHeight();
-		_logicalView = Size(logicalViewWidth, logicalViewHeight);
+		float logicalViewWidth = logicalViewHeight * resolution.getX() / resolution.getY();
+		_logicalView = Vector(logicalViewWidth, logicalViewHeight);
 
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0))
 		{
@@ -38,17 +38,17 @@ namespace Temporal
 		int flags = SDL_OPENGL;
 		if (fullScreen) flags |= SDL_FULLSCREEN;
 
-		if (!SDL_SetVideoMode(static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()), BIT_DEPTH, flags))
+		if (!SDL_SetVideoMode(static_cast<int>(resolution.getX()), static_cast<int>(resolution.getY()), BIT_DEPTH, flags))
 		{
 			// ERROR: Error Failed setting video mode
 			abort();
 		}
 		
-		glViewport(0, 0, static_cast<int>(resolution.getWidth()), static_cast<int>(resolution.getHeight()));
+		glViewport(0, 0, static_cast<int>(resolution.getX()), static_cast<int>(resolution.getY()));
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0f, _logicalView.getWidth(), 0.0f, _logicalView.getHeight(), -1.0f, 1.0f);
+		glOrtho(0.0f, _logicalView.getX(), 0.0f, _logicalView.getY(), -1.0f, 1.0f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -154,7 +154,7 @@ namespace Temporal
 
 	void Graphics::draw(const Vector& position, const Texture& texture, const Color& color)
 	{
-		draw(position, texture, AABB(texture.getSize().toVector() / 2.0f, texture.getSize()), color);
+		draw(position, texture, AABB(texture.getSize() / 2.0f, texture.getSize()), color);
 	}
 
 	void Graphics::draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color)
@@ -165,9 +165,9 @@ namespace Temporal
 			glTranslatef(position.getX(), position.getY(), 0.0f);				
 			setColor(color);
 
-			const Size& textureSize = texture.getSize();
-			float textureWidth = textureSize.getWidth();
-			float textureHeight = textureSize.getHeight();
+			const Vector& textureSize = texture.getSize();
+			float textureWidth = textureSize.getX();
+			float textureHeight = textureSize.getY();
 
 			// Images are arranged from top to bottom, and you have to include the last pixel that you don't use
 			float imageLeft = texturePart.getLeft();

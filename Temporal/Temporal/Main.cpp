@@ -6,7 +6,7 @@ using namespace Temporal;
 
 int main(int argc, char* argv[])
 {
-	Game::get().run("resources/game-states/entities.xml");
+	Game::get().run("resources/game-states/loading.xml");
 //	_CrtDumpMemoryLeaks();
 	return 0;
 }

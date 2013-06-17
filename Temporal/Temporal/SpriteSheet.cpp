@@ -32,7 +32,7 @@ namespace Temporal
 		init();
 		SpriteGroup* spriteGroup = new SpriteGroup();
 		add(spriteGroup);
-		Vector radius = _texture->getSize().toVector() / 2.0f;
+		Vector radius = _texture->getSize() / 2.0f;
 		Sprite* sprite = new Sprite(AABB(radius, radius));
 		spriteGroup->add(sprite);
 	}

@@ -22,8 +22,8 @@ namespace Temporal
 			return (instance);
 		}
 
-		const Size& getResolution() const { return _resolution; }
-		const Size& getLogicalView() const { return _logicalView; }
+		const Vector& getResolution() const { return _resolution; }
+		const Vector& getLogicalView() const { return _logicalView; }
 
 		void init();
 		void dispose() const;
@@ -49,10 +49,10 @@ namespace Temporal
 		static const int BIT_DEPTH = 32;
 
 		unsigned int _lastTextureId;
-		Size _resolution;
-		Size _logicalView;
+		Vector _resolution;
+		Vector _logicalView;
 
-		Graphics() : _lastTextureId(0), _resolution(Size::Zero), _logicalView(Size::Zero) {}
+		Graphics() : _lastTextureId(0), _resolution(Vector::Zero), _logicalView(Vector::Zero) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

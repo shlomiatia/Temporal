@@ -15,7 +15,7 @@
 namespace Temporal
 {
 	// BRODER
-	const Size NavigationGraph::MIN_AREA_SIZE = Size(32.0f, 96.0f);
+	const Vector NavigationGraph::MIN_AREA_SIZE = Vector(32.0f, 96.0f);
 
 	NavigationNode::~NavigationNode()
 	{
@@ -193,8 +193,8 @@ namespace Temporal
 				continue;
 			
 			// Create area
-			Vector center = Vector(platform.getCenterX(), platform.getCenterY() + platform.getYRadius() + 1.0f + MIN_AREA_SIZE.getHeight() / 2.0f);
-			float yRadius = MIN_AREA_SIZE.getHeight() / 2.0f;
+			Vector center = Vector(platform.getCenterX(), platform.getCenterY() + platform.getYRadius() + 1.0f + MIN_AREA_SIZE.getY() / 2.0f);
+			float yRadius = MIN_AREA_SIZE.getY() / 2.0f;
 			YABP area = YABP(center, vector, yRadius);
 
 			YABPCollection areas;
@@ -207,7 +207,7 @@ namespace Temporal
 				const YABP& area = *j;
 
 				// Check min width
-				if(area.getSlopedRadius().getLength() * 2.0f >= MIN_AREA_SIZE.getWidth())
+				if(area.getSlopedRadius().getLength() * 2.0f >= MIN_AREA_SIZE.getX())
 					_nodes.push_back(new NavigationNode(area));
 			}
 		}
