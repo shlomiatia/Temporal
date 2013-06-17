@@ -91,7 +91,6 @@ namespace Temporal
 
 		AABB() {}
 		AABB(float centerX, float centerY, float width, float height);
-		AABB(const Vector& center, const Size& size);
 		AABB(const Vector& center, const Vector& radius);
 
 		const Vector& getCenter() const { return _center; }
@@ -140,6 +139,7 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
+	inline AABB AABBS(const Vector& center, const Vector& size) { return AABB(center, size / 2.0f); }
 	inline AABB AABBLB(float left, float bottom, float width, float height) { return AABB(left + width / 2.0f, bottom + height / 2.0f, width, height); }
 	inline AABB AABBCB(float centerX, float bottom, float width, float height) { return AABB(centerX, bottom + height / 2.0f, width, height); }
 	inline AABB AABBLC(float left, float centerY, float width, float height) { return AABB(left + width / 2.0f, centerY, width, height); }

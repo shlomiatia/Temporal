@@ -14,6 +14,7 @@ namespace Temporal
 	{
 		Graphics::get().init();
 		Input::get().init();
+		IOThread::get().init();
 		ResourceManager::get().init();
 		GameStateManager::get().init(gameState);
 	}
@@ -22,6 +23,7 @@ namespace Temporal
 	{
 		GameStateManager::get().dispose();
 		ResourceManager::get().dispose();
+		IOThread::get().dispose();
 		Input::get().dispose();
 		Graphics::get().dispose();
 	}

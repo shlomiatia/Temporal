@@ -124,7 +124,7 @@ namespace Temporal
 		int length = getLength();
 		glBindTexture(GL_TEXTURE_2D, _spritesheet->getTexture().getID());
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector radius = _spritesheet->getTexture().getSize().toVector() / 2.0f;
+		Vector radius = _spritesheet->getTexture().getSize() / 2.0f;
 		const int PARTICLE_VERTICES = 8;
 		int vertexIndex = 0;
 		for(int i = 0; i < length; ++i)

@@ -89,7 +89,7 @@ namespace Temporal
 		void draw() const;
 
 	private:
-		static const Size MIN_AREA_SIZE;
+		static const Vector MIN_AREA_SIZE;
 
 		NavigationNodeCollection _nodes; 
 

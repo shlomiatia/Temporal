@@ -41,12 +41,6 @@ namespace Temporal
 		validate();
 	}
 
-	AABB::AABB(const Vector& center, const Size& size)
-		: _center(center), _radius(size.toVector() / 2.0f)
-	{
-		validate();
-	}
-
 	AABB::AABB(const Vector& center, const Vector& radius)
 		: _center(center), _radius(radius)
 	{

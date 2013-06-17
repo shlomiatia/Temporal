@@ -221,7 +221,7 @@ namespace Temporal
 	void LightLayer::preDraw() const
 	{
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
-		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getWidth()), static_cast<int>(_texture->getSize().getHeight()), 0);
+		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getX()), static_cast<int>(_texture->getSize().getY()), 0);
 
 		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -250,9 +250,9 @@ namespace Temporal
 			glBindTexture(GL_TEXTURE_2D, _texture->getID());
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			GLfloat screenVertices[] = { 0.0f, 0.0f,
-										 0.0f, _texture->getSize().getHeight(),
-										 _texture->getSize().getWidth(), _texture->getSize().getHeight(),
-										 _texture->getSize().getWidth(), 0.0f };
+										 0.0f, _texture->getSize().getY(),
+										 _texture->getSize().getX(), _texture->getSize().getY(),
+										 _texture->getSize().getX(), 0.0f };
 
 			GLfloat textureVertices[] = { 0.0f, 0.0f,
 										  0.0f, 1.0f,

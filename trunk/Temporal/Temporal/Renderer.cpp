@@ -34,7 +34,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
 			const Color& color = *static_cast<Color*>(message.getParam());
-			_color.setColor(color);
+			_color = color;
 		}
 		else if(message.getID() == MessageID::SET_ALPHA)
 		{

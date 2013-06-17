@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "Log.h"
 #include "Camera.h"
+#include "Lighting.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -18,12 +19,11 @@ namespace Temporal
 	{
 		GameStateComponent::init(gameState);
 
-		// TODO: Settings
-		Size levelSize = Size(3840.0f, 720.0f);
-		
-		_layers.push_back(new Camera(levelSize));
+		if(_cameraSize != Vector::Zero)
+			_layers.push_back(new Camera(_cameraSize));
 		_layers.push_back(new SpriteLayer());
-		//_layers.push_back(new LightLayer(Color(0.1f, 0.1f, 0.1f)));
+		if(_ambientColor != Color::White)
+			_layers.push_back(new LightLayer(_ambientColor));
 		_layers.push_back(new DebugLayer());
 		_layers.push_back(new GUILayer());
 

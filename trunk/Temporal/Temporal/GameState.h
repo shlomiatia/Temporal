@@ -1,7 +1,11 @@
 #ifndef GAMESTATEMANAGER_H
 #define GAMESTATEMANAGER_H
 
+#include "Hash.h"
+#include "ResourceManager.h"
 #include <vector>
+#include <unordered_map>
+#include <string>
 
 namespace Temporal
 {
@@ -24,6 +28,8 @@ namespace Temporal
 		void init();
 		void update(float framePeriod);
 		void draw() const;
+
+		void loaded();
 		
 	private:
 		Grid* _grid;
@@ -51,10 +57,13 @@ namespace Temporal
 		GameStateComponent& operator=(const GameStateComponent&);
 	};
 
-	typedef std::vector<GameState*> GameStateCollection;
+	typedef std::unordered_map<Hash, GameState*> GameStateCollection;
 	typedef GameStateCollection::const_iterator GameStateIterator;
+	typedef std::vector<std::string> StringCollection;
+	typedef StringCollection::const_iterator StringIterator;
 
-	class GameStateManager
+
+	class GameStateManager : public IOJob
 	{
 	public:
 		static GameStateManager& get()
@@ -69,19 +78,24 @@ namespace Temporal
 		void update(float framePeriod);
 		void draw() const;
 
-		void gameStateReady(GameState* next) { _next = next; }
+		void load(StringCollection files);
+		void unload(StringCollection files);
+		void show(const char* gameStateFile);
 
-		void changeState(const char* gameState);
-		void pushState(const char* gameState);
-		void popState();
+		void* load();
+		void loaded(void* param);
+		void unload();
 	private:
 		GameStateCollection _states;
-		bool _pop;
-		GameState* _next;
+		
+		bool _unload;
+		StringCollection _files;
+		Hash _currentStateId;
+		Hash _nextStateId;
 
-		GameStateManager() : _pop(false), _next(0) {};
+		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false) {};
 
-		GameState* getTopState() const;
+		GameState* getCurrentState() const;
 
 		GameStateManager(const GameStateManager&);
 		GameStateManager& operator=(const GameStateManager&);
