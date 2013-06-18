@@ -29,7 +29,7 @@
 
 namespace Temporal
 {
-	void SerializationAccess::serialize(const char* key, Component*& component, MemoryBaseSerializer& serializer)
+	void SerializationAccess::serialize(const char* key, Component*& component, BaseBinarySerializer& serializer)
 	{
 		switch(component->getType())
 		{
@@ -115,7 +115,7 @@ namespace Temporal
 			abort();
 	}
 
-	void SerializationAccess::serialize(const char* key, Fixture& fixture, MemoryBaseSerializer& serializer)
+	void SerializationAccess::serialize(const char* key, Fixture& fixture, BaseBinarySerializer& serializer)
 	{
 	}
 

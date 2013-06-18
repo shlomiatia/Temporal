@@ -7,8 +7,8 @@
 namespace Temporal
 {
 	class Entity;
-	class MemoryStream;
-	typedef std::vector<MemoryStream*> EchoCollection;
+	class Stream;
+	typedef std::vector<Stream*> EchoCollection;
 	typedef EchoCollection::const_iterator EchoIterator;
 	
 	class TemporalEcho : public Component

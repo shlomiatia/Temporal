@@ -24,10 +24,11 @@ namespace Temporal
 	 *********************************************************************************************/
 
 	// Memory stream
-	class MemoryStream
+	class Stream
 	{
 	public:
-		MemoryStream() {};
+		Stream(std::iostream* buffer) : _buffer(buffer) {};
+		virtual ~Stream() { delete _buffer; }
 
 		void write(int value);
 		void write(unsigned int value);
@@ -37,11 +38,26 @@ namespace Temporal
 		unsigned int readUInt();
 		float readFloat();
 		bool readBool();
-	private:
-		std::stringstream _buffer;
 
-		MemoryStream(const MemoryStream&);
-		MemoryStream& operator=(const MemoryStream&);
+	protected:
+		std::iostream* _buffer;
+
+	private:
+
+		Stream(const Stream&);
+		Stream& operator=(const Stream&);
+	};
+
+	class MemoryStream : public Stream
+	{
+	public:
+		MemoryStream();
+	};
+
+	class FileStream : public Stream
+	{
+	public:
+		FileStream(const char* file);
 	};
 	
 	class SerializationAccess;
@@ -49,10 +65,10 @@ namespace Temporal
 	class Timer;
 
 	// Memory base serializer
-	class MemoryBaseSerializer
+	class BaseBinarySerializer
 	{
 	public:
-		virtual ~MemoryBaseSerializer() {}
+		virtual ~BaseBinarySerializer() {}
 		virtual void serialize(const char* key, int& value) = 0;
 		virtual void serialize(const char* key, unsigned int& value) = 0;
 		virtual void serialize(const char* key, float& value) = 0;
@@ -83,20 +99,20 @@ namespace Temporal
 				SerializationAccess::serialize(key, *i, *this);
 		}
 	protected:
-		MemoryStream* _buffer;
+		Stream* _buffer;
 
-		MemoryBaseSerializer(MemoryStream* buffer) : _buffer(buffer) {}
+		BaseBinarySerializer(Stream* buffer) : _buffer(buffer) {}
 
 	private:
-		MemoryBaseSerializer(const MemoryBaseSerializer&);
-		MemoryBaseSerializer& operator=(const MemoryBaseSerializer&);
+		BaseBinarySerializer(const BaseBinarySerializer&);
+		BaseBinarySerializer& operator=(const BaseBinarySerializer&);
 	};
 
 	// Memory serializer;
-	class MemorySerializer : public MemoryBaseSerializer
+	class BinarySerializer : public BaseBinarySerializer
 	{
 	public:
-		MemorySerializer(MemoryStream* buffer) : MemoryBaseSerializer(buffer) {};
+		BinarySerializer(Stream* buffer) : BaseBinarySerializer(buffer) {};
 
 		void serialize(const char* key, int& value) { _buffer->write(value); }
 		void serialize(const char* key, unsigned int& value) { _buffer->write(value); }
@@ -110,27 +126,27 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			MemoryBaseSerializer::serialize(key,*value);
+			BaseBinarySerializer::serialize(key,*value);
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			MemoryBaseSerializer::serialize(key, value);
+			BaseBinarySerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			MemoryBaseSerializer::serialize(key, value);
+			BaseBinarySerializer::serialize(key, value);
 		}
 	};
 
 	// Memory deserializer
-	class MemoryDeserializer : public MemoryBaseSerializer
+	class BinaryDeserializer : public BaseBinarySerializer
 	{
 	public:
-		MemoryDeserializer(MemoryStream* buffer) : MemoryBaseSerializer(buffer) {};
+		BinaryDeserializer(Stream* buffer) : BaseBinarySerializer(buffer) {};
 
 		void serialize(const char* key, int& value) { value = _buffer->readInt(); }
 		void serialize(const char* key, unsigned int& value) { value = _buffer->readUInt(); }
@@ -144,19 +160,19 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			MemoryBaseSerializer::serialize(key,*value);
+			BaseBinarySerializer::serialize(key,*value);
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			MemoryBaseSerializer::serialize(key, value);
+			BaseBinarySerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			MemoryBaseSerializer::serialize(key, value);
+			BaseBinarySerializer::serialize(key, value);
 		}
 	};
 

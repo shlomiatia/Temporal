@@ -29,14 +29,14 @@ namespace Temporal
 		if(_echoReady)
 		{
 			EchoIterator first = _echoesData.begin();
-			MemoryStream* deserialization = *first;
-			MemoryDeserializer deserializer(deserialization);
+			Stream* deserialization = *first;
+			BinaryDeserializer deserializer(deserialization);
 			deserializer.serialize("entity", _echo);
 			delete deserialization;
 			_echoesData.erase(first);
 		}
-		MemoryStream* serialization = new MemoryStream();
-		MemorySerializer serializer(serialization);
+		Stream* serialization = new MemoryStream();
+		BinarySerializer serializer(serialization);
 		serializer.serialize("entity", getEntity());
 		_echoesData.push_back(serialization);
 	}
@@ -46,8 +46,8 @@ namespace Temporal
 		if(_echoReady)
 		{
 			EchoIterator first = _echoesData.begin();
-			MemoryStream* deserialization = *first;
-			MemoryDeserializer deserializer(deserialization);
+			Stream* deserialization = *first;
+			BinaryDeserializer deserializer(deserialization);
 			deserializer.serialize("entity", getEntity());
 			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
 			{
