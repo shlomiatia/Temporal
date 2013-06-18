@@ -56,8 +56,8 @@ namespace Temporal
 		const Color AMBIENT_COLOR;
 		const Texture* _texture;
 
-		void preDraw() const;
-		void postDraw() const;
+		void preDraw();
+		void postDraw();
 
 		LightLayer(const LightLayer&);
 		LightLayer& operator=(const LightLayer&);

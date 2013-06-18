@@ -37,9 +37,11 @@ namespace Temporal
 		void init(LayersManager* manager) { _manager = manager; }
 
 	protected:
-		LayersManager* _manager;
+		LayersManager& getLayersManager() { return *_manager; }
 
 	private:
+		LayersManager* _manager;
+
 		Layer(const Layer&);
 		Layer& operator=(const Layer&);
 	};
@@ -50,16 +52,16 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() : _cameraSize(Vector::Zero), _ambientColor(Color::White) {};
+		LayersManager() : _camera(false), _ambientColor(Color::White) {};
 		~LayersManager();
 
 		void init(GameState* gameState);
 
 		void draw();
 	private:
-		Vector _cameraSize;
 		Color _ambientColor;
 
+		bool _camera;
 		LayerCollection _layers;
 
 		LayersManager(const LayersManager&);

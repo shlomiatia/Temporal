@@ -19,8 +19,9 @@ namespace Temporal
 	{
 		GameStateComponent::init(gameState);
 
-		if(_cameraSize != Vector::Zero)
-			_layers.push_back(new Camera(_cameraSize));
+		
+		if(_camera)
+			_layers.push_back(new Camera());
 		_layers.push_back(new SpriteLayer());
 		if(_ambientColor != Color::White)
 			_layers.push_back(new LightLayer(_ambientColor));
@@ -51,14 +52,14 @@ namespace Temporal
 	{
 		
 		for(int i = LayerType::FARTHEST; i <= LayerType::NEAREST; ++i)
-			_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
+			getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &i));
 	}
 
 	void GUILayer::draw()
 	{
 		glLoadIdentity();
 		LayerType::Enum guiLayer = LayerType::GUI;
-		_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
+		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW, &guiLayer));
 	}
 
 	void DebugLayer::drawFPS()
@@ -86,7 +87,7 @@ namespace Temporal
 	void DebugLayer::draw()
 	{
 		ComponentType::Enum filter = ComponentType::STATIC_BODY;
-		_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
+		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
 		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();

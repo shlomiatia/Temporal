@@ -33,10 +33,12 @@ namespace Temporal
 	class Grid : public GameStateComponent
 	{
 	public:
-		Grid() {};
+		Grid() : _grid(0), _worldSize(Vector::Zero), _tileSize(0.0f), _gridWidth(0), _gridHeight(0) {};
 		~Grid();
 
 		virtual void init(GameState* gameState);
+
+		const Vector& getWorldSize() const { return _worldSize; }
 
 		void add(const Fixture* body);
 		void update(Fixture* body);
@@ -48,6 +50,7 @@ namespace Temporal
 
 	private:
 		FixtureCollection** _grid;
+		Vector _worldSize;
 		float _tileSize;
 		int _gridWidth;
 		int _gridHeight;
@@ -63,6 +66,8 @@ namespace Temporal
 
 		Grid(const Grid&);
 		Grid& operator=(const Grid&);
+
+		friend class SerializationAccess;
 	};
 }
 

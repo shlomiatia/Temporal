@@ -7,7 +7,8 @@
 #include "SerializationAccess.h"
 #include "GameState.h"
 #include "EntitySystem.h"
-#include "Log.h"
+#include "Grid.h"
+#include "Settings.h"
 #include <ftgl/ftgl.h>
 #include <windows.h>
 #include <SDL_syswm.h>
@@ -70,6 +71,14 @@ namespace Temporal
 		_semaphore.notify();
 	}
 
+	Settings* IOAPI::loadSettings(const char* settingsFile)
+	{
+		XmlDeserializer deserializer(settingsFile);
+		Settings* settings = new Settings();
+		deserializer.serialize("settings", *settings);
+		return settings;
+	}
+
 	GameState* IOAPI::loadGameState(const char* gameStateFile)
 	{
 		XmlDeserializer deserializer(gameStateFile);
@@ -84,10 +93,10 @@ namespace Temporal
 		Hash id = Hash(file);
 
 		SpriteSheetIterator result = _spritesheets.find(id);
-        if(result != _spritesheets.end())
-        {
-            return result->second;
-        }
+		if(result != _spritesheets.end())
+		{
+			return result->second;
+		}
 
 		XmlDeserializer deserializer(file);
 		SpriteSheet* spriteSheet = new SpriteSheet();
@@ -104,10 +113,10 @@ namespace Temporal
 		Hash id = Hash(file);
 
 		SpriteSheetIterator result = _spritesheets.find(id);
-        if(result != _spritesheets.end())
-        {
-            return result->second;
-        }
+		if(result != _spritesheets.end())
+		{
+			return result->second;
+		}
 
 		SpriteSheet* spriteSheet = new SpriteSheet(const_cast<char*>(file));
 		std::shared_ptr<SpriteSheet> spriteSheetP(spriteSheet);
@@ -122,10 +131,10 @@ namespace Temporal
 		Hash id = Hash(file);
 
 		AnimationSetIterator result = _animationSets.find(id);
-        if(result != _animationSets.end())
-        {
-            return result->second;
-        }
+		if(result != _animationSets.end())
+		{
+			return result->second;
+		}
 
 		XmlDeserializer deserializer(file);
 		AnimationSet* animationSet = new AnimationSet();
@@ -144,21 +153,21 @@ namespace Temporal
 		Hash id(stream.str().c_str());
 
 		FontIterator result = _fonts.find(id);
-        if(result != _fonts.end())
-        {
-            return result->second;
-        }
+		if(result != _fonts.end())
+		{
+			return result->second;
+		}
 
 		FTFont* font = new FTTextureFont(name);
 
-        if(!font->FaceSize(size))
-        {
-            abort();
-        }
+		if(!font->FaceSize(size))
+		{
+			abort();
+		}
 		std::shared_ptr<FTFont> fontP(font);
-        _fonts[id] = fontP;
+		_fonts[id] = fontP;
 
-        return fontP;
+		return fontP;
 	}
 
 	void ResourceManager::collectGarbage()

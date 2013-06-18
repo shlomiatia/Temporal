@@ -11,6 +11,7 @@ class FTFont;
 namespace Temporal
 {
 	class GameState;
+	class Settings;
 	class SpriteSheet;
 	class AnimationSet;
 	class Texture;
@@ -21,7 +22,6 @@ namespace Temporal
 	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
 	typedef std::unordered_map<Hash, std::shared_ptr<FTFont>> FontCollection;
 	typedef FontCollection::const_iterator FontIterator;
-
 
 	class IOJob
 	{
@@ -58,9 +58,13 @@ namespace Temporal
 		IOThread& operator=(const IOThread&);
 	};
 
+	typedef std::unordered_map<std::string, std::string> StringMap;
+	typedef StringMap::const_iterator StringMapIterator;
+
 	class IOAPI
 	{
 	public:
+		static Settings* loadSettings(const char* settingsFile);
 		static GameState* loadGameState(const char* gameStateFile);
 	private:
 	};

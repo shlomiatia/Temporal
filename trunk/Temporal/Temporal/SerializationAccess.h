@@ -3,6 +3,7 @@
 
 namespace Temporal
 {
+	class Settings;
 	class XmlDeserializer;
 	class MemoryBaseSerializer;
 	class Component;
@@ -20,6 +21,7 @@ namespace Temporal
 	class SampleSet;
 	class Animation;
 	class AnimationSet;
+	class Grid;
 	class LayersManager;
 	class GameState;
 	class EntitiesManager;
@@ -167,10 +169,26 @@ namespace Temporal
 
 		// Entity objects
 		template<class T>
+		static void serialize(const char* key, Settings& settings, T& serializer)
+		{
+			serializer.serialize("resolution", settings._resolution);
+			serializer.serialize("view-y", settings._viewY);
+			serializer.serialize("fullscreen", settings._fullscreen);
+		}
+
+		template<class T>
 		static void serialize(const char* key, GameState& gameState, T& serializer)
 		{
+			serializer.serialize("grid", *gameState._grid);
 			serializer.serialize("entities-manager", *gameState._entitiesManager);
 			serializer.serialize("layers-manager", *gameState._layersManager);
+		}
+
+		template<class T>
+		static void serialize(const char* key, Grid& grid, T& serializer)
+		{
+			serializer.serialize("tile-size", grid._tileSize);
+			serializer.serialize("world-size", grid._worldSize);
 		}
 
 		template<class T>
@@ -182,7 +200,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, LayersManager& layersManager, T& serializer)
 		{
-			serializer.serialize("camera-size", layersManager._cameraSize);
+			serializer.serialize("camera", layersManager._camera);
 			serializer.serialize("ambient-color", layersManager._ambientColor);
 		}
 
