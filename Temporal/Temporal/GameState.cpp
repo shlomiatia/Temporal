@@ -43,15 +43,18 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		if(Keyboard::get().getKey(Key::Q) && !b)
+		if(Keyboard::get().getKey(Key::Q))
 		{
 			//const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 			//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			//getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-			StringCollection files;
-			files.push_back(std::string("resources/game-states/entities.xml"));
-			GameStateManager::get().load(files);
-			b = true;
+			getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			if(!b)
+			{
+				StringCollection files;
+				files.push_back(std::string("resources/game-states/entities.xml"));
+				GameStateManager::get().load(files);
+				b = true;
+			}
 		}	
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
 	}

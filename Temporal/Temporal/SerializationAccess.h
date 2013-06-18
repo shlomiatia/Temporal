@@ -5,7 +5,7 @@ namespace Temporal
 {
 	class Settings;
 	class XmlDeserializer;
-	class MemoryBaseSerializer;
+	class BaseBinarySerializer;
 	class Component;
 	class Vector;
 	class AABB;
@@ -50,7 +50,7 @@ namespace Temporal
 	{
 	public:
 		// Factory methods
-		static void serialize(const char* key, Component*& component, MemoryBaseSerializer& serializer);
+		static void serialize(const char* key, Component*& component, BaseBinarySerializer& serializer);
 
 		template<class T>
 		static void serialize(const char* key, T*& value, XmlDeserializer& serializer)
@@ -91,7 +91,7 @@ namespace Temporal
 			serializer.serialize("y-radius", yabp._yRadius);
 		}
 		
-		static void serialize(const char* key, Fixture& fixture, MemoryBaseSerializer& serializer);
+		static void serialize(const char* key, Fixture& fixture, BaseBinarySerializer& serializer);
 		static void serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer);
 
 		// Graphics objects

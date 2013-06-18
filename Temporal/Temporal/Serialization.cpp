@@ -3,69 +3,79 @@
 #include "Hash.h"
 #include "Timer.h"
 #include <cstring>
+#include <fstream>
 
 namespace Temporal
 {
 	/**********************************************************************************************
 	 * Memory serializer
 	 *********************************************************************************************/
-	void MemoryStream::write(int value)
+	void Stream::write(int value)
 	{
-		_buffer.write((const char*)&value, sizeof(int));
+		_buffer->write((const char*)&value, sizeof(int));
 	}
-	void MemoryStream::write(unsigned int value)
+	void Stream::write(unsigned int value)
 	{
-		_buffer.write((const char*)&value, sizeof(unsigned int));
+		_buffer->write((const char*)&value, sizeof(unsigned int));
 	}
-	void MemoryStream::write(float value)
+	void Stream::write(float value)
 	{
-		_buffer.write((const char*)&value, sizeof(float));
+		_buffer->write((const char*)&value, sizeof(float));
 	}
-	void MemoryStream::write(bool value)
+	void Stream::write(bool value)
 	{
-		_buffer.write((const char*)&value, sizeof(bool));
+		_buffer->write((const char*)&value, sizeof(bool));
 	}
-	int MemoryStream::readInt()
+	int Stream::readInt()
 	{
 		int value;
-		_buffer.read((char*)&value, sizeof(int));
+		_buffer->read((char*)&value, sizeof(int));
 		return value;
 	}
-	unsigned int MemoryStream::readUInt()
+	unsigned int Stream::readUInt()
 	{
 		unsigned int value;
-		_buffer.read((char*)&value, sizeof(unsigned int));
+		_buffer->read((char*)&value, sizeof(unsigned int));
 		return value;
 	}
-	float MemoryStream::readFloat()
+	float Stream::readFloat()
 	{
 		float value;
-		_buffer.read((char*)&value, sizeof(float));
+		_buffer->read((char*)&value, sizeof(float));
 		return value;
 	}
-	bool MemoryStream::readBool()
+	bool Stream::readBool()
 	{
 		bool value;
-		_buffer.read((char*)&value, sizeof(bool));
+		_buffer->read((char*)&value, sizeof(bool));
 		return value;
 	}
 
-	void MemorySerializer::serialize(const char* key, Hash& value)
+	MemoryStream::MemoryStream() : Stream(new std::stringstream()) {}
+
+	FileStream::FileStream(const char* file) : Stream(0)
+	{
+		std::fstream* buffer = new std::fstream();
+		buffer->open(file);
+		_buffer = buffer;
+	}
+
+	void BinarySerializer::serialize(const char* key, Hash& value)
 	{
 		_buffer->write(value); 
 	}
 
-	void MemorySerializer::serialize(const char* key, Timer& value)
+	void BinarySerializer::serialize(const char* key, Timer& value)
 	{
 		_buffer->write(value.getElapsedTime());
 	}
 
-	void MemoryDeserializer::serialize(const char* key, Hash& value)
+	void BinaryDeserializer::serialize(const char* key, Hash& value)
 	{
 		value = Hash(_buffer->readUInt()); 
 	}
 
-	void MemoryDeserializer::serialize(const char* key, Timer& value)
+	void BinaryDeserializer::serialize(const char* key, Timer& value)
 	{
 		value.reset(_buffer->readFloat()); 
 	}
