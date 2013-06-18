@@ -188,6 +188,9 @@
     <ClInclude Include="GameState.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

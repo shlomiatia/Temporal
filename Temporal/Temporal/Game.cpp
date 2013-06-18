@@ -12,11 +12,13 @@ namespace Temporal
 
 	void Game::init(const char* gameState)
 	{
-		Graphics::get().init();
+		Settings* settings = IOAPI::loadSettings("resources/settings.xml");
+		Graphics::get().init(*settings);
 		Input::get().init();
 		IOThread::get().init();
 		ResourceManager::get().init();
 		GameStateManager::get().init(gameState);
+		delete settings;
 	}
 
 	void Game::dispose()

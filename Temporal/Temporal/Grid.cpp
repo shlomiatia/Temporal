@@ -18,11 +18,8 @@ namespace Temporal
 	void Grid::init(GameState* gameState)
 	{
 		GameStateComponent::init(gameState);
-		// TODO: Settings
-		Vector levelSize = Vector(3840.0f, 720.0f);
-		_tileSize = 128.0f;
-		_gridWidth = getAxisIndex(levelSize.getX()) + 1;
-		_gridHeight = getAxisIndex(levelSize.getY()) + 1;
+		_gridWidth = getAxisIndex(getWorldSize().getX()) + 1;
+		_gridHeight = getAxisIndex(getWorldSize().getY()) + 1;
 		
 		int size = getSize();
 		_grid = new FixtureCollection*[size];

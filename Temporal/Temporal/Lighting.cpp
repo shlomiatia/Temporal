@@ -214,11 +214,11 @@ namespace Temporal
 	void LightLayer::draw()
 	{
 		preDraw();
-		_manager->getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
+		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
 		postDraw();
 	}
 
-	void LightLayer::preDraw() const
+	void LightLayer::preDraw()
 	{
 		glBindTexture(GL_TEXTURE_2D, _texture->getID()); 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getX()), static_cast<int>(_texture->getSize().getY()), 0);
@@ -229,9 +229,9 @@ namespace Temporal
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void LightLayer::postDraw() const
+	void LightLayer::postDraw()
 	{
-		void* result = _manager->getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		void* result = getLayersManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		float matrix[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
@@ -240,7 +240,7 @@ namespace Temporal
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
-		_manager->getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
+		getLayersManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 
 		glPushMatrix();
 		{

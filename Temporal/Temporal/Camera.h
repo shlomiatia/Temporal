@@ -9,12 +9,10 @@ namespace Temporal
 	class Camera : public Layer
 	{
 	public:
-		Camera(const Vector& levelSize) : _levelSize(levelSize) {}
+		Camera() {}
 		void draw();
 		
 	private:
-		Vector _levelSize;
-
 		Camera(const Camera&);
 		Camera& operator=(const Camera&);
 	};

@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "SceneNode.h"
 #include "Shapes.h"
+#include "Settings.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -13,14 +14,10 @@ namespace Temporal
 		glColor4f(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
-	void Graphics::init()
+	void Graphics::init(const Settings& settings)
 	{
-		// TODO: Settings
-		bool fullScreen = false;
-		Vector resolution = Vector(1280.0f, 720.0f);
-		float logicalViewHeight = 720.0f;
-		float logicalViewWidth = logicalViewHeight * resolution.getX() / resolution.getY();
-		_logicalView = Vector(logicalViewWidth, logicalViewHeight);
+		float logicalViewWidth = settings.getViewY() * settings.getResolution().getX() / settings.getResolution().getY();
+		_logicalView = Vector(logicalViewWidth, settings.getViewY());
 
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0))
 		{
@@ -36,15 +33,15 @@ namespace Temporal
 			abort();
 		}
 		int flags = SDL_OPENGL;
-		if (fullScreen) flags |= SDL_FULLSCREEN;
+		if (settings.isFullscreen()) flags |= SDL_FULLSCREEN;
 
-		if (!SDL_SetVideoMode(static_cast<int>(resolution.getX()), static_cast<int>(resolution.getY()), BIT_DEPTH, flags))
+		if (!SDL_SetVideoMode(static_cast<int>(settings.getResolution().getX()), static_cast<int>(settings.getResolution().getY()), BIT_DEPTH, flags))
 		{
 			// ERROR: Error Failed setting video mode
 			abort();
 		}
 		
-		glViewport(0, 0, static_cast<int>(resolution.getX()), static_cast<int>(resolution.getY()));
+		glViewport(0, 0, static_cast<int>(settings.getResolution().getX()), static_cast<int>(settings.getResolution().getY()));
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();

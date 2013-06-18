@@ -6,6 +6,7 @@
 
 namespace Temporal
 {
+	class Settings;
 	class SceneNode;
 	class SpriteSheet;
 	class AABB;
@@ -25,7 +26,7 @@ namespace Temporal
 		const Vector& getResolution() const { return _resolution; }
 		const Vector& getLogicalView() const { return _logicalView; }
 
-		void init();
+		void init(const Settings& settings);
 		void dispose() const;
 
 		void setTitle(const char* title) const;
