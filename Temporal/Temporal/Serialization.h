@@ -3,7 +3,6 @@
 #include "tinyxml2.h"
 #include <vector>
 #include <unordered_map>
-#include <sstream>
 
 namespace Temporal
 {
@@ -38,6 +37,7 @@ namespace Temporal
 		unsigned int readUInt();
 		float readFloat();
 		bool readBool();
+		void copy(Stream& other);
 
 	protected:
 		std::iostream* _buffer;

@@ -33,7 +33,6 @@ namespace Temporal
 		}
 		return 0;
 	}
-
 	
 	void Entity::add(Component* component)
 	{
@@ -97,5 +96,10 @@ namespace Temporal
 	void* EntitiesManager::sendMessageToEntity(Hash id, Message& message) const
 	{
 		return _entities.at(id)->handleMessage(message);
+	}
+
+	void EntitiesManager::add(Hash id, Entity* entity)
+	{
+		_entities[id] = entity;
 	}
 }

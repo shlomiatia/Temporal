@@ -56,6 +56,9 @@ namespace Temporal
 			LEVEL_INIT, // Initialize component based on other entities
 			LEVEL_DISPOSED,
 
+			SAVE,
+			LOAD,
+
 			UPDATE,
 			DRAW,
 			DRAW_DEBUG,

@@ -4,6 +4,8 @@
 #include "Timer.h"
 #include <cstring>
 #include <fstream>
+#include <sstream>
+#include <iterator>
 
 namespace Temporal
 {
@@ -49,6 +51,12 @@ namespace Temporal
 		bool value;
 		_buffer->read((char*)&value, sizeof(bool));
 		return value;
+	}
+	void Stream::copy(Stream& other)
+	{
+		std::copy(std::istreambuf_iterator<char>(*other._buffer),
+				  std::istreambuf_iterator<char>(),
+			      std::ostreambuf_iterator<char>(*_buffer));
 	}
 
 	MemoryStream::MemoryStream() : Stream(new std::stringstream()) {}
