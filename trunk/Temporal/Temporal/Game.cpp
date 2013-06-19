@@ -12,7 +12,9 @@ namespace Temporal
 
 	void Game::init(const char* gameState)
 	{
-		Settings* settings = IOAPI::loadSettings("resources/settings.xml");
+		SettingsLoader loader("resources/settings.xml");
+		loader.execute();
+		Settings* settings = loader.getResult();
 		Graphics::get().init(*settings);
 		Input::get().init();
 		IOThread::get().init();

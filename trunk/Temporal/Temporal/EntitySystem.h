@@ -93,6 +93,7 @@ namespace Temporal
 		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		const EntityCollection& getEntities() const { return _entities; }
+		void add(Hash id, Entity* entity);
 	private:
 		EntityCollection _entities;
 		

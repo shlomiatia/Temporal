@@ -9,6 +9,8 @@
 #include "EntitySystem.h"
 #include "Grid.h"
 #include "Settings.h"
+#include "Serialization.h"
+#include <sstream>
 #include <ftgl/ftgl.h>
 #include <windows.h>
 #include <SDL_syswm.h>
@@ -33,8 +35,7 @@ namespace Temporal
 			_semaphore.wait();
 			if(!_isRunning)
 				break;
-			void* result = _job->load();
-			_job->loaded(result);
+			_job->execute();
 			_job = 0;
 		}
 		wglMakeCurrent(nullptr, nullptr);
@@ -44,6 +45,7 @@ namespace Temporal
 	void IOThread::setJob(IOJob* job)
 	{
 		_job = job;
+		_job->setStarted();
 		_semaphore.notify();
 	}
 
@@ -71,21 +73,47 @@ namespace Temporal
 		_semaphore.notify();
 	}
 
-	Settings* IOAPI::loadSettings(const char* settingsFile)
+	void SettingsLoader::executeImpl()
 	{
-		XmlDeserializer deserializer(settingsFile);
-		Settings* settings = new Settings();
-		deserializer.serialize("settings", *settings);
-		return settings;
+		XmlDeserializer deserializer(_path);
+		_result = new Settings();
+		deserializer.serialize("settings", *_result);
 	}
 
-	GameState* IOAPI::loadGameState(const char* gameStateFile)
+	GameStateLoader::GameStateLoader(const char* file)
 	{
-		XmlDeserializer deserializer(gameStateFile);
-		GameState* state = new GameState();
-		deserializer.serialize("game-state", *state);
-		state->init();
-		return state;
+		if(file)
+			add(file);
+	}
+
+	void GameStateLoader::add(const char* file)
+	{
+			_files.push_back(file);
+	}
+
+	void GameStateLoader::executeImpl()
+	{
+		for(StringIterator i = _files.begin(); i != _files.end(); ++i)
+		{
+			XmlDeserializer deserializer(i->c_str());
+			GameState* state = new GameState();
+			deserializer.serialize("game-state", *state);
+			state->init();
+			_result.push_back(state);
+		}
+	}
+
+	void GameLoader::executeImpl()
+	{
+		FileStream fileStream(_path);
+		_result = new MemoryStream();
+		_result->copy(fileStream);
+	}
+
+	void GameSaver::executeImpl()
+	{
+		FileStream fileStream(_path);
+		fileStream.copy(*_stream);
 	}
 
 	const std::shared_ptr<SpriteSheet> ResourceManager::getSpritesheet(const char* file)

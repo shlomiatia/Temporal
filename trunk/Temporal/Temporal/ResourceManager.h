@@ -15,6 +15,7 @@ namespace Temporal
 	class SpriteSheet;
 	class AnimationSet;
 	class Texture;
+	class Stream;
 	
 	typedef std::unordered_map<Hash, std::shared_ptr<SpriteSheet>> SpriteSheetCollection;
 	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
@@ -23,11 +24,31 @@ namespace Temporal
 	typedef std::unordered_map<Hash, std::shared_ptr<FTFont>> FontCollection;
 	typedef FontCollection::const_iterator FontIterator;
 
+	typedef std::vector<std::string> StringCollection;
+	typedef StringCollection::const_iterator StringIterator;
+	typedef std::vector<GameState*> GameStateCollection;
+	typedef GameStateCollection::const_iterator GameStateIterator;
+
 	class IOJob
 	{
 	public:
-		virtual void* load() = 0;
-		virtual void loaded(void* param) = 0;
+		IOJob() : _isStarted(false), _isFinished(false) {}
+		virtual ~IOJob() {}
+
+		bool isStarted() const { return _isStarted; }
+		void setStarted() { _isStarted = true; }
+		bool isFinished() const { return _isFinished; }
+
+		void execute() { executeImpl(); _isFinished = true; } 
+
+	protected:
+		virtual void executeImpl() = 0;
+	private:
+		bool _isStarted;
+		bool _isFinished;
+
+		IOJob(const IOJob&);
+		IOJob& operator=(const IOJob&);
 	};
 
 	class IOThread
@@ -61,12 +82,65 @@ namespace Temporal
 	typedef std::unordered_map<std::string, std::string> StringMap;
 	typedef StringMap::const_iterator StringMapIterator;
 
+	class SettingsLoader : public IOJob
+	{
+	public:
+		SettingsLoader(const char* path) : _path(path) {};
+		void executeImpl();
+
+		Settings* getResult() { return _result; }
+
+	private:
+		const char* _path;
+		Settings* _result;
+	};
+
+	class GameStateLoader : public IOJob
+	{
+	public:
+		GameStateLoader(const char* file = 0);
+		void executeImpl();
+
+		void add(const char* file);
+		const StringCollection& getFiles() const { return _files; }
+		const GameStateCollection& getResult() const { return _result; }
+
+	private:
+		StringCollection _files;
+		GameStateCollection _result;
+	};
+
+	class GameLoader : public IOJob
+	{
+	public:
+		GameLoader(const char* path) : _path(path) {}
+		void executeImpl();
+
+		Stream* getResult() { return _result; }
+
+	private:
+		const char* _path;
+		Stream* _result;
+	};
+
+	class GameSaver : public IOJob
+	{
+	public:
+		GameSaver(const char* path, Stream* stream) : _path(path), _stream(stream) {}
+		void executeImpl();
+
+	private:
+		const char* _path;
+		Stream* _stream;
+	};
+
 	class IOAPI
 	{
 	public:
 		static Settings* loadSettings(const char* settingsFile);
 		static GameState* loadGameState(const char* gameStateFile);
-	private:
+		void saveGame(const char* saveFile, Stream* stream);
+		Stream* loadGame(const char* saveFile);
 	};
 
 	class ResourceManager
