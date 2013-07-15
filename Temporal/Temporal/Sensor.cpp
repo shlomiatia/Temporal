@@ -11,6 +11,8 @@
 
 namespace Temporal
 {
+	const Hash Sensor::TYPE = Hash("sensor");
+
 	Component* Sensor::clone() const
 	{
 		return new Sensor(_id, _fixture->clone(), _categoryMask);

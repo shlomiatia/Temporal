@@ -2,6 +2,8 @@
 
 namespace Temporal
 {
+	const Hash Door::TYPE = Hash("door");
+
 	static Hash OPEN_ANIMATION = Hash("DOR_ANM_OPEN");
 	static Hash CLOSE_ANIMATION = Hash("DOR_ANM_CLOSE");
 	static Hash OPENING_ANIMATION = Hash("DOR_ANM_OPENING");

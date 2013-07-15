@@ -4,6 +4,8 @@
 
 namespace Temporal
 {
+	const Hash Patrol::TYPE = Hash("patrol");
+
 	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
 
 	static const Hash WALK_STATE = Hash("PAT_STT_WALK");

@@ -12,6 +12,8 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Constants
 	 *********************************************************************************************/
+	const Hash ActionController::TYPE = Hash("action-controller");
+
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
 	static const Hash ACTIVATE_SENSOR_ID = Hash("SNS_ACTIVATE");

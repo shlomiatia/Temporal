@@ -6,6 +6,8 @@
 
 namespace Temporal
 {
+	const Hash InputController::TYPE = Hash("input-controller");
+
 	void InputController::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::UPDATE)

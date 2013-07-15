@@ -1,19 +1,13 @@
 #include "SerializationAccess.h"
 #include "Serialization.h"
 #include "MovingPlatform.h"
-#include "Transform.h"
-#include "DrawPosition.h"
-#include "Animator.h"
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"
 #include "CollisionFilter.h"
 #include "Sight.h"
 #include "StaticBody.h"
-#include "DynamicBody.h"
 #include "Sensor.h"
-#include "ActionController.h"
-#include "Laser.h"
 #include "Patrol.h"
 #include "Sentry.h"
 #include "SecurityCamera.h"
@@ -26,39 +20,19 @@
 #include "Button.h"
 #include "Door.h"
 #include "Text.h"
+#include "SaverLoader.h"
+#include "Transform.h"
+#include "DrawPosition.h"
+#include "Animator.h"
+#include "ActionController.h"
+#include "DynamicBody.h"
+#include "Laser.h"
+#include "SecurityCamera.h"
+#include "Patrol.h"
+#include "Sentry.h"
 
 namespace Temporal
 {
-	void SerializationAccess::serialize(const char* key, Component*& component, BaseBinarySerializer& serializer)
-	{
-		switch(component->getType())
-		{
-		case(ComponentType::TRANSFORM):
-			serialize(key, *(Transform*&)component, serializer);
-			break;
-		case(ComponentType::DRAW_POSITION):
-			serialize(key, *(DrawPosition*&)component, serializer);
-			break;
-		case(ComponentType::ANIMATOR):
-			serialize(key, *(Animator*&)component, serializer);
-			break;
-		case(ComponentType::ACTION_CONTROLLER):
-			serialize(key, *(ActionController*&)component, serializer);
-			break;
-		case(ComponentType::DYNAMIC_BODY):
-			serialize(key, *(DynamicBody*&)component, serializer);
-			break;
-		case(ComponentType::LASER):
-			serialize(key, *(Laser*&)component, serializer);
-			break;
-		case(ComponentType::SENTRY):
-		case(ComponentType::PATROL):
-		case(ComponentType::SECURITY_CAMERA):
-			serialize(key, *(StateMachineComponent*&)component, serializer);
-			break;
-		}
-	}
-
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 	{
 		if(strcmp(key, "transform") == 0)
@@ -76,11 +50,11 @@ namespace Temporal
 		else if(strcmp(key, "text") == 0)
 			serialize(key, (Text*&)component, serializer);
 		else if(strcmp(key, "input-controller") == 0)
-			component  = new InputController();
+			serialize(key, (InputController*&)component, serializer);
 		else if(strcmp(key, "moving-platform") == 0)
 			serialize(key, (MovingPlatform*&)component, serializer);
 		else if(strcmp(key, "action-controller") == 0)
-			component = new ActionController();
+			serialize(key, (ActionController*&)component, serializer);
 		else if(strcmp(key, "collision-filter") == 0)
 			serialize(key, (CollisionFilter*&)component, serializer);
 		else if(strcmp(key, "sight") == 0)
@@ -92,35 +66,51 @@ namespace Temporal
 		else if(strcmp(key, "static-body") == 0)
 			serialize(key, (StaticBody*&)component, serializer);
 		else if(strcmp(key, "sentry") == 0)
-			component = new Sentry();
+			serialize(key, (Sentry*&)component, serializer);
 		else if(strcmp(key, "security-camera") == 0)
-			component = new SecurityCamera();
+			serialize(key, (SecurityCamera*&)component, serializer);
 		else if(strcmp(key, "patrol") == 0)
-			component = new Patrol();
+			serialize(key, (Patrol*&)component, serializer);
 		else if(strcmp(key, "navigator") == 0)
-			component = new Navigator();
+			serialize(key, (Navigator*&)component, serializer);
 		else if(strcmp(key, "door") == 0)
-			component = new Door();
+			serialize(key, (Door*&)component, serializer);
 		else if(strcmp(key, "button") == 0)
 			serialize(key, (Button*&)component, serializer);
 		else if(strcmp(key, "laser") == 0)
 			serialize(key, (Laser*&)component, serializer);
 		else if(strcmp(key, "temporal-echo") == 0)
-			component = new TemporalEcho();
+			serialize(key, (TemporalEcho*&)component, serializer);
 		else if(strcmp(key, "temporal-period") == 0)
 			serialize(key, (TemporalPeriod*&)component, serializer);
 		else if(strcmp(key, "player-period") == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
+		else if(strcmp(key, "saver-loader") == 0)
+			serialize(key, (EntitySaverLoader*&)component, serializer);
 		else
 			abort();
 	}
 
-	void SerializationAccess::serialize(const char* key, Fixture& fixture, BaseBinarySerializer& serializer)
+	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)
 	{
-	}
+		if(component->getType() == Transform::TYPE)
+			serialize(key, *(Transform*&)component, serializer);
+		else if(component->getType() == DrawPosition::TYPE)
+			serialize(key, *(DrawPosition*&)component, serializer);
+		else if(component->getType() == Animator::TYPE)
+			serialize(key, *(Animator*&)component, serializer);
+		else if(component->getType() == ActionController::TYPE)
+			serialize(key, *(ActionController*&)component, serializer);
+		else if(component->getType() == DynamicBody::TYPE)
+			serialize(key, *(DynamicBody*&)component, serializer);
+		else if(component->getType() == Laser::TYPE)
+			serialize(key, *(Laser*&)component, serializer);
+		else if(component->getType() == Sentry::TYPE)
+			serialize(key, *(Sentry*&)component, serializer);
+		else if(component->getType() == Patrol::TYPE)
+			serialize(key, *(Patrol*&)component, serializer);
+		else if(component->getType() == SecurityCamera::TYPE)
+			serialize(key, *(SecurityCamera*&)component, serializer);
 
-	void SerializationAccess::serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer)
-	{
-		serializer.serialize("yabp", fixture._localShape);
 	}
 }

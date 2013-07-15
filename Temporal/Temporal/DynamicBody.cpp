@@ -12,6 +12,8 @@
 
 namespace Temporal
 {
+	const Hash DynamicBody::TYPE = Hash("dynamic-body");
+
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
 
 	const Vector DynamicBody::GRAVITY(0.0f, -1500.0f);

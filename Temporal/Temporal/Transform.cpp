@@ -4,6 +4,7 @@
 
 namespace Temporal
 {
+	const Hash Transform::TYPE = Hash("transform");
 
 	void Transform::handleMessage(Message& message)
 	{

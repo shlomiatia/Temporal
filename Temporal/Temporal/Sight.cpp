@@ -11,6 +11,8 @@
 
 namespace Temporal
 {
+	const Hash Sight::TYPE = Hash("sight");
+
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::COVER | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
@@ -19,7 +21,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			_filter = static_cast<const CollisionFilter*>(getEntity().get(ComponentType::COLLISION_FILTER));
+			_filter = static_cast<const CollisionFilter*>(getEntity().get(CollisionFilter::TYPE));
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{

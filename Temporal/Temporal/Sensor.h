@@ -52,12 +52,14 @@ namespace Temporal
 		~Sensor() { delete _fixture; }
 		
 		void handleMessage(Message& message);
-		ComponentType::Enum getType() const { return ComponentType::SENSOR; }
+		Hash getType() const { return TYPE; }
 		Component* clone() const;
 
 		const Hash& getId() const { return _id; }
 
+		static const Hash TYPE;
 	private:
+
 		Hash _id;
 		int _categoryMask;
 		Fixture* _fixture;

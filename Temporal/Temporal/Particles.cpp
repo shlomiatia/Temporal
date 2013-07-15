@@ -12,6 +12,8 @@
 
 namespace Temporal
 {
+	const Hash ParticleEmitter::TYPE = Hash("particles");
+
 	void Particle::update(float time)
 	{
 		_ageTimer.update(time);

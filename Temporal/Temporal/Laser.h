@@ -18,10 +18,12 @@ namespace Temporal
 
 		Hash getPlatformId() const { return _platformID; }
 		
-		ComponentType::Enum getType() const { return ComponentType::LASER; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Laser(_platformID); };
+		static const Hash TYPE;
 	private:
+
 		Hash _platformID;
 		bool _isPositiveDirection;
 		SceneNode* _root;

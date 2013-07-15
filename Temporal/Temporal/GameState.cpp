@@ -7,41 +7,10 @@
 #include "Keyboard.h"
 #include "Input.h"
 #include "Game.h"
-#include "Serialization.h"
 #include <stdio.h>
 
 namespace Temporal
 {
-	class TestComponent : public Component
-	{
-	public:
-		ComponentType::Enum getType() const { return ComponentType::OTHER; }
-		virtual Component* clone() const { return 0; }
-		void handleMessage(Message& message)
-		{
-			if(message.getID() == MessageID::UPDATE)
-			{
-				if(Keyboard::get().getKey(Key::Q))
-				{
-					if(!_loader.isStarted())
-					{
-						_loader.add("resources/game-states/entities.xml");
-						GameStateManager::get().load(&_loader);
-					}
-				}
-				if(_loader.isFinished())
-				{
-					StringCollection files;
-					files.push_back(std::string("resources/game-states/loading.xml"));
-					GameStateManager::get().unload(files);
-					GameStateManager::get().show("resources/game-states/entities.xml");
-				}
-			}
-		}
-	private:
-		GameStateLoader _loader;
-	};
-
 	GameState::GameState()
 	{
 		_grid = new Grid();
@@ -72,17 +41,7 @@ namespace Temporal
 		{
 			Game::get().stop();
 		}
-		if(Keyboard::get().getKey(Key::Q))
-		{
-			//const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			//Stream* stream = new MemoryStream();
-			//getEntitiesManager().sendMessageToAllEntities(Message(MessageID::SAVE, stream));
-			//getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-		}	
-		if(Keyboard::get().getKey(Key::W))
-		{
-		}
+		
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
 	}
 
@@ -109,6 +68,8 @@ namespace Temporal
 	{
 		for(GameStateMapIterator i = _states.begin(); i != _states.end(); ++i)
 			delete (i->second);
+		if(_listener)
+			delete _listener;
 	}
 
 	void GameStateManager::load(GameStateLoader* loader)
@@ -144,6 +105,8 @@ namespace Temporal
 		{
 			unload();
 		}
+		if(_listener)
+			_listener->onUpdate(framePeriod, *getCurrentState());
 		getCurrentState()->update(framePeriod);
 	}
 
@@ -180,12 +143,9 @@ namespace Temporal
 	{
 		Hash id = Hash(file);
 		_states[id] = state;
-		if(id == Hash("resources/game-states/loading.xml"))
-		{
-			Entity* entity = new Entity();
-			entity->add(new TestComponent());
-			_states[id]->getEntitiesManager().add(Hash("ENT_TEST"), entity);
-		}
+		if(_listener)
+			_listener->onLoaded(id, *state);
+		
 		return id;
 	}
 }

@@ -5,7 +5,7 @@ namespace Temporal
 {
 	class Settings;
 	class XmlDeserializer;
-	class BaseBinarySerializer;
+	class BaseSerializer;
 	class Component;
 	class Vector;
 	class AABB;
@@ -45,23 +45,44 @@ namespace Temporal
 	class ActionController;
 	class MovingPlatform;
 	class Button;
+	class Sentry;
+	class Patrol;
+	class SecurityCamera;
+	class InputController;
+	class Navigator;
+	class Door;
+	class TemporalEcho;
+	class EntitySaverLoader;
 
 	class SerializationAccess
 	{
 	public:
 		// Factory methods
-		static void serialize(const char* key, Component*& component, BaseBinarySerializer& serializer);
+		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
+		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
+
+		template<class T, class S>
+		static void serialize(const char* key, T*& value, S& serializer)
+		{
+			SerializationAccess::serialize(key, *value, serializer);
+		}
 
 		template<class T>
 		static void serialize(const char* key, T*& value, XmlDeserializer& serializer)
 		{
-			value = new T();
+			if(!serializer.crapMode)
+				value = new T();
 			SerializationAccess::serialize(key, *value, serializer);
 		}
 
-		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
-
 		// Physics objects
+		template<class T>
+		static void serialize(const char* key, Fixture& fixture, T& serializer) 
+		{
+			// xml
+			serializer.serialize("yabp", fixture._localShape);
+		}
+
 		template<class T>
 		static void serialize(const char* key, Vector& vector, T& serializer)
 		{
@@ -90,9 +111,6 @@ namespace Temporal
 			serializer.serialize("sloped-radius", yabp._slopedRadius);
 			serializer.serialize("y-radius", yabp._yRadius);
 		}
-		
-		static void serialize(const char* key, Fixture& fixture, BaseBinarySerializer& serializer);
-		static void serialize(const char* key, Fixture& fixture, XmlDeserializer& serializer);
 
 		// Graphics objects
 		template<class T>
@@ -357,6 +375,39 @@ namespace Temporal
 		{
 			serializer.serialize("target", button._target);
 		}
+
+		template<class T>
+		static void serialize(const char* key, Sentry& component, T& serializer)
+		{
+			serialize(key, (StateMachineComponent&)component, serializer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, SecurityCamera& component, T& serializer)
+		{
+			serialize(key, (StateMachineComponent&)component, serializer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, Patrol& component, T& serializer)
+		{
+			serialize(key, (StateMachineComponent&)component, serializer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, InputController& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, Navigator& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, Door& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, EntitySaverLoader& component, T& serializer) {}
 	};
 }
 

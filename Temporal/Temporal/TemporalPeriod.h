@@ -20,11 +20,13 @@ namespace Temporal
 	public:
 		explicit PlayerPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
 
-		ComponentType::Enum getType() const { return ComponentType::PLAYER_PERIOD; }
 		void handleMessage(Message& message);
+		Hash getType() const { return TYPE; }
 
 		Component* clone() const { return new PlayerPeriod(_period); }
+		static const Hash TYPE;
 	private:
+		
 		Period::Enum _period;
 
 		void changePeriod(Period::Enum period);
@@ -37,11 +39,13 @@ namespace Temporal
 	public:
 		explicit TemporalPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
 
-		ComponentType::Enum getType() const { return ComponentType::TEMPORAL_PERIOD; }
 		void handleMessage(Message& message);
+		Hash getType() const { return TYPE; }
 
 		Component* clone() const { return new TemporalPeriod(_period); }
-	private:
+		static const Hash TYPE;
+	private:		
+
 		Period::Enum _period;
 
 		friend class SerializationAccess;

@@ -58,6 +58,17 @@ namespace Temporal
 	typedef std::unordered_map<Hash, GameState*> GameStateMap;
 	typedef GameStateMap::const_iterator GameStateMapIterator;
 
+	class GameStateListener
+	{
+	public:
+		GameStateListener() {}
+		virtual void onUpdate(float framePeriod, GameState& gameState) = 0;
+		virtual void onLoaded(Hash id, GameState& gameState) = 0;
+	private:
+		GameStateListener(const GameStateListener&);
+		GameStateListener& operator=(const GameStateListener&);
+	};
+
 	class GameStateManager
 	{
 	public:
@@ -66,6 +77,8 @@ namespace Temporal
 			static GameStateManager instance;
 			return (instance);
 		}
+
+		void setListener(GameStateListener* listener) { _listener = listener; }
 
 		void init(const char* gameStateFile);
 		void dispose();
@@ -77,15 +90,17 @@ namespace Temporal
 		void unload(StringCollection files);
 		void show(const char* gameStateFile);
 
+	private:
 		GameStateMap _states;
 		
+		GameStateListener* _listener;
 		GameStateLoader* _loader;
 		bool _unload;
 		StringCollection _files;
 		Hash _currentStateId;
 		Hash _nextStateId;
 
-		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false), _loader(0) {};
+		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false), _loader(0), _listener(0) {};
 
 		GameState* getCurrentState() const;
 		void load();

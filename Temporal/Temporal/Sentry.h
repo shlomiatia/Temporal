@@ -37,9 +37,10 @@ namespace Temporal
 	public:
 		Sentry() : StateMachineComponent(getStates(), "SEN") {}
 
-		ComponentType::Enum getType() const { return ComponentType::SENTRY; }
-
+		Hash getType() const { return TYPE; }
 		Component* clone() const { return new Sentry(); }
+
+		static const Hash TYPE;
 
 	protected:
 		Hash getInitialState() const;

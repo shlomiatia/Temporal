@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "Camera.h"
 #include "Lighting.h"
+#include "StaticBody.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -86,8 +87,9 @@ namespace Temporal
 
 	void DebugLayer::draw()
 	{
-		ComponentType::Enum filter = ComponentType::STATIC_BODY;
-		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), filter);
+		HashCollection filter;
+		filter.push_back(StaticBody::TYPE);
+		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();

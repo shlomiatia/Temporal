@@ -7,6 +7,8 @@
 
 namespace Temporal
 {
+	const Hash Text::TYPE = Hash("text");
+
 	void Text::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)

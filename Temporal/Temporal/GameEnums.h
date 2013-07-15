@@ -3,47 +3,6 @@
 
 namespace Temporal
 {
-	namespace ComponentType
-	{
-		enum Enum
-		{
-			TRANSFORM = 1,
-
-			INPUT_CONTROLLER = 2,
-
-			DRAW_POSITION = 4,
-			ANIMATOR = 8,
-			RENDERER = 16,
-			LIGHT = 32,
-			LIGHT_GEM = 64,
-			PARTICLE_EMITTER = 128,
-
-			COLLISION_FILTER = 256,
-			DYNAMIC_BODY = 512,
-			STATIC_BODY = 1024,
-			SENSOR = 2048,
-			SIGHT = 4096,
-
-			ACTION_CONTROLLER = 8192,
-			
-			TEMPORAL_ECHO = 16384,
-			TEMPORAL_PERIOD = 32768,
-			PLAYER_PERIOD = 65536,
-
-			SENTRY = 131072,
-			SECURITY_CAMERA = 262144,
-			PATROL = 524288,
-			LASER = 1048576,
-			NAVIGATOR = 2097152,
-
-			OTHER = 4194304,
-
-			ALL = 8388607
-		};
-	}
-	inline ComponentType::Enum operator|(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) | static_cast<int>(b)); }
-	inline ComponentType::Enum operator&(ComponentType::Enum a, ComponentType::Enum b) { return static_cast<ComponentType::Enum>(static_cast<int>(a) & static_cast<int>(b)); }
-
 	namespace MessageID
 	{
 		enum Enum

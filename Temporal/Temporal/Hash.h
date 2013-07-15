@@ -21,7 +21,10 @@ namespace Temporal
 		unsigned int _value;
 	};
 
-	typedef std::unordered_map<Hash, const char*> HashCollection;
+	typedef std::unordered_map<Hash, const char*> HashStringMap;
+	typedef HashStringMap::const_iterator HashStringIterator;
+
+	typedef std::vector<Hash> HashCollection;
 	typedef HashCollection::const_iterator HashIterator;
 
 	class HashToString
@@ -39,7 +42,7 @@ namespace Temporal
 		void save(Hash key, const char* value);
 		const char* getString(Hash hash) const;
 	private:
-		HashCollection _hashStrings;
+		HashStringMap _hashStrings;
 
 		HashToString() {}
 		HashToString(const HashToString&);

@@ -73,7 +73,7 @@ namespace Temporal
 		void init();
 
 	private:
-		char* _textureFile;
+		const char* _textureFile;
 		const Texture* _texture;
 		Side::Enum _orientation;
 		SpriteGroupCollection _spriteGroups;

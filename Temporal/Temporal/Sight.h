@@ -17,12 +17,14 @@ namespace Temporal
 		explicit Sight(float sightCenter = 0.0f, float sightSize = 0.0f) :
 		  _sightCenter(sightCenter), _sightSize(sightSize), _filter(0), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
-		ComponentType::Enum getType() const { return ComponentType::SIGHT; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new Sight(_sightCenter, _sightSize); }
 
+		static const Hash TYPE;
 	private:
+
 		const CollisionFilter* _filter;
 		float _sightCenter;
 		float _sightSize;

@@ -191,6 +191,9 @@
     <ClInclude Include="Settings.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="SaverLoader.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -366,6 +369,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="GameState.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SaverLoader.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

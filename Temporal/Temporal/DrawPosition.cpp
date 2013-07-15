@@ -4,6 +4,8 @@
 
 namespace Temporal
 {
+	const Hash DrawPosition::TYPE = Hash("draw-position");
+
 	void DrawPosition::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::GET_DRAW_POSITION)

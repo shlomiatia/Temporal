@@ -3,6 +3,8 @@
 
 namespace Temporal
 {
+	const Hash Sentry::TYPE = Hash("sentry");
+
 	namespace SentryStates
 	{
 		static const Hash SEARCH_STATE = Hash("SEN_STT_SEARCH");

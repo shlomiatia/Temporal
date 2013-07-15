@@ -26,14 +26,17 @@ namespace Temporal
 	public:
 		Patrol();
 
-		ComponentType::Enum getType() const { return ComponentType::PATROL; }
+		Hash getType() const { return TYPE; }
 		Component* clone() const { return new Patrol(); }
 		void handleMessage(Message& message);
+
+		static const Hash TYPE;
 
 	protected:
 		Hash getInitialState() const;
 
 	private:
+
 		EdgeDetector _edgeDetector;
 
 		StateCollection getStates() const;

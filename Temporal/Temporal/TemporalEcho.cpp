@@ -3,11 +3,25 @@
 #include "SerializationAccess.h"
 #include "Color.h"
 #include "MessageUtils.h"
+#include "Transform.h"
+#include "Renderer.h"
+#include "DrawPosition.h"
+#include "Animator.h"
 
 namespace Temporal
 {
-	const static ComponentType::Enum filter = ComponentType::TRANSFORM | ComponentType::DRAW_POSITION | ComponentType::RENDERER | ComponentType::ANIMATOR;
+	const Hash TemporalEcho::TYPE = Hash("temporal-echo");
 	const float TemporalEcho::ECHO_READY_TIME = 4.5f;
+
+	HashCollection TemporalEcho::getFilter() const
+	{
+		HashCollection result;
+		result.push_back(Transform::TYPE);
+		result.push_back(DrawPosition::TYPE);
+		result.push_back(Renderer::TYPE);
+		result.push_back(Animator::TYPE);
+		return result;
+	}
 
 	TemporalEcho::~TemporalEcho()
 	{
@@ -72,16 +86,25 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 			if(_echoReady)
-				_echo->handleMessage(message, filter);
+				_echo->handleMessage(message, &getFilter());
 		}
 		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
 		{
 			mergeToTemporalEchoes();
 		}
+		else if(message.getID() == MessageID::LOAD)
+		{
+			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
+			{
+				delete *i;
+				i = _echoesData.erase(i);
+			}
+			_echoReady = false;
+		}
 		else if(message.getID() == MessageID::DRAW) 
 		{
 			if(_echoReady)
-				_echo->handleMessage(message, filter);
+				_echo->handleMessage(message, &getFilter());
 		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
@@ -89,11 +112,11 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_echo->handleMessage(message, filter);
+			_echo->handleMessage(message, &getFilter());
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			_echo->handleMessage(message, filter);
+			_echo->handleMessage(message, &getFilter());
 		}
 	}
 }

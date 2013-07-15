@@ -7,6 +7,8 @@
 
 namespace Temporal
 {
+	const Hash StaticBody::TYPE = Hash("static-body");
+
 	StaticBody::~StaticBody()
 	{
 		delete _fixture;

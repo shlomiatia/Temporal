@@ -40,6 +40,7 @@ namespace Temporal
 		bool isFinished() const { return _isFinished; }
 
 		void execute() { executeImpl(); _isFinished = true; } 
+		void reset() { _isStarted = false; _isFinished = false; }
 
 	protected:
 		virtual void executeImpl() = 0;
@@ -108,39 +109,6 @@ namespace Temporal
 	private:
 		StringCollection _files;
 		GameStateCollection _result;
-	};
-
-	class GameLoader : public IOJob
-	{
-	public:
-		GameLoader(const char* path) : _path(path) {}
-		void executeImpl();
-
-		Stream* getResult() { return _result; }
-
-	private:
-		const char* _path;
-		Stream* _result;
-	};
-
-	class GameSaver : public IOJob
-	{
-	public:
-		GameSaver(const char* path, Stream* stream) : _path(path), _stream(stream) {}
-		void executeImpl();
-
-	private:
-		const char* _path;
-		Stream* _stream;
-	};
-
-	class IOAPI
-	{
-	public:
-		static Settings* loadSettings(const char* settingsFile);
-		static GameState* loadGameState(const char* gameStateFile);
-		void saveGame(const char* saveFile, Stream* stream);
-		Stream* loadGame(const char* saveFile);
 	};
 
 	class ResourceManager

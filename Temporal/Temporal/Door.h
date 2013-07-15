@@ -10,14 +10,16 @@ namespace Temporal
 	public:
 		Door() : StateMachineComponent(getStates(), "DOR") {}
 
-		ComponentType::Enum getType() const { return ComponentType::OTHER; }
+		Hash getType() const { return TYPE; }
 
 		Component* clone() const { return new Door(); }
 
 	protected:
 		Hash getInitialState() const;
 
+		static const Hash TYPE;
 	private:
+
 		StateCollection getStates() const;
 	};
 

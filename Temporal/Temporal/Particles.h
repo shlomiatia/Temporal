@@ -24,6 +24,7 @@ namespace Temporal
 
 		void update(float time);
 	private:
+
 		Vector _position;
 		Vector _velocity;
 		Timer _ageTimer;
@@ -42,14 +43,16 @@ namespace Temporal
 			_spritesheetFile(0), _textureFile(0), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
 		~ParticleEmitter();
 
-		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new ParticleEmitter(); }
 
+		static const Hash TYPE;
 	private:
-		char* _textureFile;
-		char* _spritesheetFile;
+
+		const char* _textureFile;
+		const char* _spritesheetFile;
 		std::shared_ptr<SpriteSheet> _spritesheet;
 		
 		float _lifetime;
