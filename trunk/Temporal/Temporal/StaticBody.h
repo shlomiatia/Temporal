@@ -15,11 +15,13 @@ namespace Temporal
 
 		Fixture& getFixture() { return *_fixture; }
 
-		ComponentType::Enum getType() const { return ComponentType::STATIC_BODY; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const;
+		static const Hash TYPE;
 	private:
+
 		Fixture* _fixture;
 
 		friend class SerializationAccess;

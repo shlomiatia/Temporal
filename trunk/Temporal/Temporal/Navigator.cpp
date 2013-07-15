@@ -6,6 +6,8 @@
 
 namespace Temporal
 {
+	const Hash Navigator::TYPE = Hash("navigator");
+
 	namespace NavigatorStates
 	{
 		static const Hash WALK_STATE = Hash("NAV_STT_WALK");	

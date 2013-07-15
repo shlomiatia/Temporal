@@ -90,16 +90,19 @@ namespace Temporal
 	public:
 		ActionController();
 
-		ComponentType::Enum getType() const { return ComponentType::ACTION_CONTROLLER; }
+		Hash getType() const { return TYPE; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
 
+		static const Hash TYPE;
+
 	protected:
 		Hash getInitialState() const;
 
 	private:
+
 		JumpHelper _jumpHelper;
 		LedgeDetector _hangDetector;
 		LedgeDetector _descendDetector;

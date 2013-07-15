@@ -5,6 +5,9 @@
 
 namespace Temporal
 {
+	const Hash PlayerPeriod::TYPE = Hash("player-period");
+	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
+
 	void PlayerPeriod::changePeriod(Period::Enum period)
 	{
 		_period = period;

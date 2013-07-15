@@ -14,18 +14,20 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(char* textueFile = 0, char* spritesheetFile = 0, SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
+		explicit Renderer(const char* textueFile = 0, const char* spritesheetFile = 0, SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
 		~Renderer();
 
 		SceneNode& getRoot() const { return *_root; }
-		ComponentType::Enum getType() const { return ComponentType::RENDERER; }
+		Hash getType() const { return TYPE; }
 
 		void handleMessage(Message& message);
 		Component* clone() const;
 
+		static const Hash TYPE;
 	private:
-		char* _textureFile;
-		char* _spriteSheetFile;
+
+		const char* _textureFile;
+		const char* _spriteSheetFile;
 		std::shared_ptr<SpriteSheet> _spriteSheet;
 		SceneNode* _root;
 

@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "ResourceManager.h"
 #include "GameState.h"
+#include "Settings.h"
 
 namespace Temporal
 {

@@ -10,7 +10,9 @@
 
 namespace Temporal
 {
-	Renderer::Renderer(char* textueFile, char* spritesheetFile, SceneNode* root, LayerType::Enum layer, Color color) :
+	const Hash Renderer::TYPE = Hash("renderer");
+
+	Renderer::Renderer(const char* textueFile, const char* spritesheetFile, SceneNode* root, LayerType::Enum layer, Color color) :
 		_spriteSheetFile(spritesheetFile), _textureFile(textueFile), _spriteSheet(0), _root(root), _layer(layer), _color(color) 
 	{
 	}

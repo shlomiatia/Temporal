@@ -11,12 +11,14 @@ namespace Temporal
 	public:
 		Button(const Hash& target = Hash::INVALID) : _target(target) {}
 
-		ComponentType::Enum getType() const { return ComponentType::OTHER; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new Button(_target); }
 
+		static const Hash TYPE;
 	private:
+
 		Hash _target;
 
 		friend class SerializationAccess;

@@ -15,6 +15,9 @@
 
 namespace Temporal
 {
+	const Hash LightGem::TYPE = Hash("light-gem");
+	const Hash Light::TYPE = Hash("light");
+
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const int MAX_LIGHT_PARTS = 32;
 

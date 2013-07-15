@@ -23,7 +23,7 @@ namespace Temporal
 			(**i).init(this);
 	}
 
-	Component* Entity::get(ComponentType::Enum type) const
+	Component* Entity::get(Hash type) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
@@ -51,14 +51,28 @@ namespace Temporal
 		return clone;
 	}
 
-	void* Entity::handleMessage(Message& message, ComponentType::Enum filter) const
+	void* Entity::handleMessage(Message& message, const HashCollection* filter) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			Component& component = **i;
-			ComponentType::Enum type = component.getType();
-			if(type & filter)
-				component.handleMessage(message);
+			
+			if(filter != 0)
+			{
+				bool isMatch = false;
+				Hash type = component.getType();
+				for(HashIterator j = filter->begin(); j != filter->end(); ++j)
+				{
+					if(*j == type)
+					{
+						isMatch = true;
+						break;
+					}
+				}
+				if(!isMatch)
+					continue;
+			}
+			component.handleMessage(message);
 		}
 		return message.getParam();
 	}
@@ -82,12 +96,7 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
-	void EntitiesManager::sendMessageToAllEntities(Message& message) const
-	{
-		sendMessageToAllEntities(message, ComponentType::ALL);
-	}
-
-	void EntitiesManager::sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashCollection* filter) const
 	{
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			(*(*i).second).handleMessage(message, filter);
@@ -101,5 +110,6 @@ namespace Temporal
 	void EntitiesManager::add(Hash id, Entity* entity)
 	{
 		_entities[id] = entity;
+		entity->init(this);
 	}
 }

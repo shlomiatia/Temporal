@@ -9,6 +9,8 @@
 
 namespace Temporal
 {
+	const Hash Animator::TYPE = Hash("animator");
+
 	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
 	{
 		bindings[node.getID()] = new SceneNodeBinding(node);
@@ -26,7 +28,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(ComponentType::RENDERER));
+			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(Renderer::TYPE));
 			bindSceneNodes(_bindings, renderer.getRoot());
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)

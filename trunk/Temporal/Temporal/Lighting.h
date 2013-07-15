@@ -16,11 +16,13 @@ namespace Temporal
 		LightGem()
 			: _isLit(false) {}
 
-		ComponentType::Enum getType() const { return ComponentType::LIGHT_GEM; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new LightGem(); }
+		static const Hash TYPE;
 	private:
+
 		bool _isLit;
 	};
 
@@ -30,12 +32,14 @@ namespace Temporal
 		explicit Light(const Color& color = Color::White, float radius = 300.0f, float beamCenter = 0.0f, float beamSize = 2 * PI)
 			: _color(color), _radius(radius), _beamCenter(beamCenter), _beamSize(beamSize) {}
 
-		ComponentType::Enum getType() const { return ComponentType::LIGHT; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new Light(_color, _radius, _beamCenter, _beamSize); }
 
+		static const Hash TYPE;
 	private:
+
 		Color _color;
 		float _radius;
 		float _beamCenter;

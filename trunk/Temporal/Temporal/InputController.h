@@ -10,10 +10,13 @@ namespace Temporal
 	public:
 		InputController() {}
 
-		ComponentType::Enum getType() const { return ComponentType::INPUT_CONTROLLER; }
-
 		void handleMessage(Message& message);
+		Hash getType() const { return TYPE; }
+
 		Component* clone() const { return new InputController(); }
+
+		static const Hash TYPE;
+	private:
 	};
 }
 

@@ -14,11 +14,13 @@ namespace Temporal
 		const Vector& getPosition() const { return _position; }
 		Side::Enum getOrientation() const { return _orientation; }
 
-		ComponentType::Enum getType() const { return ComponentType::TRANSFORM; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		
 		Component* clone() const { return new Transform(_position, _orientation); }
+		static const Hash TYPE;
 	private:
+
 		Vector _position;
 		Side::Enum _orientation;
 

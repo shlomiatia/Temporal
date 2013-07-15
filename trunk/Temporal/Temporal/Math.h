@@ -23,6 +23,7 @@ namespace Temporal
 	inline bool sameSign(float a, float b) { return (a < -EPSILON && b < -EPSILON) || (a > EPSILON && b > EPSILON); }
 	inline bool differentSign(float a, float b) { return (a < -EPSILON && b > EPSILON) || (a > EPSILON && b < -EPSILON); }
 
+	inline float fromRadians(float angle) { return angle * 180.f / PI; }
 	inline float toRadians(float angle) { return angle * PI / 180.0f; }
 
 	// Works for -PI to PI

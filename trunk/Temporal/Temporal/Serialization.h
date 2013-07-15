@@ -33,17 +33,19 @@ namespace Temporal
 		void write(unsigned int value);
 		void write(float value);
 		void write(bool value);
+		void write(const char* value);
 		int readInt();
 		unsigned int readUInt();
 		float readFloat();
 		bool readBool();
-		void copy(Stream& other);
+		const char* readString();
+		std::string str();
+		void copy(const Stream&);
 
 	protected:
 		std::iostream* _buffer;
 
 	private:
-
 		Stream(const Stream&);
 		Stream& operator=(const Stream&);
 	};
@@ -52,12 +54,14 @@ namespace Temporal
 	{
 	public:
 		MemoryStream();
+		MemoryStream(const char* data);
 	};
 
 	class FileStream : public Stream
 	{
 	public:
-		FileStream(const char* file);
+		FileStream(const char* file, bool write, bool binary);
+		void close();
 	};
 	
 	class SerializationAccess;
@@ -65,30 +69,37 @@ namespace Temporal
 	class Timer;
 
 	// Memory base serializer
-	class BaseBinarySerializer
+
+	class BaseSerializer
 	{
 	public:
-		virtual ~BaseBinarySerializer() {}
+		virtual ~BaseSerializer() {}
 		virtual void serialize(const char* key, int& value) = 0;
 		virtual void serialize(const char* key, unsigned int& value) = 0;
 		virtual void serialize(const char* key, float& value) = 0;
 		virtual void serialize(const char* key, bool& value) = 0;
 		virtual void serialize(const char* key, Hash& value) = 0;
 		virtual void serialize(const char* key, Timer& value) = 0;
-		virtual void serialize(const char* key, char*& value) {};
+		virtual void serialize(const char* key, const char*& value) = 0;
 		virtual void serializeRadians(const char* key, float& value) = 0;
 		virtual SerializationDirection::Enum type() = 0;
+		virtual void preSerialize(const char* key) {};
+		virtual void postSerialize(const char* key) {};
 
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			SerializationAccess::serialize(key, *value, *this);
+			preSerialize(key);
+			SerializationAccess::serialize(key, value, *this);
+			postSerialize(key);
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
+			preSerialize(key);
 			SerializationAccess::serialize(key, value, *this);
+			postSerialize(key);
 		}
 
 		template<class T>
@@ -96,23 +107,23 @@ namespace Temporal
 		{
 			typedef std::vector<T*>::iterator TIterator;
 			for(TIterator i = value.begin(); i != value.end(); ++i)
-				SerializationAccess::serialize(key, *i, *this);
+				serialize((*i)->getType().getString(), *i);
 		}
 	protected:
 		Stream* _buffer;
 
-		BaseBinarySerializer(Stream* buffer) : _buffer(buffer) {}
+		BaseSerializer(Stream* buffer) : _buffer(buffer) {}
 
 	private:
-		BaseBinarySerializer(const BaseBinarySerializer&);
-		BaseBinarySerializer& operator=(const BaseBinarySerializer&);
+		BaseSerializer(const BaseSerializer&);
+		BaseSerializer& operator=(const BaseSerializer&);
 	};
 
 	// Memory serializer;
-	class BinarySerializer : public BaseBinarySerializer
+	class BinarySerializer : public BaseSerializer
 	{
 	public:
-		BinarySerializer(Stream* buffer) : BaseBinarySerializer(buffer) {};
+		BinarySerializer(Stream* buffer) : BaseSerializer(buffer) {};
 
 		void serialize(const char* key, int& value) { _buffer->write(value); }
 		void serialize(const char* key, unsigned int& value) { _buffer->write(value); }
@@ -121,32 +132,33 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
+		void serialize(const char* key, const char*& value) { _buffer->write(value); }
 		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
 		
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			BaseBinarySerializer::serialize(key,*value);
+			BaseSerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			BaseBinarySerializer::serialize(key, value);
+			BaseSerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			BaseBinarySerializer::serialize(key, value);
+			BaseSerializer::serialize(key, value);
 		}
 	};
 
 	// Memory deserializer
-	class BinaryDeserializer : public BaseBinarySerializer
+	class BinaryDeserializer : public BaseSerializer
 	{
 	public:
-		BinaryDeserializer(Stream* buffer) : BaseBinarySerializer(buffer) {};
+		BinaryDeserializer(Stream* buffer) : BaseSerializer(buffer) {};
 
 		void serialize(const char* key, int& value) { value = _buffer->readInt(); }
 		void serialize(const char* key, unsigned int& value) { value = _buffer->readUInt(); }
@@ -155,34 +167,37 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
+		void serialize(const char* key, const char*& value) { value = _buffer->readString(); }
 		SerializationDirection::Enum type() { return SerializationDirection::DESERIALIZATION; };
 
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			BaseBinarySerializer::serialize(key,*value);
+			BaseSerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			BaseBinarySerializer::serialize(key, value);
+			BaseSerializer::serialize(key, value);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			BaseBinarySerializer::serialize(key, value);
+			BaseSerializer::serialize(key, value);
 		}
 	};
 
 	/**********************************************************************************************
 	 * Xml serializer
 	 *********************************************************************************************/
-	class XmlDeserializer
+
+	// XML serializer
+	class XmlSerializer : public BaseSerializer
 	{
 	public:
-		XmlDeserializer(const char * path);
+		XmlSerializer(Stream* stream);
 
 		void serialize(const char* key, int& value);
 		void serialize(const char* key, unsigned int& value);
@@ -191,7 +206,54 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
-		void serialize(const char* key, char*& value);
+		void serialize(const char* key, const char*& value);
+		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
+
+		void preSerialize(const char* key);
+		void postSerialize(const char* key);
+		void save();
+
+		template<class T>
+		void serialize(const char* key, T*& value)
+		{
+			BaseSerializer::serialize(key, value);
+		}
+
+		template<class T>
+		void serialize(const char* key, T& value)
+		{
+			BaseSerializer::serialize(key, value);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::vector<T*>& value)
+		{
+			BaseSerializer::serialize(key, value);
+		}
+
+	private:
+		tinyxml2::XMLDocument _doc; 
+		tinyxml2::XMLNode* _current;
+
+		XmlSerializer(const XmlSerializer&);
+		XmlSerializer& operator=(const XmlSerializer&);
+	};
+
+	// XML deserializer
+	class XmlDeserializer
+	{
+	public:
+		bool crapMode;
+		XmlDeserializer(Stream* stream);
+
+		void serialize(const char* key, int& value);
+		void serialize(const char* key, unsigned int& value);
+		void serialize(const char* key, float& value);
+		void serialize(const char* key, bool& value);
+		void serialize(const char* key, Hash& value);
+		void serialize(const char* key, Timer& value);
+		void serializeRadians(const char* key, float& value);
+		void serialize(const char* key, const char*& value);
 		SerializationDirection::Enum type() { return SerializationDirection::DESERIALIZATION; };
 		
 		template<class T>
@@ -201,7 +263,7 @@ namespace Temporal
 			if(current)
 			{
 				_current = current;
-				SerializationAccess::serialize(_current->ToElement()->Attribute("type"), value, *this);
+				SerializationAccess::serialize(_current->Value(), value, *this);
 				_current = _current->Parent();
 			}
 		}
@@ -222,11 +284,16 @@ namespace Temporal
 		void serialize(const char* key, std::vector<T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
+			int i = 0;
 			for(_current = _current->FirstChildElement(); _current; _current = _current->NextSiblingElement())
 			{
 				T* object = 0;
+				if(crapMode)
+					object = value[i];
 				SerializationAccess::serialize(_current->Value(), object, *this);
-				value.push_back(object);
+				if(!crapMode)
+					value.push_back(object);
+				++i;
 			}
 			_current = parent;
 		}
@@ -243,7 +310,6 @@ namespace Temporal
 			}
 			_current = parent;
 		}
-
 		
 	private:
 		tinyxml2::XMLDocument _doc; 

@@ -36,7 +36,7 @@ namespace Temporal
 
 		Entity& getEntity() const { return *_entity; }
 		void init(Entity* entity) { _entity = entity; }
-		virtual ComponentType::Enum getType() const = 0;
+		virtual Hash getType() const = 0;
 
 		virtual void handleMessage(Message& message) = 0;
 		virtual Component* clone() const = 0;
@@ -57,7 +57,7 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		Entity() : _id(Hash::INVALID) {}
+		Entity() : _id(Hash::INVALID), _manager(0) {}
 		~Entity();
 
 		Hash getId() const { return _id; }
@@ -66,8 +66,8 @@ namespace Temporal
 
 		void init(EntitiesManager* manager);
 		void add(Component* component);
-		Component* get(ComponentType::Enum type) const;
-		void* handleMessage(Message& message, ComponentType::Enum filter = ComponentType::ALL) const;
+		Component* get(Hash type) const;
+		void* handleMessage(Message& message, const HashCollection* filter = 0) const;
 		Entity* clone() const;
 	private:
 		Hash _id;
@@ -89,8 +89,7 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		void sendMessageToAllEntities(Message& message) const;
-		void sendMessageToAllEntities(Message& message, ComponentType::Enum filter) const;
+		void sendMessageToAllEntities(Message& message, const HashCollection* filter = 0) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		const EntityCollection& getEntities() const { return _entities; }
 		void add(Hash id, Entity* entity);

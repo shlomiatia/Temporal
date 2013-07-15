@@ -88,12 +88,14 @@ namespace Temporal
 
 	const char* Hash::getString() const
 	{
+		if(*this == Hash::INVALID)
+			return 0;
 		return HashToString::get().getString(*this);
 	}
 
 	void HashToString::dispose() const
 	{
-		for(HashIterator i = _hashStrings.begin(); i != _hashStrings.end(); ++i)
+		for(HashStringIterator i = _hashStrings.begin(); i != _hashStrings.end(); ++i)
 		{
 			delete i->second;
 		}
@@ -101,7 +103,7 @@ namespace Temporal
 
 	void HashToString::save(Hash key, const char* string)
 	{
-		HashIterator i = _hashStrings.find(key);
+		HashStringIterator i = _hashStrings.find(key);
 		if(i == _hashStrings.end())
 		{
 			_hashStrings[key] = strdup(string);

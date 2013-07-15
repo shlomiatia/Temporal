@@ -11,12 +11,14 @@ namespace Temporal
 	public:
 		explicit DrawPosition(const Vector& offset = Vector::Zero) : _offset(offset), _override(Vector::Zero) {}
 
-		ComponentType::Enum getType() const { return ComponentType::DRAW_POSITION; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		
 		Component* clone() const { return new DrawPosition(_offset); }
 
+		static const Hash TYPE;
 	private:
+
 		Vector _offset;
 		Vector _override;
 

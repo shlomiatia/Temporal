@@ -44,6 +44,8 @@ namespace Temporal
 
 	void IOThread::setJob(IOJob* job)
 	{
+		if(_job)
+			abort();
 		_job = job;
 		_job->setStarted();
 		_semaphore.notify();
@@ -75,7 +77,7 @@ namespace Temporal
 
 	void SettingsLoader::executeImpl()
 	{
-		XmlDeserializer deserializer(_path);
+		XmlDeserializer deserializer(new FileStream(_path, false, false));
 		_result = new Settings();
 		deserializer.serialize("settings", *_result);
 	}
@@ -95,25 +97,12 @@ namespace Temporal
 	{
 		for(StringIterator i = _files.begin(); i != _files.end(); ++i)
 		{
-			XmlDeserializer deserializer(i->c_str());
+			XmlDeserializer deserializer(new FileStream(i->c_str(), false, false));
 			GameState* state = new GameState();
 			deserializer.serialize("game-state", *state);
 			state->init();
 			_result.push_back(state);
 		}
-	}
-
-	void GameLoader::executeImpl()
-	{
-		FileStream fileStream(_path);
-		_result = new MemoryStream();
-		_result->copy(fileStream);
-	}
-
-	void GameSaver::executeImpl()
-	{
-		FileStream fileStream(_path);
-		fileStream.copy(*_stream);
 	}
 
 	const std::shared_ptr<SpriteSheet> ResourceManager::getSpritesheet(const char* file)
@@ -126,7 +115,7 @@ namespace Temporal
 			return result->second;
 		}
 
-		XmlDeserializer deserializer(file);
+		XmlDeserializer deserializer(new FileStream(file, false, false));
 		SpriteSheet* spriteSheet = new SpriteSheet();
 		deserializer.serialize("sprite-sheet", *spriteSheet);
 		spriteSheet->init();
@@ -164,7 +153,7 @@ namespace Temporal
 			return result->second;
 		}
 
-		XmlDeserializer deserializer(file);
+		XmlDeserializer deserializer(new FileStream(file, false, false));
 		AnimationSet* animationSet = new AnimationSet();
 		deserializer.serialize("animation-set", *animationSet);
 		animationSet->init();

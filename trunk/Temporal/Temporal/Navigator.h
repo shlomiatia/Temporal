@@ -59,7 +59,7 @@ namespace Temporal
 	public:
 		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(YABP::Zero), _path(0) {}
 
-		ComponentType::Enum getType() const { return ComponentType::NAVIGATOR; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		const YABP& getDestination() const { return _destination; }
@@ -67,10 +67,13 @@ namespace Temporal
 		NavigationEdgeCollection* getPath() const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { if(_path) delete _path; _path = path; }
 		Component* clone() const { return new Navigator(); }
+
 	protected:
 		Hash getInitialState() const;
 
+		static const Hash TYPE;
 	private:
+
 		YABP _destination;
 		NavigationEdgeCollection* _path;
 

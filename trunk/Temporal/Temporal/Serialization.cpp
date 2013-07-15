@@ -28,6 +28,12 @@ namespace Temporal
 	{
 		_buffer->write((const char*)&value, sizeof(bool));
 	}
+	void Stream::write(const char* value)
+	{
+		int length = strlen(value) + 1;
+		write(length);
+		_buffer->write(value, sizeof(char)*length);
+	}
 	int Stream::readInt()
 	{
 		int value;
@@ -52,20 +58,49 @@ namespace Temporal
 		_buffer->read((char*)&value, sizeof(bool));
 		return value;
 	}
-	void Stream::copy(Stream& other)
+	const char* Stream::readString()
+	{
+		int length = readInt();
+		char* value = new char[length];
+		_buffer->read(value, length);
+		return value;
+	}
+	void Stream::copy(const Stream& other)
 	{
 		std::copy(std::istreambuf_iterator<char>(*other._buffer),
 				  std::istreambuf_iterator<char>(),
 			      std::ostreambuf_iterator<char>(*_buffer));
 	}
 
-	MemoryStream::MemoryStream() : Stream(new std::stringstream()) {}
+	std::string Stream::str()
+	{
+		std::ostringstream buffer;
+		std::copy(std::istreambuf_iterator<char>(*_buffer),
+				  std::istreambuf_iterator<char>(),
+			      std::ostreambuf_iterator<char>(buffer));
+		return buffer.str();
+	}
 
-	FileStream::FileStream(const char* file) : Stream(0)
+	MemoryStream::MemoryStream() : Stream(new std::stringstream()) {}
+	MemoryStream::MemoryStream(const char* data) : Stream(new std::stringstream(data)) {};
+
+	FileStream::FileStream(const char* file, bool write, bool binary) : Stream(0)
 	{
 		std::fstream* buffer = new std::fstream();
-		buffer->open(file);
+		int mode = 0;
+		if(binary)
+			mode |= std::ios::binary;
+		if(write)
+			mode |= std::ios::out | std::ios::trunc;
+		else
+			mode |= std::ios::in;
+		buffer->open(file, mode);
 		_buffer = buffer;
+	}
+	void FileStream::close()
+	{
+		std::fstream* f = static_cast<std::fstream*>(_buffer);
+		f->close();
 	}
 
 	void BinarySerializer::serialize(const char* key, Hash& value)
@@ -91,9 +126,77 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Xml serializer
 	 *********************************************************************************************/
-	XmlDeserializer::XmlDeserializer(const char * path) : _current(0) 
+
+	// Xml serializer
+	XmlSerializer::XmlSerializer(Stream* stream) : BaseSerializer(stream), _current(&_doc) 
 	{
-		int result = _doc.LoadFile(path);
+	}
+
+	void XmlSerializer::serialize(const char* key, int& value)
+	{
+		_current->ToElement()->SetAttribute(key, value);
+	}
+
+	void XmlSerializer::serialize(const char* key, unsigned int& value)
+	{
+		_current->ToElement()->SetAttribute(key, value);
+	}
+
+	void XmlSerializer::serialize(const char* key, float& value)
+	{
+		_current->ToElement()->SetAttribute(key, value);
+	}
+
+	void XmlSerializer::serialize(const char* key, bool& value)
+	{
+		_current->ToElement()->SetAttribute(key, value);
+	}
+
+	void XmlSerializer::serialize(const char* key, Hash& value)
+	{
+		const char* str = value.getString();
+		if(str)
+			_current->ToElement()->SetAttribute(key, str);
+	}
+
+	void XmlSerializer::serialize(const char* key, const char*& value)
+	{
+		if(value)
+			_current->ToElement()->SetAttribute(key, value);
+	}
+
+	void XmlSerializer::serialize(const char* key, Timer& value)
+	{
+		_current->ToElement()->SetAttribute(key, value.getElapsedTime());
+	}
+
+	void XmlSerializer::serializeRadians(const char* key, float& value)
+	{
+		_current->ToElement()->SetAttribute(key, fromRadians(value));
+	}
+
+	void XmlSerializer::save()
+	{
+		tinyxml2::XMLPrinter printer;
+		_doc.Print(&printer);
+		_buffer->copy(MemoryStream(printer.CStr()));
+	}
+	void XmlSerializer::preSerialize(const char* key)
+	{
+		tinyxml2::XMLElement* current = _doc.NewElement(key);
+		_current->LinkEndChild(current);
+		_current = current;
+	}
+
+	void XmlSerializer::postSerialize(const char* key)
+	{
+		_current = _current->Parent();
+	}
+		
+	// Xml deserializer
+	XmlDeserializer::XmlDeserializer(Stream* stream) : _current(0), crapMode(false) 
+	{
+		int result = _doc.Parse(stream->str().c_str());
 		if(result != 0)
 			abort();
 		_current = _doc.GetDocument(); 
@@ -126,13 +229,14 @@ namespace Temporal
 			value = Hash(str);
 	}
 
-	void XmlDeserializer::serialize(const char* key, char*& value)
+	void XmlDeserializer::serialize(const char* key, const char*& value)
 	{
 		const char* str = _current->ToElement()->Attribute(key);
 		if(str)
 		{
-			value = new char[strlen(str)+1];
-			strcpy(value, str);
+			char* temp = new char[strlen(str)+1];
+			strcpy(temp, str);
+			value = temp;
 		}
 	}
 

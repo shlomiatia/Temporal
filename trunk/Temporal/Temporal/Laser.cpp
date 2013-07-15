@@ -12,6 +12,8 @@
 
 namespace Temporal
 {
+	const Hash Laser::TYPE = Hash("laser");
+
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
@@ -20,7 +22,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			Renderer* renderer = static_cast<Renderer*>(getEntity().get(ComponentType::RENDERER));
+			Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
 			_root = &renderer->getRoot();
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)

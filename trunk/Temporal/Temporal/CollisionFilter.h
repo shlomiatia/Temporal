@@ -14,12 +14,14 @@ namespace Temporal
 		int getGroup() const { return _group; }
 		bool isEnabled() const { return _isEnabled; }
 
-		ComponentType::Enum getType() const { return ComponentType::COLLISION_FILTER; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		bool canCollide(int mask, int group) const;
 		Component* clone() const { return new CollisionFilter(_category, _group); }
+		static const Hash TYPE;
 	private:
+
 		int _category;
 		int _group;
 		bool _isEnabled;

@@ -363,7 +363,7 @@ namespace Temporal
 		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = (*(*i).second);
-			const Component* component = entity.get(ComponentType::STATIC_BODY);
+			const Component* component = entity.get(StaticBody::TYPE);
 			if(component)
 				addPlatform((StaticBody&)(*component), platforms);
 		}

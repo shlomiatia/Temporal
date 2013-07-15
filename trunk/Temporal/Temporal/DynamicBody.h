@@ -22,12 +22,14 @@ namespace Temporal
 
 		~DynamicBody();
 
-		ComponentType::Enum getType() const { return ComponentType::DYNAMIC_BODY; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const;
 
+		static const Hash TYPE;
 	private:
+
 		float _maxMovementStepSize;
 		Fixture* _fixture;
 		
