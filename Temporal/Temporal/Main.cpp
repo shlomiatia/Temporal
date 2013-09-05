@@ -25,7 +25,8 @@ namespace Temporal
 			SPEED,
 			WALK,
 			JUMP,
-			TURN
+			TURN,
+			CLIMB
 		};
 	}
 
@@ -47,6 +48,8 @@ namespace Temporal
 					_test = MovementSimulatorTest::JUMP;
 				else if(Keyboard::get().isKeyDown(Key::T))
 					_test = MovementSimulatorTest::TURN;
+				else if(Keyboard::get().isKeyDown(Key::C))
+					_test = MovementSimulatorTest::CLIMB;
 				const char* name = 0;
 				float* value = 0;
 				float temp = 0.0f;
@@ -70,8 +73,13 @@ namespace Temporal
 				}
 				else if(_test == MovementSimulatorTest::TURN)
 				{
-					name = "TURN";
+					name = "Turn";
 					animationId = TURN;
+				}
+				else if(_test == MovementSimulatorTest::CLIMB)
+				{
+					name = "Climb";
+					animationId = CLIMB;
 				}
 				
 				if(animationId != Hash::INVALID)
@@ -95,6 +103,13 @@ namespace Temporal
 				{
 					sample->setDuration(temp/1000.0f);
 					animation->init();
+					if(animationId == CLIMB)
+					{
+						animation = &const_cast<Animation&>(animationSet->get(DESCEND));
+						sample = animation->get(Hash::INVALID).get()[0];
+						sample->setDuration(temp/1000.0f);
+						animation->init();
+					}
 				}
 
 				std::ostringstream stream;
@@ -110,12 +125,16 @@ namespace Temporal
 		static const Hash TYPE;
 		static const Hash TURN;
 		static const Hash WALK;
+		static const Hash CLIMB;
+		static const Hash DESCEND;
 		MovementSimulatorTest::Enum _test;
 	};
 
 	const Hash MovementSimulator::TYPE = Hash("movement-simulator");
 	const Hash MovementSimulator::TURN = Hash("POP_ANM_TURN");
 	const Hash MovementSimulator::WALK = Hash("POP_ANM_WALK");
+	const Hash MovementSimulator::CLIMB = Hash("POP_ANM_CLIMB");
+	const Hash MovementSimulator::DESCEND = Hash("POP_ANM_DESCEND");
 
 	class GameStateLoaderComponent : public Component
 	{
