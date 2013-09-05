@@ -56,6 +56,6 @@ namespace Temporal
 
 	void SpriteSheet::init()
 	{
-		_texture = Texture::load(_textureFile);
+		_texture = Texture::load(_textureFile.c_str());
 	}
 }

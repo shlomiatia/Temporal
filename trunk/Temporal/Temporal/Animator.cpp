@@ -24,7 +24,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_animationSet = ResourceManager::get().getAnimationSet(_animationSetFile);
+			_animationSet = ResourceManager::get().getAnimationSet(_animationSetFile.c_str());
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{

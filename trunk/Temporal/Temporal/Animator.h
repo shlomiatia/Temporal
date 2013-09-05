@@ -33,18 +33,18 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		 Animator(const char* animationSetFile = 0, Hash animationId = Hash::INVALID) :
+		 Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
 			_animationSetFile(animationSetFile), _animationId(animationId) {}
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		
-		Component* clone() const { return new Animator(_animationSetFile, _animationId); }
+		Component* clone() const { return new Animator(_animationSetFile.c_str(), _animationId); }
 
 		static const Hash TYPE;
 	private:
 
-		const char* _animationSetFile;
+		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;

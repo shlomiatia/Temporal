@@ -28,15 +28,15 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if(Keyboard::get().getKey(Key::Q))
+			if(Keyboard::get().isKeyDown(Key::Q))
 			{
 				changePeriod(Period::PAST);
 			}
-			if(Keyboard::get().getKey(Key::W))
+			if(Keyboard::get().isKeyDown(Key::W))
 			{
 				changePeriod(Period::PRESENT);
 			}
-			if(Keyboard::get().getKey(Key::E))
+			if(Keyboard::get().isKeyDown(Key::E))
 			{
 				changePeriod(Period::FUTURE);
 			}

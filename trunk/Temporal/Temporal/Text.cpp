@@ -13,9 +13,13 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_font = ResourceManager::get().getFont(_fontFamily, _fontSize);
+			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_layout.SetFont(_font.get());
-			//_layout->SetLineLength(64.0f);
+		}
+		else if(message.getID() == MessageID::SET_TEXT)
+		{
+			const char* text = static_cast<const char*>(message.getParam());
+			_text = text;
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
@@ -28,25 +32,18 @@ namespace Temporal
 	void Text::draw()
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector position = Vector::Zero;
-		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
-		raiseMessage(getDrawPosition);
-		if(position == Vector::Zero)
-			position = getPosition(*this);
-
-		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
-
+		Vector position = getPosition(*this);
 		glPushMatrix();
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
-			_layout.Render(_text);
+			_layout.Render(_text.c_str());
 		}
 		glPopMatrix();
 	}
 
 	Component* Text::clone() const
 	{
-		return new Text(_font, _text);
+		return new Text(_fontFamily.c_str(), _fontSize, _text.c_str());
 	}
 
 }

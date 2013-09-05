@@ -13,6 +13,8 @@ namespace Temporal
 	 * Constants
 	 *********************************************************************************************/
 	const Hash ActionController::TYPE = Hash("action-controller");
+	float ActionController::WALK_FORCE_PER_SECOND(250.0f);
+	float ActionController::JUMP_FORCE_PER_SECOND(450.0f);
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
@@ -230,7 +232,7 @@ namespace Temporal
 				else
 				{
 					// We need to apply this every update because the ground has infinite restitution. 
-					Vector force = Vector(WALK_FORCE_PER_SECOND, 0.0f);
+					Vector force = Vector(ActionController::WALK_FORCE_PER_SECOND, 0.0f);
 					_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 				}
 			}
@@ -254,8 +256,8 @@ namespace Temporal
 		{
 			const JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
 			float angle = jumpHelper.getInfo().getAngle();
-			float jumpForceX = JUMP_FORCE_PER_SECOND * cos(angle);
-			float jumpForceY = JUMP_FORCE_PER_SECOND * sin(angle);
+			float jumpForceX = ActionController::JUMP_FORCE_PER_SECOND * cos(angle);
+			float jumpForceY = ActionController::JUMP_FORCE_PER_SECOND * sin(angle);
 			Vector jumpVector = Vector(jumpForceX, jumpForceY);
 			_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 			Hash animation = jumpHelper.getInfo().getJumpAnimation();

@@ -45,7 +45,7 @@ namespace Temporal
 		{
 			if(!_loader.isStarted() && !_saver.isStarted())
 			{
-				if(Keyboard::get().getKey(Key::F5))
+				if(Keyboard::get().isKeyDown(Key::F5))
 				{
 					Stream* stream = new MemoryStream();
 					BinarySerializer serializer(stream);
@@ -54,7 +54,7 @@ namespace Temporal
 					_saver.setStream(stream);
 					IOThread::get().setJob(&_saver);
 				}
-				else if(Keyboard::get().getKey(Key::F9))
+				else if(Keyboard::get().isKeyDown(Key::F9))
 				{
 					IOThread::get().setJob(&_loader);
 				}
@@ -68,7 +68,6 @@ namespace Temporal
 				_loader.reset();
 				Stream* stream = _loader.getResult();
 				BinaryDeserializer deserializer(stream);
-				//deserializer.crapMode = true;
 				getEntity().getManager().sendMessageToAllEntities(Message(MessageID::LOAD, &deserializer));
 				delete stream;
 			}

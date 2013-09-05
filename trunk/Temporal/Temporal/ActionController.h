@@ -9,10 +9,6 @@
 
 namespace Temporal
 {
-	// BRODER
-	static const float WALK_FORCE_PER_SECOND = 250.0f;
-	static const float JUMP_FORCE_PER_SECOND = 450.0f;
-
 	/**********************************************************************************************
 	 * Jump Helpers
 	 *********************************************************************************************/
@@ -96,6 +92,8 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
 
+		static float WALK_FORCE_PER_SECOND;
+		static float JUMP_FORCE_PER_SECOND;
 		static const Hash TYPE;
 
 	protected:

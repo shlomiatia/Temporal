@@ -5,7 +5,6 @@
 #include "ResourceManager.h"
 #include <vector>
 #include <unordered_map>
-#include <string>
 
 namespace Temporal
 {
@@ -55,9 +54,6 @@ namespace Temporal
 		GameStateComponent& operator=(const GameStateComponent&);
 	};
 
-	typedef std::unordered_map<Hash, GameState*> GameStateMap;
-	typedef GameStateMap::const_iterator GameStateMapIterator;
-
 	class GameStateListener
 	{
 	public:
@@ -79,6 +75,7 @@ namespace Temporal
 		}
 
 		void setListener(GameStateListener* listener) { _listener = listener; }
+		GameStateListener* getListener() const { return _listener; }
 
 		void init(const char* gameStateFile);
 		void dispose();
@@ -90,8 +87,10 @@ namespace Temporal
 		void unload(StringCollection files);
 		void show(const char* gameStateFile);
 
+		GameState* getCurrentState() const; 
+
 	private:
-		GameStateMap _states;
+		GameStateCollection _states;
 		
 		GameStateListener* _listener;
 		GameStateLoader* _loader;
@@ -102,10 +101,8 @@ namespace Temporal
 
 		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false), _loader(0), _listener(0) {};
 
-		GameState* getCurrentState() const;
 		void load();
 		void unload();
-		Hash add(const char* file, GameState* state);
 
 		GameStateManager(const GameStateManager&);
 		GameStateManager& operator=(const GameStateManager&);
