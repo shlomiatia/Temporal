@@ -5,6 +5,7 @@ namespace Temporal
 {
 	void SampleSet::init()
 	{
+		_duration = 0.0f;
 		for(SampleIterator i = _samples.begin(); i != _samples.end(); ++i)
 		{
 			Sample& sample = **i;
@@ -19,6 +20,7 @@ namespace Temporal
 	
 	void Animation::init()
 	{
+		_duration = 0.0f;
 		for(SampleSetIterator i = _sampleSets.begin(); i != _sampleSets.end(); ++i)
 		{
 			i->second->init();

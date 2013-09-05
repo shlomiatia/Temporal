@@ -13,7 +13,7 @@ namespace Temporal
 	 * Constants
 	 *********************************************************************************************/
 	const Hash ActionController::TYPE = Hash("action-controller");
-	float ActionController::WALK_FORCE_PER_SECOND(250.0f);
+	float ActionController::WALK_FORCE_PER_SECOND(200.0f);
 	float ActionController::JUMP_FORCE_PER_SECOND(450.0f);
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");

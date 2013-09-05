@@ -107,6 +107,11 @@ namespace Temporal
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		
+		for(int i = 0; i < Key::SIZE; ++i)
+		{
+			if(_keys[i] == KeyboardEvent::DOWN)
+				_keys[i] = KeyboardEvent::PRESSSED;
+		}
 		if (e.type == SDL_QUIT)
 		{
 			_keys[Key::ESC] = KeyboardEvent::DOWN;

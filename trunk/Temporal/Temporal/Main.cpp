@@ -13,17 +13,21 @@
 #include "Input.h"
 #include "ActionController.h"
 #include "Text.h"
+#include "Animation.h"
 #include <sstream>
 
 namespace Temporal
 {
-	enum MovementSimulatorTest
+	namespace MovementSimulatorTest
 	{
-		SPEED,
-		JUMP
-	};
-
-	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+		enum Enum
+		{
+			SPEED,
+			WALK,
+			JUMP,
+			TURN
+		};
+	}
 
 	class MovementSimulator : public Component
 	{
@@ -34,23 +38,50 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
+				std::shared_ptr<AnimationSet> animationSet =  ResourceManager::get().getAnimationSet("resources/animations/pop.xml");
 				if(Keyboard::get().isKeyDown(Key::P))
-					_test = SPEED;
+					_test = MovementSimulatorTest::SPEED;
+				else if(Keyboard::get().isKeyDown(Key::L))
+					_test = MovementSimulatorTest::WALK;
 				else if(Keyboard::get().isKeyDown(Key::J))
-					_test = JUMP;
+					_test = MovementSimulatorTest::JUMP;
+				else if(Keyboard::get().isKeyDown(Key::T))
+					_test = MovementSimulatorTest::TURN;
 				const char* name = 0;
 				float* value = 0;
-				if(_test == SPEED)
+				float temp = 0.0f;
+				Hash animationId = Hash::INVALID;
+				Animation* animation = 0;
+				Sample* sample = 0;
+				if(_test == MovementSimulatorTest::SPEED)
 				{
 					name = "Speed";
 					value = &ActionController::WALK_FORCE_PER_SECOND;
 				}
-				else if(_test == JUMP)
+				else if(_test == MovementSimulatorTest::WALK)
+				{
+					name = "Walk";
+					animationId = WALK;
+				}
+				else if(_test == MovementSimulatorTest::JUMP)
 				{
 					name = "Jump";
 					value = &ActionController::JUMP_FORCE_PER_SECOND;
 				}
-
+				else if(_test == MovementSimulatorTest::TURN)
+				{
+					name = "TURN";
+					animationId = TURN;
+				}
+				
+				if(animationId != Hash::INVALID)
+				{
+					animation = &const_cast<Animation&>(animationSet->get(animationId));
+					sample = animation->get(Hash::INVALID).get()[0];
+					temp = sample->getDuration() * 1000.0f;
+					value = &temp;
+				}
+				
 				if(Keyboard::get().isKeyPressed(Key::PLUS))
 				{
 					(*value)++;
@@ -60,6 +91,12 @@ namespace Temporal
 					(*value)--;
 				}
 
+				if(animationId != Hash::INVALID)
+				{
+					sample->setDuration(temp/1000.0f);
+					animation->init();
+				}
+
 				std::ostringstream stream;
 				stream << name << ": " << *value;
 				this->raiseMessage(Message(MessageID::SET_TEXT, const_cast<char *>(stream.str().c_str())));
@@ -67,14 +104,18 @@ namespace Temporal
 		}
 		Component* clone() const { return 0; }
 
-		MovementSimulator() : _test(SPEED) {}
+		MovementSimulator() : _test(MovementSimulatorTest::SPEED) {}
 
 	private:
 		static const Hash TYPE;
-		MovementSimulatorTest _test;
+		static const Hash TURN;
+		static const Hash WALK;
+		MovementSimulatorTest::Enum _test;
 	};
 
 	const Hash MovementSimulator::TYPE = Hash("movement-simulator");
+	const Hash MovementSimulator::TURN = Hash("POP_ANM_TURN");
+	const Hash MovementSimulator::WALK = Hash("POP_ANM_WALK");
 
 	class GameStateLoaderComponent : public Component
 	{
