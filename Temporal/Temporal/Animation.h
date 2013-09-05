@@ -16,6 +16,7 @@ namespace Temporal
 		void setStartTime(float startTime) { _startTime = startTime; }
 		float getStartTime() const { return _startTime; }
 		float getEndTime() const { return getStartTime() + getDuration(); }
+		void setDuration(float duration) { _duration = duration; }
 		float getDuration() const { return _duration; }
 		const Vector& getTranslation() const { return _translation; }
 		float getRotation() const { return _rotation; }
