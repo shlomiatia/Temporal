@@ -1,0 +1,10 @@
+<game-state>
+	<entities-manager>
+		<entity id="ENT_BACKGROUND">
+			<transform>
+				<position x="640" y="360" />
+			</transform>
+			<renderer layer="0" texture="resources/textures/loading.png" />
+		</entity>
+	</entities-manager>
+</game-state>
