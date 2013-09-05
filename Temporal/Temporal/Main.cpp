@@ -10,9 +10,72 @@
 #include "Timer.h"
 #include "ResourceManager.h"
 #include "SaverLoader.h"
+#include "Input.h"
+#include "ActionController.h"
+#include "Text.h"
+#include <sstream>
 
 namespace Temporal
 {
+	enum MovementSimulatorTest
+	{
+		SPEED,
+		JUMP
+	};
+
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+
+	class MovementSimulator : public Component
+	{
+	public:
+		Hash getType() const { return TYPE; }
+
+		void handleMessage(Message& message)
+		{
+			if(message.getID() == MessageID::UPDATE)
+			{
+				if(Keyboard::get().isKeyDown(Key::P))
+					_test = SPEED;
+				else if(Keyboard::get().isKeyDown(Key::J))
+					_test = JUMP;
+				const char* name = 0;
+				float* value = 0;
+				if(_test == SPEED)
+				{
+					name = "Speed";
+					value = &ActionController::WALK_FORCE_PER_SECOND;
+				}
+				else if(_test == JUMP)
+				{
+					name = "Jump";
+					value = &ActionController::JUMP_FORCE_PER_SECOND;
+				}
+
+				if(Keyboard::get().isKeyPressed(Key::PLUS))
+				{
+					(*value)++;
+				}
+				else if(Keyboard::get().isKeyPressed(Key::MINUS))
+				{
+					(*value)--;
+				}
+
+				std::ostringstream stream;
+				stream << name << ": " << *value;
+				this->raiseMessage(Message(MessageID::SET_TEXT, const_cast<char *>(stream.str().c_str())));
+			}
+		}
+		Component* clone() const { return 0; }
+
+		MovementSimulator() : _test(SPEED) {}
+
+	private:
+		static const Hash TYPE;
+		MovementSimulatorTest _test;
+	};
+
+	const Hash MovementSimulator::TYPE = Hash("movement-simulator");
+
 	class GameStateLoaderComponent : public Component
 	{
 	public:
@@ -55,7 +118,7 @@ namespace Temporal
 	public:
 		void onUpdate(float framePeriod, GameState& gameState)
 		{
-			if(Keyboard::get().getKey(Key::Q))
+			if(Keyboard::get().isKeyDown(Key::Q))
 			{
 				//const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 				//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
@@ -75,6 +138,11 @@ namespace Temporal
 				Entity* entity = new Entity();
 				entity->add(new GameSaverLoader());
 				gameState.getEntitiesManager().add(Hash("ENT_SAVER_LOADER"), entity);
+				entity = new Entity();
+				entity->add(new MovementSimulator());
+				Text* text = new Text("c:/windows/fonts/Arial.ttf", 12);
+				entity->add(text);
+				gameState.getEntitiesManager().add(Hash("ENT_MOVEMENT_SIMULATOR"), entity);
 			}
 		}
 	};
@@ -84,8 +152,11 @@ using namespace Temporal;
 
 int main(int argc, char* argv[])
 {
+	{
+		std::string s;
+	}
 	GameStateManager::get().setListener(new MyGameStateListener());
-	Game::get().run("resources/game-states/loading.xml");
+	Game::get().run("resources/game-states/entities.xml");
 //	_CrtDumpMemoryLeaks();
 	return 0;
 }

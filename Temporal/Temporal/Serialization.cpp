@@ -159,10 +159,9 @@ namespace Temporal
 			_current->ToElement()->SetAttribute(key, str);
 	}
 
-	void XmlSerializer::serialize(const char* key, const char*& value)
+	void XmlSerializer::serialize(const char* key, std::string& value)
 	{
-		if(value)
-			_current->ToElement()->SetAttribute(key, value);
+		_current->ToElement()->SetAttribute(key, value.c_str());
 	}
 
 	void XmlSerializer::serialize(const char* key, Timer& value)
@@ -194,7 +193,7 @@ namespace Temporal
 	}
 		
 	// Xml deserializer
-	XmlDeserializer::XmlDeserializer(Stream* stream) : _current(0), crapMode(false) 
+	XmlDeserializer::XmlDeserializer(Stream* stream) : _current(0)
 	{
 		int result = _doc.Parse(stream->str().c_str());
 		if(result != 0)
@@ -229,15 +228,11 @@ namespace Temporal
 			value = Hash(str);
 	}
 
-	void XmlDeserializer::serialize(const char* key, const char*& value)
+	void XmlDeserializer::serialize(const char* key, std::string& value)
 	{
-		const char* str = _current->ToElement()->Attribute(key);
-		if(str)
-		{
-			char* temp = new char[strlen(str)+1];
-			strcpy(temp, str);
-			value = temp;
-		}
+		const char* valueP = _current->ToElement()->Attribute(key);
+		if(valueP)
+			value = valueP;
 	}
 
 	void XmlDeserializer::serialize(const char* key, Timer& value)

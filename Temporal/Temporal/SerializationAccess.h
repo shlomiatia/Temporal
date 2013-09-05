@@ -70,8 +70,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, T*& value, XmlDeserializer& serializer)
 		{
-			if(!serializer.crapMode)
-				value = new T();
+			value = new T();
 			SerializationAccess::serialize(key, *value, serializer);
 		}
 

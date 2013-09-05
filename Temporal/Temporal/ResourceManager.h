@@ -26,7 +26,7 @@ namespace Temporal
 
 	typedef std::vector<std::string> StringCollection;
 	typedef StringCollection::const_iterator StringIterator;
-	typedef std::vector<GameState*> GameStateCollection;
+	typedef std::unordered_map<Hash, GameState*> GameStateCollection;
 	typedef GameStateCollection::const_iterator GameStateIterator;
 
 	class IOJob
@@ -99,11 +99,10 @@ namespace Temporal
 	class GameStateLoader : public IOJob
 	{
 	public:
-		GameStateLoader(const char* file = 0);
+		GameStateLoader(const char* file = "");
 		void executeImpl();
 
 		void add(const char* file);
-		const StringCollection& getFiles() const { return _files; }
 		const GameStateCollection& getResult() const { return _result; }
 
 	private:

@@ -62,7 +62,7 @@ namespace Temporal
 	public:
 		explicit SpriteSheet(char* textureFile);
 		explicit SpriteSheet(const Texture* texture = 0, Side::Enum orientation = Side::RIGHT) :
-			_textureFile(0), _texture(texture), _orientation(orientation) {}
+			_textureFile(), _texture(texture), _orientation(orientation) {}
 		~SpriteSheet();
 		void add(SpriteGroup* spriteGroup);
 
@@ -73,7 +73,7 @@ namespace Temporal
 		void init();
 
 	private:
-		const char* _textureFile;
+		std::string _textureFile;
 		const Texture* _texture;
 		Side::Enum _orientation;
 		SpriteGroupCollection _spriteGroups;

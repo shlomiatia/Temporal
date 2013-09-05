@@ -26,10 +26,10 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			if(_spriteSheetFile)
-				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile);
+			if(!_spriteSheetFile.empty())
+				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile.c_str());
 			else
-				_spriteSheet = ResourceManager::get().getTexture(_textureFile);
+				_spriteSheet = ResourceManager::get().getTexture(_textureFile.c_str());
 			if(!_root)
 				_root = new SceneNode();
 		}
@@ -74,7 +74,7 @@ namespace Temporal
 	Component* Renderer::clone() const
 	{
 		SceneNode* sceneNodeClone = _root == 0 ? 0 : _root->clone();
-		return new Renderer(_textureFile, _spriteSheetFile, sceneNodeClone, _layer, _color);
+		return new Renderer(_textureFile.c_str(), _spriteSheetFile.c_str(), sceneNodeClone, _layer, _color);
 	}
 
 }

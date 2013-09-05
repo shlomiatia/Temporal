@@ -222,7 +222,7 @@ namespace Temporal
 		float y1 = lowerSegment1.getY(x);
 		float y2 = lowerSegment2.getY(x);
 		float verticalDistance = y1 - y2;
-		float minFallDistance = getFallDistance(WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
+		float minFallDistance = getFallDistance(ActionController::WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 
 		if(distance >= minFallDistance)
@@ -267,7 +267,7 @@ namespace Temporal
 			node1.addEdge(new NavigationEdge(node1, node2, x, Side::LEFT, NavigationEdgeType::DESCEND));
 
 			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
+			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Side::LEFT, NavigationEdgeType::JUMP_UP));
 		}
@@ -282,7 +282,7 @@ namespace Temporal
 		float y1low = area1.getCenterY() + area1.getSlopedRadiusVy() - area1.getYRadius();
 		float y2low = area2.getCenterY() - area2.getSlopedRadiusVy() - area2.getYRadius();
 		float y2high = area2.getCenterY() - area2.getSlopedRadiusVy() + area2.getYRadius();
-		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
+		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
 			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1low - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);

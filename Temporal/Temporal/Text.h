@@ -2,6 +2,7 @@
 #define TEXT_H
 #include "EntitySystem.h"
 #include <memory>
+#include <string>
 #include <ftgl/ftgl.h>
 
 namespace Temporal
@@ -10,8 +11,7 @@ namespace Temporal
 	{
 	public:
 		
-		explicit Text(std::shared_ptr<FTFont> font = 0, const char* text = 0) : _font(font), _text(text)  {}
-		~Text() { delete[] _fontFamily; delete[] _text; }
+		explicit Text(const char* fontFamily = "", unsigned int size = 0, const char* text = "") : _fontFamily(fontFamily), _fontSize(size), _text(text)  {}
 
 		Hash getType() const { return TYPE; }
 
@@ -22,10 +22,10 @@ namespace Temporal
 	private:
 
 		FTSimpleLayout _layout;
-		const char* _fontFamily;
+		std::string _fontFamily;
 		unsigned int _fontSize;
 		std::shared_ptr<FTFont> _font;
-		const char* _text;
+		std::string _text;
 
 		void draw();
 

@@ -12,23 +12,23 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if(Keyboard::get().getKey(Key::RIGHT) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
+			if(Keyboard::get().isKeyPressed(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
 			{
 				sendDirectionAction(*this, Side::RIGHT);
 			}
-			if(Keyboard::get().getKey(Key::LEFT)  || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
+			if(Keyboard::get().isKeyPressed(Key::A) == KeyboardEvent::DOWN || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
 			{
 				sendDirectionAction(*this, Side::LEFT);
 			}
-			if(Keyboard::get().getKey(Key::UP) || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().isKeyPressed(Key::SPACE) || Keyboard::get().isKeyPressed(Key::W) || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_UP));
 			}
-			if(Keyboard::get().getKey(Key::DOWN) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().isKeyPressed(Key::S) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
-			if(Keyboard::get().getKey(Key::Q)  || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
+			if(Keyboard::get().isKeyPressed(Key::Q)  || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
 			{
 				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 			}

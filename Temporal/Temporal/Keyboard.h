@@ -31,6 +31,18 @@ namespace Temporal
 	typedef std::unordered_map<int, int> KeyCollection;
 	typedef KeyCollection::const_iterator KeyCollectionIterator;
 
+
+	namespace KeyboardEvent
+	{
+		enum Enum
+		{
+			NONE,
+			DOWN,
+			PRESSSED,
+			UP
+		};
+	}
+
 	class Keyboard
 	{
 	public:
@@ -41,13 +53,16 @@ namespace Temporal
 		}
 
 		void update(void* obj);
-		bool getKey(Key::Enum key) const { return _keys[key]; }
+		bool isKeyPressed(Key::Enum key) { KeyboardEvent::Enum status = _keys[key];  return status == KeyboardEvent::PRESSSED || status == KeyboardEvent::DOWN; }
+		bool isKeyDown(Key::Enum key) { return _keys[key] == KeyboardEvent::DOWN; }
+		bool isKeyUp(Key::Enum key) { return _keys[key] == KeyboardEvent::UP; }
+
 
 	private:
 
 		// TODO:
 		KeyCollection _keysMap;
-		bool _keys[Key::SIZE];
+		KeyboardEvent::Enum _keys[Key::SIZE];
 
 		Keyboard();
 		~Keyboard() {};

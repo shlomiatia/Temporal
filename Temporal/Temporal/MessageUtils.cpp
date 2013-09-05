@@ -1,11 +1,16 @@
 #include "MessageUtils.h"
 #include "EntitySystem.h"
+#include "Vector.h"
 
 namespace Temporal
 {
 	const Vector& getPosition(const Component& component)
 	{
-		return *static_cast<Vector*>(component.raiseMessage(Message(MessageID::GET_POSITION)));
+		void* result = component.raiseMessage(Message(MessageID::GET_POSITION));
+		if(result)
+			return *static_cast<Vector*>(result);
+		else
+			return Vector::Zero;
 	}
 
 	Side::Enum getOrientation(const Component& component)

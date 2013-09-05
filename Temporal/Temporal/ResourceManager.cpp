@@ -97,11 +97,14 @@ namespace Temporal
 	{
 		for(StringIterator i = _files.begin(); i != _files.end(); ++i)
 		{
-			XmlDeserializer deserializer(new FileStream(i->c_str(), false, false));
+			const char* file = i->c_str();
+			XmlDeserializer deserializer(new FileStream(file, false, false));
 			GameState* state = new GameState();
 			deserializer.serialize("game-state", *state);
+			Hash id = Hash(file);
+			GameStateManager::get().getListener()->onLoaded(id, *state);
 			state->init();
-			_result.push_back(state);
+			_result[id] = state;
 		}
 	}
 

@@ -56,10 +56,10 @@ namespace Temporal
 		_particles = new Particle[length];
 		_vertices = new float[length*8];
 		_texCoords = new float[length*8];
-		if(_spritesheetFile)
-			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile);
+		if(!_spritesheetFile.empty())
+			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile.c_str());
 		else
-			_spritesheet = ResourceManager::get().getTexture(_textureFile);
+			_spritesheet = ResourceManager::get().getTexture(_textureFile.c_str());
 		int j = 8;
 		for(int i = 0; i < length; ++i)
 		{

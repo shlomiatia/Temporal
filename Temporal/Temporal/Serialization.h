@@ -80,7 +80,7 @@ namespace Temporal
 		virtual void serialize(const char* key, bool& value) = 0;
 		virtual void serialize(const char* key, Hash& value) = 0;
 		virtual void serialize(const char* key, Timer& value) = 0;
-		virtual void serialize(const char* key, const char*& value) = 0;
+		virtual void serialize(const char* key, std::string& value) = 0;
 		virtual void serializeRadians(const char* key, float& value) = 0;
 		virtual SerializationDirection::Enum type() = 0;
 		virtual void preSerialize(const char* key) {};
@@ -132,7 +132,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
-		void serialize(const char* key, const char*& value) { _buffer->write(value); }
+		void serialize(const char* key, std::string& value) { _buffer->write(value.c_str()); }
 		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
 		
 		template<class T>
@@ -167,7 +167,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value) { value = _buffer->readFloat(); }
-		void serialize(const char* key, const char*& value) { value = _buffer->readString(); }
+		void serialize(const char* key, std::string& value) { value = _buffer->readString(); }
 		SerializationDirection::Enum type() { return SerializationDirection::DESERIALIZATION; };
 
 		template<class T>
@@ -206,7 +206,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
-		void serialize(const char* key, const char*& value);
+		void serialize(const char* key, std::string& value);
 		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
 
 		void preSerialize(const char* key);
@@ -243,7 +243,6 @@ namespace Temporal
 	class XmlDeserializer
 	{
 	public:
-		bool crapMode;
 		XmlDeserializer(Stream* stream);
 
 		void serialize(const char* key, int& value);
@@ -253,7 +252,7 @@ namespace Temporal
 		void serialize(const char* key, Hash& value);
 		void serialize(const char* key, Timer& value);
 		void serializeRadians(const char* key, float& value);
-		void serialize(const char* key, const char*& value);
+		void serialize(const char* key, std::string& value);
 		SerializationDirection::Enum type() { return SerializationDirection::DESERIALIZATION; };
 		
 		template<class T>
@@ -288,11 +287,8 @@ namespace Temporal
 			for(_current = _current->FirstChildElement(); _current; _current = _current->NextSiblingElement())
 			{
 				T* object = 0;
-				if(crapMode)
-					object = value[i];
 				SerializationAccess::serialize(_current->Value(), object, *this);
-				if(!crapMode)
-					value.push_back(object);
+				value.push_back(object);
 				++i;
 			}
 			_current = parent;

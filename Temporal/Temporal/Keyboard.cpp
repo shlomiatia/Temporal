@@ -6,7 +6,7 @@ namespace Temporal
 	Keyboard::Keyboard()
 	{
 		for(int i = 0; i < Key::SIZE; ++i)
-			_keys[i] = false;
+			_keys[i] = KeyboardEvent::NONE;
 		_keysMap[SDLK_ESCAPE] = Key::ESC;
 		_keysMap[SDLK_F1] = Key::F1;
 		_keysMap[SDLK_F2] = Key::F2;
@@ -33,7 +33,9 @@ namespace Temporal
 		_keysMap[SDLK_9] = Key::D9;
 		_keysMap[SDLK_0] = Key::D0;
 		_keysMap[SDLK_MINUS] = Key::MINUS;
+		_keysMap[SDLK_KP_MINUS] = Key::MINUS;
 		_keysMap[SDLK_PLUS] = Key::PLUS;
+		_keysMap[SDLK_KP_PLUS] = Key::PLUS;
 		_keysMap[SDLK_BACKSPACE] = Key::BACKSPACE;
 
 		_keysMap[SDLK_TAB] = Key::TAB;
@@ -107,15 +109,15 @@ namespace Temporal
 		
 		if (e.type == SDL_QUIT)
 		{
-			_keys[Key::ESC] = true;
+			_keys[Key::ESC] = KeyboardEvent::DOWN;
 		}
 		else if (e.type == SDL_KEYDOWN)
 		{
-			_keys[_keysMap[e.key.keysym.sym]] = true;
+			_keys[_keysMap[e.key.keysym.sym]] = KeyboardEvent::DOWN;
 		}
 		else if (e.type == SDL_KEYUP)
 		{
-			_keys[_keysMap[e.key.keysym.sym]] = false;
+			_keys[_keysMap[e.key.keysym.sym]] = KeyboardEvent::UP;
 		}
 	}
 }
