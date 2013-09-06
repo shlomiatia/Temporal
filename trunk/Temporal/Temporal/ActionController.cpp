@@ -17,6 +17,8 @@ namespace Temporal
 	float ActionController::MAX_WALK_FORCE_PER_SECOND(250.0f);
 	float ActionController::JUMP_FORCE_PER_SECOND(450.0f);
 	float ActionController::FALL_ALLOW_JUMP_TIME(0.15f);
+	float ActionController::JUMP_STOP_MODIFIER(0.5f);
+	float ActionController::MAX_WALK_JUMP_MODIFIER(1.2f);
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
@@ -259,16 +261,25 @@ namespace Temporal
 		{
 			const JumpHelper& jumpHelper = getActionController(_stateMachine).getJumpHelper();
 			float angle = jumpHelper.getInfo().getAngle();
-			float jumpForceX = ActionController::JUMP_FORCE_PER_SECOND * cos(angle);
-			float jumpForceY = ActionController::JUMP_FORCE_PER_SECOND * sin(angle);
+			Vector& velocity = *static_cast<Vector*>(_stateMachine->raiseMessage(Message(MessageID::GET_VELOCITY)));
+			float force = ActionController::JUMP_FORCE_PER_SECOND + velocity.getLength();
+			float max = ActionController::JUMP_FORCE_PER_SECOND * ActionController::MAX_WALK_JUMP_MODIFIER;
+			if(force > max)
+				force = max;
+			float jumpForceX = force * cos(angle);
+			float jumpForceY = force * sin(angle);
 			Vector jumpVector = Vector(jumpForceX, jumpForceY);
 			_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &jumpVector));
 			Hash animation = jumpHelper.getInfo().getJumpAnimation();
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &animation));
+
+			// Pressed on transition
+			_stateMachine->setTempFlag1(true);
 		}
 
 		void Jump::handleMessage(Message& message) const
 		{
+			
 			// TempFlag 1 - Want to hang
 			if(message.getID() == MessageID::ACTION_UP)
 			{
@@ -285,7 +296,22 @@ namespace Temporal
 				if(collision.getY() < 0.0f)
 					_stateMachine->changeState(JUMP_END_STATE);
 			}
+			else if(message.getID() == MessageID::UPDATE)
+			{
+				// Permanent flag - stopped jumping
+				if(!_stateMachine->getPermanentFlag() && !_stateMachine->getTempFlag1())
+				{
+					Vector& velocity = *static_cast<Vector*>(_stateMachine->raiseMessage(Message(MessageID::GET_VELOCITY)));
+					if(velocity.getY() > 0.0f)
+					{
+						velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
+						_stateMachine->setPermanentFlag(true);
+					}
+				}
+			}
 		}
+
+		
 
 		void JumpEnd::enter() const
 		{

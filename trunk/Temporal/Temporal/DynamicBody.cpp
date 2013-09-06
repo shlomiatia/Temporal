@@ -46,6 +46,10 @@ namespace Temporal
 			YABP* shape = &_fixture->getGlobalShape();
 			message.setParam(shape);
 		}
+		else if(message.getID() == MessageID::GET_VELOCITY)
+		{
+			message.setParam(&_velocity);
+		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));

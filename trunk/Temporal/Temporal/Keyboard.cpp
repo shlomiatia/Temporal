@@ -1,5 +1,4 @@
 #include "Keyboard.h"
-#include "Log.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -113,6 +112,11 @@ namespace Temporal
 			{
 				_keys[i] = KeyboardEvent::PRESSSED;
 			}
+			else if(_keys[i] == KeyboardEvent::UP)
+			{
+				_keys[i] = KeyboardEvent::NONE;
+			}
+
 		}
 	}
 
