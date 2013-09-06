@@ -96,6 +96,8 @@ namespace Temporal
 		static float MAX_WALK_FORCE_PER_SECOND;
 		static float JUMP_FORCE_PER_SECOND;
 		static float FALL_ALLOW_JUMP_TIME;
+		static float JUMP_STOP_MODIFIER;
+		static float MAX_WALK_JUMP_MODIFIER;
 		static const Hash TYPE;
 
 	protected:

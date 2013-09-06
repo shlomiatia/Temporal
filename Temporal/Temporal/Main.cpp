@@ -15,6 +15,7 @@
 #include "Text.h"
 #include "Animation.h"
 #include "DynamicBody.h"
+#include "Transform.h"
 #include <sstream>
 
 namespace Temporal
@@ -25,12 +26,15 @@ namespace Temporal
 		{
 			SPEED,
 			ACCELERATION,
-			WALK,
-			JUMP,
-			TURN,
-			CLIFF,
 			GRAVITY,
-			FALL
+			FALL_TIME,
+			JUMP_STOP_MODIFIER,
+			WALK_JUMP_MODIFIER,
+			WALK_ANIMATION,
+			JUMP_ANIMATION,
+			TURN_ANIMATION,
+			CLIFF_ANIMATION,
+			SIZE
 		};
 	}
 
@@ -44,22 +48,11 @@ namespace Temporal
 			if(message.getID() == MessageID::UPDATE)
 			{
 				std::shared_ptr<AnimationSet> animationSet =  ResourceManager::get().getAnimationSet("resources/animations/pop.xml");
-				if(Keyboard::get().isKeyDown(Key::P))
-					_test = MovementSimulatorTest::SPEED;
-				else if(Keyboard::get().isKeyDown(Key::C))
-					_test = MovementSimulatorTest::ACCELERATION;
-				else if(Keyboard::get().isKeyDown(Key::K))
-					_test = MovementSimulatorTest::WALK;
-				else if(Keyboard::get().isKeyDown(Key::J))
-					_test = MovementSimulatorTest::JUMP;
-				else if(Keyboard::get().isKeyDown(Key::T))
-					_test = MovementSimulatorTest::TURN;
-				else if(Keyboard::get().isKeyDown(Key::F))
-					_test = MovementSimulatorTest::CLIFF;
-				else if(Keyboard::get().isKeyDown(Key::G))
-					_test = MovementSimulatorTest::GRAVITY;
-				else if(Keyboard::get().isKeyDown(Key::L))
-					_test = MovementSimulatorTest::FALL;
+				if(Keyboard::get().isKeyDown(Key::OPEN_BRACKET))
+					_test = (MovementSimulatorTest::Enum)((MovementSimulatorTest::SIZE + _test - 1) % MovementSimulatorTest::SIZE);
+				else if(Keyboard::get().isKeyDown(Key::CLOSE_BRACKET))
+					_test = (MovementSimulatorTest::Enum)((MovementSimulatorTest::SIZE + _test + 1) % MovementSimulatorTest::SIZE);
+				
 				const char* name = 0;
 				float* value = 0;
 				float temp = 0.0f;
@@ -76,38 +69,51 @@ namespace Temporal
 					name = "Acceleration";
 					value = &ActionController::WALK_ACC_PER_SECOND;
 				}
-				else if(_test == MovementSimulatorTest::WALK)
-				{
-					name = "Walk";
-					animationId = WALK;
-				}
-				else if(_test == MovementSimulatorTest::JUMP)
-				{
-					name = "Jump";
-					value = &ActionController::JUMP_FORCE_PER_SECOND;
-				}
-				else if(_test == MovementSimulatorTest::TURN)
-				{
-					name = "Turn";
-					animationId = TURN;
-				}
-				else if(_test == MovementSimulatorTest::CLIFF)
-				{
-					name = "Climb";
-					animationId = CLIMB;
-				}
 				else if(_test == MovementSimulatorTest::GRAVITY)
 				{
 					name = "Gravity";
 					temp = DynamicBody::GRAVITY.getY();
 					value = &temp;
 				}
-				else if(_test == MovementSimulatorTest::FALL)
+				else if(_test == MovementSimulatorTest::FALL_TIME)
 				{
-					name = "Fall";
+					name = "Fall Time";
 					temp = ActionController::FALL_ALLOW_JUMP_TIME * 1000.0f;
 					value = &temp;
 				}
+				else if(_test == MovementSimulatorTest::JUMP_STOP_MODIFIER)
+				{
+					name = "Jump Stop Modifier";
+					temp = ActionController::JUMP_STOP_MODIFIER * 1000.0f;
+					value = &temp;
+				}
+				else if(_test == MovementSimulatorTest::WALK_JUMP_MODIFIER)
+				{
+					name = "Walk Jump Modifier";
+					temp = ActionController::MAX_WALK_JUMP_MODIFIER* 1000.0f;
+					value = &temp;
+				}
+				else if(_test == MovementSimulatorTest::WALK_ANIMATION)
+				{
+					name = "Walk Animation";
+					animationId = WALK;
+				}
+				else if(_test == MovementSimulatorTest::JUMP_ANIMATION)
+				{
+					name = "Jump Animation";
+					value = &ActionController::JUMP_FORCE_PER_SECOND;
+				}
+				else if(_test == MovementSimulatorTest::TURN_ANIMATION)
+				{
+					name = "Turn Animation";
+					animationId = TURN;
+				}
+				else if(_test == MovementSimulatorTest::CLIFF_ANIMATION)
+				{
+					name = "Climb Animation";
+					animationId = CLIMB;
+				}
+				
 				
 				if(animationId != Hash::INVALID)
 				{
@@ -142,11 +148,18 @@ namespace Temporal
 				{
 					DynamicBody::GRAVITY.setY(temp);
 				}
-				else if(_test == MovementSimulatorTest::FALL)
+				else if(_test == MovementSimulatorTest::FALL_TIME)
 				{
 					ActionController::FALL_ALLOW_JUMP_TIME = temp/1000.0f;
 				}
-
+				else if(_test == MovementSimulatorTest::JUMP_STOP_MODIFIER)
+				{
+					ActionController::JUMP_STOP_MODIFIER = temp/1000.0f;
+				}
+				else if(_test == MovementSimulatorTest::WALK_JUMP_MODIFIER)
+				{
+					ActionController::MAX_WALK_JUMP_MODIFIER = temp/1000.0f;
+				}
 
 				std::ostringstream stream;
 				stream << name << ": " << *value;
@@ -235,9 +248,11 @@ namespace Temporal
 				entity->add(new GameSaverLoader());
 				gameState.getEntitiesManager().add(Hash("ENT_SAVER_LOADER"), entity);
 				entity = new Entity();
+				entity->add(new Transform(Vector(0.0f, 100.0f)));
 				entity->add(new MovementSimulator());
 				Text* text = new Text("c:/windows/fonts/Arial.ttf", 12);
 				entity->add(text);
+
 				gameState.getEntitiesManager().add(Hash("ENT_MOVEMENT_SIMULATOR"), entity);
 			}
 		}

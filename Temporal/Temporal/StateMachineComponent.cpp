@@ -52,5 +52,6 @@ namespace Temporal
 		_currentStateID = stateID;
 		resetTempState();
 		_timer.reset();
+		_permanentFlag = false;
 	}
 }
