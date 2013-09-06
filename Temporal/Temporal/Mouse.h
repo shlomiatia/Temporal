@@ -30,7 +30,7 @@ namespace Temporal
 			return (instance);
 		}
 
-		void update(void* obj);
+		void dispatchEvent(void* obj);
 
 		const Vector& getPosition() const { return _position; }
 		bool getButton(MouseButton::Enum button) { return _buttons[button]; }

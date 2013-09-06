@@ -53,7 +53,7 @@ namespace Temporal
 		SDL_JoystickClose(_joystick);
 	}
 
-	void Gamepad::update(void* obj)
+	void Gamepad::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		

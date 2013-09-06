@@ -13,8 +13,10 @@ namespace Temporal
 	 * Constants
 	 *********************************************************************************************/
 	const Hash ActionController::TYPE = Hash("action-controller");
-	float ActionController::WALK_FORCE_PER_SECOND(250.0f);
+	float ActionController::WALK_ACC_PER_SECOND(2500.0f);
+	float ActionController::MAX_WALK_FORCE_PER_SECOND(250.0f);
 	float ActionController::JUMP_FORCE_PER_SECOND(450.0f);
+	float ActionController::FALL_ALLOW_JUMP_TIME(0.15f);
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
@@ -166,8 +168,6 @@ namespace Temporal
 			}
 		}
 
-		const float Fall::ALLOW_JUMP_TIME = 0.075f;
-
 		void Fall::enter() const
 		{
 			// Not setting force because we want to continue the momentum
@@ -180,7 +180,7 @@ namespace Temporal
 			if(message.getID() == MessageID::ACTION_UP)
 			{
 				// Need to be in start jump start, because can occur on fall from ledge
-				if(_stateMachine->getTimer().getElapsedTime() <= ALLOW_JUMP_TIME)
+				if(_stateMachine->getTimer().getElapsedTime() <= ActionController::FALL_ALLOW_JUMP_TIME)
 				{
 					getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);
 					_stateMachine->changeState(JUMP_STATE);
@@ -232,7 +232,10 @@ namespace Temporal
 				else
 				{
 					// We need to apply this every update because the ground has infinite restitution. 
-					Vector force = Vector(ActionController::WALK_FORCE_PER_SECOND, 0.0f);
+					float x = ActionController::WALK_ACC_PER_SECOND * _stateMachine->getTimer().getElapsedTime();
+					if(x > ActionController::MAX_WALK_FORCE_PER_SECOND)
+						x = ActionController::MAX_WALK_FORCE_PER_SECOND; 
+					Vector force = Vector(x, 0.0f);
 					_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 				}
 			}

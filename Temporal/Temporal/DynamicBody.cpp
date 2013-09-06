@@ -16,7 +16,7 @@ namespace Temporal
 
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
 
-	const Vector DynamicBody::GRAVITY(0.0f, -1500.0f);
+	Vector DynamicBody::GRAVITY(0.0f, -1500.0f);
 
 	float getMaxMovementStepSize(const Fixture& fixture)
 	{
@@ -147,11 +147,6 @@ namespace Temporal
 		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
 		if(direction.getY() >= 0.0 || (curr.getX() - _ground->getGlobalShape().getSide(Side::getOpposite(side))) * side >= 0.0f)
 			velocity = direction * movementAmount;
-		
-
-		// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
-		if(direction.getY() <= 0.0f )
-			_velocity = velocity;
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
@@ -182,6 +177,9 @@ namespace Temporal
 			// Fall
 			if(!_ground)
 			{
+				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
+				if(direction.getY() <= 0.0f )
+					_velocity = velocity;
 				executeMovement(movement);
 			}
 			else

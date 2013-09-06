@@ -12,5 +12,6 @@ namespace Temporal
 		va_start(arguments, text);
 		vprintf(text, arguments);
 		va_end(arguments);
+		printf("\n");
 	}
 }

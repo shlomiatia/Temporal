@@ -28,7 +28,7 @@ namespace Temporal
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
-			if(Keyboard::get().isKeyPressed(Key::Q)  || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
+			if(Keyboard::get().isKeyDown(Key::Q)  || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
 			{
 				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 			}
