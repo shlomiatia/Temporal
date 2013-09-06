@@ -79,7 +79,7 @@ namespace Temporal
 			{
 				timer.stop();
 				float fps = timer.getSplits() / time;
-				Log::write("FPS: %f\n", fps);
+				Log::write("FPS: %f", fps);
 				timer.start();
 			}
 		}

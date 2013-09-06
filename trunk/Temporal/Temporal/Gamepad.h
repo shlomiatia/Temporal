@@ -36,7 +36,7 @@ namespace Temporal
 
 		void init();
 		void dispose();
-		void update(void* obj);
+		void dispatchEvent(void* obj);
 
 		const Vector& getLeftStick() const { return _leftStick; }
 		const Vector& getRightStick() const { return _rightStick; }

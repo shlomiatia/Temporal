@@ -92,8 +92,10 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
 
-		static float WALK_FORCE_PER_SECOND;
+		static float WALK_ACC_PER_SECOND;
+		static float MAX_WALK_FORCE_PER_SECOND;
 		static float JUMP_FORCE_PER_SECOND;
+		static float FALL_ALLOW_JUMP_TIME;
 		static const Hash TYPE;
 
 	protected:
@@ -125,9 +127,6 @@ namespace Temporal
 		public:
 			void enter() const;
 			void handleMessage(Message& message) const;
-
-		private:
-			static const float ALLOW_JUMP_TIME;
 		};
 
 		class Walk : public ComponentState

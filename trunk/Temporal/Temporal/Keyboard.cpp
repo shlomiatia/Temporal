@@ -1,4 +1,5 @@
 #include "Keyboard.h"
+#include "Log.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -79,6 +80,7 @@ namespace Temporal
 		_keysMap[SDLK_SLASH] = Key::SLASH;
 
 		_keysMap[SDLK_LCTRL] = Key::LEFT_CTRL;
+		_keysMap[SDLK_LSUPER] = Key::WINDOWS;
 		_keysMap[SDLK_LALT] = Key::LEFT_ALT;
 		_keysMap[SDLK_SPACE] = Key::SPACE;
 		_keysMap[SDLK_RALT] = Key::RIGHT_ALT;
@@ -103,26 +105,34 @@ namespace Temporal
 		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
 	}
 
-	void Keyboard::update(void* obj)
+	void Keyboard::update()
 	{
-		SDL_Event& e = *static_cast<SDL_Event*>(obj);
-		
 		for(int i = 0; i < Key::SIZE; ++i)
 		{
 			if(_keys[i] == KeyboardEvent::DOWN)
+			{
 				_keys[i] = KeyboardEvent::PRESSSED;
+			}
 		}
+	}
+
+	void Keyboard::dispatchEvent(void* obj)
+	{
+		SDL_Event& e = *static_cast<SDL_Event*>(obj);
+		
 		if (e.type == SDL_QUIT)
 		{
 			_keys[Key::ESC] = KeyboardEvent::DOWN;
 		}
 		else if (e.type == SDL_KEYDOWN)
 		{
-			_keys[_keysMap[e.key.keysym.sym]] = KeyboardEvent::DOWN;
+			int key = _keysMap[e.key.keysym.sym];
+			_keys[key] = KeyboardEvent::DOWN;
 		}
 		else if (e.type == SDL_KEYUP)
 		{
-			_keys[_keysMap[e.key.keysym.sym]] = KeyboardEvent::UP;
+			int key = _keysMap[e.key.keysym.sym];
+			_keys[key] = KeyboardEvent::UP;
 		}
 	}
 }

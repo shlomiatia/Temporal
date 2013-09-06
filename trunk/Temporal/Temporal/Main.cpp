@@ -14,6 +14,7 @@
 #include "ActionController.h"
 #include "Text.h"
 #include "Animation.h"
+#include "DynamicBody.h"
 #include <sstream>
 
 namespace Temporal
@@ -23,10 +24,13 @@ namespace Temporal
 		enum Enum
 		{
 			SPEED,
+			ACCELERATION,
 			WALK,
 			JUMP,
 			TURN,
-			CLIMB
+			CLIFF,
+			GRAVITY,
+			FALL
 		};
 	}
 
@@ -42,14 +46,20 @@ namespace Temporal
 				std::shared_ptr<AnimationSet> animationSet =  ResourceManager::get().getAnimationSet("resources/animations/pop.xml");
 				if(Keyboard::get().isKeyDown(Key::P))
 					_test = MovementSimulatorTest::SPEED;
-				else if(Keyboard::get().isKeyDown(Key::L))
+				else if(Keyboard::get().isKeyDown(Key::C))
+					_test = MovementSimulatorTest::ACCELERATION;
+				else if(Keyboard::get().isKeyDown(Key::K))
 					_test = MovementSimulatorTest::WALK;
 				else if(Keyboard::get().isKeyDown(Key::J))
 					_test = MovementSimulatorTest::JUMP;
 				else if(Keyboard::get().isKeyDown(Key::T))
 					_test = MovementSimulatorTest::TURN;
-				else if(Keyboard::get().isKeyDown(Key::C))
-					_test = MovementSimulatorTest::CLIMB;
+				else if(Keyboard::get().isKeyDown(Key::F))
+					_test = MovementSimulatorTest::CLIFF;
+				else if(Keyboard::get().isKeyDown(Key::G))
+					_test = MovementSimulatorTest::GRAVITY;
+				else if(Keyboard::get().isKeyDown(Key::L))
+					_test = MovementSimulatorTest::FALL;
 				const char* name = 0;
 				float* value = 0;
 				float temp = 0.0f;
@@ -59,7 +69,12 @@ namespace Temporal
 				if(_test == MovementSimulatorTest::SPEED)
 				{
 					name = "Speed";
-					value = &ActionController::WALK_FORCE_PER_SECOND;
+					value = &ActionController::MAX_WALK_FORCE_PER_SECOND;
+				}
+				else if(_test == MovementSimulatorTest::ACCELERATION)
+				{
+					name = "Acceleration";
+					value = &ActionController::WALK_ACC_PER_SECOND;
 				}
 				else if(_test == MovementSimulatorTest::WALK)
 				{
@@ -76,10 +91,22 @@ namespace Temporal
 					name = "Turn";
 					animationId = TURN;
 				}
-				else if(_test == MovementSimulatorTest::CLIMB)
+				else if(_test == MovementSimulatorTest::CLIFF)
 				{
 					name = "Climb";
 					animationId = CLIMB;
+				}
+				else if(_test == MovementSimulatorTest::GRAVITY)
+				{
+					name = "Gravity";
+					temp = DynamicBody::GRAVITY.getY();
+					value = &temp;
+				}
+				else if(_test == MovementSimulatorTest::FALL)
+				{
+					name = "Fall";
+					temp = ActionController::FALL_ALLOW_JUMP_TIME * 1000.0f;
+					value = &temp;
 				}
 				
 				if(animationId != Hash::INVALID)
@@ -111,6 +138,15 @@ namespace Temporal
 						animation->init();
 					}
 				}
+				else if(_test == MovementSimulatorTest::GRAVITY)
+				{
+					DynamicBody::GRAVITY.setY(temp);
+				}
+				else if(_test == MovementSimulatorTest::FALL)
+				{
+					ActionController::FALL_ALLOW_JUMP_TIME = temp/1000.0f;
+				}
+
 
 				std::ostringstream stream;
 				stream << name << ": " << *value;

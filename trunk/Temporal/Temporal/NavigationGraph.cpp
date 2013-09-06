@@ -222,7 +222,7 @@ namespace Temporal
 		float y1 = lowerSegment1.getY(x);
 		float y2 = lowerSegment2.getY(x);
 		float verticalDistance = y1 - y2;
-		float minFallDistance = getFallDistance(ActionController::WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
+		float minFallDistance = getFallDistance(ActionController::MAX_WALK_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY(), verticalDistance);
 		float distance = (area2.getSide(orientation) - x) * orientation;
 
 		if(distance >= minFallDistance)

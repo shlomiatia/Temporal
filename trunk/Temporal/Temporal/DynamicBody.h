@@ -13,8 +13,7 @@ namespace Temporal
 	class DynamicBody : public Component
 	{
 	public:
-		// BRODER
-		static const Vector GRAVITY;
+		static Vector GRAVITY;
 
 		explicit DynamicBody(Fixture* fixture = 0) :
 			_fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _ground(0), _maxMovementStepSize(0.0f),

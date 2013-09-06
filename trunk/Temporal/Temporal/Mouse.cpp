@@ -19,7 +19,7 @@ namespace Temporal
 		_buttonsMap[SDL_BUTTON_RIGHT] = MouseButton::RIGHT;
 	}
 
-	void Mouse::update(void* obj)
+	void Mouse::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		

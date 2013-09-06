@@ -17,12 +17,13 @@ namespace Temporal
 
 	void Input::update()
 	{
+		Keyboard::get().update();
 		SDL_Event e;
 		while (SDL_PollEvent(&e))
 		{
-			Keyboard::get().update(&e);
-			Mouse::get().update(&e);
-			_gamepad.update(&e);
+			Keyboard::get().dispatchEvent(&e);
+			Mouse::get().dispatchEvent(&e);
+			_gamepad.dispatchEvent(&e);
 		}
 	}
 }
