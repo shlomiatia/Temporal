@@ -16,7 +16,7 @@ namespace Temporal
 
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
 
-	Vector DynamicBody::GRAVITY(0.0f, -1500.0f);
+	Vector DynamicBody::GRAVITY(0.0f, -1200.0f);
 
 	float getMaxMovementStepSize(const Fixture& fixture)
 	{
@@ -102,7 +102,7 @@ namespace Temporal
 		{
 			// BRODER
 			_velocity = _ground->getGlobalShape().getSlopedRadius().normalize() * 250.0f;
-			if(_velocity .getY() > 0.0f)
+			if(_velocity.getY() > 0.0f)
 				_velocity = -_velocity;
 			_ground = 0;
 			executeMovement(determineMovement(framePeriod));
