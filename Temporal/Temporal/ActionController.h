@@ -138,6 +138,13 @@ namespace Temporal
 			void handleMessage(Message& message) const;
 		};
 
+		class Slide : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
+
 		class Turn : public ComponentState
 		{
 		public:

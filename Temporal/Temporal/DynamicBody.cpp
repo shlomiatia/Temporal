@@ -261,7 +261,8 @@ namespace Temporal
 			_velocity = Vector::Zero;
 			_previousGroundCenter = _ground->getGlobalShape().getCenter();
 		}
-		raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
+		if(collision != Vector::Zero)
+			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 
 		// Absolute impulses last one frame
 		_absoluteImpulse = Vector::Zero;
