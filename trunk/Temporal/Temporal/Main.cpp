@@ -170,9 +170,8 @@ namespace Temporal
 					ActionController::MAX_WALK_JUMP_MODIFIER = temp/1000.0f;
 				}
 
-				const Vector& vector = *static_cast<Vector*>(GameStateManager::get().getCurrentState()->getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_VELOCITY)));
 				std::ostringstream stream;
-				stream << name << ": " << *value << "\n" << vector.getX() << ", " << vector.getY();
+				stream << name << ": " << *value << "\n";
 				this->raiseMessage(Message(MessageID::SET_TEXT, const_cast<char *>(stream.str().c_str())));
 			}
 		}

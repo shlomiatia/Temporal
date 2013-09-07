@@ -38,6 +38,7 @@ namespace Temporal
 	static const Hash STAND_STATE = Hash("ACT_STT_STAND");
 	static const Hash FALL_STATE = Hash("ACT_STT_FALL");
 	static const Hash WALK_STATE = Hash("ACT_STT_WALK");
+	static const Hash SLIDE_STATE = Hash("ACT_STT_SLIDE");
 	static const Hash TURN_STATE = Hash("ACT_STT_TURN");
 	static const Hash JUMP_STATE = Hash("ACT_STT_JUMP");
 	static const Hash JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
@@ -107,6 +108,7 @@ namespace Temporal
 		states[STAND_STATE] = new Stand();
 		states[FALL_STATE] = new Fall();
 		states[WALK_STATE] = new Walk();
+		states[SLIDE_STATE] = new Slide();
 		states[TURN_STATE] = new Turn();
 		states[JUMP_STATE] = new Jump();
 		states[JUMP_END_STATE] = new JumpEnd();
@@ -168,6 +170,14 @@ namespace Temporal
 					_stateMachine->getEntity().getManager().sendMessageToEntity(entityId, Message(MessageID::ACTIVATE));
 				}
 			}
+			else if(message.getID() == MessageID::UPDATE)
+			{
+				void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
+				if(!ground)
+				{
+					_stateMachine->changeState(FALL_STATE);
+				}
+			}
 		}
 
 		void Fall::enter() const
@@ -196,7 +206,14 @@ namespace Temporal
 			{
 				const Vector& collision = getVectorParam(message.getParam());
 				if(collision.getY() < 0.0f)
-					_stateMachine->changeState(STAND_STATE);
+				{
+					const Fixture& ground = *static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+					if(!isModerateAngle(ground.getGlobalShape().getSlopedRadius().getAngle()))
+						_stateMachine->changeState(SLIDE_STATE);
+					else
+						_stateMachine->changeState(STAND_STATE);
+				}
+
 			}
 		}
 
@@ -240,6 +257,21 @@ namespace Temporal
 					Vector force = Vector(x, 0.0f);
 					_stateMachine->raiseMessage(Message(MessageID::SET_TIME_BASED_IMPULSE, &force));
 				}
+			}
+		}
+
+		void Slide::enter() const
+		{
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &JUMP_FORWARD_ANIMATION));
+		}
+
+		void Slide::handleMessage(Message& message) const
+		{
+			if(message.getID() == MessageID::UPDATE)
+			{
+				const Fixture* ground = static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+				if(!ground || isModerateAngle(ground->getGlobalShape().getSlopedRadius().getAngle()))
+					_stateMachine->changeState(STAND_STATE);
 			}
 		}
 
@@ -294,7 +326,13 @@ namespace Temporal
 			{
 				const Vector& collision = getVectorParam(message.getParam());
 				if(collision.getY() < 0.0f)
-					_stateMachine->changeState(JUMP_END_STATE);
+				{
+					const Fixture& ground = *static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+					if(!isModerateAngle(ground.getGlobalShape().getSlopedRadius().getAngle()))
+						_stateMachine->changeState(SLIDE_STATE);
+					else
+						_stateMachine->changeState(JUMP_END_STATE);
+				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
