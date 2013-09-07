@@ -15,10 +15,10 @@ namespace Temporal
 	const Hash ActionController::TYPE = Hash("action-controller");
 	float ActionController::WALK_ACC_PER_SECOND(2500.0f);
 	float ActionController::MAX_WALK_FORCE_PER_SECOND(250.0f);
-	float ActionController::JUMP_FORCE_PER_SECOND(450.0f);
+	float ActionController::JUMP_FORCE_PER_SECOND(400.0f);
 	float ActionController::FALL_ALLOW_JUMP_TIME(0.15f);
 	float ActionController::JUMP_STOP_MODIFIER(0.5f);
-	float ActionController::MAX_WALK_JUMP_MODIFIER(1.2f);
+	float ActionController::MAX_WALK_JUMP_MODIFIER(1.15f);
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");

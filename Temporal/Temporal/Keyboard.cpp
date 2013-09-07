@@ -35,6 +35,7 @@ namespace Temporal
 		_keysMap[SDLK_MINUS] = Key::MINUS;
 		_keysMap[SDLK_KP_MINUS] = Key::MINUS;
 		_keysMap[SDLK_PLUS] = Key::PLUS;
+		_keysMap[SDLK_EQUALS] = Key::PLUS;
 		_keysMap[SDLK_KP_PLUS] = Key::PLUS;
 		_keysMap[SDLK_BACKSPACE] = Key::BACKSPACE;
 

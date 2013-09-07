@@ -16,16 +16,20 @@
 #include "Animation.h"
 #include "DynamicBody.h"
 #include "Transform.h"
+#include "EntitySystem.h"
 #include <sstream>
 
 namespace Temporal
 {
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+
 	namespace MovementSimulatorTest
 	{
 		enum Enum
 		{
 			SPEED,
 			ACCELERATION,
+			JUMP,
 			GRAVITY,
 			FALL_TIME,
 			JUMP_STOP_MODIFIER,
@@ -68,6 +72,11 @@ namespace Temporal
 				{
 					name = "Acceleration";
 					value = &ActionController::WALK_ACC_PER_SECOND;
+				}
+				else if(_test == MovementSimulatorTest::JUMP)
+				{
+					name = "Jump";
+					value = &ActionController::JUMP_FORCE_PER_SECOND;
 				}
 				else if(_test == MovementSimulatorTest::GRAVITY)
 				{
@@ -161,8 +170,9 @@ namespace Temporal
 					ActionController::MAX_WALK_JUMP_MODIFIER = temp/1000.0f;
 				}
 
+				const Vector& vector = *static_cast<Vector*>(GameStateManager::get().getCurrentState()->getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_VELOCITY)));
 				std::ostringstream stream;
-				stream << name << ": " << *value;
+				stream << name << ": " << *value << "\n" << vector.getX() << ", " << vector.getY();
 				this->raiseMessage(Message(MessageID::SET_TEXT, const_cast<char *>(stream.str().c_str())));
 			}
 		}
