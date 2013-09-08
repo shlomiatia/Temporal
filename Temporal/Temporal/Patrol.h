@@ -9,13 +9,13 @@ namespace Temporal
 	class EdgeDetector : public ContactListener
 	{
 	public:
-		explicit EdgeDetector(Hash sensorId)
-			: ContactListener(sensorId), _isFound(false) {}
+		explicit EdgeDetector(Hash sensorId, Component& owner)
+			: ContactListener(sensorId, owner), _isFound(false) {}
 
 	protected:
 		void start();
 		void handle(const Contact& contact);
-		void end(Component& component);
+		void end();
 
 	private:
 		bool _isFound;
@@ -36,7 +36,6 @@ namespace Temporal
 		Hash getInitialState() const;
 
 	private:
-
 		EdgeDetector _edgeDetector;
 
 		StateCollection getStates() const;

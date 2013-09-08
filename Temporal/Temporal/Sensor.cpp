@@ -51,7 +51,7 @@ namespace Temporal
 		}
 	}
 
-	void ContactListener::handleMessage(Component& component, Message& message)
+	void ContactListener::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::SENSOR_START)
 		{
@@ -69,7 +69,7 @@ namespace Temporal
 		{
 			Hash sensorId = getHashParam(message.getParam());
 			if(_sensorId == sensorId)
-				end(component);
+				end();
 		}
 	}
 }

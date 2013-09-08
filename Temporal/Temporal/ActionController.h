@@ -63,35 +63,32 @@ namespace Temporal
 	class LedgeDetector : public ContactListener
 	{
 	public:
-		explicit LedgeDetector(Hash sensorId, MessageID::Enum messageId)
-			: ContactListener(sensorId), _messageId(messageId), _isFailed(false), _isFound(false) {}
+		explicit LedgeDetector(Hash sensorId, Component& owner)
+			: ContactListener(sensorId, owner), _upFound(false), _upFailed(false), _downFound(false), _downFailed(false), 
+										 _frontFound(false), _frontFailed(false), _height(0.0f), _max(0.0f), _body(0), _side(Side::LEFT) {}
 
 	protected:
 		void start();
 		void handle(const Contact& contact);
-		void end(Component& component);
+		void end();
 
 	private:
-		const MessageID::Enum _messageId;
-		bool _isFound;
-		bool _isFailed;
-	};
-
-	class LedgeDetector2 : public ContactListener
-	{
-	public:
-		explicit LedgeDetector2(Hash sensorId, MessageID::Enum messageId)
-			: ContactListener(sensorId), _messageId(messageId), _isFailed(false), _height(-1.0f) {}
-
-	protected:
-		void start();
-		void handle(const Contact& contact);
-		void end(Component& component);
-
-	private:
+		bool _upFound;
+		bool _upFailed;
+		bool _downFound;
+		bool _downFailed;
+		bool _frontFound;
+		bool _frontFailed;
 		float _height;
-		const MessageID::Enum _messageId;
-		bool _isFailed;
+		float _max;
+		const YABP* _body;
+		Side::Enum _side;
+
+		void handleUp(const Contact& contact);
+		void handleDown(const Contact& contact);
+		void handleFront(const Contact& contact);
+
+		void handleFrontCheckY(float y);
 	};
 
 
@@ -105,6 +102,8 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
+		void setClimbVector(const Vector& vector) { _climbVector = vector; }
+		const Vector& getClimbVector() const { return _climbVector; } 
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
@@ -121,11 +120,9 @@ namespace Temporal
 		Hash getInitialState() const;
 
 	private:
-
+		Vector _climbVector; 
 		JumpHelper _jumpHelper;
-		LedgeDetector _hangDetector;
-		LedgeDetector2 _hangDetector2;
-		LedgeDetector _descendDetector;
+		LedgeDetector _ledgeDetector;
 
 		StateCollection getStates() const;
 	};

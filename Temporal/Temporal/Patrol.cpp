@@ -25,20 +25,20 @@ namespace Temporal
 		_isFound = false;
 	}
 
-	void EdgeDetector::end(Component& component)
+	void EdgeDetector::end()
 	{
 		if(_isFound)
-			component.raiseMessage(Message(MessageID::SENSOR_FRONG_EDGE));
+			getOwner().raiseMessage(Message(MessageID::SENSOR_FRONG_EDGE));
 	}
 
 	Patrol::Patrol() : 
 		StateMachineComponent(getStates(), "PAT"),
-		_edgeDetector(FRONT_EDGE_SENSOR_ID)
+		_edgeDetector(FRONT_EDGE_SENSOR_ID, *this)
 		{}
 
 	void Patrol::handleMessage(Message& message)
 	{
-		_edgeDetector.handleMessage(*this, message);
+		_edgeDetector.handleMessage(message);
 		StateMachineComponent::handleMessage(message);
 	}
 

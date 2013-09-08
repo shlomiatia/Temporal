@@ -122,13 +122,6 @@ namespace Temporal
 
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
-
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("center", _center);	
-			serializer.serialize("radius", _radius);
-		}
 		
 	private:
 		Vector _center;
@@ -185,11 +178,16 @@ namespace Temporal
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-		Vector getTop(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
-		Vector getBottom(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
+		float getTop(Side::Enum side) const { getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() + getYRadius(); }
+		float getBottom(Side::Enum side) const { getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() - getYRadius(); }
+		Vector getTopSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
+		Vector getBottomSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
 
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
+
+		Segment getTopSegment() const { return Segment(getCenter() + getYVector(), getSlopedRadius()); }
+		Segment getBottomSegment() const { return Segment(getCenter() - getYVector(), getSlopedRadius()); }
 
 		YABP* clone() const { return new YABP(_center, _slopedRadius, _yRadius); }
 	private:
