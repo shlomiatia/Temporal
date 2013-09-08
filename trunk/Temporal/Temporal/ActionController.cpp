@@ -6,6 +6,7 @@
 #include "Shapes.h"
 #include "Math.h"
 #include "DynamicBody.h"
+#include "ShapeOperations.h"
 
 namespace Temporal
 {
@@ -20,9 +21,7 @@ namespace Temporal
 	float ActionController::JUMP_STOP_MODIFIER(0.5f);
 	float ActionController::MAX_WALK_JUMP_MODIFIER(1.15f);
 
-	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
-	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
-	static const Hash HANG_SENSOR_ID2 = Hash("SNS_HANG2");
+	static const Hash LEDGE_SENSOR_ID = Hash("SNS_LEDGE");
 	static const Hash ACTIVATE_SENSOR_ID = Hash("SNS_ACTIVATE");
 
 	static Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
@@ -60,81 +59,139 @@ namespace Temporal
 
 	void LedgeDetector::start()
 	{
-		_isFound = false;
-		_isFailed = false;
+		_upFound = false;
+		_upFailed = false;
+		_downFound = false;
+		_downFailed = false;
+		_frontFound = false;
+		_frontFailed = false;
+		_height = 0.0f;
+		
+
+		_body = static_cast<const YABP*>(getOwner().raiseMessage(Message(MessageID::GET_SHAPE)));
+		_max  = _body->getTop() + _body->getHeight();
+		_side = getOrientation(getOwner());
 	}
 
-	void LedgeDetector::handle(const Contact& contact)
+	void LedgeDetector::handleUp(const Contact& contact)
 	{
-		const YABP& actor = contact.getSource().getGlobalShape();
+		const YABP& sensor = contact.getSource().getGlobalShape();
 		const YABP& platform = contact.getTarget().getGlobalShape();
 		if(platform.getHeight() == 0.0f && 
-		   (equals(actor.getTop(), platform.getTop()) || equals(actor.getBottom() ,platform.getBottom())) &&
-		   !_isFailed)
+		   equals(_body->getTop(), platform.getTop()) &&
+		   !_upFailed)
 		{
-			_isFound = true;
+			_upFound = true;
 		}
 		else
 		{
-			_isFailed = true;
-			_isFound = false;
-		}
-	}
-
-	void LedgeDetector::end(Component& component)
-	{
-		if(_isFound)
-			component.raiseMessage(Message(_messageId));
-	}
-
-	void LedgeDetector2::start()
-	{
-		_isFailed = false;
-		_height = -1.0f;
-	}
-
-	void LedgeDetector2::handle(const Contact& contact)
-	{
-		const YABP& actor = contact.getSource().getGlobalShape();
-		const YABP& platform = contact.getTarget().getGlobalShape();
-		if(equals(actor.getRight() - 1.0f, platform.getLeft()) &&
-			actor.getTop() > platform.getTop() &&
-		   !_isFailed)
-		{
-			float height = platform.getTop() - actor.getBottom();
-			if(_height == -1.0f || height < _height)
-				_height = height;
-		}
-		else
-		{
-			if((actor.getTop() + _height) >= platform.getBottom())
+			YABP test(_body->getCenter() + Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
+			if(intersects(test, platform))
 			{
-				_isFailed = true;
-				_height = -1.0f;
+				_upFailed = true;
+				_upFound = false;
 			}
 		}
 	}
 
-	void LedgeDetector2::end(Component& component)
+	void LedgeDetector::handleDown(const Contact& contact)
 	{
-		if(_height != -1.0f)
-			component.raiseMessage(Message(_messageId, &_height));
+		const YABP& sensor = contact.getSource().getGlobalShape();
+		const YABP& platform = contact.getTarget().getGlobalShape();
+		if(platform.getHeight() == 0.0f && 
+		   equals(_body->getBottom(), platform.getTop()) &&
+		   !_downFailed)
+		{
+			_downFound = true;
+		}
+		else
+		{
+			YABP test(_body->getCenter() - Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
+			if(intersects(test, platform))
+			{
+				_downFailed = true;
+				_downFound = false;
+			}
+		}
+	}
+
+	void LedgeDetector::handleFrontCheckY(float y)
+	{
+		if(y > _body->getTop())
+		{
+			_max = std::min(_max, y);
+		}
+		else if(y > _body->getBottom())
+		{
+			_frontFound = false;
+			_frontFailed = true;
+		}
+	}
+
+	void LedgeDetector::handleFront(const Contact& contact)
+	{
+		const YABP& sensor = contact.getSource().getGlobalShape();
+		const YABP& platform = contact.getTarget().getGlobalShape();
+		Side::Enum opposite = Side::getOpposite(_side);
+		float topSide = platform.getTop(opposite);
+		if(equals(_body->getSide(_side), platform.getSide(opposite)) &&
+			_body->getTop() >= topSide &&
+			_body->getBottom() <= topSide &&
+			!_frontFailed)
+		{
+			float height = topSide - _body->getBottom();
+			if(height > _height)
+				_height = height;
+			_frontFound = true;
+		}
+		else
+		{
+			Segment topSegment = platform.getTopSegment();
+			Segment bottomSegment = platform.getBottomSegment();
+			float topLeftY = topSegment.getY(_body->getLeft());
+			float topRightY = topSegment.getY(_body->getRight());
+			float bottomLeftY = bottomSegment.getY(_body->getLeft());
+			float bottomRightY = bottomSegment.getY(_body->getRight());
+			
+			handleFrontCheckY(topLeftY);
+			handleFrontCheckY(topRightY);
+			handleFrontCheckY(bottomLeftY);
+			handleFrontCheckY(bottomRightY);
+		}
+	}
+
+	void LedgeDetector::handle(const Contact& contact)
+	{
+		handleUp(contact);
+		handleDown(contact);
+		handleFront(contact);
+	}
+
+	void LedgeDetector::end()
+	{
+		if(_upFound)
+			getOwner().raiseMessage(Message(MessageID::SENSOR_HANG_UP));
+		if(_downFound)
+			getOwner().raiseMessage(Message(MessageID::SENSOR_DESCEND));
+
+		if(_body->getHeight() + _height > _max)
+		{
+			_frontFound = false;
+			_frontFailed = true;
+		}
+		if(_frontFound)
+			getOwner().raiseMessage(Message(MessageID::SENSOR_HANG_FRONT, &_height));
 	}
 
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
 	ActionController::ActionController() :
-		StateMachineComponent(getStates(), "ACT"),
-		_hangDetector(HANG_SENSOR_ID, MessageID::SENSOR_HANG),
-		_hangDetector2(HANG_SENSOR_ID2, MessageID::SENSOR_HANG2),
-		_descendDetector(DESCEND_SENSOR_ID, MessageID::SENSOR_DESCEND) {}
+		StateMachineComponent(getStates(), "ACT"), _ledgeDetector(LEDGE_SENSOR_ID, *this), _climbVector(Vector::Zero) {}
 
 	void ActionController::handleMessage(Message& message)
 	{
-		_hangDetector.handleMessage(*this, message);
-		_hangDetector2.handleMessage(*this, message);
-		_descendDetector.handleMessage(*this, message);
+		_ledgeDetector.handleMessage(message);
 		StateMachineComponent::handleMessage(message);
 	}
 
@@ -354,21 +411,16 @@ namespace Temporal
 			{
 				_stateMachine->setTempFlag1(true);
 			}
-			else if (message.getID() == MessageID::SENSOR_HANG)
+			else if (message.getID() == MessageID::SENSOR_HANG_UP)
 			{
 				if(_stateMachine->getTempFlag1())
 					_stateMachine->changeState(HANG_STATE);
 			}
-			else if(message.getID() == MessageID::SENSOR_HANG2)
+			else if(message.getID() == MessageID::SENSOR_HANG_FRONT)
 			{
-				Vector crap(1.0f, *(float*)message.getParam());
-				_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &crap));
-				_stateMachine->changeState(STAND_STATE);
-			}
-			else if (message.getID() == MessageID::SENSOR_HANG)
-			{
-				if(_stateMachine->getTempFlag1())
-					_stateMachine->changeState(HANG_STATE);
+				Vector climbVector(1.0f, *(float*)message.getParam());
+				getActionController(_stateMachine).setClimbVector(climbVector);
+				_stateMachine->changeState(HANG_STATE);
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
@@ -428,6 +480,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ACTION_DOWN)
 			{	
+				getActionController(_stateMachine).setClimbVector(Vector::Zero);
 				Vector zero = Vector::Zero;
 				_stateMachine->raiseMessage(Message(MessageID::SET_DRAW_POSITION_OVERRIDE, &zero));
 				bool gravityEnabled = true;
@@ -444,7 +497,10 @@ namespace Temporal
 		{
 			const YABP& shape = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 			float climbForceY = shape.getHeight();
-			Vector climbForce(0.0f, climbForceY);
+			Vector climbForce = getActionController(_stateMachine).getClimbVector();
+			if(climbForce == Vector::Zero)
+				climbForce = Vector(0.0f, climbForceY);
+			getActionController(_stateMachine).setClimbVector(Vector::Zero);
 
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLIMB_ANIMATION));
 			_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &climbForce));

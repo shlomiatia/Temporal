@@ -27,18 +27,21 @@ namespace Temporal
 	class ContactListener
 	{
 	public:
-		ContactListener(Hash sensorId) : _sensorId(sensorId) {};
+		ContactListener(Hash sensorId, Component& owner) : _sensorId(sensorId), _owner(owner) {};
 		virtual ~ContactListener() {};
 	
-		void handleMessage(Component& component, Message& message);
+		void handleMessage(Message& message);
 
 	protected:
 		virtual void start() {}
 		virtual void handle(const Contact& contact) = 0;
-		virtual void end(Component& component) {}
+		virtual void end() {}
+
+		Component& getOwner() { return _owner; }
 
 	private:
 		Hash _sensorId;
+		Component& _owner;
 
 		ContactListener(const ContactListener&);
 		ContactListener& operator=(const ContactListener&);

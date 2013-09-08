@@ -154,7 +154,7 @@ namespace Temporal
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
-		Vector max = _ground->getGlobalShape().getTop(side);
+		Vector max = _ground->getGlobalShape().getTopSide(side);
 
 		// Still on platform
 		if((dest.getX() - max.getX()) * side <= 0.0f)
