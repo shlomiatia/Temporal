@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Lighting.h"
 #include "StaticBody.h"
+#include "Sensor.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -89,6 +90,7 @@ namespace Temporal
 	{
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);
+		filter.push_back(Sensor::TYPE);
 		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		//Grid::get().draw();

@@ -40,7 +40,6 @@ namespace Temporal
 
 	bool equals(float a, float b)
 	{
-		float e = EPSILON;
 		bool bb = abs(a - b) < EPSILON; 
 		return bb;
 	}
