@@ -22,6 +22,7 @@ namespace Temporal
 
 	static const Hash DESCEND_SENSOR_ID = Hash("SNS_DESCEND");
 	static const Hash HANG_SENSOR_ID = Hash("SNS_HANG");
+	static const Hash HANG_SENSOR_ID2 = Hash("SNS_HANG2");
 	static const Hash ACTIVATE_SENSOR_ID = Hash("SNS_ACTIVATE");
 
 	static Hash STAND_ANIMATION = Hash("POP_ANM_STAND");
@@ -86,17 +87,53 @@ namespace Temporal
 			component.raiseMessage(Message(_messageId));
 	}
 
+	void LedgeDetector2::start()
+	{
+		_isFailed = false;
+		_height = -1.0f;
+	}
+
+	void LedgeDetector2::handle(const Contact& contact)
+	{
+		const YABP& actor = contact.getSource().getGlobalShape();
+		const YABP& platform = contact.getTarget().getGlobalShape();
+		if(equals(actor.getRight() - 1.0f, platform.getLeft()) &&
+			actor.getTop() > platform.getTop() &&
+		   !_isFailed)
+		{
+			float height = platform.getTop() - actor.getBottom();
+			if(_height == -1.0f || height < _height)
+				_height = height;
+		}
+		else
+		{
+			if((actor.getTop() + _height) >= platform.getBottom())
+			{
+				_isFailed = true;
+				_height = -1.0f;
+			}
+		}
+	}
+
+	void LedgeDetector2::end(Component& component)
+	{
+		if(_height != -1.0f)
+			component.raiseMessage(Message(_messageId, &_height));
+	}
+
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
 	ActionController::ActionController() :
 		StateMachineComponent(getStates(), "ACT"),
 		_hangDetector(HANG_SENSOR_ID, MessageID::SENSOR_HANG),
+		_hangDetector2(HANG_SENSOR_ID2, MessageID::SENSOR_HANG2),
 		_descendDetector(DESCEND_SENSOR_ID, MessageID::SENSOR_DESCEND) {}
 
 	void ActionController::handleMessage(Message& message)
 	{
 		_hangDetector.handleMessage(*this, message);
+		_hangDetector2.handleMessage(*this, message);
 		_descendDetector.handleMessage(*this, message);
 		StateMachineComponent::handleMessage(message);
 	}
@@ -316,6 +353,17 @@ namespace Temporal
 			if(message.getID() == MessageID::ACTION_UP)
 			{
 				_stateMachine->setTempFlag1(true);
+			}
+			else if (message.getID() == MessageID::SENSOR_HANG)
+			{
+				if(_stateMachine->getTempFlag1())
+					_stateMachine->changeState(HANG_STATE);
+			}
+			else if(message.getID() == MessageID::SENSOR_HANG2)
+			{
+				Vector crap(1.0f, *(float*)message.getParam());
+				_stateMachine->raiseMessage(Message(MessageID::SET_ABSOLUTE_IMPULSE, &crap));
+				_stateMachine->changeState(STAND_STATE);
 			}
 			else if (message.getID() == MessageID::SENSOR_HANG)
 			{

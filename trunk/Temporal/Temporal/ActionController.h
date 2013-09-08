@@ -77,6 +77,23 @@ namespace Temporal
 		bool _isFailed;
 	};
 
+	class LedgeDetector2 : public ContactListener
+	{
+	public:
+		explicit LedgeDetector2(Hash sensorId, MessageID::Enum messageId)
+			: ContactListener(sensorId), _messageId(messageId), _isFailed(false), _height(-1.0f) {}
+
+	protected:
+		void start();
+		void handle(const Contact& contact);
+		void end(Component& component);
+
+	private:
+		float _height;
+		const MessageID::Enum _messageId;
+		bool _isFailed;
+	};
+
 
 	/**********************************************************************************************
 	 * Action controller
@@ -107,6 +124,7 @@ namespace Temporal
 
 		JumpHelper _jumpHelper;
 		LedgeDetector _hangDetector;
+		LedgeDetector2 _hangDetector2;
 		LedgeDetector _descendDetector;
 
 		StateCollection getStates() const;
