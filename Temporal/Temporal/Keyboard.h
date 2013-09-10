@@ -44,7 +44,7 @@ namespace Temporal
 
 		void update();
 		void dispatchEvent(void* obj);
-		bool isPressing(Key::Enum key) { ButtonState::isPushing(_keys[key]); }
+		bool isPressing(Key::Enum key) { return ButtonState::isPushing(_keys[key]); }
 		bool isStartPressing(Key::Enum key) { return _keys[key] == ButtonState::START_PUSHING; }
 		bool isStopPressing(Key::Enum key) { return _keys[key] == ButtonState::STOP_PUSHING; }
 

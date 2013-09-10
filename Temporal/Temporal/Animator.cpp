@@ -62,7 +62,7 @@ namespace Temporal
 			if(binding.getSceneNode().isTransformOnly())
 				continue;
 			int index = binding.getIndex();
-			const SampleCollection& sampleSet = animation.get(sceneNodeID).get();
+			const SampleCollection& sampleSet = animation.get(sceneNodeID).getSamples();
 			int size = sampleSet.size();
 			const Sample* currentSample = sampleSet.at(index);
 			float relativePeriod =  fmod(totalPeriod, animationDuration);

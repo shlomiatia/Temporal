@@ -178,8 +178,8 @@ namespace Temporal
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-		float getTop(Side::Enum side) const { getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() + getYRadius(); }
-		float getBottom(Side::Enum side) const { getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() - getYRadius(); }
+		float getTop(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() + getYRadius(); }
+		float getBottom(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() - getYRadius(); }
 		Vector getTopSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
 		Vector getBottomSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
 

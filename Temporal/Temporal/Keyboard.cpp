@@ -6,7 +6,7 @@ namespace Temporal
 	Keyboard::Keyboard()
 	{
 		for(int i = 0; i < Key::SIZE; ++i)
-			_keys[i] = KeyboardEvent::NONE;
+			_keys[i] = ButtonState::NONE;
 		_keysMap[SDLK_ESCAPE] = Key::ESC;
 		_keysMap[SDLK_F1] = Key::F1;
 		_keysMap[SDLK_F2] = Key::F2;

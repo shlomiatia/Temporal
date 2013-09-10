@@ -86,7 +86,7 @@ namespace Temporal
 		else
 		{
 			YABP test(_body->getCenter() + Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
-			if(intersects(test, platform))
+			if(intersectsExclusive(test, platform))
 			{
 				_upFailed = true;
 				_upFound = false;
@@ -107,7 +107,7 @@ namespace Temporal
 		else
 		{
 			YABP test(_body->getCenter() - Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
-			if(intersects(test, platform))
+			if(intersectsExclusive(test, platform))
 			{
 				_downFailed = true;
 				_downFound = false;
@@ -442,7 +442,7 @@ namespace Temporal
 					Vector& velocity = *static_cast<Vector*>(_stateMachine->raiseMessage(Message(MessageID::GET_VELOCITY)));
 					if(velocity.getY() > 0.0f)
 					{
-						velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
+						//velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
 						_stateMachine->setPermanentFlag(true);
 					}
 				}

@@ -15,7 +15,7 @@ namespace Temporal
 			STOP_PUSHING
 		};
 
-		bool isPushing(ButtonState::Enum state)
+		inline bool isPushing(ButtonState::Enum state)
 		{
 			return state == ButtonState::START_PUSHING || state == ButtonState::PUSHING;
 		}

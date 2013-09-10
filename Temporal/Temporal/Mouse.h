@@ -35,7 +35,7 @@ namespace Temporal
 		void dispatchEvent(void* obj);
 
 		const Vector& getPosition() const { return _position; }
-		bool isClicking(MouseButton::Enum key) { ButtonState::isPushing(_buttons[key]); }
+		bool isClicking(MouseButton::Enum key) { return ButtonState::isPushing(_buttons[key]); }
 		bool isStartClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::START_PUSHING; }
 		bool isStopClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::STOP_PUSHING; }
 

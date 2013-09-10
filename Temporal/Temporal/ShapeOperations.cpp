@@ -65,6 +65,14 @@ namespace Temporal
 		return true;
 	}
 
+	bool intersectsExclusive(const YABP& yabp1, const YABP& yabp2)
+	{
+		Vector correction;
+		if(intersects(yabp1, yabp2, &correction) && !equals(correction.getX(), 0.0f) && !equals(correction.getY(), 0.0f))
+			return true;
+		return false;
+	}
+
 	bool slopedAxisIntersects(float direction, float origin, float min, float max, float& tmin, float& tmax)
 	{
 		if (abs(direction) < EPSILON) 
