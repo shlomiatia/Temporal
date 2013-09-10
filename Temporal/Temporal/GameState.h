@@ -58,8 +58,8 @@ namespace Temporal
 	{
 	public:
 		GameStateListener() {}
-		virtual void onUpdate(float framePeriod, GameState& gameState) = 0;
-		virtual void onLoaded(Hash id, GameState& gameState) = 0;
+		virtual void onUpdate(float framePeriod, GameState& gameState) {};
+		virtual void onLoaded(Hash id, GameState& gameState) {};
 	private:
 		GameStateListener(const GameStateListener&);
 		GameStateListener& operator=(const GameStateListener&);

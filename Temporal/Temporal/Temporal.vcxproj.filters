@@ -194,6 +194,12 @@
     <ClInclude Include="SaverLoader.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Temp1.h">
+      <Filter>Temp</Filter>
+    </ClInclude>
+    <ClInclude Include="Temp2.h">
+      <Filter>Temp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -393,6 +399,9 @@
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{014c8123-e9c4-4975-8753-42e8924c5704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Temp">
+      <UniqueIdentifier>{b252260c-8069-44bf-b12b-892df903542c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
