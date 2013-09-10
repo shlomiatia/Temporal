@@ -200,6 +200,9 @@
     <ClInclude Include="Temp2.h">
       <Filter>Temp</Filter>
     </ClInclude>
+    <ClInclude Include="Temp3.h">
+      <Filter>Temp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

@@ -18,7 +18,9 @@ namespace Temporal
 		float getEndTime() const { return getStartTime() + getDuration(); }
 		void setDuration(float duration) { _duration = duration; }
 		float getDuration() const { return _duration; }
+		void setTranslation(const Vector& translation) { _translation = translation; }
 		const Vector& getTranslation() const { return _translation; }
+		void setRotation(float rotation) { _rotation = rotation; }
 		float getRotation() const { return _rotation; }
 
 	private:
@@ -44,7 +46,7 @@ namespace Temporal
 
 		Hash getId() const { return _sceneNodeId; }
 		float getDuration() const { return _duration; }
-		const SampleCollection& get() const { return _samples; }
+		const SampleCollection& getSamples() const { return _samples; }
 
 		void init();
 
@@ -72,6 +74,7 @@ namespace Temporal
 		bool Repeat() const { return _repeat; }
 		bool Rewind() const { return _rewind; }
 		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
+		SampleSetCollection& getSampleSets() { return _sampleSets; }
 
 		void init();
 
@@ -98,6 +101,7 @@ namespace Temporal
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		const Animation& get(Hash id) const { return *_animations.at(id); }
+		AnimationCollection& get() { return _animations; }
 		void init();
 		
 	private:

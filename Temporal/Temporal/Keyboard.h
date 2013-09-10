@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#include "Input.h"
 #include <unordered_map>
 
 namespace Temporal
@@ -32,18 +33,6 @@ namespace Temporal
 	typedef std::unordered_map<int, int> KeyCollection;
 	typedef KeyCollection::const_iterator KeyCollectionIterator;
 
-
-	namespace KeyboardEvent
-	{
-		enum Enum
-		{
-			NONE,
-			DOWN,
-			PRESSSED,
-			UP
-		};
-	}
-
 	class Keyboard
 	{
 	public:
@@ -55,16 +44,16 @@ namespace Temporal
 
 		void update();
 		void dispatchEvent(void* obj);
-		bool isKeyPressed(Key::Enum key) { KeyboardEvent::Enum status = _keys[key];  return status == KeyboardEvent::PRESSSED || status == KeyboardEvent::DOWN; }
-		bool isKeyDown(Key::Enum key) { return _keys[key] == KeyboardEvent::DOWN; }
-		bool isKeyUp(Key::Enum key) { return _keys[key] == KeyboardEvent::UP; }
+		bool isPressing(Key::Enum key) { ButtonState::isPushing(_keys[key]); }
+		bool isStartPressing(Key::Enum key) { return _keys[key] == ButtonState::START_PUSHING; }
+		bool isStopPressing(Key::Enum key) { return _keys[key] == ButtonState::STOP_PUSHING; }
 
 
 	private:
 
 		// TODO:
 		KeyCollection _keysMap;
-		KeyboardEvent::Enum _keys[Key::SIZE];
+		ButtonState::Enum _keys[Key::SIZE];
 
 		Keyboard();
 		~Keyboard() {};

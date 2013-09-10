@@ -2,6 +2,7 @@
 #define MOUSE_H
 
 #include "Vector.h"
+#include "Input.h"
 #include <unordered_map>
 
 namespace Temporal
@@ -30,15 +31,18 @@ namespace Temporal
 			return (instance);
 		}
 
+		void update();
 		void dispatchEvent(void* obj);
 
 		const Vector& getPosition() const { return _position; }
-		bool getButton(MouseButton::Enum button) { return _buttons[button]; }
+		bool isClicking(MouseButton::Enum key) { ButtonState::isPushing(_buttons[key]); }
+		bool isStartClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::START_PUSHING; }
+		bool isStopClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::STOP_PUSHING; }
 
 	private:
 		Vector _position;
 		MouseButtonCollection _buttonsMap;
-		bool _buttons[MouseButton::SIZE];
+		ButtonState::Enum _buttons[MouseButton::SIZE];
 
 		Mouse();
 		~Mouse() {};
