@@ -17,6 +17,7 @@ namespace Temporal
 
 	void Input::update()
 	{
+		Mouse::get().update();
 		Keyboard::get().update();
 		SDL_Event e;
 		while (SDL_PollEvent(&e))
