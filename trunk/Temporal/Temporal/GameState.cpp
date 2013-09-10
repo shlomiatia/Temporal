@@ -36,7 +36,7 @@ namespace Temporal
 
 	void GameState::update(float framePeriod)
 	{
-		if(Keyboard::get().isKeyDown(Key::ESC) || Input::get().getGamepad().getButton(GamepadButton::FRONT_RIGHT))
+		if(Keyboard::get().isPressing(Key::ESC) || Input::get().getGamepad().getButton(GamepadButton::FRONT_RIGHT))
 		{
 			Game::get().stop();
 		}

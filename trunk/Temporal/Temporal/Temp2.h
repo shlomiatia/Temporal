@@ -122,11 +122,11 @@ namespace Temporal
 					value = &temp;
 				}
 				
-				if(Keyboard::get().isKeyPressed(Key::PLUS))
+				if(Keyboard::get().isPressing(Key::PLUS))
 				{
 					(*value)++;
 				}
-				else if(Keyboard::get().isKeyPressed(Key::MINUS))
+				else if(Keyboard::get().isPressing(Key::MINUS))
 				{
 					(*value)--;
 				}
@@ -138,7 +138,7 @@ namespace Temporal
 					if(animationId == CLIMB)
 					{
 						animation = &const_cast<Animation&>(animationSet->get(DESCEND));
-						sample = animation->get(Hash::INVALID).get()[0];
+						sample = animation->get(Hash::INVALID).getSamples()[0];
 						sample->setDuration(temp/1000.0f);
 						animation->init();
 					}
@@ -193,7 +193,6 @@ namespace Temporal
 			{
 			
 				Entity* entity = new Entity();
-				entity = new Entity();
 				entity->add(new Transform(Vector(0.0f, 100.0f)));
 				entity->add(new MovementSimulator());
 				Text* text = new Text("c:/windows/fonts/Arial.ttf", 12);

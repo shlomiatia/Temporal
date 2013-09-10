@@ -5,6 +5,22 @@
 
 namespace Temporal
 {
+	namespace ButtonState
+	{
+		enum Enum
+		{
+			NONE,
+			START_PUSHING,
+			PUSHING,
+			STOP_PUSHING
+		};
+
+		bool isPushing(ButtonState::Enum state)
+		{
+			return state == ButtonState::START_PUSHING || state == ButtonState::PUSHING;
+		}
+	}
+
 	class Input
 	{
 	public:

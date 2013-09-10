@@ -49,6 +49,7 @@
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="Temp1.h" />
     <ClInclude Include="Temp2.h" />
+    <ClInclude Include="Temp3.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Timer.h" />

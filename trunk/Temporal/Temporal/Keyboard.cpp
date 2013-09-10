@@ -109,13 +109,13 @@ namespace Temporal
 	{
 		for(int i = 0; i < Key::SIZE; ++i)
 		{
-			if(_keys[i] == KeyboardEvent::DOWN)
+			if(_keys[i] == ButtonState::START_PUSHING)
 			{
-				_keys[i] = KeyboardEvent::PRESSSED;
+				_keys[i] = ButtonState::PUSHING;
 			}
-			else if(_keys[i] == KeyboardEvent::UP)
+			else if(_keys[i] == ButtonState::STOP_PUSHING)
 			{
-				_keys[i] = KeyboardEvent::NONE;
+				_keys[i] = ButtonState::NONE;
 			}
 
 		}
@@ -127,17 +127,17 @@ namespace Temporal
 		
 		if (e.type == SDL_QUIT)
 		{
-			_keys[Key::ESC] = KeyboardEvent::DOWN;
+			_keys[Key::ESC] = ButtonState::START_PUSHING;
 		}
 		else if (e.type == SDL_KEYDOWN)
 		{
 			int key = _keysMap[e.key.keysym.sym];
-			_keys[key] = KeyboardEvent::DOWN;
+			_keys[key] = ButtonState::START_PUSHING;
 		}
 		else if (e.type == SDL_KEYUP)
 		{
 			int key = _keysMap[e.key.keysym.sym];
-			_keys[key] = KeyboardEvent::UP;
+			_keys[key] = ButtonState::STOP_PUSHING;
 		}
 	}
 }
