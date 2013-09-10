@@ -22,8 +22,8 @@ namespace Temporal
 		GameStateComponent::init(gameState);
 
 		
-		if(_camera)
-			_layers.push_back(new Camera());
+		/*if(_camera)
+			_layers.push_back(new Camera());*/
 		_layers.push_back(new SpriteLayer());
 		if(_ambientColor != Color::White)
 			_layers.push_back(new LightLayer(_ambientColor));

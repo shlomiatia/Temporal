@@ -102,7 +102,8 @@ namespace Temporal
 			GameState* state = new GameState();
 			deserializer.serialize("game-state", *state);
 			Hash id = Hash(file);
-			GameStateManager::get().getListener()->onLoaded(id, *state);
+			if(GameStateManager::get().getListener())
+				GameStateManager::get().getListener()->onLoaded(id, *state);
 			state->init();
 			_result[id] = state;
 		}

@@ -3,6 +3,8 @@
 #include "EntitySystem.h"
 #include "Animation.h"
 #include "Mouse.h"
+#include "Graphics.h"
+#include <sstream>
 
 // Animation editor
 namespace Temporal
@@ -10,7 +12,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _mouseLastPosition(Vector::Zero) {}
+		AnimationEditor() : _offset(Vector::Zero) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -25,24 +27,29 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
+				const Vector& position = Mouse::get().getPosition();
+				Sample& sample = (**_sample);
 				if(Mouse::get().isStartClicking(MouseButton::LEFT))
 				{
-					_mouseLastPosition = Mouse::get().getPosition();
+					_offset = Mouse::get().getPosition() - sample.getTranslation();
 				}
 				else if(Mouse::get().isClicking(MouseButton::LEFT))
 				{
-					const Vector& position = Mouse::get().getPosition();
-					Sample& sample = (**_sample);
-					sample.setTranslation(sample.getTranslation() + position - _mouseLastPosition);
-					_mouseLastPosition = position;
+					sample.setTranslation(position - _offset);
 					_animation->second->init();
 				}
+				std::ostringstream s;
+				s << "position:" << position.getX() << "," << position.getY() <<
+					 "offset:" << _offset.getX() << "," << _offset.getY() <<
+					 "translation:" << sample.getTranslation().getX() << "," << sample.getTranslation().getY();
+				Graphics::get().setTitle(s.str().c_str());
+				
 			}
 		}
 
 		Component* clone() const { return 0; }
 	private:
-		Vector _mouseLastPosition;
+		Vector _offset;
 		std::shared_ptr<AnimationSet> _animationSet;
 		AnimationIterator _animation;
 		SampleSetIterator _sceneNode;
@@ -54,7 +61,7 @@ namespace Temporal
 	public:
 		void onLoaded(Hash id, GameState& gameState)
 		{
-			if(id == Hash("resources/game-states/entities.xml"))
+			if(id == Hash("resources/game-states/test.xml"))
 			{
 				Entity* entity = new Entity();
 				entity->add(new AnimationEditor());
