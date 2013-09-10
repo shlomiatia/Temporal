@@ -442,7 +442,7 @@ namespace Temporal
 					Vector& velocity = *static_cast<Vector*>(_stateMachine->raiseMessage(Message(MessageID::GET_VELOCITY)));
 					if(velocity.getY() > 0.0f)
 					{
-						//velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
+						velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
 						_stateMachine->setPermanentFlag(true);
 					}
 				}
