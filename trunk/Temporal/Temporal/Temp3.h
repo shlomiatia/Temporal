@@ -38,12 +38,6 @@ namespace Temporal
 					sample.setTranslation(position - _offset);
 					_animation->second->init();
 				}
-				std::ostringstream s;
-				s << "position:" << position.getX() << "," << position.getY() <<
-					 "offset:" << _offset.getX() << "," << _offset.getY() <<
-					 "translation:" << sample.getTranslation().getX() << "," << sample.getTranslation().getY();
-				Graphics::get().setTitle(s.str().c_str());
-				
 			}
 		}
 
