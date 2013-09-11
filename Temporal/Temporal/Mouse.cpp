@@ -6,8 +6,10 @@ namespace Temporal
 {
 	void updatePosition(Vector& position, SDL_Event& e)
 	{
-		position.setX(e.button.x);
-		position.setY(Graphics::get().getLogicalView().getY() - e.button.y);
+		float x = e.button.x * Graphics::get().getLogicalView().getX() / Graphics::get().getResolution().getX();
+		float y = Graphics::get().getLogicalView().getY() - e.button.y * Graphics::get().getLogicalView().getY() / Graphics::get().getResolution().getY();
+		position.setX(x);
+		position.setY(y);
 	}
 
 	Mouse::Mouse() : _position(Vector::Zero)

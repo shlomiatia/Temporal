@@ -16,7 +16,8 @@ namespace Temporal
 
 	void Graphics::init(const Settings& settings)
 	{
-		float logicalViewWidth = settings.getViewY() * settings.getResolution().getX() / settings.getResolution().getY();
+		_resolution = settings.getResolution();
+		float logicalViewWidth = settings.getViewY() * _resolution.getX() / _resolution.getY();
 		_logicalView = Vector(logicalViewWidth, settings.getViewY());
 
 		if ((SDL_WasInit(SDL_INIT_VIDEO) == 0) && (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0))
