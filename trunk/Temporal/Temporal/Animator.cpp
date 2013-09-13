@@ -88,7 +88,8 @@ namespace Temporal
 			Vector translation = currentSample->getTranslation() * (1 - interpolation) + nextSample->getTranslation() * interpolation;
 			float rotation = currentSample->getRotation() * (1 - interpolation) + nextSample->getRotation() * interpolation;
 			SceneNode& sceneNode = binding.getSceneNode();
-			sceneNode.setSpriteGroupId(currentSample->getSpriteGroupId());
+			if(currentSample->getSpriteGroupId() != Hash::INVALID)
+				sceneNode.setSpriteGroupId(currentSample->getSpriteGroupId());
 			sceneNode.setTranslation(translation);
 			sceneNode.setRotation(rotation);
 			sceneNode.setSpriteInterpolation(interpolation);
