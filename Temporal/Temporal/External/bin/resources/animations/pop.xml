@@ -6,7 +6,7 @@
     </animation>
     <animation id="POP_ANM_TURN">
         <sample-set>
-            <sample sprite-group="POP_ANM_TURN" duration="0.0905" />
+            <sample sprite-group="POP_ANM_TURN" duration="0.13575" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_FALL" repeat="1">
@@ -31,17 +31,17 @@
     </animation>
     <animation id="POP_ANM_CLIMB" rewind="1">
         <sample-set>
-            <sample sprite-group="POP_ANM_CLIMB" duration="0.396" />
+            <sample sprite-group="POP_ANM_CLIMB" duration="0.594" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_DESCEND">
         <sample-set>
-            <sample sprite-group="POP_ANM_CLIMB" duration="0.396" />
+            <sample sprite-group="POP_ANM_CLIMB" duration="0.594" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD_START">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="0" />
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_START" duration="0.198" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD" repeat="1">
@@ -51,12 +51,12 @@
     </animation>
     <animation id="POP_ANM_JUMP_FORWARD_END">
         <sample-set>
-            <sample sprite-group="POP_ANM_JUMP_FORWARD_END" duration="0.132" />
+            <sample sprite-group="POP_ANM_JUMP_FORWARD_END" duration="0.198" />
         </sample-set>
     </animation>
     <animation id="POP_ANM_WALK" repeat="1">
         <sample-set>
-            <sample sprite-group="POP_ANM_WALK" duration="0.396" />
+            <sample sprite-group="POP_ANM_WALK" duration="0.594" />
         </sample-set>
     </animation>
 </animation-set>
