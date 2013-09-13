@@ -49,9 +49,9 @@ namespace Temporal
 		_layersManager->draw();
 	}
 
-	GameState* GameStateManager::getCurrentState() const
+	GameState& GameStateManager::getCurrentState() const
 	{
-		return _states.at(_currentStateId);
+		return *_states.at(_currentStateId);
 	}
 
 	void GameStateManager::init(const char* gameStateFile)
@@ -105,13 +105,13 @@ namespace Temporal
 			unload();
 		}
 		if(_listener)
-			_listener->onUpdate(framePeriod, *getCurrentState());
-		getCurrentState()->update(framePeriod);
+			_listener->onUpdate(framePeriod, getCurrentState());
+		getCurrentState().update(framePeriod);
 	}
 
 	void GameStateManager::draw() const
 	{
-		getCurrentState()->draw();
+		getCurrentState().draw();
 	}
 
 	void GameStateManager::unload()

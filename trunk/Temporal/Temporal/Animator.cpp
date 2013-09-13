@@ -36,16 +36,28 @@ namespace Temporal
 			Hash animationId = getHashParam(message.getParam());
 			reset(animationId);
 		}
+		else if(message.getID() == MessageID::TOGGLE_ANIMATION)
+		{
+			_isPaused = !_isPaused;
+		}
+		else if(message.getID() == MessageID::SET_ANIMATION_FRAME)
+		{
+			float frame = getFloatParam(message.getParam());			
+				_timer.reset(frame);
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			float framePeriod = getFloatParam(message.getParam());
-			update(framePeriod);
+			if(!_isPaused)
+			{
+				float framePeriod = getFloatParam(message.getParam());
+				_timer.update(framePeriod);
+			}
+			update();
 		}
 	}
 
-	void Animator::update(float framePeriod)
+	void Animator::update()
 	{
-		_timer.update(framePeriod);
 		float totalPeriod = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
 		float animationDuration = animation.getDuration();
@@ -104,6 +116,6 @@ namespace Temporal
 		{
 			i->second->setIndex(0);
 		}
-		update(0.0f);
+		update();
 	}
 }

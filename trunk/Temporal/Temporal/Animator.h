@@ -34,7 +34,7 @@ namespace Temporal
 	{
 	public:
 		 Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId) {}
+			_animationSetFile(animationSetFile), _animationId(animationId), _isPaused(false) {}
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -43,16 +43,16 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
 		Timer _timer;
+		bool _isPaused;
 
 		friend class SerializationAccess;
 
-		void update(float framePeriod);
+		void update();
 		void reset(Hash animationId);
 	};
 }
