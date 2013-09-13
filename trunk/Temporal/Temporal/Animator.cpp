@@ -78,19 +78,27 @@ namespace Temporal
 			const SampleCollection& samples = sampleSet.getSamples();
 			int size = samples.size();
 			const Sample* currentSample = samples.at(index);
-			float relativePeriod =  fmod(totalPeriod, sampleSetDuration);
+			float relativePeriod =  fmod(totalPeriod, animationDuration);
 			int offset = 1;
 			if(animation.Rewind())
 			{
 				offset = -1;
-				relativePeriod = sampleSetDuration - relativePeriod;
+				relativePeriod = animationDuration - relativePeriod;
 			}
-			while(currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod)
+			if(relativePeriod > sampleSetDuration)
 			{
-				index = (size + index + offset) % size;
-				binding.setIndex(index);
+				index = size - 1;;
 				currentSample = samples.at(index);
 			}
+			else
+			{
+				while(currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod)
+				{
+					index = (size + index + offset) % size;
+					currentSample = samples.at(index);
+				}
+			}
+			binding.setIndex(index);
 			int nextIndex = (size + index + 1) % size;
 			const Sample* nextSample = samples.at(nextIndex);
 			float samplePeriod = relativePeriod - currentSample->getStartTime();
