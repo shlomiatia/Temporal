@@ -181,7 +181,7 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
 			{
-				XmlSerializer serializer(new FileStream("resources/animations/skeleton2.xml", true, false));
+				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/naija2.xml", true, false));
 				AnimationSet& set =  *_animationSet;
 				serializer.serialize("animation-set", set);
 				serializer.save();
@@ -196,7 +196,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ENTITY_INIT)
 			{
-				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/skeleton.xml");
+				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/naija.xml");
 				_animation = _animationSet->get().begin();
 				_sceneNode = _animation->second->getSampleSets().begin();
 				_sample = _sceneNode->second->getSamples().begin();
