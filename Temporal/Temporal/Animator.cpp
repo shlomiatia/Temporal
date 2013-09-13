@@ -73,25 +73,26 @@ namespace Temporal
 			if(binding.getSceneNode().isTransformOnly())
 				continue;
 			int index = binding.getIndex();
-			const SampleCollection& sampleSet = animation.get(sceneNodeID).getSamples();
-			int size = sampleSet.size();
-			const Sample* currentSample = sampleSet.at(index);
-			float relativePeriod =  fmod(totalPeriod, animationDuration);
+			const SampleSet& sampleSet = animation.get(sceneNodeID);
+			float sampleSetDuration = sampleSet.getDuration();
+			const SampleCollection& samples = sampleSet.getSamples();
+			int size = samples.size();
+			const Sample* currentSample = samples.at(index);
+			float relativePeriod =  fmod(totalPeriod, sampleSetDuration);
 			int offset = 1;
 			if(animation.Rewind())
 			{
 				offset = -1;
-				relativePeriod = animationDuration - relativePeriod;
+				relativePeriod = sampleSetDuration - relativePeriod;
 			}
-			while(currentSample->getEndTime() != 0.0f && (currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod))
+			while(currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod)
 			{
 				index = (size + index + offset) % size;
 				binding.setIndex(index);
-
-				currentSample = sampleSet.at(index);
+				currentSample = samples.at(index);
 			}
 			int nextIndex = (size + index + 1) % size;
-			const Sample* nextSample = sampleSet.at(nextIndex);
+			const Sample* nextSample = samples.at(nextIndex);
 			float samplePeriod = relativePeriod - currentSample->getStartTime();
 			float sampleDuration = currentSample->getDuration();
 			float interpolation = sampleDuration == 0.0f ? 0.0f : samplePeriod / sampleDuration;

@@ -95,6 +95,24 @@ namespace Temporal
 				(**_sample).setRotation(rotation);
 				_animation->second->init();
 			}
+			else if(Keyboard::get().isPressing(Key::PLUS))
+			{
+				if((**_sample).getStartTime() == _startTime)
+				{
+					(**_sample).setDuration((**_sample).getDuration() + 0.01f);
+					_duration = (**_sample).getDuration();
+					_animation->second->init();
+				}
+			}
+			else if(Keyboard::get().isPressing(Key::MINUS))
+			{
+				if((**_sample).getStartTime() == _startTime && (**_sample).getDuration() > 0.0f)
+				{
+					(**_sample).setDuration((**_sample).getDuration() - 0.01);
+					_duration = (**_sample).getDuration();
+					_animation->second->init();
+				}
+			}
 			else if(Keyboard::get().isPressing(Key::UP))
 			{
 				handleArrows(Vector(0.0f, 1.0f));
@@ -115,6 +133,17 @@ namespace Temporal
 			{
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
+			}
+			else if(Keyboard::get().isStartPressing(Key::C))
+			{
+				
+				Sample* sample = new Sample();
+				sample->setTranslation((**_sample).getTranslation());
+				sample->setRotation((**_sample).getRotation());
+				sample->setDuration((**_sample).getDuration());
+				_sample = _sceneNode->second->getSamples().insert(_sample+1, sample);
+				_animation->second->init();
+				setStartTime();
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
@@ -146,7 +175,7 @@ namespace Temporal
 				setStartTime();
 			}
 			std::stringstream s;
-			s << _sceneNode->first.getString() << " " << _startTime;
+			s << _sceneNode->first.getString() << " " << _startTime << " " << _duration;
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
