@@ -17,7 +17,6 @@ namespace Temporal
 		explicit Renderer(const char* textueFile = "", const char* spritesheetFile = "", SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
 		~Renderer();
 
-		SceneNode& getRoot() const { return *_root; }
 		Hash getType() const { return TYPE; }
 
 		void handleMessage(Message& message);

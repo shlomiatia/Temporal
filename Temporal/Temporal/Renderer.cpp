@@ -49,6 +49,10 @@ namespace Temporal
 			if(_layer == layer)
 				draw();			
 		}
+		else if(message.getID() == MessageID::GET_ROOT_SCENE_NODE)
+		{
+			message.setParam(_root);
+		}
 	}
 	
 	void Renderer::draw() const

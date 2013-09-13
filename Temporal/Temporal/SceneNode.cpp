@@ -29,4 +29,17 @@ namespace Temporal
 		}
 		return clone;
 	}
+
+	const SceneNode* SceneNode::get(Hash id) const
+	{
+		if(getID() == id)
+			return this;
+		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
+		{
+			const SceneNode* result = (**i).get(id);
+			if(result)
+				return result;
+		}
+		return 0;
+	}
 }

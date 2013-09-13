@@ -46,8 +46,8 @@ namespace Temporal
 
 		Hash getId() const { return _sceneNodeId; }
 		float getDuration() const { return _duration; }
+		SampleCollection& getSamples() { return _samples; }
 		const SampleCollection& getSamples() const { return _samples; }
-
 		void init();
 
 	private:

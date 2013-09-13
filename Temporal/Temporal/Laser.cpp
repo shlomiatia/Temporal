@@ -7,7 +7,6 @@
 #include "MessageUtils.h"
 #include "Fixture.h"
 #include "PhysicsEnums.h"
-#include "Renderer.h"
 #include "SceneNode.h"
 
 namespace Temporal
@@ -22,8 +21,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
-			_root = &renderer->getRoot();
+			_root = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
