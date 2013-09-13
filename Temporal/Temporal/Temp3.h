@@ -106,9 +106,12 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isPressing(Key::MINUS))
 			{
-				if((**_sample).getStartTime() == _startTime && (**_sample).getDuration() > 0.0f)
+				if((**_sample).getStartTime() == _startTime)
 				{
-					(**_sample).setDuration((**_sample).getDuration() - 0.01);
+					float duration = (**_sample).getDuration() - 0.01;
+					if(duration < 0.0f)
+						duration = 0.0f;
+					(**_sample).setDuration(duration);;
 					_duration = (**_sample).getDuration();
 					_animation->second->init();
 				}
