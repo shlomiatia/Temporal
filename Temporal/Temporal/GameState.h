@@ -87,7 +87,7 @@ namespace Temporal
 		void unload(StringCollection files);
 		void show(const char* gameStateFile);
 
-		GameState* getCurrentState() const; 
+		GameState& getCurrentState() const; 
 
 	private:
 		GameStateCollection _states;
