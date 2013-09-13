@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="3000" y="512" />
+				<position x="512" y="512" />
 			</transform>
 			<collision-filter category="8" />
 			<draw-position>
@@ -144,29 +144,6 @@
 			<animator animation-set="resources/animations/pop.xml" />
 			<renderer layer="4">
 				<scene-node sprite-sheet="resources/spritesheets/pop.xml" />
-			</renderer>
-		</entity>
-		<entity id="ENT_SKELETON">
-			<transform orientation="1">
-				<position x="300" y="300" />
-			</transform>
-			<animator animation-set="resources/animations/skeleton.xml" animation="SKL_ANM_FIGHT" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/skeleton.xml">
-				<scene-node id="SCN_BODY">
-					<scene-node id="SCN_LEFT_LEG" behind-parent="1">
-						<scene-node id="SCN_LEFT_FOOT" />
-					</scene-node>
-					<scene-node id="SCN_LEFT_HAND" behind-parent="1">
-						<scene-node id="SCN_LEFT_PALM" />
-					</scene-node>
-					<scene-node id="SCN_HEAD" />
-					<scene-node id="SCN_RIGHT_LEG">
-						<scene-node id="SCN_RIGHT_FOOT" />
-					</scene-node>
-					<scene-node id="SCN_RIGHT_HAND" >
-							<scene-node id="SCN_RIGHT_PALM" />
-					</scene-node>
-				</scene-node>
 			</renderer>
 		</entity>
 		<entity id="ENT_SENTRY">
