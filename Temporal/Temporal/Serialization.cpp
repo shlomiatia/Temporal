@@ -132,6 +132,12 @@ namespace Temporal
 	{
 	}
 
+	XmlSerializer::~XmlSerializer()
+	{
+		_buffer->close();
+		delete _buffer;
+	}
+
 	void XmlSerializer::serialize(const char* key, int& value)
 	{
 		_current->ToElement()->SetAttribute(key, value);
