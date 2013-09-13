@@ -6,6 +6,8 @@
 #include "Keyboard.h"
 #include "Math.h"
 #include "SceneNode.h"
+#include "Serialization.h"
+#include "SerializationAccess.h"
 
 #include <sstream>
 #include "Graphics.h"
@@ -176,6 +178,14 @@ namespace Temporal
 					_sample = _sceneNode->second->getSamples().end();
 				_sample--;
 				setStartTime();
+			}
+			else if(Keyboard::get().isStartPressing(Key::F2))
+			{
+				XmlSerializer serializer(new FileStream("resources/animations/skeleton2.xml", true, false));
+				AnimationSet& set =  *_animationSet;
+				serializer.serialize("animation-set", set);
+				serializer.save();
+
 			}
 			std::stringstream s;
 			s << _sceneNode->first.getString() << " " << _startTime << " " << _duration;

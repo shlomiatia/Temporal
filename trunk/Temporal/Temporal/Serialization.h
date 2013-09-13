@@ -29,6 +29,7 @@ namespace Temporal
 		Stream(std::iostream* buffer) : _buffer(buffer) {};
 		virtual ~Stream() { delete _buffer; }
 
+		virtual void close() {};
 		void write(int value);
 		void write(unsigned int value);
 		void write(float value);
@@ -107,7 +108,15 @@ namespace Temporal
 		{
 			typedef std::vector<T*>::iterator TIterator;
 			for(TIterator i = value.begin(); i != value.end(); ++i)
-				serialize((*i)->getType().getString(), *i);
+				serialize(key, *i);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
+		{
+			typedef std::unordered_map<Hash, T*>::iterator TIterator;
+			for(TIterator i = value.begin(); i != value.end(); ++i)
+				serialize(key, i->second);
 		}
 	protected:
 		Stream* _buffer;
@@ -198,6 +207,7 @@ namespace Temporal
 	{
 	public:
 		XmlSerializer(Stream* stream);
+		~XmlSerializer();
 
 		void serialize(const char* key, int& value);
 		void serialize(const char* key, unsigned int& value);
@@ -227,6 +237,12 @@ namespace Temporal
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
+		{
+			BaseSerializer::serialize(key, value);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
 		{
 			BaseSerializer::serialize(key, value);
 		}
