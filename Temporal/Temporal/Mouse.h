@@ -14,6 +14,8 @@ namespace Temporal
 			LEFT,
 			MIDDLE,
 			RIGHT,
+			WHEEL_DOWN,
+			WHEEL_UP,
 
 			SIZE
 		};

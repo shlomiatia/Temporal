@@ -19,6 +19,8 @@ namespace Temporal
 		_buttonsMap[SDL_BUTTON_LEFT] = MouseButton::LEFT;
 		_buttonsMap[SDL_BUTTON_MIDDLE] = MouseButton::MIDDLE;
 		_buttonsMap[SDL_BUTTON_RIGHT] = MouseButton::RIGHT;
+		_buttonsMap[SDL_BUTTON_WHEELDOWN] = MouseButton::WHEEL_DOWN;
+		_buttonsMap[SDL_BUTTON_WHEELUP] = MouseButton::WHEEL_UP;
 	}
 
 	void Mouse::update()
