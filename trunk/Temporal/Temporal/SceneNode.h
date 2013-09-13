@@ -44,6 +44,7 @@ namespace Temporal
 
 		void add(SceneNode* child) { _children.push_back(child);}
 		SceneNode* clone() const;
+		const SceneNode* get(Hash id) const;
 
 		Hash _id;
 		bool _drawBehindParent;	

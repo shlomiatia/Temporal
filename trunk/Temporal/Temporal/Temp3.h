@@ -5,6 +5,7 @@
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Math.h"
+#include "SceneNode.h"
 
 #include <sstream>
 #include "Graphics.h"
@@ -15,12 +16,13 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _startTime(0.0f) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(true), _startTime(0.0f), _duration(0.0f) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
 		void handleArrows(const Vector& vector)
 		{
+			createKeyframeIfNeeded();
 			Sample& sample = (**_sample);
 			if(_translation)
 			{
@@ -47,10 +49,27 @@ namespace Temporal
 		void setStartTime()
 		{
 			_startTime = (**_sample).getStartTime();
+			_duration = (**_sample).getDuration();
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
 		}
 
-		void updateEdit()
+		void createKeyframeIfNeeded()
+		{
+			if((**_sample).getStartTime() != _startTime)
+			{
+				const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+				const SceneNode& node = *root.get(_sceneNode->second->getId());
+				Sample* sample = new Sample();
+				sample->setTranslation(node.getTranslation());
+				sample->setRotation(node.getRotation());
+				sample->setDuration(_duration);
+				(**_sample).setDuration(_startTime - (**_sample).getStartTime());
+				_sample = _sceneNode->second->getSamples().insert(_sample+1, sample);
+				_animation->second->init();
+			}
+		}
+
+		void update()
 		{
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
 			{
@@ -59,6 +78,7 @@ namespace Temporal
 			}
 			else if(Mouse::get().isClicking(MouseButton::LEFT))
 			{
+				createKeyframeIfNeeded();
 				(**_sample).setTranslation(Mouse::get().getPosition() - _offset);
 				_animation->second->init();
 			}
@@ -69,6 +89,7 @@ namespace Temporal
 			}
 			else if(Mouse::get().isClicking(MouseButton::RIGHT))
 			{
+				createKeyframeIfNeeded();
 				const Vector vector = Mouse::get().getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
 				(**_sample).setRotation(rotation);
@@ -90,15 +111,7 @@ namespace Temporal
 			{
 				handleArrows(Vector(1.0f, 0.0f));
 			}
-		}
-
-		void update()
-		{
-			if((**_sample).getStartTime() == _startTime)
-			{
-				updateEdit();
-			}
-			if(Keyboard::get().isStartPressing(Key::SPACE))
+			else if(Keyboard::get().isStartPressing(Key::SPACE))
 			{
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
@@ -157,6 +170,7 @@ namespace Temporal
 		Vector _offset;
 		bool _translation;
 		float _startTime;
+		float _duration;
 
 		std::shared_ptr<AnimationSet> _animationSet;
 		AnimationIterator _animation;

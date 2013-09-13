@@ -54,6 +54,7 @@ namespace Temporal
 			STATE_ENTERED,
 			STATE_EXITED,
 
+			GET_ROOT_SCENE_NODE,
 			SET_COLOR,
 			SET_ALPHA,
 			RESET_ANIMATION,

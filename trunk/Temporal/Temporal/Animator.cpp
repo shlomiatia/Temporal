@@ -3,7 +3,6 @@
 #include "Serialization.h"
 #include "SceneNode.h"
 #include "MessageUtils.h"
-#include "Renderer.h"
 #include "ResourceManager.h"
 #include <math.h>
 
@@ -28,8 +27,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(Renderer::TYPE));
-			bindSceneNodes(_bindings, renderer.getRoot());
+			SceneNode& sceneNode = *static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
+			bindSceneNodes(_bindings, sceneNode);
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{
