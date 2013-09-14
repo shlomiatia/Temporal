@@ -8,7 +8,7 @@
 	<entities-manager>
 		<entity id="ENT_SKELETON">
 			<transform orientation="0">
-				<position x="50" y="300" />
+				<position x="300" y="300" />
 			</transform>
 			<animator animation-set="resources/animations/aquaria.xml" animation="AQU_ANM_IDLE" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
