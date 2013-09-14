@@ -49,7 +49,7 @@ namespace Temporal
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
-				_timer.update(framePeriod);
+				_timer.update(framePeriod/2.0f);
 			}
 			update();
 		}

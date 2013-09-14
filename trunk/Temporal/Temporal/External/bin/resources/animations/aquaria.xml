@@ -1,13 +1,13 @@
 <animation-set>
     <animation id="AQU_ANM_BASE" repeat="1" rewind="0">
-        <sample-set scene-node-id="SCN_BODY">
-            <sample rotation="0.000000" duration="0.000000">
-                <translation x="-2.000000" y="1.000000"/>
-            </sample>
-        </sample-set>
         <sample-set scene-node-id="SCN_BACKLEG2">
             <sample rotation="-1.871535" duration="0.000000">
                 <translation x="-5.822205" y="-40.644440"/>
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_BODY">
+            <sample rotation="0.000000" duration="0.000000">
+                <translation x="-2.000000" y="1.000000"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_HEAD">
@@ -35,24 +35,24 @@
                 <translation x="22.177765" y="-17.733307"/>
             </sample>
         </sample-set>
-        <sample-set scene-node-id="SCN_BACKARM3">
-            <sample rotation="-22.303482" duration="0.000000">
-                <translation x="14.222229" y="-23.022202"/>
-            </sample>
-        </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG1">
             <sample rotation="-1.031335" duration="0.000000">
                 <translation x="5.244385" y="-26.733337"/>
             </sample>
         </sample-set>
-        <sample-set scene-node-id="SCN_FRONTLEG2">
-            <sample rotation="-4.251616" duration="0.000000">
-                <translation x="-2.711060" y="-39.799988"/>
+        <sample-set scene-node-id="SCN_BACKARM3">
+            <sample rotation="-22.303482" duration="0.000000">
+                <translation x="14.222229" y="-23.022202"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG3">
             <sample rotation="10.861281" duration="0.000000">
                 <translation x="1.733307" y="-29.000000"/>
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_FRONTLEG2">
+            <sample rotation="-4.251616" duration="0.000000">
+                <translation x="-2.711060" y="-39.799988"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_FRONTARM1">
@@ -72,17 +72,17 @@
         </sample-set>
     </animation>
     <animation id="AQU_ANM_IDLE" repeat="1" rewind="0">
+        <sample-set scene-node-id="SCN_BACKLEG2">
+            <sample rotation="-1.871535" duration="1.000000">
+                <translation x="-5.822205" y="-40.644440"/>
+            </sample>
+        </sample-set>
         <sample-set scene-node-id="SCN_BODY">
             <sample rotation="0.000000" duration="1.000000">
                 <translation x="-2.000000" y="1.000000"/>
             </sample>
             <sample rotation="-1.412527" duration="1.000000">
                 <translation x="-2.000000" y="3.000000"/>
-            </sample>
-        </sample-set>
-        <sample-set scene-node-id="SCN_BACKLEG2">
-            <sample rotation="-1.871535" duration="1.000000">
-                <translation x="-5.822205" y="-40.644440"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_HEAD">
@@ -119,24 +119,24 @@
                 <translation x="22.177765" y="-17.733307"/>
             </sample>
         </sample-set>
-        <sample-set scene-node-id="SCN_BACKARM3">
-            <sample rotation="-22.303482" duration="1.000000">
-                <translation x="14.222229" y="-23.022202"/>
-            </sample>
-        </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG1">
             <sample rotation="-1.031335" duration="0.000000">
                 <translation x="5.244385" y="-26.733337"/>
             </sample>
         </sample-set>
-        <sample-set scene-node-id="SCN_FRONTLEG2">
-            <sample rotation="-4.251616" duration="1.000000">
-                <translation x="-2.711060" y="-39.799988"/>
+        <sample-set scene-node-id="SCN_BACKARM3">
+            <sample rotation="-22.303482" duration="1.000000">
+                <translation x="14.222229" y="-23.022202"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG3">
             <sample rotation="10.861281" duration="0.000000">
                 <translation x="1.733307" y="-29.000000"/>
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_FRONTLEG2">
+            <sample rotation="-4.251616" duration="1.000000">
+                <translation x="-2.711060" y="-39.799988"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_FRONTARM1">
@@ -162,26 +162,6 @@
         </sample-set>
     </animation>
     <animation id="AQU_ANM_WALK" repeat="1" rewind="0">
-        <sample-set scene-node-id="SCN_BODY">
-            <sample rotation="0.000000" duration="0.050000">
-                <translation x="-2.000000" y="1.000000"/>
-            </sample>
-            <sample rotation="0.000000" duration="0.150000">
-                <translation x="-2.000000" y="-4.000000"/>
-            </sample>
-            <sample rotation="0.000000" duration="0.150000">
-                <translation x="-2.000000" y="1.000000"/>
-            </sample>
-            <sample rotation="0.000000" duration="0.100000">
-                <translation x="-2.000000" y="-4.000000"/>
-            </sample>
-            <sample rotation="0.000000" duration="0.050000">
-                <translation x="-2.000000" y="-8.000000"/>
-            </sample>
-            <sample rotation="0.000000" duration="0.100000">
-                <translation x="-2.000000" y="-4.000000"/>
-            </sample>
-        </sample-set>
         <sample-set scene-node-id="SCN_BACKLEG2">
             <sample rotation="63.856159" duration="0.050000">
                 <translation x="-3.955536" y="-37.644424"/>
@@ -218,6 +198,26 @@
             </sample>
             <sample rotation="41.393990" duration="0.050000">
                 <translation x="-2.822205" y="-38.644440"/>
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_BODY">
+            <sample rotation="0.000000" duration="0.050000">
+                <translation x="-2.000000" y="1.000000"/>
+            </sample>
+            <sample rotation="0.000000" duration="0.150000">
+                <translation x="-2.000000" y="-4.000000"/>
+            </sample>
+            <sample rotation="0.000000" duration="0.150000">
+                <translation x="-2.000000" y="1.000000"/>
+            </sample>
+            <sample rotation="0.000000" duration="0.100000">
+                <translation x="-2.000000" y="-4.000000"/>
+            </sample>
+            <sample rotation="0.000000" duration="0.050000">
+                <translation x="-2.000000" y="-8.000000"/>
+            </sample>
+            <sample rotation="0.000000" duration="0.100000">
+                <translation x="-2.000000" y="-4.000000"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_HEAD">
@@ -368,38 +368,6 @@
                 <translation x="20.177765" y="-19.733307"/>
             </sample>
         </sample-set>
-        <sample-set scene-node-id="SCN_BACKARM3">
-            <sample rotation="-22.303482" duration="0.050000">
-                <translation x="14.222229" y="-23.022202"/>
-            </sample>
-            <sample rotation="-82.708572" duration="0.050000">
-                <translation x="17.222229" y="-20.022202"/>
-            </sample>
-            <sample rotation="-59.426537" duration="0.050000">
-                <translation x="15.222229" y="-20.022202"/>
-            </sample>
-            <sample rotation="-82.708572" duration="0.050000">
-                <translation x="17.222229" y="-20.022202"/>
-            </sample>
-            <sample rotation="-82.708572" duration="0.150000">
-                <translation x="17.222229" y="-20.022202"/>
-            </sample>
-            <sample rotation="-34.846973" duration="0.050000">
-                <translation x="15.222229" y="-23.022217"/>
-            </sample>
-            <sample rotation="-41.185909" duration="0.050000">
-                <translation x="15.222229" y="-21.022186"/>
-            </sample>
-            <sample rotation="-41.185909" duration="0.050000">
-                <translation x="15.222229" y="-21.022186"/>
-            </sample>
-            <sample rotation="-44.060795" duration="0.050000">
-                <translation x="14.222229" y="-22.022217"/>
-            </sample>
-            <sample rotation="-44.060795" duration="0.050000">
-                <translation x="14.222229" y="-22.022217"/>
-            </sample>
-        </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG1">
             <sample rotation="5.024630" duration="0.050000">
                 <translation x="5.244385" y="-28.733337"/>
@@ -438,6 +406,64 @@
                 <translation x="4.244385" y="-31.733337"/>
             </sample>
         </sample-set>
+        <sample-set scene-node-id="SCN_BACKARM3">
+            <sample rotation="-22.303482" duration="0.050000">
+                <translation x="14.222229" y="-23.022202"/>
+            </sample>
+            <sample rotation="-82.708572" duration="0.050000">
+                <translation x="17.222229" y="-20.022202"/>
+            </sample>
+            <sample rotation="-59.426537" duration="0.050000">
+                <translation x="15.222229" y="-20.022202"/>
+            </sample>
+            <sample rotation="-82.708572" duration="0.050000">
+                <translation x="17.222229" y="-20.022202"/>
+            </sample>
+            <sample rotation="-82.708572" duration="0.150000">
+                <translation x="17.222229" y="-20.022202"/>
+            </sample>
+            <sample rotation="-34.846973" duration="0.050000">
+                <translation x="15.222229" y="-23.022217"/>
+            </sample>
+            <sample rotation="-41.185909" duration="0.050000">
+                <translation x="15.222229" y="-21.022186"/>
+            </sample>
+            <sample rotation="-41.185909" duration="0.050000">
+                <translation x="15.222229" y="-21.022186"/>
+            </sample>
+            <sample rotation="-44.060795" duration="0.050000">
+                <translation x="14.222229" y="-22.022217"/>
+            </sample>
+            <sample rotation="-44.060795" duration="0.050000">
+                <translation x="14.222229" y="-22.022217"/>
+            </sample>
+        </sample-set>
+        <sample-set scene-node-id="SCN_FRONTLEG3">
+            <sample rotation="-6.639599" duration="0.050000">
+                <translation x="0.733307" y="-31.000000"/>
+            </sample>
+            <sample rotation="-14.865899" duration="0.050000">
+                <translation x="0.733307" y="-29.000000"/>
+            </sample>
+            <sample rotation="-12.251921" duration="0.100000">
+                <translation x="0.733307" y="-28.999985"/>
+            </sample>
+            <sample rotation="2.546873" duration="0.150000">
+                <translation x="2.733307" y="-29.000015"/>
+            </sample>
+            <sample rotation="13.177748" duration="0.050000">
+                <translation x="-0.266693" y="-28.999985"/>
+            </sample>
+            <sample rotation="20.487366" duration="0.050000">
+                <translation x="1.733307" y="-29.000000"/>
+            </sample>
+            <sample rotation="9.309532" duration="0.100000">
+                <translation x="1.733307" y="-29.000000"/>
+            </sample>
+            <sample rotation="3.905804" duration="0.050000">
+                <translation x="1.733307" y="-29.000002"/>
+            </sample>
+        </sample-set>
         <sample-set scene-node-id="SCN_FRONTLEG2">
             <sample rotation="1.944938" duration="0.050000">
                 <translation x="-2.711060" y="-41.799988"/>
@@ -446,7 +472,7 @@
                 <translation x="-2.711060" y="-39.799988"/>
             </sample>
             <sample rotation="-7.252107" duration="0.050000">
-                <translation x="-4.711060" y="-41.799988"/>
+                <translation x="-4.711060" y="-40.799988"/>
             </sample>
             <sample rotation="12.093096" duration="0.050000">
                 <translation x="-2.711060" y="-39.799988"/>
@@ -474,32 +500,6 @@
             </sample>
             <sample rotation="-0.805156" duration="0.050000">
                 <translation x="-2.555496" y="-39.800018"/>
-            </sample>
-        </sample-set>
-        <sample-set scene-node-id="SCN_FRONTLEG3">
-            <sample rotation="-6.639599" duration="0.050000">
-                <translation x="0.733307" y="-31.000000"/>
-            </sample>
-            <sample rotation="-14.104502" duration="0.050000">
-                <translation x="0.733307" y="-29.000000"/>
-            </sample>
-            <sample rotation="-12.251921" duration="0.100000">
-                <translation x="0.733307" y="-28.999985"/>
-            </sample>
-            <sample rotation="2.546873" duration="0.150000">
-                <translation x="2.733307" y="-29.000015"/>
-            </sample>
-            <sample rotation="13.177748" duration="0.050000">
-                <translation x="-0.266693" y="-28.999985"/>
-            </sample>
-            <sample rotation="20.487366" duration="0.050000">
-                <translation x="1.733307" y="-29.000000"/>
-            </sample>
-            <sample rotation="9.309532" duration="0.100000">
-                <translation x="1.733307" y="-29.000000"/>
-            </sample>
-            <sample rotation="3.905804" duration="0.050000">
-                <translation x="1.733307" y="-29.000002"/>
             </sample>
         </sample-set>
         <sample-set scene-node-id="SCN_FRONTARM1">
