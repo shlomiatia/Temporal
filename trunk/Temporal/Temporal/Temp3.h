@@ -24,20 +24,18 @@ namespace Temporal
 
 		void handleArrows(const Vector& vector)
 		{
-			createKeyframeIfNeeded();
-			Sample& sample = (**_sample);
 			if(_translation)
 			{
-				sample.setTranslation(sample.getTranslation() + vector);
+				getSample().setTranslation(getSample().getTranslation() + vector);
 			}
 			else
 			{
-				float angle = sample.getRotation() + vector.getX() + vector.getY();
+				float angle = getSample().getRotation() + vector.getX() + vector.getY();
 				if(abs(angle) > 180.0f)
 				{
 					angle = (angle > 0.0f ? -360.0f : 360.0f) + angle;
 				}
-				sample.setRotation(angle);
+				getSample().setRotation(angle);
 			}
 		}
 
@@ -45,36 +43,15 @@ namespace Temporal
 		{
 			Hash id = _animation->first;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &id));
+			_sceneNode = _animation->second->getSampleSets().begin();
+			setSample(_sceneNode->second->getSamples().begin());
 		}
 
-		void setSample()
+		void setSample(SampleIterator i)
 		{
-			for(_sample = _sceneNode->second->getSamples().begin(); _sample != _sceneNode->second->getSamples().end() && (**_sample).getStartTime() <= _startTime; ++_sample);
-			if(_sample != _sceneNode->second->getSamples().begin())
-				--_sample;
-		}
-
-		void setStartTime()
-		{
-			_startTime = (**_sample).getStartTime();
-			_duration = (**_sample).getDuration();
+			_startTime = (**i).getStartTime();
+			_duration = (**i).getDuration();
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
-		}
-
-		void createKeyframeIfNeeded()
-		{
-			if((**_sample).getStartTime() != _startTime)
-			{
-				const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-				const SceneNode& node = *root.get(_sceneNode->second->getId());
-				Sample* sample = new Sample();
-				sample->setTranslation(node.getTranslation());
-				sample->setRotation(node.getRotation());
-				sample->setDuration(_duration);
-				(**_sample).setDuration(_startTime - (**_sample).getStartTime());
-				_sample = _sceneNode->second->getSamples().insert(_sample+1, sample);
-				_animation->second->init();
-			}
 		}
 
 		template<class T>
@@ -95,30 +72,58 @@ namespace Temporal
 			return i;
 		}
 
+		SampleIterator getSampleIterator()
+		{
+			SampleCollection& samples = _sceneNode->second->getSamples();
+			SampleIterator sampleIterator;
+			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() <= _startTime; ++sampleIterator);
+			if(sampleIterator == samples.end())
+			{
+				--sampleIterator;
+				const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+				const SceneNode& node = *root.get(_sceneNode->second->getId());
+				Sample* sample = new Sample();
+				sample->setTranslation(node.getTranslation());
+				sample->setRotation(node.getRotation());
+				sample->setDuration(_duration);
+				(**sampleIterator).setDuration(_startTime - (**sampleIterator).getStartTime());
+				sampleIterator = _sceneNode->second->getSamples().insert(sampleIterator+1, sample);
+				_animation->second->init();
+			}
+			else if(sampleIterator != samples.begin())
+			{
+				--sampleIterator;
+			}
+			return sampleIterator;
+		}
+
+		Sample& getSample()
+		{
+			return **getSampleIterator();
+		}
+
 		void update()
 		{
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
 			{
-				_offset = Mouse::get().getPosition() - (**_sample).getTranslation();
+				_offset = Mouse::get().getPosition() - getSample().getTranslation();
 				_translation = true;
 			}
 			else if(Mouse::get().isClicking(MouseButton::LEFT))
 			{
-				createKeyframeIfNeeded();
-				(**_sample).setTranslation(Mouse::get().getPosition() - _offset);
+				getSample().setTranslation(Mouse::get().getPosition() - _offset);
 				_animation->second->init();
 			}
 			else if(Mouse::get().isStartClicking(MouseButton::RIGHT))
 			{
-				_offset = Mouse::get().getPosition() - (**_sample).getTranslation();
+				_offset = Mouse::get().getPosition() - getSample().getTranslation();
 				_translation = false;
 			}
 			else if(Mouse::get().isClicking(MouseButton::RIGHT))
 			{
-				createKeyframeIfNeeded();
 				const Vector vector = Mouse::get().getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
-				(**_sample).setRotation(rotation);
+				getSample().setRotation(rotation);
 				_animation->second->init();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
@@ -133,22 +138,22 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isPressing(Key::PLUS))
 			{
-				if((**_sample).getStartTime() == _startTime)
+				if(getSample().getStartTime() == _startTime)
 				{
-					(**_sample).setDuration((**_sample).getDuration() + 0.01f);
-					_duration = (**_sample).getDuration();
+					getSample().setDuration(getSample().getDuration() + 0.01f);
+					_duration = getSample().getDuration();
 					_animation->second->init();
 				}
 			}
 			else if(Keyboard::get().isPressing(Key::MINUS))
 			{
-				if((**_sample).getStartTime() == _startTime)
+				if(getSample().getStartTime() == _startTime)
 				{
-					float duration = (**_sample).getDuration() - 0.01;
+					float duration = getSample().getDuration() - 0.01;
 					if(duration < 0.0f)
 						duration = 0.0f;
-					(**_sample).setDuration(duration);;
-					_duration = (**_sample).getDuration();
+					getSample().setDuration(duration);;
+					_duration = getSample().getDuration();
 					_animation->second->init();
 				}
 			}
@@ -177,33 +182,31 @@ namespace Temporal
 			{
 				
 				Sample* sample = new Sample();
-				sample->setTranslation((**_sample).getTranslation());
-				sample->setRotation((**_sample).getRotation());
-				sample->setDuration((**_sample).getDuration());
-				_sample = _sceneNode->second->getSamples().insert(_sample+1, sample);
+				sample->setTranslation(getSample().getTranslation());
+				sample->setRotation(getSample().getRotation());
+				sample->setDuration(getSample().getDuration());
+				SampleIterator i = _sceneNode->second->getSamples().insert(getSampleIterator()+1, sample);
 				_animation->second->init();
-				setStartTime();
+				setSample(i);
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
 				_sceneNode = cyclicIncrease(_sceneNode, _animation->second->getSampleSets());
-				setSample();
 
 			}
 			else if(Keyboard::get().isStartPressing(Key::S))
 			{
 				_sceneNode = cyclicDecrease(_sceneNode, _animation->second->getSampleSets());
-				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
-				_sample = cyclicIncrease(_sample, _sceneNode->second->getSamples());
-				setStartTime();
+				SampleIterator i = cyclicIncrease(getSampleIterator(), _sceneNode->second->getSamples());
+				setSample(i);
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
 			{
-				_sample = cyclicDecrease(_sample, _sceneNode->second->getSamples());
-				setStartTime();
+				SampleIterator i = cyclicDecrease(getSampleIterator(), _sceneNode->second->getSamples());
+				setSample(i);
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
 			{
@@ -224,8 +227,6 @@ namespace Temporal
 			{
 				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
 				_animation = _animationSet->get().begin();
-				_sceneNode = _animation->second->getSampleSets().begin();
-				_sample = _sceneNode->second->getSamples().begin();
 				setAnimation();
 			}
 			else if(message.getID() == MessageID::UPDATE)
@@ -244,7 +245,6 @@ namespace Temporal
 		std::shared_ptr<AnimationSet> _animationSet;
 		AnimationIterator _animation;
 		SampleSetIterator _sceneNode;
-		SampleIterator _sample;
 		float _time;
 	};
 
