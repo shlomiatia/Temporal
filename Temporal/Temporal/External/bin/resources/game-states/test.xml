@@ -7,32 +7,32 @@
 	</grid>
 	<entities-manager>
 		<entity id="ENT_SKELETON">
-			<transform orientation="1">
+			<transform orientation="0">
 				<position x="300" y="300" />
 			</transform>
-			<animator animation-set="resources/animations/naija.xml" animation="NAJ_ANM_IDLE" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/naija.xml">
+			<animator animation-set="resources/animations/aquaria.xml" animation="AQU_ANM_IDLE" />
+			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1">
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_BACKARM1">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_BACKARM2">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_BACKARM3" behind-parent="1" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_BACKLEG1">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_BACKLEG2">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_BACKLEG3" behind-parent="1" />
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
 						</scene-node>
 					</scene-node>
 					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
 					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_FRONTLEG1">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_FRONTLEG2">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_FRONTLEG3" behind-parent="1" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_FRONTARM1">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_FRONTARM2">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_FRONTARM3" behind-parent="1" />
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
 						</scene-node>
 					</scene-node>
 				</scene-node>
