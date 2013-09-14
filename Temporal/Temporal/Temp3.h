@@ -76,7 +76,7 @@ namespace Temporal
 		{
 			SampleCollection& samples = _sceneNode->second->getSamples();
 			SampleIterator sampleIterator;
-			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() <= _startTime; ++sampleIterator);
+			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < _startTime; ++sampleIterator);
 			if(sampleIterator == samples.end())
 			{
 				--sampleIterator;
@@ -89,10 +89,6 @@ namespace Temporal
 				(**sampleIterator).setDuration(_startTime - (**sampleIterator).getStartTime());
 				sampleIterator = _sceneNode->second->getSamples().insert(sampleIterator+1, sample);
 				_animation->second->init();
-			}
-			else if(sampleIterator != samples.begin())
-			{
-				--sampleIterator;
 			}
 			return sampleIterator;
 		}
@@ -180,12 +176,12 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::C))
 			{
-				
+				SampleIterator i = getSampleIterator();
 				Sample* sample = new Sample();
-				sample->setTranslation(getSample().getTranslation());
-				sample->setRotation(getSample().getRotation());
-				sample->setDuration(getSample().getDuration());
-				SampleIterator i = _sceneNode->second->getSamples().insert(getSampleIterator()+1, sample);
+				sample->setTranslation((**i).getTranslation());
+				sample->setRotation((**i).getRotation());
+				sample->setDuration((**i).getDuration());
+				i = _sceneNode->second->getSamples().insert(i+1, sample);
 				_animation->second->init();
 				setSample(i);
 			}
