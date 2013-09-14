@@ -41,6 +41,12 @@ namespace Temporal
 			}
 		}
 
+		void setAnimation()
+		{
+			Hash id = _animation->first;
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &id));
+		}
+
 		void setSample()
 		{
 			for(_sample = _sceneNode->second->getSamples().begin(); _sample != _sceneNode->second->getSamples().end() && (**_sample).getStartTime() <= _startTime; ++_sample);
@@ -71,6 +77,24 @@ namespace Temporal
 			}
 		}
 
+		template<class T>
+		typename T::const_iterator cyclicIncrease(typename T::const_iterator i, T& v)
+		{
+			i++;
+			if(i == v.end())
+				i = v.begin();
+			return i;
+		}
+
+		template<class T>
+		typename T::const_iterator cyclicDecrease(typename T::const_iterator i, T& v)
+		{
+			if(i == v.begin())
+				i = v.end();
+			i--;
+			return i;
+		}
+
 		void update()
 		{
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
@@ -97,6 +121,16 @@ namespace Temporal
 				(**_sample).setRotation(rotation);
 				_animation->second->init();
 			}
+			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
+			{
+				_animation = cyclicIncrease(_animation, _animationSet->get());
+				setAnimation();
+			}
+			else if(Keyboard::get().isStartPressing(Key::PAGE_DOWN))
+			{
+				_animation = cyclicDecrease(_animation, _animationSet->get());
+				setAnimation();
+			}
 			else if(Keyboard::get().isPressing(Key::PLUS))
 			{
 				if((**_sample).getStartTime() == _startTime)
@@ -118,19 +152,19 @@ namespace Temporal
 					_animation->second->init();
 				}
 			}
-			else if(Keyboard::get().isPressing(Key::UP))
+			else if(Keyboard::get().isStartPressing(Key::UP))
 			{
 				handleArrows(Vector(0.0f, 1.0f));
 			}
-			else if(Keyboard::get().isPressing(Key::DOWN))
+			else if(Keyboard::get().isStartPressing(Key::DOWN))
 			{
 				handleArrows(Vector(0.0f, -1.0f));
 			}
-			else if(Keyboard::get().isPressing(Key::LEFT))
+			else if(Keyboard::get().isStartPressing(Key::LEFT))
 			{
 				handleArrows(Vector(-1.0f, 0.0f));
 			}
-			else if(Keyboard::get().isPressing(Key::RIGHT))
+			else if(Keyboard::get().isStartPressing(Key::RIGHT))
 			{
 				handleArrows(Vector(1.0f, 0.0f));
 			}
@@ -152,43 +186,35 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
-				_sceneNode++;
-				if(_sceneNode == _animation->second->getSampleSets().end())
-					_sceneNode = _animation->second->getSampleSets().begin();
+				_sceneNode = cyclicIncrease(_sceneNode, _animation->second->getSampleSets());
 				setSample();
 
 			}
 			else if(Keyboard::get().isStartPressing(Key::S))
 			{
-				if(_sceneNode == _animation->second->getSampleSets().begin())
-					_sceneNode = _animation->second->getSampleSets().end();
-				_sceneNode--;
+				_sceneNode = cyclicDecrease(_sceneNode, _animation->second->getSampleSets());
 				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
-				_sample++;
-				if(_sample == _sceneNode->second->getSamples().end())
-					_sample = _sceneNode->second->getSamples().begin();
+				_sample = cyclicIncrease(_sample, _sceneNode->second->getSamples());
 				setStartTime();
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
 			{
-				if(_sample == _sceneNode->second->getSamples().begin())
-					_sample = _sceneNode->second->getSamples().end();
-				_sample--;
+				_sample = cyclicDecrease(_sample, _sceneNode->second->getSamples());
 				setStartTime();
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
 			{
-				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/naija2.xml", true, false));
+				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
 				AnimationSet& set =  *_animationSet;
 				serializer.serialize("animation-set", set);
 				serializer.save();
 
 			}
 			std::stringstream s;
-			s << _sceneNode->first.getString() << " " << _startTime << " " << _duration;
+			s << _animation->first.getString() << " " << _sceneNode->first.getString() << " " << _startTime << " " << _duration;
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
@@ -196,10 +222,11 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ENTITY_INIT)
 			{
-				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/naija.xml");
+				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
 				_animation = _animationSet->get().begin();
 				_sceneNode = _animation->second->getSampleSets().begin();
 				_sample = _sceneNode->second->getSamples().begin();
+				setAnimation();
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
