@@ -100,7 +100,7 @@ namespace Temporal
 		AnimationSet() {}
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
-		const Animation& get(Hash id) const { return *_animations.at(id); }
+		const Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
 		AnimationCollection& get() { return _animations; }
 		void init();
 		

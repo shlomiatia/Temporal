@@ -300,7 +300,9 @@ namespace Temporal
 		{
 			tinyxml2::XMLNode* parent = _current;
 			int i = 0;
-			for(_current = _current->FirstChildElement(); _current; _current = _current->NextSiblingElement())
+			if(strcmp(key, "component") == 0)
+				key = 0;
+			for(_current = _current->FirstChildElement(key); _current; _current = _current->NextSiblingElement(key))
 			{
 				T* object = 0;
 				SerializationAccess::serialize(_current->Value(), object, *this);

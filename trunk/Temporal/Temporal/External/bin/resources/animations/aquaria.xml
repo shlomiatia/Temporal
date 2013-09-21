@@ -1,5 +1,5 @@
 <animation-set>
-    <animation id="AQU_ANM_BASE" repeat="1" rewind="0">
+	<animation id="POP_ANM_BASE" repeat="0" rewind="0">
         <sample-set scene-node-id="SCN_BODY">
             <sample rotation="0.000000" duration="0.000000">
                 <translation x="-2.000000" y="1.000000"/>
@@ -71,7 +71,7 @@
             </sample>
         </sample-set>
     </animation>
-    <animation id="AQU_ANM_IDLE" repeat="1" rewind="0">
+    <animation id="POP_ANM_STAND" repeat="1" rewind="0">
         <sample-set scene-node-id="SCN_BODY">
             <sample rotation="0.000000" duration="1.000000">
                 <translation x="-2.000000" y="1.000000"/>
@@ -161,7 +161,7 @@
             </sample>
         </sample-set>
     </animation>
-    <animation id="AQU_ANM_WALK" repeat="1" rewind="0">
+    <animation id="POP_ANM_WALK" repeat="1" rewind="0">
         <sample-set scene-node-id="SCN_BODY">
             <sample rotation="0.000000" duration="0.050000">
                 <translation x="-2.000000" y="1.000000"/>

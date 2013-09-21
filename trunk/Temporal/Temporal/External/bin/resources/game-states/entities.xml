@@ -57,8 +57,35 @@
 				</fixture>
 			</sensor>
 			<action-controller />
-			<animator animation-set="resources/animations/pop.xml" />
-			<renderer layer="2" sprite-sheet="resources/spritesheets/pop.xml" />
+			<animator animation-set="resources/animations/aquaria.xml" />
+			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
+				<scene-node id="SCN_ROOT" transform="1" flip="1">
+					<translation x="0" y="100" />
+					<scale x="0.45" y="0.45" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+				</scene-node>
+			</renderer>
 			<!--<light />
 			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
 			<player-period period="2" />-->
