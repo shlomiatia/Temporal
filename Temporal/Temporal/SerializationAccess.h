@@ -159,6 +159,10 @@ namespace Temporal
 			serializer.serialize("behind-parent", sceneNode._drawBehindParent);
 			serializer.serialize("transform", sceneNode._transformOnly);
 			serializer.serialize("sprite-group", sceneNode._spriteGroupId);
+			serializer.serialize("flip", sceneNode._flip);
+			serializer.serialize("rotation", sceneNode._rotation);
+			serializer.serialize("translation", sceneNode._translation);
+			serializer.serialize("scale", sceneNode._scale);
 			serializer.serialize("scene-node", sceneNode._children);
 		}
 		

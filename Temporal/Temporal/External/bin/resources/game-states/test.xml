@@ -10,7 +10,7 @@
 			<transform orientation="0">
 				<position x="300" y="300" />
 			</transform>
-			<animator animation-set="resources/animations/aquaria.xml" animation="AQU_ANM_IDLE" />
+			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1">
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">

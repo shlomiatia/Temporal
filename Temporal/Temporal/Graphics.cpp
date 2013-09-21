@@ -111,8 +111,10 @@ namespace Temporal
 	{
 		glPushMatrix();
 		{	
-			translate(sceneNode.getTranslation());
+			if(sceneNode.isFlip())
+				glScalef(-1.0f, 1.0f, 1.0f);
 			glScalef(sceneNode.getScale().getX(), sceneNode.getScale().getY(), 1.0f);
+			translate(sceneNode.getTranslation());
 			glRotatef(sceneNode.getRotation(), 0.0, 0.0, 1.0f);
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
