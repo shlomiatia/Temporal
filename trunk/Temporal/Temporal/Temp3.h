@@ -18,7 +18,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _startTime(0.0f), _duration(0.0f) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -44,14 +44,19 @@ namespace Temporal
 			Hash id = _animation->first;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &id));
 			_sceneNode = _animation->second->getSampleSets().begin();
-			setSample(_sceneNode->second->getSamples().begin());
+			_frame = 0;
+			setSample();
 		}
 
-		void setSample(SampleIterator i)
+		float getStartTime()
 		{
-			_startTime = (**i).getStartTime();
-			_duration = (**i).getDuration();
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
+			return _frame * FRAME_TIME;
+		}
+
+		void setSample()
+		{
+			float startTime = getStartTime();
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &startTime));
 		}
 
 		template<class T>
@@ -72,23 +77,37 @@ namespace Temporal
 			return i;
 		}
 
+		SampleIterator addSample(SampleIterator sampleIterator, float duration2)
+		{
+			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+			const SceneNode& node = *root.get(_sceneNode->second->getId());
+			Sample* sample = new Sample();
+			sample->setTranslation(node.getTranslation());
+			sample->setRotation(node.getRotation());
+			sample->setDuration(duration2);
+			float duration1 = getStartTime() - (**sampleIterator).getStartTime();
+			(**sampleIterator).setDuration(duration1);
+			sampleIterator = _sceneNode->second->getSamples().insert(sampleIterator+1, sample);
+			_animation->second->init();
+			return sampleIterator;
+		}
+
 		SampleIterator getSampleIterator()
 		{
 			SampleCollection& samples = _sceneNode->second->getSamples();
 			SampleIterator sampleIterator;
-			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < _startTime; ++sampleIterator);
+			float startTime = getStartTime();
+			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
 			if(sampleIterator == samples.end())
 			{
 				--sampleIterator;
-				const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-				const SceneNode& node = *root.get(_sceneNode->second->getId());
-				Sample* sample = new Sample();
-				sample->setTranslation(node.getTranslation());
-				sample->setRotation(node.getRotation());
-				sample->setDuration(_duration);
-				(**sampleIterator).setDuration(_startTime - (**sampleIterator).getStartTime());
-				sampleIterator = _sceneNode->second->getSamples().insert(sampleIterator+1, sample);
-				_animation->second->init();
+				sampleIterator = addSample(sampleIterator, FRAME_TIME);
+			}
+			else if((**sampleIterator).getStartTime() != startTime)
+			{
+				--sampleIterator;
+				float duration2 = (**sampleIterator).getDuration() - startTime + (**sampleIterator).getStartTime();
+				sampleIterator = addSample(sampleIterator, duration2);
 			}
 			return sampleIterator;
 		}
@@ -132,27 +151,6 @@ namespace Temporal
 				_animation = cyclicDecrease(_animation, _animationSet->get());
 				setAnimation();
 			}
-			else if(Keyboard::get().isPressing(Key::PLUS))
-			{
-				if(getSample().getStartTime() == _startTime)
-				{
-					getSample().setDuration(getSample().getDuration() + 0.01f);
-					_duration = getSample().getDuration();
-					_animation->second->init();
-				}
-			}
-			else if(Keyboard::get().isPressing(Key::MINUS))
-			{
-				if(getSample().getStartTime() == _startTime)
-				{
-					float duration = getSample().getDuration() - 0.01;
-					if(duration < 0.0f)
-						duration = 0.0f;
-					getSample().setDuration(duration);;
-					_duration = getSample().getDuration();
-					_animation->second->init();
-				}
-			}
 			else if(Keyboard::get().isStartPressing(Key::UP))
 			{
 				handleArrows(Vector(0.0f, 1.0f));
@@ -172,7 +170,8 @@ namespace Temporal
 			else if(Keyboard::get().isStartPressing(Key::SPACE))
 			{
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_startTime));
+				float startTime = getStartTime();
+				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &startTime));
 			}
 			else if(Keyboard::get().isStartPressing(Key::C))
 			{
@@ -183,7 +182,7 @@ namespace Temporal
 				sample->setDuration((**i).getDuration());
 				i = _sceneNode->second->getSamples().insert(i+1, sample);
 				_animation->second->init();
-				setSample(i);
+				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
@@ -196,13 +195,13 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
-				SampleIterator i = cyclicIncrease(getSampleIterator(), _sceneNode->second->getSamples());
-				setSample(i);
+				
+				++_frame;
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
 			{
-				SampleIterator i = cyclicDecrease(getSampleIterator(), _sceneNode->second->getSamples());
-				setSample(i);
+				if(_frame > 0)
+					--_frame;
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
 			{
@@ -213,7 +212,7 @@ namespace Temporal
 
 			}
 			std::stringstream s;
-			s << _animation->first.getString() << " " << _sceneNode->first.getString() << " " << _startTime << " " << _duration;
+			s << _animation->first.getString() << " " << _sceneNode->first.getString() << " " << _frame;
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
@@ -233,16 +232,18 @@ namespace Temporal
 
 		Component* clone() const { return 0; }
 	private:
+		static const float FRAME_TIME;
+
 		Vector _offset;
 		bool _translation;
-		float _startTime;
-		float _duration;
 
 		std::shared_ptr<AnimationSet> _animationSet;
 		AnimationIterator _animation;
 		SampleSetIterator _sceneNode;
-		float _time;
+		int _frame;
 	};
+
+	const float AnimationEditor::FRAME_TIME = 0.067f;
 
 	class MyGameStateListener : public GameStateListener
 	{
