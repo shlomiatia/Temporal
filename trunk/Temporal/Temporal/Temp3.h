@@ -18,7 +18,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0), _copyFrame(0), _copyAllSceneNodes(false) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -92,29 +92,38 @@ namespace Temporal
 			return sampleIterator;
 		}
 
-		SampleIterator getSampleIterator()
+		Sample& getSample()
 		{
 			SampleCollection& samples = _sceneNode->second->getSamples();
 			SampleIterator sampleIterator;
 			float startTime = getStartTime();
 			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
+
+			// Frame not exist yet
 			if(sampleIterator == samples.end())
 			{
 				--sampleIterator;
 				sampleIterator = addSample(sampleIterator, FRAME_TIME);
 			}
+			// Split Frame
 			else if((**sampleIterator).getStartTime() != startTime)
 			{
 				--sampleIterator;
 				float duration2 = (**sampleIterator).getDuration() - startTime + (**sampleIterator).getStartTime();
 				sampleIterator = addSample(sampleIterator, duration2);
 			}
-			return sampleIterator;
+			return **sampleIterator;
 		}
 
-		Sample& getSample()
+		void pasteFrame()
 		{
-			return **getSampleIterator();
+			Sample& pasteSample = getSample();
+			int tempFrame = _frame;
+			_frame = _copyFrame;
+			Sample& copySample = getSample();
+			_frame = tempFrame;
+			pasteSample.setTranslation(copySample.getTranslation());
+			pasteSample.setRotation(copySample.getRotation());
 		}
 
 		void update()
@@ -175,19 +184,35 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::C))
 			{
-				SampleIterator i = getSampleIterator();
-				Sample* sample = new Sample();
-				sample->setTranslation((**i).getTranslation());
-				sample->setRotation((**i).getRotation());
-				sample->setDuration((**i).getDuration());
-				i = _sceneNode->second->getSamples().insert(i+1, sample);
-				_animation->second->init();
-				setSample();
+				_copyFrame = _frame;
+				_copyAllSceneNodes = false;
+			}
+			else if(Keyboard::get().isStartPressing(Key::X))
+			{
+				_copyFrame = _frame;
+				_copyAllSceneNodes = true;
+			}
+			else if(Keyboard::get().isStartPressing(Key::V))
+			{
+				if(!_copyAllSceneNodes)
+				{
+					pasteFrame();
+				}
+				else
+				{
+					SampleSetIterator tempSceneNode = _sceneNode;
+					for(SampleSetIterator i = _animation->second->getSampleSets().begin(); i != _animation->second->getSampleSets().end(); ++i)
+					{
+						_sceneNode = i;
+						pasteFrame();
+					}
+					_sceneNode = tempSceneNode;
+				}
+
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
 				_sceneNode = cyclicIncrease(_sceneNode, _animation->second->getSampleSets());
-
 			}
 			else if(Keyboard::get().isStartPressing(Key::S))
 			{
@@ -195,7 +220,6 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
-				
 				++_frame;
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
@@ -241,6 +265,9 @@ namespace Temporal
 		AnimationIterator _animation;
 		SampleSetIterator _sceneNode;
 		int _frame;
+
+		bool _copyAllSceneNodes;
+		int _copyFrame;
 	};
 
 	const float AnimationEditor::FRAME_TIME = 0.067f;
