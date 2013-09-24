@@ -18,7 +18,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0), _copyFrame(0), _copyAllSceneNodes(false) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0), _copyFrame(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -92,15 +92,21 @@ namespace Temporal
 			return sampleIterator;
 		}
 
-		Sample& getSample()
+		SampleIterator getSampleIterator()
 		{
 			SampleCollection& samples = _sceneNode->second->getSamples();
 			SampleIterator sampleIterator;
 			float startTime = getStartTime();
 			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
+			return sampleIterator;
+		}
 
+		Sample& getSample()
+		{
+			float startTime = getStartTime();
+			SampleIterator sampleIterator = getSampleIterator();
 			// Frame not exist yet
-			if(sampleIterator == samples.end())
+			if(sampleIterator == _sceneNode->second->getSamples().end())
 			{
 				--sampleIterator;
 				sampleIterator = addSample(sampleIterator, FRAME_TIME);
@@ -185,29 +191,30 @@ namespace Temporal
 			else if(Keyboard::get().isStartPressing(Key::C))
 			{
 				_copyFrame = _frame;
-				_copyAllSceneNodes = false;
-			}
-			else if(Keyboard::get().isStartPressing(Key::X))
-			{
-				_copyFrame = _frame;
-				_copyAllSceneNodes = true;
 			}
 			else if(Keyboard::get().isStartPressing(Key::V))
 			{
-				if(!_copyAllSceneNodes)
+				SampleSetIterator tempSceneNode = _sceneNode;
+				for(SampleSetIterator i = _animation->second->getSampleSets().begin(); i != _animation->second->getSampleSets().end(); ++i)
 				{
+					_sceneNode = i;
 					pasteFrame();
 				}
-				else
-				{
-					SampleSetIterator tempSceneNode = _sceneNode;
-					for(SampleSetIterator i = _animation->second->getSampleSets().begin(); i != _animation->second->getSampleSets().end(); ++i)
-					{
-						_sceneNode = i;
-						pasteFrame();
-					}
-					_sceneNode = tempSceneNode;
-				}
+				_sceneNode = tempSceneNode;
+			}
+			else if(Keyboard::get().isStartPressing(Key::DELETE))
+			{
+				SampleIterator i = getSampleIterator();
+				if(i == _sceneNode->second->getSamples().begin() ||
+				   i == _sceneNode->second->getSamples().end() ||
+				   (**i).getStartTime() != getStartTime())
+					return;
+
+				Sample* sample = *i;
+				i = _sceneNode->second->getSamples().erase(i);
+				--i;
+				(**i).setDuration((**i).getDuration() + sample->getDuration());
+				delete sample;
 
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
@@ -221,15 +228,17 @@ namespace Temporal
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
 				++_frame;
+				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
 			{
 				if(_frame > 0)
 					--_frame;
+				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
 			{
-				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
+				XmlSerializer serializer(new FileStream("C:/Users/Rolllo1U/Documents/Visual Studio 2012/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
 				AnimationSet& set =  *_animationSet;
 				serializer.serialize("animation-set", set);
 				serializer.save();
@@ -266,7 +275,6 @@ namespace Temporal
 		SampleSetIterator _sceneNode;
 		int _frame;
 
-		bool _copyAllSceneNodes;
 		int _copyFrame;
 	};
 
