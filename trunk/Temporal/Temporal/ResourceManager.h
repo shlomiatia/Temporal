@@ -130,7 +130,6 @@ namespace Temporal
 		const std::shared_ptr<FTFont> getFont(const char* name, unsigned int size);
 
 	private:
-		
 		SpriteSheetCollection _spritesheets;
 		AnimationSetCollection _animationSets;
 		FontCollection _fonts;
@@ -138,6 +137,8 @@ namespace Temporal
 		ResourceManager() {}
 		ResourceManager(const ResourceManager&);
 		ResourceManager& operator=(const ResourceManager&);
+
+		friend class AnimationEditor;
 	};
 }
 

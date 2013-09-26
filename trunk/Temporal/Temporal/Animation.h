@@ -9,8 +9,8 @@ namespace Temporal
 	class Sample
 	{
 	public:
-		explicit Sample(Hash spriteGroupId = Hash::INVALID, float startTime = 0.0f, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _startTime(startTime), _duration(duration) {}
+		explicit Sample(Hash spriteGroupId = Hash::INVALID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
+		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _duration(duration), _startTime(0.0f) {}
 
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
 		void setStartTime(float startTime) { _startTime = startTime; }
@@ -22,6 +22,8 @@ namespace Temporal
 		const Vector& getTranslation() const { return _translation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 		float getRotation() const { return _rotation; }
+
+		Sample* clone() const { return new Sample(getSpriteGroupId(), getDuration(), getTranslation(), getRotation()); }
 
 	private:
 		Hash _spriteGroupId;
@@ -42,13 +44,16 @@ namespace Temporal
 	class SampleSet
 	{
 	public:
-		SampleSet() : _sceneNodeId(Hash::INVALID), _duration(0.0f) {}
+		SampleSet(Hash sceneNodeId = Hash::INVALID, float duration = 0.0f) : _sceneNodeId(sceneNodeId), _duration(duration) {}
+		~SampleSet();
 
 		Hash getId() const { return _sceneNodeId; }
 		float getDuration() const { return _duration; }
 		SampleCollection& getSamples() { return _samples; }
 		const SampleCollection& getSamples() const { return _samples; }
+
 		void init();
+		SampleSet* clone() const;
 
 	private:
 		Hash _sceneNodeId;
@@ -67,7 +72,9 @@ namespace Temporal
 	class Animation
 	{
 	public:
-		Animation() : _id(Hash::INVALID), _duration(0.0f), _repeat(false), _rewind(false) {}
+		Animation(Hash id = Hash::INVALID, float duration = 0.0f, bool repeat = false, bool rewind = false) :
+		  _id(id), _duration(duration), _repeat(repeat), _rewind(rewind) {}
+		~Animation();
 		
 		Hash getId() const { return _id; }
 		float getDuration() const { return _duration; }
@@ -75,8 +82,10 @@ namespace Temporal
 		bool Rewind() const { return _rewind; }
 		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
 		SampleSetCollection& getSampleSets() { return _sampleSets; }
+		const SampleSetCollection& getSampleSets() const { return _sampleSets; }
 
 		void init();
+		Animation* clone() const;
 
 	private:
 		Hash _id;
@@ -98,11 +107,14 @@ namespace Temporal
 	{
 	public:
 		AnimationSet() {}
+		~AnimationSet();
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		const Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
 		AnimationCollection& get() { return _animations; }
+		const AnimationCollection& get() const { return _animations; }
 		void init();
+		AnimationSet* clone() const;
 		
 	private:
 		AnimationCollection _animations;
