@@ -63,7 +63,7 @@ namespace Temporal
 	void Game::update()
 	{
 		Input::get().update();
-		GameStateManager::get().update(FRAME_PERIOD/4.0f);
+		GameStateManager::get().update(FRAME_PERIOD);
 	}
 
 	void Game::draw() const

@@ -35,4 +35,52 @@ namespace Temporal
 			i->second->init();
 		}
 	}
+
+	SampleSet* SampleSet::clone() const
+	{
+		SampleSet* clone = new SampleSet(getId(), getDuration());
+		for(SampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
+		{
+			clone->getSamples().push_back((**i).clone());
+		}
+		return clone;
+	}
+
+	Animation* Animation::clone() const
+	{
+		Animation* clone = new Animation(getId(), getDuration(), _repeat, _rewind);
+		for(SampleSetIterator i = getSampleSets().begin(); i != getSampleSets().end(); ++i)
+		{
+			clone->getSampleSets()[i->first] = i->second->clone();
+		}
+		return clone;
+	}
+
+	AnimationSet* AnimationSet::clone() const
+	{
+		AnimationSet* clone = new AnimationSet();
+		for(AnimationIterator i = get().begin(); i != get().end(); ++i)
+		{
+			clone->get()[i->first] = i->second->clone();
+		}
+		return clone;
+	}
+
+	SampleSet::~SampleSet()
+	{
+		for(SampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
+			delete *i;
+	}
+
+	Animation::~Animation()
+	{
+		for(SampleSetIterator i = getSampleSets().begin(); i != getSampleSets().end(); ++i)
+			delete i->second;
+	}
+
+	AnimationSet::~AnimationSet()
+	{
+		for(AnimationIterator i = get().begin(); i != get().end(); ++i)
+			delete i->second;
+	}
 }
