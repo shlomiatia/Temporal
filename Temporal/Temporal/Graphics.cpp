@@ -100,7 +100,7 @@ namespace Temporal
 
 	void Graphics::bindTexture(unsigned int id)
 	{
-		if(id != _lastTextureId)
+		if(id != _lastTextureId || id == 0)
 		{
 			glBindTexture(GL_TEXTURE_2D, id);
 			_lastTextureId = id;
