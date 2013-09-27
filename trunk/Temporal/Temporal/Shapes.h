@@ -132,10 +132,7 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	inline AABB AABBS(const Vector& center, const Vector& size) { return AABB(center, size / 2.0f); }
-	inline AABB AABBLB(float left, float bottom, float width, float height) { return AABB(left + width / 2.0f, bottom + height / 2.0f, width, height); }
-	inline AABB AABBCB(float centerX, float bottom, float width, float height) { return AABB(centerX, bottom + height / 2.0f, width, height); }
-	inline AABB AABBLC(float left, float centerY, float width, float height) { return AABB(left + width / 2.0f, centerY, width, height); }
+	inline AABB AABBLT(float left, float top, float width, float height) { return AABB(left + width / 2.0f, top - height / 2.0f, width, height); }
 
 	/**********************************************************************************************
 	 * YABP - A parallelogram with 1 axis parallel to Y

@@ -8,9 +8,14 @@
 #include "SceneNode.h"
 #include "Serialization.h"
 #include "SerializationAccess.h"
+#include "Text.h"
+#include "Transform.h"
+#include "Utils.h"
+#include "Graphics.h"
+#include "Shapes.h"
 
 #include <sstream>
-#include "Graphics.h"
+
 
 // Animation editor
 namespace Temporal
@@ -276,6 +281,18 @@ namespace Temporal
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
+		void addLabel(const char* label, const Vector& position, float width)
+		{
+			Transform* transform = new Transform(position);
+			Text* text = new Text("c:/windows/fonts/Arial.ttf", 12, label);
+			text->setWidth(width);
+			Entity* entity = new Entity();
+			entity->add(transform);
+			entity->add(text);
+			entity->handleMessage(Message(MessageID::ENTITY_INIT));
+			getEntity().getManager().add(Hash(label), entity);
+		}
+
 		void bindSceneNodes(SceneNode& sceneNode)
 		{
 			_sceneNodes.push_back(sceneNode.getID());
@@ -285,33 +302,62 @@ namespace Temporal
 			}
 		}
 
+		void init()
+		{
+			_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
+			for(AnimationIterator i = _animationSet->get().begin(); i != _animationSet->get().end(); ++i)
+			{
+				_animations.push_back(i->first);
+			}
+			_animation = _animations.begin();
+			SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
+			bindSceneNodes(sceneNode);
+			_sceneNode = _sceneNodes.begin();
+			setAnimation();
+
+			
+			float y = GRID_START_Y;
+			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			{
+				y -= CELL_SIZE;
+				addLabel(i->getString(), Vector(0.0f, y), GRID_START_X);
+			}
+			for(int i = 0;  i < 24; ++i)
+			{
+				addLabel(Utils::toString(i+1).c_str(), Vector(GRID_START_X + i * CELL_SIZE, GRID_START_Y), CELL_SIZE);
+			}
+		}
+
 		void handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ENTITY_INIT)
 			{
-				_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
-				for(AnimationIterator i = _animationSet->get().begin(); i != _animationSet->get().end(); ++i)
-				{
-					_animations.push_back(i->first);
-				}
-				_animation = _animations.begin();
-				SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
-				bindSceneNodes(sceneNode);
-				_sceneNode = _sceneNodes.begin();
-				setAnimation();
+				init();
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				update();
+			}
+			else if(message.getID() == MessageID::DRAW)
+			{
+				float y = GRID_START_Y;
+				for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+				{
+					for(int i = 0;  i < 24; ++i)
+					{
+						Graphics::get().draw(AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					}
+					y -= CELL_SIZE;
+				}
 			}
 		}
 
 		Component* clone() const { return 0; }
 	private:
 		static const float FRAME_TIME;
-
-		Vector _offset;
-		bool _translation;
+		static const float CELL_SIZE;
+		static const float GRID_START_X;
+		static const float GRID_START_Y;
 
 		std::shared_ptr<AnimationSet> _animationSet;
 		HashCollection _animations;
@@ -319,8 +365,10 @@ namespace Temporal
 		HashCollection _sceneNodes;
 		HashIterator _sceneNode;
 		int _frame;
-		AnimationSet* _undo;
 
+		Vector _offset;
+		bool _translation;
+		AnimationSet* _undo;
 		int _copyFrame;
 	};
 

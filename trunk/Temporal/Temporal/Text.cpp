@@ -3,6 +3,7 @@
 #include "Vector.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
+#include "Graphics.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -37,6 +38,7 @@ namespace Temporal
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 			_layout.Render(_text.c_str());
+			Graphics::get().bindTexture(0); // Because we cache textures...
 		}
 		glPopMatrix();
 	}
@@ -46,4 +48,19 @@ namespace Temporal
 		return new Text(_fontFamily.c_str(), _fontSize, _text.c_str());
 	}
 
+	void Text::setWidth(float width)
+	{
+		_layout.SetLineLength(width);
+	}
+
+	float Text::getWidth() const
+	{
+		return _layout.GetLineLength();
+	}
+
+	float Text::getHeight() const
+	{
+		FTBBox box =  const_cast<FTSimpleLayout&>(_layout).BBox(_text.c_str());
+		return box.Upper().Yf() - box.Lower().Yf();
+	}
 }
