@@ -207,27 +207,19 @@ namespace Temporal
 	void Graphics::draw(const AABB& rect, const Color& color, bool fill)
 	{
 		bindTexture(0);
-
-		glPushMatrix();
-		{
-			setColor(color);
-
-			glTranslatef(rect.getCenterX(), rect.getCenterY(), 0.0f);
-
-			GLfloat vertices[] = {-rect.getRadiusVx(), -rect.getRadiusVy(),
-								  -rect.getRadiusVx(), rect.getRadiusVy(),
-								   rect.getRadiusVx(), rect.getRadiusVy(),
-								   rect.getRadiusVx(), -rect.getRadiusVy()};
+		setColor(color);
+		GLfloat vertices[] = {rect.getLeft(), rect.getBottom(),
+							  rect.getLeft(), rect.getTop(),
+							  rect.getRight(), rect.getTop(),
+							  rect.getRight(), rect.getBottom()};
  
-			glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_VERTEX_ARRAY);
  
-			glVertexPointer(2, GL_FLOAT, 0, vertices);
+		glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glDrawArrays(fill ? GL_QUADS : GL_LINE_LOOP, 0, 4);
+		glDrawArrays(fill ? GL_QUADS : GL_LINE_LOOP, 0, 4);
  
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		glPopMatrix();
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
 	void Graphics::draw(const YABP& slopedArea, const Color& color)
