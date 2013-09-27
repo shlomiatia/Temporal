@@ -13,9 +13,9 @@
 #include "Utils.h"
 #include "Graphics.h"
 #include "Shapes.h"
-
+#include "Layer.h"
+#include <algorithm>
 #include <sstream>
-
 
 // Animation editor
 namespace Temporal
@@ -46,8 +46,7 @@ namespace Temporal
 
 		void setAnimation()
 		{
-			Hash id = *_animation;
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &id));
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animation));
 			_frame = 0;
 			setSample();
 		}
@@ -63,43 +62,25 @@ namespace Temporal
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &startTime));
 		}
 
-		template<class T>
-		typename T::const_iterator cyclicIncrease(typename T::const_iterator i, T& v)
-		{
-			i++;
-			if(i == v.end())
-				i = v.begin();
-			return i;
-		}
-
-		template<class T>
-		typename T::const_iterator cyclicDecrease(typename T::const_iterator i, T& v)
-		{
-			if(i == v.begin())
-				i = v.end();
-			i--;
-			return i;
-		}
-
 		SampleIterator addSample(SampleIterator sampleIterator, float duration2)
 		{
 			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-			const SceneNode& node = *root.get(*_sceneNode);
+			const SceneNode& node = *root.get(_sceneNode);
 			Sample* sample = new Sample();
 			sample->setTranslation(node.getTranslation());
 			sample->setRotation(node.getRotation());
 			sample->setDuration(duration2);
 			float duration1 = getStartTime() - (**sampleIterator).getStartTime();
 			(**sampleIterator).setDuration(duration1);
-			Animation& animation = *_animationSet->get().at(*_animation);
-			sampleIterator = animation.getSampleSets().at(*_sceneNode)->getSamples().insert(sampleIterator+1, sample);
+			Animation& animation = *_animationSet->get().at(_animation);
+			sampleIterator = animation.getSampleSets().at(_sceneNode)->getSamples().insert(sampleIterator+1, sample);
 			animation.init();
 			return sampleIterator;
 		}
 
 		SampleIterator getSampleIterator()
 		{
-			SampleCollection& samples = _animationSet->get().at(*_animation)->getSampleSets().at(*_sceneNode)->getSamples();
+			SampleCollection& samples = _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples();
 			SampleIterator sampleIterator;
 			float startTime = getStartTime();
 			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
@@ -111,7 +92,7 @@ namespace Temporal
 			float startTime = getStartTime();
 			SampleIterator sampleIterator = getSampleIterator();
 			// Frame not exist yet
-			if(sampleIterator == _animationSet->get().at(*_animation)->getSampleSets().at(*_sceneNode)->getSamples().end())
+			if(sampleIterator == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().end())
 			{
 				--sampleIterator;
 				sampleIterator = addSample(sampleIterator, FRAME_TIME);
@@ -129,10 +110,10 @@ namespace Temporal
 		void paste()
 		{
 			addUndo();
-			HashIterator tempSceneNode = _sceneNode;
+			Hash tempSceneNode = _sceneNode;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
-				_sceneNode = i;
+				_sceneNode = *i;
 				Sample& pasteSample = getSample();
 				int tempFrame = _frame;
 				_frame = _copyFrame;
@@ -155,13 +136,13 @@ namespace Temporal
 		{
 			addUndo();
 			SampleIterator i = getSampleIterator();
-			if(i == _animationSet->get().at(*_animation)->getSampleSets().at(*_sceneNode)->getSamples().begin() ||
-				i == _animationSet->get().at(*_animation)->getSampleSets().at(*_sceneNode)->getSamples().end() ||
+			if(i == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().begin() ||
+				i == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().end() ||
 				(**i).getStartTime() != getStartTime())
 				return;
 
 			Sample* sample = *i;
-			i = _animationSet->get().at(*_animation)->getSampleSets().at(*_sceneNode)->getSamples().erase(i);
+			i = _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().erase(i);
 			--i;
 			(**i).setDuration((**i).getDuration() + sample->getDuration());
 			delete sample;
@@ -178,7 +159,7 @@ namespace Temporal
 			else if(Mouse::get().isClicking(MouseButton::LEFT))
 			{
 				getSample().setTranslation(Mouse::get().getPosition() - _offset);
-				_animationSet->get().at(*_animation)->init();
+				_animationSet->get().at(_animation)->init();
 			}
 			else if(Mouse::get().isStartClicking(MouseButton::RIGHT))
 			{
@@ -191,16 +172,24 @@ namespace Temporal
 				const Vector vector = Mouse::get().getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
 				getSample().setRotation(rotation);
-				_animationSet->get().at(*_animation)->init();
+				_animationSet->get().at(_animation)->init();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
 			{
-				_animation = cyclicIncrease(_animation, _animations);
+				AnimationIterator i = _animationSet->get().find(_animation);
+				++i;
+				if(i != _animationSet->get().end())
+					_animation = i->first;
 				setAnimation();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_DOWN))
 			{
-				_animation = cyclicDecrease(_animation, _animations);
+				AnimationIterator i = _animationSet->get().find(_animation);
+				if(i != _animationSet->get().begin())
+				{
+					--i;
+					_animation = i->first;
+				}
 				setAnimation();
 			}
 			else if(Keyboard::get().isStartPressing(Key::UP))
@@ -247,15 +236,22 @@ namespace Temporal
 			else if(Keyboard::get().isStartPressing(Key::DELETE))
 			{
 				deleteFrame();
-
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
-				_sceneNode = cyclicIncrease(_sceneNode, _sceneNodes);
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNode);
+				++i;
+				if(i != _sceneNodes.end())
+					_sceneNode = *i;
 			}
 			else if(Keyboard::get().isStartPressing(Key::S))
 			{
-				_sceneNode = cyclicDecrease(_sceneNode, _sceneNodes);
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNode);
+				if(i != _sceneNodes.begin())
+				{
+					--i;
+					_animation = *i;
+				}
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
@@ -277,7 +273,7 @@ namespace Temporal
 
 			}
 			std::stringstream s;
-			s << _animation->getString() << " " << _sceneNode->getString() << " " << _frame;
+			s << _animation.getString() << " " << _sceneNode.getString() << " " << _frame;
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
@@ -305,14 +301,10 @@ namespace Temporal
 		void init()
 		{
 			_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
-			for(AnimationIterator i = _animationSet->get().begin(); i != _animationSet->get().end(); ++i)
-			{
-				_animations.push_back(i->first);
-			}
-			_animation = _animations.begin();
+			_animation = _animationSet->get().begin()->first;
 			SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 			bindSceneNodes(sceneNode);
-			_sceneNode = _sceneNodes.begin();
+			_sceneNode = *_sceneNodes.begin();
 			setAnimation();
 
 			
@@ -322,9 +314,22 @@ namespace Temporal
 				y -= CELL_SIZE;
 				addLabel(i->getString(), Vector(0.0f, y), GRID_START_X);
 			}
-			for(int i = 0;  i < 24; ++i)
+			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
 				addLabel(Utils::toString(i+1).c_str(), Vector(GRID_START_X + i * CELL_SIZE, GRID_START_Y), CELL_SIZE);
+			}
+		}
+
+		void draw()
+		{
+			float y = GRID_START_Y;
+			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			{
+				for(int i = 0;  i < GRID_FRAMES; ++i)
+				{
+					Graphics::get().draw(AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+				}
+				y -= CELL_SIZE;
 			}
 		}
 
@@ -340,15 +345,10 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::DRAW)
 			{
-				float y = GRID_START_Y;
-				for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
-				{
-					for(int i = 0;  i < 24; ++i)
-					{
-						Graphics::get().draw(AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
-					}
-					y -= CELL_SIZE;
-				}
+				
+				LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
+				if(layer == LayerType::GUI)
+					draw();
 			}
 		}
 
@@ -358,12 +358,12 @@ namespace Temporal
 		static const float CELL_SIZE;
 		static const float GRID_START_X;
 		static const float GRID_START_Y;
+		static const int GRID_FRAMES;
 
 		std::shared_ptr<AnimationSet> _animationSet;
-		HashCollection _animations;
-		HashIterator _animation;
+		Hash _animation;
 		HashCollection _sceneNodes;
-		HashIterator _sceneNode;
+		Hash _sceneNode;
 		int _frame;
 
 		Vector _offset;
@@ -373,6 +373,10 @@ namespace Temporal
 	};
 
 	const float AnimationEditor::FRAME_TIME = 0.067f;
+	const float AnimationEditor::CELL_SIZE = 16.0f;
+	const float AnimationEditor::GRID_START_X = 128.0f;
+	const float AnimationEditor::GRID_START_Y = 256.0f;
+	const int AnimationEditor::GRID_FRAMES = 48;
 
 	class MyGameStateListener : public GameStateListener
 	{
