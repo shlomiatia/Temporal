@@ -29,18 +29,19 @@ namespace Temporal
 
 		void handleArrows(const Vector& vector)
 		{
+			Sample& sample = getOrCreateSample();
 			if(_translation)
 			{
-				getSample().setTranslation(getSample().getTranslation() + vector);
+				sample.setTranslation(sample.getTranslation() + vector);
 			}
 			else
 			{
-				float angle = getSample().getRotation() + vector.getX() + vector.getY();
+				float angle = sample.getRotation() + vector.getX() + vector.getY();
 				if(abs(angle) > 180.0f)
 				{
 					angle = (angle > 0.0f ? -360.0f : 360.0f) + angle;
 				}
-				getSample().setRotation(angle);
+				sample.setRotation(angle);
 			}
 		}
 
@@ -51,9 +52,11 @@ namespace Temporal
 			setSample();
 		}
 
-		float getStartTime()
+		float getStartTime(int frame = -1)
 		{
-			return _frame * FRAME_TIME;
+			if(frame == -1)
+				frame = _frame;
+			return frame * FRAME_TIME;
 		}
 
 		void setSample()
@@ -78,21 +81,50 @@ namespace Temporal
 			return sampleIterator;
 		}
 
-		SampleIterator getSampleIterator()
+		SampleCollection* getSceneNode(Hash animation = Hash::INVALID, Hash sceneNode = Hash::INVALID)
 		{
-			SampleCollection& samples = _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples();
+			if(animation == Hash::INVALID)
+				animation = _animation;
+			if(sceneNode == Hash::INVALID)
+				sceneNode = _sceneNode;
+			AnimationIterator i = _animationSet->get().find(animation);
+			if(i == _animationSet->get().end())
+				return 0;
+			SampleSetIterator j = i->second->getSampleSets().find(sceneNode);
+			if(j == i->second->getSampleSets().end())
+				return 0;
+			SampleCollection& samples = j->second->getSamples();
+			return &samples;
+		}
+
+		SampleIterator getSampleIterator(SampleCollection& samples, int frame = -1)
+		{
 			SampleIterator sampleIterator;
-			float startTime = getStartTime();
+			float startTime = getStartTime(frame);
 			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
 			return sampleIterator;
 		}
 
-		Sample& getSample()
+		Sample* getSample(Hash animation = Hash::INVALID, Hash sceneNode = Hash::INVALID, int frame = -1)
 		{
+			SampleCollection* samples = getSceneNode(animation, sceneNode);
+			if(!samples)
+				return 0;
+			SampleIterator i = getSampleIterator(*samples, frame);
+			if(i == samples->end())
+				return 0;
+			return *i;
+			return 0;
+		}
+
+		Sample& getOrCreateSample()
+		{
+			SampleCollection* samples = getSceneNode();
+			// TODO: create sample...
+			SampleIterator sampleIterator = getSampleIterator(*samples);
 			float startTime = getStartTime();
-			SampleIterator sampleIterator = getSampleIterator();
 			// Frame not exist yet
-			if(sampleIterator == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().end())
+			if(sampleIterator == samples->end())
 			{
 				--sampleIterator;
 				sampleIterator = addSample(sampleIterator, FRAME_TIME);
@@ -114,10 +146,10 @@ namespace Temporal
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
 				_sceneNode = *i;
-				Sample& pasteSample = getSample();
+				Sample& pasteSample = getOrCreateSample();
 				int tempFrame = _frame;
 				_frame = _copyFrame;
-				Sample& copySample = getSample();
+				Sample& copySample = getOrCreateSample();
 				_frame = tempFrame;
 				pasteSample.setTranslation(copySample.getTranslation());
 				pasteSample.setRotation(copySample.getRotation());
@@ -134,15 +166,18 @@ namespace Temporal
 
 		void deleteFrame()
 		{
+			SampleCollection* samples = getSceneNode();
+			if(!samples)
+				return;
 			addUndo();
-			SampleIterator i = getSampleIterator();
-			if(i == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().begin() ||
-				i == _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().end() ||
+			SampleIterator i = getSampleIterator(*samples);
+			if(i == samples->begin() ||
+				i == samples->end() ||
 				(**i).getStartTime() != getStartTime())
 				return;
 
 			Sample* sample = *i;
-			i = _animationSet->get().at(_animation)->getSampleSets().at(_sceneNode)->getSamples().erase(i);
+			i = samples->erase(i);
 			--i;
 			(**i).setDuration((**i).getDuration() + sample->getDuration());
 			delete sample;
@@ -153,25 +188,25 @@ namespace Temporal
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
 			{
 				addUndo();
-				_offset = Mouse::get().getPosition() - getSample().getTranslation();
+				_offset = Mouse::get().getPosition() - getOrCreateSample().getTranslation();
 				_translation = true;
 			}
 			else if(Mouse::get().isClicking(MouseButton::LEFT))
 			{
-				getSample().setTranslation(Mouse::get().getPosition() - _offset);
+				getOrCreateSample().setTranslation(Mouse::get().getPosition() - _offset);
 				_animationSet->get().at(_animation)->init();
 			}
 			else if(Mouse::get().isStartClicking(MouseButton::RIGHT))
 			{
 				addUndo();
-				_offset = Mouse::get().getPosition() - getSample().getTranslation();
+				_offset = Mouse::get().getPosition() - getOrCreateSample().getTranslation();
 				_translation = false;
 			}
 			else if(Mouse::get().isClicking(MouseButton::RIGHT))
 			{
 				const Vector vector = Mouse::get().getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
-				getSample().setRotation(rotation);
+				getOrCreateSample().setRotation(rotation);
 				_animationSet->get().at(_animation)->init();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
@@ -307,7 +342,6 @@ namespace Temporal
 			_sceneNode = *_sceneNodes.begin();
 			setAnimation();
 
-			
 			float y = GRID_START_Y;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
@@ -325,11 +359,31 @@ namespace Temporal
 			float y = GRID_START_Y;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
-				for(int i = 0;  i < GRID_FRAMES; ++i)
+				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
-					Graphics::get().draw(AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					//Sample* sample = getSample(_animation, *i, j);
+					//bool fill = sample && sample->getStartTime() == getStartTime(j);
+					Graphics::get().draw(AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					
 				}
 				y -= CELL_SIZE;
+			}
+
+			Animation& animation = *_animationSet->get().find(_animation)->second;
+			for(SampleSetIterator i = animation.getSampleSets().begin(); i != animation.getSampleSets().end(); ++i)
+			{
+				int j = 0;
+				for(HashIterator k = _sceneNodes.begin(); k != _sceneNodes.end(); ++k)	
+				{
+					if(i->first == *k)
+						break;
+					++j;
+				}
+				for(SampleIterator l = i->second->getSamples().begin(); l != i->second->getSamples().end(); ++l)
+				{
+					float m = (**l).getStartTime() / FRAME_TIME;
+					Graphics::get().draw(AABBLT(GRID_START_X + m * CELL_SIZE, GRID_START_Y - j * CELL_SIZE, CELL_SIZE, CELL_SIZE), Color::White, true);
+				}
 			}
 		}
 
@@ -345,7 +399,6 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::DRAW)
 			{
-				
 				LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
 				if(layer == LayerType::GUI)
 					draw();
