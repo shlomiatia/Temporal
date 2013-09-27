@@ -203,6 +203,9 @@
     <ClInclude Include="Temp3.h">
       <Filter>Temp</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -382,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="SaverLoader.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

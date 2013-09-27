@@ -15,6 +15,12 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 
+
+		void setText(const char* text) { _text = text; }
+		void setWidth(float width);
+		float getWidth() const;
+		float getHeight() const;
+
 		void handleMessage(Message& message);
 		Component* clone() const;
 
