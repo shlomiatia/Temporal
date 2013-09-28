@@ -21,7 +21,7 @@ namespace Temporal
 	{
 	public:
 		explicit SceneNodeSample(Hash sceneNodeId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _next(0), _previous(0) {}
+		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _parent(0), _next(0), _previous(0) {}
 
 		Hash getId() const { return _sceneNodeId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
@@ -60,10 +60,10 @@ namespace Temporal
 	class SceneGraphSample
 	{
 	public:
-		SceneGraphSample(int frame = 0) : _frame(frame) {}
+		SceneGraphSample(int index = 0) : _index(index) {}
 		~SceneGraphSample();
 
-		int getFrame() const { return _frame; }
+		int getIndex() const { return _index; }
 		SceneNodeSampleCollection& getSamples() { return _samples; }
 		const SceneNodeSampleCollection& getSamples() const { return _samples; }
 
@@ -71,7 +71,7 @@ namespace Temporal
 		void init();
 
 	private:
-		int _frame;
+		int _index;
 		SceneNodeSampleCollection _samples;
 
 		SceneGraphSample(const SceneGraphSample&);
@@ -90,7 +90,7 @@ namespace Temporal
 		  _id(id), _repeat(repeat), _rewind(rewind) {}
 		~Animation();
 		
-		int getDuration() const { return (**(getSamples().end()-1)).getFrame() + 1; }
+		int getDuration() const { return (**(getSamples().end()-1)).getIndex() + 1; }
 		Hash getId() const { return _id; }
 		bool Repeat() const { return _repeat; }
 		bool Rewind() const { return _rewind; }
@@ -122,7 +122,7 @@ namespace Temporal
 		~AnimationSet();
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
-		const Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
+		Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
 		AnimationCollection& getAnimations() { return _animations; }
 		const AnimationCollection& getAnimations() const { return _animations; }
 		AnimationSet* clone() const;

@@ -46,10 +46,10 @@ namespace Temporal
 
 	SceneGraphSample* SceneGraphSample::clone() const
 	{
-		SceneGraphSample* clone = new SceneGraphSample(_frame);
+		SceneGraphSample* clone = new SceneGraphSample(_index);
 		for(SceneNodeSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
 		{
-			clone->getSamples()[i->first](i->second->clone());
+			clone->getSamples()[i->first] = i->second->clone();
 		}
 		return clone;
 	}
@@ -77,7 +77,7 @@ namespace Temporal
 	SceneGraphSample::~SceneGraphSample()
 	{
 		for(SceneNodeSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
-			delete *i;
+			delete i->second;
 	}
 
 	Animation::~Animation()
@@ -88,7 +88,7 @@ namespace Temporal
 
 	AnimationSet::~AnimationSet()
 	{
-		for(AnimationIterator i = getAnimations().begin(); i != get().end(); ++i)
+		for(AnimationIterator i = getAnimations().begin(); i != getAnimations().end(); ++i)
 			delete i->second;
 	}
 }
