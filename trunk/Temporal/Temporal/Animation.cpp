@@ -1,30 +1,38 @@
 #include "Animation.h"
-#include <algorithm>
 
 namespace Temporal
 {
-	void SampleSet::init()
-	{
-		_duration = 0.0f;
-		for(SampleIterator i = _samples.begin(); i != _samples.end(); ++i)
-		{
-			Sample& sample = **i;
-			if(i != _samples.begin())
-			{
-				sample.setStartTime((**(i - 1)).getEndTime());
-			}
-			_duration += sample.getDuration();
-		
-		}
-	}
-	
 	void Animation::init()
 	{
-		_duration = 0.0f;
-		for(SampleSetIterator i = _sampleSets.begin(); i != _sampleSets.end(); ++i)
+		for(SceneGraphSampleIterator gi1 = getSamples().begin(); gi1 != getSamples().end(); ++gi1)
 		{
-			i->second->init();
-			_duration = std::max(_duration, i->second->getDuration());
+			SceneGraphSample& sceneGraphSample1 = **gi1;
+			for(SceneNodeSampleIterator ni1 = sceneGraphSample1.getSamples().begin(); ni1 != sceneGraphSample1.getSamples().end(); ++ni1)
+			{
+				SceneNodeSample& sceneNodeSample1 = *ni1->second;
+				sceneNodeSample1.setParent(sceneGraphSample1);
+				bool isFound = false;
+				for(SceneGraphSampleIterator gi2 = gi1 + 1; gi2 != getSamples().end(); ++gi2)
+				{
+					SceneGraphSample& sceneGraphSample2 = **gi2;
+					SceneNodeSampleIterator ni2 = sceneGraphSample2.getSamples().find(sceneNodeSample1.getId());
+					if(ni2 != sceneGraphSample2.getSamples().end())
+					{
+						SceneNodeSample& sceneNodeSample2 = *ni2->second;
+						sceneNodeSample1.setNext(&sceneNodeSample2);
+						sceneNodeSample2.setPrevious(&sceneNodeSample1);
+						isFound = true;
+						break;
+					}
+				}
+				if(!isFound)
+				{
+					SceneGraphSample& firstSceneGraphSample = **getSamples().begin();
+					SceneNodeSample& sceneNodeSample2 = *firstSceneGraphSample.getSamples().find(sceneNodeSample1.getId())->second;
+					sceneNodeSample1.setNext(&sceneNodeSample2);
+					sceneNodeSample2.setPrevious(&sceneNodeSample1);
+				}
+			}
 		}
 	}
 
@@ -36,22 +44,22 @@ namespace Temporal
 		}
 	}
 
-	SampleSet* SampleSet::clone() const
+	SceneGraphSample* SceneGraphSample::clone() const
 	{
-		SampleSet* clone = new SampleSet(getId(), getDuration());
-		for(SampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
+		SceneGraphSample* clone = new SceneGraphSample(_frame);
+		for(SceneNodeSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
 		{
-			clone->getSamples().push_back((**i).clone());
+			clone->getSamples()[i->first](i->second->clone());
 		}
 		return clone;
 	}
 
 	Animation* Animation::clone() const
 	{
-		Animation* clone = new Animation(getId(), getDuration(), _repeat, _rewind);
-		for(SampleSetIterator i = getSampleSets().begin(); i != getSampleSets().end(); ++i)
+		Animation* clone = new Animation(getId(), _repeat, _rewind);
+		for(SceneGraphSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
 		{
-			clone->getSampleSets()[i->first] = i->second->clone();
+			clone->getSamples().push_back((**i).clone());
 		}
 		return clone;
 	}
@@ -59,28 +67,28 @@ namespace Temporal
 	AnimationSet* AnimationSet::clone() const
 	{
 		AnimationSet* clone = new AnimationSet();
-		for(AnimationIterator i = get().begin(); i != get().end(); ++i)
+		for(AnimationIterator i = getAnimations().begin(); i != getAnimations().end(); ++i)
 		{
-			clone->get()[i->first] = i->second->clone();
+			clone->getAnimations()[i->first] = i->second->clone();
 		}
 		return clone;
 	}
 
-	SampleSet::~SampleSet()
+	SceneGraphSample::~SceneGraphSample()
 	{
-		for(SampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
+		for(SceneNodeSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
 			delete *i;
 	}
 
 	Animation::~Animation()
 	{
-		for(SampleSetIterator i = getSampleSets().begin(); i != getSampleSets().end(); ++i)
-			delete i->second;
+		for(SceneGraphSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
+			delete *i;
 	}
 
 	AnimationSet::~AnimationSet()
 	{
-		for(AnimationIterator i = get().begin(); i != get().end(); ++i)
+		for(AnimationIterator i = getAnimations().begin(); i != get().end(); ++i)
 			delete i->second;
 	}
 }

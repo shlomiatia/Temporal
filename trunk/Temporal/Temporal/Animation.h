@@ -6,83 +6,96 @@
 
 namespace Temporal
 {
-	class Sample
+	class SceneGraphSample;
+
+	namespace Direction
+	{
+		enum Enum
+		{
+			FORWARD = 1,
+			BACKWARD = -1
+		};
+	}
+
+	class SceneNodeSample
 	{
 	public:
-		explicit Sample(Hash spriteGroupId = Hash::INVALID, float duration = 0.0f, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _duration(duration), _startTime(0.0f) {}
+		explicit SceneNodeSample(Hash sceneNodeId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
+		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _next(0), _previous(0) {}
 
+		Hash getId() const { return _sceneNodeId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
-		void setStartTime(float startTime) { _startTime = startTime; }
-		float getStartTime() const { return _startTime; }
-		float getEndTime() const { return getStartTime() + getDuration(); }
-		void setDuration(float duration) { _duration = duration; }
-		float getDuration() const { return _duration; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
 		const Vector& getTranslation() const { return _translation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 		float getRotation() const { return _rotation; }
+		const SceneNodeSample* getNext() const { return _next; }
+		const SceneNodeSample* getPrevious() const { return _previous; }
+		const SceneNodeSample* getSibling(Direction::Enum direction) const { return direction == Direction::FORWARD ? _next : _previous; }
+		void setNext(const SceneNodeSample* next) { _next = next; }
+		void setPrevious(const SceneNodeSample* next) { _previous = next; }
+		const SceneGraphSample& getParent() const { return * _parent; }
+		void setParent(SceneGraphSample& parent) { _parent = &parent; }
 
-		Sample* clone() const { return new Sample(getSpriteGroupId(), getDuration(), getTranslation(), getRotation()); }
-
-	private:
-		Hash _spriteGroupId;
-		Vector _translation;
-		float _rotation;
-		float _startTime;
-		float _duration;
-
-		Sample(const Sample&);
-		Sample& operator=(const Sample&);
-
-		friend class SerializationAccess;
-	};
-
-	typedef std::vector<Sample*> SampleCollection;
-	typedef SampleCollection::const_iterator SampleIterator;
-	
-	class SampleSet
-	{
-	public:
-		SampleSet(Hash sceneNodeId = Hash::INVALID, float duration = 0.0f) : _sceneNodeId(sceneNodeId), _duration(duration) {}
-		~SampleSet();
-
-		Hash getId() const { return _sceneNodeId; }
-		float getDuration() const { return _duration; }
-		SampleCollection& getSamples() { return _samples; }
-		const SampleCollection& getSamples() const { return _samples; }
-
-		void init();
-		SampleSet* clone() const;
+		SceneNodeSample* clone() const { return new SceneNodeSample(getId(), getSpriteGroupId(),  getTranslation(), getRotation()); }
 
 	private:
 		Hash _sceneNodeId;
-		SampleCollection _samples;
-		float _duration;
+		Hash _spriteGroupId;
+		Vector _translation;
+		float _rotation;
+		const SceneGraphSample* _parent;
+		const SceneNodeSample* _next;
+		const SceneNodeSample* _previous;
 
-		SampleSet(const SampleSet&);
-		SampleSet& operator=(const SampleSet&);
+		SceneNodeSample(const SceneNodeSample&);
+		SceneNodeSample& operator=(const SceneNodeSample&);
 
 		friend class SerializationAccess;
 	};
 
-	typedef std::unordered_map<Hash, SampleSet*> SampleSetCollection;
-	typedef SampleSetCollection::const_iterator SampleSetIterator;
+	typedef std::unordered_map<Hash, SceneNodeSample*> SceneNodeSampleCollection;
+	typedef SceneNodeSampleCollection::const_iterator SceneNodeSampleIterator;
+	
+	class SceneGraphSample
+	{
+	public:
+		SceneGraphSample(int frame = 0) : _frame(frame) {}
+		~SceneGraphSample();
+
+		int getFrame() const { return _frame; }
+		SceneNodeSampleCollection& getSamples() { return _samples; }
+		const SceneNodeSampleCollection& getSamples() const { return _samples; }
+
+		SceneGraphSample* clone() const;
+		void init();
+
+	private:
+		int _frame;
+		SceneNodeSampleCollection _samples;
+
+		SceneGraphSample(const SceneGraphSample&);
+		SceneGraphSample& operator=(const SceneGraphSample&);
+
+		friend class SerializationAccess;
+	};
+
+	typedef std::vector<SceneGraphSample*> SceneGraphSampleCollection;
+	typedef SceneGraphSampleCollection::const_iterator SceneGraphSampleIterator;
 
 	class Animation
 	{
 	public:
-		Animation(Hash id = Hash::INVALID, float duration = 0.0f, bool repeat = false, bool rewind = false) :
-		  _id(id), _duration(duration), _repeat(repeat), _rewind(rewind) {}
+		Animation(Hash id = Hash::INVALID, bool repeat = false, bool rewind = false) :
+		  _id(id), _repeat(repeat), _rewind(rewind) {}
 		~Animation();
 		
+		int getDuration() const { return (**(getSamples().end()-1)).getFrame() + 1; }
 		Hash getId() const { return _id; }
-		float getDuration() const { return _duration; }
 		bool Repeat() const { return _repeat; }
 		bool Rewind() const { return _rewind; }
-		const SampleSet& get(Hash sceneNodeID) const { return *_sampleSets.at(sceneNodeID); }
-		SampleSetCollection& getSampleSets() { return _sampleSets; }
-		const SampleSetCollection& getSampleSets() const { return _sampleSets; }
+		SceneGraphSampleCollection& getSamples() { return _samples; }
+		const SceneGraphSampleCollection& getSamples() const { return _samples; }
 
 		void init();
 		Animation* clone() const;
@@ -91,8 +104,7 @@ namespace Temporal
 		Hash _id;
 		bool _repeat;
 		bool _rewind;
-		SampleSetCollection _sampleSets;
-		float _duration;
+		SceneGraphSampleCollection _samples;
 
 		Animation(const Animation&);
 		Animation& operator=(const Animation&);
@@ -111,10 +123,10 @@ namespace Temporal
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		const Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
-		AnimationCollection& get() { return _animations; }
-		const AnimationCollection& get() const { return _animations; }
-		void init();
+		AnimationCollection& getAnimations() { return _animations; }
+		const AnimationCollection& getAnimations() const { return _animations; }
 		AnimationSet* clone() const;
+		void init();
 		
 	private:
 		AnimationCollection _animations;
