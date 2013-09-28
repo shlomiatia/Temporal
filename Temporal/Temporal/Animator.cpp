@@ -9,14 +9,23 @@
 namespace Temporal
 {
 	const Hash Animator::TYPE = Hash("animator");
-
+	const int Animator::FPS = 15;
+	
 	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
 	{
-		bindings[node.getID()] = new SceneNodeBinding(node);
+		if(!node.isTransformOnly())
+			bindings[node.getID()] = new SceneNodeBinding(node);
+
 		for(SceneNodeIterator i = node.getChildren().begin(); i != node.getChildren().end(); ++i)
 		{
 			bindSceneNodes(bindings, **i);
 		}
+	}
+
+	Animator::~Animator()
+	{
+		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
+			delete i->second;
 	}
 
 	void Animator::handleMessage(Message& message)
@@ -57,10 +66,12 @@ namespace Temporal
 
 	void Animator::update()
 	{
-		float totalPeriod = _timer.getElapsedTime();
+		float currentTime = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
-		float animationDuration = animation.getDuration();
-		if((animationDuration == 0.0f || totalPeriod > animationDuration) && !animation.Repeat())
+		int animationDuration = animation.getDuration();
+		float currentFrame = currentTime * FPS;
+
+		if(currentFrame > animationDuration && !animation.Repeat())
 		{
 			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
 			return;
@@ -68,42 +79,22 @@ namespace Temporal
 		
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
-			Hash sceneNodeID = i->first;
-			SceneNodeBinding& binding = *i->second;
-			if(binding.getSceneNode().isTransformOnly())
-				continue;
-			int index = binding.getIndex();
-			const SampleSet& sampleSet = animation.get(sceneNodeID);
-			float sampleSetDuration = sampleSet.getDuration();
-			const SampleCollection& samples = sampleSet.getSamples();
-			int size = samples.size();
-			const Sample* currentSample = samples.at(index);
-			float relativePeriod =  fmod(totalPeriod, animationDuration);
-			int offset = 1;
+			SceneNodeBinding& binding = **i;
+			float relativeFrame = fmod(currentFrame, animationDuration);
+			Direction::Enum direction = Direction::FORWARD;
 			if(animation.Rewind())
 			{
-				offset = -1;
-				relativePeriod = animationDuration - relativePeriod;
+				relativeFrame = animationDuration - relativeFrame;
+				direction = Direction::BACKWARD;
 			}
-			if(relativePeriod > sampleSetDuration)
-			{
-				index = size - 1;;
-				currentSample = samples.at(index);
-			}
-			else
-			{
-				while(currentSample->getStartTime() > relativePeriod || currentSample->getEndTime() < relativePeriod)
-				{
-					index = (size + index + offset) % size;
-					currentSample = samples.at(index);
-				}
-			}
-			binding.setIndex(index);
-			int nextIndex = (size + index + 1) % size;
-			const Sample* nextSample = samples.at(nextIndex);
-			float samplePeriod = relativePeriod - currentSample->getStartTime();
-			float sampleDuration = currentSample->getDuration();
-			float interpolation = sampleDuration == 0.0f ? 0.0f : samplePeriod / sampleDuration;
+			const SceneNodeSample* currentSample = binding.getSample();
+			while(currentSample->getParent().getFrame() > relativeFrame || currentSample->getNext()->getParent().getFrame() < relativeFrame)
+				currentSample = currentSample->getSibling(direction);
+			binding.setSample(currentSample);
+			const SceneNodeSample* nextSample = currentSample->getNext();
+			float sampleOffset = relativeFrame - currentSample->getParent().getFrame();
+			float sampleDuration = nextSample->getParent().getFrame() - currentSample->getParent().getFrame();
+			float interpolation = sampleDuration == 0.0f ? 0.0f : sampleOffset / sampleDuration;
 			
 			Vector translation = currentSample->getTranslation() * (1 - interpolation) + nextSample->getTranslation() * interpolation;
 			float rotation = currentSample->getRotation() * (1 - interpolation) + nextSample->getRotation() * interpolation;
@@ -118,11 +109,15 @@ namespace Temporal
 
 	void Animator::reset(Hash animationId)
 	{
+		const Animation& animation = _animationSet->get(_animationId);
+		const SceneGraphSample& sceneGraphSample = **animation.getSamples().begin();
 		_timer.reset();
 		_animationId = animationId;
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
-			i->second->setIndex(0);
+			SceneNodeBinding& binding = **i;
+			const SceneNodeSample* sceneNodeSample = sceneGraphSample.getSamples().at(binding.getSceneNode().getID());
+			binding.setSample(sceneNodeSample);
 		}
 		update();
 	}

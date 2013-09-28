@@ -144,15 +144,6 @@ namespace Temporal
 		}
 		
 		template<class T>
-		static void serialize(const char* key, Sample& sample, T& serializer)
-		{
-			serializer.serialize("sprite-group", sample._spriteGroupId);
-			serializer.serialize("translation", sample._translation);
-			serializer.serialize("rotation", sample._rotation);
-			serializer.serialize("duration", sample._duration);
-		}
-		
-		template<class T>
 		static void serialize(const char* key, SceneNode& sceneNode, T& serializer)
 		{
 			serializer.serialize("id", sceneNode._id);
@@ -164,6 +155,15 @@ namespace Temporal
 			serializer.serialize("translation", sceneNode._translation);
 			serializer.serialize("scale", sceneNode._scale);
 			serializer.serialize("scene-node", sceneNode._children);
+		}
+
+		template<class T>
+		static void serialize(const char* key, Sample& sample, T& serializer)
+		{
+			serializer.serialize("sprite-group", sample._spriteGroupId);
+			serializer.serialize("sprite-group", sample._spriteGroupId);
+			serializer.serialize("translation", sample._translation);
+			serializer.serialize("rotation", sample._rotation);
 		}
 		
 		template<class T>

@@ -16,25 +16,26 @@ namespace Temporal
 	{
 	public:
 		SceneNodeBinding(SceneNode& node)
-			: _node(node), _index(0) {}
+			: _node(node), _sample(0) {}
 
 		SceneNode& getSceneNode() { return _node; }
-		int getIndex() { return _index; }
-		void setIndex(int index) { _index = index; }
+		const SceneNodeSample* getSample() { return _sample; }
+		void setSample(const SceneNodeSample* sample) { _sample = sample; }
 
 	private:
 		SceneNode& _node;	
-		int _index;
+		const SceneNodeSample* _sample;
 	};
 
-	typedef std::unordered_map<Hash, SceneNodeBinding*> SceneNodeBindingCollection;
+	typedef std::vector<SceneNodeBinding*> SceneNodeBindingCollection;
 	typedef SceneNodeBindingCollection::const_iterator SceneNodeBindingIterator;
 
 	class Animator : public Component
 	{
 	public:
-		 Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
+		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
 			_animationSetFile(animationSetFile), _animationId(animationId), _isPaused(false) {}
+		~Animator();
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -43,6 +44,8 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
+		static const int FPS;
+
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeBindingCollection _bindings;
