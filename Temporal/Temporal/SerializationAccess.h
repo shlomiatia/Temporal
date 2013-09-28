@@ -16,9 +16,9 @@ namespace Temporal
 	class Sprite;
 	class SpriteGroup;
 	class SpriteSheet;
-	class Sample;
 	class SceneNode;
-	class SampleSet;
+	class SceneNodeSample;
+	class SceneGraphSample;
 	class Animation;
 	class AnimationSet;
 	class Grid;
@@ -158,19 +158,19 @@ namespace Temporal
 		}
 
 		template<class T>
-		static void serialize(const char* key, Sample& sample, T& serializer)
+		static void serialize(const char* key, SceneNodeSample& sample, T& serializer)
 		{
-			serializer.serialize("sprite-group", sample._spriteGroupId);
+			serializer.serialize("scene-node-id", sample._sceneNodeId);
 			serializer.serialize("sprite-group", sample._spriteGroupId);
 			serializer.serialize("translation", sample._translation);
 			serializer.serialize("rotation", sample._rotation);
 		}
 		
 		template<class T>
-		static void serialize(const char* key, SampleSet& sampleSet, T& serializer)
+		static void serialize(const char* key, SceneGraphSample& sample, T& serializer)
 		{
-			serializer.serialize("scene-node-id", sampleSet._sceneNodeId);
-			serializer.serialize("sample", sampleSet._samples);
+			serializer.serialize("index", sample._index);
+			serializer.serialize("scene-node-sample", sample._samples);
 		}
 		
 		template<class T>
@@ -179,7 +179,7 @@ namespace Temporal
 			serializer.serialize("id", animation._id);
 			serializer.serialize("repeat", animation._repeat);
 			serializer.serialize("rewind", animation._rewind);
-			serializer.serialize("sample-set", animation._sampleSets);
+			serializer.serialize("scene-graph-sample", animation._samples);
 		}
 		
 		template<class T>

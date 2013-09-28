@@ -23,13 +23,128 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _frame(0), _copyFrame(0), _undo(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(true), _index(0), _copyIndex(0), _undo(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
+		void setAnimation()
+		{
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animationId));
+			_index = 0;
+			setSample();
+		}
+
+		void setSample()
+		{
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_index));
+		}
+
+		SceneGraphSampleIterator getSceneGraphSampleIterator(SceneGraphSampleCollection* samples, int index = -1, bool createSceneGraphSample = false)
+		{
+			if(index == -1)
+				index = _index;
+			samples = &_animationSet->get(_animationId).getSamples();
+			for(SceneGraphSampleIterator i = samples->begin();; ++i)
+			{
+				if(createSceneGraphSample && (i == samples->end() || (**i).getIndex() >= index))
+				{
+					return samples->insert(i, new SceneGraphSample(index));
+				}
+				else if(i == samples->end() || (**i).getIndex() == index)
+				{
+					return i;
+				}
+			}
+		}
+
+		SceneGraphSample& getSceneGraphSample(int index = -1)
+		{
+			if(index == -1)
+				index = _index;
+			SceneGraphSampleCollection* samples = 0;
+			return **getSceneGraphSampleIterator(samples, index, true);
+		}
+
+		SceneNodeSampleIterator getSceneNodeSampleIterator(SceneNodeSampleCollection* samples, int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneGraphSample = false)
+		{
+			if(sceneNodeId == Hash::INVALID)
+				sceneNodeId = _sceneNodeId;
+			SceneGraphSampleCollection* sceneGraphSamples = 0;
+			SceneGraphSampleIterator i = getSceneGraphSampleIterator(sceneGraphSamples, index, createSceneGraphSample);
+			SceneNodeSampleIterator j;
+			if(i == sceneGraphSamples->end())
+				return j;
+			samples = &(**i).getSamples();
+			j = samples->find(sceneNodeId);
+			return j;
+		}
+
+		SceneNodeSample& addSample(SceneNodeSampleCollection& samples, SceneNodeSampleIterator iterator)
+		{
+			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+			const SceneNode& node = *root.get(_sceneNodeId);
+			SceneNodeSample* sample = new SceneNodeSample();
+			sample->setTranslation(node.getTranslation());
+			sample->setTranslation(node.getTranslation());
+			sample->setRotation(node.getRotation());
+			_animationSet->get(_animationId).init();
+			samples[sample->getId()] = sample;
+			return *sample;
+		}
+
+		SceneNodeSample& getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID)
+		{
+			SceneNodeSampleCollection* samples = 0;
+			SceneNodeSampleIterator i = getSceneNodeSampleIterator(samples, index, sceneNodeId, true);
+			if(i == samples->end())
+				return addSample(*samples, i);
+			return *i->second;
+		}
+
+		void paste()
+		{
+			addUndo();
+			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			{
+				SceneNodeSampleCollection* sceneNodeSamples = 0;
+				SceneNodeSampleIterator j = getSceneNodeSampleIterator(sceneNodeSamples, _copyIndex, *i);
+				if(!sceneNodeSamples)
+					continue;
+				SceneNodeSample& copy = *j->second;
+				SceneNodeSample& paste = getSceneNodeSample(_index, *i);
+				paste.setTranslation(copy.getTranslation());
+				paste.setRotation(copy.getRotation());
+			}
+		}
+
+		void addUndo()
+		{
+			if(_undo)
+				delete _undo;
+			_undo = _animationSet->clone();
+		}
+
+		void deleteSample()
+		{
+			SceneNodeSampleCollection* sceneNodeSamples = 0;
+			SceneNodeSampleIterator i = getSceneNodeSampleIterator(sceneNodeSamples);
+			if(!sceneNodeSamples || i == sceneNodeSamples->end() || i->second->getParent().getIndex() == 0)
+				return;
+			addUndo();
+			SceneNodeSample* sample = i->second;
+			i = sceneNodeSamples->erase(i);
+			delete sample;
+			if(sceneNodeSamples->size() == 0)
+			{
+				SceneGraphSampleCollection* sceneGraphSamples = 0;
+				SceneGraphSampleIterator j = getSceneGraphSampleIterator(sceneGraphSamples);
+				j = sceneGraphSamples->erase(j);
+			}
+		}
+
 		void handleArrows(const Vector& vector)
 		{
-			Sample& sample = getOrCreateSample();
+			SceneNodeSample& sample = getSceneNodeSample();
 			if(_translation)
 			{
 				sample.setTranslation(sample.getTranslation() + vector);
@@ -45,185 +160,47 @@ namespace Temporal
 			}
 		}
 
-		void setAnimation()
-		{
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animation));
-			_frame = 0;
-			setSample();
-		}
-
-		float getStartTime(int frame = -1)
-		{
-			if(frame == -1)
-				frame = _frame;
-			return frame * FRAME_TIME;
-		}
-
-		void setSample()
-		{
-			float startTime = getStartTime();
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &startTime));
-		}
-
-		SampleIterator addSample(SampleIterator sampleIterator, float duration2)
-		{
-			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-			const SceneNode& node = *root.get(_sceneNode);
-			Sample* sample = new Sample();
-			sample->setTranslation(node.getTranslation());
-			sample->setRotation(node.getRotation());
-			sample->setDuration(duration2);
-			float duration1 = getStartTime() - (**sampleIterator).getStartTime();
-			(**sampleIterator).setDuration(duration1);
-			Animation& animation = *_animationSet->get().at(_animation);
-			sampleIterator = animation.getSampleSets().at(_sceneNode)->getSamples().insert(sampleIterator+1, sample);
-			animation.init();
-			return sampleIterator;
-		}
-
-		SampleCollection* getSceneNode(Hash animation = Hash::INVALID, Hash sceneNode = Hash::INVALID)
-		{
-			if(animation == Hash::INVALID)
-				animation = _animation;
-			if(sceneNode == Hash::INVALID)
-				sceneNode = _sceneNode;
-			AnimationIterator i = _animationSet->get().find(animation);
-			if(i == _animationSet->get().end())
-				return 0;
-			SampleSetIterator j = i->second->getSampleSets().find(sceneNode);
-			if(j == i->second->getSampleSets().end())
-				return 0;
-			SampleCollection& samples = j->second->getSamples();
-			return &samples;
-		}
-
-		SampleIterator getSampleIterator(SampleCollection& samples, int frame = -1)
-		{
-			SampleIterator sampleIterator;
-			float startTime = getStartTime(frame);
-			for(sampleIterator = samples.begin(); sampleIterator != samples.end() && (**sampleIterator).getStartTime() < startTime; ++sampleIterator);
-			return sampleIterator;
-		}
-
-		Sample* getSample(Hash animation = Hash::INVALID, Hash sceneNode = Hash::INVALID, int frame = -1)
-		{
-			SampleCollection* samples = getSceneNode(animation, sceneNode);
-			if(!samples)
-				return 0;
-			SampleIterator i = getSampleIterator(*samples, frame);
-			if(i == samples->end())
-				return 0;
-			return *i;
-			return 0;
-		}
-
-		Sample& getOrCreateSample()
-		{
-			SampleCollection* samples = getSceneNode();
-			// TODO: create sample...
-			SampleIterator sampleIterator = getSampleIterator(*samples);
-			float startTime = getStartTime();
-			// Frame not exist yet
-			if(sampleIterator == samples->end())
-			{
-				--sampleIterator;
-				sampleIterator = addSample(sampleIterator, FRAME_TIME);
-			}
-			// Split Frame
-			else if((**sampleIterator).getStartTime() != startTime)
-			{
-				--sampleIterator;
-				float duration2 = (**sampleIterator).getDuration() - startTime + (**sampleIterator).getStartTime();
-				sampleIterator = addSample(sampleIterator, duration2);
-			}
-			return **sampleIterator;
-		}
-
-		void paste()
-		{
-			addUndo();
-			Hash tempSceneNode = _sceneNode;
-			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
-			{
-				_sceneNode = *i;
-				Sample& pasteSample = getOrCreateSample();
-				int tempFrame = _frame;
-				_frame = _copyFrame;
-				Sample& copySample = getOrCreateSample();
-				_frame = tempFrame;
-				pasteSample.setTranslation(copySample.getTranslation());
-				pasteSample.setRotation(copySample.getRotation());
-			}
-			_sceneNode = tempSceneNode;
-		}
-
-		void addUndo()
-		{
-			if(_undo)
-				delete _undo;
-			_undo = _animationSet->clone();
-		}
-
-		void deleteFrame()
-		{
-			SampleCollection* samples = getSceneNode();
-			if(!samples)
-				return;
-			addUndo();
-			SampleIterator i = getSampleIterator(*samples);
-			if(i == samples->begin() ||
-				i == samples->end() ||
-				(**i).getStartTime() != getStartTime())
-				return;
-
-			Sample* sample = *i;
-			i = samples->erase(i);
-			--i;
-			(**i).setDuration((**i).getDuration() + sample->getDuration());
-			delete sample;
-		}
-
 		void update()
 		{
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
 			{
 				addUndo();
-				_offset = Mouse::get().getPosition() - getOrCreateSample().getTranslation();
+				_offset = Mouse::get().getPosition() - getSceneNodeSample().getTranslation();
 				_translation = true;
 			}
 			else if(Mouse::get().isClicking(MouseButton::LEFT))
 			{
-				getOrCreateSample().setTranslation(Mouse::get().getPosition() - _offset);
-				_animationSet->get().at(_animation)->init();
+				getSceneNodeSample().setTranslation(Mouse::get().getPosition() - _offset);
+				_animationSet->getAnimations().at(_animationId)->init();
 			}
 			else if(Mouse::get().isStartClicking(MouseButton::RIGHT))
 			{
 				addUndo();
-				_offset = Mouse::get().getPosition() - getOrCreateSample().getTranslation();
+				_offset = Mouse::get().getPosition() - getSceneNodeSample().getTranslation();
 				_translation = false;
 			}
 			else if(Mouse::get().isClicking(MouseButton::RIGHT))
 			{
 				const Vector vector = Mouse::get().getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
-				getOrCreateSample().setRotation(rotation);
-				_animationSet->get().at(_animation)->init();
+				getSceneNodeSample().setRotation(rotation);
+				_animationSet->getAnimations().at(_animationId)->init();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
 			{
-				AnimationIterator i = _animationSet->get().find(_animation);
+				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
 				++i;
-				if(i != _animationSet->get().end())
-					_animation = i->first;
+				if(i != _animationSet->getAnimations().end())
+					_animationId = i->first;
 				setAnimation();
 			}
 			else if(Keyboard::get().isStartPressing(Key::PAGE_DOWN))
 			{
-				AnimationIterator i = _animationSet->get().find(_animation);
-				if(i != _animationSet->get().begin())
+				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
+				if(i != _animationSet->getAnimations().begin())
 				{
 					--i;
-					_animation = i->first;
+					_animationId = i->first;
 				}
 				setAnimation();
 			}
@@ -262,7 +239,7 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::C))
 			{
-				_copyFrame = _frame;
+				_copyIndex = _index;
 			}
 			else if(Keyboard::get().isStartPressing(Key::V))
 			{
@@ -270,33 +247,33 @@ namespace Temporal
 			}
 			else if(Keyboard::get().isStartPressing(Key::DELETE))
 			{
-				deleteFrame();
+				deleteSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::W))
 			{
-				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNode);
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
 				++i;
 				if(i != _sceneNodes.end())
-					_sceneNode = *i;
+					_sceneNodeId = *i;
 			}
 			else if(Keyboard::get().isStartPressing(Key::S))
 			{
-				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNode);
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
 				if(i != _sceneNodes.begin())
 				{
 					--i;
-					_animation = *i;
+					_animationId = *i;
 				}
 			}
 			else if(Keyboard::get().isStartPressing(Key::D))
 			{
-				++_frame;
+				++_index;
 				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::A))
 			{
-				if(_frame > 0)
-					--_frame;
+				if(_index > 0)
+					--_index;
 				setSample();
 			}
 			else if(Keyboard::get().isStartPressing(Key::F2))
@@ -308,7 +285,7 @@ namespace Temporal
 
 			}
 			std::stringstream s;
-			s << _animation.getString() << " " << _sceneNode.getString() << " " << _frame;
+			s << _animationId.getString() << " " << _sceneNodeId.getString() << " " << _index;
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
@@ -336,10 +313,10 @@ namespace Temporal
 		void init()
 		{
 			_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
-			_animation = _animationSet->get().begin()->first;
+			_animationId = _animationSet->getAnimations().begin()->first;
 			SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 			bindSceneNodes(sceneNode);
-			_sceneNode = *_sceneNodes.begin();
+			_sceneNodeId = *_sceneNodes.begin();
 			setAnimation();
 
 			float y = GRID_START_Y;
@@ -361,28 +338,25 @@ namespace Temporal
 			{
 				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
-					//Sample* sample = getSample(_animation, *i, j);
-					//bool fill = sample && sample->getStartTime() == getStartTime(j);
 					Graphics::get().draw(AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
 					
 				}
 				y -= CELL_SIZE;
 			}
 
-			Animation& animation = *_animationSet->get().find(_animation)->second;
-			for(SampleSetIterator i = animation.getSampleSets().begin(); i != animation.getSampleSets().end(); ++i)
+			Animation& animation = _animationSet->get(_animationId);
+			for(SceneGraphSampleIterator i = animation.getSamples().begin(); i != animation.getSamples().end(); ++i)
 			{
+				SceneGraphSample& sceneGraphSample = **i;
 				int j = 0;
 				for(HashIterator k = _sceneNodes.begin(); k != _sceneNodes.end(); ++k)	
 				{
-					if(i->first == *k)
-						break;
+					 SceneNodeSampleIterator l = sceneGraphSample.getSamples().find(*k);
+					 if(l != sceneGraphSample.getSamples().end())
+					 {
+						 Graphics::get().draw(AABBLT(GRID_START_X + sceneGraphSample.getIndex() * CELL_SIZE, GRID_START_Y - j * CELL_SIZE, CELL_SIZE, CELL_SIZE), Color::White, true);
+					 }
 					++j;
-				}
-				for(SampleIterator l = i->second->getSamples().begin(); l != i->second->getSamples().end(); ++l)
-				{
-					float m = (**l).getStartTime() / FRAME_TIME;
-					Graphics::get().draw(AABBLT(GRID_START_X + m * CELL_SIZE, GRID_START_Y - j * CELL_SIZE, CELL_SIZE, CELL_SIZE), Color::White, true);
 				}
 			}
 		}
@@ -414,15 +388,15 @@ namespace Temporal
 		static const int GRID_FRAMES;
 
 		std::shared_ptr<AnimationSet> _animationSet;
-		Hash _animation;
+		Hash _animationId;
 		HashCollection _sceneNodes;
-		Hash _sceneNode;
-		int _frame;
+		Hash _sceneNodeId;
+		int _index;
 
 		Vector _offset;
 		bool _translation;
 		AnimationSet* _undo;
-		int _copyFrame;
+		int _copyIndex;
 	};
 
 	const float AnimationEditor::FRAME_TIME = 0.067f;

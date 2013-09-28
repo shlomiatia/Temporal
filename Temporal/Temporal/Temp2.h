@@ -197,7 +197,7 @@ namespace Temporal
 				entity->add(new MovementSimulator());
 				Text* text = new Text("c:/windows/fonts/Arial.ttf", 12);
 				entity->add(text);
-				gameState.getEntitiesManager().add(Hash("ENT_MOVEMENT_SIMULATOR"), entity);
+				//gameState.getEntitiesManager().add(Hash("ENT_MOVEMENT_SIMULATOR"), entity);
 			}
 		}
 	};
