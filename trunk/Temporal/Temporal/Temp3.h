@@ -39,7 +39,7 @@ namespace Temporal
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_index));
 		}
 
-		SceneGraphSampleIterator getSceneGraphSampleIterator(SceneGraphSampleCollection* samples, int index = -1, bool createSceneGraphSample = false)
+		SceneGraphSampleIterator getSceneGraphSampleIterator(SceneGraphSampleCollection*& samples, int index = -1, bool createSceneGraphSample = false)
 		{
 			if(index == -1)
 				index = _index;
