@@ -160,6 +160,107 @@ namespace Temporal
 			}
 		}
 
+		void handleKey(Key::Enum key)
+		{
+			if(key == Key::PAGE_UP)
+			{
+				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
+				++i;
+				if(i != _animationSet->getAnimations().end())
+					_animationId = i->first;
+				setAnimation();
+			}
+			else if(key == Key::PAGE_DOWN)
+			{
+				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
+				if(i != _animationSet->getAnimations().begin())
+				{
+					--i;
+					_animationId = i->first;
+				}
+				setAnimation();
+			}
+			else if(key == Key::UP)
+			{
+				handleArrows(Vector(0.0f, 1.0f));
+			}
+			else if(key == Key::DOWN)
+			{
+				handleArrows(Vector(0.0f, -1.0f));
+			}
+			else if(key == Key::LEFT)
+			{
+				handleArrows(Vector(-1.0f, 0.0f));
+			}
+			else if(key == Key::RIGHT)
+			{
+				handleArrows(Vector(1.0f, 0.0f));
+			}
+			else if(key == Key::SPACE)
+			{
+				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
+				setSample();
+			}
+			else if(key == Key::Z)
+			{
+				if(_undo)
+				{
+					std::shared_ptr<AnimationSet> undo(_undo);
+					ResourceManager::get()._animationSets[Hash("resources/animations/aquaria.xml")] = undo;
+					undo->init();
+					_animationSet = undo;
+					getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
+					_undo = 0;
+				}
+			}
+			else if(key == Key::C)
+			{
+				_copyIndex = _index;
+			}
+			else if(key == Key::V)
+			{
+				paste();
+			}
+			else if(key == Key::DELETE)
+			{
+				deleteSample();
+			}
+			else if(key == Key::W)
+			{
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
+				++i;
+				if(i != _sceneNodes.end())
+					_sceneNodeId = *i;
+			}
+			else if(key == Key::S)
+			{
+				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
+				if(i != _sceneNodes.begin())
+				{
+					--i;
+					_animationId = *i;
+				}
+			}
+			else if(key == Key::D)
+			{
+				++_index;
+				setSample();
+			}
+			else if(key == Key::A)
+			{
+				if(_index > 0)
+					--_index;
+				setSample();
+			}
+			else if(key == Key::F2)
+			{
+				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
+				AnimationSet& set =  *_animationSet;
+				serializer.serialize("animation-set", set);
+				serializer.save();
+			}
+		}
+
 		void update()
 		{
 			if(Mouse::get().isStartClicking(MouseButton::LEFT))
@@ -186,104 +287,7 @@ namespace Temporal
 				getSceneNodeSample().setRotation(rotation);
 				_animationSet->getAnimations().at(_animationId)->init();
 			}
-			else if(Keyboard::get().isStartPressing(Key::PAGE_UP))
-			{
-				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
-				++i;
-				if(i != _animationSet->getAnimations().end())
-					_animationId = i->first;
-				setAnimation();
-			}
-			else if(Keyboard::get().isStartPressing(Key::PAGE_DOWN))
-			{
-				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
-				if(i != _animationSet->getAnimations().begin())
-				{
-					--i;
-					_animationId = i->first;
-				}
-				setAnimation();
-			}
-			else if(Keyboard::get().isStartPressing(Key::UP))
-			{
-				handleArrows(Vector(0.0f, 1.0f));
-			}
-			else if(Keyboard::get().isStartPressing(Key::DOWN))
-			{
-				handleArrows(Vector(0.0f, -1.0f));
-			}
-			else if(Keyboard::get().isStartPressing(Key::LEFT))
-			{
-				handleArrows(Vector(-1.0f, 0.0f));
-			}
-			else if(Keyboard::get().isStartPressing(Key::RIGHT))
-			{
-				handleArrows(Vector(1.0f, 0.0f));
-			}
-			else if(Keyboard::get().isStartPressing(Key::SPACE))
-			{
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
-				setSample();
-			}
-			else if(Keyboard::get().isStartPressing(Key::Z))
-			{
-				if(_undo)
-				{
-					std::shared_ptr<AnimationSet> undo(_undo);
-					ResourceManager::get()._animationSets[Hash("resources/animations/aquaria.xml")] = undo;
-					undo->init();
-					_animationSet = undo;
-					getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
-					_undo = 0;
-				}
-			}
-			else if(Keyboard::get().isStartPressing(Key::C))
-			{
-				_copyIndex = _index;
-			}
-			else if(Keyboard::get().isStartPressing(Key::V))
-			{
-				paste();
-			}
-			else if(Keyboard::get().isStartPressing(Key::DELETE))
-			{
-				deleteSample();
-			}
-			else if(Keyboard::get().isStartPressing(Key::W))
-			{
-				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
-				++i;
-				if(i != _sceneNodes.end())
-					_sceneNodeId = *i;
-			}
-			else if(Keyboard::get().isStartPressing(Key::S))
-			{
-				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
-				if(i != _sceneNodes.begin())
-				{
-					--i;
-					_animationId = *i;
-				}
-			}
-			else if(Keyboard::get().isStartPressing(Key::D))
-			{
-				++_index;
-				setSample();
-			}
-			else if(Keyboard::get().isStartPressing(Key::A))
-			{
-				if(_index > 0)
-					--_index;
-				setSample();
-			}
-			else if(Keyboard::get().isStartPressing(Key::F2))
-			{
-				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
-				AnimationSet& set =  *_animationSet;
-				serializer.serialize("animation-set", set);
-				serializer.save();
-
-			}
+			
 			std::stringstream s;
 			s << _animationId.getString() << " " << _sceneNodeId.getString() << " " << _index;
 			Graphics::get().setTitle(s.str().c_str());
@@ -366,6 +370,11 @@ namespace Temporal
 			if(message.getID() == MessageID::ENTITY_INIT)
 			{
 				init();
+			}
+			else if(message.getID() == MessageID::KEY_UP)
+			{
+				Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+				handleKey(key);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{

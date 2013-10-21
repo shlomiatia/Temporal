@@ -36,11 +36,6 @@ namespace Temporal
 
 	void GameState::update(float framePeriod)
 	{
-		if(Keyboard::get().isPressing(Key::ESC) || Input::get().getGamepad().getButton(GamepadButton::FRONT_RIGHT))
-		{
-			Game::get().stop();
-		}
-		
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
 	}
 

@@ -20,6 +20,7 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MouseHandler.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="Navigator.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
     <ClCompile Include="Navigator.cpp" />

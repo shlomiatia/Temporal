@@ -10,15 +10,9 @@ namespace Temporal
 		enum Enum
 		{
 			NONE,
-			START_PUSHING,
-			PUSHING,
-			STOP_PUSHING
+			DOWN,
+			UP
 		};
-
-		inline bool isPushing(ButtonState::Enum state)
-		{
-			return state == ButtonState::START_PUSHING || state == ButtonState::PUSHING;
-		}
 	}
 
 	class Input

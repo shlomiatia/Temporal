@@ -11,6 +11,7 @@ namespace Temporal
 	class YABP;
 	class Vector;
 	class Contact;
+	namespace MouseButton { enum Enum; }
 
 	const Vector& getPosition(const Component& component);
 	Side::Enum getOrientation(const Component& component);
@@ -35,7 +36,20 @@ namespace Temporal
 		Hash _sensorId;
 		const Contact* _contact;
 	};
-	
 	inline const SensorParams& getSensorParams(void* data) { return *static_cast<SensorParams*>(data); }
+
+	class MouseParams
+	{
+	public:
+		MouseParams(MouseButton::Enum button, const Vector& position)
+			: _button(button), _position(position) {}
+
+		MouseButton::Enum getButton() const { return _button; }
+		const Vector& getPosition() const { return _position; }
+	private:
+		MouseButton::Enum _button;
+		const Vector& _position;
+	};
+	inline const MouseParams& getMouseParams(void* data) { return *static_cast<MouseParams*>(data); }
 }
 #endif
