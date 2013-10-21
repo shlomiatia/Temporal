@@ -15,7 +15,7 @@ namespace Temporal
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-		Component* clone() const { return new Laser(_platformID); };
+		Component* clone() const { return new Laser(); };
 		static const Hash TYPE;
 	private:
 		SceneNode* _root;

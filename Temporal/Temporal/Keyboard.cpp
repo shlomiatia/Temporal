@@ -1,12 +1,12 @@
 #include "Keyboard.h"
+#include "GameState.h"
+#include "EntitySystem.h"
 #include <SDL.h>
 
 namespace Temporal
 {
 	Keyboard::Keyboard()
 	{
-		for(int i = 0; i < Key::SIZE; ++i)
-			_keys[i] = ButtonState::NONE;
 		_keysMap[SDLK_ESCAPE] = Key::ESC;
 		_keysMap[SDLK_F1] = Key::F1;
 		_keysMap[SDLK_F2] = Key::F2;
@@ -105,39 +105,25 @@ namespace Temporal
 		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
 	}
 
-	void Keyboard::update()
-	{
-		for(int i = 0; i < Key::SIZE; ++i)
-		{
-			if(_keys[i] == ButtonState::START_PUSHING)
-			{
-				_keys[i] = ButtonState::PUSHING;
-			}
-			else if(_keys[i] == ButtonState::STOP_PUSHING)
-			{
-				_keys[i] = ButtonState::NONE;
-			}
-
-		}
-	}
-
 	void Keyboard::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		
 		if (e.type == SDL_QUIT)
 		{
-			_keys[Key::ESC] = ButtonState::START_PUSHING;
+			Key::Enum key = Key::ESC;
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_DOWN, &key));
 		}
 		else if (e.type == SDL_KEYDOWN)
 		{
-			int key = _keysMap[e.key.keysym.sym];
-			_keys[key] = ButtonState::START_PUSHING;
+			Key::Enum key = _keysMap[e.key.keysym.sym];
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_DOWN, &key));
+			
 		}
 		else if (e.type == SDL_KEYUP)
 		{
-			int key = _keysMap[e.key.keysym.sym];
-			_keys[key] = ButtonState::STOP_PUSHING;
+			Key::Enum key = _keysMap[e.key.keysym.sym];
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_UP, &key));
 		}
 	}
 }

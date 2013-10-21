@@ -26,17 +26,18 @@ namespace Temporal
 		{
 			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
 		}
-		else if(message.getID() == MessageID::UPDATE)
+		else if(message.getID() == MessageID::KEY_UP)
 		{
-			if(Keyboard::get().isStartPressing(Key::Q))
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if(key == Key::Q)
 			{
 				changePeriod(Period::PAST);
 			}
-			if(Keyboard::get().isStartPressing(Key::W))
+			if(key == Key::W)
 			{
 				changePeriod(Period::PRESENT);
 			}
-			if(Keyboard::get().isStartPressing(Key::E))
+			if(key == Key::E)
 			{
 				changePeriod(Period::FUTURE);
 			}

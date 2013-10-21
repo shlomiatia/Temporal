@@ -41,11 +41,12 @@ namespace Temporal
 
 	void GameSaverLoader::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::KEY_DOWN)
 		{
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if(!_loader.isStarted() && !_saver.isStarted())
 			{
-				if(Keyboard::get().isStartPressing(Key::F5))
+				if(key == Key::F5)
 				{
 					Stream* stream = new MemoryStream();
 					BinarySerializer serializer(stream);
@@ -54,7 +55,7 @@ namespace Temporal
 					_saver.setStream(stream);
 					IOThread::get().setJob(&_saver);
 				}
-				else if(Keyboard::get().isStartPressing(Key::F9))
+				else if(key == Key::F9)
 				{
 					IOThread::get().setJob(&_loader);
 				}

@@ -11,6 +11,7 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			NONE,
 			LEFT,
 			MIDDLE,
 			RIGHT,
@@ -21,7 +22,7 @@ namespace Temporal
 		};
 	}
 
-	typedef std::unordered_map<int, int> MouseButtonCollection;
+	typedef std::unordered_map<int, MouseButton::Enum> MouseButtonCollection;
 	typedef MouseButtonCollection::const_iterator MouseButtonIterator;
 
 	class Mouse
@@ -33,18 +34,10 @@ namespace Temporal
 			return (instance);
 		}
 
-		void update();
 		void dispatchEvent(void* obj);
 
-		const Vector& getPosition() const { return _position; }
-		bool isClicking(MouseButton::Enum key) { return ButtonState::isPushing(_buttons[key]); }
-		bool isStartClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::START_PUSHING; }
-		bool isStopClicking(MouseButton::Enum key) { return _buttons[key] == ButtonState::STOP_PUSHING; }
-
 	private:
-		Vector _position;
 		MouseButtonCollection _buttonsMap;
-		ButtonState::Enum _buttons[MouseButton::SIZE];
 
 		Mouse();
 		~Mouse() {};

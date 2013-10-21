@@ -30,7 +30,7 @@ namespace Temporal
 		};
 	}
 
-	typedef std::unordered_map<int, int> KeyCollection;
+	typedef std::unordered_map<int, Key::Enum> KeyCollection;
 	typedef KeyCollection::const_iterator KeyCollectionIterator;
 
 	class Keyboard
@@ -42,18 +42,10 @@ namespace Temporal
 			return (instance);
 		}
 
-		void update();
 		void dispatchEvent(void* obj);
-		bool isPressing(Key::Enum key) { return ButtonState::isPushing(_keys[key]); }
-		bool isStartPressing(Key::Enum key) { return _keys[key] == ButtonState::START_PUSHING; }
-		bool isStopPressing(Key::Enum key) { return _keys[key] == ButtonState::STOP_PUSHING; }
-
-
 	private:
-
 		// TODO:
 		KeyCollection _keysMap;
-		ButtonState::Enum _keys[Key::SIZE];
 
 		Keyboard();
 		~Keyboard() {};
