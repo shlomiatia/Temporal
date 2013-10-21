@@ -92,8 +92,8 @@ namespace Temporal
 		
 		int getDuration() const { return (**(getSamples().end()-1)).getIndex() + 1; }
 		Hash getId() const { return _id; }
-		bool Repeat() const { return _repeat; }
-		bool Rewind() const { return _rewind; }
+		bool repeat() const { return _repeat; }
+		bool rewind() const { return _rewind; }
 		SceneGraphSampleCollection& getSamples() { return _samples; }
 		const SceneGraphSampleCollection& getSamples() const { return _samples; }
 
