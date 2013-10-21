@@ -71,14 +71,14 @@ namespace Temporal
 		float animationDuration = animation.getDuration();
 		float currentIndex = currentTime * FPS;
 
-		if(currentIndex > animationDuration && !animation.Repeat())
+		if(currentIndex > animationDuration && !animation.repeat())
 		{
 			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
 			return;
 		}
 		float relativeIndex = fmod(currentIndex, animationDuration);
 			Direction::Enum direction = Direction::FORWARD;
-		if(animation.Rewind())
+		if(animation.rewind())
 		{
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;

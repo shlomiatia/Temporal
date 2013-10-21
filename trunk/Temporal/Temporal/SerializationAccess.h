@@ -344,8 +344,6 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Laser& laser, T& serializer)
 		{
-			serializer.serialize("platform", laser._platformID); // xml
-			serializer.serialize("direction", laser._isPositiveDirection); // memory
 		}
 		
 		template<class T>
