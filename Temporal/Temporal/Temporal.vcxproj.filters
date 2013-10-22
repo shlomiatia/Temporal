@@ -206,8 +206,8 @@
     <ClInclude Include="Utils.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="MouseHandler.h">
-      <Filter>Input</Filter>
+    <ClInclude Include="Delegate.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -391,9 +391,6 @@
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="MouseHandler.cpp">
-      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,9 @@
 #include "GameState.h"
 #include "EntitySystem.h"
 #include "MessageUtils.h"
+
+#include "ShapeOperations.h"
+
 #include <SDL.h>
 
 namespace Temporal
@@ -33,20 +36,49 @@ namespace Temporal
 			MouseButton::Enum button = _buttonsMap[e.button.button];
 			Vector position = getPosition(e);
 			MouseParams params(button, position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::PREVIEW_MOUSE_DOWN, &params));
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_DOWN, &params));
 		}
 		else if(e.type == SDL_MOUSEBUTTONUP)
 		{
 			MouseButton::Enum button = _buttonsMap[e.button.button];
 			Vector position = getPosition(e);
 			MouseParams params(button, position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::PREVIEW_MOUSE_DOWN, &params));
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_DOWN, &params));
 		}
 		else if(e.type == SDL_MOUSEMOTION)
 		{
 			Vector position = getPosition(e);
 			MouseParams params(MouseButton::NONE, position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::PREVIEW_MOUSE_MOVE, &params));
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_MOVE, &params));
+		}
+	}
+
+	void MouseListener::handleMessage(Message& message)
+	{
+		if(message.getID() == MessageID::MOUSE_DOWN)
+		{
+			const YABP& shape = *static_cast<YABP*>(_owner.raiseMessage(Message(MessageID::GET_SHAPE)));
+			const MouseParams& params = getMouseParams(message.getParam());
+			if(intersects(shape, params.getPosition()))
+			{
+				_isClick = true;
+				_isDown= true;
+				mouseDown(params.getButton());
+			}
+		}
+		else if(message.getID() == MessageID::MOUSE_UP)
+		{
+			const MouseParams& params = getMouseParams(message.getParam());
+			if(_isClick)
+				mouseClick(params.getButton());
+			if(_isDown)
+				mouseUp(params.getButton());
+			_isClick = false;
+			_isDown = false;
+		}
+		else if(message.getID() == MessageID::MOUSE_MOVE)
+		{
+			_isClick= false;
 		}
 	}
 }

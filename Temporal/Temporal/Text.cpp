@@ -6,6 +6,8 @@
 #include "Graphics.h"
 #include <SDL_opengl.h>
 
+#include "Shapes.h"
+
 namespace Temporal
 {
 	const Hash Text::TYPE = Hash("text");
@@ -62,5 +64,27 @@ namespace Temporal
 	{
 		FTBBox box =  const_cast<FTSimpleLayout&>(_layout).BBox(_text.c_str());
 		return box.Upper().Yf() - box.Lower().Yf();
+	}
+
+	const Hash Panel::TYPE = Hash("panel");
+
+	void Panel::handleMessage(Message& message)
+	{
+		if(message.getID() == MessageID::DRAW)
+		{
+			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
+			if(layer == LayerType::GUI)
+			{
+				const Vector& position = getPosition(*this);
+				_shape.setCenter(position);
+				Graphics::get().draw(_shape);
+			}
+		}
+		else if(message.getID() == MessageID::GET_SHAPE)
+		{
+			const Vector& position = getPosition(*this);
+			_shape.setCenter(position);
+			message.setParam(&_shape);
+		}
 	}
 }

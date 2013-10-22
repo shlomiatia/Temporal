@@ -17,6 +17,8 @@
 #include <algorithm>
 #include <sstream>
 
+#include "Delegate.h"
+
 // Animation editor
 namespace Temporal
 {
@@ -263,7 +265,7 @@ namespace Temporal
 
 		void update()
 		{
-			if(Mouse::get().isStartClicking(MouseButton::LEFT))
+			/*if(Mouse::get().isStartClicking(MouseButton::LEFT))
 			{
 				addUndo();
 				_offset = Mouse::get().getPosition() - getSceneNodeSample().getTranslation();
@@ -286,7 +288,7 @@ namespace Temporal
 				float rotation = fromRadians(vector.getAngle());
 				getSceneNodeSample().setRotation(rotation);
 				_animationSet->getAnimations().at(_animationId)->init();
-			}
+			}*/
 			
 			std::stringstream s;
 			s << _animationId.getString() << " " << _sceneNodeId.getString() << " " << _index;

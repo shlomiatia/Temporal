@@ -44,5 +44,30 @@ namespace Temporal
 		Mouse(const Mouse&);
 		Mouse& operator=(const Mouse&);
 	};
+
+	//class Action;
+	class Component;
+	class Message;
+
+	class MouseListener
+	{
+	public:
+		MouseListener(Component& owner) : _owner(owner), _isClick(false), _isDown(false) {}
+		~MouseListener();
+
+		void handleMessage(Message& message);
+
+		virtual void mouseDown(MouseButton::Enum button) {}
+		virtual void mouseClick(MouseButton::Enum button) {}
+		virtual void mouseUp(MouseButton::Enum button) {}
+	private:
+		Component& _owner;
+/*		Action* MouseDownEvent;
+		Action* MouseClickEvent;
+		Action* MouseUpEvent;*/
+
+		bool _isDown;
+		bool _isClick;
+	};
 }
 #endif
