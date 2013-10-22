@@ -5,6 +5,8 @@
 #include <string>
 #include <ftgl/ftgl.h>
 
+#include "Shapes.h"
+
 namespace Temporal
 {
 	class Text : public Component
@@ -24,8 +26,9 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const;
 
-		static const Hash TYPE;
+		
 	private:
+		static const Hash TYPE;
 
 		FTSimpleLayout _layout;
 		std::string _fontFamily;
@@ -36,6 +39,22 @@ namespace Temporal
 		void draw();
 
 		friend class SerializationAccess;
+	};
+
+	class Panel : public Component
+	{
+	public:
+		explicit Panel(const Vector& size = Vector::Zero) : _shape(YABPAABB(Vector::Zero, size / 2.0f)) {}
+		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape) {}
+
+		Hash getType() const { return TYPE; }
+
+		void handleMessage(Message& message);
+		Component* clone() const { return new Panel(_shape); }
+	private:
+		YABP _shape;
+
+		static const Hash TYPE;
 	};
 }
 #endif
