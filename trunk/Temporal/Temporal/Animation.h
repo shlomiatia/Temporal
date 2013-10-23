@@ -21,7 +21,7 @@ namespace Temporal
 	{
 	public:
 		explicit SceneNodeSample(Hash sceneNodeId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _parent(0), _next(0), _previous(0) {}
+		  _sceneNodeId(sceneNodeId), _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _parent(0), _next(0), _previous(0) {}
 
 		Hash getId() const { return _sceneNodeId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }

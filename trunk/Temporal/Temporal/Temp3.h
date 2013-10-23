@@ -14,6 +14,7 @@
 #include "Graphics.h"
 #include "Shapes.h"
 #include "Layer.h"
+#include "MessageUtils.h"
 #include <algorithm>
 #include <sstream>
 
@@ -25,14 +26,14 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(true), _index(0), _copyIndex(0), _undo(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), _undo(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
-		void setAnimation()
+		void setAnimation(int index = 0)
 		{
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animationId));
-			_index = 0;
+			_index = index;
 			setSample();
 		}
 
@@ -48,7 +49,7 @@ namespace Temporal
 			samples = &_animationSet->get(_animationId).getSamples();
 			for(SceneGraphSampleIterator i = samples->begin();; ++i)
 			{
-				if(createSceneGraphSample && (i == samples->end() || (**i).getIndex() >= index))
+				if(createSceneGraphSample && (i == samples->end() || (**i).getIndex() > index))
 				{
 					return samples->insert(i, new SceneGraphSample(index));
 				}
@@ -67,17 +68,14 @@ namespace Temporal
 			return **getSceneGraphSampleIterator(samples, index, true);
 		}
 
-		SceneNodeSampleIterator getSceneNodeSampleIterator(SceneNodeSampleCollection* samples, int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneGraphSample = false)
+		SceneNodeSampleIterator getSceneNodeSampleIterator(SceneNodeSampleCollection*& samples, int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneGraphSample = false)
 		{
 			if(sceneNodeId == Hash::INVALID)
 				sceneNodeId = _sceneNodeId;
 			SceneGraphSampleCollection* sceneGraphSamples = 0;
 			SceneGraphSampleIterator i = getSceneGraphSampleIterator(sceneGraphSamples, index, createSceneGraphSample);
-			SceneNodeSampleIterator j;
-			if(i == sceneGraphSamples->end())
-				return j;
 			samples = &(**i).getSamples();
-			j = samples->find(sceneNodeId);
+			SceneNodeSampleIterator j = samples->find(sceneNodeId);
 			return j;
 		}
 
@@ -85,12 +83,11 @@ namespace Temporal
 		{
 			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
 			const SceneNode& node = *root.get(_sceneNodeId);
-			SceneNodeSample* sample = new SceneNodeSample();
-			sample->setTranslation(node.getTranslation());
+			SceneNodeSample* sample = new SceneNodeSample(_sceneNodeId);
 			sample->setTranslation(node.getTranslation());
 			sample->setRotation(node.getRotation());
-			_animationSet->get(_animationId).init();
 			samples[sample->getId()] = sample;
+			_animationSet->get(_animationId).init();
 			return *sample;
 		}
 
@@ -212,6 +209,7 @@ namespace Temporal
 					undo->init();
 					_animationSet = undo;
 					getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
+					setAnimation(_index);
 					_undo = 0;
 				}
 			}
@@ -240,7 +238,7 @@ namespace Temporal
 				if(i != _sceneNodes.begin())
 				{
 					--i;
-					_animationId = *i;
+					_sceneNodeId = *i;
 				}
 			}
 			else if(key == Key::D)
@@ -265,31 +263,6 @@ namespace Temporal
 
 		void update()
 		{
-			/*if(Mouse::get().isStartClicking(MouseButton::LEFT))
-			{
-				addUndo();
-				_offset = Mouse::get().getPosition() - getSceneNodeSample().getTranslation();
-				_translation = true;
-			}
-			else if(Mouse::get().isClicking(MouseButton::LEFT))
-			{
-				getSceneNodeSample().setTranslation(Mouse::get().getPosition() - _offset);
-				_animationSet->getAnimations().at(_animationId)->init();
-			}
-			else if(Mouse::get().isStartClicking(MouseButton::RIGHT))
-			{
-				addUndo();
-				_offset = Mouse::get().getPosition() - getSceneNodeSample().getTranslation();
-				_translation = false;
-			}
-			else if(Mouse::get().isClicking(MouseButton::RIGHT))
-			{
-				const Vector vector = Mouse::get().getPosition() - _offset;
-				float rotation = fromRadians(vector.getAngle());
-				getSceneNodeSample().setRotation(rotation);
-				_animationSet->getAnimations().at(_animationId)->init();
-			}*/
-			
 			std::stringstream s;
 			s << _animationId.getString() << " " << _sceneNodeId.getString() << " " << _index;
 			Graphics::get().setTitle(s.str().c_str());
@@ -297,12 +270,34 @@ namespace Temporal
 
 		void leftMouseDown(const MouseParams& params)
 		{
-			printf("leftMouseDown");
+			addUndo();
+			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
+			_translation = true;
+			_rotation = false;
 		}
 
-		void rightMouseUp(const MouseParams& params)
+		void rightMouseDown(const MouseParams& params)
 		{
-			printf("rightMouseUp");
+			addUndo();
+			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
+			_translation = false;
+			_rotation = true;
+		}
+
+		void mouseMove(const MouseParams& params)
+		{
+			if(_translation)
+			{
+				getSceneNodeSample().setTranslation(params.getPosition() - _offset);
+				_animationSet->getAnimations().at(_animationId)->init();
+			}
+			else if(_rotation)
+			{
+				const Vector vector = params.getPosition() - _offset;
+				float rotation = fromRadians(vector.getAngle());
+				getSceneNodeSample().setRotation(rotation);
+				_animationSet->getAnimations().at(_animationId)->init();
+			}
 		}
 
 		void addPanel(const AABB& shape)
@@ -310,7 +305,8 @@ namespace Temporal
 			Transform* transform = new Transform(shape.getCenter());
 			Panel* panel = new Panel(shape.getRadius());
 			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, leftMouseDown));
-			panel->setRightMouseUpEvent(createAction1(AnimationEditor, const MouseParams&, rightMouseUp));
+			panel->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, rightMouseDown));
+			panel->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, mouseMove));
 			Entity* entity = new Entity();
 			entity->add(transform);
 			entity->add(panel);
@@ -430,6 +426,7 @@ namespace Temporal
 
 		Vector _offset;
 		bool _translation;
+		bool _rotation;
 		AnimationSet* _undo;
 		int _copyIndex;
 	};
