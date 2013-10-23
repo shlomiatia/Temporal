@@ -3,6 +3,8 @@
 
 #include "Vector.h"
 #include "Input.h"
+#include "EntitySystem.h"
+#include "Delegate.h"
 #include <unordered_map>
 
 namespace Temporal
@@ -45,29 +47,42 @@ namespace Temporal
 		Mouse& operator=(const Mouse&);
 	};
 
-	//class Action;
-	class Component;
-	class Message;
+	class MouseParams;
 
-	class MouseListener
+	class MouseListener : public Component
 	{
 	public:
-		MouseListener(Component& owner) : _owner(owner), _isClick(false), _isDown(false) {}
+		MouseListener() : _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false), _leftMouseDownEvent(0),
+			_leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0) {}
 		~MouseListener();
 
-		void handleMessage(Message& message);
+		virtual void handleMessage(Message& message);
 
-		virtual void mouseDown(MouseButton::Enum button) {}
-		virtual void mouseClick(MouseButton::Enum button) {}
-		virtual void mouseUp(MouseButton::Enum button) {}
+		void setLeftMouseDownEvent(IAction1<const MouseParams&>* leftMouseDownEvent) { setEvent(_leftMouseDownEvent, leftMouseDownEvent); }
+		void setLeftMouseClickEvent(IAction1<const MouseParams&>* leftMouseClickEvent) { setEvent(_leftMouseClickEvent, leftMouseClickEvent); }
+		void setLeftMouseUpEvent(IAction1<const MouseParams&>* leftMouseUpEvent) { setEvent(_leftMouseUpEvent, leftMouseUpEvent); }
+		void setRightMouseDownEvent(IAction1<const MouseParams&>* rightMouseDownEvent) { setEvent(_rightMouseDownEvent, rightMouseDownEvent); }
+		void setRightMouseClickEvent(IAction1<const MouseParams&>* rightMouseClickEvent) { setEvent(_rightMouseClickEvent, rightMouseClickEvent); }
+		void setRightMouseUpEvent(IAction1<const MouseParams&>* rightMouseUpEvent) { setEvent(_rightMouseUpEvent, rightMouseUpEvent); }
+		void setMouseMoveEvent(IAction1<const MouseParams&>* mouseMoveEvent) { setEvent(_mouseMoveEvent, mouseMoveEvent); }
+
 	private:
-		Component& _owner;
-/*		Action* MouseDownEvent;
-		Action* MouseClickEvent;
-		Action* MouseUpEvent;*/
+		static const Hash TYPE;
 
-		bool _isDown;
-		bool _isClick;
+		IAction1<const MouseParams&>* _leftMouseDownEvent;
+		IAction1<const MouseParams&>* _leftMouseClickEvent;
+		IAction1<const MouseParams&>* _leftMouseUpEvent;
+		IAction1<const MouseParams&>* _rightMouseDownEvent;
+		IAction1<const MouseParams&>* _rightMouseClickEvent;
+		IAction1<const MouseParams&>* _rightMouseUpEvent;
+		IAction1<const MouseParams&>* _mouseMoveEvent;
+
+		bool _isLeftDown;
+		bool _isLeftClick;
+		bool _isRightDown;
+		bool _isRightClick;
+
+		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
 	};
 }
 #endif

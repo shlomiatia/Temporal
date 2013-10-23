@@ -1,9 +1,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "GameState.h"
-#include "EntitySystem.h"
 #include "MessageUtils.h"
-
 #include "ShapeOperations.h"
 
 #include <SDL.h>
@@ -43,7 +41,7 @@ namespace Temporal
 			MouseButton::Enum button = _buttonsMap[e.button.button];
 			Vector position = getPosition(e);
 			MouseParams params(button, position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_DOWN, &params));
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_UP, &params));
 		}
 		else if(e.type == SDL_MOUSEMOTION)
 		{
@@ -53,32 +51,81 @@ namespace Temporal
 		}
 	}
 
+	void deleteEvent(IAction1<const MouseParams&>* e)
+	{
+		if(e)
+			delete e;
+	}
+
+	void raiseEvent(IAction1<const MouseParams&>* e, const MouseParams& params)
+	{
+		if(e)
+			(*e)(params);
+	}
+
+	void mouseDown(IAction1<const MouseParams&>* mouseDownEvent, const MouseParams& params, bool& isDown, bool& isClick)
+	{
+		isClick = true;
+		isDown = true;
+		raiseEvent(mouseDownEvent, params);
+	}
+
+	void mouseUp(IAction1<const MouseParams&>* mouseClickEvent, IAction1<const MouseParams&>* mouseUpEvent, const MouseParams& params, bool& isDown, bool& isClick)
+	{
+		if(isClick)
+			raiseEvent(mouseClickEvent, params);
+		if(isDown)
+			raiseEvent(mouseUpEvent, params);
+		isClick = false;
+		isDown = false;
+	}
+
+	void MouseListener::setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value)
+	{
+		deleteEvent(prop);
+		prop = value;
+	}
+
+	MouseListener::~MouseListener()
+	{
+		deleteEvent(_leftMouseDownEvent);
+		deleteEvent(_leftMouseClickEvent);
+		deleteEvent(_leftMouseUpEvent);
+		deleteEvent(_rightMouseDownEvent);
+		deleteEvent(_rightMouseClickEvent);
+		deleteEvent(_rightMouseUpEvent);
+		deleteEvent(_mouseMoveEvent);
+	}
+
 	void MouseListener::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::MOUSE_DOWN)
 		{
-			const YABP& shape = *static_cast<YABP*>(_owner.raiseMessage(Message(MessageID::GET_SHAPE)));
+			const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 			const MouseParams& params = getMouseParams(message.getParam());
 			if(intersects(shape, params.getPosition()))
 			{
-				_isClick = true;
-				_isDown= true;
-				mouseDown(params.getButton());
+				if(params.getButton() == MouseButton::LEFT)
+					mouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
+				if(params.getButton() == MouseButton::RIGHT)
+					mouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
 			}
 		}
 		else if(message.getID() == MessageID::MOUSE_UP)
 		{
 			const MouseParams& params = getMouseParams(message.getParam());
-			if(_isClick)
-				mouseClick(params.getButton());
-			if(_isDown)
-				mouseUp(params.getButton());
-			_isClick = false;
-			_isDown = false;
+			if(params.getButton() == MouseButton::LEFT)
+				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+			else
+				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
+			
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{
-			_isClick= false;
+			_isLeftClick = false;
+			_isRightClick = false;
+			if(_isLeftDown || _isRightDown)
+				raiseEvent(_mouseMoveEvent, getMouseParams(message.getParam()));
 		}
 	}
 }

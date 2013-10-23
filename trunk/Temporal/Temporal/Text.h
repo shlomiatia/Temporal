@@ -6,6 +6,7 @@
 #include <ftgl/ftgl.h>
 
 #include "Shapes.h"
+#include "Mouse.h"
 
 namespace Temporal
 {
@@ -17,7 +18,6 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 
-
 		void setText(const char* text) { _text = text; }
 		void setWidth(float width);
 		float getWidth() const;
@@ -25,7 +25,6 @@ namespace Temporal
 
 		void handleMessage(Message& message);
 		Component* clone() const;
-
 		
 	private:
 		static const Hash TYPE;
@@ -41,10 +40,10 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	class Panel : public Component
+	class Panel : public MouseListener
 	{
 	public:
-		explicit Panel(const Vector& size = Vector::Zero) : _shape(YABPAABB(Vector::Zero, size / 2.0f)) {}
+		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)) {}
 		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape) {}
 
 		Hash getType() const { return TYPE; }
