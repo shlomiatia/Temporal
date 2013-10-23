@@ -70,6 +70,7 @@ namespace Temporal
 
 	void Panel::handleMessage(Message& message)
 	{
+		MouseListener::handleMessage(message);
 		if(message.getID() == MessageID::DRAW)
 		{
 			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());

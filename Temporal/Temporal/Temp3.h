@@ -295,6 +295,28 @@ namespace Temporal
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
+		void leftMouseDown(const MouseParams& params)
+		{
+			printf("leftMouseDown");
+		}
+
+		void rightMouseUp(const MouseParams& params)
+		{
+			printf("rightMouseUp");
+		}
+
+		void addPanel(const AABB& shape)
+		{
+			Transform* transform = new Transform(shape.getCenter());
+			Panel* panel = new Panel(shape.getRadius());
+			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, leftMouseDown));
+			panel->setRightMouseUpEvent(createAction1(AnimationEditor, const MouseParams&, rightMouseUp));
+			Entity* entity = new Entity();
+			entity->add(transform);
+			entity->add(panel);
+			getEntity().getManager().add(Hash("myPanel"), entity);
+		}
+
 		void addLabel(const char* label, const Vector& position, float width)
 		{
 			Transform* transform = new Transform(position);
@@ -335,6 +357,8 @@ namespace Temporal
 			{
 				addLabel(Utils::toString(i+1).c_str(), Vector(GRID_START_X + i * CELL_SIZE, GRID_START_Y), CELL_SIZE);
 			}
+
+			addPanel(AABB(455, 384, 512, 228));
 		}
 
 		void draw()
