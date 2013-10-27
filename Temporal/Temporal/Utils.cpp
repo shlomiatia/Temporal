@@ -59,4 +59,15 @@ namespace Temporal
 		va_end(arguments);
 		return ss.str();
 	}
+
+	std::vector<std::string> Utils::split(const char* s, char d) 
+	{
+		std::stringstream ss(s);
+		std::string item;
+		std::vector<std::string> result;
+		while (std::getline(ss, item, d)) {
+			result.push_back(item);
+		}
+		return result;
+	}
 }
