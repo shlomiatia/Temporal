@@ -43,15 +43,19 @@ namespace Temporal
 	class Panel : public MouseListener
 	{
 	public:
-		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)) {}
-		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape) {}
+		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)), _fill(false) {}
+		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape), _fill(false) {}
 
 		Hash getType() const { return TYPE; }
-
 		void handleMessage(Message& message);
 		Component* clone() const { return new Panel(_shape); }
+
+		void setFill(bool fill) { _fill = fill; }
+		bool isFill() const { return _fill; }
+
 	private:
 		YABP _shape;
+		bool _fill;
 
 		static const Hash TYPE;
 	};

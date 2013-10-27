@@ -57,7 +57,7 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		Entity() : _id(Hash::INVALID), _manager(0) {}
+		Entity(Hash id = Hash::INVALID) : _id(id), _manager(0) {}
 		~Entity();
 
 		Hash getId() const { return _id; }
@@ -92,7 +92,7 @@ namespace Temporal
 		void sendMessageToAllEntities(Message& message, const HashCollection* filter = 0) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		const EntityCollection& getEntities() const { return _entities; }
-		void add(Hash id, Entity* entity);
+		void add(Entity* entity);
 	private:
 		EntityCollection _entities;
 		

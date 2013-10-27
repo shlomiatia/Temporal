@@ -35,20 +35,29 @@ namespace Temporal
 	private:
 		Hash _sensorId;
 		const Contact* _contact;
+
+		SensorParams(const SensorParams&);
+		SensorParams& operator=(const SensorParams&);
 	};
 	inline const SensorParams& getSensorParams(void* data) { return *static_cast<SensorParams*>(data); }
 
 	class MouseParams
 	{
 	public:
-		MouseParams(MouseButton::Enum button, const Vector& position)
-			: _button(button), _position(position) {}
+		MouseParams(MouseButton::Enum button, const Vector& position, void* sender = 0)
+			: _button(button), _position(position), _sender(sender) {}
 
 		MouseButton::Enum getButton() const { return _button; }
 		const Vector& getPosition() const { return _position; }
+		void* getSender() const { return _sender; }
+
 	private:
 		MouseButton::Enum _button;
 		const Vector& _position;
+		void* _sender;
+
+		MouseParams(const MouseParams&);
+		MouseParams& operator=(const MouseParams&);
 	};
 	inline const MouseParams& getMouseParams(void* data) { return *static_cast<MouseParams*>(data); }
 }

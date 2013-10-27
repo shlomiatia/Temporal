@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <string>
+#include <vector>
 
 namespace Temporal
 {
@@ -11,6 +12,7 @@ namespace Temporal
 		static std::string toString(int i);
 		static std::string toString(float f);
 		static std::string format(const char* s, ...);
+		static std::vector<std::string> split(const char* s, char d);
 	};
 }
 

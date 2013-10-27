@@ -103,29 +103,35 @@ namespace Temporal
 		{
 			const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 			const MouseParams& params = getMouseParams(message.getParam());
+			const MouseParams params1(params.getButton(), params.getPosition(), this);
 			if(intersects(shape, params.getPosition()))
 			{
 				if(params.getButton() == MouseButton::LEFT)
-					mouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
+					mouseDown(_leftMouseDownEvent, params1, _isLeftDown, _isLeftClick);
 				if(params.getButton() == MouseButton::RIGHT)
-					mouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
+					mouseDown(_rightMouseDownEvent, params1, _isRightDown, _isRightClick);
 			}
 		}
 		else if(message.getID() == MessageID::MOUSE_UP)
 		{
 			const MouseParams& params = getMouseParams(message.getParam());
+			const MouseParams params1(params.getButton(), params.getPosition(), this);
 			if(params.getButton() == MouseButton::LEFT)
-				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params1, _isLeftDown, _isLeftClick);
 			else
-				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
+				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params1, _isRightDown, _isRightClick);
 			
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{
 			_isLeftClick = false;
 			_isRightClick = false;
+			const MouseParams& params = getMouseParams(message.getParam());
+			const MouseParams params1(params.getButton(), params.getPosition(), this);
 			if(_isLeftDown || _isRightDown)
-				raiseEvent(_mouseMoveEvent, getMouseParams(message.getParam()));
+			{
+				raiseEvent(_mouseMoveEvent, params1);
+			}
 		}
 	}
 }

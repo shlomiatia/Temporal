@@ -120,9 +120,9 @@ namespace Temporal
 		return _entities.at(id)->handleMessage(message);
 	}
 
-	void EntitiesManager::add(Hash id, Entity* entity)
+	void EntitiesManager::add(Entity* entity)
 	{
-		_entities[id] = entity;
+		_entities[entity->getId()] = entity;
 		entity->init(this);
 	}
 }

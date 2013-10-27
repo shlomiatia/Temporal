@@ -268,7 +268,7 @@ namespace Temporal
 			Graphics::get().setTitle(s.str().c_str());
 		}
 
-		void leftMouseDown(const MouseParams& params)
+		void skeletonLeftMouseDown(const MouseParams& params)
 		{
 			addUndo();
 			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
@@ -276,7 +276,7 @@ namespace Temporal
 			_rotation = false;
 		}
 
-		void rightMouseDown(const MouseParams& params)
+		void skeletonRightMouseDown(const MouseParams& params)
 		{
 			addUndo();
 			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
@@ -284,7 +284,7 @@ namespace Temporal
 			_rotation = true;
 		}
 
-		void mouseMove(const MouseParams& params)
+		void skeletonMouseMove(const MouseParams& params)
 		{
 			if(_translation)
 			{
@@ -300,17 +300,15 @@ namespace Temporal
 			}
 		}
 
-		void addPanel(const AABB& shape)
+		Panel* addPanel(const char* id, const AABB& shape)
 		{
 			Transform* transform = new Transform(shape.getCenter());
 			Panel* panel = new Panel(shape.getRadius());
-			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, leftMouseDown));
-			panel->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, rightMouseDown));
-			panel->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, mouseMove));
-			Entity* entity = new Entity();
+			Entity* entity = new Entity(Hash(id));
 			entity->add(transform);
 			entity->add(panel);
-			getEntity().getManager().add(Hash("myPanel"), entity);
+			getEntity().getManager().add(entity);
+			return panel;
 		}
 
 		void addLabel(const char* label, const Vector& position, float width)
@@ -318,11 +316,11 @@ namespace Temporal
 			Transform* transform = new Transform(position);
 			Text* text = new Text("c:/windows/fonts/Arial.ttf", 12, label);
 			text->setWidth(width);
-			Entity* entity = new Entity();
+			Entity* entity = new Entity(Hash(label));
 			entity->add(transform);
 			entity->add(text);
 			entity->handleMessage(Message(MessageID::ENTITY_INIT));
-			getEntity().getManager().add(Hash(label), entity);
+			getEntity().getManager().add(entity);
 		}
 
 		void bindSceneNodes(SceneNode& sceneNode)
@@ -334,6 +332,13 @@ namespace Temporal
 			}
 		}
 
+		void keyframeLeftClick(const MouseParams& params)
+		{
+			Panel* panel = static_cast<Panel*>(params.getSender());
+			Hash id = panel->getEntity().getId();
+			//std::vector<std::string> parts = Utils::split(id.getString(), '.');
+		}
+
 		void init()
 		{
 			_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
@@ -342,6 +347,11 @@ namespace Temporal
 			bindSceneNodes(sceneNode);
 			_sceneNodeId = *_sceneNodes.begin();
 			setAnimation();
+
+			Panel* panel = addPanel("skeletonPanel", AABB(455, 384, 512, 228));
+			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
+			panel->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
+			panel->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
 			float y = GRID_START_Y;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
@@ -354,36 +364,16 @@ namespace Temporal
 				addLabel(Utils::toString(i+1).c_str(), Vector(GRID_START_X + i * CELL_SIZE, GRID_START_Y), CELL_SIZE);
 			}
 
-			addPanel(AABB(455, 384, 512, 228));
-		}
-
-		void draw()
-		{
-			float y = GRID_START_Y;
+			y = GRID_START_Y;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
 				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
-					Graphics::get().draw(AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
-					
+					std::string id = Utils::format("%s.%d", i->getString(), j); 
+					Panel* panel = addPanel(id.c_str(), AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					panel->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, keyframeLeftClick));
 				}
 				y -= CELL_SIZE;
-			}
-
-			Animation& animation = _animationSet->get(_animationId);
-			for(SceneGraphSampleIterator i = animation.getSamples().begin(); i != animation.getSamples().end(); ++i)
-			{
-				SceneGraphSample& sceneGraphSample = **i;
-				int j = 0;
-				for(HashIterator k = _sceneNodes.begin(); k != _sceneNodes.end(); ++k)	
-				{
-					 SceneNodeSampleIterator l = sceneGraphSample.getSamples().find(*k);
-					 if(l != sceneGraphSample.getSamples().end())
-					 {
-						 Graphics::get().draw(AABBLT(GRID_START_X + sceneGraphSample.getIndex() * CELL_SIZE, GRID_START_Y - j * CELL_SIZE, CELL_SIZE, CELL_SIZE), Color::White, true);
-					 }
-					++j;
-				}
 			}
 		}
 
@@ -401,12 +391,6 @@ namespace Temporal
 			else if(message.getID() == MessageID::UPDATE)
 			{
 				update();
-			}
-			else if(message.getID() == MessageID::DRAW)
-			{
-				LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
-				if(layer == LayerType::GUI)
-					draw();
 			}
 		}
 
@@ -444,9 +428,9 @@ namespace Temporal
 		{
 			if(id == Hash("resources/game-states/test.xml"))
 			{
-				Entity* entity = new Entity();
+				Entity* entity = new Entity(Hash("ENT_ANIMATION_EDITOR"));
 				entity->add(new AnimationEditor());
-				gameState.getEntitiesManager().add(Hash("ENT_ANIMATION_EDITOR"), entity);
+				gameState.getEntitiesManager().add(entity);
 			}
 		}
 	};
