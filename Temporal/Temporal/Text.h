@@ -53,11 +53,10 @@ namespace Temporal
 		void setFill(bool fill) { _fill = fill; }
 		bool isFill() const { return _fill; }
 
+		static const Hash TYPE;
 	private:
 		YABP _shape;
 		bool _fill;
-
-		static const Hash TYPE;
 	};
 }
 #endif

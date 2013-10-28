@@ -42,6 +42,21 @@ namespace Temporal
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_index));
 		}
 
+		void initSns()
+		{
+			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			{
+				for(int j = 0;  j < GRID_FRAMES; ++j)
+				{
+					Hash id = getSnsId(*i, j); 
+					Panel& panel = *static_cast<Panel*>(getEntity().getManager().getEntities().at(id)->get(Panel::TYPE));
+					SceneNodeSampleCollection* samples = 0;
+					getSceneNodeSampleIterator(samples, j, *i);
+					panel.setFill(samples != 0);
+				}
+			}
+		}
+
 		SceneGraphSampleIterator getSceneGraphSampleIterator(SceneGraphSampleCollection*& samples, int index = -1, bool createSceneGraphSample = false)
 		{
 			if(index == -1)
@@ -60,18 +75,12 @@ namespace Temporal
 			}
 		}
 
-		SceneGraphSample& getSceneGraphSample(int index = -1)
-		{
-			if(index == -1)
-				index = _index;
-			SceneGraphSampleCollection* samples = 0;
-			return **getSceneGraphSampleIterator(samples, index, true);
-		}
-
 		SceneNodeSampleIterator getSceneNodeSampleIterator(SceneNodeSampleCollection*& samples, int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneGraphSample = false)
 		{
 			if(sceneNodeId == Hash::INVALID)
 				sceneNodeId = _sceneNodeId;
+			if(index == -1)
+				index = _index;
 			SceneGraphSampleCollection* sceneGraphSamples = 0;
 			SceneGraphSampleIterator i = getSceneGraphSampleIterator(sceneGraphSamples, index, createSceneGraphSample);
 			samples = &(**i).getSamples();
@@ -100,6 +109,13 @@ namespace Temporal
 			return *i->second;
 		}
 
+		void addUndo()
+		{
+			if(_undo)
+				delete _undo;
+			_undo = _animationSet->clone();
+		}
+
 		void paste()
 		{
 			addUndo();
@@ -114,13 +130,6 @@ namespace Temporal
 				paste.setTranslation(copy.getTranslation());
 				paste.setRotation(copy.getRotation());
 			}
-		}
-
-		void addUndo()
-		{
-			if(_undo)
-				delete _undo;
-			_undo = _animationSet->clone();
 		}
 
 		void deleteSample()
@@ -254,7 +263,7 @@ namespace Temporal
 			}
 			else if(key == Key::F2)
 			{
-				XmlSerializer serializer(new FileStream("C:/Users/SHLOMIATIA/Documents/Visual Studio 2010/Projects/Temporal/Temporal/Temporal/External/bin/resources/animations/aquaria.xml", true, false));
+				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/animations/aquaria.xml", true, false));
 				AnimationSet& set =  *_animationSet;
 				serializer.serialize("animation-set", set);
 				serializer.save();
@@ -300,11 +309,11 @@ namespace Temporal
 			}
 		}
 
-		Panel* addPanel(const char* id, const AABB& shape)
+		Panel* addPanel(Hash id, const AABB& shape)
 		{
 			Transform* transform = new Transform(shape.getCenter());
 			Panel* panel = new Panel(shape.getRadius());
-			Entity* entity = new Entity(Hash(id));
+			Entity* entity = new Entity(id);
 			entity->add(transform);
 			entity->add(panel);
 			getEntity().getManager().add(entity);
@@ -332,13 +341,20 @@ namespace Temporal
 			}
 		}
 
-		void keyframeLeftClick(const MouseParams& params)
+		void snsLeftClick(const MouseParams& params)
 		{
 			Panel* panel = static_cast<Panel*>(params.getSender());
 			Hash id = panel->getEntity().getId();
 			std::vector<std::string> parts = Utils::split(id.getString(), '.');
 			_sceneNodeId = Hash(parts[0].c_str());
 			_index = Utils::parseInt(parts[1].c_str());
+			setSample();
+		}
+
+		Hash getSnsId(Hash snId, int index)
+		{
+			std::string sid = Utils::format("%s.%d", snId.getString(), index);
+			return Hash(sid.c_str());
 		}
 
 		void init()
@@ -350,7 +366,7 @@ namespace Temporal
 			_sceneNodeId = *_sceneNodes.begin();
 			setAnimation();
 
-			Panel* panel = addPanel("skeletonPanel", AABB(455, 384, 512, 228));
+			Panel* panel = addPanel(Hash("skeletonPanel"), AABB(455, 384, 512, 228));
 			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
 			panel->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			panel->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
@@ -371,9 +387,9 @@ namespace Temporal
 			{
 				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
-					std::string id = Utils::format("%s.%d", i->getString(), j); 
-					Panel* panel = addPanel(id.c_str(), AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
-					panel->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, keyframeLeftClick));
+					Hash id = getSnsId(*i, j); 
+					Panel* panel = addPanel(id, AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					panel->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
 				}
 				y -= CELL_SIZE;
 			}
