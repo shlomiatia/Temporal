@@ -66,9 +66,9 @@ namespace Temporal
 		return box.Upper().Yf() - box.Lower().Yf();
 	}
 
-	const Hash Panel::TYPE = Hash("panel");
+	const Hash Control::TYPE = Hash("control");
 
-	void Panel::handleMessage(Message& message)
+	void Control::handleMessage(Message& message)
 	{
 		MouseListener::handleMessage(message);
 		if(message.getID() == MessageID::DRAW)

@@ -52,7 +52,7 @@ namespace Temporal
 				for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 				{
 					Hash id = getSnsId(*i, j); 
-					Panel& panel = *static_cast<Panel*>(getEntity().getManager().getEntity(id)->get(Panel::TYPE));
+					Control& panel = *static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
 					if(isEmptySgs)
 					{
 						panel.setFill(true);
@@ -77,7 +77,10 @@ namespace Temporal
 			{
 				if(createSceneGraphSample && (i == samples.end() || (**i).getIndex() > index))
 				{
-					return *samples.insert(i, new SceneGraphSample(index));
+					SceneGraphSample* result = *samples.insert(i, new SceneGraphSample(index));
+					_animationSet->get(_animationId).init();
+					initSns();
+					return result;
 				}
 				else if(i == samples.end())
 				{
@@ -102,7 +105,6 @@ namespace Temporal
 			sample->setTranslation(node.getTranslation());
 			sample->setRotation(node.getRotation());
 			samples[sample->getId()] = sample;
-			_animationSet->get(_animationId).init();
 			return sample;
 		}
 
@@ -115,21 +117,31 @@ namespace Temporal
 				return 0;
 			SceneNodeSampleCollection& samples = sceneGraphSample->getSamples();
 			SceneNodeSampleIterator i = samples.find(sceneNodeId);
-			if(i == samples.end())
+			if(deleteSceneNodeSample)
+			{
+				if(i != samples.end())
+				{
+					delete i->second;
+					i = samples.erase(i);
+				}
+				if(sceneGraphSample->getSamples().size() == 0)
+					getSceneGraphSample(index, false, true);
+				_animationSet->get(_animationId).init();
+				initSns();
+				return 0;
+			}
+			else if(i == samples.end())
 			{
 				if(!createSceneNodeSample)
 					return 0;
-				return addSample(samples, i);
+				SceneNodeSample* result = addSample(samples, i);
+				_animationSet->get(_animationId).init();
+				initSns();
+				return result;
 			}
 			else
 			{
-				if(!deleteSceneNodeSample)
-					return i->second;
-				delete i->second;
-				i = samples.erase(i);
-				if(sceneGraphSample->getSamples().size() == 0)
-					getSceneGraphSample(index, false, true);
-				return 0;
+				return i->second;
 			}
 		}
 
@@ -166,6 +178,7 @@ namespace Temporal
 				return;
 			addUndo();
 			getSceneNodeSample(_index, _sceneNodeId, false, true);
+			setAnimation(_index);
 		}
 
 		void handleArrows(const Vector& vector)
@@ -252,6 +265,10 @@ namespace Temporal
 			{
 				deleteSample();
 			}
+			else if(key == Key::N)
+			{
+				getSceneGraphSample(_index, true);
+			}
 			else if(key == Key::W)
 			{
 				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
@@ -316,26 +333,26 @@ namespace Temporal
 			if(_translation)
 			{
 				getCreateSceneNodeSample().setTranslation(params.getPosition() - _offset);
-				_animationSet->getAnimations().at(_animationId)->init();
+				//_animationSet->getAnimations().at(_animationId)->init();
 			}
 			else if(_rotation)
 			{
 				const Vector vector = params.getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
 				getCreateSceneNodeSample().setRotation(rotation);
-				_animationSet->getAnimations().at(_animationId)->init();
+				//_animationSet->getAnimations().at(_animationId)->init();
 			}
 		}
 
-		Panel* addPanel(Hash id, const AABB& shape)
+		Control* addControl(Hash id, const AABB& shape)
 		{
 			Transform* transform = new Transform(shape.getCenter());
-			Panel* panel = new Panel(shape.getRadius());
+			Control* control = new Control(shape.getRadius());
 			Entity* entity = new Entity(id);
 			entity->add(transform);
-			entity->add(panel);
+			entity->add(control);
 			getEntity().getManager().add(entity);
-			return panel;
+			return control;
 		}
 
 		void addLabel(const char* label, const Vector& position, float width)
@@ -361,7 +378,7 @@ namespace Temporal
 
 		void snsLeftClick(const MouseParams& params)
 		{
-			Panel* panel = static_cast<Panel*>(params.getSender());
+			Control* panel = static_cast<Control*>(params.getSender());
 			Hash id = panel->getEntity().getId();
 			std::vector<std::string> parts = Utils::split(id.getString(), '.');
 			_sceneNodeId = Hash(parts[0].c_str());
@@ -383,10 +400,10 @@ namespace Temporal
 			bindSceneNodes(sceneNode);
 			_sceneNodeId = *_sceneNodes.begin();
 
-			Panel* panel = addPanel(Hash("skeletonPanel"), AABB(455, 384, 512, 228));
-			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
-			panel->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
-			panel->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
+			Control* control = addControl(Hash("skeletonPanel"), AABB(455, 384, 512, 228));
+			control->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
+			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
+			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
 			float y = GRID_START_Y;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
@@ -405,7 +422,7 @@ namespace Temporal
 				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
 					Hash id = getSnsId(*i, j); 
-					Panel* panel = addPanel(id, AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					Control* panel = addControl(id, AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
 					panel->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
 				}
 				y -= CELL_SIZE;
