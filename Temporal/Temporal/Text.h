@@ -41,15 +41,15 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	class Panel : public MouseListener
+	class Control : public MouseListener
 	{
 	public:
-		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)), _color(Color::White), _fill(false) {}
-		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape), _color(Color::White), _fill(false) {}
+		explicit Control(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)), _color(Color::White), _fill(false) {}
+		explicit Control(const YABP& shape = YABP::Zero) : _shape(shape), _color(Color::White), _fill(false) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-		Component* clone() const { return new Panel(_shape); }
+		Component* clone() const { return new Control(_shape); }
 
 		void setFill(bool fill) { _fill = fill; }
 		bool isFill() const { return _fill; }
