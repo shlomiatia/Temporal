@@ -7,6 +7,7 @@
 
 #include "Shapes.h"
 #include "Mouse.h"
+#include "Color.h"
 
 namespace Temporal
 {
@@ -43,8 +44,8 @@ namespace Temporal
 	class Panel : public MouseListener
 	{
 	public:
-		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)), _fill(false) {}
-		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape), _fill(false) {}
+		explicit Panel(const Vector& radius = Vector::Zero) : _shape(YABPAABB(Vector::Zero, radius)), _color(Color::White), _fill(false) {}
+		explicit Panel(const YABP& shape = YABP::Zero) : _shape(shape), _color(Color::White), _fill(false) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -52,10 +53,13 @@ namespace Temporal
 
 		void setFill(bool fill) { _fill = fill; }
 		bool isFill() const { return _fill; }
+		void setColor(const Color& color) { _color = color; }
+		const Color& getColor() const { return _color; }
 
 		static const Hash TYPE;
 	private:
 		YABP _shape;
+		Color _color;
 		bool _fill;
 	};
 }

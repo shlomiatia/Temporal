@@ -45,14 +45,25 @@ namespace Temporal
 
 		void initSns()
 		{
-			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			for(int j = 0;  j < GRID_FRAMES; ++j)
 			{
-				for(int j = 0;  j < GRID_FRAMES; ++j)
+				SceneGraphSample* sgs = getSceneGraphSample(j);
+				bool isEmptySgs = sgs && sgs->getSamples().size() == 0;
+				for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 				{
 					Hash id = getSnsId(*i, j); 
 					Panel& panel = *static_cast<Panel*>(getEntity().getManager().getEntity(id)->get(Panel::TYPE));
-					SceneNodeSample* sample = getSceneNodeSample(j, *i);
-					panel.setFill(sample != 0);
+					if(isEmptySgs)
+					{
+						panel.setFill(true);
+						panel.setColor(Color::Red);
+					}
+					else
+					{
+						SceneNodeSample* sns = getSceneNodeSample(j, *i);
+						panel.setFill(sns != 0);
+						panel.setColor(Color::White);
+					}
 				}
 			}
 		}
