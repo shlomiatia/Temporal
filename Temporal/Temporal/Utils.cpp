@@ -18,6 +18,22 @@ namespace Temporal
 		return s.str();
 	}
 
+	int Utils::parseInt(const char* s)
+	{
+		std::istringstream ss(s);
+		int i = 0;
+		ss >> i;
+		return i;
+	}
+
+	float Utils::parseFloat(const char* s)
+	{
+		std::istringstream ss(s);
+		float f = 0;
+		ss >> f;
+		return f;
+	}
+
 	std::string Utils::format(const char* s, ...)
 	{
 		const char* ts;
