@@ -222,7 +222,7 @@ namespace Temporal
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
-	void Graphics::draw(const YABP& slopedArea, const Color& color)
+	void Graphics::draw(const YABP& slopedArea, const Color& color, bool fill)
 	{
 		bindTexture(0);
 
@@ -245,7 +245,7 @@ namespace Temporal
  
 			glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glDrawArrays(GL_LINE_LOOP, 0, 4);
+			glDrawArrays(fill ? GL_QUADS : GL_LINE_LOOP, 0, 4);
  
 			glDisableClientState(GL_VERTEX_ARRAY);
 		}

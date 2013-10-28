@@ -77,7 +77,7 @@ namespace Temporal
 			return;
 		}
 		float relativeIndex = fmod(currentIndex, animationDuration);
-			Direction::Enum direction = Direction::FORWARD;
+		Direction::Enum direction = Direction::FORWARD;
 		if(animation.rewind())
 		{
 			relativeIndex = animationDuration - relativeIndex;
@@ -86,7 +86,6 @@ namespace Temporal
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
 			SceneNodeBinding& binding = **i;
-			
 			const SceneNodeSample* currentSample = binding.getSample();
 			if(!currentSample)
 				continue;
