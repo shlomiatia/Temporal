@@ -336,7 +336,9 @@ namespace Temporal
 		{
 			Panel* panel = static_cast<Panel*>(params.getSender());
 			Hash id = panel->getEntity().getId();
-			//std::vector<std::string> parts = Utils::split(id.getString(), '.');
+			std::vector<std::string> parts = Utils::split(id.getString(), '.');
+			_sceneNodeId = Hash(parts[0].c_str());
+			_index = Utils::parseInt(parts[1].c_str());
 		}
 
 		void init()
