@@ -120,6 +120,14 @@ namespace Temporal
 		return _entities.at(id)->handleMessage(message);
 	}
 
+	Entity* EntitiesManager::getEntity(Hash id) const
+	{
+		EntityIterator i = _entities.find(id);
+		if(i == _entities.end())
+			return 0;
+		return i->second;
+	}
+
 	void EntitiesManager::add(Entity* entity)
 	{
 		_entities[entity->getId()] = entity;

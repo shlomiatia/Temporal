@@ -35,6 +35,7 @@ namespace Temporal
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animationId));
 			_index = index;
 			setSample();
+			initSns();
 		}
 
 		void setSample()
@@ -49,46 +50,40 @@ namespace Temporal
 				for(int j = 0;  j < GRID_FRAMES; ++j)
 				{
 					Hash id = getSnsId(*i, j); 
-					Panel& panel = *static_cast<Panel*>(getEntity().getManager().getEntities().at(id)->get(Panel::TYPE));
-					SceneNodeSampleCollection* samples = 0;
-					getSceneNodeSampleIterator(samples, j, *i);
-					panel.setFill(samples != 0);
+					Panel& panel = *static_cast<Panel*>(getEntity().getManager().getEntity(id)->get(Panel::TYPE));
+					SceneNodeSample* sample = getSceneNodeSample(j, *i);
+					panel.setFill(sample != 0);
 				}
 			}
 		}
 
-		SceneGraphSampleIterator getSceneGraphSampleIterator(SceneGraphSampleCollection*& samples, int index = -1, bool createSceneGraphSample = false)
+		SceneGraphSample* getSceneGraphSample(int index = -1, bool createSceneGraphSample = false, bool deleteSceneGraphSample = false)
 		{
 			if(index == -1)
 				index = _index;
-			samples = &_animationSet->get(_animationId).getSamples();
-			for(SceneGraphSampleIterator i = samples->begin();; ++i)
+			SceneGraphSampleCollection& samples = _animationSet->get(_animationId).getSamples();
+			for(SceneGraphSampleIterator i = samples.begin();; ++i)
 			{
-				if(createSceneGraphSample && (i == samples->end() || (**i).getIndex() > index))
+				if(createSceneGraphSample && (i == samples.end() || (**i).getIndex() > index))
 				{
-					return samples->insert(i, new SceneGraphSample(index));
+					return *samples.insert(i, new SceneGraphSample(index));
 				}
-				else if(i == samples->end() || (**i).getIndex() == index)
+				else if(i == samples.end())
 				{
-					return i;
+					return 0;
+				}
+				else if((**i).getIndex() == index)
+				{
+					if(!deleteSceneGraphSample)
+						return *i;
+					delete *i;
+					i = samples.erase(i);
+					return 0;
 				}
 			}
 		}
 
-		SceneNodeSampleIterator getSceneNodeSampleIterator(SceneNodeSampleCollection*& samples, int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneGraphSample = false)
-		{
-			if(sceneNodeId == Hash::INVALID)
-				sceneNodeId = _sceneNodeId;
-			if(index == -1)
-				index = _index;
-			SceneGraphSampleCollection* sceneGraphSamples = 0;
-			SceneGraphSampleIterator i = getSceneGraphSampleIterator(sceneGraphSamples, index, createSceneGraphSample);
-			samples = &(**i).getSamples();
-			SceneNodeSampleIterator j = samples->find(sceneNodeId);
-			return j;
-		}
-
-		SceneNodeSample& addSample(SceneNodeSampleCollection& samples, SceneNodeSampleIterator iterator)
+		SceneNodeSample* addSample(SceneNodeSampleCollection& samples, SceneNodeSampleIterator iterator)
 		{
 			const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
 			const SceneNode& node = *root.get(_sceneNodeId);
@@ -97,16 +92,39 @@ namespace Temporal
 			sample->setRotation(node.getRotation());
 			samples[sample->getId()] = sample;
 			_animationSet->get(_animationId).init();
-			return *sample;
+			return sample;
 		}
 
-		SceneNodeSample& getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID)
+		SceneNodeSample* getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneNodeSample = false, bool deleteSceneNodeSample = false)
 		{
-			SceneNodeSampleCollection* samples = 0;
-			SceneNodeSampleIterator i = getSceneNodeSampleIterator(samples, index, sceneNodeId, true);
-			if(i == samples->end())
-				return addSample(*samples, i);
-			return *i->second;
+			if(sceneNodeId == Hash::INVALID)
+				sceneNodeId = _sceneNodeId;
+			SceneGraphSample* sceneGraphSample = getSceneGraphSample(index, createSceneNodeSample);
+			if(!sceneGraphSample)
+				return 0;
+			SceneNodeSampleCollection& samples = sceneGraphSample->getSamples();
+			SceneNodeSampleIterator i = samples.find(sceneNodeId);
+			if(i == samples.end())
+			{
+				if(!createSceneNodeSample)
+					return 0;
+				return addSample(samples, i);
+			}
+			else
+			{
+				if(!deleteSceneNodeSample)
+					return i->second;
+				delete i->second;
+				i = samples.erase(i);
+				if(sceneGraphSample->getSamples().size() == 0)
+					getSceneGraphSample(index, false, true);
+				return 0;
+			}
+		}
+
+		SceneNodeSample& getCreateSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID)
+		{
+			return *getSceneNodeSample(index, sceneNodeId, true);
 		}
 
 		void addUndo()
@@ -122,37 +140,26 @@ namespace Temporal
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
 				SceneNodeSampleCollection* sceneNodeSamples = 0;
-				SceneNodeSampleIterator j = getSceneNodeSampleIterator(sceneNodeSamples, _copyIndex, *i);
-				if(!sceneNodeSamples)
+				SceneNodeSample* copy = getSceneNodeSample(_copyIndex, *i);
+				if(!copy)
 					continue;
-				SceneNodeSample& copy = *j->second;
-				SceneNodeSample& paste = getSceneNodeSample(_index, *i);
-				paste.setTranslation(copy.getTranslation());
-				paste.setRotation(copy.getRotation());
+				SceneNodeSample& paste = getCreateSceneNodeSample(_index, *i);
+				paste.setTranslation(copy->getTranslation());
+				paste.setRotation(copy->getRotation());
 			}
 		}
 
 		void deleteSample()
 		{
-			SceneNodeSampleCollection* sceneNodeSamples = 0;
-			SceneNodeSampleIterator i = getSceneNodeSampleIterator(sceneNodeSamples);
-			if(!sceneNodeSamples || i == sceneNodeSamples->end() || i->second->getParent().getIndex() == 0)
+			if(_index == 0)
 				return;
 			addUndo();
-			SceneNodeSample* sample = i->second;
-			i = sceneNodeSamples->erase(i);
-			delete sample;
-			if(sceneNodeSamples->size() == 0)
-			{
-				SceneGraphSampleCollection* sceneGraphSamples = 0;
-				SceneGraphSampleIterator j = getSceneGraphSampleIterator(sceneGraphSamples);
-				j = sceneGraphSamples->erase(j);
-			}
+			getSceneNodeSample(_index, _sceneNodeId, false, true);
 		}
 
 		void handleArrows(const Vector& vector)
 		{
-			SceneNodeSample& sample = getSceneNodeSample();
+			SceneNodeSample& sample = getCreateSceneNodeSample();
 			if(_translation)
 			{
 				sample.setTranslation(sample.getTranslation() + vector);
@@ -280,7 +287,7 @@ namespace Temporal
 		void skeletonLeftMouseDown(const MouseParams& params)
 		{
 			addUndo();
-			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
+			_offset = params.getPosition() - getCreateSceneNodeSample().getTranslation();
 			_translation = true;
 			_rotation = false;
 		}
@@ -288,7 +295,7 @@ namespace Temporal
 		void skeletonRightMouseDown(const MouseParams& params)
 		{
 			addUndo();
-			_offset = params.getPosition() - getSceneNodeSample().getTranslation();
+			_offset = params.getPosition() - getCreateSceneNodeSample().getTranslation();
 			_translation = false;
 			_rotation = true;
 		}
@@ -297,14 +304,14 @@ namespace Temporal
 		{
 			if(_translation)
 			{
-				getSceneNodeSample().setTranslation(params.getPosition() - _offset);
+				getCreateSceneNodeSample().setTranslation(params.getPosition() - _offset);
 				_animationSet->getAnimations().at(_animationId)->init();
 			}
 			else if(_rotation)
 			{
 				const Vector vector = params.getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
-				getSceneNodeSample().setRotation(rotation);
+				getCreateSceneNodeSample().setRotation(rotation);
 				_animationSet->getAnimations().at(_animationId)->init();
 			}
 		}
@@ -364,7 +371,6 @@ namespace Temporal
 			SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 			bindSceneNodes(sceneNode);
 			_sceneNodeId = *_sceneNodes.begin();
-			setAnimation();
 
 			Panel* panel = addPanel(Hash("skeletonPanel"), AABB(455, 384, 512, 228));
 			panel->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
@@ -393,6 +399,7 @@ namespace Temporal
 				}
 				y -= CELL_SIZE;
 			}
+			setAnimation();
 		}
 
 		void handleMessage(Message& message)

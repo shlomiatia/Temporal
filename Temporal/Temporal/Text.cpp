@@ -78,7 +78,7 @@ namespace Temporal
 			{
 				const Vector& position = getPosition(*this);
 				_shape.setCenter(position);
-				Graphics::get().draw(_shape);
+				Graphics::get().draw(_shape, Color::White, _fill);
 			}
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
