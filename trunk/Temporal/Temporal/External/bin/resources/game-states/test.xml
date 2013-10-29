@@ -5,7 +5,7 @@
 	</grid>
 	<entities-manager>
 		<entity id="ENT_SKELETON">
-			<transform orientation="0">
+			<transform orientation="1">
 				<position x="455" y="384" />
 			</transform>
 			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />

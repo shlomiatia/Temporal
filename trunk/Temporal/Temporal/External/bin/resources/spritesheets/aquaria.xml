@@ -1,17 +1,17 @@
 <sprite-sheet texture="resources/textures/aquaria.png">
-    <sprite-group id="SCN_HEAD">
+	<sprite-group id="SCN_HEAD">
 		<sprite>
 			<bounds>
-				<center x="31.5" y="30.5" />
+				<center x="223.5" y="30.5" />
 				<radius x="23" y="29" />
 			</bounds>
-			<offset x="4" y="-16" />
+			<offset x="-7" y="-17" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_BODY">
 		<sprite>
 			<bounds>
-				<center x="15.5" y="128" />
+				<center x="239.5" y="128" />
 				<radius x="16" y="37.5" />
 			</bounds>
 			<offset x="0" y="0" />
@@ -20,55 +20,55 @@
 	<sprite-group id="SCN_ARM1">
 		<sprite>
 			<bounds>
-				<center x="81.5" y="80.5" />
+				<center x="173.5" y="80.5" />
 				<radius x="16" y="16" />
 			</bounds>
-			<offset x="-7" y="6" />
+			<offset x="11" y="7" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_ARM2">
 		<sprite>
 			<bounds>
-				<center x="178.5" y="15.5" />
+				<center x="68.5" y="32.5" />
 				<radius x="16" y="16" />
 			</bounds>
-			<offset x="-6" y="8" />
+			<offset x="-7" y="8" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_ARM3">
 		<sprite>
 			<bounds>
-				<center x="48" y="145.5" />
-				<radius x="15.5" y="11" />
+				<center x="209.5" y="149" />
+				<radius x="11" y="15.5" />
 			</bounds>
-			<offset x="-10" y="1" />
+			<offset x="-4" y="9" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_LEG1">
 		<sprite>
 			<bounds>
-				<center x="48.5" y="96" />
+				<center x="206.5" y="96" />
 				<radius x="14" y="24.5" />
 			</bounds>
-			<offset x="4" y="12" />
+			<offset x="-1" y="16" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_LEG2">
 		<sprite>
 			<bounds>
-				<center x="145.5" y="31.5" />
+				<center x="109.5" y="31.5" />
 				<radius x="10" y="23" />
 			</bounds>
-			<offset x="-1" y="10" />
+			<offset x="2" y="14" />
 		</sprite>
 	</sprite-group>
 	<sprite-group id="SCN_LEG3">
 		<sprite>
 			<bounds>
-				<center x="96.5" y="31.5" />
+				<center x="158.5" y="31.5" />
 				<radius x="19" y="12" />
 			</bounds>
-			<offset x="9" y="3" />
+			<offset x="-9" y="3" />
 		</sprite>
 	</sprite-group>
 </sprite-sheet>
