@@ -427,7 +427,6 @@ namespace Temporal
 				}
 				y -= CELL_SIZE;
 			}
-			setAnimation();
 		}
 
 		void handleMessage(Message& message)
@@ -435,6 +434,10 @@ namespace Temporal
 			if(message.getID() == MessageID::ENTITY_INIT)
 			{
 				init();
+			}
+			else if(message.getID() == MessageID::ENTITY_POST_INIT)
+			{
+				setAnimation();
 			}
 			else if(message.getID() == MessageID::KEY_UP)
 			{
