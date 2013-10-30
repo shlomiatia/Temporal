@@ -52,7 +52,7 @@
     <ClInclude Include="Temp2.h" />
     <ClInclude Include="Temp3.h" />
     <ClInclude Include="TemporalPeriod.h" />
-    <ClInclude Include="Text.h" />
+    <ClInclude Include="Control.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="DrawPosition.h" />
     <ClInclude Include="EntitySystem.h" />
@@ -116,7 +116,7 @@
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
-    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Control.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="tinyxml2.cpp" />

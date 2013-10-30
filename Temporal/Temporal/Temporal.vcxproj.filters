@@ -170,9 +170,6 @@
     <ClInclude Include="Button.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -208,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Delegate.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Control.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,9 +362,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>Input</Filter>
     </ClCompile>
@@ -391,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Control.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

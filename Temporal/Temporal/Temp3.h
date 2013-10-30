@@ -8,7 +8,7 @@
 #include "SceneNode.h"
 #include "Serialization.h"
 #include "SerializationAccess.h"
-#include "Text.h"
+#include "Control.h"
 #include "Transform.h"
 #include "Utils.h"
 #include "Graphics.h"
@@ -33,7 +33,7 @@ namespace Temporal
 		void setAnimation(int index = 0)
 		{
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animationId));
-			_index = index;
+			setIndex(index);
 			setSample();
 			initSns();
 		}
@@ -45,24 +45,26 @@ namespace Temporal
 
 		void initSns()
 		{
-			for(int j = 0;  j < GRID_FRAMES; ++j)
+			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				SceneGraphSample* sgs = getSceneGraphSample(j);
+				SceneGraphSample* sgs = getSceneGraphSample(i);
 				bool isEmptySgs = sgs && sgs->getSamples().size() == 0;
-				for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+				for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 				{
-					Hash id = getSnsId(*i, j); 
-					Control& panel = *static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
-					if(isEmptySgs)
+					Hash id = getSnsId(i, *j);
+					Control& control = *static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
+					if(_index == i && _sceneNodeId == *j)
 					{
-						panel.setFill(true);
-						panel.setColor(Color::Red);
+						control.setBackgroundColor(Color::Yellow);
+					}
+					else if(isEmptySgs)
+					{
+						control.setBackgroundColor(Color::Red);
 					}
 					else
 					{
-						SceneNodeSample* sns = getSceneNodeSample(j, *i);
-						panel.setFill(sns != 0);
-						panel.setColor(Color::White);
+						SceneNodeSample* sns = getSceneNodeSample(i, *j);
+						control.setBackgroundColor(sns != 0 ? Color::White : Color::Transparent);
 					}
 				}
 			}
@@ -199,6 +201,18 @@ namespace Temporal
 			}
 		}
 
+		void setSceneNodeId(Hash sceneNodeId)
+		{
+			_sceneNodeId = sceneNodeId;
+			initSns();
+		}
+
+		void setIndex(int index)
+		{
+			_index = index;
+			initSns();
+		}
+
 		void handleKey(Key::Enum key)
 		{
 			if(key == Key::PAGE_UP)
@@ -269,31 +283,31 @@ namespace Temporal
 			{
 				getSceneGraphSample(_index, true);
 			}
-			else if(key == Key::W)
+			else if(key == Key::S)
 			{
 				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
 				++i;
 				if(i != _sceneNodes.end())
-					_sceneNodeId = *i;
+					setSceneNodeId(*i);
 			}
-			else if(key == Key::S)
+			else if(key == Key::W)
 			{
 				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
 				if(i != _sceneNodes.begin())
 				{
 					--i;
-					_sceneNodeId = *i;
+					setSceneNodeId(*i);
 				}
 			}
 			else if(key == Key::D)
 			{
-				++_index;
+				setIndex(_index + 1);
 				setSample();
 			}
 			else if(key == Key::A)
 			{
 				if(_index > 0)
-					--_index;
+					setIndex(_index - 1);
 				setSample();
 			}
 			else if(key == Key::F2)
@@ -344,27 +358,22 @@ namespace Temporal
 			}
 		}
 
-		Control* addControl(Hash id, const AABB& shape)
-		{
+		Control* addControl(Hash id, const AABB& shape, const char* text = 0)
+		{		
 			Transform* transform = new Transform(shape.getCenter());
-			Control* control = new Control(shape.getRadius());
+			Control* control = new Control();
+			if(text)
+			{
+				id = Hash(text);
+				control->setText(text);
+			}
+			control->setWidth(shape.getWidth());
+			control->setHeight(shape.getHeight());
 			Entity* entity = new Entity(id);
 			entity->add(transform);
 			entity->add(control);
 			getEntity().getManager().add(entity);
 			return control;
-		}
-
-		void addLabel(const char* label, const Vector& position, float width)
-		{
-			Transform* transform = new Transform(position);
-			Text* text = new Text("c:/windows/fonts/Arial.ttf", 12, label);
-			text->setWidth(width);
-			Entity* entity = new Entity(Hash(label));
-			entity->add(transform);
-			entity->add(text);
-			entity->handleMessage(Message(MessageID::ENTITY_INIT));
-			getEntity().getManager().add(entity);
 		}
 
 		void bindSceneNodes(SceneNode& sceneNode)
@@ -381,14 +390,14 @@ namespace Temporal
 			Control* panel = static_cast<Control*>(params.getSender());
 			Hash id = panel->getEntity().getId();
 			std::vector<std::string> parts = Utils::split(id.getString(), '.');
-			_sceneNodeId = Hash(parts[0].c_str());
-			_index = Utils::parseInt(parts[1].c_str());
+			setIndex(Utils::parseInt(parts[0].c_str()));
+			setSceneNodeId(Hash(parts[1].c_str()));
 			setSample();
 		}
 
-		Hash getSnsId(Hash snId, int index)
+		Hash getSnsId(int index, Hash snId)
 		{
-			std::string sid = Utils::format("%s.%d", snId.getString(), index);
+			std::string sid = Utils::format("%d.%s", index, snId.getString());
 			return Hash(sid.c_str());
 		}
 
@@ -405,33 +414,34 @@ namespace Temporal
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			float y = GRID_START_Y;
+			float y = GRID_START_Y - CELL_SIZE;
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
+				addControl(Hash::INVALID, AABBLT(0.0f, y, GRID_START_X, CELL_SIZE), i->getString());
 				y -= CELL_SIZE;
-				addLabel(i->getString(), Vector(0.0f, y), GRID_START_X);
 			}
 			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				addLabel(Utils::toString(i+1).c_str(), Vector(GRID_START_X + i * CELL_SIZE, GRID_START_Y), CELL_SIZE);
+				addControl(Hash::INVALID, AABBLT(GRID_START_X + i * CELL_SIZE, GRID_START_Y, CELL_SIZE, CELL_SIZE), Utils::toString(i+1).c_str());
 			}
 
-			y = GRID_START_Y;
-			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				for(int j = 0;  j < GRID_FRAMES; ++j)
+				y = GRID_START_Y - CELL_SIZE;
+				for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 				{
-					Hash id = getSnsId(*i, j); 
-					Control* panel = addControl(id, AABBLT(GRID_START_X + j * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
-					panel->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
+					Hash id = getSnsId(i, *j); 
+					Control* control = addControl(id, AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					control->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
+					y -= CELL_SIZE;
 				}
-				y -= CELL_SIZE;
+				
 			}
 		}
 
 		void handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::ENTITY_INIT)
+			if(message.getID() == MessageID::ENTITY_PRE_INIT)
 			{
 				init();
 			}

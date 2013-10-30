@@ -20,4 +20,5 @@ namespace Temporal
 	const Color Color::Yellow(1.0f, 1.0f, 0.0f);
 	const Color Color::Magenta(1.0f, 0.0f, 1.0f);
 	const Color Color::Cyan(0.0f, 1.0f, 1.0f);
+	const Color Color::Transparent(0.0f, 0.0f, 0.0f, 0.0f);
 }
