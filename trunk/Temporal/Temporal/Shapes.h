@@ -165,7 +165,9 @@ namespace Temporal
 		float getTop() const;
 		float getBottom() const;
 
+		void setWidth(float width) { _slopedRadius.setX(width / 2.0f); }
 		float getWidth() const { return getSlopedRadiusVx() * 2.0f; }
+		void setHeight(float height) { setYRadius(height / 2.0f); }
 		float getHeight() const { return (abs(getSlopedRadiusVy()) + getYRadius()) * 2.0f; }
 
 		Vector getTopLeft() const { return getCenter() - getSlopedRadius() + getYVector(); }

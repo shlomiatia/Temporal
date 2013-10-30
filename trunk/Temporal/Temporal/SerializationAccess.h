@@ -33,7 +33,6 @@ namespace Temporal
 	class Renderer;
 	class Light;
 	class ParticleEmitter;
-	class Text;
 	class CollisionFilter;
 	class Sight;
 	class Sensor;
@@ -295,14 +294,6 @@ namespace Temporal
 			serializer.serialize("velocity", particleEmitter._velocity);
 			serializer.serializeRadians("center", particleEmitter._directionCenter);
 			serializer.serializeRadians("size", particleEmitter._directionSize);
-		}
-		
-		template<class T>
-		static void serialize(const char* key, Text& text, T& serializer)
-		{
-			serializer.serialize("font-family", text._fontFamily);
-			serializer.serialize("font-size", text._fontSize);
-			serializer.serialize("text", text._text);
 		}
 		
 		template<class T>

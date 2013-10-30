@@ -19,7 +19,6 @@
 #include "Shapes.h"
 #include "Button.h"
 #include "Door.h"
-#include "Text.h"
 #include "SaverLoader.h"
 #include "Transform.h"
 #include "DrawPosition.h"
@@ -47,8 +46,6 @@ namespace Temporal
 			serialize(key, (Light*&)component, serializer);
 		else if(strcmp(key, "particle-emitter") == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
-		else if(strcmp(key, "text") == 0)
-			serialize(key, (Text*&)component, serializer);
 		else if(strcmp(key, "input-controller") == 0)
 			serialize(key, (InputController*&)component, serializer);
 		else if(strcmp(key, "moving-platform") == 0)
