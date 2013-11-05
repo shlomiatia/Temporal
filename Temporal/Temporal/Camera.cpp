@@ -9,12 +9,12 @@ namespace Temporal
 
 	void Camera::draw()
 	{
-		void* result = getLayersManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		const Vector& cameraSize = Graphics::get().getLogicalView();
 		float cameraWidth = cameraSize.getX();
 		float cameraHeight = cameraSize.getY();
-		const Vector& levelSize = getLayersManager().getGameState().getGrid().getWorldSize();
+		const Vector& levelSize = getManager().getGameState().getGrid().getWorldSize();
 		float levelWidth = levelSize.getX();
 		float levelHeight = levelSize.getY();
 		float cameraLeftPosition = playerPosition.getX() -  cameraWidth/ 2.0f;

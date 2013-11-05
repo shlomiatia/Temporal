@@ -209,7 +209,7 @@ namespace Temporal
 		glPopMatrix();
 	}
 
-	LightLayer::LightLayer(const Color& ambientColor) : AMBIENT_COLOR(ambientColor)
+	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor)
 	{
 		_texture = Texture::load(Graphics::get().getLogicalView());
 	}
@@ -217,7 +217,7 @@ namespace Temporal
 	void LightLayer::draw()
 	{
 		preDraw();
-		getLayersManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
+		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
 		postDraw();
 	}
 
@@ -234,7 +234,7 @@ namespace Temporal
 
 	void LightLayer::postDraw()
 	{
-		void* result = getLayersManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		float matrix[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
@@ -243,7 +243,7 @@ namespace Temporal
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
-		getLayersManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
+		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 
 		glPushMatrix();
 		{

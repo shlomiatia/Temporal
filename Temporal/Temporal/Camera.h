@@ -9,7 +9,7 @@ namespace Temporal
 	class Camera : public Layer
 	{
 	public:
-		Camera() {}
+		Camera(LayersManager* manager) : Layer(manager) {}
 		void draw();
 		
 	private:

@@ -26,6 +26,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			getEntity().getManager().getGameState().getLayersManager().addSprite(_layer, this);
 			if(!_spriteSheetFile.empty())
 				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile.c_str());
 			else
@@ -45,9 +46,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
-			if(_layer == layer)
-				draw();			
+			draw();
 		}
 		else if(message.getID() == MessageID::GET_ROOT_SCENE_NODE)
 		{

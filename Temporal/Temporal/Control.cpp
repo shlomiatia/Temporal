@@ -63,17 +63,15 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			
+			getEntity().getManager().getGameState().getLayersManager().addGUI(this);
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_layout.SetFont(_font.get());
 			_layout.SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
-			if(layer == LayerType::GUI)
-			{
-				draw();
-			}
+			draw();
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
