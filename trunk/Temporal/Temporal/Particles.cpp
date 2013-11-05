@@ -42,16 +42,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			LayerType::Enum layer = *static_cast<LayerType::Enum*>(message.getParam());
-			if(layer == LayerType::PARTICLES)
-			{
-				draw();
-			}
+			draw();
 		}
 	}
 
 	void ParticleEmitter::init()
 	{
+		getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::PARTICLES, this);
 		int length = getLength();
 		_particles = new Particle[length];
 		_vertices = new float[length*8];

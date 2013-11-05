@@ -5,6 +5,7 @@
 #include "Vector.h"
 #include "Color.h"
 #include <vector>
+#include <unordered_map>
 
 namespace Temporal
 {
@@ -12,17 +13,14 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			BACKGROUND = 0,
-			STATIC = 1,
-			PC = 2,
-			COVER = 3,
-			NPC = 4,
-			PARTICLES = 5,
-			GUI = 6
+			BACKGROUND,
+			STATIC,
+			PC,
+			COVER,
+			NPC,
+			PARTICLES,
+			SIZE
 		};
-
-		static const int FARTHEST = BACKGROUND;
-		static const int NEAREST = PARTICLES;
 	}
 
 	class LayersManager;
@@ -30,20 +28,56 @@ namespace Temporal
 	class Layer
 	{
 	public:
-		Layer() : _manager(0) {}
+		Layer(LayersManager* manager) : _manager(manager) {}
 		virtual ~Layer() {};
 		virtual void draw() = 0;
 
-		void init(LayersManager* manager) { _manager = manager; }
-
 	protected:
-		LayersManager& getLayersManager() { return *_manager; }
+		LayersManager& getManager() { return *_manager; }
 
 	private:
 		LayersManager* _manager;
 
 		Layer(const Layer&);
 		Layer& operator=(const Layer&);
+	};
+
+	class Component;
+	typedef std::unordered_map<LayerType::Enum, std::vector<Component*>> LayerComponentsMap;
+	typedef LayerComponentsMap::const_iterator LayerComponentsIterator;
+
+	class SpriteLayer : public Layer
+	{
+	public:
+		SpriteLayer(LayersManager* manager);
+
+		void draw();
+		void add(LayerType::Enum layer, Component* component) { _layers.at(layer).push_back(component); }
+
+	private:
+		LayerComponentsMap _layers;
+	};
+
+	class GUILayer : public Layer
+	{
+	public:
+		GUILayer(LayersManager* manager) : Layer(manager) {}
+
+		void draw();
+		void add(Component* component) { _components.push_back(component); }
+
+	private:
+		std::vector<Component*> _components;
+	};
+
+	class DebugLayer : public Layer
+	{
+	public:
+		DebugLayer(LayersManager* manager) : Layer(manager) {}
+
+		void draw();
+	private:
+		void drawFPS();
 	};
 
 	typedef std::vector<Layer*> LayerCollection;
@@ -56,38 +90,22 @@ namespace Temporal
 		~LayersManager();
 
 		void init(GameState* gameState);
-
+		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
+		void addGUI(Component* component) { _guiLayer->add(component); }
 		void draw();
+
 	private:
 		Color _ambientColor;
 
 		bool _camera;
 		LayerCollection _layers;
+		SpriteLayer* _spriteLayer;
+		GUILayer* _guiLayer;
 
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);
 
 		friend class SerializationAccess;
-	};
-
-	class SpriteLayer : public Layer
-	{
-	public:
-		void draw();
-	};
-
-	class GUILayer : public Layer
-	{
-	public:
-		void draw();
-	};
-
-	class DebugLayer : public Layer
-	{
-	public:
-		void draw();
-	private:
-		void drawFPS();
 	};
 }
 #endif

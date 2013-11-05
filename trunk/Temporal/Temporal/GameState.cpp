@@ -20,18 +20,18 @@ namespace Temporal
 
 	GameState::~GameState()
 	{
-		delete _grid;
 		delete _entitiesManager;
 		delete _navigationGraph;
 		delete _layersManager;
+		delete _grid;
 	}
 
 	void GameState::init()
 	{
 		_grid->init(this);
-		_entitiesManager->init(this);
-		_navigationGraph->init(this);
 		_layersManager->init(this);
+		_navigationGraph->init(this);
+		_entitiesManager->init(this);
 	}
 
 	void GameState::update(float framePeriod)
