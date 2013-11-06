@@ -44,6 +44,13 @@ namespace Temporal
 		}
 	}
 
+	void AnimationSet::remove(Hash id)
+	{
+		AnimationIterator i = _animations.find(id);
+		delete i->second;
+		_animations.erase(i);
+	}
+
 	SceneGraphSample* SceneGraphSample::clone() const
 	{
 		SceneGraphSample* clone = new SceneGraphSample(_index);
@@ -67,9 +74,9 @@ namespace Temporal
 	AnimationSet* AnimationSet::clone() const
 	{
 		AnimationSet* clone = new AnimationSet();
-		for(AnimationIterator i = getAnimations().begin(); i != getAnimations().end(); ++i)
+		for(AnimationIterator i = _animations.begin(); i != _animations.end(); ++i)
 		{
-			clone->getAnimations()[i->first] = i->second->clone();
+			clone->_animations[i->first] = i->second->clone();
 		}
 		return clone;
 	}
@@ -88,7 +95,7 @@ namespace Temporal
 
 	AnimationSet::~AnimationSet()
 	{
-		for(AnimationIterator i = getAnimations().begin(); i != getAnimations().end(); ++i)
+		for(AnimationIterator i = _animations.begin(); i != _animations.end(); ++i)
 			delete i->second;
 	}
 }
