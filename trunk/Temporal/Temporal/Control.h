@@ -17,7 +17,7 @@ namespace Temporal
 	public:
 		explicit Control() : _box(YABP::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(12),
 			_backgroundColor(Color::Transparent), _foregroundColor(Color::White), _borderColor(Color::White), _hoverColor(Color::Transparent),
-			_isTextBox(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false),
+			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false),
 			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0) {}
 		~Control();
 
@@ -65,6 +65,7 @@ namespace Temporal
 		Color _hoverColor;
 
 		bool _isTextBox;
+		bool _isTextBoxMode;
 		std::string _label;
 		std::string _textbox;
 
@@ -83,8 +84,8 @@ namespace Temporal
 
 		void draw();
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
-		const std::string& getString() const { return _isTextBox ? _textbox : _label; }
-		std::string& getString() { return _isTextBox ? _textbox : _label; }
+		const std::string& getString() const { return _isTextBoxMode ? _textbox : _label; }
+		std::string& getString() { return _isTextBoxMode ? _textbox : _label; }
 
 		friend class SerializationAccess;
 	};

@@ -26,7 +26,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), _undo(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), _undo(0), GRID_FRAMES(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -403,35 +403,51 @@ namespace Temporal
 
 		void init()
 		{
+			const float CELL_SIZE = 16.0f;
+			const float PADDING = 16.0f;
+			const Vector PADDING_VECTOR(PADDING, PADDING);
+			const Vector WINDOW_SIZE(Graphics::get().getLogicalView());
+			const Vector BUTTON_SIZE(WINDOW_SIZE.getX() / 4.0f - PADDING * 2.0f, 32.0f);
+			const Vector PADDED_BUTTON_SIZE(BUTTON_SIZE + PADDING_VECTOR  * 2.0f);
+			const Vector PADDED_PANEL_SIZE(WINDOW_SIZE / 2.0f);
+			const Vector PANEL_SIZE(PADDED_PANEL_SIZE.getX(), PADDED_PANEL_SIZE.getY() - PADDING);
+			const float GRID_START_Y = PADDED_PANEL_SIZE.getY() - CELL_SIZE;
+			GRID_FRAMES = (WINDOW_SIZE.getX() - PADDED_BUTTON_SIZE.getX()) / CELL_SIZE;
+			
 			_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
 			_animationId = _animationSet->getAnimations().begin()->first;
 			SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 			bindSceneNodes(sceneNode);
 			_sceneNodeId = *_sceneNodes.begin();
 
-			Control* control = addControl(Hash("skeletonPanel"), AABB(455, 384, 512, 228));
+			Control* control = addControl(Hash("skeletonPanel"), AABBLT(PADDED_BUTTON_SIZE.getX(), WINDOW_SIZE.getY() - PADDING, PANEL_SIZE.getX(), PANEL_SIZE.getY()));
 			control->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			float y = GRID_START_Y - CELL_SIZE;
+			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation");
+			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
+
+			float y = PADDED_PANEL_SIZE.getY();
+			addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE));
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
-				addControl(Hash::INVALID, AABBLT(0.0f, y, GRID_START_X, CELL_SIZE), i->getString());
 				y -= CELL_SIZE;
+				addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE), i->getString());
 			}
+			
 			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				addControl(Hash::INVALID, AABBLT(GRID_START_X + i * CELL_SIZE, GRID_START_Y, CELL_SIZE, CELL_SIZE), Utils::toString(i+1).c_str());
+				addControl(Hash::INVALID, AABBLT(PADDED_BUTTON_SIZE.getX() + i * CELL_SIZE, PADDED_PANEL_SIZE.getY(), CELL_SIZE, CELL_SIZE), Utils::toString(i+1).c_str());
 			}
 
 			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				y = GRID_START_Y - CELL_SIZE;
+				float y = GRID_START_Y;
 				for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 				{
 					Hash id = getSnsId(i, *j); 
-					Control* control = addControl(id, AABBLT(GRID_START_X + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
+					Control* control = addControl(id, AABBLT(PADDED_BUTTON_SIZE.getX() + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
 					control->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
 					y -= CELL_SIZE;
 				}
@@ -467,10 +483,8 @@ namespace Temporal
 		Component* clone() const { return 0; }
 	private:
 		static const float FRAME_TIME;
-		static const float CELL_SIZE;
-		static const float GRID_START_X;
-		static const float GRID_START_Y;
-		static const int GRID_FRAMES;
+
+		int GRID_FRAMES;
 
 		std::shared_ptr<AnimationSet> _animationSet;
 		Hash _animationId;
@@ -486,10 +500,9 @@ namespace Temporal
 	};
 
 	const float AnimationEditor::FRAME_TIME = 0.067f;
-	const float AnimationEditor::CELL_SIZE = 16.0f;
-	const float AnimationEditor::GRID_START_X = 128.0f;
+	/*const float AnimationEditor::GRID_START_X = 128.0f;
 	const float AnimationEditor::GRID_START_Y = 256.0f;
-	const int AnimationEditor::GRID_FRAMES = 48;
+	const int AnimationEditor::GRID_FRAMES = 48;*/
 
 	class MyGameStateListener : public GameStateListener
 	{
