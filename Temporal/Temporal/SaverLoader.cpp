@@ -41,7 +41,11 @@ namespace Temporal
 
 	void GameSaverLoader::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::KEY_DOWN)
+		if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			Keyboard::get().add(this);
+		}
+		else if(message.getID() == MessageID::KEY_DOWN)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if(!_loader.isStarted() && !_saver.isStarted())

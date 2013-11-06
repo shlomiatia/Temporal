@@ -30,6 +30,8 @@ namespace Temporal
 		};
 	}
 
+	class Message;
+	class Component;
 	typedef std::unordered_map<int, Key::Enum> KeyCollection;
 	typedef KeyCollection::const_iterator KeyCollectionIterator;
 
@@ -43,9 +45,17 @@ namespace Temporal
 		}
 
 		void dispatchEvent(void* obj);
+
+		void add(Component* component) { _components.push_back(component); }
+		void setFocus(Component* component) { _focus = component; }
+		void clearFocus() { _focus = 0; }
 	private:
 		// TODO:
 		KeyCollection _keysMap;
+		std::vector<Component*> _components;
+		Component* _focus;
+
+		void raiseEvent(Message& message) const;
 
 		Keyboard();
 		~Keyboard() {};

@@ -20,6 +20,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			Keyboard::get().add(this);
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)

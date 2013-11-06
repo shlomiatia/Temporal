@@ -87,35 +87,39 @@ namespace Temporal
 		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{
 			const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-			const MouseParams& params = getMouseParams(message.getParam());
-			const MouseParams params1(params.getButton(), params.getPosition(), this);
+			MouseParams& params = getMouseParams(message.getParam());
+			params.setSender(this);
 			if(intersects(shape, params.getPosition()))
 			{
+				//params.setHandled(true);
 				if(params.getButton() == MouseButton::LEFT)
-					mouseDown(_leftMouseDownEvent, params1, _isLeftDown, _isLeftClick);
-				if(params.getButton() == MouseButton::RIGHT)
-					mouseDown(_rightMouseDownEvent, params1, _isRightDown, _isRightClick);
+					mouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
+				else if(params.getButton() == MouseButton::RIGHT)
+					mouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
+				/*else
+					params.setHandled(false);*/
 			}
 		}
 		else if(message.getID() == MessageID::MOUSE_UP)
 		{
-			const MouseParams& params = getMouseParams(message.getParam());
-			const MouseParams params1(params.getButton(), params.getPosition(), this);
+			MouseParams& params = getMouseParams(message.getParam());
+			params.setSender(this);
+			//params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
-				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params1, _isLeftDown, _isLeftClick);
+				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
 			else
-				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params1, _isRightDown, _isRightClick);
-			
+				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{
 			_isLeftClick = false;
 			_isRightClick = false;
-			const MouseParams& params = getMouseParams(message.getParam());
-			const MouseParams params1(params.getButton(), params.getPosition(), this);
+			MouseParams& params = getMouseParams(message.getParam());
+			params.setSender(this);
 			if(_isLeftDown || _isRightDown)
 			{
-				raiseEvent(_mouseMoveEvent, params1);
+//				params.setHandled(true);
+				raiseEvent(_mouseMoveEvent, params);
 			}
 		}
 	}
