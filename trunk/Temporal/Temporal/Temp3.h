@@ -15,10 +15,9 @@
 #include "Shapes.h"
 #include "Layer.h"
 #include "MessageUtils.h"
+#include "Delegate.h"
 #include <algorithm>
 #include <sstream>
-
-#include "Delegate.h"
 
 // Animation editor
 namespace Temporal
@@ -236,7 +235,6 @@ namespace Temporal
 		void toggleAnimation()
 		{
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
-			//setSample();
 		}
 
 		void undo()
@@ -585,6 +583,11 @@ namespace Temporal
 				entity->add(new AnimationEditor());
 				gameState.getEntitiesManager().add(entity);
 			}
+		}
+
+		void onDraw()
+		{
+			Graphics::get().draw(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f), Color(0.8f,0.8f,0.8f));
 		}
 	};
 }

@@ -49,7 +49,7 @@ namespace Temporal
 	class MyGameStateListener : public GameStateListener
 	{
 	public:
-		void onUpdate(float framePeriod, GameState& gameState)
+		void onUpdate(float framePeriod)
 		{
 			/*if(Keyboard::get().isStartPressing(Key::Q))
 			{
