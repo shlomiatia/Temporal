@@ -402,6 +402,17 @@ namespace Temporal
 			return Hash(sid.c_str());
 		}
 
+		void newAnimation(const char* name)
+		{
+			Animation* animation = _animationSet->get(_animationId).clone();
+			_animationId = Hash(name);
+			animation->setId(_animationId);
+			animation->setRepeat(true);
+			animation->init();
+			_animationSet->add(animation);
+			setAnimation();
+		}
+
 		void init()
 		{
 			const float CELL_SIZE = 16.0f;
@@ -427,6 +438,7 @@ namespace Temporal
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
 			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", true);
+			control->setTextChangedEvent(createAction1(AnimationEditor, const char*, newAnimation));
 			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
 
 			float y = PADDED_PANEL_SIZE.getY();
