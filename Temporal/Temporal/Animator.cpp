@@ -87,8 +87,6 @@ namespace Temporal
 		{
 			SceneNodeBinding& binding = **i;
 			const SceneNodeSample* currentSample = binding.getSample();
-			if(!currentSample)
-				continue;
 			while(currentSample->getParent().getIndex() > relativeIndex ||
 				  (currentSample->getNext()->getParent().getIndex() < relativeIndex && 
 				   currentSample->getParent().getIndex() < currentSample->getNext()->getParent().getIndex()))
@@ -116,12 +114,12 @@ namespace Temporal
 	{
 		_animationId = animationId;
 		const Animation& animation = _animationSet->get(_animationId);
-		SceneGraphSampleIterator sgs = animation.getSamples().begin();
+		const SceneGraphSample& sgs = **animation.getSamples().begin();
 		_timer.reset();
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
 			SceneNodeBinding& binding = **i;
-			const SceneNodeSample* sceneNodeSample = sgs == animation.getSamples().end() ? 0 : (**sgs).getSamples().at(binding.getSceneNode().getID());
+			const SceneNodeSample* sceneNodeSample = sgs.getSamples().at(binding.getSceneNode().getID());
 			binding.setSample(sceneNodeSample);
 		}
 		update();

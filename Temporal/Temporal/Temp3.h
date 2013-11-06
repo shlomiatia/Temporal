@@ -213,25 +213,35 @@ namespace Temporal
 			initSns();
 		}
 
+		void nextAnimation()
+		{
+			AnimationIterator i = _animationSet->getAnimations().find(_animationId);
+			++i;
+			if(i != _animationSet->getAnimations().end())
+				_animationId = i->first;
+			setAnimation();
+		}
+
+		void previousAnimation()
+		{
+			AnimationIterator i = _animationSet->getAnimations().find(_animationId);
+			if(i != _animationSet->getAnimations().begin())
+			{
+				--i;
+				_animationId = i->first;
+			}
+			setAnimation();
+		}
+
 		void handleKey(Key::Enum key)
 		{
 			if(key == Key::PAGE_UP)
 			{
-				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
-				++i;
-				if(i != _animationSet->getAnimations().end())
-					_animationId = i->first;
-				setAnimation();
+				nextAnimation();	
 			}
 			else if(key == Key::PAGE_DOWN)
 			{
-				AnimationIterator i = _animationSet->getAnimations().find(_animationId);
-				if(i != _animationSet->getAnimations().begin())
-				{
-					--i;
-					_animationId = i->first;
-				}
-				setAnimation();
+				previousAnimation();	
 			}
 			else if(key == Key::UP)
 			{
@@ -404,6 +414,7 @@ namespace Temporal
 
 		void newAnimation(const char* name)
 		{
+			addUndo();
 			Animation* animation = _animationSet->get(_animationId).clone();
 			_animationId = Hash(name);
 			animation->setId(_animationId);
@@ -411,6 +422,14 @@ namespace Temporal
 			animation->init();
 			_animationSet->add(animation);
 			setAnimation();
+		}
+
+		void deleteAnimation(const MouseParams& params)
+		{
+			addUndo();
+			Hash id = _animationId;
+			previousAnimation();
+			_animationSet->remove(id);
 		}
 
 		void init()
@@ -439,6 +458,8 @@ namespace Temporal
 
 			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", true);
 			control->setTextChangedEvent(createAction1(AnimationEditor, const char*, newAnimation));
+			control = addControl(Hash("deleteAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY(), BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Delete Animation");
+			control->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, deleteAnimation));
 			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
 
 			float y = PADDED_PANEL_SIZE.getY();

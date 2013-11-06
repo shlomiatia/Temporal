@@ -124,6 +124,7 @@ namespace Temporal
 		~AnimationSet();
 
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
+		void remove(Hash id);
 		Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
 		AnimationCollection& getAnimations() { return _animations; }
 		const AnimationCollection& getAnimations() const { return _animations; }
