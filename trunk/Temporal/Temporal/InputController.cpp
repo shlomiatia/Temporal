@@ -10,7 +10,11 @@ namespace Temporal
 
 	void InputController::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::KEY_DOWN)
+		if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			Keyboard::get().add(this);
+		}
+		else if(message.getID() == MessageID::KEY_DOWN)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if(key == Key::D || Input::get().getGamepad().getLeftStick().getX() > 0.0f)

@@ -1,6 +1,7 @@
 #include "Keyboard.h"
 #include "GameState.h"
 #include "EntitySystem.h"
+#include "Game.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -105,25 +106,40 @@ namespace Temporal
 		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
 	}
 
+	void Keyboard::raiseEvent(Message& message) const
+	{
+		if(_focus)
+		{
+			_focus->handleMessage(message);
+		}
+		else
+		{
+			for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+				(**i).handleMessage(message);
+		}
+	}
+
 	void Keyboard::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		
 		if (e.type == SDL_QUIT)
 		{
-			Key::Enum key = Key::ESC;
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_DOWN, &key));
+			Game::get().stop();
 		}
 		else if (e.type == SDL_KEYDOWN)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_DOWN, &key));
+			raiseEvent(Message(MessageID::KEY_DOWN, &key));
 			
 		}
 		else if (e.type == SDL_KEYUP)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::KEY_UP, &key));
+			if(key == Key::ESC)
+				Game::get().stop();
+			else
+				raiseEvent(Message(MessageID::KEY_UP, &key));
 		}
 	}
 }

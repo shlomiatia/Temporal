@@ -445,6 +445,10 @@ namespace Temporal
 			{
 				init();
 			}
+			else if(message.getID() == MessageID::ENTITY_INIT)
+			{
+				Keyboard::get().add(this);
+			}
 			else if(message.getID() == MessageID::ENTITY_POST_INIT)
 			{
 				setAnimation();

@@ -102,15 +102,6 @@ namespace Temporal
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashCollection* filter) const
 	{
-		// TODO:
-		if(message.getID() == MessageID::KEY_UP)
-		{
-			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if(key == Key::ESC || Input::get().getGamepad().getButton(GamepadButton::FRONT_RIGHT))
-			{
-				Game::get().stop();
-			}
-		}
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			(*(*i).second).handleMessage(message, filter);
 	}
