@@ -7,6 +7,7 @@
 #include "Shapes.h"
 #include "Mouse.h"
 #include "ShapeOperations.h"
+#include "Keyboard.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -63,7 +64,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			
+			Keyboard::get().add(this);
 			getEntity().getManager().getGameState().getLayersManager().addGUI(this);
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_layout.SetFont(_font.get());
@@ -79,10 +80,28 @@ namespace Temporal
 			_box.setCenter(position);
 			message.setParam(&_box);
 		}
-		else if(message.getID() == MessageID::SET_TEXT)
+		else if(message.getID() == MessageID::KEY_UP)
 		{
-			const char* text = static_cast<const char*>(message.getParam());
-			setText(text);
+			if(_isTextBoxMode)
+			{
+				Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+				if(key == Key::ENTER)
+				{
+					_isTextBoxMode = false;
+					Keyboard::get().clearFocus();
+					if(_textChangedEvent)
+						(*_textChangedEvent)(_textbox.c_str());
+				}
+				else if(key == Key::BACKSPACE)
+				{
+					if (_textbox.size() > 0)
+						_textbox.resize(_textbox.size () - 1);
+				}
+				else
+				{
+					_textbox += static_cast<char>(key);
+				}
+			}
 		}
 		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{
@@ -108,9 +127,11 @@ namespace Temporal
 			if(params.getButton() == MouseButton::LEFT)
 			{
 				if(_isTextBox)
+				{
+					Keyboard::get().setFocus(this);
 					_isTextBoxMode = true;
-				else
-					mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+				}
+				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
 			}
 			else
 			{
@@ -155,4 +176,12 @@ namespace Temporal
 		_layout.SetLineLength(width);
 		_box.setWidth(width);
 	}
+
+	void Control::setTextChangedEvent(IAction1<const char*>* textChangedEvent)
+	{
+		if(_textChangedEvent)
+			delete _textChangedEvent;
+		_textChangedEvent = textChangedEvent;
+	}
+
 }

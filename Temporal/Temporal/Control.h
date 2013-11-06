@@ -18,7 +18,7 @@ namespace Temporal
 		explicit Control() : _box(YABP::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(12),
 			_backgroundColor(Color::Transparent), _foregroundColor(Color::White), _borderColor(Color::White), _hoverColor(Color::Transparent),
 			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false),
-			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0) {}
+			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0), _textChangedEvent(0) {}
 		~Control();
 
 		Hash getType() const { return TYPE; }
@@ -48,6 +48,7 @@ namespace Temporal
 		void setRightMouseClickEvent(IAction1<const MouseParams&>* rightMouseClickEvent) { setEvent(_rightMouseClickEvent, rightMouseClickEvent); }
 		void setRightMouseUpEvent(IAction1<const MouseParams&>* rightMouseUpEvent) { setEvent(_rightMouseUpEvent, rightMouseUpEvent); }
 		void setMouseMoveEvent(IAction1<const MouseParams&>* mouseMoveEvent) { setEvent(_mouseMoveEvent, mouseMoveEvent); }
+		void setTextChangedEvent(IAction1<const char*>* textChangedEvent);
 
 		static const Hash TYPE;
 	private:
@@ -76,6 +77,7 @@ namespace Temporal
 		IAction1<const MouseParams&>* _rightMouseClickEvent;
 		IAction1<const MouseParams&>* _rightMouseUpEvent;
 		IAction1<const MouseParams&>* _mouseMoveEvent;
+		IAction1<const char*>* _textChangedEvent;
 
 		bool _isLeftDown;
 		bool _isLeftClick;

@@ -358,7 +358,7 @@ namespace Temporal
 			}
 		}
 
-		Control* addControl(Hash id, const AABB& shape, const char* text = 0)
+		Control* addControl(Hash id, const AABB& shape, const char* text = 0, bool textBox = false)
 		{		
 			Transform* transform = new Transform(shape.getCenter());
 			Control* control = new Control();
@@ -369,6 +369,7 @@ namespace Temporal
 			}
 			control->setWidth(shape.getWidth());
 			control->setHeight(shape.getHeight());
+			control->setTextBox(textBox);
 			Entity* entity = new Entity(id);
 			entity->add(transform);
 			entity->add(control);
@@ -425,7 +426,7 @@ namespace Temporal
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation");
+			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", true);
 			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
 
 			float y = PADDED_PANEL_SIZE.getY();
@@ -500,9 +501,6 @@ namespace Temporal
 	};
 
 	const float AnimationEditor::FRAME_TIME = 0.067f;
-	/*const float AnimationEditor::GRID_START_X = 128.0f;
-	const float AnimationEditor::GRID_START_Y = 256.0f;
-	const int AnimationEditor::GRID_FRAMES = 48;*/
 
 	class MyGameStateListener : public GameStateListener
 	{
