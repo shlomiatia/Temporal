@@ -83,9 +83,7 @@ namespace Temporal
 			SET_LIT,
 			IS_LIT,
 
-			ACTIVATE,
-
-			SET_TEXT
+			ACTIVATE
 		};
 	}
 }
