@@ -106,9 +106,16 @@ namespace Temporal
 			params.setSender(this);
 			//params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
-				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+			{
+				if(_isTextBox)
+					_isTextBoxMode = true;
+				else
+					mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+			}
 			else
+			{
 				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
+			}
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{
