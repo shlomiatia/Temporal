@@ -189,6 +189,11 @@ namespace Temporal
 //				params.setHandled(true);
 				raiseEvent(_mouseMoveEvent, params);
 			}
+			if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
+			{
+				const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+				_isHover = intersects(shape, params.getPosition());
+			}
 		}
 	}
 	
@@ -196,7 +201,7 @@ namespace Temporal
 	{
 		const Vector& position = getPosition(*this);
 		_box.setCenter(position);
-		Graphics::get().draw(_box, _backgroundColor, true);
+		Graphics::get().draw(_box, _isHover ? _hoverColor : _backgroundColor, true);
 		Graphics::get().draw(_box, _borderColor, false);
 		if(getString() != "")
 		{

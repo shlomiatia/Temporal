@@ -53,9 +53,10 @@ namespace Temporal
 				{
 					Hash id = getSnsId(i, *j);
 					Control& control = *static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
+					SceneNodeSample* sns = getSceneNodeSample(i, *j);
 					if(_index == i && _sceneNodeId == *j)
 					{
-						control.setBackgroundColor(Color::Yellow);
+						control.setBackgroundColor(sns == 0 ? Color(1.0f ,0.65f ,0) : Color::Yellow);
 					}
 					else if(isEmptySgs)
 					{
@@ -63,7 +64,6 @@ namespace Temporal
 					}
 					else
 					{
-						SceneNodeSample* sns = getSceneNodeSample(i, *j);
 						control.setBackgroundColor(sns != 0 ? Color::White : Color::Transparent);
 					}
 				}
@@ -174,7 +174,7 @@ namespace Temporal
 			}
 		}
 
-		void deleteSample()
+		void deleteSns()
 		{
 			if(_index == 0)
 				return;
@@ -233,13 +233,47 @@ namespace Temporal
 			setAnimation();
 		}
 
+		void toggleAnimation()
+		{
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
+			//setSample();
+		}
+
+		void undo()
+		{
+			if(_undo)
+			{
+				std::shared_ptr<AnimationSet> undo(_undo);
+				ResourceManager::get()._animationSets[Hash("resources/animations/aquaria.xml")] = undo;
+				undo->init();
+				_animationSet = undo;
+				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
+				setAnimation(_index);
+				_undo = 0;
+			}
+		}
+
+		void copy()
+		{
+			_copyIndex = _index;
+		}
+
+		void newSgs()
+		{
+			getSceneGraphSample(_index, true);
+		}
+
+		void save()
+		{
+			XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/animations/aquaria.xml", true, false));
+			AnimationSet& set =  *_animationSet;
+			serializer.serialize("animation-set", set);
+			serializer.save();
+		}
+
 		void handleKey(Key::Enum key)
 		{
-			if(key == Key::PAGE_DOWN)
-			{
-				previousAnimation();	
-			}
-			else if(key == Key::UP)
+			if(key == Key::UP)
 			{
 				handleArrows(Vector(0.0f, 1.0f));
 			}
@@ -255,27 +289,13 @@ namespace Temporal
 			{
 				handleArrows(Vector(1.0f, 0.0f));
 			}
-			else if(key == Key::SPACE)
-			{
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
-				setSample();
-			}
 			else if(key == Key::Z)
 			{
-				if(_undo)
-				{
-					std::shared_ptr<AnimationSet> undo(_undo);
-					ResourceManager::get()._animationSets[Hash("resources/animations/aquaria.xml")] = undo;
-					undo->init();
-					_animationSet = undo;
-					getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
-					setAnimation(_index);
-					_undo = 0;
-				}
+				undo();	
 			}
 			else if(key == Key::C)
 			{
-				_copyIndex = _index;
+				copy();
 			}
 			else if(key == Key::V)
 			{
@@ -283,11 +303,11 @@ namespace Temporal
 			}
 			else if(key == Key::DELETE)
 			{
-				deleteSample();
+				deleteSns();
 			}
 			else if(key == Key::N)
 			{
-				getSceneGraphSample(_index, true);
+				newSgs();
 			}
 			else if(key == Key::S)
 			{
@@ -318,10 +338,7 @@ namespace Temporal
 			}
 			else if(key == Key::F2)
 			{
-				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/animations/aquaria.xml", true, false));
-				AnimationSet& set =  *_animationSet;
-				serializer.serialize("animation-set", set);
-				serializer.save();
+				save();
 			}
 		}
 
@@ -466,13 +483,21 @@ namespace Temporal
 			_sceneNodeId = *_sceneNodes.begin();
 
 			Control* control = addControl(Hash("skeletonPanel"), AABBLT(PADDED_BUTTON_SIZE.getX(), WINDOW_SIZE.getY() - PADDING, PANEL_SIZE.getX(), PANEL_SIZE.getY()));
+			control->setBackgroundColor(Color::Transparent);
 			control->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			control = addTextBox(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
-			control = addButton(Hash("deleteAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY(), BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Delete Animation", createAction(AnimationEditor, deleteAnimation));
-			control = addButton(Hash("nextAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY() * 2.0f + PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Next Animation", createAction(AnimationEditor, nextAnimation), Key::PAGE_UP);
+			Vector position(PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f);
+			control = addTextBox(Hash("newAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("deleteAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Delete Animation", createAction(AnimationEditor, deleteAnimation));
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("nextAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Next Animation", createAction(AnimationEditor, nextAnimation), Key::PAGE_UP);
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("previousAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Previous Animation", createAction(AnimationEditor, previousAnimation), Key::PAGE_DOWN);
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("toggleAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Toggle Animation", createAction(AnimationEditor, toggleAnimation), Key::SPACE);
 
 			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
 
@@ -481,7 +506,7 @@ namespace Temporal
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
 				y -= CELL_SIZE;
-				addLabel(AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE), i->getString());
+				addLabel(AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX() - PADDING, CELL_SIZE), i->getString());
 			}
 			
 			for(int i = 0;  i < GRID_FRAMES; ++i)

@@ -18,8 +18,8 @@ namespace Temporal
 	{
 	public:
 		explicit Control() : _box(YABP::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(12), _shortcutKey(Key::NONE),
-			_backgroundColor(Color::Transparent), _foregroundColor(Color::White), _borderColor(Color::White), _hoverColor(Color::Transparent),
-			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false),
+			_backgroundColor(0.015, 0.388f, 0.501f), _foregroundColor(0.937f, 0.925f, 0.792f), _borderColor(0.654f, 0.639f, 0.494f), _hoverColor(0, 0.184f, 0.184f),
+			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false), _isHover(false),
 			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0) {}
 		~Control();
 
@@ -86,6 +86,7 @@ namespace Temporal
 		bool _isLeftClick;
 		bool _isRightDown;
 		bool _isRightClick;
+		bool _isHover;
 
 		Key::Enum _shortcutKey;
 
