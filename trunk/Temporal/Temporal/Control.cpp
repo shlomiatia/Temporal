@@ -126,7 +126,7 @@ namespace Temporal
 			//params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
 			{
-				if(_isTextBox)
+				if(_isLeftClick && _isTextBox)
 				{
 					Keyboard::get().setFocus(this);
 					_isTextBoxMode = true;

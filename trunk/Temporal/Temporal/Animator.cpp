@@ -116,12 +116,12 @@ namespace Temporal
 	{
 		_animationId = animationId;
 		const Animation& animation = _animationSet->get(_animationId);
-		const SceneGraphSample& sceneGraphSample = **animation.getSamples().begin();
+		SceneGraphSampleIterator sgs = animation.getSamples().begin();
 		_timer.reset();
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
 			SceneNodeBinding& binding = **i;
-			const SceneNodeSample* sceneNodeSample = sceneGraphSample.getSamples().at(binding.getSceneNode().getID());
+			const SceneNodeSample* sceneNodeSample = sgs == animation.getSamples().end() ? 0 : (**sgs).getSamples().at(binding.getSceneNode().getID());
 			binding.setSample(sceneNodeSample);
 		}
 		update();

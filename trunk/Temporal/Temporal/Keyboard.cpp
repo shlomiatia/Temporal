@@ -23,6 +23,7 @@ namespace Temporal
 		_keysMap[SDLK_F12] = Key::F2;
 
 		_keysMap[SDLK_GREATER] = Key::TILDE;
+		_keysMap[SDLK_BACKQUOTE] = Key::TILDE;
 		_keysMap[SDLK_1] = Key::D1;
 		_keysMap[SDLK_2] = Key::D2;
 		_keysMap[SDLK_3] = Key::D3;
@@ -67,6 +68,7 @@ namespace Temporal
 		_keysMap[SDLK_l] = Key::L;
 		_keysMap[SDLK_SEMICOLON] = Key::SEMICOLON;
 		_keysMap[SDLK_BACKSLASH] = Key::BACKSLASH;
+		_keysMap[SDLK_QUOTE] = Key::QUOTE;
 
 		_keysMap[SDLK_LSHIFT] = Key::LEFT_SHIFT;
 		_keysMap[SDLK_z] = Key::Z;
