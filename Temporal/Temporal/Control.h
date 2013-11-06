@@ -7,18 +7,20 @@
 #include "Delegate.h"
 #include "Shapes.h"
 #include "Color.h"
+#include "Keyboard.h"
 
 namespace Temporal
 {
 	class MouseParams;
+	namespace Key { enum Enum; }
 
 	class Control : public Component
 	{
 	public:
-		explicit Control() : _box(YABP::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(12),
+		explicit Control() : _box(YABP::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(12), _shortcutKey(Key::NONE),
 			_backgroundColor(Color::Transparent), _foregroundColor(Color::White), _borderColor(Color::White), _hoverColor(Color::Transparent),
 			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isRightDown(false), _isRightClick(false),
-			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0), _textChangedEvent(0) {}
+			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0), _mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0) {}
 		~Control();
 
 		Hash getType() const { return TYPE; }
@@ -38,8 +40,6 @@ namespace Temporal
 
 		void setText(const char* text) { getString() = text; }
 		const char* getText() const { return getString().c_str(); }
-		void setTextBox(bool isTextBox)  { _isTextBox = isTextBox; }
-		bool isTextBox() const { return _isTextBox; }
 
 		void setLeftMouseDownEvent(IAction1<const MouseParams&>* leftMouseDownEvent) { setEvent(_leftMouseDownEvent, leftMouseDownEvent); }
 		void setLeftMouseClickEvent(IAction1<const MouseParams&>* leftMouseClickEvent) { setEvent(_leftMouseClickEvent, leftMouseClickEvent); }
@@ -49,6 +49,9 @@ namespace Temporal
 		void setRightMouseUpEvent(IAction1<const MouseParams&>* rightMouseUpEvent) { setEvent(_rightMouseUpEvent, rightMouseUpEvent); }
 		void setMouseMoveEvent(IAction1<const MouseParams&>* mouseMoveEvent) { setEvent(_mouseMoveEvent, mouseMoveEvent); }
 		void setTextChangedEvent(IAction1<const char*>* textChangedEvent);
+		void setCommandEvent(IAction* commandEvent);
+
+		void setShortcutKey(Key::Enum key) { _shortcutKey = key; }
 
 		static const Hash TYPE;
 	private:
@@ -59,7 +62,6 @@ namespace Temporal
 
 		YABP _box;
 
-		Vector _padding;
 		Color _backgroundColor;
 		Color _foregroundColor;
 		Color _borderColor;
@@ -78,11 +80,14 @@ namespace Temporal
 		IAction1<const MouseParams&>* _rightMouseUpEvent;
 		IAction1<const MouseParams&>* _mouseMoveEvent;
 		IAction1<const char*>* _textChangedEvent;
+		IAction* _commandEvent;
 
 		bool _isLeftDown;
 		bool _isLeftClick;
 		bool _isRightDown;
 		bool _isRightClick;
+
+		Key::Enum _shortcutKey;
 
 		void draw();
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);

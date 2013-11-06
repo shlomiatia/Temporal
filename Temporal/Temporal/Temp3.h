@@ -235,11 +235,7 @@ namespace Temporal
 
 		void handleKey(Key::Enum key)
 		{
-			if(key == Key::PAGE_UP)
-			{
-				nextAnimation();	
-			}
-			else if(key == Key::PAGE_DOWN)
+			if(key == Key::PAGE_DOWN)
 			{
 				previousAnimation();	
 			}
@@ -368,22 +364,40 @@ namespace Temporal
 			}
 		}
 
-		Control* addControl(Hash id, const AABB& shape, const char* text = 0, bool textBox = false)
+		Control* addControl(Hash id, const AABB& shape)
 		{		
 			Transform* transform = new Transform(shape.getCenter());
 			Control* control = new Control();
-			if(text)
-			{
-				id = Hash(text);
-				control->setText(text);
-			}
 			control->setWidth(shape.getWidth());
 			control->setHeight(shape.getHeight());
-			control->setTextBox(textBox);
 			Entity* entity = new Entity(id);
 			entity->add(transform);
 			entity->add(control);
 			getEntity().getManager().add(entity);
+			return control;
+		}
+
+		Control* addLabel(const AABB& shape, const char* text)
+		{
+			Control* control = addControl(Hash(text), shape);
+			control->setText(text);
+			return control;
+		}
+
+		Control* addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey = Key::NONE)
+		{
+			Control* control = addControl(id, shape);
+			control->setText(text);
+			control->setCommandEvent(commandEvent);
+			control->setShortcutKey(shortcutKey);
+			return control;
+		}
+
+		Control* addTextBox(Hash id, const AABB& shape, const char* text, IAction1<const char*>* textChangedEvent)
+		{
+			Control* control = addControl(id, shape);
+			control->setText(text);
+			control->setTextChangedEvent(textChangedEvent);
 			return control;
 		}
 
@@ -424,7 +438,7 @@ namespace Temporal
 			setAnimation();
 		}
 
-		void deleteAnimation(const MouseParams& params)
+		void deleteAnimation()
 		{
 			addUndo();
 			Hash id = _animationId;
@@ -456,10 +470,10 @@ namespace Temporal
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			control = addControl(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", true);
-			control->setTextChangedEvent(createAction1(AnimationEditor, const char*, newAnimation));
-			control = addControl(Hash("deleteAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY(), BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Delete Animation");
-			control->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, deleteAnimation));
+			control = addTextBox(Hash("newAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
+			control = addButton(Hash("deleteAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY(), BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Delete Animation", createAction(AnimationEditor, deleteAnimation));
+			control = addButton(Hash("nextAnimation"), AABBLT(PADDING, WINDOW_SIZE.getY() - PADDED_BUTTON_SIZE.getY() * 2.0f + PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()), "Next Animation", createAction(AnimationEditor, nextAnimation), Key::PAGE_UP);
+
 			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
 
 			float y = PADDED_PANEL_SIZE.getY();
@@ -467,12 +481,12 @@ namespace Temporal
 			for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 			{
 				y -= CELL_SIZE;
-				addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE), i->getString());
+				addLabel(AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE), i->getString());
 			}
 			
 			for(int i = 0;  i < GRID_FRAMES; ++i)
 			{
-				addControl(Hash::INVALID, AABBLT(PADDED_BUTTON_SIZE.getX() + i * CELL_SIZE, PADDED_PANEL_SIZE.getY(), CELL_SIZE, CELL_SIZE), Utils::toString(i+1).c_str());
+				addLabel(AABBLT(PADDED_BUTTON_SIZE.getX() + i * CELL_SIZE, PADDED_PANEL_SIZE.getY(), CELL_SIZE, CELL_SIZE), Utils::toString(i+1).c_str());
 			}
 
 			for(int i = 0;  i < GRID_FRAMES; ++i)

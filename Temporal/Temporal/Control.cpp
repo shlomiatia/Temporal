@@ -43,10 +43,31 @@ namespace Temporal
 		isDown = false;
 	}
 
+	void Control::setTextChangedEvent(IAction1<const char*>* textChangedEvent)
+	{
+		_isTextBox = true;
+		if(_textChangedEvent)
+			delete _textChangedEvent;
+		_textChangedEvent = textChangedEvent;
+	}
+
+	void Control::setCommandEvent(IAction* commandEvent)
+	{
+		if(_commandEvent)
+			delete _commandEvent;
+		_commandEvent = commandEvent;
+	}
+
 	void Control::setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value)
 	{
 		deleteEvent(prop);
 		prop = value;
+	}
+
+	void Control::setWidth(float width)
+	{
+		_layout.SetLineLength(width);
+		_box.setWidth(width);
 	}
 
 	Control::~Control()
@@ -58,6 +79,10 @@ namespace Temporal
 		deleteEvent(_rightMouseClickEvent);
 		deleteEvent(_rightMouseUpEvent);
 		deleteEvent(_mouseMoveEvent);
+		if(_textChangedEvent)
+			delete _textChangedEvent;
+		if(_commandEvent)
+			delete _commandEvent;
 	}
 
 	void Control::handleMessage(Message& message)
@@ -82,9 +107,17 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{
-			if(_isTextBoxMode)
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if(!_isTextBoxMode)
 			{
-				Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+				if(key == _shortcutKey)
+				{
+					if(_commandEvent)
+						(*_commandEvent)();
+				}
+			}
+			else
+			{
 				if(key == Key::ENTER)
 				{
 					_isTextBoxMode = false;
@@ -126,12 +159,19 @@ namespace Temporal
 			//params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
 			{
-				if(_isLeftClick && _isTextBox)
+				if(_isLeftClick)
 				{
-					Keyboard::get().setFocus(this);
-					_isTextBoxMode = true;
+					if(_isTextBox)
+					{
+						Keyboard::get().setFocus(this);
+						_isTextBoxMode = true;
+					}
+					if(_commandEvent)
+						(*_commandEvent)();
+
 				}
 				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+				
 			}
 			else
 			{
@@ -170,18 +210,4 @@ namespace Temporal
 			glPopMatrix();
 		}
 	}
-
-	void Control::setWidth(float width)
-	{
-		_layout.SetLineLength(width);
-		_box.setWidth(width);
-	}
-
-	void Control::setTextChangedEvent(IAction1<const char*>* textChangedEvent)
-	{
-		if(_textChangedEvent)
-			delete _textChangedEvent;
-		_textChangedEvent = textChangedEvent;
-	}
-
 }
