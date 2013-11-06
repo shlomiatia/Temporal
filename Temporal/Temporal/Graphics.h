@@ -41,6 +41,7 @@ namespace Temporal
 		void draw(const Vector& position, const Texture& texture, const Color& color = Color::White);
 		void draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color = Color::White);
 		void draw(const AABB& rect, const Color& color = Color::White, bool fill = false);
+		void draw(const AABB& rect, const Color& color1, const Color& color2);
 		void draw(const YABP& slopedArea, const Color& color = Color::White, bool fill = false);
 		void draw(const Segment& segment, const Color& color = Color::White);
 

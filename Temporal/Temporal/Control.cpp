@@ -201,7 +201,9 @@ namespace Temporal
 	{
 		const Vector& position = getPosition(*this);
 		_box.setCenter(position);
-		Graphics::get().draw(_box, _isHover ? _hoverColor : _backgroundColor, true);
+		Graphics::get().draw(_box, _backgroundColor, true);
+		if(_isHover)
+			Graphics::get().draw(_box, _hoverColor, true);
 		Graphics::get().draw(_box, _borderColor, false);
 		if(getString() != "")
 		{

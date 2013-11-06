@@ -222,6 +222,31 @@ namespace Temporal
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
+	void Graphics::draw(const AABB& rect, const Color& color1, const Color& color2)
+	{
+		bindTexture(0);
+		GLfloat vertices[] = {rect.getLeft(), rect.getBottom(),
+							  rect.getLeft(), rect.getTop(),
+							  rect.getRight(), rect.getTop(),
+							  rect.getRight(), rect.getBottom()};
+
+		GLfloat colors[] = {color2.getR(), color2.getG(), color2.getB() ,
+							color1.getR(), color1.getG(), color1.getB(),
+							color1.getR(), color1.getG(), color1.getB(),
+							color2.getR(), color2.getG(), color2.getB() };
+ 
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+ 
+		glVertexPointer(2, GL_FLOAT, 0, vertices);
+		glColorPointer(3, GL_FLOAT, 0, colors);
+ 
+		glDrawArrays(GL_QUADS, 0, 4);
+ 
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+	}
+
 	void Graphics::draw(const YABP& slopedArea, const Color& color, bool fill)
 	{
 		bindTexture(0);

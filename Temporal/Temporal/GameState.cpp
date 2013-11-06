@@ -100,12 +100,14 @@ namespace Temporal
 			unload();
 		}
 		if(_listener)
-			_listener->onUpdate(framePeriod, getCurrentState());
+			_listener->onUpdate(framePeriod);
 		getCurrentState().update(framePeriod);
 	}
 
 	void GameStateManager::draw() const
 	{
+		if(_listener)
+			_listener->onDraw();
 		getCurrentState().draw();
 	}
 
