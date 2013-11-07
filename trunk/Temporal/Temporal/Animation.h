@@ -90,7 +90,7 @@ namespace Temporal
 		  _id(id), _repeat(repeat), _rewind(rewind) {}
 		~Animation();
 		
-		int getDuration() const { return getSamples().size() == 0 ? 0 : (**(getSamples().end()-1)).getIndex() + 1; }
+		int getDuration() const { return(**(getSamples().end()-1)).getIndex() + 1; }
 		void setId(Hash id) { _id = id; }
 		Hash getId() const { return _id; }
 		bool repeat() const { return _repeat; }

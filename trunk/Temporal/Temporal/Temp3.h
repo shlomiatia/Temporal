@@ -173,7 +173,7 @@ namespace Temporal
 			}
 		}
 
-		void deleteSns()
+		void deleteSs()
 		{
 			if(_index == 0)
 				return;
@@ -198,6 +198,7 @@ namespace Temporal
 				}
 				sample.setRotation(angle);
 			}
+			setSample();
 		}
 
 		void setSceneNodeId(Hash sceneNodeId)
@@ -235,6 +236,7 @@ namespace Temporal
 		void toggleAnimation()
 		{
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
+			setSample();
 		}
 
 		void undo()
@@ -287,26 +289,6 @@ namespace Temporal
 			{
 				handleArrows(Vector(1.0f, 0.0f));
 			}
-			else if(key == Key::Z)
-			{
-				undo();	
-			}
-			else if(key == Key::C)
-			{
-				copy();
-			}
-			else if(key == Key::V)
-			{
-				paste();
-			}
-			else if(key == Key::DELETE)
-			{
-				deleteSns();
-			}
-			else if(key == Key::N)
-			{
-				newSgs();
-			}
 			else if(key == Key::S)
 			{
 				HashIterator i =  std::find(_sceneNodes.begin(), _sceneNodes.end(), _sceneNodeId);
@@ -333,10 +315,6 @@ namespace Temporal
 				if(_index > 0)
 					setIndex(_index - 1);
 				setSample();
-			}
-			else if(key == Key::F2)
-			{
-				save();
 			}
 		}
 
@@ -368,15 +346,14 @@ namespace Temporal
 			if(_translation)
 			{
 				getCreateSceneNodeSample().setTranslation(params.getPosition() - _offset);
-				//_animationSet->getAnimations().at(_animationId)->init();
 			}
 			else if(_rotation)
 			{
 				const Vector vector = params.getPosition() - _offset;
 				float rotation = fromRadians(vector.getAngle());
 				getCreateSceneNodeSample().setRotation(rotation);
-				//_animationSet->getAnimations().at(_animationId)->init();
 			}
+			setSample();
 		}
 
 		Control* addControl(Hash id, const AABB& shape)
@@ -496,8 +473,23 @@ namespace Temporal
 			control = addButton(Hash("previousAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Previous Animation", createAction(AnimationEditor, previousAnimation), Key::PAGE_DOWN);
 			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
 			control = addButton(Hash("toggleAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Toggle Animation", createAction(AnimationEditor, toggleAnimation), Key::SPACE);
+			position = Vector(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f);
+			control = addButton(Hash("newSgs"), AABB(position, BUTTON_SIZE / 2.0f), "New Sgs", createAction(AnimationEditor, newSgs), Key::N);		
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("deleteSs"), AABB(position, BUTTON_SIZE / 2.0f), "Delete Ss", createAction(AnimationEditor, deleteSs), Key::D);
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("copySgs"), AABB(position, BUTTON_SIZE / 2.0f), "Copy Sgs", createAction(AnimationEditor, copy), Key::C);
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("pasteSgs"), AABB(position, BUTTON_SIZE / 2.0f), "Paste Sgs", createAction(AnimationEditor, paste), Key::V);
+			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("undo"), AABB(position, BUTTON_SIZE / 2.0f), "Undo", createAction(AnimationEditor, undo), Key::Z);
 
-			//control = addControl(Hash("button2"), AABBLT(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING, WINDOW_SIZE.getY() - PADDING, BUTTON_SIZE.getX(), BUTTON_SIZE.getY()));
+			/*
+			else if(key == Key::F2)
+			{
+				save();
+			}
+			*/
 
 			float y = PADDED_PANEL_SIZE.getY();
 			addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE));
