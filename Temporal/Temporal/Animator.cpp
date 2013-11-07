@@ -68,7 +68,7 @@ namespace Temporal
 	{
 		float currentTime = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
-		float animationDuration = animation.getDuration();
+		int animationDuration = animation.getDuration();
 		float currentIndex = currentTime * FPS;
 
 		if(currentIndex > animationDuration && !animation.repeat())
@@ -92,13 +92,10 @@ namespace Temporal
 				   currentSample->getParent().getIndex() < currentSample->getNext()->getParent().getIndex()))
 				currentSample = currentSample->getSibling(direction);
 			binding.setSample(currentSample);
-			const SceneNodeSample* nextSample = currentSample->getNext();
+			const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !animation.repeat()) ? currentSample : currentSample->getNext();
 			float sampleOffset = relativeIndex - currentSample->getParent().getIndex();
-			float sampleDuration = nextSample->getParent().getIndex() - currentSample->getParent().getIndex();
-			if(sampleDuration < 0.0f)
-				sampleDuration = animationDuration + sampleDuration;
-			float interpolation = sampleDuration == 0.0f ? 0.0f : sampleOffset / sampleDuration;
-			
+			int sampleDuration = (animationDuration + nextSample->getParent().getIndex() - currentSample->getParent().getIndex()) % animationDuration;
+			float interpolation = sampleDuration == 0 ? 0.0f : sampleOffset / sampleDuration;
 			Vector translation = currentSample->getTranslation() * (1 - interpolation) + nextSample->getTranslation() * interpolation;
 			float rotation = currentSample->getRotation() * (1 - interpolation) + nextSample->getRotation() * interpolation;
 			SceneNode& sceneNode = binding.getSceneNode();
