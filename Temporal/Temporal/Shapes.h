@@ -98,24 +98,28 @@ namespace Temporal
 
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
+		void setCenterX(float x) { _center.setX(x); }
+		void setCenterY(float y) { _center.setY(y); }
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
 
 		const Vector& getRadius() const { return _radius; }
 
-		float getRadiusVx() const { return getRadius().getX(); }
-		float getRadiusVy() const { return getRadius().getY(); }
+		float getRadiusX() const { return getRadius().getX(); }
+		float getRadiusY() const { return getRadius().getY(); }
+		void setRadiusX(float x) { _radius.setX(x); }
+		void setRadiusY(float y) { _radius.setY(y); }
 
-		float getBottom() const { return getCenterY() - getRadiusVy(); }
-		float getLeft() const {	return getCenterX() - getRadiusVx(); }
-		float getTop() const { return getCenterY() + getRadiusVy(); }
-		float getRight() const { return getCenterX() + getRadiusVx(); }
+		float getBottom() const { return getCenterY() - getRadiusY(); }
+		float getLeft() const {	return getCenterX() - getRadiusX(); }
+		float getTop() const { return getCenterY() + getRadiusY(); }
+		float getRight() const { return getCenterX() + getRadiusX(); }
 		
 		AABB* clone() const { return new AABB(_center, _radius); }
 
-		float getWidth() const { return getRadiusVx() * 2.0f; }
-		float getHeight() const { return getRadiusVy() * 2.0f; }
+		float getWidth() const { return getRadiusX() * 2.0f; }
+		float getHeight() const { return getRadiusY() * 2.0f; }
 
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }

@@ -49,8 +49,8 @@ namespace Temporal
 
 	void AABB::validate() const
 	{
-		assert(getRadiusVx() >= 0);
-		assert(getRadiusVy() >= 0);
+		assert(getRadiusX() >= 0);
+		assert(getRadiusY() >= 0);
 	}
 
 	/**********************************************************************************************
