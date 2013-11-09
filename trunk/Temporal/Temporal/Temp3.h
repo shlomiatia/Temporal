@@ -25,7 +25,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), _undo(0), GRID_FRAMES(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), GRID_FRAMES(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 
@@ -153,9 +153,7 @@ namespace Temporal
 
 		void addUndo()
 		{
-			if(_undo)
-				delete _undo;
-			_undo = _animationSet->clone();
+			_undo.push_back(_animationSet->clone());
 		}
 
 		void paste()
@@ -241,15 +239,15 @@ namespace Temporal
 
 		void undo()
 		{
-			if(_undo)
+			if(_undo.size() > 0)
 			{
-				std::shared_ptr<AnimationSet> undo(_undo);
+				std::shared_ptr<AnimationSet> undo(_undo[_undo.size() - 1]);
+				_undo.pop_back();
 				ResourceManager::get()._animationSets[Hash("resources/animations/aquaria.xml")] = undo;
 				undo->init();
 				_animationSet = undo;
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
 				setAnimation(_index);
-				_undo = 0;
 			}
 		}
 
@@ -463,33 +461,30 @@ namespace Temporal
 			control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 			control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
-			Vector position(PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f);
-			control = addTextBox(Hash("newAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("deleteAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Delete Animation", createAction(AnimationEditor, deleteAnimation));
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("nextAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Next Animation", createAction(AnimationEditor, nextAnimation), Key::PAGE_UP);
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("previousAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Previous Animation", createAction(AnimationEditor, previousAnimation), Key::PAGE_DOWN);
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("toggleAnimation"), AABB(position, BUTTON_SIZE / 2.0f), "Toggle Animation", createAction(AnimationEditor, toggleAnimation), Key::SPACE);
-			position = Vector(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f);
-			control = addButton(Hash("newSgs"), AABB(position, BUTTON_SIZE / 2.0f), "New Sgs", createAction(AnimationEditor, newSgs), Key::N);		
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("deleteSs"), AABB(position, BUTTON_SIZE / 2.0f), "Delete Ss", createAction(AnimationEditor, deleteSs), Key::D);
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("copySgs"), AABB(position, BUTTON_SIZE / 2.0f), "Copy Sgs", createAction(AnimationEditor, copy), Key::C);
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("pasteSgs"), AABB(position, BUTTON_SIZE / 2.0f), "Paste Sgs", createAction(AnimationEditor, paste), Key::V);
-			position.setY(position.getY() - BUTTON_SIZE.getY() - PADDING);
-			control = addButton(Hash("undo"), AABB(position, BUTTON_SIZE / 2.0f), "Undo", createAction(AnimationEditor, undo), Key::Z);
+			AABB bounds(PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f, BUTTON_SIZE.getX(), BUTTON_SIZE.getY());
+			control = addButton(Hash("saveAnimationSet"), bounds, "Save Animation Set", createAction(AnimationEditor, save), Key::F2);
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addTextBox(Hash("newAnimation"), bounds, "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("deleteAnimation"), bounds, "Delete Animation", createAction(AnimationEditor, deleteAnimation));
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			AABB halfBounds(PADDING + (BUTTON_SIZE.getX() - PADDING) / 4.0f, bounds.getCenterY(), (BUTTON_SIZE.getX() - PADDING) / 2.0f, BUTTON_SIZE.getY());
+			control = addButton(Hash("nextAnimation"), halfBounds, "Next Animation", createAction(AnimationEditor, nextAnimation), Key::PAGE_UP);
+			halfBounds.setCenterX(halfBounds.getCenterX() + (BUTTON_SIZE.getX() + PADDING) / 2.0f);
+			control = addButton(Hash("previousAnimation"), halfBounds, "Prev Animation", createAction(AnimationEditor, previousAnimation), Key::PAGE_DOWN);
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("toggleAnimation"), bounds, "Toggle Animation", createAction(AnimationEditor, toggleAnimation), Key::SPACE);
 
-			/*
-			else if(key == Key::F2)
-			{
-				save();
-			}
-			*/
+			bounds = AABB(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f, BUTTON_SIZE.getX(), BUTTON_SIZE.getY());
+			control = addButton(Hash("newSgs"), bounds, "New Sgs", createAction(AnimationEditor, newSgs), Key::N);		
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("deleteSs"), bounds, "Delete Ss", createAction(AnimationEditor, deleteSs), Key::DELETE);
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("copySgs"), bounds, "Copy Sgs", createAction(AnimationEditor, copy), Key::C);
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("pasteSgs"), bounds, "Paste Sgs", createAction(AnimationEditor, paste), Key::V);
+			bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
+			control = addButton(Hash("undo"), bounds, "Undo", createAction(AnimationEditor, undo), Key::Z);
 
 			float y = PADDED_PANEL_SIZE.getY();
 			addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE));
@@ -558,7 +553,7 @@ namespace Temporal
 		Vector _offset;
 		bool _translation;
 		bool _rotation;
-		AnimationSet* _undo;
+		std::vector<AnimationSet*> _undo;
 		int _copyIndex;
 	};
 

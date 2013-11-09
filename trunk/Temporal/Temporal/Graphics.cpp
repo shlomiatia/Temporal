@@ -180,10 +180,10 @@ namespace Temporal
 			const float textureTop = imageTop / textureHeight;
 			const float textureBottom = imageBottom / textureHeight;
 
-			GLfloat screenVertices[] = { -texturePart.getRadiusVx(), -texturePart.getRadiusVy(),
-											-texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-											texturePart.getRadiusVx(), texturePart.getRadiusVy(),
-											texturePart.getRadiusVx(), -texturePart.getRadiusVy()};
+			GLfloat screenVertices[] = { -texturePart.getRadiusX(), -texturePart.getRadiusY(),
+											-texturePart.getRadiusX(), texturePart.getRadiusY(),
+											texturePart.getRadiusX(), texturePart.getRadiusY(),
+											texturePart.getRadiusX(), -texturePart.getRadiusY()};
 
 			GLfloat textureVertices[] = { textureLeft, textureBottom,
 											textureLeft, textureTop,
