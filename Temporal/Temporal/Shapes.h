@@ -159,38 +159,38 @@ namespace Temporal
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
 
-		float getSlopedRadiusVx() const { return getSlopedRadius().getX(); }
-		float getSlopedRadiusVy() const { return getSlopedRadius().getY(); }
+		float getSlopedRadiusX() const { return getSlopedRadius().getX(); }
+		float getSlopedRadiusY() const { return getSlopedRadius().getY(); }
 
-		Vector getYVector() const { return Vector(0.0f, getYRadius()); }
 
-		float getLeft() const {	return getCenterX() - getSlopedRadiusVx(); }
-		float getRight() const { return getCenterX() + getSlopedRadiusVx(); }
+		float getLeft() const {	return getCenterX() - getSlopedRadiusX(); }
+		float getRight() const { return getCenterX() + getSlopedRadiusX(); }
 		float getTop() const;
 		float getBottom() const;
 
 		void setWidth(float width) { _slopedRadius.setX(width / 2.0f); }
-		float getWidth() const { return getSlopedRadiusVx() * 2.0f; }
+		float getWidth() const { return getSlopedRadiusX() * 2.0f; }
 		void setHeight(float height) { setYRadius(height / 2.0f); }
-		float getHeight() const { return (abs(getSlopedRadiusVy()) + getYRadius()) * 2.0f; }
+		float getHeight() const { return (abs(getSlopedRadiusY()) + getYRadius()) * 2.0f; }
 
-		Vector getTopLeft() const { return getCenter() - getSlopedRadius() + getYVector(); }
-		Vector getBottomLeft() const { return getCenter() - getSlopedRadius() - getYVector(); }
-		Vector getTopRight() const { return getCenter() + getSlopedRadius() + getYVector(); }
-		Vector getBottomRight() const { return getCenter() + getSlopedRadius() - getYVector(); }
+		float getTopLeft() const { return getCenterY() - getSlopedRadiusY() + getYRadius(); }
+		float getBottomLeft() const { return getCenterY() - getSlopedRadiusY() - getYRadius(); }
+		float getTopRight() const { return getCenterY() + getSlopedRadiusY() + getYRadius(); }
+		float getBottomRight() const { return getCenterY() + getSlopedRadiusY() - getYRadius(); }
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-		float getTop(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() + getYRadius(); }
-		float getBottom(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusVy() - getYRadius(); }
-		Vector getTopSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
-		Vector getBottomSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
+		float getTop(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusY() + getYRadius(); }
+		float getBottom(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusY() - getYRadius(); }
+		float getTopSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
+		float getBottomSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
 
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
 
 		Segment getTopSegment() const { return Segment(getCenter() + getYVector(), getSlopedRadius()); }
 		Segment getBottomSegment() const { return Segment(getCenter() - getYVector(), getSlopedRadius()); }
+		Vector getYVector() const { return Vector(0.0f, getYRadius()); }
 
 		YABP* clone() const { return new YABP(_center, _slopedRadius, _yRadius); }
 	private:

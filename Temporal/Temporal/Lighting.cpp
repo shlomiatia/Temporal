@@ -43,7 +43,7 @@ namespace Temporal
 
 	void getPoints(float x, float y, const YABP& shape, Vector& point1, Vector& point2, Vector& point3)
 	{
-		if(x < shape.getLeft())
+		/*if(x < shape.getLeft())
 		{
 			if(y < -shape.getYRadius())
 			{
@@ -99,7 +99,7 @@ namespace Temporal
 				point2 = shape.getTopRight();
 				point3 = shape.getTopRight();
 			}
-		}
+		}*/
 	}
 	
 	void drawShadow(const Vector& lightCenter, const YABP& shape)

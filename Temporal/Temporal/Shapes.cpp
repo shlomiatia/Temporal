@@ -64,12 +64,12 @@ namespace Temporal
 		validate();
 	}
 	
-	float YABP::getTop() const { return getCenterY() + getYRadius() + abs(getSlopedRadiusVy()); }
-	float YABP::getBottom() const { return getCenterY() - getYRadius() - abs(getSlopedRadiusVy()); }
+	float YABP::getTop() const { return getCenterY() + getYRadius() + abs(getSlopedRadiusY()); }
+	float YABP::getBottom() const { return getCenterY() - getYRadius() - abs(getSlopedRadiusY()); }
 
 	void YABP::validate() const
 	{
-		assert(getSlopedRadiusVx() >= 0.0f);
+		assert(getSlopedRadiusX() >= 0.0f);
 		assert(getYRadius() >= 0.0f);
 	}
 }
