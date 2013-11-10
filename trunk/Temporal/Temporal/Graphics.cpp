@@ -247,34 +247,24 @@ namespace Temporal
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
 
-	void Graphics::draw(const YABP& slopedArea, const Color& color, bool fill)
+	void Graphics::draw(const YABP& yabp, const Color& color, bool fill)
 	{
 		bindTexture(0);
 
-		glPushMatrix();
-		{
-			setColor(color);
+		setColor(color);
+		
+		GLfloat vertices[] = {yabp.getLeft(), yabp.getBottomLeft(),
+							  yabp.getLeft(), yabp.getTopRight(),
+							  yabp.getRight(), yabp.getTopRight(),
+							  yabp.getRight(), yabp.getBottomLeft()};
 
-			glTranslatef(slopedArea.getCenterX(), slopedArea.getCenterY(), 0.0f);
-
-			Vector yRadius = Vector(0.0f, slopedArea.getYRadius());
-			Vector plusRadius = slopedArea.getSlopedRadius() + yRadius;
-			Vector minusRadius = slopedArea.getSlopedRadius() - yRadius;
-
-			GLfloat vertices[] = {-plusRadius.getX(), -plusRadius.getY(),
-								  -minusRadius.getX(), -minusRadius.getY(),
-								   plusRadius.getX(), plusRadius.getY(),
-								   minusRadius.getX(), minusRadius.getY()};
+		glEnableClientState(GL_VERTEX_ARRAY);
  
-			glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, vertices);
  
-			glVertexPointer(2, GL_FLOAT, 0, vertices);
+		glDrawArrays(fill ? GL_QUADS : GL_LINE_LOOP, 0, 4);
  
-			glDrawArrays(fill ? GL_QUADS : GL_LINE_LOOP, 0, 4);
- 
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		glPopMatrix();
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
 	void Graphics::draw(const Segment& segment, const Color& color)

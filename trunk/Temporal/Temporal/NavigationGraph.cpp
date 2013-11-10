@@ -279,9 +279,9 @@ namespace Temporal
 		const YABP& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float y1low = area1.getCenterY() + area1.getSlopedRadiusVy() - area1.getYRadius();
-		float y2low = area2.getCenterY() - area2.getSlopedRadiusVy() - area2.getYRadius();
-		float y2high = area2.getCenterY() - area2.getSlopedRadiusVy() + area2.getYRadius();
+		float y1low = area1.getCenterY() + area1.getSlopedRadiusY() - area1.getYRadius();
+		float y2low = area2.getCenterY() - area2.getSlopedRadiusY() - area2.getYRadius();
+		float y2high = area2.getCenterY() - area2.getSlopedRadiusY() + area2.getYRadius();
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{

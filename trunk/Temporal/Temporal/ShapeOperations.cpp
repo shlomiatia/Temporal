@@ -48,7 +48,7 @@ namespace Temporal
 	{
 		// Check x axis (parallel to y)
 		float delta = yabp1.getCenterX() - yabp2.getCenterX();
-		float penetration = yabp1.getSlopedRadiusVx() + yabp2.getSlopedRadiusVx() - abs(delta);
+		float penetration = yabp1.getSlopedRadiusX() + yabp2.getSlopedRadiusX() - abs(delta);
 		if(penetration < 0.0f) return false;
 
 		if(correction)
