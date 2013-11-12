@@ -22,7 +22,7 @@ namespace Temporal
 
 		void Search::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &SEARCH_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEARCH_ANIMATION)));
 		}
 
 		void Search::handleMessage(Message& message) const
@@ -40,7 +40,7 @@ namespace Temporal
 
 		void See::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &SEE_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEE_ANIMATION)));
 		}
 
 		void See::handleMessage(Message& message) const
@@ -60,7 +60,7 @@ namespace Temporal
 		void Turn::enter() const
 		{
 			_hasTurned = false;
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(TURN_ANIMATION)));
 		}
 
 		void Turn::handleMessage(Message& message) const
@@ -74,7 +74,7 @@ namespace Temporal
 				else
 				{
 					_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &TURN_ANIMATION2));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(TURN_ANIMATION2)));
 					_hasTurned = true;
 				}
 			}
@@ -86,7 +86,7 @@ namespace Temporal
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setTempFlag1(true);
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &ACQUIRE_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(ACQUIRE_ANIMATION)));
 		}
 
 		void Acquire::update() const

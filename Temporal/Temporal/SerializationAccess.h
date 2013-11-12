@@ -176,7 +176,6 @@ namespace Temporal
 		{
 			serializer.serialize("id", animation._id);
 			serializer.serialize("repeat", animation._repeat);
-			serializer.serialize("rewind", animation._rewind);
 			serializer.serialize("scene-graph-sample", animation._samples);
 		}
 		

@@ -11,6 +11,7 @@ namespace Temporal
 {
 	class ResetAnimationParams;
 	class SceneNode;
+	class AnimationParams;
 
 	class SceneNodeBinding
 	{
@@ -34,7 +35,7 @@ namespace Temporal
 	{
 	public:
 		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId), _isPaused(false) {}
+			_animationSetFile(animationSetFile), _animationId(animationId), _isPaused(false), _isRewined(false) {}
 		~Animator();
 		
 		Hash getType() const { return TYPE; }
@@ -52,11 +53,12 @@ namespace Temporal
 		Hash _animationId;
 		Timer _timer;
 		bool _isPaused;
+		bool _isRewined;
 
 		friend class SerializationAccess;
 
 		void update();
-		void reset(Hash animationId);
+		void reset(AnimationParams& animationParams);
 	};
 }
 #endif

@@ -1,4 +1,5 @@
 #include "Door.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
@@ -32,7 +33,7 @@ namespace Temporal
 		{
 			bool isEnabled = false;
 			_stateMachine->raiseMessage(Message(MessageID::SET_BODY_ENABLED, &isEnabled));
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &OPEN_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPEN_ANIMATION)));
 		}
 
 		void Open::handleMessage(Message& message) const
@@ -47,7 +48,7 @@ namespace Temporal
 		{
 			bool isEnabled = true;
 			_stateMachine->raiseMessage(Message(MessageID::SET_BODY_ENABLED, &isEnabled));
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLOSE_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(CLOSE_ANIMATION)));
 		}
 
 		void Close::handleMessage(Message& message) const
@@ -60,7 +61,7 @@ namespace Temporal
 
 		void Opening::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &OPENING_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPENING_ANIMATION)));
 		}
 
 		void Opening::handleMessage(Message& message) const
@@ -73,7 +74,7 @@ namespace Temporal
 
 		void Closing::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &CLOSING_ANIMATION));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(CLOSING_ANIMATION)));
 		}
 
 		void Closing::handleMessage(Message& message) const
