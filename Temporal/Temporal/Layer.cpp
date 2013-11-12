@@ -11,6 +11,7 @@
 #include "Lighting.h"
 #include "StaticBody.h"
 #include "Sensor.h"
+#include "DynamicBody.h"
 #include <SDL_opengl.h>
 
 namespace Temporal

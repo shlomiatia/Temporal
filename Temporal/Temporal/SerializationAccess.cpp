@@ -21,7 +21,6 @@
 #include "Door.h"
 #include "SaverLoader.h"
 #include "Transform.h"
-#include "DrawPosition.h"
 #include "Animator.h"
 #include "ActionController.h"
 #include "DynamicBody.h"
@@ -36,8 +35,6 @@ namespace Temporal
 	{
 		if(strcmp(key, "transform") == 0)
 			serialize(key, (Transform*&)component, serializer);
-		else if(strcmp(key, "draw-position") == 0)
-			serialize(key, (DrawPosition*&)component, serializer);
 		else if(strcmp(key, "animator") == 0)
 			serialize(key, (Animator*&)component, serializer);
 		else if(strcmp(key, "renderer") == 0)
@@ -92,8 +89,6 @@ namespace Temporal
 	{
 		if(component->getType() == Transform::TYPE)
 			serialize(key, *(Transform*&)component, serializer);
-		else if(component->getType() == DrawPosition::TYPE)
-			serialize(key, *(DrawPosition*&)component, serializer);
 		else if(component->getType() == Animator::TYPE)
 			serialize(key, *(Animator*&)component, serializer);
 		else if(component->getType() == ActionController::TYPE)

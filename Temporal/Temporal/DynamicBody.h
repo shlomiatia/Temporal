@@ -16,7 +16,7 @@ namespace Temporal
 		static Vector GRAVITY;
 
 		explicit DynamicBody(Fixture* fixture = 0) :
-			_fixture(fixture), _velocity(Vector::Zero), _absoluteImpulse(Vector::Zero), _gravityEnabled(true), _ground(0), _maxMovementStepSize(0.0f),
+			_fixture(fixture), _velocity(Vector::Zero), _gravityEnabled(true), _ground(0), _maxMovementStepSize(0.0f),
 			_previousGroundCenter(Vector::Zero) {}
 
 		~DynamicBody();
@@ -37,7 +37,6 @@ namespace Temporal
 		Vector _velocity;
 
 		// Temp state
-		Vector _absoluteImpulse;
 		const Fixture* _ground;
 		Vector _previousGroundCenter;
 

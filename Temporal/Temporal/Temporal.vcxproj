@@ -54,7 +54,6 @@
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="DrawPosition.h" />
     <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="GameEnums.h" />
     <ClInclude Include="MovementUtils.h" />
@@ -122,7 +121,6 @@
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="DrawPosition.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="MovementUtils.cpp" />
     <ClCompile Include="StateMachineComponent.cpp" />

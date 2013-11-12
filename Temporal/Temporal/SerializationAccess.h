@@ -28,7 +28,6 @@ namespace Temporal
 	class Entity;
 	class StateMachineComponent;
 	class Transform;
-	class DrawPosition;
 	class Animator;
 	class Renderer;
 	class Light;
@@ -247,13 +246,6 @@ namespace Temporal
 		{
 			serializer.serialize("position", transform._position);
 			serializer.serialize("orientation", (int&)transform._orientation);
-		}
-		
-		template<class T>
-		static void serialize(const char* key, DrawPosition& drawPosition, T& serializer)
-		{
-			serializer.serialize("offset", drawPosition._offset); // xml
-			serializer.serialize("override", drawPosition._override); // memory
 		}
 		
 		template<class T>

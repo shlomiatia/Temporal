@@ -29,9 +29,6 @@
 				<position x="512" y="512" />
 			</transform>
 			<collision-filter category="8" />
-			<draw-position>
-				<offset y="-40" />
-			</draw-position>
 			<input-controller />
 			<dynamic-body>
 				<fixture>
@@ -59,8 +56,8 @@
 			<action-controller />
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
-				<scene-node id="SCN_ROOT" transform="1" flip="1">
-					<translation x="0" y="100" />
+				<scene-node id="SCN_ROOT" transform="1" flip="0">
+					<translation x="0" y="20" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">

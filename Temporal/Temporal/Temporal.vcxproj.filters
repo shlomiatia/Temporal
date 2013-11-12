@@ -50,9 +50,6 @@
     <ClInclude Include="Thread.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="DrawPosition.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Animator.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -252,9 +249,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Animator.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DrawPosition.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">

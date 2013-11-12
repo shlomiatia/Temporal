@@ -56,11 +56,7 @@ namespace Temporal
 	
 	void Renderer::draw() const
 	{
-		Vector position = Vector::Zero;
-		Message getDrawPosition(MessageID::GET_DRAW_POSITION, &position);
-		raiseMessage(getDrawPosition);
-		if(position == Vector::Zero)
-			position = getPosition(*this);
+		const Vector& position = getPosition(*this);
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 

@@ -254,9 +254,9 @@ namespace Temporal
 		setColor(color);
 		
 		GLfloat vertices[] = {yabp.getLeft(), yabp.getBottomLeft(),
-							  yabp.getLeft(), yabp.getTopRight(),
+							  yabp.getLeft(), yabp.getTopLeft(),
 							  yabp.getRight(), yabp.getTopRight(),
-							  yabp.getRight(), yabp.getBottomLeft()};
+							  yabp.getRight(), yabp.getBottomRight()};
 
 		glEnableClientState(GL_VERTEX_ARRAY);
  
