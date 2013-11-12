@@ -5,16 +5,6 @@
 
 namespace Temporal
 {
-	namespace ButtonState
-	{
-		enum Enum
-		{
-			NONE,
-			DOWN,
-			UP
-		};
-	}
-
 	class Input
 	{
 	public:

@@ -30,8 +30,8 @@ namespace Temporal
 	{
 		_grid->init(this);
 		_layersManager->init(this);
-		_navigationGraph->init(this);
 		_entitiesManager->init(this);
+		_navigationGraph->init(this);
 	}
 
 	void GameState::update(float framePeriod)
