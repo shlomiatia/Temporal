@@ -14,26 +14,25 @@ namespace Temporal
 		{
 			Keyboard::get().add(this);
 		}
-		else if(message.getID() == MessageID::KEY_DOWN)
+		else if(message.getID() == MessageID::UPDATE)
 		{
-			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if(key == Key::D || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
+			if(Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
 			{
 				sendDirectionAction(*this, Side::RIGHT);
 			}
-			if(key == Key::A || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
+			if(Keyboard::get().getKey(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
 			{
 				sendDirectionAction(*this, Side::LEFT);
 			}
-			if(key == Key::SPACE || key == Key::W || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().getKey(Key::SPACE) || Keyboard::get().getKey(Key::W) || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_UP));
 			}
-			if(key == Key::S || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().getKey(Key::S) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
-			if(key == Key::Q || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
+			if(Keyboard::get().getKey(Key::Q) || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
 			{
 				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 			}

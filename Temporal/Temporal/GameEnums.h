@@ -43,6 +43,7 @@ namespace Temporal
 			ACTION_DOWN,
 			ACTION_FORWARD,
 			ACTION_BACKWARD,
+			ACTION_STOP,
 			ACTION_ACTIVATE,
 			
 			GET_GROUND,

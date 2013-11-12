@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	Keyboard::Keyboard()
+	Keyboard::Keyboard() : _focus(0)
 	{
 		_keysMap[SDLK_ESCAPE] = Key::ESC;
 		_keysMap[SDLK_F1] = Key::F1;
@@ -106,6 +106,11 @@ namespace Temporal
 
 		_keysMap[SDLK_NUMLOCK] = Key::NUM_LOCK;
 		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
+
+		for(IntKeyMapIterator i = _keysMap.begin(); i != _keysMap.end(); ++i)
+		{
+			_keys[i->second] = false;
+		}
 	}
 
 	void Keyboard::raiseEvent(Message& message) const
@@ -132,16 +137,16 @@ namespace Temporal
 		else if (e.type == SDL_KEYDOWN)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
+			_keys[key] = true;
 			raiseEvent(Message(MessageID::KEY_DOWN, &key));
-			
 		}
 		else if (e.type == SDL_KEYUP)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
+			_keys[key] = false;
+			raiseEvent(Message(MessageID::KEY_UP, &key));
 			if(key == Key::ESC)
 				Game::get().stop();
-			else
-				raiseEvent(Message(MessageID::KEY_UP, &key));
 		}
 	}
 }
