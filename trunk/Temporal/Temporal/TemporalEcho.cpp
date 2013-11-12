@@ -5,7 +5,6 @@
 #include "MessageUtils.h"
 #include "Transform.h"
 #include "Renderer.h"
-#include "DrawPosition.h"
 #include "Animator.h"
 
 namespace Temporal
@@ -17,7 +16,6 @@ namespace Temporal
 	{
 		HashCollection result;
 		result.push_back(Transform::TYPE);
-		result.push_back(DrawPosition::TYPE);
 		result.push_back(Renderer::TYPE);
 		result.push_back(Animator::TYPE);
 		return result;

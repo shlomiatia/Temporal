@@ -59,17 +59,11 @@ namespace Temporal
 			if(_ground)
 				message.setParam(const_cast<Fixture*>(_ground));
 		}
-		else if(message.getID() == MessageID::SET_TIME_BASED_IMPULSE)
+		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
 			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
 			_velocity = impulse;
-		}
-		else if(message.getID() == MessageID::SET_ABSOLUTE_IMPULSE)
-		{
-			const Vector& param = getVectorParam(message.getParam());
-			_absoluteImpulse = Vector(param.getX() * getOrientation(*this), param.getY());
-			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
@@ -91,14 +85,8 @@ namespace Temporal
 	{
 		_fixture->update();
 
-		// Absolute impulse
-		if(_absoluteImpulse != Vector::Zero)
-		{
-			_ground = 0;
-			executeMovement(_absoluteImpulse);
-		}
 		// Slide
-		else if(_ground && !isModerateAngle(_ground->getGlobalShape().getSlopedRadius().getAngle()))
+		if(_ground && !isModerateAngle(_ground->getGlobalShape().getSlopedRadius().getAngle()))
 		{
 			// BRODER
 			_velocity = _ground->getGlobalShape().getSlopedRadius().normalize() * 250.0f;
@@ -227,8 +215,7 @@ namespace Temporal
 			Vector stepMovement = Vector::Zero;
 			float movementAmount = movement.getLength();
 
-			// Absolute impulses are done in one stroke
-			if(movementAmount <= _maxMovementStepSize || _absoluteImpulse != Vector::Zero)
+			if(movementAmount <= _maxMovementStepSize)
 			{
 				stepMovement = movement;
 			}
@@ -263,9 +250,6 @@ namespace Temporal
 		}
 		if(collision != Vector::Zero)
 			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
-
-		// Absolute impulses last one frame
-		_absoluteImpulse = Vector::Zero;
 	}
 
 	void DynamicBody::detectCollision(YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
