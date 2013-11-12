@@ -105,7 +105,7 @@
 			<door />
 			<animator animation-set="resources/animations/door.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/door.xml" />
-		</entity>-->
+		</entity>
 		<entity id="ENT_BUTTON">
 			<transform>
 				<position x="768" y="512" />
@@ -120,7 +120,7 @@
 			</static-body>
 			<button target="ENT_DOOR" />
 		</entity>
-		<!--<entity id="ENT_TEXT">
+		<entity id="ENT_TEXT">
 			<transform>
 				<position x="16" y="256" />
 			</transform>

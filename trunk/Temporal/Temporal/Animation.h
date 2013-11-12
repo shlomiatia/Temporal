@@ -87,7 +87,7 @@ namespace Temporal
 	{
 	public:
 		Animation(Hash id = Hash::INVALID, bool repeat = false, bool rewind = false) :
-		  _id(id), _repeat(repeat), _rewind(rewind) {}
+		  _id(id), _repeat(repeat) {}
 		~Animation();
 		
 		int getDuration() const { return(**(getSamples().end()-1)).getIndex() + 1; }
@@ -95,7 +95,6 @@ namespace Temporal
 		Hash getId() const { return _id; }
 		bool repeat() const { return _repeat; }
 		void setRepeat(bool repeat) { _repeat = repeat; }
-		bool rewind() const { return _rewind; }
 		SceneGraphSampleCollection& getSamples() { return _samples; }
 		const SceneGraphSampleCollection& getSamples() const { return _samples; }
 
@@ -105,7 +104,6 @@ namespace Temporal
 	private:
 		Hash _id;
 		bool _repeat;
-		bool _rewind;
 		SceneGraphSampleCollection _samples;
 
 		Animation(const Animation&);

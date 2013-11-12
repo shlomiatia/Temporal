@@ -41,8 +41,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{
-			Hash animationId = getHashParam(message.getParam());
-			reset(animationId);
+			AnimationParams& params = getAnimationParams(message.getParam());
+			reset(params);
 		}
 		else if(message.getID() == MessageID::TOGGLE_ANIMATION)
 		{
@@ -78,7 +78,7 @@ namespace Temporal
 		}
 		float relativeIndex = fmod(currentIndex, animationDuration);
 		Direction::Enum direction = Direction::FORWARD;
-		if(animation.rewind())
+		if(_isRewined)
 		{
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;
@@ -107,9 +107,10 @@ namespace Temporal
 		}
 	}
 
-	void Animator::reset(Hash animationId)
+	void Animator::reset(AnimationParams& animationParams)
 	{
-		_animationId = animationId;
+		_animationId = animationParams.getAnimationId();
+		_isRewined = animationParams.isRewind();
 		const Animation& animation = _animationSet->get(_animationId);
 		const SceneGraphSample& sgs = **animation.getSamples().begin();
 		_timer.reset();
