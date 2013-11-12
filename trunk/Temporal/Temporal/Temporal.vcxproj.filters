@@ -189,13 +189,10 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Temp1.h">
-      <Filter>Temp</Filter>
+      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="Temp2.h">
-      <Filter>Temp</Filter>
-    </ClInclude>
-    <ClInclude Include="Temp3.h">
-      <Filter>Temp</Filter>
+      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Common</Filter>
@@ -203,8 +200,11 @@
     <ClInclude Include="Delegate.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationEditor.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
     <ClInclude Include="Control.h">
-      <Filter>Graphics</Filter>
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -384,7 +384,10 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Control.cpp">
-      <Filter>Graphics</Filter>
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEditor.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -406,7 +409,7 @@
     <Filter Include="Game">
       <UniqueIdentifier>{014c8123-e9c4-4975-8753-42e8924c5704}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Temp">
+    <Filter Include="Tools">
       <UniqueIdentifier>{b252260c-8069-44bf-b12b-892df903542c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

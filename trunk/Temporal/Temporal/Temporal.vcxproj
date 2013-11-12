@@ -50,7 +50,7 @@
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="Temp1.h" />
     <ClInclude Include="Temp2.h" />
-    <ClInclude Include="Temp3.h" />
+    <ClInclude Include="AnimationEditor.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="Timer.h" />
@@ -82,6 +82,7 @@
     <ClInclude Include="StaticBody.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
