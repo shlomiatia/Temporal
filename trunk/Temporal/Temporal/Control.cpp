@@ -94,6 +94,7 @@ namespace Temporal
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_layout.SetFont(_font.get());
 			_layout.SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
+			_box.setOBB(_obb);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
@@ -102,7 +103,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
 			const Vector& position = getPosition(*this);
-			_box.setCenter(position);
+			_obb.setCenter(position);
 			message.setParam(&_box);
 		}
 		else if(message.getID() == MessageID::KEY_UP)
@@ -138,10 +139,10 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{
-			const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 			MouseParams& params = getMouseParams(message.getParam());
 			params.setSender(this);
-			if(intersects(shape, params.getPosition()))
+			if(intersects(shape.getOBB(), params.getPosition()))
 			{
 				//params.setHandled(true);
 				if(params.getButton() == MouseButton::LEFT)
@@ -191,8 +192,8 @@ namespace Temporal
 			}
 			if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
 			{
-				const YABP& shape = *static_cast<YABP*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-				_isHover = intersects(shape, params.getPosition());
+				const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+				_isHover = intersects(shape.getOBB(), params.getPosition());
 			}
 		}
 	}
@@ -200,11 +201,11 @@ namespace Temporal
 	void Control::draw()
 	{
 		const Vector& position = getPosition(*this);
-		_box.setCenter(position);
-		Graphics::get().draw(_box, _backgroundColor, true);
+		_obb.setCenter(position);
+		Graphics::get().draw(_obb, _backgroundColor, true);
 		if(_isHover)
-			Graphics::get().draw(_box, _hoverColor, true);
-		Graphics::get().draw(_box, _borderColor, false);
+			Graphics::get().draw(_obb, _hoverColor, true);
+		Graphics::get().draw(_obb, _borderColor, false);
 		if(getString() != "")
 		{
 			glColor4f(_foregroundColor.getR(), _foregroundColor.getG(), _foregroundColor.getB(), _foregroundColor.getA());

@@ -10,9 +10,9 @@
 
 namespace Temporal
 {
-	YABP Grid::getTileShape(int i, int j) const
+	OBB Grid::getTileShape(int i, int j) const
 	{
-		return YABPAABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Vector(_tileSize, _tileSize) / 2.0f);
+		return OBBAABB(Vector(getTileAxisCenter(i), getTileAxisCenter(j)), Vector(_tileSize, _tileSize) / 2.0f);
 	}
 
 	void Grid::init(GameState* gameState)
@@ -67,17 +67,18 @@ namespace Temporal
 
 	void Grid::add(const Fixture* body)
 	{
-		const YABP& shape = body->getGlobalShape();
-		int leftIndex = getAxisIndex(shape.getLeft());
-		int rightIndex = getAxisIndex(shape.getRight());
-		int topIndex = getAxisIndex(shape.getTop());
-		int bottomIndex = getAxisIndex(shape.getBottom());	
+		const OBB& shape = body->getGlobalShape();
+		OBBAABBWrapper aabb = shape.getAABBWrapper();
+		int leftIndex = getAxisIndex(aabb.getLeft());
+		int rightIndex = getAxisIndex(aabb.getRight());
+		int topIndex = getAxisIndex(aabb.getTop());
+		int bottomIndex = getAxisIndex(aabb.getBottom());	
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				YABP tile = getTileShape(i, j);
+				OBB tile = getTileShape(i, j);
 				if(intersects(tile, body->getGlobalShape()))
 					add(body, i, j);
 			}
@@ -86,18 +87,20 @@ namespace Temporal
 
 	void Grid::update(Fixture* body)
 	{
-		const YABP& previous = body->getGlobalShape();
-		int leftRemoveIndex = getAxisIndex(previous.getLeft());
-		int rightRemoveIndex = getAxisIndex(previous.getRight());
-		int topRemoveIndex = getAxisIndex(previous.getTop());
-		int bottomRemoveIndex = getAxisIndex(previous.getBottom());
+		const OBB& previous = body->getGlobalShape();
+		OBBAABBWrapper previousAABB = previous.getAABBWrapper();
+		int leftRemoveIndex = getAxisIndex(previousAABB.getLeft());
+		int rightRemoveIndex = getAxisIndex(previousAABB.getRight());
+		int topRemoveIndex = getAxisIndex(previousAABB.getTop());
+		int bottomRemoveIndex = getAxisIndex(previousAABB.getBottom());
 
 		body->update();
-		const YABP& current = body->getGlobalShape();
-		int leftIndex = getAxisIndex(current.getLeft());
-		int rightIndex = getAxisIndex(current.getRight());
-		int topIndex = getAxisIndex(current.getTop());
-		int bottomIndex = getAxisIndex(current.getBottom());	
+		const OBB& current = body->getGlobalShape();
+		OBBAABBWrapper currentAABB = current.getAABBWrapper();
+		int leftIndex = getAxisIndex(currentAABB.getLeft());
+		int rightIndex = getAxisIndex(currentAABB.getRight());
+		int topIndex = getAxisIndex(currentAABB.getTop());
+		int bottomIndex = getAxisIndex(currentAABB.getBottom());	
 
 		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
 		{
@@ -144,9 +147,9 @@ namespace Temporal
 		if(rayDirection == Vector::Zero)
 			return false;
 		float maxSize = std::max(_gridWidth * _tileSize, _gridHeight * _tileSize);
-		DirectedSegment ray = DirectedSegment(rayOrigin, maxSize * rayDirection);
+		DirectedSegment ray = DirectedSegment(rayOrigin, rayDirection * maxSize);
 		const Vector& origin = ray.getOrigin();
-		const Vector& destination = ray.getTarget();
+		const Vector& destination = ray.getOrigin() + ray.getDirection() * maxSize;
 		float x1 = origin.getX();
 		float y1 = origin.getY();
 		float x2 = destination.getX();
@@ -178,13 +181,13 @@ namespace Temporal
 		float deltatx = _tileSize / abs(x2 - x1);
 		float deltaty = _tileSize / abs(y2 - y1);
 
-		float minDistance = ray.getVector().getLength();
+		float minDistance = maxSize;
 
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
 			FixtureCollection* bodies = getTile(i, j);
-			YABP tile = getTileShape(i, j);
+			OBB tile = getTileShape(i, j);
 			if(bodies)
 			{
 				float distance = 0;
@@ -223,12 +226,13 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureCollection Grid::iterateTiles(const YABP& shape, int mask, int group, bool checkIntersection) const
+	FixtureCollection Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
 	{
-		int leftIndex = getAxisIndex(shape.getLeft());
-		int rightIndex = getAxisIndex(shape.getRight());
-		int topIndex = getAxisIndex(shape.getTop());
-		int bottomIndex = getAxisIndex(shape.getBottom());
+		OBBAABBWrapper shapeAABB = shape.getAABBWrapper();
+		int leftIndex = getAxisIndex(shapeAABB.getLeft());
+		int rightIndex = getAxisIndex(shapeAABB.getRight());
+		int topIndex = getAxisIndex(shapeAABB.getTop());
+		int bottomIndex = getAxisIndex(shapeAABB.getBottom());
 
 		FixtureCollection result;
 

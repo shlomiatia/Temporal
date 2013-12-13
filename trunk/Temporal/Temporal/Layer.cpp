@@ -3,12 +3,12 @@
 #include "Graphics.h"
 #include "Thread.h"
 #include "Grid.h"
-#include "NavigationGraph.h"
+//#include "NavigationGraph.h"
 #include "Hash.h"
 #include "Timer.h"
 #include "Log.h"
 #include "Camera.h"
-#include "Lighting.h"
+//#include "Lighting.h"
 #include "StaticBody.h"
 #include "Sensor.h"
 #include "DynamicBody.h"
@@ -28,8 +28,8 @@ namespace Temporal
 		if(_camera)
 			_layers.push_back(new Camera(this));
 		_layers.push_back(_spriteLayer);
-		if(_ambientColor != Color::White)
-			_layers.push_back(new LightLayer(this, _ambientColor));
+/*		if(_ambientColor != Color::White)
+			_layers.push_back(new LightLayer(this, _ambientColor));*/
 		_layers.push_back(new DebugLayer(this));
 		_layers.push_back(_guiLayer);
 	}
@@ -101,6 +101,7 @@ namespace Temporal
 	{
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);
+		filter.push_back(DynamicBody::TYPE);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		//Grid::get().draw();

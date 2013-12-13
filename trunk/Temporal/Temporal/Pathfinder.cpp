@@ -1,4 +1,4 @@
-#include "Pathfinder.h"
+/*#include "Pathfinder.h"
 #include "Segment.h"
 #include <assert.h>
 
@@ -9,8 +9,8 @@ namespace Temporal
 
 	float PathNode::calculateHeuristicCost(const NavigationNode& goal)
 	{
-		const YABP& sourceArea = getNavigationNode().getArea();
-		const YABP& goalArea = goal.getArea();
+		const OBB& sourceArea = getNavigationNode().getArea();
+		const OBB& goalArea = goal.getArea();
 
 		Segment segment(sourceArea.getCenter(), goalArea.getCenter());
 		return segment.getLength();
@@ -142,4 +142,4 @@ namespace Temporal
 		deleteCollection(closed);
 		return 0;
 	}
-}
+}*/

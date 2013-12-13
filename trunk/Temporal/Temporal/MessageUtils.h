@@ -8,7 +8,7 @@ namespace Temporal
 {
 	class Component;
 	class Message;
-	class YABP;
+	class OBB;
 	class Vector;
 	class Contact;
 	namespace MouseButton { enum Enum; }

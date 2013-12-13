@@ -1,6 +1,6 @@
 #ifndef LIGHTING_H
 #define LIGHTING_H
-
+/*
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Math.h"
@@ -67,5 +67,5 @@ namespace Temporal
 		LightLayer& operator=(const LightLayer&);
 	};
 }
-
+*/
 #endif

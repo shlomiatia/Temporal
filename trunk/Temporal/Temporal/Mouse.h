@@ -22,8 +22,11 @@ namespace Temporal
 		};
 	}
 
-	typedef std::unordered_map<int, MouseButton::Enum> MouseButtonCollection;
-	typedef MouseButtonCollection::const_iterator MouseButtonIterator;
+	typedef std::unordered_map<int, MouseButton::Enum> IntMouseButtonMap;
+	typedef IntMouseButtonMap::const_iterator IntMouseButtonIterator;
+
+	typedef std::unordered_map<MouseButton::Enum, bool> MouseButtonBoolMap;
+	typedef MouseButtonBoolMap::const_iterator MouseButtonBoolIterator;
 
 	class Mouse
 	{
@@ -36,9 +39,15 @@ namespace Temporal
 
 		void dispatchEvent(void* obj);
 
+		bool getButton(MouseButton::Enum button) const { return _buttons.at(button); }
+		const Vector& getPosition() const { return _position; }
+
 	private:
 		// TODO:
-		MouseButtonCollection _buttonsMap;
+		IntMouseButtonMap _buttonsMap;
+		MouseButtonBoolMap _buttons;
+		Vector _position;
+
 
 		Mouse();
 		~Mouse() {};

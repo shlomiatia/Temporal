@@ -54,22 +54,28 @@ namespace Temporal
 	}
 
 	/**********************************************************************************************
-	 * YABP
+	 * OBB
 	 *********************************************************************************************/
-	const YABP YABP::Zero(Vector::Zero, Vector::Zero, 0.0f);
+	const OBB OBB::Zero(Vector::Zero, 0.0f, Vector::Zero);
 
-	YABP::YABP(const Vector& center, const Vector& slopedRadius, float yRadius)
-		: _center(center), _slopedRadius(slopedRadius), _yRadius(yRadius)
+	Vector OBB::getPoint(Axis::Enum axis, bool positive) const
 	{
-		validate();
+		Vector axis1 = (getAxisX().getAxis(axis) < 0.0f ^ positive) ? getAxisX() : -getAxisX();
+
+		// Fix for AABB
+		if(getAxisX().getAxis(axis) == 0.0f && axis == Axis::Y)
+			axis1 = -axis1;
+		Vector axis2 = (getAxisY().getAxis(axis) < 0.0f ^ positive) ? getAxisY() : -getAxisY();
+		return getCenter() + axis1 * getRadiusX() + axis2 * getRadiusY(); 
 	}
-	
-	float YABP::getTop() const { return getCenterY() + getYRadius() + abs(getSlopedRadiusY()); }
-	float YABP::getBottom() const { return getCenterY() - getYRadius() - abs(getSlopedRadiusY()); }
 
-	void YABP::validate() const
+	OBBAABBWrapper OBB::getAABBWrapper()
 	{
-		assert(getSlopedRadiusX() >= 0.0f);
-		assert(getYRadius() >= 0.0f);
+		return OBBAABBWrapper(this);
+	}
+
+	const OBBAABBWrapper OBB::getAABBWrapper() const 
+	{
+		return OBBAABBWrapper(const_cast<OBB*>(this));
 	}
 }

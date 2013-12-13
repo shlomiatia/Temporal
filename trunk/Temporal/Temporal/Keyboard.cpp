@@ -95,7 +95,7 @@ namespace Temporal
 		_keysMap[SDLK_INSERT] = Key::INSERT;
 		_keysMap[SDLK_HOME] = Key::HOME;
 		_keysMap[SDLK_PAGEUP] = Key::PAGE_UP;
-		_keysMap[SDLK_DELETE] = Key::DELETE;
+		_keysMap[SDLK_DELETE] = Key::DEL;
 		_keysMap[SDLK_END] = Key::END;
 		_keysMap[SDLK_PAGEDOWN] = Key::PAGE_DOWN;
 

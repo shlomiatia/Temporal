@@ -29,7 +29,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
-			YABP* shape = &_fixture->getGlobalShape();
+			OBB* shape = &_fixture->getGlobalShape();
 			message.setParam(shape);
 		}
 		else if(message.getID() == MessageID::SET_POSITION)

@@ -21,13 +21,13 @@ namespace Temporal
 	void Sensor::update()
 	{
 		_fixture->update();
-		const YABP& sensorShape = _fixture->getGlobalShape();
+		const OBB& sensorShape = _fixture->getGlobalShape();
 		FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
 		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
 			const Fixture& fixture = **i;
-			const YABP& shape = fixture.getGlobalShape();
+			const OBB& shape = fixture.getGlobalShape();
 
 			Contact contact(*_fixture, fixture);
 			raiseMessage(Message(MessageID::SENSOR_SENSE, &SensorParams(_id, &contact)));

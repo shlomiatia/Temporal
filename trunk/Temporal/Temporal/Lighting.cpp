@@ -1,4 +1,4 @@
-#include "Lighting.h"
+/*#include "Lighting.h"
 #include "Vector.h"
 #include "Math.h"
 #include "Grid.h"
@@ -41,9 +41,9 @@ namespace Temporal
 		}
 	}
 
-	void getPoints(float x, float y, const YABP& shape, Vector& point1, Vector& point2, Vector& point3)
+	void getPoints(float x, float y, const OBB& shape, Vector& point1, Vector& point2, Vector& point3)
 	{
-		/*if(x < shape.getLeft())
+		if(x < shape.getLeft())
 		{
 			if(y < -shape.getYRadius())
 			{
@@ -99,10 +99,10 @@ namespace Temporal
 				point2 = shape.getTopRight();
 				point3 = shape.getTopRight();
 			}
-		}*/
+		}
 	}
 	
-	void drawShadow(const Vector& lightCenter, const YABP& shape)
+	void drawShadow(const Vector& lightCenter, const OBB& shape)
 	{
 		// BRODER
 		float shadowSize = 10000.0f;
@@ -164,7 +164,7 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		YABP lightBounds = YABPAABB(position, Vector(_radius, _radius));
+		OBB lightBounds = YABPAABB(position, Vector(_radius, _radius));
 
 		FixtureCollection result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
@@ -277,4 +277,4 @@ namespace Temporal
 		}
 		glPopMatrix();
 	}
-}
+}*/

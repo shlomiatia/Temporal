@@ -15,9 +15,10 @@ namespace Temporal
 
 	void Fixture::update()
 	{
-		_globalShape.setCenter(_localShape.getCenter());
-		_globalShape.rotate(_transform->getOrientation());
-		_globalShape.translate(_transform->getPosition());
+		Vector center = _localShape.getCenter();
+		center.setX(center.getX() * _transform->getOrientation());
+		center += _transform->getPosition();
+		_globalShape.setCenter(center);
 	}
 
 	Hash Fixture::getEntityId() const

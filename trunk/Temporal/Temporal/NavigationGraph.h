@@ -1,6 +1,6 @@
 #ifndef NAVIGATIONGRAPH_H
 #define NAVIGATIONGRAPH_H
-
+/*
 #include "GameState.h"
 #include "BaseEnums.h"
 #include "Vector.h"
@@ -29,15 +29,15 @@ namespace Temporal
 	class NavigationNode
 	{
 	public:
-		NavigationNode(const YABP& area) : _area(area) {}
+		NavigationNode(const OBB& area) : _area(area) {}
 		~NavigationNode();
 
-		const YABP& getArea() const { return _area; }
+		const OBB& getArea() const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
 		const NavigationEdgeCollection& getEdges() const { return _edges; }
 
 	private:
-		const YABP _area;
+		const OBB _area;
 		NavigationEdgeCollection _edges;
 
 		NavigationNode(const NavigationNode&);
@@ -72,9 +72,9 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeCollection;
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const YABP> YABPCollection;
+	typedef std::vector<const OBB> YABPCollection;
 	typedef YABPCollection::const_iterator YABPIterator;
-	typedef std::vector<const YABP*> ShapeCollection;
+	typedef std::vector<const OBB*> ShapeCollection;
 	typedef ShapeCollection::const_iterator ShapeIterator;
 
 	class NavigationGraph : public GameStateComponent
@@ -85,7 +85,7 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		const NavigationNode* getNode(const YABP& shape) const;
+		const NavigationNode* getNode(const OBB& shape) const;
 		void draw() const;
 
 	private:
@@ -102,5 +102,5 @@ namespace Temporal
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);
 	};
-}
+}*/
 #endif

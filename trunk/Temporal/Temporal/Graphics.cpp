@@ -247,17 +247,24 @@ namespace Temporal
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
 
-	void Graphics::draw(const YABP& yabp, const Color& color, bool fill)
+	void Graphics::draw(const OBB& obb, const Color& color, bool fill)
 	{
 		bindTexture(0);
 
 		setColor(color);
-		
-		GLfloat vertices[] = {yabp.getLeft(), yabp.getBottomLeft(),
-							  yabp.getLeft(), yabp.getTopLeft(),
-							  yabp.getRight(), yabp.getTopRight(),
-							  yabp.getRight(), yabp.getBottomRight()};
 
+		GLfloat vertices[8];
+		int j = 0;
+		for(int i = 0; i < 2; ++i)
+		{
+			for(Axis::Enum axis = Axis::Y; axis >= Axis::X; --axis)
+			{
+				Vector point = obb.getPoint(axis, i != 0);
+				vertices[j*2] = point.getX();
+				vertices[j*2+1] = point.getY();
+				++j;
+			}
+		}
 		glEnableClientState(GL_VERTEX_ARRAY);
  
 		glVertexPointer(2, GL_FLOAT, 0, vertices);

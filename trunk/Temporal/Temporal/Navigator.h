@@ -1,6 +1,6 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-#include "Shapes.h"
+/*#include "Shapes.h"
 #include "StateMachineComponent.h"
 #include "Pathfinder.h"
 
@@ -57,13 +57,13 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(YABP::Zero), _path(0) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(OBB::Zero), _path(0) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		const YABP& getDestination() const { return _destination; }
-		void setDestination(const YABP& destination) { _destination = destination; }
+		const OBB& getDestination() const { return _destination; }
+		void setDestination(const OBB& destination) { _destination = destination; }
 		NavigationEdgeCollection* getPath() const { return _path; }
 		void setPath(NavigationEdgeCollection* path) { if(_path) delete _path; _path = path; }
 		Component* clone() const { return new Navigator(); }
@@ -74,7 +74,7 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 
-		YABP _destination;
+		OBB _destination;
 		NavigationEdgeCollection* _path;
 
 		//void deserialize(const Serialization& serialization);
@@ -82,5 +82,5 @@ namespace Temporal
 
 		StateCollection getStates() const;
 	};
-}
+}*/
 #endif

@@ -4,10 +4,10 @@
 #include <vector>
 #include "Vector.h"
 #include "EntitySystem.h"
+#include "Shapes.h"
 
 namespace Temporal
 {
-	class YABP;
 	class Fixture;
 
 	class DynamicBody : public Component
@@ -16,8 +16,7 @@ namespace Temporal
 		static Vector GRAVITY;
 
 		explicit DynamicBody(Fixture* fixture = 0) :
-			_fixture(fixture), _velocity(Vector::Zero), _gravityEnabled(true), _ground(0), _maxMovementStepSize(0.0f),
-			_previousGroundCenter(Vector::Zero) {}
+			_fixture(fixture), _velocity(Vector::Zero), _gravityEnabled(true), _ground(0), _maxMovementStepSize(0.0f), _previousGroundCenter(Vector::Zero) {}
 
 		~DynamicBody();
 
@@ -31,6 +30,8 @@ namespace Temporal
 
 		float _maxMovementStepSize;
 		Fixture* _fixture;
+		OBBAABBWrapper _dynamicBodyBounds;
+		
 		
 		// Persistent state
 		bool _gravityEnabled;
@@ -38,15 +39,16 @@ namespace Temporal
 
 		// Temp state
 		const Fixture* _ground;
+		Segment _groundSegment;
 		Vector _previousGroundCenter;
 
-		void walk(float framePeriod);
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
+		void walk(float framePeriod);
 		void executeMovement(Vector movement);
-		void detectCollision(YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement);
-		void correctCollision(YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement);
-		void modifyCorrection(const YABP& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& movement);
+		void detectCollision(const Fixture* staticBodyBounds, Vector& collision, Vector& movement);
+		void correctCollision(const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement);
+		void modifyCorrection(const Fixture* staticBodyBounds, Vector& correction, Vector& movement);
 		void modifyVelocity(const Vector& correction);
 
 		friend class SerializationAccess;
