@@ -8,12 +8,11 @@
 
 namespace Temporal
 {
-	Vector getPosition(SDL_Event& e)
+	void fillPosition(SDL_Event& e, Vector& position)
 	{
 		float x = e.button.x * Graphics::get().getLogicalView().getX() / Graphics::get().getResolution().getX();
 		float y = Graphics::get().getLogicalView().getY() - e.button.y * Graphics::get().getLogicalView().getY() / Graphics::get().getResolution().getY();
-		Vector position(x, y);
-		return position;
+		position = Vector(x, y);
 	}
 
 	Mouse::Mouse()
@@ -23,6 +22,12 @@ namespace Temporal
 		_buttonsMap[SDL_BUTTON_RIGHT] = MouseButton::RIGHT;
 		_buttonsMap[SDL_BUTTON_WHEELDOWN] = MouseButton::WHEEL_DOWN;
 		_buttonsMap[SDL_BUTTON_WHEELUP] = MouseButton::WHEEL_UP;
+
+		for(IntMouseButtonIterator i = _buttonsMap.begin(); i != _buttonsMap.end(); ++i)
+		{
+			_buttons[i->second] = false;
+		}
+		
 	}
 
 	void Mouse::dispatchEvent(void* obj)
@@ -32,21 +37,23 @@ namespace Temporal
 		if (e.type == SDL_MOUSEBUTTONDOWN)
 		{
 			MouseButton::Enum button = _buttonsMap[e.button.button];
-			Vector position = getPosition(e);
-			MouseParams params(button, position);
+			_buttons[button] = true;
+			fillPosition(e, _position);
+			MouseParams params(button, _position);
 			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_DOWN, &params));
 		}
 		else if(e.type == SDL_MOUSEBUTTONUP)
 		{
 			MouseButton::Enum button = _buttonsMap[e.button.button];
-			Vector position = getPosition(e);
-			MouseParams params(button, position);
+			_buttons[button] = false;
+			fillPosition(e, _position);
+			MouseParams params(button, _position);
 			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_UP, &params));
 		}
 		else if(e.type == SDL_MOUSEMOTION)
 		{
-			Vector position = getPosition(e);
-			MouseParams params(MouseButton::NONE, position);
+			fillPosition(e, _position);
+			MouseParams params(MouseButton::NONE, _position);
 			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_MOVE, &params));
 		}
 	}

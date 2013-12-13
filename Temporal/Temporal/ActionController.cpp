@@ -58,33 +58,40 @@ namespace Temporal
 
 	void LedgeDetector::start()
 	{
-		_upFound = false;
+   		_upFound = false;
 		_upFailed = false;
 		_downFound = false;
 		_downFailed = false;
 		_frontFound = false;
 		_frontFailed = false;
 		_height = 0.0f;
-		
 
-		_body = static_cast<const YABP*>(getOwner().raiseMessage(Message(MessageID::GET_SHAPE)));
+		_body = static_cast<const OBBAABBWrapper*>(getOwner().raiseMessage(Message(MessageID::GET_SHAPE)));
 		_max  = _body->getTop() + _body->getHeight();
 		_side = getOrientation(getOwner());
 	}
 
+	bool intersectsExclusive(const OBB& o1, const OBB& o2)
+	{
+		Vector correction = Vector::Zero;
+		return(intersects(o1, o2, &correction) && (!equals(correction.getX(), 0.0f) || !equals(correction.getY(), 0.0f)));
+	}
+
 	void LedgeDetector::handleUp(const Contact& contact)
 	{
-		const YABP& sensor = contact.getSource().getGlobalShape();
-		const YABP& platform = contact.getTarget().getGlobalShape();
-		if(platform.getHeight() == 0.0f && 
-		   equals(_body->getTop(), platform.getTop()) &&
-		   !_upFailed)
+		if(_upFailed)
+			return;
+		const OBB& sensor = contact.getSource().getGlobalShape();
+		const OBB& platform = contact.getTarget().getGlobalShape();
+		if(platform.getAxisX().getY() == 0.0f && 
+		   equals(_body->getTop(), platform.getCenterY()))
 		{
 			_upFound = true;
 		}
 		else
 		{
-			YABP test(_body->getCenter() + Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
+			OBB test = OBBAABB(_body->getCenter() + Vector(0.0f, _body->getHeight()), _body->getRadius()); 
+			
 			if(intersectsExclusive(test, platform))
 			{
 				_upFailed = true;
@@ -95,17 +102,19 @@ namespace Temporal
 
 	void LedgeDetector::handleDown(const Contact& contact)
 	{
-		const YABP& sensor = contact.getSource().getGlobalShape();
-		const YABP& platform = contact.getTarget().getGlobalShape();
-		if(platform.getHeight() == 0.0f && 
-		   equals(_body->getBottom(), platform.getTop()) &&
-		   !_downFailed)
+		if(_downFailed)
+			return;
+		const OBB& sensor = contact.getSource().getGlobalShape();
+		const OBB& platform = contact.getTarget().getGlobalShape();
+		if(platform.getAxisX().getY() == 0.0f && 
+		   equals(_body->getBottom(), platform.getCenterY()))
 		{
 			_downFound = true;
 		}
 		else
 		{
-			YABP test(_body->getCenter() - Vector(0.0f, _body->getHeight()), _body->getSlopedRadius(), _body->getYRadius()); 
+			OBB test = OBBAABB(_body->getCenter() - Vector(0.0f, _body->getHeight()), _body->getRadius()); 
+			Vector correction = Vector::Zero;
 			if(intersectsExclusive(test, platform))
 			{
 				_downFailed = true;
@@ -129,14 +138,22 @@ namespace Temporal
 
 	void LedgeDetector::handleFront(const Contact& contact)
 	{
-		const YABP& sensor = contact.getSource().getGlobalShape();
-		const YABP& platform = contact.getTarget().getGlobalShape();
+		if(_frontFailed)
+			return;
+		const OBB& sensor = contact.getSource().getGlobalShape();
+		const OBB& platform = contact.getTarget().getGlobalShape();
+		if(platform.getAxisX().getY() != 0.0f)
+		{
+			_frontFound = false;
+			_frontFailed = true;
+			return;
+		}
+		const OBBAABBWrapper platformAABB = platform.getAABBWrapper();
 		Side::Enum opposite = Side::getOpposite(_side);
-		float topSide = platform.getTop(opposite);
-		if(equals(_body->getSide(_side), platform.getSide(opposite)) &&
+		float topSide = platformAABB.getTop();
+		if(equals(_body->getSide(_side), platformAABB.getSide(opposite)) &&
 			_body->getTop() >= topSide &&
-			_body->getBottom() <= topSide &&
-			!_frontFailed)
+			_body->getBottom() <= topSide)
 		{
 			float height = topSide - _body->getBottom();
 			if(height > _height)
@@ -145,17 +162,8 @@ namespace Temporal
 		}
 		else
 		{
-			Segment topSegment = platform.getTopSegment();
-			Segment bottomSegment = platform.getBottomSegment();
-			float topLeftY = topSegment.getY(_body->getLeft());
-			float topRightY = topSegment.getY(_body->getRight());
-			float bottomLeftY = bottomSegment.getY(_body->getLeft());
-			float bottomRightY = bottomSegment.getY(_body->getRight());
-			
-			handleFrontCheckY(topLeftY);
-			handleFrontCheckY(topRightY);
-			handleFrontCheckY(bottomLeftY);
-			handleFrontCheckY(bottomRightY);
+			handleFrontCheckY(platformAABB.getTop());
+			handleFrontCheckY(platformAABB.getBottom());
 		}
 	}
 
@@ -300,8 +308,8 @@ namespace Temporal
 				const Vector& collision = getVectorParam(message.getParam());
 				if(collision.getY() < 0.0f)
 				{
-					const Fixture& ground = *static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
-					if(!isModerateAngle(ground.getGlobalShape().getSlopedRadius().getAngle()))
+					const Segment& ground = *static_cast<Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+					if(!isModerateAngle(ground.getNaturalVector().getAngle()))
 						_stateMachine->changeState(SLIDE_STATE);
 					else
 						_stateMachine->changeState(STAND_STATE);
@@ -362,8 +370,8 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
-				const Fixture* ground = static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
-				if(!ground || isModerateAngle(ground->getGlobalShape().getSlopedRadius().getAngle()))
+				const Segment* ground = static_cast<Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+				if(!ground || isModerateAngle(ground->getNaturalVector().getAngle()))
 					_stateMachine->changeState(STAND_STATE);
 			}
 		}
@@ -426,8 +434,8 @@ namespace Temporal
 				const Vector& collision = getVectorParam(message.getParam());
 				if(collision.getY() < 0.0f)
 				{
-					const Fixture& ground = *static_cast<Fixture*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
-					if(!isModerateAngle(ground.getGlobalShape().getSlopedRadius().getAngle()))
+					const Segment& ground = *static_cast<Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
+					if(!isModerateAngle(ground.getNaturalVector().getAngle()))
 						_stateMachine->changeState(SLIDE_STATE);
 					else
 						_stateMachine->changeState(JUMP_END_STATE);
@@ -488,7 +496,7 @@ namespace Temporal
 
 		void Climb::enter() const
 		{
-			const YABP& shape = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 			float climbForceY = shape.getHeight();
 			Vector climbForce = getActionController(_stateMachine).getClimbVector();
 			if(climbForce == Vector::Zero)
@@ -524,7 +532,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
-				const YABP& size = *static_cast<YABP*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
+				const OBBAABBWrapper& size = *static_cast<OBBAABBWrapper*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 				float forceX = 0.0f;
 				float forceY = -(size.getHeight());
 				Vector position = size.getCenter() + Vector(forceX, forceY);

@@ -3,7 +3,7 @@
 #include "MovingPlatform.h"
 #include "Renderer.h"
 #include "Particles.h"
-#include "Lighting.h"
+//#include "Lighting.h"
 #include "CollisionFilter.h"
 #include "Sight.h"
 #include "StaticBody.h"
@@ -11,7 +11,7 @@
 #include "Patrol.h"
 #include "Sentry.h"
 #include "SecurityCamera.h"
-#include "Navigator.h"
+//#include "Navigator.h"
 #include "TemporalEcho.h"
 #include "TemporalPeriod.h"
 #include "SceneNode.h"
@@ -39,8 +39,8 @@ namespace Temporal
 			serialize(key, (Animator*&)component, serializer);
 		else if(strcmp(key, "renderer") == 0)
 			serialize(key, (Renderer*&)component, serializer);
-		else if(strcmp(key, "light") == 0)
-			serialize(key, (Light*&)component, serializer);
+		/*else if(strcmp(key, "light") == 0)
+			serialize(key, (Light*&)component, serializer);*/
 		else if(strcmp(key, "particle-emitter") == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, "input-controller") == 0)
@@ -65,8 +65,8 @@ namespace Temporal
 			serialize(key, (SecurityCamera*&)component, serializer);
 		else if(strcmp(key, "patrol") == 0)
 			serialize(key, (Patrol*&)component, serializer);
-		else if(strcmp(key, "navigator") == 0)
-			serialize(key, (Navigator*&)component, serializer);
+		/*else if(strcmp(key, "navigator") == 0)
+			serialize(key, (Navigator*&)component, serializer);*/
 		else if(strcmp(key, "door") == 0)
 			serialize(key, (Door*&)component, serializer);
 		else if(strcmp(key, "button") == 0)

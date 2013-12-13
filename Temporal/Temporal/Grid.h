@@ -44,7 +44,7 @@ namespace Temporal
 		void update(Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
-		FixtureCollection iterateTiles(const YABP& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;
+		FixtureCollection iterateTiles(const OBB& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;
 
 		void draw() const;
 
@@ -56,7 +56,7 @@ namespace Temporal
 		int _gridHeight;
 
 		float getTileAxisCenter(int index) const { return index * _tileSize + _tileSize / 2.0f; }
-		YABP getTileShape(int i, int j) const;
+		OBB getTileShape(int i, int j) const;
 		int getAxisIndex(float value) const { return static_cast<int>(value / _tileSize); }
 		int getIndex(int i, int j) const { return i + j * _gridWidth; }
 		int getSize() const { return _gridWidth * _gridHeight; }

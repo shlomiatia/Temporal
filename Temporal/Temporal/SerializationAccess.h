@@ -10,7 +10,7 @@ namespace Temporal
 	class Vector;
 	class AABB;
 	class Segment;
-	class YABP;
+	class OBB;
 	class Fixture;
 	class Color;
 	class Sprite;
@@ -30,7 +30,7 @@ namespace Temporal
 	class Transform;
 	class Animator;
 	class Renderer;
-	class Light;
+	//class Light;
 	class ParticleEmitter;
 	class CollisionFilter;
 	class Sight;
@@ -47,7 +47,7 @@ namespace Temporal
 	class Patrol;
 	class SecurityCamera;
 	class InputController;
-	class Navigator;
+	//class Navigator;
 	class Door;
 	class TemporalEcho;
 	class EntitySaverLoader;
@@ -77,7 +77,7 @@ namespace Temporal
 		static void serialize(const char* key, Fixture& fixture, T& serializer) 
 		{
 			// xml
-			serializer.serialize("yabp", fixture._localShape);
+			serializer.serialize("obb", fixture._localShape);
 		}
 
 		template<class T>
@@ -102,11 +102,15 @@ namespace Temporal
 		}
 		
 		template<class T>
-		static void serialize(const char* key, YABP& yabp, T& serializer)
+		static void serialize(const char* key, OBB& obb, T& serializer)
 		{
-			serializer.serialize("center", yabp._center);
-			serializer.serialize("sloped-radius", yabp._slopedRadius);
-			serializer.serialize("y-radius", yabp._yRadius);
+			serializer.serialize("center", obb._center);
+			serializer.serialize("radius", obb._radius);
+
+			// TODO:
+			float angle;
+			serializer.serializeRadians("angle", angle);
+			obb.setAngle(angle);
 		}
 
 		// Graphics objects
@@ -265,14 +269,14 @@ namespace Temporal
 			serializer.serialize("scene-node", renderer._root);
 		}
 		
-		template<class T>
+		/*template<class T>
 		static void serialize(const char* key, Light& light, T& serializer)
 		{
 			serializer.serialize("color", light._color);
 			serializer.serialize("radius", light._radius);
 			serializer.serialize("center", light._beamCenter);
 			serializer.serialize("size", light._beamSize);
-		}
+		}*/
 		
 		template<class T>
 		static void serialize(const char* key, ParticleEmitter& particleEmitter, T& serializer)
@@ -381,8 +385,8 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, InputController& component, T& serializer) {}
 
-		template<class T>
-		static void serialize(const char* key, Navigator& component, T& serializer) {}
+		/*template<class T>
+		static void serialize(const char* key, Navigator& component, T& serializer) {}*/
 
 		template<class T>
 		static void serialize(const char* key, Door& component, T& serializer) {}

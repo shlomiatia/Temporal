@@ -8,7 +8,6 @@
 namespace Temporal
 {
 	class SerializationAccess;
-
 	
 	/**********************************************************************************************
 	 * Segment
@@ -24,7 +23,7 @@ namespace Temporal
 		
 		const Vector& getCenter() const { return _center; }
 		void setCenter(const Vector& center) { _center = center; }
-		
+
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
 
@@ -42,6 +41,7 @@ namespace Temporal
 		Vector getNaturalOrigin() const { return getRadiusX() == 0.0f ? getBottomPoint() : getLeftPoint(); }
 		Vector getNaturalTarget() const { return getRadiusX() == 0.0f ? getTopPoint() : getRightPoint(); }
 		Vector getNaturalVector() const { return getNaturalTarget() - getNaturalOrigin(); }
+		Vector getNaturalDirection() const { return getNaturalVector().normalize(); }
 
 		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
 		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
@@ -95,17 +95,12 @@ namespace Temporal
 
 		const Vector& getCenter() const { return _center; }
 		void setCenter(const Vector& center) { _center = center; }
-
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
 		void setCenterX(float x) { _center.setX(x); }
 		void setCenterY(float y) { _center.setY(y); }
 
-		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
-		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-
 		const Vector& getRadius() const { return _radius; }
-
 		float getRadiusX() const { return getRadius().getX(); }
 		float getRadiusY() const { return getRadius().getY(); }
 		void setRadiusX(float x) { _radius.setX(x); }
@@ -115,11 +110,14 @@ namespace Temporal
 		float getLeft() const {	return getCenterX() - getRadiusX(); }
 		float getTop() const { return getCenterY() + getRadiusY(); }
 		float getRight() const { return getCenterX() + getRadiusX(); }
-		
-		AABB* clone() const { return new AABB(_center, _radius); }
-
+		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
+		float getOppositeSide(Side::Enum orientation) const { return getSide(Side::getOpposite(orientation)); }
 		float getWidth() const { return getRadiusX() * 2.0f; }
 		float getHeight() const { return getRadiusY() * 2.0f; }
+		void setWidth(float width) { setRadiusX(width / 2.0f); }
+		void setHeight(float height) { setRadiusY(height / 2.0f); }
+
+		AABB* clone() const { return new AABB(_center, _radius); }
 
 		bool operator==(const AABB& other) const { return ((getCenter() == other.getCenter()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const AABB& other) const { return !(*this == other); }
@@ -139,71 +137,107 @@ namespace Temporal
 	inline AABB AABBLT(float left, float top, float width, float height) { return AABB(left + width / 2.0f, top - height / 2.0f, width, height); }
 
 	/**********************************************************************************************
-	 * YABP - A parallelogram with 1 axis parallel to Y
+	 * OBB 
 	 *********************************************************************************************/
-	class YABP
+	class OBBAABBWrapper;
+
+	class OBB 
 	{
 	public:
-		static const YABP Zero;
+		static const OBB Zero;
 
-		YABP() {}
-		YABP(const Vector& center, const Vector& slopedRadius, float yRadius);
+		OBB () {}
+
+		OBB(const Vector& center, float angle, const Vector& radius) : _center(center), _radius(radius) 
+		{
+			setAngle(angle);
+		}
+
+		OBB(const Vector& center, const Vector& axis0, const Vector& radius) : _center(center), _radius(radius) 
+		{
+			setAxis0(axis0);
+		}
 
 		const Vector& getCenter() const { return _center; }
 		void setCenter(const Vector& center) { _center = center; }
-		const Vector& getSlopedRadius() const { return _slopedRadius; }
-		void setSlopedRadius(const Vector& slopedRadius){ _slopedRadius = slopedRadius; }
-		float getYRadius() const { return _yRadius; }
-		void setYRadius(float yRadius) { _yRadius = yRadius; }
-
 		float getCenterX() const { return getCenter().getX(); }
 		float getCenterY() const { return getCenter().getY(); }
+		void setCenterX(float x) { _center.setX(x); }
+		void setCenterY(float y) { _center.setY(y); }
 
-		float getSlopedRadiusX() const { return getSlopedRadius().getX(); }
-		float getSlopedRadiusY() const { return getSlopedRadius().getY(); }
+		const Vector& getRadius() const { return _radius; }
+		float getRadiusX() const { return getRadius().getX(); }
+		float getRadiusY() const { return getRadius().getY(); }
+		void setRadius(const Vector& radius) { _radius = radius; }
+		void setRadiusX(float x) { _radius.setX(x); }
+		void setRadiusY(float y) { _radius.setY(y); }
 
-
-		float getLeft() const {	return getCenterX() - getSlopedRadiusX(); }
-		float getRight() const { return getCenterX() + getSlopedRadiusX(); }
-		float getTop() const;
-		float getBottom() const;
-
-		void setWidth(float width) { _slopedRadius.setX(width / 2.0f); }
-		float getWidth() const { return getSlopedRadiusX() * 2.0f; }
-		void setHeight(float height) { setYRadius(height / 2.0f); }
-		float getHeight() const { return (abs(getSlopedRadiusY()) + getYRadius()) * 2.0f; }
-
-		float getTopLeft() const { return getCenterY() - getSlopedRadiusY() + getYRadius(); }
-		float getBottomLeft() const { return getCenterY() - getSlopedRadiusY() - getYRadius(); }
-		float getTopRight() const { return getCenterY() + getSlopedRadiusY() + getYRadius(); }
-		float getBottomRight() const { return getCenterY() + getSlopedRadiusY() - getYRadius(); }
-
-		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
-		float getOppositeSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getRight() : getLeft(); }
-		float getTop(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusY() + getYRadius(); }
-		float getBottom(Side::Enum side) const { return getCenterY() + (Side::LEFT ? -1.0f : 1.0f) * getSlopedRadiusY() - getYRadius(); }
-		float getTopSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getTopLeft() : getTopRight(); }
-		float getBottomSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getBottomLeft() : getBottomRight(); }
+		const Vector* getAxes() const { return _axes; }
+		const Vector& getAxis(Axis::Enum i) const { return _axes[i]; }
+		const Vector& getAxisX() const { return getAxis(Axis::X); }
+		const Vector& getAxisY() const { return getAxis(Axis::Y); }
 
 		void translate(const Vector& translation) { _center += translation; }
-		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
 
-		Segment getTopSegment() const { return Segment(getCenter() + getYVector(), getSlopedRadius()); }
-		Segment getBottomSegment() const { return Segment(getCenter() - getYVector(), getSlopedRadius()); }
-		Vector getYVector() const { return Vector(0.0f, getYRadius()); }
+		Vector getPoint(Axis::Enum axis, bool positive) const;
+		Vector getPoint(Side::Enum side) const { return getPoint(Axis::X, side == Side::RIGHT ? true : false); }
+		OBBAABBWrapper getAABBWrapper();
+		const OBBAABBWrapper getAABBWrapper() const;
 
-		YABP* clone() const { return new YABP(_center, _slopedRadius, _yRadius); }
+		// angle>0<90
+		void setAngle(float angle)
+		{
+			setAxis0(Vector(angle));
+		}
+
+		// axis0 => unit vector. x>=0, y>=0
+		void setAxis0(const Vector& axis0)
+		{
+			_axes[0] = axis0;
+			_axes[1] = _axes[0].getLeftNormal();
+		}
 	private:
 		Vector _center;
-		Vector _slopedRadius;
-		float _yRadius;
-		
-		void validate() const;
+		Vector _axes[2];
+		Vector _radius;
 
 		friend class SerializationAccess;
+
 	};
 
-	inline YABP YABPAABB(const Vector& center, const Vector& radius) { return YABP(center, Vector(radius.getX(), 0.0f), radius.getY()); }
+	class OBBAABBWrapper
+	{
+	public:
+		// TODO: Validate
+		explicit OBBAABBWrapper(OBB* obb = 0) : _obb(obb) {}
+
+		const Vector& getCenter() const { return _obb->getCenter(); }
+		float getCenterX() const { return _obb->getCenter().getX(); }
+		float getCenterY() const { return _obb->getCenter().getY(); }
+
+		const Vector& getRadius() const { return _obb->getRadius(); }
+		float getRadiusX() const { return _obb->getRadius().getX(); }
+		float getRadiusY() const { return _obb->getRadius().getY(); }
+
+		float getBottom() const { return _obb->getCenterY() - _obb->getRadiusY(); }
+		float getLeft() const {	return _obb->getCenterX() - _obb->getRadiusX(); }
+		float getTop() const { return _obb->getCenterY() + _obb->getRadiusY(); }
+		float getRight() const { return _obb->getCenterX() + _obb->getRadiusX(); }
+		float getSide(Side::Enum orientation) const { return orientation == Side::LEFT ? getLeft() : getRight(); }
+		float getOppositeSide(Side::Enum orientation) const { return getSide(Side::getOpposite(orientation)); }
+		float getWidth() const { return _obb->getRadiusX() * 2.0f; }
+		float getHeight() const { return _obb->getRadiusY() * 2.0f; }
+		void setWidth(float width) { _obb->setRadiusX(width / 2.0f); }
+		void setHeight(float height) { _obb->setRadiusY(height / 2.0f); }
+
+		void setOBB(OBB& obb) { _obb = &obb; }
+		OBB& getOBB() const { return *_obb; }
+
+	private:
+		OBB* _obb;
+	};
+
+	inline OBB OBBAABB(const Vector& center, const Vector& radius) { return OBB(center, 0.0f, radius); }
 
 	/**********************************************************************************************
 	 * Directed segment
@@ -214,8 +248,11 @@ namespace Temporal
 		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
 		DirectedSegment(const Vector& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
 		const Vector& getOrigin() const { return _origin; }
+		void setOrigin(const Vector& origin) { _origin = origin; }
 		const Vector& getVector() const { return _vector; }
+		void setVector(const Vector& vector) { _vector = vector; }
 		Vector getTarget() const { return getOrigin() + getVector(); }
+		Vector getDirection() const { return getVector().normalize(); }
 	private:
 		Vector _origin;
 		Vector _vector;

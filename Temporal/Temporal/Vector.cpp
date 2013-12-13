@@ -5,6 +5,11 @@ namespace Temporal
 {
 	const Vector Vector::Zero(0.0f, 0.0f);
 
+	Vector::Vector(float angle)
+		: _x(cos(angle)), _y(sin(angle))
+	{
+	}
+
 	Vector Vector::absolute() const
 	{
 		return Vector(abs(_x), abs(_y));

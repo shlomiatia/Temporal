@@ -391,7 +391,7 @@ namespace Temporal
 		bounds = AABB(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f, BUTTON_SIZE.getX(), BUTTON_SIZE.getY());
 		control = addButton(Hash("newSgs"), bounds, "New Sgs", createAction(AnimationEditor, newSgs), Key::N);		
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
-		control = addButton(Hash("deleteSs"), bounds, "Delete Ss", createAction(AnimationEditor, deleteSs), Key::DELETE);
+		control = addButton(Hash("deleteSs"), bounds, "Delete Ss", createAction(AnimationEditor, deleteSs), Key::DEL);
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
 		control = addButton(Hash("copySgs"), bounds, "Copy Sgs", createAction(AnimationEditor, copy), Key::C);
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);

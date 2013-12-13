@@ -13,13 +13,13 @@ namespace Temporal
 	class Fixture
 	{
 	public:
-		explicit Fixture(const YABP& shape = YABP::Zero) : _localShape(shape), _transform(0), _filter(0) {}
+		explicit Fixture(const OBB& shape = OBB::Zero) : _localShape(shape), _transform(0), _filter(0) {}
 
 		void init(const Component& parent);
 
-		const YABP& getLocalShape() const { return _localShape; }
-		const YABP& getGlobalShape() const { return _globalShape; }
-		YABP& getGlobalShape() { return _globalShape; }
+		const OBB& getLocalShape() const { return _localShape; }
+		const OBB& getGlobalShape() const { return _globalShape; }
+		OBB& getGlobalShape() { return _globalShape; }
 		const CollisionFilter& getFilter() const { return *_filter; }
 		Hash getEntityId() const;
 
@@ -29,8 +29,8 @@ namespace Temporal
 	private:
 		const Transform* _transform;
 		const CollisionFilter* _filter;
-		YABP _localShape; 
-		YABP _globalShape;
+		OBB _localShape; 
+		OBB _globalShape;
 
 		friend class SerializationAccess;
 	};

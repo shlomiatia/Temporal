@@ -4,13 +4,14 @@
 namespace Temporal
 {
 	class Vector;
-	class YABP;
 	class DirectedSegment;
+	class OBB;
 
-	bool intersects(const YABP& yabp1, const YABP& yabp2, Vector* correction = 0);
-	bool intersectsExclusive(const YABP& yabp1, const YABP& yabp2);
-	bool intersects(const DirectedSegment& seg, const YABP& yabp, Vector* pointOfIntersection = 0, float* distance = 0);
-	bool intersects(const YABP& yabp, const Vector& point);
+	bool intersects(const OBB& obb, const Vector& point);
+	bool intersects(const DirectedSegment& seg, const OBB& obb, Vector* pointOfIntersection = 0, float* distance = 0);
+	bool intersects(const OBB& obb1, const OBB& obb2, Vector* correction = 0);
+	
+	
 }
 
 #endif

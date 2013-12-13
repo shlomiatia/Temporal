@@ -18,7 +18,6 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			UNKNOWN,
 			X,
 			Y
 		};
@@ -26,5 +25,8 @@ namespace Temporal
 		inline Axis::Enum getOpposite(Axis::Enum axis) { return axis == Axis::X ? Axis::Y : Axis::X; }
 	}
 	inline void operator++(Axis::Enum& value, int) { value = static_cast<Axis::Enum>(value + 1); }
+	inline void operator++(Axis::Enum& value) { value = static_cast<Axis::Enum>(value + 1); }
+	inline void operator--(Axis::Enum& value, int) { value = static_cast<Axis::Enum>(value - 1); }
+	inline void operator--(Axis::Enum& value) { value = static_cast<Axis::Enum>(value - 1); }
 }
 #endif

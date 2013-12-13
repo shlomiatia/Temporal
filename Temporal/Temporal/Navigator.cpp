@@ -1,4 +1,4 @@
-#include "Navigator.h"
+/*#include "Navigator.h"
 #include "Serialization.h"
 #include "Segment.h"
 #include "MessageUtils.h"
@@ -27,10 +27,10 @@ namespace Temporal
 			return static_cast<Navigator&>(stateMachine);
 		}
 
-		void plotPath(StateMachineComponent& stateMachine, const YABP& goalPosition)
+		void plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const YABP& startPosition = *static_cast<YABP*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBB& startPosition = *static_cast<OBB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
@@ -47,7 +47,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const YABP& goalPosition = *static_cast<const YABP*>(message.getParam());
+				const OBB& goalPosition = *static_cast<const OBB*>(message.getParam());
 				plotPath(*_stateMachine, goalPosition); 
 			}
 		}
@@ -64,7 +64,7 @@ namespace Temporal
 				bool reachedTargetPlatform;
 				if(!path)
 				{
-					const YABP& destination = navigator.getDestination();
+					const OBB& destination = navigator.getDestination();
 					targetX = destination.getCenterX();
 					reachedTargetPlatform = true;
 				}
@@ -82,7 +82,7 @@ namespace Temporal
 				{
 					if(reachedTargetPlatform)
 					{
-						navigator.setDestination(YABP::Zero);
+						navigator.setDestination(OBB::Zero);
 						_stateMachine->changeState(WAIT_STATE);
 					}
 					else
@@ -221,7 +221,7 @@ namespace Temporal
 		return WAIT_STATE;
 	}
 
-	/*void Navigator::deserialize(const Serialization& serialization)
+	void Navigator::deserialize(const Serialization& serialization)
 	{
 		if(_path)
 		{
@@ -236,7 +236,7 @@ namespace Temporal
 			
 		if(destination != AABB::Zero)
 			plotPath(*this, destination);
-	}*/
+	}
 
 	void Navigator::debugDraw() const
 	{
@@ -260,7 +260,7 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		/*if(message.getID() == MessageID::SERIALIZE)
+		if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
@@ -271,9 +271,9 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			deserialize(serialization);
 		}
-		else */if(message.getID() == MessageID::DRAW_DEBUG)
+		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}
 	}
-}
+}*/

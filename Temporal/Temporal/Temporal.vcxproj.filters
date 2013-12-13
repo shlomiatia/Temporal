@@ -149,15 +149,6 @@
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Pathfinder.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigationGraph.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Navigator.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="MovingPlatform.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -205,6 +196,15 @@
     </ClInclude>
     <ClInclude Include="Control.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinder.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGraph.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Navigator.h">
+      <Filter>AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,15 +338,6 @@
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="NavigationGraph.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Navigator.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Pathfinder.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="MovingPlatform.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -388,6 +379,15 @@
     </ClCompile>
     <ClCompile Include="AnimationEditor.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGraph.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Navigator.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinder.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

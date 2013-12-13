@@ -59,10 +59,10 @@ namespace Temporal
 			{
 				switch(ch)
 				{
-					case 's': { ts = va_arg(arguments, const char*);  ss << ts; } break;
-					case 'c': { n = va_arg(arguments, int);    ss << n;   } break;
-					case 'd': { n = va_arg(arguments, int);    ss << n;    } break;
-					case 'f': { f = va_arg(arguments, float); ss << f;   } break;
+					case 's': { ts = va_arg(arguments, const char*); ss << ts; } break;
+					case 'c': { n = va_arg(arguments, int); ss << n; } break;
+					case 'd': { n = va_arg(arguments, int); ss << n; } break;
+					case 'f': { f = va_arg(arguments, float); ss << f; } break;
 					case '%': { ss << '%'; } break;
 					default:  { abort(); }
 				}
@@ -71,7 +71,6 @@ namespace Temporal
 			++i;
 			ch = s[i];
 		}
-
 		va_end(arguments);
 		return ss.str();
 	}
