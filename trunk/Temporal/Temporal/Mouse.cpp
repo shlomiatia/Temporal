@@ -54,7 +54,7 @@ namespace Temporal
 		{
 			fillPosition(e, _position);
 			MouseParams params(MouseButton::NONE, _position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_MOVE, &params));
+			//GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_MOVE, &params));
 		}
 	}
 }
