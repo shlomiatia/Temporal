@@ -46,24 +46,18 @@ namespace Temporal
 		{
 			update();
 			draw();
-			float currentFrameTime = Time::now();
-			float framesDifference = currentFrameTime - _lastFrameTime;
-			float sleepTime = FRAME_PERIOD - framesDifference;
-			if(sleepTime >= 0)
-				Thread::sleep(sleepTime);
-
-			_lastFrameTime += FRAME_PERIOD;
-			if(_lastFrameTime < currentFrameTime)
-				_lastFrameTime = currentFrameTime;
 		}
 
 		dispose();
 	}
 
+	
 	void Game::update()
 	{
 		Input::get().update();
-		GameStateManager::get().update(FRAME_PERIOD);
+		float currentFrameTime = Time::now();
+		GameStateManager::get().update(currentFrameTime - _lastFrameTime);
+		_lastFrameTime = currentFrameTime;
 	}
 
 	void Game::draw() const

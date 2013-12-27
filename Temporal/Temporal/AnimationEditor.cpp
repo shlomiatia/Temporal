@@ -21,7 +21,7 @@ namespace Temporal
 
 	void AnimationEditor::setAnimation(int index)
 	{
-		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &_animationId));
+		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &AnimationParams(_animationId)));
 		setIndex(index);
 		setSample();
 		initSns();

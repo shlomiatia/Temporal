@@ -202,10 +202,10 @@ namespace Temporal
 	{
 		const Vector& position = getPosition(*this);
 		_obb.setCenter(position);
-		Graphics::get().draw(_obb, _backgroundColor, true);
+		Graphics::get().draw(_box, _backgroundColor, true);
 		if(_isHover)
-			Graphics::get().draw(_obb, _hoverColor, true);
-		Graphics::get().draw(_obb, _borderColor, false);
+			Graphics::get().draw(_box, _hoverColor, true);
+		Graphics::get().draw(_box, _borderColor, false);
 		if(getString() != "")
 		{
 			glColor4f(_foregroundColor.getR(), _foregroundColor.getG(), _foregroundColor.getB(), _foregroundColor.getA());

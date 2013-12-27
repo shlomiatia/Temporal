@@ -75,6 +75,7 @@ namespace Temporal
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glLoadIdentity();
+		
 	}
 
 	void Graphics::finishDrawing() const
@@ -245,6 +246,20 @@ namespace Temporal
  
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);
+	}
+
+	void Graphics::draw(const OBBAABBWrapper& obb, const Color& color, bool fill)
+	{
+		bindTexture(0);
+
+		setColor(color);
+
+		glBegin(fill ? GL_QUADS : GL_LINE_LOOP);
+		glVertex3f(obb.getCenterX()-obb.getRadiusX(),obb.getCenterY()-obb.getRadiusY(), 0);
+		glVertex3f(obb.getCenterX()-obb.getRadiusX(),obb.getCenterY()+obb.getRadiusY(), 0);
+		glVertex3f(obb.getCenterX()+obb.getRadiusX(),obb.getCenterY()+obb.getRadiusY(), 0);
+		glVertex3f(obb.getCenterX()+obb.getRadiusX(),obb.getCenterY()-obb.getRadiusY(), 0);
+		glEnd();
 	}
 
 	void Graphics::draw(const OBB& obb, const Color& color, bool fill)
