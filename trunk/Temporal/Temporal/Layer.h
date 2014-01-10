@@ -53,6 +53,7 @@ namespace Temporal
 
 		void draw();
 		void add(LayerType::Enum layer, Component* component) { _layers.at(layer).push_back(component); }
+		LayerComponentsMap& get() { return _layers; }
 
 	private:
 		LayerComponentsMap _layers;
@@ -65,6 +66,7 @@ namespace Temporal
 
 		void draw();
 		void add(Component* component) { _components.push_back(component); }
+		std::vector<Component*>& get() { return _components; }
 
 	private:
 		std::vector<Component*> _components;
@@ -92,6 +94,8 @@ namespace Temporal
 		void init(GameState* gameState);
 		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
+		GUILayer& getGUILayer() { return *_guiLayer; }
+		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		void draw();
 
 	private:

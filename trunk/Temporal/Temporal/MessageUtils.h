@@ -45,17 +45,20 @@ namespace Temporal
 	{
 	public:
 		MouseParams(MouseButton::Enum button, const Vector& position)
-			: _button(button), _position(position), _sender(0) {}
+			: _button(button), _position(position), _sender(0), _handled(false) {}
 
 		MouseButton::Enum getButton() const { return _button; }
 		const Vector& getPosition() const { return _position; }
 		void* getSender() const { return _sender; }
 		void setSender(void* sender) { _sender = sender; }
+		void setHandled(bool handled) { _handled = handled; }
+		bool isHandled() const { return _handled; }
 
 	private:
 		MouseButton::Enum _button;
 		const Vector& _position;
 		void* _sender;
+		bool _handled;
 
 		MouseParams(const MouseParams&);
 		MouseParams& operator=(const MouseParams&);
