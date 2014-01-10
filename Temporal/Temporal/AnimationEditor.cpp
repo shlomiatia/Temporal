@@ -493,7 +493,6 @@ namespace Temporal
 		control->setText(text);
 		return control;
 	}
-
 	Control* AnimationEditor::addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey)
 	{
 		Control* control = addControl(id, shape);
@@ -538,7 +537,7 @@ namespace Temporal
 
 	void MyGameStateListener::onLoaded(Hash id, GameState& gameState)
 	{
-		if(id == Hash("resources/game-states/test.xml"))
+		if(id == Hash("resources/game-states/animation-editor.xml"))
 		{
 			Entity* entity = new Entity(Hash("ENT_ANIMATION_EDITOR"));
 			entity->add(new AnimationEditor());

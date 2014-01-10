@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "MessageUtils.h"
 #include "EntitySystem.h"
+#include "Layer.h"
 
 #include <SDL.h>
 
@@ -30,6 +31,31 @@ namespace Temporal
 		
 	}
 
+	void sendMessage(MessageID::Enum messageId, MouseParams& params)
+	{
+		Message message(messageId, &params);
+		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
+		ComponentCollection& components = layersManager.getGUILayer().get();
+		for(ComponentIterator j = components.begin(); j != components.end(); ++j)
+		{
+			(**j).raiseMessage(message);
+			if(params.isHandled())
+				return;
+		}
+
+		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
+		for(int i = LayerType::SIZE - 1; i >= 0 ; --i)
+		{
+			ComponentCollection& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
+			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
+			{
+				(**j).raiseMessage(message);
+				if(params.isHandled())
+					return;
+			}
+		}
+	}
+
 	void Mouse::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
@@ -40,7 +66,7 @@ namespace Temporal
 			_buttons[button] = true;
 			fillPosition(e, _position);
 			MouseParams params(button, _position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_DOWN, &params));
+			sendMessage(MessageID::MOUSE_DOWN, params);
 		}
 		else if(e.type == SDL_MOUSEBUTTONUP)
 		{
@@ -48,13 +74,13 @@ namespace Temporal
 			_buttons[button] = false;
 			fillPosition(e, _position);
 			MouseParams params(button, _position);
-			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_UP, &params));
+			sendMessage(MessageID::MOUSE_UP, params);
 		}
 		else if(e.type == SDL_MOUSEMOTION)
 		{
 			fillPosition(e, _position);
 			MouseParams params(MouseButton::NONE, _position);
-			//GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MOUSE_MOVE, &params));
+			sendMessage(MessageID::MOUSE_MOVE, params);
 		}
 	}
 }

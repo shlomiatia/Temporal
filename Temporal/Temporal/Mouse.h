@@ -22,6 +22,8 @@ namespace Temporal
 		};
 	}
 
+	class Message;
+
 	typedef std::unordered_map<int, MouseButton::Enum> IntMouseButtonMap;
 	typedef IntMouseButtonMap::const_iterator IntMouseButtonIterator;
 
@@ -47,7 +49,6 @@ namespace Temporal
 		IntMouseButtonMap _buttonsMap;
 		MouseButtonBoolMap _buttons;
 		Vector _position;
-
 
 		Mouse();
 		~Mouse() {};

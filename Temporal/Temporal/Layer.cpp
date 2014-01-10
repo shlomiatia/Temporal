@@ -56,7 +56,7 @@ namespace Temporal
 
 	void SpriteLayer::draw()
 	{
-		for(int i = 0; i <= LayerType::SIZE; ++i)
+		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
 			ComponentCollection& components = _layers.at(static_cast<LayerType::Enum>(i));
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)

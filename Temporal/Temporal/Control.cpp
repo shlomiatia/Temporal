@@ -33,12 +33,18 @@ namespace Temporal
 		raiseEvent(mouseDownEvent, params);
 	}
 
-	void mouseUp(IAction1<const MouseParams&>* mouseClickEvent, IAction1<const MouseParams&>* mouseUpEvent, const MouseParams& params, bool& isDown, bool& isClick)
+	void mouseUp(IAction1<const MouseParams&>* mouseClickEvent, IAction1<const MouseParams&>* mouseUpEvent, MouseParams& params, bool& isDown, bool& isClick)
 	{
-		if(isClick)
+		if(isClick) 
+		{
 			raiseEvent(mouseClickEvent, params);
+			params.setHandled(true);
+		}
 		if(isDown)
+		{
 			raiseEvent(mouseUpEvent, params);
+			params.setHandled(true);
+		}
 		isClick = false;
 		isDown = false;
 	}
@@ -144,20 +150,19 @@ namespace Temporal
 			params.setSender(this);
 			if(intersects(shape.getOBB(), params.getPosition()))
 			{
-				//params.setHandled(true);
+				params.setHandled(true);
 				if(params.getButton() == MouseButton::LEFT)
 					mouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
 				else if(params.getButton() == MouseButton::RIGHT)
 					mouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
-				/*else
-					params.setHandled(false);*/
+				else
+					params.setHandled(false);
 			}
 		}
 		else if(message.getID() == MessageID::MOUSE_UP)
 		{
 			MouseParams& params = getMouseParams(message.getParam());
 			params.setSender(this);
-			//params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
 			{
 				if(_isLeftClick)
@@ -187,7 +192,7 @@ namespace Temporal
 			params.setSender(this);
 			if(_isLeftDown || _isRightDown)
 			{
-//				params.setHandled(true);
+				params.setHandled(true);
 				raiseEvent(_mouseMoveEvent, params);
 			}
 			if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
