@@ -9,12 +9,17 @@ namespace Temporal
 	class Camera : public Layer
 	{
 	public:
-		Camera(LayersManager* manager) : Layer(manager), _position(Vector::Zero) {}
+		Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _bottomLeft(Vector::Zero) {}
 		void draw();
-		const Vector& getPosition() const { return _position; }
+		
+		void setFollowPlayer(bool followPlayer) { _followPlayer = followPlayer; }
+		const Vector& getBottomLeft() const { return _bottomLeft; }
+		void setCenter(const Vector& position);
+		void setBottomLeft(const Vector& position);
 		
 	private:
-		Vector _position;
+		bool _followPlayer;
+		Vector _bottomLeft;
 
 		Camera(const Camera&);
 		Camera& operator=(const Camera&);
