@@ -63,13 +63,6 @@ namespace Temporal
 		void translate(const Vector& translation) { _center += translation; }
 		void rotate(Side::Enum orientation) { _center.setX(_center.getX() * orientation); }
 
-		template<class T>
-		void serialize(T& serializer)
-		{
-			serializer.serialize("center", _center);	
-			serializer.serialize("radius", _radius);
-		}
-
 	private:
 		Vector _center;
 		Vector _radius;
@@ -183,6 +176,8 @@ namespace Temporal
 		Vector getPoint(Side::Enum side) const { return getPoint(Axis::X, side == Side::RIGHT ? true : false); }
 		OBBAABBWrapper getAABBWrapper();
 		const OBBAABBWrapper getAABBWrapper() const;
+
+		float getAngle() const { return _axes[0].getAngle(); }
 
 		// angle>0<90
 		void setAngle(float angle)

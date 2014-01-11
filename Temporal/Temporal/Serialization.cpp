@@ -186,6 +186,7 @@ namespace Temporal
 		_doc.Print(&printer);
 		_buffer->copy(MemoryStream(printer.CStr()));
 	}
+
 	void XmlSerializer::preSerialize(const char* key)
 	{
 		tinyxml2::XMLElement* current = _doc.NewElement(key);

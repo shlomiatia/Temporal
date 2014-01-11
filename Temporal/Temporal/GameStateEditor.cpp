@@ -1,11 +1,20 @@
 #include "GameStateEditor.h"
 #include "Editable.h"
+#include "Keyboard.h"
+#include "Serialization.h"
+#include "SerializationAccess.h"
+#include "Grid.h"
+#include "Layer.h"
 
 namespace Temporal
 {
 	void GameStateEditor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_PRE_INIT)
+		if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			Keyboard::get().add(this);
+		}
+		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
 			EntityCollection& entities = getEntity().getManager().getEntities();
 			Hash rendererComponentID = Hash("static-body");
@@ -14,6 +23,16 @@ namespace Temporal
 				Entity& entity = *i->second;
 				if(entity.get(rendererComponentID))
 					entity.add(new Editable());
+			}
+		}
+		else if(message.getID() == MessageID::KEY_UP)
+		{
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if(key == Key::F2)
+			{
+				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
+				serializer.serialize("game-state", getEntity().getManager().getGameState());
+				serializer.save();
 			}
 		}
 	}

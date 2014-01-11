@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	//GameStateManager::get().setListener(new AEGameStateListener());
 	GameStateManager::get().setListener(new GSEGameStateListener());
 	//Game::get().run("resources/game-states/animation-editor.xml");
-	Game::get().run("resources/game-states/entities.xml");
+	Game::get().run("resources/game-states/save-test.xml");
 	
 //	_CrtDumpMemoryLeaks();
 	return 0;

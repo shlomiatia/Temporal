@@ -5,20 +5,18 @@
 
 namespace Temporal
 {
-	const Hash Editable::TYPE = Hash("editable");
-
 	void Editable::leftMouseDown(const MouseParams& params)
 	{
 		_offset = params.getPosition() - getPosition(*this);
 		_translation = true;
-		_rotation = false;
+		//_rotation = false;
 	}
 
 	void Editable::rightMouseDown(const MouseParams& params)
 	{
 		_offset = params.getPosition() - getPosition(*this);
 		_translation = false;
-		_rotation = true;
+		//_rotation = true;
 	}
 
 	void Editable::mouseMove(const MouseParams& params)
@@ -28,12 +26,12 @@ namespace Temporal
 			Vector newPosition = params.getPosition() - _offset;
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 		}
-		else if(_rotation)
+		/*else if(_rotation)
 		{
 			const Vector vector = params.getPosition() - _offset;
-			//float rotation = fromRadians(vector.getAngle());
-			//getCreateSceneNodeSample().setRotation(rotation);
-		}
+			float rotation = fromRadians(vector.getAngle());
+			getCreateSceneNodeSample().setRotation(rotation);
+		}*/
 	}
 
 	void Editable::handleMessage(Message& message)
@@ -57,7 +55,7 @@ namespace Temporal
 		else if (message.getID() == MessageID::MOUSE_UP)
 		{
 			_translation = false;
-			_rotation = false;
+			//_rotation = false;
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{

@@ -33,56 +33,60 @@ namespace Temporal
 {
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 	{
-		if(strcmp(key, "transform") == 0)
+		if(strcmp(key, Transform::TYPE.getString()) == 0)
 			serialize(key, (Transform*&)component, serializer);
-		else if(strcmp(key, "animator") == 0)
+		else if(strcmp(key, Animator::TYPE.getString()) == 0)
 			serialize(key, (Animator*&)component, serializer);
-		else if(strcmp(key, "renderer") == 0)
+		else if(strcmp(key, Renderer::TYPE.getString()) == 0)
 			serialize(key, (Renderer*&)component, serializer);
-		/*else if(strcmp(key, "light") == 0)
+		/*else if(strcmp(key, Light::TYPE.getString()) == 0)
 			serialize(key, (Light*&)component, serializer);*/
-		else if(strcmp(key, "particle-emitter") == 0)
+		else if(strcmp(key, ParticleEmitter::TYPE.getString()) == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
-		else if(strcmp(key, "input-controller") == 0)
+		else if(strcmp(key, InputController::TYPE.getString()) == 0)
 			serialize(key, (InputController*&)component, serializer);
-		else if(strcmp(key, "moving-platform") == 0)
+		else if(strcmp(key, MovingPlatform::TYPE.getString()) == 0)
 			serialize(key, (MovingPlatform*&)component, serializer);
-		else if(strcmp(key, "action-controller") == 0)
+		else if(strcmp(key, ActionController::TYPE.getString()) == 0)
 			serialize(key, (ActionController*&)component, serializer);
-		else if(strcmp(key, "collision-filter") == 0)
+		else if(strcmp(key, CollisionFilter::TYPE.getString()) == 0)
 			serialize(key, (CollisionFilter*&)component, serializer);
-		else if(strcmp(key, "sight") == 0)
+		else if(strcmp(key, Sight::TYPE.getString()) == 0)
 			serialize(key, (Sight*&)component, serializer);
-		else if(strcmp(key, "sensor") == 0)
+		else if(strcmp(key, Sensor::TYPE.getString()) == 0)
 			serialize(key, (Sensor*&)component, serializer);
-		else if(strcmp(key, "dynamic-body") == 0)
+		else if(strcmp(key, DynamicBody::TYPE.getString()) == 0)
 			serialize(key, (DynamicBody*&)component, serializer);
-		else if(strcmp(key, "static-body") == 0)
+		else if(strcmp(key, StaticBody::TYPE.getString()) == 0)
 			serialize(key, (StaticBody*&)component, serializer);
-		else if(strcmp(key, "sentry") == 0)
+		else if(strcmp(key, Sentry::TYPE.getString()) == 0)
 			serialize(key, (Sentry*&)component, serializer);
-		else if(strcmp(key, "security-camera") == 0)
+		else if(strcmp(key, SecurityCamera::TYPE.getString()) == 0)
 			serialize(key, (SecurityCamera*&)component, serializer);
-		else if(strcmp(key, "patrol") == 0)
+		else if(strcmp(key, Patrol::TYPE.getString()) == 0)
 			serialize(key, (Patrol*&)component, serializer);
-		/*else if(strcmp(key, "navigator") == 0)
+		/*else if(strcmp(key, Navigator::TYPE.getString()) == 0)
 			serialize(key, (Navigator*&)component, serializer);*/
-		else if(strcmp(key, "door") == 0)
+		else if(strcmp(key, Door::TYPE.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
-		else if(strcmp(key, "button") == 0)
+		else if(strcmp(key, Button::TYPE.getString()) == 0)
 			serialize(key, (Button*&)component, serializer);
-		else if(strcmp(key, "laser") == 0)
+		else if(strcmp(key, Laser::TYPE.getString()) == 0)
 			serialize(key, (Laser*&)component, serializer);
-		else if(strcmp(key, "temporal-echo") == 0)
+		else if(strcmp(key, TemporalEcho::TYPE.getString()) == 0)
 			serialize(key, (TemporalEcho*&)component, serializer);
-		else if(strcmp(key, "temporal-period") == 0)
+		else if(strcmp(key, TemporalPeriod::TYPE.getString()) == 0)
 			serialize(key, (TemporalPeriod*&)component, serializer);
-		else if(strcmp(key, "player-period") == 0)
+		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
-		else if(strcmp(key, "saver-loader") == 0)
-			serialize(key, (EntitySaverLoader*&)component, serializer);
 		else
 			abort();
+	}
+
+	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
+	{
+		key = value->getType().getString();
+		shouldSerialize = key != 0;
 	}
 
 	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)
@@ -103,6 +107,36 @@ namespace Temporal
 			serialize(key, *(Patrol*&)component, serializer);
 		else if(component->getType() == SecurityCamera::TYPE)
 			serialize(key, *(SecurityCamera*&)component, serializer);
-
+		// XML ONLY
+		else if(component->getType() == Renderer::TYPE)
+			serialize(key, *(Renderer*&)component, serializer);
+		/*else if(component->getType() == Light::TYPE)
+			serialize(key, *(Light*&)component, serializer);*/
+		else if(component->getType() == ParticleEmitter::TYPE)
+			serialize(key, *(ParticleEmitter*&)component, serializer);
+		else if(component->getType() == InputController::TYPE)
+			serialize(key, *(InputController*&)component, serializer);
+		else if(component->getType() == MovingPlatform::TYPE)
+			serialize(key, *(MovingPlatform*&)component, serializer);
+		else if(component->getType() == CollisionFilter::TYPE)
+			serialize(key, *(CollisionFilter*&)component, serializer);
+		else if(component->getType() == Sight::TYPE)
+			serialize(key, *(Sight*&)component, serializer);
+		else if(component->getType() == Sensor::TYPE)
+			serialize(key, *(Sensor*&)component, serializer);
+		else if(component->getType() == StaticBody::TYPE)
+			serialize(key, *(StaticBody*&)component, serializer);
+		/*else if(component->getType() == Navigator::TYPE)
+			serialize(key, *(Navigator*&)component, serializer);*/
+		else if(component->getType() == Door::TYPE)
+			serialize(key, *(Door*&)component, serializer);
+		else if(component->getType() == Button::TYPE)
+			serialize(key, *(Button*&)component, serializer);
+		else if(component->getType() == TemporalEcho::TYPE)
+			serialize(key, *(TemporalEcho*&)component, serializer);
+		else if(component->getType() == TemporalPeriod::TYPE)
+			serialize(key, *(TemporalPeriod*&)component, serializer);
+		else if(component->getType() == PlayerPeriod::TYPE)
+			serialize(key, *(PlayerPeriod*&)component, serializer);
 	}
 }

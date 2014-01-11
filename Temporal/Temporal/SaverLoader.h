@@ -9,10 +9,8 @@ namespace Temporal
 	{
 	public:
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return Hash::INVALID;; }
 		Component* clone() const { return new EntitySaverLoader(); }
-
-		static const Hash TYPE;
 	private:
 	};
 
@@ -45,10 +43,9 @@ namespace Temporal
 	{
 	public:
 		GameSaverLoader() : _loader("save.dat"), _saver("save.dat") {}
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return Hash::INVALID;; }
 		virtual Component* clone() const { return 0; }
 		void handleMessage(Message& message);
-		static const Hash TYPE;
 	private:
 
 		GameSaver _saver;

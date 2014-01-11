@@ -12,7 +12,7 @@ namespace Temporal
 	class GameStateLoaderComponent : public Component
 	{
 	public:
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return Hash::INVALID; }
 		virtual Component* clone() const { return 0; }
 		void handleMessage(Message& message)
 		{
