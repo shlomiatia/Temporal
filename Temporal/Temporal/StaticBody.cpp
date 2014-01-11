@@ -5,6 +5,8 @@
 #include "MessageUtils.h"
 #include "CollisionFilter.h"
 
+#include "Layer.h"
+
 namespace Temporal
 {
 	const Hash StaticBody::TYPE = Hash("static-body");
@@ -23,6 +25,10 @@ namespace Temporal
 			_fixture->init(*this);
 			getEntity().getManager().getGameState().getGrid().add(_fixture);
 		}
+		else if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::STATIC, this);
+		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			Graphics::get().draw(_fixture->getGlobalShape(), Color(0.5f, 0.25f, 0.125f));
@@ -35,6 +41,11 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_POSITION)
 		{
 			getEntity().getManager().getGameState().getGrid().update(_fixture);
+		}
+		else if(message.getID() == MessageID::SET_ROTATION)
+		{
+			float angle = getFloatParam(message.getParam());
+			//_fixture->getLocalShape().setAngle(angle);
 		}
 	}
 }

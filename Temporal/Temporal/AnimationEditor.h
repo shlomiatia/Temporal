@@ -1,3 +1,5 @@
+#ifndef ANIMATION_EDITOR_H
+#define ANIMATION_EDITOR_H
 #include "Hash.h"
 #include "EntitySystem.h"
 #include "Vector.h"
@@ -82,10 +84,11 @@ namespace Temporal
 		Control* addTextBox(Hash id, const AABB& shape, const char* text, IAction1<const char*>* textChangedEvent);
 	};
 
-	class MyGameStateListener : public GameStateListener
+	class AEGameStateListener : public GameStateListener
 	{
 	public:
 		void onLoaded(Hash id, GameState& gameState);
 		void onDraw();
 	};
 }
+#endif

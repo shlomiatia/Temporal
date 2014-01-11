@@ -25,8 +25,11 @@ namespace Temporal
 		_spriteLayer = new SpriteLayer(this);
 		_guiLayer = new GUILayer(this);
 		
-		if(_camera)
-			_layers.push_back(new Camera(this));
+		if(_useCamera)
+		{
+			_camera = new Camera(this);
+			_layers.push_back(_camera);
+		}
 		_layers.push_back(_spriteLayer);
 /*		if(_ambientColor != Color::White)
 			_layers.push_back(new LightLayer(this, _ambientColor));*/

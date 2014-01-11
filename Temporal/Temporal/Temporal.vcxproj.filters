@@ -206,6 +206,12 @@
     <ClInclude Include="Navigator.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="Editable.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateEditor.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -388,6 +394,12 @@
     </ClCompile>
     <ClCompile Include="Pathfinder.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Editable.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateEditor.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

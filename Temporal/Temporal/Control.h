@@ -96,6 +96,11 @@ namespace Temporal
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
 		const std::string& getString() const { return _isTextBoxMode ? _textbox : _label; }
 		std::string& getString() { return _isTextBoxMode ? _textbox : _label; }
+		void buttonKeyUp(Key::Enum key);
+		void textBoxKeyUp(Key::Enum key);
+		void mouseDown(MouseParams& params);
+		void mouseUp(MouseParams& params);
+		void mouseMove(MouseParams& params);
 
 		friend class SerializationAccess;
 	};

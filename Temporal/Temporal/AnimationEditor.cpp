@@ -535,7 +535,7 @@ namespace Temporal
 		}
 	}
 
-	void MyGameStateListener::onLoaded(Hash id, GameState& gameState)
+	void AEGameStateListener::onLoaded(Hash id, GameState& gameState)
 	{
 		if(id == Hash("resources/game-states/animation-editor.xml"))
 		{
@@ -545,7 +545,7 @@ namespace Temporal
 		}
 	}
 
-	void MyGameStateListener::onDraw()
+	void AEGameStateListener::onDraw()
 	{
 		Graphics::get().draw(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f), Color(0.8f,0.8f,0.8f));
 	}
