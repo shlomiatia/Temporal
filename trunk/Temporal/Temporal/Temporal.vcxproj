@@ -15,8 +15,10 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Editable.h" />
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateEditor.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Log.h" />
@@ -86,8 +88,10 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Editable.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateEditor.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Log.cpp" />

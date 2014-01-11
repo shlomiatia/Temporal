@@ -4,6 +4,7 @@
 #include "MessageUtils.h"
 #include "EntitySystem.h"
 #include "Layer.h"
+#include "Camera.h"
 
 #include <SDL.h>
 
@@ -42,14 +43,17 @@ namespace Temporal
 			if(params.isHandled())
 				return;
 		}
-
+		
+		Vector offsetPosition = layersManager.getCamera().getPosition() + params.getPosition();
+		MouseParams offsetParams(params.getButton(), offsetPosition);
+		Message offsetMessage(messageId, &offsetParams);
 		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
 		for(int i = LayerType::SIZE - 1; i >= 0 ; --i)
 		{
 			ComponentCollection& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
-				(**j).raiseMessage(message);
+				(**j).raiseMessage(offsetMessage);
 				if(params.isHandled())
 					return;
 			}

@@ -23,8 +23,8 @@ namespace Temporal
 		float cameraBottomPosition = playerPosition.getY() - cameraHeight / 2.0f;
 		cameraBottomPosition = cameraBottomPosition + cameraHeight < levelHeight ? cameraBottomPosition :  (levelHeight - cameraHeight);
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
-		Vector cameraBottomLeft = Vector(cameraLeftPosition, cameraBottomPosition);
-		Vector translation = -cameraBottomLeft;
+		_position = Vector(cameraLeftPosition, cameraBottomPosition);
+		Vector translation = -_position;
 		Graphics::get().translate(translation);
 	}
 }

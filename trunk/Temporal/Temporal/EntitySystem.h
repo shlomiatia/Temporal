@@ -91,7 +91,7 @@ namespace Temporal
 
 		void sendMessageToAllEntities(Message& message, const HashCollection* filter = 0) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
-		const EntityCollection& getEntities() const { return _entities; }
+		EntityCollection& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
 		void add(Entity* entity);
 	private:

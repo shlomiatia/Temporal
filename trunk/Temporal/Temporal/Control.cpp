@@ -26,14 +26,14 @@ namespace Temporal
 			(*e)(params);
 	}
 
-	void mouseDown(IAction1<const MouseParams&>* mouseDownEvent, const MouseParams& params, bool& isDown, bool& isClick)
+	void raiseMouseDown(IAction1<const MouseParams&>* mouseDownEvent, const MouseParams& params, bool& isDown, bool& isClick)
 	{
 		isClick = true;
 		isDown = true;
 		raiseEvent(mouseDownEvent, params);
 	}
 
-	void mouseUp(IAction1<const MouseParams&>* mouseClickEvent, IAction1<const MouseParams&>* mouseUpEvent, MouseParams& params, bool& isDown, bool& isClick)
+	void raiseMouseUp(IAction1<const MouseParams&>* mouseClickEvent, IAction1<const MouseParams&>* mouseUpEvent, MouseParams& params, bool& isDown, bool& isClick)
 	{
 		if(isClick) 
 		{
@@ -117,89 +117,113 @@ namespace Temporal
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if(!_isTextBoxMode)
 			{
-				if(key == _shortcutKey)
-				{
-					if(_commandEvent)
-						(*_commandEvent)();
-				}
+				buttonKeyUp(key);
 			}
 			else
 			{
-				if(key == Key::ENTER)
-				{
-					_isTextBoxMode = false;
-					Keyboard::get().clearFocus();
-					if(_textChangedEvent)
-						(*_textChangedEvent)(_textbox.c_str());
-				}
-				else if(key == Key::BACKSPACE)
-				{
-					if (_textbox.size() > 0)
-						_textbox.resize(_textbox.size () - 1);
-				}
-				else
-				{
-					_textbox += static_cast<char>(key);
-				}
+				textBoxKeyUp(key);
 			}
 		}
 		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{
-			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 			MouseParams& params = getMouseParams(message.getParam());
-			params.setSender(this);
-			if(intersects(shape.getOBB(), params.getPosition()))
-			{
-				params.setHandled(true);
-				if(params.getButton() == MouseButton::LEFT)
-					mouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
-				else if(params.getButton() == MouseButton::RIGHT)
-					mouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
-				else
-					params.setHandled(false);
-			}
+			mouseDown(params);
 		}
 		else if(message.getID() == MessageID::MOUSE_UP)
 		{
 			MouseParams& params = getMouseParams(message.getParam());
-			params.setSender(this);
-			if(params.getButton() == MouseButton::LEFT)
-			{
-				if(_isLeftClick)
-				{
-					if(_isTextBox)
-					{
-						Keyboard::get().setFocus(this);
-						_isTextBoxMode = true;
-					}
-					if(_commandEvent)
-						(*_commandEvent)();
-
-				}
-				mouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
-				
-			}
-			else
-			{
-				mouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
-			}
+			mouseUp(params);
 		}
 		else if(message.getID() == MessageID::MOUSE_MOVE)
 		{
-			_isLeftClick = false;
-			_isRightClick = false;
 			MouseParams& params = getMouseParams(message.getParam());
-			params.setSender(this);
-			if(_isLeftDown || _isRightDown)
+			mouseMove(params);
+		}
+	}
+
+	void Control::mouseDown(MouseParams& params)
+	{
+		const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+		params.setSender(this);
+		if(intersects(shape.getOBB(), params.getPosition()))
+		{
+			params.setHandled(true);
+			if(params.getButton() == MouseButton::LEFT)
+				raiseMouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
+			else if(params.getButton() == MouseButton::RIGHT)
+				raiseMouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
+			else
+				params.setHandled(false);
+		}
+	}
+
+	void Control::mouseUp(MouseParams& params)
+	{
+		params.setSender(this);
+		if(params.getButton() == MouseButton::RIGHT)
+		{
+			raiseMouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
+		}
+		else
+		{
+			if(_isLeftClick)
 			{
-				params.setHandled(true);
-				raiseEvent(_mouseMoveEvent, params);
+				if(_isTextBox)
+				{
+					Keyboard::get().setFocus(this);
+					_isTextBoxMode = true;
+				}
+				if(_commandEvent)
+					(*_commandEvent)();
+
 			}
-			if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
-			{
-				const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-				_isHover = intersects(shape.getOBB(), params.getPosition());
-			}
+			raiseMouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+		}
+	}
+
+	void Control::mouseMove(MouseParams& params)
+	{
+		_isLeftClick = false;
+		_isRightClick = false;
+		params.setSender(this);
+		if(_isLeftDown || _isRightDown)
+		{
+			params.setHandled(true);
+			raiseEvent(_mouseMoveEvent, params);
+		}
+		if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
+		{
+			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+			_isHover = intersects(shape.getOBB(), params.getPosition());
+		}
+	}
+
+	void Control::buttonKeyUp(Key::Enum key)
+	{
+		if(key == _shortcutKey)
+		{
+			if(_commandEvent)
+				(*_commandEvent)();
+		}
+	}
+
+	void Control::textBoxKeyUp(Key::Enum key)
+	{
+		if(key == Key::ENTER)
+		{
+			_isTextBoxMode = false;
+			Keyboard::get().clearFocus();
+			if(_textChangedEvent)
+				(*_textChangedEvent)(_textbox.c_str());
+		}
+		else if(key == Key::BACKSPACE)
+		{
+			if (_textbox.size() > 0)
+				_textbox.resize(_textbox.size () - 1);
+		}
+		else
+		{
+			_textbox += static_cast<char>(key);
 		}
 	}
 	

@@ -23,6 +23,7 @@ namespace Temporal
 		};
 	}
 
+	class Camera;
 	class LayersManager;
 
 	class Layer
@@ -88,12 +89,13 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() : _camera(false), _ambientColor(Color::White) {};
+		LayersManager() : _useCamera(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0) {};
 		~LayersManager();
 
 		void init(GameState* gameState);
 		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
+		Camera& getCamera() { return *_camera; }
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		void draw();
@@ -101,8 +103,9 @@ namespace Temporal
 	private:
 		Color _ambientColor;
 
-		bool _camera;
+		bool _useCamera;
 		LayerCollection _layers;
+		Camera* _camera;
 		SpriteLayer* _spriteLayer;
 		GUILayer* _guiLayer;
 
