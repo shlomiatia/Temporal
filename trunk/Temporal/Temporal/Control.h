@@ -24,7 +24,7 @@ namespace Temporal
 			_box(&_obb) {}
 		~Control();
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return Hash::INVALID; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Control(); }
 

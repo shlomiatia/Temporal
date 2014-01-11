@@ -90,6 +90,10 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
+			bool shouldSerialize = true;
+			SerializationAccess::getConfig(key, value, *this, shouldSerialize);
+			if(!shouldSerialize)
+				return;
 			preSerialize(key);
 			SerializationAccess::serialize(key, value, *this);
 			postSerialize(key);
@@ -299,7 +303,7 @@ namespace Temporal
 		void serialize(const char* key, std::vector<T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			int i = 0;
+			// TODO:
 			if(strcmp(key, "component") == 0)
 				key = 0;
 			for(_current = _current->FirstChildElement(key); _current; _current = _current->NextSiblingElement(key))
@@ -307,7 +311,6 @@ namespace Temporal
 				T* object = 0;
 				SerializationAccess::serialize(_current->Value(), object, *this);
 				value.push_back(object);
-				++i;
 			}
 			_current = parent;
 		}

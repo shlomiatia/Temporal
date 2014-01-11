@@ -6,9 +6,6 @@
 
 namespace Temporal
 {
-	const Hash EntitySaverLoader::TYPE = Hash("saver-loader");
-	const Hash GameSaverLoader::TYPE = Hash("game-saver-loader");
-
 	void EntitySaverLoader::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::LOAD)

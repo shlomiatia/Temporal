@@ -1,7 +1,5 @@
 <game-state>
-	<layers-manager camera="1">
-		<camera-size x="1280" y="720" />
-	</layers-manager>
+	<layers-manager camera="1" />
 	<grid tile-size="128">
 		<world-size x="3840" y="720" />
 	</grid>

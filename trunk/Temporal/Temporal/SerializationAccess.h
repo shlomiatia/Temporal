@@ -58,6 +58,12 @@ namespace Temporal
 		// Factory methods
 		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
+		static void getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize);
+
+		template<class T, class S>
+		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize)
+		{
+		}
 
 		template<class T, class S>
 		static void serialize(const char* key, T*& value, S& serializer)
@@ -108,7 +114,7 @@ namespace Temporal
 			serializer.serialize("radius", obb._radius);
 
 			// TODO:
-			float angle;
+			float angle = obb.getAngle();
 			serializer.serializeRadians("angle", angle);
 			obb.setAngle(angle);
 		}
@@ -201,9 +207,9 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, GameState& gameState, T& serializer)
 		{
+			serializer.serialize("layers-manager", *gameState._layersManager);
 			serializer.serialize("grid", *gameState._grid);
 			serializer.serialize("entities-manager", *gameState._entitiesManager);
-			serializer.serialize("layers-manager", *gameState._layersManager);
 		}
 
 		template<class T>

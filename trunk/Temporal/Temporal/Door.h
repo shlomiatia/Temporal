@@ -13,11 +13,11 @@ namespace Temporal
 		Hash getType() const { return TYPE; }
 
 		Component* clone() const { return new Door(); }
+		static const Hash TYPE;
 
 	protected:
 		Hash getInitialState() const;
 
-		static const Hash TYPE;
 	private:
 
 		StateCollection getStates() const;
