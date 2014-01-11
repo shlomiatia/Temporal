@@ -44,7 +44,7 @@ namespace Temporal
 				return;
 		}
 		
-		Vector offsetPosition = layersManager.getCamera().getPosition() + params.getPosition();
+		Vector offsetPosition = layersManager.getCamera().getBottomLeft() + params.getPosition();
 		MouseParams offsetParams(params.getButton(), offsetPosition);
 		Message offsetMessage(messageId, &offsetParams);
 		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();

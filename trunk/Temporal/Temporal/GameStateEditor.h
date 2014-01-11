@@ -5,6 +5,8 @@
 
 namespace Temporal
 {
+	class Vector;
+
 	class GameStateEditor : public Component
 	{
 	public:
@@ -14,6 +16,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return 0; }
 	private:
+		void moveCamera(const Vector& direction);
 	};
 
 	class GSEGameStateListener : public GameStateListener

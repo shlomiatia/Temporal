@@ -228,7 +228,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, LayersManager& layersManager, T& serializer)
 		{
-			serializer.serialize("camera", layersManager._useCamera);
+			serializer.serialize("camera-follow-player", layersManager._cameraFollowPlayer);
 			serializer.serialize("ambient-color", layersManager._ambientColor);
 		}
 
