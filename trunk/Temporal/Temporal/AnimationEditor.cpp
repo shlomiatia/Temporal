@@ -53,19 +53,21 @@ namespace Temporal
 			for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 			{
 				Hash id = getSnsId(i, *j);
-				Control& control = *static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
+				Control* control = static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
+				if(!control)
+					continue;
 				SceneNodeSample* sns = getSceneNodeSample(i, *j);
 				if(_index == i && _sceneNodeId == *j)
 				{
-					control.setBackgroundColor(sns == 0 ? Color(1.0f ,0.65f ,0) : Color::Yellow);
+					control->setBackgroundColor(sns == 0 ? Color(1.0f ,0.65f ,0) : Color::Yellow);
 				}
 				else if(isEmptySgs)
 				{
-					control.setBackgroundColor(Color::Red);
+					control->setBackgroundColor(Color::Red);
 				}
 				else
 				{
-					control.setBackgroundColor(sns != 0 ? Color::White : Color::Transparent);
+					control->setBackgroundColor(sns != 0 ? Color::White : Color::Transparent);
 				}
 			}
 		}
