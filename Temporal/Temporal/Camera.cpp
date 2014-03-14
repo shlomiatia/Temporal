@@ -17,7 +17,7 @@ namespace Temporal
 		}
 		
 		Vector translation = -_bottomLeft;
-		Graphics::get().translate(translation);
+		Graphics::get().getMatrixStack().translate(translation);
 	}
 
 	void Camera::setCenter(const Vector& position)
