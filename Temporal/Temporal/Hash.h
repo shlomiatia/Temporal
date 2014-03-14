@@ -20,6 +20,31 @@ namespace Temporal
 	private:
 		unsigned int _value;
 	};
+}
+namespace std
+{
+	using namespace Temporal;
+	template<>
+	struct hash<Hash> : public unary_function<Hash, size_t>
+	{
+		size_t operator()(const Hash& value) const
+		{
+			return value;
+		}
+	};
+
+	template<>
+	struct equal_to<Hash> : public unary_function<Hash, bool>
+	{
+		bool operator()(const Hash& x, const Hash& y) const
+		{
+			return x == y;
+		}
+	};
+
+}
+namespace Temporal
+{
 
 	typedef std::unordered_map<Hash, const char*> HashStringMap;
 	typedef HashStringMap::const_iterator HashStringIterator;
