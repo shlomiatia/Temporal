@@ -45,7 +45,7 @@ namespace Temporal
 				FixtureCollection* fixtures = getTile(i, j);
 				if(fixtures && fixtures->size() != 0)
 				{
-					Graphics::get().draw(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					Graphics::get().getSpriteBatch().add(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
 				}
 			}
 		}

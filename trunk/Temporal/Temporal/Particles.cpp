@@ -121,7 +121,6 @@ namespace Temporal
 	void ParticleEmitter::draw()
 	{
 		int length = getLength();
-		Graphics::get().bindTexture(_spritesheet->getTexture().getID());
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		Vector radius = _spritesheet->getTexture().getSize() / 2.0f;
 		const int PARTICLE_VERTICES = 8;

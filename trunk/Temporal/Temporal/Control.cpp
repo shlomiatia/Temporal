@@ -226,25 +226,29 @@ namespace Temporal
 			_textbox += static_cast<char>(key);
 		}
 	}
+
+	void addToSpriteBatch(const OBBAABBWrapper& aabb, const Color& color)
+	{
+		Graphics::get().getSpriteBatch().add(aabb.getCenter(), aabb.getRadius(), color);
+	}
 	
 	void Control::draw()
 	{
 		const Vector& position = getPosition(*this);
 		_obb.setCenter(position);
-		Graphics::get().draw(_box, _backgroundColor, true);
-		if(_isHover)
-			Graphics::get().draw(_box, _hoverColor, true);
-		Graphics::get().draw(_box, _borderColor, false);
+		_isHover ? addToSpriteBatch(_box, _hoverColor) :  addToSpriteBatch(_box, _backgroundColor);
+
+		//Graphics::get().draw(_box, _borderColor, false);
 		if(getString() != "")
 		{
-			glColor4f(_foregroundColor.getR(), _foregroundColor.getG(), _foregroundColor.getB(), _foregroundColor.getA());
+			/*glColor4f(_foregroundColor.getR(), _foregroundColor.getG(), _foregroundColor.getB(), _foregroundColor.getA());
 			glPushMatrix();
 			{
 				glTranslatef(position.getX() - _box.getWidth() / 2.0f, position.getY() - _box.getHeight() / 4.0f , 0.0f);
 				_layout.Render(getText());
 				Graphics::get().bindTexture(0); // Because we cache textures...
 			}
-			glPopMatrix();
+			glPopMatrix();*/
 		}
 	}
 }

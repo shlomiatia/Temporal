@@ -69,6 +69,7 @@ namespace Temporal
 		validate();
 
 		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
+		_spriteBatch.init();
 	}
 
 	void Graphics::setTitle(const char* title) const
@@ -88,10 +89,12 @@ namespace Temporal
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		_matrixStack.reset();
+		_spriteBatch.begin();
 	}
 
 	void Graphics::finishDrawing()
 	{
+		_spriteBatch.end();
 		SDL_GL_SwapWindow(_window);
 		validate();
 	}
@@ -106,13 +109,9 @@ namespace Temporal
 		}
 	}
 
-	void Graphics::bindTexture(unsigned int id)
+	/*void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color)
 	{
-	}
-
-	void Graphics::draw(const SceneNode& sceneNode, const SpriteSheet& spritesheet, const Color& color)
-	{
-		/*
+		
 		glPushMatrix();
 		{	
 			if(sceneNode.isFlip())
@@ -153,35 +152,6 @@ namespace Temporal
 					draw(**i, spritesheet, color);
 			}
 		}
-		glPopMatrix();*/
-	}
-
-	void Graphics::draw(const Vector& position, const Texture& texture, const Color& color)
-	{
-	}
-
-	void Graphics::draw(const Vector& position, const Texture& texture, const AABB& texturePart, const Color& color)
-	{
-	}
-
-	void Graphics::draw(const AABB& rect, const Color& color, bool fill)
-	{
-	}
-
-	void Graphics::draw(const AABB& rect, const Color& color1, const Color& color2)
-	{
-	}
-
-	void Graphics::draw(const OBBAABBWrapper& obb, const Color& color, bool fill)
-	{
-	}
-
-	void Graphics::draw(const OBB& obb, const Color& color, bool fill)
-	{
-	}
-
-	void Graphics::draw(const Segment& segment, const Color& color)
-	{
-		
-	}
+		glPopMatrix();
+	}*/
 }

@@ -18,11 +18,6 @@ namespace Temporal
 		return texture == 0 ? 0 : texture->getID(); 
 	}
 
-	const Vector& SpriteBatchItem::getSize() const
-	{
-		return size == Vector::Zero ? size : texture->getSize();
-	}
-
 	void SpriteBatch::init() 
 	{
 		ShaderProgram& program = Graphics::get().getShaderProgram();
@@ -35,7 +30,7 @@ namespace Temporal
 	
 		_typeUniform = program.getUniform("u_type");
 
-		program.setUniform(_typeUniform, 0);
+		program.setUniform(_typeUniform, -1);
 
 		glGenBuffers(1, &_vbo);
 		glGenBuffers(1, &_ibo);
@@ -124,7 +119,7 @@ namespace Temporal
 	{
 		if(_vertices)
 			delete[] _vertices;
-		_vertices = new GLfloat[vboVertices(maxSprites)];
+		_vertices = new float[vboVertices(maxSprites)];
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		glBufferData(GL_ARRAY_BUFFER, vboBytes(maxSprites), _vertices, GL_DYNAMIC_DRAW);
 		
@@ -145,12 +140,13 @@ namespace Temporal
 		_size = 0;
 	}
 
-	void SpriteBatch::add(const Texture* texture, const AABB& texturePart, const Vector& objectTranslation, float rotation, 
-		const Vector& rotationTranslation, float scale, const Vector& size, const Color color)
+	void SpriteBatch::add(const Texture* texture, const Vector& objectTranslation, const AABB& texturePart, float rotation, 
+		const Vector& rotationTranslation, const Vector& radius, const Color& color)
 	{
 		if(_size == _items.size())
 		{
-			_items.resize(_items.size() * 2, SpriteBatchItem());
+			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
+			_items.resize(size);
 			expand(_items.size());
 		
 		}
@@ -160,15 +156,16 @@ namespace Temporal
 		item.objectTranslation = objectTranslation;
 		item.rotation = rotation;
 		item.rotationTranslation = rotationTranslation;
-		item.scale = scale;
-		item.size = size;
+		item.radius = radius != Vector::Zero ? radius : texture->getSize() / 2.0f;
+		if(item.radius.getAngle() == 0.0f)
+		{
+			if(item.radius.getY() == 0.0f)
+				item.radius.setY(1.0f);
+			else if(item.radius.getX() == 0.0f)
+				item.radius.setX(1.0f);
+		}
 		item.color = color;
 		++_size;
-	}
-
-	void SpriteBatch::add(const Vector& objectTranslation, const Vector& size, float rotation, const Vector& rotationTranslation, float scale, const Color color) 
-	{
-		add(0, AABB::Zero, objectTranslation, rotation, rotationTranslation, scale, size, color);
 	}
 
 	void SpriteBatch::end()
@@ -190,28 +187,15 @@ namespace Temporal
 			int i = index * vboFloats();
 			++index;
 	
-			glm::vec4 a;
-			glm::vec4 b;
-			glm::vec4 c;
-			glm::vec4 d;
-			
-			Vector radius = item.getSize() / 2.0f;
-			a = glm::vec4(item.objectTranslation.getX() - radius.getX(), item.objectTranslation.getY() - radius.getY(), 0.0f, 0.0f);
-			b = glm::vec4(item.objectTranslation.getX() + radius.getX(), item.objectTranslation.getY() - radius.getY(), 0.0f, 0.0f);
-			c = glm::vec4(item.objectTranslation.getX() + radius.getX(), item.objectTranslation.getY() + radius.getY(), 0.0f, 0.0f);
-			d = glm::vec4(item.objectTranslation.getX() - radius.getX(), item.objectTranslation.getY() + radius.getY(), 0.0f, 0.0f);
-			
-			if(item.rotation != 0.0f)
-			{
-				glm::mat4 m = glm::mat4();
-				// scale
-				m = glm::translate(m, glm::vec3(item.rotationTranslation.getX(), item.rotationTranslation.getY(), 0.0f));
-				m = glm::rotate(m, item.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-				a = m * a;
-				b = m * b;
-				c = m * c;
-				d = m * d;
-			}
+			glm::mat4 m = glm::mat4();
+			// scale
+			m = glm::translate(m, glm::vec3(item.objectTranslation.getX(), item.objectTranslation.getY(), 0.0f));
+			m = glm::rotate(m, item.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+			m = glm::translate(m, glm::vec3(item.rotationTranslation.getX(), item.rotationTranslation.getY(), 0.0f));
+			glm::vec4 a = m * glm::vec4(-item.radius.getX(), -item.radius.getY(), 0.0f, 1.0f);
+			glm::vec4 b = m * glm::vec4(item.radius.getX(), -item.radius.getY(), 0.0f, 1.0f);
+			glm::vec4 c = m * glm::vec4(item.radius.getX(), item.radius.getY(), 0.0f, 1.0f);
+			glm::vec4 d = m * glm::vec4(-item.radius.getX(), item.radius.getY(), 0.0f, 1.0f);
 
 			_vertices[i++] = a.x;
 			_vertices[i++] = a.y;
