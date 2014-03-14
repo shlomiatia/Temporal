@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "Vector.h"
 #include "MatrixStack.h"
+#include "ShaderProgram.h"
 
 class SDL_Window;
 
@@ -58,9 +59,11 @@ namespace Temporal
 		static const int BIT_DEPTH = 32;
 		SDL_Window* _window;
 
-		MatrixStack _matrixStack;
 		Vector _resolution;
 		Vector _logicalView;
+		MatrixStack _matrixStack;
+		ShaderProgram _shaderProgram;
+
 
 		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0) {}
 		~Graphics() { dispose(); }

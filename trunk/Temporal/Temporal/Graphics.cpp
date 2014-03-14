@@ -54,8 +54,6 @@ namespace Temporal
 		
 		glewInit();
 		glGetError(); // Stupid glewinit set error
-		validate();
-
 
 		if (!GLEW_VERSION_3_2) {
 			abort();
@@ -69,6 +67,8 @@ namespace Temporal
 		glDisable(GL_DEPTH_TEST);
 		
 		validate();
+
+		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
 	}
 
 	void Graphics::setTitle(const char* title) const
