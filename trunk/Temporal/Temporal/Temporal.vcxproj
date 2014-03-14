@@ -22,6 +22,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationGraph.h" />
@@ -95,6 +96,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />

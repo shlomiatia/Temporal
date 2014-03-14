@@ -83,14 +83,14 @@ namespace Temporal
 		SDL_Quit();
 	}
 
-	void Graphics::prepareForDrawing() const
+	void Graphics::prepareForDrawing()
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		validate();
+		_matrixStack.reset();
 	}
 
-	void Graphics::finishDrawing() const
+	void Graphics::finishDrawing()
 	{
 		SDL_GL_SwapWindow(_window);
 		validate();
@@ -104,10 +104,6 @@ namespace Temporal
 			// ERROR: Error OpenGL error
 			abort();
 		}
-	}
-
-	void Graphics::translate(const Vector& translation) const
-	{
 	}
 
 	void Graphics::bindTexture(unsigned int id)

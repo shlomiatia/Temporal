@@ -212,6 +212,9 @@
     <ClInclude Include="GameStateEditor.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="MatrixStack.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -400,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="GameStateEditor.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixStack.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
