@@ -549,6 +549,6 @@ namespace Temporal
 
 	void AEGameStateListener::onDraw()
 	{
-		Graphics::get().draw(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f), Color(0.8f,0.8f,0.8f));
+		Graphics::get().getSpriteBatch().add(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f));
 	}
 }
