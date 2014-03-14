@@ -21,7 +21,6 @@ namespace Temporal
 		Graphics::get().validate();
 
 		_program = createProgram(vertexShaderId, fragmentShaderId);
-		Graphics::get().validate();
 
 		glUseProgram(_program);
 
@@ -45,6 +44,13 @@ namespace Temporal
 		if(result == -1)
 			abort();
 		return result;
+	}
+
+	void ShaderProgram::setUniform(int uniform, int value)
+	{
+		glUseProgram(_program);
+		glUniform1i(uniform, value);
+		glUseProgram(0);
 	}
 
 	unsigned int ShaderProgram::createShader(unsigned int shaderType, const char* shaderData)

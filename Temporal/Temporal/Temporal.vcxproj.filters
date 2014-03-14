@@ -218,6 +218,9 @@
     <ClInclude Include="ShaderProgram.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -411,6 +414,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,9 +10,11 @@ namespace Temporal
 		void init(const char * vertexShaderFile, const char * fragmentShaderFile);
 		~ShaderProgram();
 
-		unsigned int getProgram() const { return _program; }
+		unsigned int getId() const { return _program; }
 		int getAttribute(const char* key);
 		int getUniform(const char* key);
+		void setUniform(int uniform, int value);
+
 	private:
 		unsigned int createShader(unsigned int shaderType, const char* shaderData);
 		unsigned int loadShader(unsigned int shaderType, const char* shaderFile);
