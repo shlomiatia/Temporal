@@ -5,6 +5,7 @@
 #include "Hash.h"
 #include <unordered_map>
 #include <memory>
+#include <string>
 
 class FTFont;
 
