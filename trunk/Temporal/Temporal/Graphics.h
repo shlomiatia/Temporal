@@ -36,6 +36,7 @@ namespace Temporal
 
 		SDL_Window* getWindow() { return _window; }
 		MatrixStack& getMatrixStack() { return _matrixStack; }
+		ShaderProgram& getShaderProgram() { return _shaderProgram; }
 
 		void setTitle(const char* title) const;
 

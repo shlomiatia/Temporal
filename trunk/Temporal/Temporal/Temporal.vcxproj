@@ -52,6 +52,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShapeOperations.h" />
+    <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Temp1.h" />
     <ClInclude Include="Temp2.h" />
     <ClInclude Include="AnimationEditor.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Thread.cpp" />

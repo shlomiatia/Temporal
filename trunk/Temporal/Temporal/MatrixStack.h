@@ -10,7 +10,7 @@ namespace Temporal
 	class MatrixStack
 	{
 	public:
-		MatrixStack() : _matrix(1.0f) {}
+		MatrixStack() : _matrix() {}
 
 		const glm::mat4& top() const { return _matrix; }
 
