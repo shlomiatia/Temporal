@@ -10,9 +10,11 @@
 #include "Grid.h"
 #include "Settings.h"
 #include "Serialization.h"
+#include "Graphics.h"
 #include <sstream>
 #include <ftgl/ftgl.h>
 #include <windows.h>
+#include <SDL.h>
 #include <SDL_syswm.h>
 
 namespace Temporal
@@ -55,11 +57,12 @@ namespace Temporal
 	{
 		SDL_SysWMinfo wmInfo;
 		SDL_VERSION(&wmInfo.version);
-		if(SDL_GetWMInfo(&wmInfo) < 0)
+		SDL_Window* window = Graphics::get().getWindow();
+		if(!SDL_GetWindowWMInfo(window, &wmInfo))
 		{
 			abort();
 		}
-		HWND hwnd = wmInfo.window;
+		HWND hwnd = wmInfo.info.win.window;
 		hdc = GetDC(hwnd);
 		HGLRC mainContext = wglGetCurrentContext();
 		loaderContext = wglCreateContext(hdc);

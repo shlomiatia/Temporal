@@ -12,7 +12,7 @@ namespace Temporal
 
 	void Thread::start(int (*function)(void*), void *data)
 	{
-		_thread = SDL_CreateThread(function, data);
+		_thread = SDL_CreateThread(function, "MyThread", data);
 	}
 
 	Thread::~Thread()

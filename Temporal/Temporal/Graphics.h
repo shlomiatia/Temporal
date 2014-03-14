@@ -4,6 +4,8 @@
 #include "Color.h"
 #include "Vector.h"
 
+class SDL_Window;
+
 namespace Temporal
 {
 	class Settings;
@@ -30,6 +32,8 @@ namespace Temporal
 		void init(const Settings& settings);
 		void dispose() const;
 
+		SDL_Window* getWindow() { return _window; }
+
 		void setTitle(const char* title) const;
 
 		void prepareForDrawing() const;
@@ -51,12 +55,13 @@ namespace Temporal
 
 	private:
 		static const int BIT_DEPTH = 32;
+		SDL_Window* _window;
 
 		unsigned int _lastTextureId;
 		Vector _resolution;
 		Vector _logicalView;
 
-		Graphics() : _lastTextureId(0), _resolution(Vector::Zero), _logicalView(Vector::Zero) {}
+		Graphics() : _lastTextureId(0), _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

@@ -45,7 +45,7 @@ namespace Temporal
 	{		
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
-			(**i).draw();		
+			(**i).draw();
 		}
 	}
 
@@ -69,7 +69,7 @@ namespace Temporal
 
 	void GUILayer::draw()
 	{
-		glLoadIdentity();
+		//glLoadIdentity();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW));

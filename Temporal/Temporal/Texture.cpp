@@ -9,48 +9,49 @@ namespace Temporal
 {
 	const Texture* Texture::load(const char* path)
 	{
-		SDL_Surface* image(IMG_Load(path));
-		if (!image)
-		{
-			abort();
-			// ERROR: Failed loading image
-		}
-		GLenum texture_format;
-		if (image->format->BytesPerPixel == 4)
-		{
-			if (image->format->Rmask == 0x000000ff)
-				texture_format = GL_RGBA;
-			else
-				texture_format = GL_BGRA;
-		}
-		else if (image->format->BytesPerPixel == 3)
-		{
-			if (image->format->Rmask == 0x000000ff)
-				texture_format = GL_RGB;
-			else
-				texture_format = GL_BGR;
-		}
-		else
-		{
-			abort();
-			// ERROR: Invalid bytes per pixel
-		}
+		SDL_Surface *surface = NULL;
+	
+		if (!(surface = IMG_Load(path)))
+			return 0;
 
-		GLuint id;
+		char colors = surface->format->BytesPerPixel;
+		int format;
+		// get the image format
+		if (colors == 4) {
+			if (surface->format->Rmask == 0x000000ff) {
+				format = GL_RGBA;
+			} else {
+				format = GL_BGRA;
+			}
+		} else if (colors == 3) {
+			if (surface->format->Rmask == 0x000000ff) {
+				format = GL_RGB;
+			} else {
+				format = GL_BGR;
+			}
+		}
+		unsigned int id;
+		// generate the gl texture
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
+ 
+		// set filter parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, image->format->BytesPerPixel, image->w, image->h, 0, texture_format, GL_UNSIGNED_BYTE, image->pixels);
-		Vector size(static_cast<float>(image->w), static_cast<float>(image->h));
-		const Texture* result(new Texture(id, size));
-
+ 
+		int width = surface->w;
+		int height = surface->h;
+	
+		// send the loaded binary into open gl
+		glTexImage2D(GL_TEXTURE_2D, 0, format,
+				surface->w, surface->h,
+				0, format,
+				GL_UNSIGNED_BYTE, surface->pixels);
 		Graphics::get().validate();
-		SDL_FreeSurface(image);
-		return result;
+		SDL_FreeSurface(surface);
+		return new Texture(id, Vector(width, height));
 	}
 
 	const Texture* Texture::load(const Vector& size)
