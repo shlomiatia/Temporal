@@ -49,6 +49,7 @@
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="SerializationAccess.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="Temp1.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="SerializationAccess.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
@@ -204,7 +206,7 @@
       <AdditionalLibraryDirectories>$(ProjectDir)External\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(ProjectDir)External\bin\"* "$(OutDir)"</Command>
+      <Command>xcopy /S /Y "$(ProjectDir)External\bin\"* "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
