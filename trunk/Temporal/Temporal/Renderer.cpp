@@ -60,14 +60,14 @@ namespace Temporal
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 
-		glPushMatrix();
+		/*glPushMatrix();
 		{
 			glTranslatef(position.getX(), position.getY(), 0.0f);
 			if(entityOrientation != Side::RIGHT)
 				glScalef(-1.0f, 1.0f, 1.0f);
 			Graphics::get().draw(*_root, *_spriteSheet.get(), _color);
 		}
-		glPopMatrix();
+		glPopMatrix();*/
 	}
 
 	Component* Renderer::clone() const

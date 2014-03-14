@@ -83,14 +83,14 @@ namespace Temporal
 		_keysMap[SDLK_SLASH] = Key::SLASH;
 
 		_keysMap[SDLK_LCTRL] = Key::LEFT_CTRL;
-		_keysMap[SDLK_LSUPER] = Key::WINDOWS;
+		//_keysMap[SDLK_LSUPER] = Key::WINDOWS;
 		_keysMap[SDLK_LALT] = Key::LEFT_ALT;
 		_keysMap[SDLK_SPACE] = Key::SPACE;
 		_keysMap[SDLK_RALT] = Key::RIGHT_ALT;
 		_keysMap[SDLK_RCTRL] = Key::RIGHT_CTRL;
 
-		_keysMap[SDLK_PRINT] = Key::PRINT_SCREEN;
-		_keysMap[SDLK_SCROLLOCK] = Key::SCROLL_LOCK;
+		//_keysMap[SDLK_PRINT] = Key::PRINT_SCREEN;
+		//_keysMap[SDLK_SCROLLOCK] = Key::SCROLL_LOCK;
 		_keysMap[SDLK_PAUSE] = Key::PAUSE;
 		_keysMap[SDLK_INSERT] = Key::INSERT;
 		_keysMap[SDLK_HOME] = Key::HOME;
@@ -104,7 +104,7 @@ namespace Temporal
 		_keysMap[SDLK_DOWN] = Key::DOWN;
 		_keysMap[SDLK_RIGHT] = Key::RIGHT;
 
-		_keysMap[SDLK_NUMLOCK] = Key::NUM_LOCK;
+		//_keysMap[SDLK_NUMLOCK] = Key::NUM_LOCK;
 		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
 
 		for(IntKeyMapIterator i = _keysMap.begin(); i != _keysMap.end(); ++i)
