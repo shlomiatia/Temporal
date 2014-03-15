@@ -1,6 +1,7 @@
 #include "SpriteBatch.h"
 #include "Graphics.h"
 #include "Texture.h"
+#include "Math.h"
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -25,7 +26,6 @@ namespace Temporal
 		_textureCoordinateAttribute = program.getAttribute("a_textureCoordinate");
 		_colorAttribute = program.getAttribute("a_color");
 	
-		_transformUniform = program.getUniform("u_transform");
 		_textureUniform = program.getUniform("u_texture");
 	
 		_typeUniform = program.getUniform("u_type");
@@ -140,30 +140,41 @@ namespace Temporal
 		_size = 0;
 	}
 
-	void SpriteBatch::add(const Texture* texture, const Vector& objectTranslation, const AABB& texturePart, float rotation, 
-		const Vector& rotationTranslation, const Vector& radius, const Color& color)
+	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, const Vector& radius)
 	{
 		if(_size == _items.size())
 		{
 			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
 			_items.resize(size);
 			expand(_items.size());
-		
 		}
+		
+		glm::mat4 m = Graphics::get().getMatrixStack().top();
+		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
+		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+		m = glm::translate(m, glm::vec3(pivot.getX(), pivot.getY(), 0.0f));
+		Vector actualScale = scale;
+		if(flipX)
+			actualScale.setX(-actualScale.getX());
+		if(flipY)
+			actualScale.setX(-actualScale.getY());
+		m = glm::scale(m, glm::vec3(actualScale.getX(), actualScale.getY(), 0.0f));
+		Vector actualRadius = radius != Vector::Zero ? radius : texture->getSize() / 2.0f;
+		if(actualRadius.getY() == 0.0f)
+			actualRadius.setY(1.0f);
+		else if(actualRadius.getX() == 0.0f)
+			actualRadius.setX(1.0f);
 		SpriteBatchItem& item = _items[_size];
 		item.texture = texture;
 		item.texturePart = texturePart;
-		item.objectTranslation = objectTranslation;
-		item.rotation = rotation;
-		item.rotationTranslation = rotationTranslation;
-		item.radius = radius != Vector::Zero ? radius : texture->getSize() / 2.0f;
-		if(item.radius.getAngle() == 0.0f)
-		{
-			if(item.radius.getY() == 0.0f)
-				item.radius.setY(1.0f);
-			else if(item.radius.getX() == 0.0f)
-				item.radius.setX(1.0f);
-		}
+		glm::vec4 a = m * glm::vec4(-actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
+		glm::vec4 b = m * glm::vec4(actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
+		glm::vec4 c = m * glm::vec4(actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
+		glm::vec4 d = m * glm::vec4(-actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
+		item.a = Vector(a.x, a.y);
+		item.b = Vector(b.x, b.y);
+		item.c = Vector(c.x, c.y);
+		item.d = Vector(d.x, d.y);
 		item.color = color;
 		++_size;
 	}
@@ -186,43 +197,33 @@ namespace Temporal
 			
 			int i = index * vboFloats();
 			++index;
-	
-			glm::mat4 m = glm::mat4();
-			// scale
-			m = glm::translate(m, glm::vec3(item.objectTranslation.getX(), item.objectTranslation.getY(), 0.0f));
-			m = glm::rotate(m, item.rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-			m = glm::translate(m, glm::vec3(item.rotationTranslation.getX(), item.rotationTranslation.getY(), 0.0f));
-			glm::vec4 a = m * glm::vec4(-item.radius.getX(), -item.radius.getY(), 0.0f, 1.0f);
-			glm::vec4 b = m * glm::vec4(item.radius.getX(), -item.radius.getY(), 0.0f, 1.0f);
-			glm::vec4 c = m * glm::vec4(item.radius.getX(), item.radius.getY(), 0.0f, 1.0f);
-			glm::vec4 d = m * glm::vec4(-item.radius.getX(), item.radius.getY(), 0.0f, 1.0f);
 
-			_vertices[i++] = a.x;
-			_vertices[i++] = a.y;
+			_vertices[i++] = item.a.getX();
+			_vertices[i++] = item.a.getY();
 			_vertices[i++] = item.texturePart.getLeft();
 			_vertices[i++] = item.texturePart.getBottom();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
 			_vertices[i++] = item.color.getA();
-			_vertices[i++] = b.x;
-			_vertices[i++] = b.y;
+			_vertices[i++] = item.b.getX();
+			_vertices[i++] = item.b.getY();
 			_vertices[i++] = item.texturePart.getRight();
 			_vertices[i++] = item.texturePart.getBottom();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
 			_vertices[i++] = item.color.getA();
-			_vertices[i++] = c.x;
-			_vertices[i++] = c.y;
+			_vertices[i++] = item.c.getX();
+			_vertices[i++] = item.c.getY();
 			_vertices[i++] = item.texturePart.getRight();
 			_vertices[i++] = item.texturePart.getTop();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
 			_vertices[i++] = item.color.getA();
-			_vertices[i++] = d.x; 
-			_vertices[i++] = d.y;
+			_vertices[i++] = item.d.getX(); 
+			_vertices[i++] = item.d.getY();
 			_vertices[i++] = item.texturePart.getLeft();
 			_vertices[i++] = item.texturePart.getTop();
 			_vertices[i++] = item.color.getR();
@@ -243,7 +244,6 @@ namespace Temporal
 		glBindVertexArray(_vao);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(getTextureUniform(), 0);
-		glUniformMatrix4fv(getTransformUniform(), 1, GL_FALSE, glm::value_ptr(Graphics::get().getMatrixStack().top()));
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		
 		int bytes = vboBytes(size);

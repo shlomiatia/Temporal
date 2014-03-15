@@ -4,7 +4,6 @@
 #include "Vector.h"
 #include "Shapes.h"
 #include "Color.h"
-#include "Math.h"
 #include <vector>
 
 namespace Temporal
@@ -14,13 +13,13 @@ namespace Temporal
 	class SpriteBatchItem
 	{
 	public:
-		SpriteBatchItem() : texture(0), rotation(0.0f), color(Color::White) {}
+		SpriteBatchItem() : texture(0), color(Color::White) {}
 
 		const Texture* texture;
-		Vector objectTranslation;
-		float rotation;
-		Vector rotationTranslation;
-		Vector radius;
+		Vector a;
+		Vector b;
+		Vector c;
+		Vector d;
 		Color color;
 		AABB texturePart;
 
@@ -43,51 +42,30 @@ namespace Temporal
 	{
 	public:
 
-		SpriteBatch() : _mode(SpriteBatchMode::TRIANGLES), _size(0), _vertices(0), _vao(0), _vbo(0), _ibo(0), _lastTexture(0), 
-			_coordinateAttribute(0), _textureCoordinateAttribute(0), _colorAttribute(0), _textureUniform(0),
-			_transformUniform(0), _typeUniform(0) {}
+		SpriteBatch() : _mode(SpriteBatchMode::TRIANGLES), _size(0), _vertices(0), _vao(0), _vbo(0), _ibo(0), _lastTexture(0), _coordinateAttribute(0), _textureCoordinateAttribute(0), _colorAttribute(0),
+			_textureUniform(0), _typeUniform(0) {}
 		~SpriteBatch();
 
 		void init();
 		void begin();
 
-		// Partial pivoted texture
-		void add(const Texture* texture, const Vector& objectTranslation, const AABB& texturePart = AABB(0.0f, 0.0f, 1.0f, 1.0f), 
-			float rotation = 0.0f, const Vector& rotationTranslation = Vector::Zero, const Vector& radius = Vector::Zero, const Color& color = Color::White);
-		// Partial texture
-		void add(const Texture* texture, const Vector& objectTranslation, const AABB& texturePart = AABB(0.0f, 0.0f, 1.0f, 1.0f), 
-			float rotation = 0.0f, const Vector& radius = Vector::Zero, const Color& color = Color::White)
+		// texture
+		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB(0.0f, 0.0f, 1.0f, 1.0f), const Color& color = Color::White, float rotation = 0.0f, 
+			const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero);
+
+		void add(const Vector& translation, const Vector& radius = Vector::Zero, const Color& color = Color::White, float rotation = 0.0f)
 		{
-			add(texture, objectTranslation, texturePart, rotation, Vector::Zero, radius, color);
+			add(0, translation, AABB::Zero, color, rotation, Vector::Zero, Vector(1.0f, 1.0f), false, false, radius);
 		}
-		// Full pivoted texture
-		void add(const Texture* texture, const Vector& objectTranslation, float rotation = 0.0f, const Vector& rotationTranslation = Vector::Zero,
-			const Vector& radius = Vector::Zero, const Color& color = Color::White)
-		{
-			add(texture, objectTranslation, AABB(0.0f, 0.0f, 1.0f, 1.0f), rotation, rotationTranslation, radius, color);
-		}
-		// Full texture
-		void add(const Texture* texture, const Vector& objectTranslation, float rotation = 0.0f, const Vector& radius = Vector::Zero, const Color& color = Color::White)
-		{
-			add(texture, objectTranslation, AABB(0.0f, 0.0f, 1.0f, 1.0f), rotation, Vector::Zero, radius, color);
-		}
-		// OBB Shape
-		void add(const Vector& objectTranslation, const Vector& radius, float rotation = 0.0f, const Color& color = Color::White)
-		{
-			add(0, objectTranslation, AABB(0.0f, 0.0f, 1.0f, 1.0f), fromRadians(rotation), Vector::Zero, radius, color);
-		}
+		// OBB
 		void add(const OBB& obb, const Color& color = Color::White)
 		{
-			add(obb.getCenter(), obb.getRadius(), obb.getAngle(), color);
+			add(obb.getCenter(), obb.getRadius(), color, obb.getAngle());
 		}
-		// AABB Shape
-		void add(const Vector& objectTranslation, const Vector& radius, const Color& color = Color::White)
+		// AABB
+		void add(const AABB& aabb, const Color& color = Color::White)
 		{
-			add(0, objectTranslation, AABB(0.0f, 0.0f, 1.0f, 1.0f), 0.0f, Vector::Zero, radius, color);
-		}
-		void add(const AABB& abb, const Color& color = Color::White)
-		{
-			add(abb.getCenter(), abb.getRadius(), color);
+			add(aabb.getCenter(), aabb.getRadius(), color);
 		}
 		void end();
 
@@ -106,13 +84,12 @@ namespace Temporal
 		unsigned int _lastTexture;
 
 		int _coordinateAttribute, _textureCoordinateAttribute, _colorAttribute;
-		int _textureUniform, _transformUniform, _typeUniform;
+		int _textureUniform, _typeUniform;
 
 		int getCoordinateAttribute() const { return _coordinateAttribute; }
 		int getTextureCoordinateAttribute() const { return _textureCoordinateAttribute; }
 		int getColorAttribute() const { return _colorAttribute; }
 		int getTextureUniform() const { return _textureUniform; }
-		int getTransformUniform() const { return _transformUniform; }
 
 		void addIBOLines(unsigned short* elements, int i);
 		void addIBOTriangles(unsigned short* elements, int i);
