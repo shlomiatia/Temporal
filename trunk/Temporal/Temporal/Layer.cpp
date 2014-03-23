@@ -57,6 +57,7 @@ namespace Temporal
 
 	void SpriteLayer::draw()
 	{
+		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
 			ComponentCollection& components = _layers.at(static_cast<LayerType::Enum>(i));
@@ -65,6 +66,8 @@ namespace Temporal
 				(**j).handleMessage(Message(MessageID::DRAW));
 			}
 		}
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().begin();
 	}
 
 	void GUILayer::draw()
@@ -100,6 +103,7 @@ namespace Temporal
 
 	void DebugLayer::draw()
 	{
+		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);
 		filter.push_back(DynamicBody::TYPE);

@@ -6,10 +6,9 @@ attribute vec4 a_color;
 varying vec2 v_textureCoordinate;
 varying vec4 v_color;
 uniform mat4 u_projection;
-uniform mat4 u_transform;
 
 void main(void) {
-	gl_Position = u_projection * u_transform * vec4(a_coordinate, 0.0, 1.0);
+	gl_Position = u_projection * vec4(a_coordinate, 0.0, 1.0);
 	v_textureCoordinate = a_textureCoordinate;
 	v_color = a_color;
 }

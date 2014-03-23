@@ -71,7 +71,6 @@ namespace Temporal
 		const SpriteGroup& get(Hash spriteGroupID) const;
 
 		void init();
-
 	private:
 		std::string _textureFile;
 		const Texture* _texture;

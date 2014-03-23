@@ -5,6 +5,7 @@
 #include "Shapes.h"
 #include "Color.h"
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace Temporal
 {
@@ -46,13 +47,15 @@ namespace Temporal
 			_textureUniform(0), _typeUniform(0) {}
 		~SpriteBatch();
 
+		int getTypeUniform() const { return _typeUniform; }
+
 		void init();
 		void begin();
 
 		// texture
 		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB(0.0f, 0.0f, 1.0f, 1.0f), const Color& color = Color::White, float rotation = 0.0f, 
 			const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero);
-
+		void add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m);
 		void add(const Vector& translation, const Vector& radius = Vector::Zero, const Color& color = Color::White, float rotation = 0.0f)
 		{
 			add(0, translation, AABB::Zero, color, rotation, Vector::Zero, Vector(1.0f, 1.0f), false, false, radius);
@@ -90,6 +93,7 @@ namespace Temporal
 		int getTextureCoordinateAttribute() const { return _textureCoordinateAttribute; }
 		int getColorAttribute() const { return _colorAttribute; }
 		int getTextureUniform() const { return _textureUniform; }
+		
 
 		void addIBOLines(unsigned short* elements, int i);
 		void addIBOTriangles(unsigned short* elements, int i);
