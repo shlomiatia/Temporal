@@ -54,20 +54,67 @@ namespace Temporal
 		}
 	}
 	
-	void Renderer::draw() const
+	void Renderer::draw()
 	{
 		const Vector& position = getPosition(*this);
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 
-		/*glPushMatrix();
+		
+		Graphics::get().getMatrixStack().push();
 		{
-			glTranslatef(position.getX(), position.getY(), 0.0f);
+			Graphics::get().getMatrixStack().translate(position);
 			if(entityOrientation != Side::RIGHT)
-				glScalef(-1.0f, 1.0f, 1.0f);
-			Graphics::get().draw(*_root, *_spriteSheet.get(), _color);
+				Graphics::get().getMatrixStack().scale(Vector(-1.0f, 1.0f));
+			draw(*_root);
 		}
-		glPopMatrix();*/
+		Graphics::get().getMatrixStack().pop();
+		Graphics::get().validate();
+	}
+
+	void Renderer::draw(const SceneNode& sceneNode)
+	{
+		Graphics::get().getMatrixStack().push();
+		{	
+			if(sceneNode.isFlip())
+				Graphics::get().getMatrixStack().scale(Vector(-1.0f, 1.0f));
+			Graphics::get().getMatrixStack().scale(sceneNode.getScale());
+			Graphics::get().getMatrixStack().translate(sceneNode.getTranslation());
+			Graphics::get().getMatrixStack().rotate(sceneNode.getRotation());
+
+			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
+			{
+				if((**i).drawBehindParent())
+					draw(**i);
+			}
+
+			if(!sceneNode.isTransformOnly())
+			{
+				
+				const Texture& texture = _spriteSheet->getTexture();
+				Hash spriteGroupID = sceneNode.getSpriteGroupId();
+				const SpriteGroup& spriteGroup = _spriteSheet->get(spriteGroupID);
+				float spriteInterpolation = sceneNode.getSpriteInterpolation();
+				int spriteIndex;
+				if(spriteInterpolation < 0.0f)
+					spriteIndex = 0;
+				else if(spriteInterpolation >= 1.0f)
+					spriteIndex = spriteGroup.getSize() - 1;
+				else
+					spriteIndex = static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
+				const Sprite& sprite = spriteGroup.get(spriteIndex);
+				const AABB& texturePart = sprite.getBounds();
+				Graphics::get().getMatrixStack().translate(-sprite.getOffset());
+				Graphics::get().getSpriteBatch().add(&texture, texturePart, _color, Vector::Zero, Graphics::get().getMatrixStack().top());
+			}
+
+			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
+			{
+				if(!(**i).drawBehindParent())
+					draw(**i);
+			}
+		}
+		Graphics::get().getMatrixStack().pop();
 	}
 
 	Component* Renderer::clone() const

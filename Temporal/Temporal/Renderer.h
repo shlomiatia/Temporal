@@ -33,7 +33,8 @@ namespace Temporal
 		LayerType::Enum _layer;
 		Color _color;
 
-		void draw() const;
+		void draw();
+		void draw(const SceneNode& sceneNode);
 
 		friend class SerializationAccess;
 	};

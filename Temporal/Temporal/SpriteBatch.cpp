@@ -30,7 +30,7 @@ namespace Temporal
 	
 		_typeUniform = program.getUniform("u_type");
 
-		program.setUniform(_typeUniform, -1);
+		program.setUniform(_typeUniform, 0);
 
 		glGenBuffers(1, &_vbo);
 		glGenBuffers(1, &_ibo);
@@ -142,13 +142,6 @@ namespace Temporal
 
 	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, const Vector& radius)
 	{
-		if(_size == _items.size())
-		{
-			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
-			_items.resize(size);
-			expand(_items.size());
-		}
-		
 		glm::mat4 m = Graphics::get().getMatrixStack().top();
 		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
 		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -159,14 +152,27 @@ namespace Temporal
 		if(flipY)
 			actualScale.setX(-actualScale.getY());
 		m = glm::scale(m, glm::vec3(actualScale.getX(), actualScale.getY(), 0.0f));
-		Vector actualRadius = radius != Vector::Zero ? radius : texture->getSize() / 2.0f;
+		
+		add(texture, texturePart, color, radius, m);
+	}
+
+	void SpriteBatch::add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m)
+	{
+		if(_size == _items.size())
+		{
+			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
+			_items.resize(size);
+			expand(_items.size());
+		}
+		Vector actualRadius = radius != Vector::Zero ? radius : texturePart.getRadius();
 		if(actualRadius.getY() == 0.0f)
 			actualRadius.setY(1.0f);
 		else if(actualRadius.getX() == 0.0f)
 			actualRadius.setX(1.0f);
 		SpriteBatchItem& item = _items[_size];
 		item.texture = texture;
-		item.texturePart = texturePart;
+		if(texture)
+			item.texturePart = AABB(Vector(texturePart.getCenterX()/texture->getSize().getX(),texturePart.getCenterY()/texture->getSize().getY()),Vector(texturePart.getRadiusX()/texture->getSize().getX(),texturePart.getRadiusY()/texture->getSize().getY()));
 		glm::vec4 a = m * glm::vec4(-actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 b = m * glm::vec4(actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 c = m * glm::vec4(actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
@@ -201,7 +207,7 @@ namespace Temporal
 			_vertices[i++] = item.a.getX();
 			_vertices[i++] = item.a.getY();
 			_vertices[i++] = item.texturePart.getLeft();
-			_vertices[i++] = item.texturePart.getBottom();
+			_vertices[i++] = item.texturePart.getTop();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
@@ -209,7 +215,7 @@ namespace Temporal
 			_vertices[i++] = item.b.getX();
 			_vertices[i++] = item.b.getY();
 			_vertices[i++] = item.texturePart.getRight();
-			_vertices[i++] = item.texturePart.getBottom();
+			_vertices[i++] = item.texturePart.getTop();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
@@ -217,7 +223,7 @@ namespace Temporal
 			_vertices[i++] = item.c.getX();
 			_vertices[i++] = item.c.getY();
 			_vertices[i++] = item.texturePart.getRight();
-			_vertices[i++] = item.texturePart.getTop();
+			_vertices[i++] = item.texturePart.getBottom();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
@@ -225,7 +231,7 @@ namespace Temporal
 			_vertices[i++] = item.d.getX(); 
 			_vertices[i++] = item.d.getY();
 			_vertices[i++] = item.texturePart.getLeft();
-			_vertices[i++] = item.texturePart.getTop();
+			_vertices[i++] = item.texturePart.getBottom();
 			_vertices[i++] = item.color.getR();
 			_vertices[i++] = item.color.getG();
 			_vertices[i++] = item.color.getB();
@@ -252,5 +258,6 @@ namespace Temporal
 
 		glBindVertexArray(0);	
 		glUseProgram(0);
+		Graphics::get().validate();
 	}
 }
