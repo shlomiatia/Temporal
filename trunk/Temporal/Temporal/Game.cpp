@@ -51,19 +51,27 @@ namespace Temporal
 		dispose();
 	}
 
-	
+	PerformanceTimer& updateTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_UPDATE"));
 	void Game::update()
 	{
+		updateTimer.measure();
 		Input::get().update();
 		float currentFrameTime = Time::now();
 		GameStateManager::get().update(currentFrameTime - _lastFrameTime);
 		_lastFrameTime = currentFrameTime;
+		updateTimer.print("Update");
 	}
 
+	PerformanceTimer& drawTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DRAW"));
+	PerformanceTimer& finishDrawingTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_FINISH_DRAWING"));
 	void Game::draw() const
 	{
 		Graphics::get().prepareForDrawing();
+		drawTimer.measure();
 		GameStateManager::get().draw();
+		drawTimer.print("DRAW");
+		finishDrawingTimer.measure();
 		Graphics::get().finishDrawing();
+		finishDrawingTimer.print("FINISH DRAWING");
 	}
 }

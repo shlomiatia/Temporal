@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "Log.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -9,22 +10,25 @@ namespace Temporal
 		return ticks / 1000.0f;
 	}
 
-	void PerformanceTimer::start()
+	void PerformanceTimer::measure()
 	{
-		_startTime = Time::now();
-		_endTime = 0.0f;
-		_splits = 0;
+		_last = Time::now();
 	}
 
-	void PerformanceTimer::stop()
+	void PerformanceTimer::print(const char* name, int maxSplits)
 	{
-		_endTime = Time::now();
-	}
-
-	float PerformanceTimer::getElapsedTime() const
-	{
-		float endTime = _endTime != 0.0f ? _endTime : Time::now();
-		return endTime - _startTime;
+		if(_last == 0.0f)
+			return;
+		++_splits;
+		_total += (Time::now() - _last);
+		if(_splits == maxSplits)
+		{
+			float fps = _splits / _total;
+			float average = (_total / _splits) * 1000.0f;
+			Log::write("%s: %f (%f)", name, fps, average);
+			_splits = 0;
+			_total = 0.0f;
+		}
 	}
 
 	PerformanceTimer& PerformanceTimerManager::getTimer(Hash id)

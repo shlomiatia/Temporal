@@ -45,6 +45,7 @@ namespace Temporal
 	{		
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
+			
 			(**i).draw();
 		}
 	}
@@ -55,8 +56,10 @@ namespace Temporal
 			_layers[static_cast<LayerType::Enum>(i)] = ComponentCollection();
 	}
 
+	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
 	void SpriteLayer::draw()
 	{
+		spriteLayerTimer.measure();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
@@ -68,50 +71,41 @@ namespace Temporal
 		}
 		Graphics::get().getSpriteBatch().end();
 		Graphics::get().getSpriteBatch().begin();
+		spriteLayerTimer.print("SPRITE");
 	}
 
+	PerformanceTimer& guiLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_GUI_LAYER"));
 	void GUILayer::draw()
 	{
+		guiLayerTimer.measure();
 		//glLoadIdentity();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW));
 		}
+		guiLayerTimer.print("GUI");
 	}
 
 	void DebugLayer::drawFPS()
 	{
 		PerformanceTimer& timer = PerformanceTimerManager::get().getTimer(FPS_TIMER);
-		
-		if(!timer.isStarted())
-		{
-			timer.start();
-		}
-		else
-		{
-			timer.split();
-			float time = timer.getElapsedTime();
-			if(time >= 1.0f)
-			{
-				timer.stop();
-				float fps = timer.getSplits() / time;
-				Log::write("FPS: %f", fps);
-				timer.start();
-			}
-		}
+		timer.print("FPS");
+		timer.measure();
 	}
 
+	PerformanceTimer& debugLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DEBUG_LAYER"));
 	void DebugLayer::draw()
 	{
+		debugLayerTimer.measure();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);
-		filter.push_back(DynamicBody::TYPE);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 
 		drawFPS();
+		debugLayerTimer.print("DEBUG LAYER");
 	}
 }

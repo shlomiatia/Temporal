@@ -38,6 +38,8 @@ namespace Temporal
 		{
 			SceneNode& sceneNode = *static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
 			bindSceneNodes(_bindings, sceneNode);
+			if(_animationId != Hash::INVALID)
+				reset(AnimationParams(_animationId, _isRewined));
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{
