@@ -32,18 +32,14 @@ namespace Temporal
 	class PerformanceTimer
 	{
 	public:
-		PerformanceTimer() : _startTime(0.0f), _endTime(0.0f), _splits(0) {}
-
-		int getSplits() const { return _splits; }
-		void split() { ++_splits; }
-		bool isStarted() const { return _startTime != 0.0f; }
-		void start();
-		void stop();
-		float getElapsedTime() const;
+		PerformanceTimer() : _last(0.0f), _total(0.0f), _splits(0) {}
+		
+		void measure();
+		void print(const char* name, int maxSplits = 60);
 
 	private:
-		float _startTime;
-		float _endTime;
+		float _last;
+		float _total;
 		int _splits;
 
 		PerformanceTimer(const PerformanceTimer&);

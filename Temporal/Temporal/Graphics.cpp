@@ -4,6 +4,7 @@
 #include "SceneNode.h"
 #include "Shapes.h"
 #include "Settings.h"
+#include "Timer.h"
 #include <gl/glew.h>
 #include <SDL.h>
 
@@ -92,11 +93,15 @@ namespace Temporal
 		_spriteBatch.begin();
 	}
 
+
+	PerformanceTimer& swapTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SWAP"));
 	void Graphics::finishDrawing()
 	{
 		_spriteBatch.end();
+		swapTimer.measure();
 		SDL_GL_SwapWindow(_window);
 		validate();
+		swapTimer.print("SWAP");
 	}
 
 	void Graphics::validate() const
