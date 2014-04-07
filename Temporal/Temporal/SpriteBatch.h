@@ -55,7 +55,8 @@ namespace Temporal
 		// texture
 		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB(0.0f, 0.0f, 1.0f, 1.0f), const Color& color = Color::White, float rotation = 0.0f, 
 			const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero);
-		void add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m);
+
+		// Shape
 		void add(const Vector& translation, const Vector& radius = Vector::Zero, const Color& color = Color::White, float rotation = 0.0f)
 		{
 			add(0, translation, AABB::Zero, color, rotation, Vector::Zero, Vector(1.0f, 1.0f), false, false, radius);
@@ -107,7 +108,7 @@ namespace Temporal
 		int iboVertices(int size) {	return size * iboFloats(); }
 		int vboBytes(int size) { return vboVertices(size) * sizeof(float); }
 		int iboBytes(int size) { return iboVertices(size) * sizeof(unsigned short); }
-	
+		void add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m);
 	};
 
 }

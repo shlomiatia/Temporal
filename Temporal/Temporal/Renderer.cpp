@@ -104,8 +104,7 @@ namespace Temporal
 					spriteIndex = static_cast<int>(spriteGroup.getSize() * sceneNode.getSpriteInterpolation());
 				const Sprite& sprite = spriteGroup.get(spriteIndex);
 				const AABB& texturePart = sprite.getBounds();
-				Graphics::get().getMatrixStack().translate(-sprite.getOffset());
-				Graphics::get().getSpriteBatch().add(&texture, texturePart, _color, Vector::Zero, Graphics::get().getMatrixStack().top());
+				Graphics::get().getSpriteBatch().add(&texture, Vector::Zero, texturePart, _color, 0.0f, -sprite.getOffset());
 			}
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
