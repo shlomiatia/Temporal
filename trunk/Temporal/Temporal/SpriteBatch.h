@@ -43,7 +43,7 @@ namespace Temporal
 	{
 	public:
 
-		SpriteBatch() : _mode(SpriteBatchMode::TRIANGLES), _size(0), _vertices(0), _vao(0), _vbo(0), _ibo(0), _lastTexture(0), _coordinateAttribute(0), _textureCoordinateAttribute(0), _colorAttribute(0),
+		SpriteBatch(SpriteBatchMode::Enum mode = SpriteBatchMode::TRIANGLES) : _mode(mode), _size(0), _vertices(0), _vao(0), _vbo(0), _ibo(0), _lastTexture(0), _coordinateAttribute(0), _textureCoordinateAttribute(0), _colorAttribute(0),
 			_textureUniform(0), _typeUniform(0) {}
 		~SpriteBatch();
 
@@ -72,8 +72,6 @@ namespace Temporal
 			add(aabb.getCenter(), aabb.getRadius(), color);
 		}
 		void end();
-
-		void setMode(SpriteBatchMode::Enum mode) { _mode = mode; }
 	
 	private:
 		static const int INITLAL_MAX_SPRITES = 256;

@@ -22,6 +22,7 @@ namespace Temporal
 			DRAW,
 			DRAW_DEBUG,
 			DRAW_TEXT,
+			DRAW_BORDERS,
 			DRAW_LIGHTS,
 
 			MOUSE_DOWN,

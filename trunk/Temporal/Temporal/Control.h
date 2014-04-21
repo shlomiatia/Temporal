@@ -93,6 +93,7 @@ namespace Temporal
 
 		void drawControl();
 		void drawText();
+		void drawBorder();
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
 		const std::string& getString() const { return _isTextBoxMode ? _textbox : _label; }
 		std::string& getString() { return _isTextBoxMode ? _textbox : _label; }

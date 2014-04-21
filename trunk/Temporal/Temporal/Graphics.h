@@ -32,6 +32,7 @@ namespace Temporal
 		MatrixStack& getMatrixStack() { return _matrixStack; }
 		ShaderProgram& getShaderProgram() { return _shaderProgram; }
 		SpriteBatch& getSpriteBatch() { return _spriteBatch; }
+		SpriteBatch& getLinesSpriteBatch() { return _linesSpriteBatch; }
 
 		void setTitle(const char* title) const;
 
@@ -49,8 +50,9 @@ namespace Temporal
 		MatrixStack _matrixStack;
 		ShaderProgram _shaderProgram;
 		SpriteBatch _spriteBatch;
+		SpriteBatch _linesSpriteBatch;
 
-		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0) {}
+		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0), _linesSpriteBatch(SpriteBatchMode::LINES) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);
