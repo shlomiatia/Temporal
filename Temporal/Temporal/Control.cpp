@@ -103,6 +103,10 @@ namespace Temporal
 		{
 			drawText();
 		}
+		else if(message.getID() == MessageID::DRAW_BORDERS)
+		{
+			drawBorder();
+		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
 			const Vector& position = getPosition(*this);
@@ -223,25 +227,24 @@ namespace Temporal
 			_textbox += static_cast<char>(key);
 		}
 	}
-
-	void addToSpriteBatch(const OBBAABBWrapper& aabb, const Color& color)
-	{
-		Graphics::get().getSpriteBatch().add(aabb.getCenter(), aabb.getRadius(), color);
-	}
 	
 	void Control::drawControl()
 	{
 		const Vector& position = getPosition(*this);
 		_obb.setCenter(position);
 		const Color& color = _isHover ? _hoverColor : _backgroundColor;
-		addToSpriteBatch(_box, color);
+		Graphics::get().getSpriteBatch().add(_box.getCenter(), _box.getRadius(), color);
 
-		//Graphics::get().draw(_box, _borderColor, false);
 	}
 
 	void Control::drawText()
 	{
 		const Vector& position = getPosition(*this);
 		_font->draw(getString().c_str(), position, _foregroundColor);
+	}
+
+	void Control::drawBorder()
+	{
+		Graphics::get().getLinesSpriteBatch().add(_box.getCenter(), _box.getRadius(), _borderColor);
 	}
 }

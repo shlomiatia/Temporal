@@ -71,6 +71,7 @@ namespace Temporal
 
 		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
 		_spriteBatch.init();
+		_linesSpriteBatch.init();
 	}
 
 	void Graphics::setTitle(const char* title) const
@@ -91,12 +92,14 @@ namespace Temporal
 		glClear(GL_COLOR_BUFFER_BIT);
 		_matrixStack.reset();
 		_spriteBatch.begin();
+		_linesSpriteBatch.begin();
 	}
 
 
 	PerformanceTimer& swapTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SWAP"));
 	void Graphics::finishDrawing()
 	{
+		_linesSpriteBatch.end();
 		_spriteBatch.end();
 		swapTimer.measure();
 		SDL_GL_SwapWindow(_window);

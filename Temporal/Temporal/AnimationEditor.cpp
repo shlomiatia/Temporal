@@ -549,6 +549,7 @@ namespace Temporal
 
 	void AEGameStateListener::onPreDraw()
 	{
+		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		Graphics::get().getSpriteBatch().add(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f));
 	}
 }

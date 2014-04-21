@@ -60,6 +60,8 @@ namespace Temporal
 	void SpriteLayer::draw()
 	{
 		spriteLayerTimer.measure();
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
@@ -84,8 +86,14 @@ namespace Temporal
 		{
 			(**i).handleMessage(Message(MessageID::DRAW));
 		}
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			(**i).handleMessage(Message(MessageID::DRAW_BORDERS));
+		}
 		Graphics::get().getSpriteBatch().end();
 		Graphics::get().getSpriteBatch().begin();
+		Graphics::get().getLinesSpriteBatch().end();
+		Graphics::get().getLinesSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 1);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
