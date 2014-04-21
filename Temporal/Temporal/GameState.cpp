@@ -107,8 +107,10 @@ namespace Temporal
 	void GameStateManager::draw() const
 	{
 		if(_listener)
-			_listener->onDraw();
+			_listener->onPreDraw();
 		getCurrentState().draw();
+		if(_listener)
+			_listener->onPostDraw();
 	}
 
 	void GameStateManager::unload()

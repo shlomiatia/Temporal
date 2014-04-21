@@ -36,8 +36,8 @@ namespace Temporal
 		glBindTexture(GL_TEXTURE_2D, id);
  
 		// set filter parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
  
@@ -45,30 +45,31 @@ namespace Temporal
 		int height = surface->h;
 	
 		// send the loaded binary into open gl
-		glTexImage2D(GL_TEXTURE_2D, 0, format,
-				surface->w, surface->h,
-				0, format,
-				GL_UNSIGNED_BYTE, surface->pixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 		Graphics::get().validate();
 		SDL_FreeSurface(surface);
 		return new Texture(id, Vector(width, height));
 	}
 
-	const Texture* Texture::load(const Vector& size)
+	const Texture* Texture::load(const Vector& size, bool greyscale)
 	{
 		GLuint id;
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		unsigned int* data = new unsigned int[((static_cast<int>(size.getX()) * static_cast<int>(size.getY()))* 4 * sizeof(unsigned int))];
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, static_cast<int>(size.getX()), static_cast<int>(size.getY()), 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		//unsigned int* data = new unsigned int[((static_cast<int>(size.getX()) * static_cast<int>(size.getY()))* 4 * sizeof(unsigned int))];
+		int internalFormat = greyscale ? GL_R8 : GL_RGBA;
+		int format = greyscale ? GL_RED : GL_RGBA;
+		int width = static_cast<int>(size.getX());
+		int height = static_cast<int>(size.getY());
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, 0);
+
 		const Texture* result(new Texture(id, size));
 		Graphics::get().validate();
-		delete data;
 		return result;
 	}
 

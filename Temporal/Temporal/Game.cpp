@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "GameState.h"
 #include "Settings.h"
+#include "Font.h"
 
 namespace Temporal
 {
@@ -16,8 +17,10 @@ namespace Temporal
 		SettingsLoader loader("resources/settings.xml");
 		loader.execute();
 		Settings* settings = loader.getResult();
+		
 		Graphics::get().init(*settings);
 		Input::get().init();
+		FontManager::get().init();
 		IOThread::get().init();
 		ResourceManager::get().init();
 		GameStateManager::get().init(gameState);
@@ -29,6 +32,7 @@ namespace Temporal
 		GameStateManager::get().dispose();
 		ResourceManager::get().dispose();
 		IOThread::get().dispose();
+		FontManager::get().dispose();
 		Input::get().dispose();
 		Graphics::get().dispose();
 	}

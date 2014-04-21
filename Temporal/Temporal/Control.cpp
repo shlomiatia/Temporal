@@ -8,6 +8,7 @@
 #include "Mouse.h"
 #include "ShapeOperations.h"
 #include "Keyboard.h"
+#include "Font.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -70,12 +71,6 @@ namespace Temporal
 		prop = value;
 	}
 
-	void Control::setWidth(float width)
-	{
-		_layout.SetLineLength(width);
-		_box.setWidth(width);
-	}
-
 	Control::~Control()
 	{
 		deleteEvent(_leftMouseDownEvent);
@@ -98,13 +93,15 @@ namespace Temporal
 			Keyboard::get().add(this);
 			getEntity().getManager().getGameState().getLayersManager().addGUI(this);
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
-			_layout.SetFont(_font.get());
-			_layout.SetAlignment(FTGL::TextAlignment::ALIGN_CENTER);
 			_box.setOBB(_obb);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
-			draw();
+			drawControl();
+		}
+		else if(message.getID() == MessageID::DRAW_TEXT)
+		{
+			drawText();
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
@@ -232,23 +229,19 @@ namespace Temporal
 		Graphics::get().getSpriteBatch().add(aabb.getCenter(), aabb.getRadius(), color);
 	}
 	
-	void Control::draw()
+	void Control::drawControl()
 	{
 		const Vector& position = getPosition(*this);
 		_obb.setCenter(position);
-		_isHover ? addToSpriteBatch(_box, _hoverColor) :  addToSpriteBatch(_box, _backgroundColor);
+		const Color& color = _isHover ? _hoverColor : _backgroundColor;
+		addToSpriteBatch(_box, color);
 
 		//Graphics::get().draw(_box, _borderColor, false);
-		if(getString() != "")
-		{
-			/*glColor4f(_foregroundColor.getR(), _foregroundColor.getG(), _foregroundColor.getB(), _foregroundColor.getA());
-			glPushMatrix();
-			{
-				glTranslatef(position.getX() - _box.getWidth() / 2.0f, position.getY() - _box.getHeight() / 4.0f , 0.0f);
-				_layout.Render(getText());
-				Graphics::get().bindTexture(0); // Because we cache textures...
-			}
-			glPopMatrix();*/
-		}
+	}
+
+	void Control::drawText()
+	{
+		const Vector& position = getPosition(*this);
+		_font->draw(getString().c_str(), position, _foregroundColor);
 	}
 }
