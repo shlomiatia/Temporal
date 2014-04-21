@@ -11,8 +11,8 @@
 #include "Settings.h"
 #include "Serialization.h"
 #include "Graphics.h"
+#include "Font.h"
 #include <sstream>
-#include <ftgl/ftgl.h>
 #include <windows.h>
 #include <SDL.h>
 #include <SDL_syswm.h>
@@ -132,7 +132,7 @@ namespace Temporal
 		return spriteSheetP;
 	}
 
-	const std::shared_ptr<SpriteSheet> ResourceManager::getTexture(const char* file)
+	const std::shared_ptr<SpriteSheet> ResourceManager::getSingleTextureSpritesheet(const char* file)
 	{
 		Hash id = Hash(file);
 
@@ -148,7 +148,6 @@ namespace Temporal
 
 		return spriteSheetP;
 	}
-
 
 	const std::shared_ptr<AnimationSet> ResourceManager::getAnimationSet(const char* file)
 	{
@@ -170,7 +169,7 @@ namespace Temporal
 		return animationSetP;
 	}
 
-	const std::shared_ptr<FTFont> ResourceManager::getFont(const char* name, unsigned int size)
+	const std::shared_ptr<Font> ResourceManager::getFont(const char* name, unsigned int size)
 	{
 		std::ostringstream stream;
 		stream << name << size;
@@ -182,13 +181,9 @@ namespace Temporal
 			return result->second;
 		}
 
-		FTFont* font = new FTTextureFont(name);
+		Font* font = new Font(name, size);
 
-		if(!font->FaceSize(size))
-		{
-			abort();
-		}
-		std::shared_ptr<FTFont> fontP(font);
+		std::shared_ptr<Font> fontP(font);
 		_fonts[id] = fontP;
 
 		return fontP;

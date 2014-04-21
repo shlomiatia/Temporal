@@ -221,6 +221,9 @@
     <ClInclude Include="SpriteBatch.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -417,6 +420,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SpriteBatch.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

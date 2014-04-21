@@ -88,7 +88,7 @@ namespace Temporal
 	{
 	public:
 		void onLoaded(Hash id, GameState& gameState);
-		void onDraw();
+		void onPreDraw();
 	};
 }
 #endif

@@ -9,7 +9,7 @@ namespace Temporal
 	{
 	public:
 		static const Texture* load(const char* path);
-		static const Texture* load(const Vector& size);
+		static const Texture* load(const Vector& size, bool greyscale = false);
 		~Texture();
 
 		unsigned int getID() const { return _id; }

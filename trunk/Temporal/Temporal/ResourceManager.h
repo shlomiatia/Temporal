@@ -15,6 +15,7 @@ namespace Temporal
 	class Settings;
 	class SpriteSheet;
 	class AnimationSet;
+	class Font;
 	class Texture;
 	class Stream;
 	
@@ -22,7 +23,7 @@ namespace Temporal
 	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
 	typedef std::unordered_map<Hash, std::shared_ptr<AnimationSet>> AnimationSetCollection;
 	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
-	typedef std::unordered_map<Hash, std::shared_ptr<FTFont>> FontCollection;
+	typedef std::unordered_map<Hash, std::shared_ptr<Font>> FontCollection;
 	typedef FontCollection::const_iterator FontIterator;
 
 	typedef std::vector<std::string> StringCollection;
@@ -126,9 +127,9 @@ namespace Temporal
 		void collectGarbage();
 
 		const std::shared_ptr<SpriteSheet> getSpritesheet(const char* file);
-		const std::shared_ptr<SpriteSheet> getTexture(const char* file);
+		const std::shared_ptr<SpriteSheet> getSingleTextureSpritesheet(const char* file);
 		const std::shared_ptr<AnimationSet> getAnimationSet(const char* file);
-		const std::shared_ptr<FTFont> getFont(const char* name, unsigned int size);
+		const std::shared_ptr<Font> getFont(const char* name, unsigned int size);
 
 	private:
 		SpriteSheetCollection _spritesheets;

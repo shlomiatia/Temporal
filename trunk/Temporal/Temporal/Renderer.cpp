@@ -30,7 +30,7 @@ namespace Temporal
 			if(!_spriteSheetFile.empty())
 				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile.c_str());
 			else
-				_spriteSheet = ResourceManager::get().getTexture(_textureFile.c_str());
+				_spriteSheet = ResourceManager::get().getSingleTextureSpritesheet(_textureFile.c_str());
 			if(!_root)
 				_root = new SceneNode();
 		}

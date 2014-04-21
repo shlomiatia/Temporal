@@ -21,6 +21,7 @@ namespace Temporal
 			UPDATE,
 			DRAW,
 			DRAW_DEBUG,
+			DRAW_TEXT,
 			DRAW_LIGHTS,
 
 			MOUSE_DOWN,

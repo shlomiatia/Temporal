@@ -56,7 +56,7 @@ namespace Temporal
 		if(!_spritesheetFile.empty())
 			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile.c_str());
 		else
-			_spritesheet = ResourceManager::get().getTexture(_textureFile.c_str());
+			_spritesheet = ResourceManager::get().getSingleTextureSpritesheet(_textureFile.c_str());
 		int j = 8;
 		for(int i = 0; i < length; ++i)
 		{

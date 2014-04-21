@@ -69,8 +69,6 @@ namespace Temporal
 				(**j).handleMessage(Message(MessageID::DRAW));
 			}
 		}
-		Graphics::get().getSpriteBatch().end();
-		Graphics::get().getSpriteBatch().begin();
 		spriteLayerTimer.print("SPRITE");
 	}
 
@@ -78,10 +76,20 @@ namespace Temporal
 	void GUILayer::draw()
 	{
 		guiLayerTimer.measure();
-		//glLoadIdentity();
+		Graphics::get().getMatrixStack().reset();
+		//Graphics::get().getSpriteBatch().end();
+		//Graphics::get().getSpriteBatch().begin();
+		//Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW));
+		}
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().begin();
+		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 1);
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			(**i).handleMessage(Message(MessageID::DRAW_TEXT));
 		}
 		guiLayerTimer.print("GUI");
 	}
@@ -97,6 +105,8 @@ namespace Temporal
 	void DebugLayer::draw()
 	{
 		debugLayerTimer.measure();
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);

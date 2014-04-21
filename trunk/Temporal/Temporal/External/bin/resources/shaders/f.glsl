@@ -10,5 +10,7 @@ void main(void) {
 		gl_FragColor = v_color;
 	} else if(u_type == 0) {
 		gl_FragColor =  texture2D(u_texture, v_textureCoordinate) * v_color;
+	} else if (u_type == 1) {
+		gl_FragColor =  texture2D(u_texture, v_textureCoordinate) .rrrr * v_color;
 	}
 }
