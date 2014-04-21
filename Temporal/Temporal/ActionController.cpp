@@ -142,6 +142,8 @@ namespace Temporal
 			return;
 		const OBB& sensor = contact.getSource().getGlobalShape();
 		const OBB& platform = contact.getTarget().getGlobalShape();
+
+		// Need to improve this, it's too sensitive
 		if(platform.getAxisX().getY() != 0.0f)
 		{
 			_frontFound = false;
