@@ -39,7 +39,7 @@ namespace Temporal
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _vertices(0), _texCoords(0), _birthIndex(0),
+		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _birthIndex(0),
 			_spritesheetFile(), _textureFile(), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
 		~ParticleEmitter();
 
@@ -66,8 +66,6 @@ namespace Temporal
 		Timer _birthTimer;
 		int _birthIndex;
 		Particle* _particles;
-		float* _vertices;
-		float* _texCoords;
 		
 		void init();
 		void update(float framePeriod);

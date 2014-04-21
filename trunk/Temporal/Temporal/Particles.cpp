@@ -12,7 +12,7 @@
 
 namespace Temporal
 {
-	const Hash ParticleEmitter::TYPE = Hash("particles");
+	const Hash ParticleEmitter::TYPE = Hash("particle-emitter");
 
 	void Particle::update(float time)
 	{
@@ -23,8 +23,6 @@ namespace Temporal
 	ParticleEmitter::~ParticleEmitter()
 	{
 		delete[] _particles;
-		delete[] _vertices;
-		delete[] _texCoords;
 	}
 
 	int ParticleEmitter::getLength() { return static_cast<int>(_lifetime / _birthThreshold); }
@@ -51,24 +49,10 @@ namespace Temporal
 		getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::PARTICLES, this);
 		int length = getLength();
 		_particles = new Particle[length];
-		_vertices = new float[length*8];
-		_texCoords = new float[length*8];
 		if(!_spritesheetFile.empty())
 			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile.c_str());
 		else
 			_spritesheet = ResourceManager::get().getSingleTextureSpritesheet(_textureFile.c_str());
-		int j = 8;
-		for(int i = 0; i < length; ++i)
-		{
-			_texCoords[i*j] = 0.0f;
-			_texCoords[i*j+1] = 1.0f;
-			_texCoords[i*j+2] = 0.0f;
-			_texCoords[i*j+3] = 0.0f;
-			_texCoords[i*j+4] = 1.0f;
-			_texCoords[i*j+5] = 0.0f;
-			_texCoords[i*j+6] = 1.0f;
-			_texCoords[i*j+7] = 1.0f;
-		}
 	}
 
 	int random(int max, int min = 0)
@@ -121,35 +105,13 @@ namespace Temporal
 	void ParticleEmitter::draw()
 	{
 		int length = getLength();
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		Vector radius = _spritesheet->getTexture().getSize() / 2.0f;
-		const int PARTICLE_VERTICES = 8;
-		int vertexIndex = 0;
 		for(int i = 0; i < length; ++i)
 		{
 			const Particle& particle = _particles[i];
 			if(particle.isAlive())
 			{
-				int startIndex = PARTICLE_VERTICES * vertexIndex;
-				_vertices[startIndex] = particle.getPosition().getX() - radius.getX();
-				_vertices[startIndex+1] = particle.getPosition().getY() - radius.getY();
-				_vertices[startIndex+2] = particle.getPosition().getX() - radius.getX();
-				_vertices[startIndex+3] = particle.getPosition().getY() + radius.getY();
-				_vertices[startIndex+4] = particle.getPosition().getX() + radius.getX();
-				_vertices[startIndex+5] = particle.getPosition().getY() + radius.getY();
-				_vertices[startIndex+6] = particle.getPosition().getX() + radius.getX();
-				_vertices[startIndex+7] = particle.getPosition().getY() - radius.getY();
-				++vertexIndex;
+				Graphics::get().getSpriteBatch().add(&_spritesheet->getTexture(), particle.getPosition());
 			}
 		}
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);	
-
-		glVertexPointer(2, GL_FLOAT, 0, _vertices);
-		glTexCoordPointer(2, GL_FLOAT, 0, _texCoords);
- 
-		glDrawArrays(GL_QUADS, 0, vertexIndex * 4);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 }

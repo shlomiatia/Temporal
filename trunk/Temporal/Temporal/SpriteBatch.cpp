@@ -164,15 +164,29 @@ namespace Temporal
 			_items.resize(size);
 			expand(_items.size());
 		}
-		Vector actualRadius = radius != Vector::Zero ? radius : texturePart.getRadius();
+		
+		Vector actualRadius = Vector::Zero; radius != Vector::Zero ? radius : texturePart.getRadius();
+		if(radius != Vector::Zero)
+			actualRadius = radius;
+		else if(texturePart != AABB::Zero)
+			actualRadius = texturePart.getRadius();
+		else
+			actualRadius = texture->getSize() / 2.0f;
+
 		if(actualRadius.getY() == 0.0f)
 			actualRadius.setY(1.0f);
 		else if(actualRadius.getX() == 0.0f)
 			actualRadius.setX(1.0f);
 		SpriteBatchItem& item = _items[_size];
 		item.texture = texture;
-		if(texture)
-			item.texturePart = AABB(Vector(texturePart.getCenterX()/texture->getSize().getX(),texturePart.getCenterY()/texture->getSize().getY()),Vector(texturePart.getRadiusX()/texture->getSize().getX(),texturePart.getRadiusY()/texture->getSize().getY()));
+		if(texture) {
+			if(texturePart == AABB::Zero)
+				item.texturePart = AABB(0.5f, 0.5f, 1.0f, 1.0f);
+			else
+				item.texturePart = AABB(Vector(texturePart.getCenterX() / texture->getSize().getX(), texturePart.getCenterY() / texture->getSize().getY()),
+										Vector(texturePart.getRadiusX() / texture->getSize().getX(), texturePart.getRadiusY() / texture->getSize().getY()));
+		}
+			
 		glm::vec4 a = m * glm::vec4(-actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 b = m * glm::vec4(actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 c = m * glm::vec4(actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
