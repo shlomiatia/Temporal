@@ -52,7 +52,7 @@ namespace Temporal
 		SpriteBatch _spriteBatch;
 		SpriteBatch _linesSpriteBatch;
 
-		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0), _linesSpriteBatch(SpriteBatchMode::LINES) {}
+		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0), _linesSpriteBatch(_shaderProgram, SpriteBatchMode::LINES), _spriteBatch(_shaderProgram) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

@@ -224,6 +224,9 @@
     <ClInclude Include="Font.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="FBO.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -423,6 +426,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FBO.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
