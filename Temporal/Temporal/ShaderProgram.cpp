@@ -1,8 +1,7 @@
 #include "ShaderProgram.h"
 #include <GL/glew.h>
 #include "Graphics.h"
-#include "glm/gtc/type_ptr.hpp"
-#include <glm/gtc/matrix_transform.hpp>
+
 #include <fstream>
 #include <sstream>
 
@@ -21,13 +20,6 @@ namespace Temporal
 		Graphics::get().validate();
 
 		_program = createProgram(vertexShaderId, fragmentShaderId);
-
-		glUseProgram(_program);
-
-		glm::mat4 projection = glm::ortho(0.0f, Graphics::get().getLogicalView().getX(), 0.0f, Graphics::get().getLogicalView().getY(), -1.0f, 1.0f);
-		glUniformMatrix4fv(getUniform("u_projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-		glUseProgram(0);
 	}
 
 	int ShaderProgram::getAttribute(const char* key)
@@ -57,6 +49,13 @@ namespace Temporal
 	{
 		glUseProgram(_program);
 		glUniform1f(uniform, value);
+		glUseProgram(0);
+	}
+
+	void ShaderProgram::setUniform(int uniform, float* value)
+	{
+		glUseProgram(_program);
+		glUniformMatrix4fv(uniform, 1, GL_FALSE, value);
 		glUseProgram(0);
 	}
 
