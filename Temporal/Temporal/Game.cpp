@@ -25,6 +25,8 @@ namespace Temporal
 		ResourceManager::get().init();
 		GameStateManager::get().init(gameState);
 		delete settings;
+
+		_fbo.init(0);
 	}
 
 	void Game::dispose()
@@ -68,14 +70,17 @@ namespace Temporal
 
 	PerformanceTimer& drawTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DRAW"));
 	PerformanceTimer& finishDrawingTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_FINISH_DRAWING"));
-	void Game::draw() const
+	void Game::draw()
 	{
 		Graphics::get().prepareForDrawing();
+		_fbo.bind();
 		drawTimer.measure();
 		GameStateManager::get().draw();
 		drawTimer.print("DRAW");
 		finishDrawingTimer.measure();
-		Graphics::get().finishDrawing();
 		finishDrawingTimer.print("FINISH DRAWING");
+		_fbo.unbind();
+		_fbo.draw();
+		Graphics::get().finishDrawing();
 	}
 }

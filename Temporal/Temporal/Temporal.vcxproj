@@ -16,6 +16,7 @@
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Editable.h" />
+    <ClInclude Include="FBO.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="GameState.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Editable.cpp" />
+    <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GameState.cpp" />

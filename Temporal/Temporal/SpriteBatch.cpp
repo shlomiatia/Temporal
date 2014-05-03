@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "Texture.h"
 #include "Math.h"
+#include "ShaderProgram.h"
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -21,16 +22,15 @@ namespace Temporal
 
 	void SpriteBatch::init() 
 	{
-		ShaderProgram& program = Graphics::get().getShaderProgram();
-		_coordinateAttribute = program.getAttribute("a_coordinate");
-		_textureCoordinateAttribute = program.getAttribute("a_textureCoordinate");
-		_colorAttribute = program.getAttribute("a_color");
+		_coordinateAttribute = _program.getAttribute("a_coordinate");
+		_textureCoordinateAttribute = _program.getAttribute("a_textureCoordinate");
+		_colorAttribute = _program.getAttribute("a_color");
 	
-		_textureUniform = program.getUniform("u_texture");
+		_textureUniform = _program.getUniform("u_texture");
 	
-		_typeUniform = program.getUniform("u_type");
+		_typeUniform = _program.getUniform("u_type");
 
-		program.setUniform(_typeUniform, 0);
+		_program.setUniform(_typeUniform, 0);
 
 		glGenBuffers(1, &_vbo);
 		glGenBuffers(1, &_ibo);
@@ -258,7 +258,7 @@ namespace Temporal
 	{
 		if(size == 0)
 			return;
-		glUseProgram(Graphics::get().getShaderProgram().getId());
+		glUseProgram(_program.getId());
 		glActiveTexture(GL_TEXTURE0);
 
 		glBindVertexArray(_vao);

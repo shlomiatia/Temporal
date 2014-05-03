@@ -53,6 +53,13 @@ namespace Temporal
 		glUseProgram(0);
 	}
 
+	void ShaderProgram::setUniform(int uniform, float value)
+	{
+		glUseProgram(_program);
+		glUniform1f(uniform, value);
+		glUseProgram(0);
+	}
+
 	unsigned int ShaderProgram::createShader(unsigned int shaderType, const char* shaderData)
 	{
 		unsigned int shader = glCreateShader(shaderType);
