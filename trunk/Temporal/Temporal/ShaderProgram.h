@@ -15,6 +15,7 @@ namespace Temporal
 		int getUniform(const char* key);
 		void setUniform(int uniform, int value);
 		void setUniform(int uniform, float value);
+		void setUniform(int uniform, float* value);
 
 	private:
 		unsigned int createShader(unsigned int shaderType, const char* shaderData);

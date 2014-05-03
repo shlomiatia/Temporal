@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "Settings.h"
 #include "Font.h"
+#include <GL/glew.h>
 
 namespace Temporal
 {
@@ -26,7 +27,8 @@ namespace Temporal
 		GameStateManager::get().init(gameState);
 		delete settings;
 
-		_fbo.init(0);
+		//_fbo1.init(1);
+		//_fbo2.init(2);
 	}
 
 	void Game::dispose()
@@ -73,14 +75,20 @@ namespace Temporal
 	void Game::draw()
 	{
 		Graphics::get().prepareForDrawing();
-		_fbo.bind();
+		//_fbo1.bind();
 		drawTimer.measure();
 		GameStateManager::get().draw();
 		drawTimer.print("DRAW");
 		finishDrawingTimer.measure();
 		finishDrawingTimer.print("FINISH DRAWING");
-		_fbo.unbind();
-		_fbo.draw();
+		/*_fbo1.unbind();
+		_fbo2.bind();
+		_fbo1.draw();
+		_fbo2.unbind();
+		GameStateManager::get().draw();
+		glBlendFunc(GL_ONE, GL_ONE);
+		_fbo2.draw();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 		Graphics::get().finishDrawing();
 	}
 }

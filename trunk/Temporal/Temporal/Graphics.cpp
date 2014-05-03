@@ -5,6 +5,8 @@
 #include "Shapes.h"
 #include "Settings.h"
 #include "Timer.h"
+#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 #include <gl/glew.h>
 #include <SDL.h>
 
@@ -70,6 +72,9 @@ namespace Temporal
 		validate();
 
 		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
+		
+		glm::mat4 projection = glm::ortho(0.0f, _logicalView.getX(), 0.0f, _logicalView.getY(), -1.0f, 1.0f);
+		_shaderProgram.setUniform(_shaderProgram.getUniform("u_projection"), glm::value_ptr(projection));
 		_spriteBatch.init();
 		_linesSpriteBatch.init();
 	}

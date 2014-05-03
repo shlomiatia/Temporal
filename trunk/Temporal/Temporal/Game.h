@@ -24,7 +24,8 @@ namespace Temporal
 
 		bool _isRunning;
 		float _lastFrameTime;
-		FBO _fbo;
+		FBO _fbo1;
+		FBO _fbo2;
 
 		void init(const char* gameState);
 		void dispose();
