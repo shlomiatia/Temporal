@@ -4,24 +4,26 @@
 #include "Grid.h"
 #include "StaticBody.h"
 #include "Shapes.h"
-#include "Texture.h"
-#include "Camera.h"
+#include "SpriteSheet.h"
 #include "Fixture.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
 #include "Graphics.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <SDL.h>
 #include <gl/glew.h>
 
 namespace Temporal
 {
-	/*const Hash LightGem::TYPE = Hash("light-gem");
 	const Hash Light::TYPE = Hash("light");
-
-	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const int MAX_LIGHT_PARTS = 32;
 
-	void LightGem::handleMessage(Message& message)
+	/*const Hash LightGem::TYPE = Hash("light-gem");
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+	
+
+	/*void LightGem::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::SET_LIT)
 		{
@@ -31,17 +33,21 @@ namespace Temporal
 		{
 			message.setParam(&_isLit);
 		}
-	}
+	}*/
 
 	void Light::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::DRAW_LIGHTS)
+		if(message.getID() == MessageID::ENTITY_INIT)
+		{
+			_spriteSheet = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/light.png");
+		}
+		else if(message.getID() == MessageID::DRAW_LIGHTS)
 		{
 			draw();
 		}
 	}
 
-	void getPoints(float x, float y, const OBB& shape, Vector& point1, Vector& point2, Vector& point3)
+	/*void getPoints(float x, float y, const OBB& shape, Vector& point1, Vector& point2, Vector& point3)
 	{
 		if(x < shape.getLeft())
 		{
@@ -150,12 +156,12 @@ namespace Temporal
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
  
 		glDisableClientState(GL_VERTEX_ARRAY);
-	}
+	}*/
 	
 	void Light::draw() const
 	{
 		const Vector& position = getPosition(*this);
-		Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
+		/*Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 		bool isFlipped = orientation != 0 && *orientation == Side::LEFT;
 
 		glDisable(GL_BLEND);
@@ -206,18 +212,23 @@ namespace Temporal
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_COLOR_ARRAY);
 		}
-		glPopMatrix();
-	}*/
+		glPopMatrix();*/
+		Graphics::get().getSpriteBatch().add(&_spriteSheet->getTexture(), position, AABB::Zero, _color, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Vector(_radius, _radius));
+	}
 
-	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _fbo(Graphics::get().getSpriteBatch())
+	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _batch(_program), _fbo(_batch)
 	{
+		_program.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
+		glm::mat4 projection = glm::ortho(0.0f, Graphics::get().getResolution().getX(), Graphics::get().getResolution().getY(), 0.0f, -1.0f, 1.0f);
+		_program.setUniform(_program.getUniform("u_projection"), glm::value_ptr(projection));
+		_batch.init();
 		_fbo.init();
 	}
 
 	void LightLayer::draw()
 	{
 		preDraw();
-		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS));
+		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS, this));
 		postDraw();
 	}
 
@@ -227,10 +238,12 @@ namespace Temporal
 		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
+		Graphics::get().getSpriteBatch().begin();
 	}
 
 	void LightLayer::postDraw()
 	{
+		Graphics::get().getSpriteBatch().end();
 		/*void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		float matrix[16];

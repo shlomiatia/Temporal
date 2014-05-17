@@ -6,9 +6,14 @@
 #include "Math.h"
 #include "Layer.h"
 #include "FBO.h"
+#include "SpriteBatch.h"
+#include "ShaderProgram.h"
+#include <memory>
 
 namespace Temporal
 {
+	class SpriteSheet;
+
 	/*class LightGem : public Component
 	{
 	public:
@@ -23,12 +28,12 @@ namespace Temporal
 	private:
 
 		bool _isLit;
-	};
+	};*/
 
 	class Light : public Component
 	{
 	public:
-		explicit Light(const Color& color = Color::White, float radius = 300.0f, float beamCenter = 0.0f, float beamSize = 2 * PI)
+		explicit Light(const Color& color = Color::White, float radius = 256.0, float beamCenter = 0.0f, float beamSize = 2 * PI)
 			: _color(color), _radius(radius), _beamCenter(beamCenter), _beamSize(beamSize) {}
 
 		Hash getType() const { return TYPE; }
@@ -38,6 +43,7 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
+		std::shared_ptr<SpriteSheet> _spriteSheet;
 
 		Color _color;
 		float _radius;
@@ -47,7 +53,7 @@ namespace Temporal
 		void draw() const;
 
 		friend class SerializationAccess;
-	};*/
+	};
 
 	class LightLayer : public Layer
 	{
@@ -58,6 +64,8 @@ namespace Temporal
 	private:
 		const Color AMBIENT_COLOR;
 		FBO _fbo;
+		ShaderProgram _program;
+		SpriteBatch _batch;
 
 		void preDraw();
 		void postDraw();
