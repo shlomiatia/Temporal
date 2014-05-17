@@ -140,9 +140,9 @@ namespace Temporal
 		_size = 0;
 	}
 
-	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, const Vector& radius)
+	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, const Vector& radius, bool ignoreMatrixStack)
 	{
-		glm::mat4 m = Graphics::get().getMatrixStack().top();
+		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
 		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
 		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 		m = glm::translate(m, glm::vec3(pivot.getX(), pivot.getY(), 0.0f));

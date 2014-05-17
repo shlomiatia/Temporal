@@ -44,7 +44,7 @@ namespace Temporal
 	void FBO::draw()
 	{
 		_batch.begin();
-		_batch.add(_texture, Graphics::get().getResolution() / 2.0f, AABB::Zero, Color::White, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Graphics::get().getResolution() / 2.0f);
+		_batch.add(_texture, Graphics::get().getResolution() / 2.0f, AABB::Zero, Color::White, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Graphics::get().getResolution() / 2.0f, true);
 		_batch.end();
 	}
 }
