@@ -7,20 +7,9 @@
 
 namespace Temporal
 {
-	void FBO::init(int type)
+	void FBO::init()
 	{
-		_program.init("resources/shaders/v.glsl", "resources/shaders/xf.glsl");
-
-		glm::mat4 projection = glm::ortho(0.0f, Graphics::get().getResolution().getX(), Graphics::get().getResolution().getY(), 0.0f, -1.0f, 1.0f);
-		_program.setUniform(_program.getUniform("u_projection"), glm::value_ptr(projection));
-
-		_batch.init();
-
-		int typeUniform = _program.getUniform("u_type");
-		_timeUniform = _program.getUniform("u_time");
-		_program.setUniform(typeUniform, type);
-		
-		_texture = Texture::load(Graphics::get().getResolution() / 10.0f);
+		_texture = Texture::load(Graphics::get().getResolution() / _resolutionDivider);
  
 		glGenFramebuffers(1, &_fbo);
 		glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
@@ -43,7 +32,7 @@ namespace Temporal
 		glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 		glClearColor(0.0, 0.0, 0.0, 0.0);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glViewport(0, 0, Graphics::get().getResolution().getX() / 10.0f, Graphics::get().getResolution().getY() / 10.0f);
+		glViewport(0, 0, Graphics::get().getResolution().getX() / _resolutionDivider, Graphics::get().getResolution().getY() / _resolutionDivider);
 	}
 
 	void FBO::unbind()
@@ -54,8 +43,6 @@ namespace Temporal
 
 	void FBO::draw()
 	{
-		_time += 1.0f/60.0f;
-		_program.setUniform(_timeUniform, _time);
 		_batch.begin();
 		_batch.add(_texture, Graphics::get().getResolution() / 2.0f, AABB::Zero, Color::White, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Graphics::get().getResolution() / 2.0f);
 		_batch.end();
