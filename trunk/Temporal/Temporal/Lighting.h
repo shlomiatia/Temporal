@@ -1,16 +1,15 @@
 #ifndef LIGHTING_H
 #define LIGHTING_H
-/*
+
 #include "Color.h"
 #include "EntitySystem.h"
 #include "Math.h"
 #include "Layer.h"
+#include "FBO.h"
 
 namespace Temporal
 {
-	class Texture;
-
-	class LightGem : public Component
+	/*class LightGem : public Component
 	{
 	public:
 		LightGem()
@@ -48,7 +47,7 @@ namespace Temporal
 		void draw() const;
 
 		friend class SerializationAccess;
-	};
+	};*/
 
 	class LightLayer : public Layer
 	{
@@ -58,7 +57,7 @@ namespace Temporal
 
 	private:
 		const Color AMBIENT_COLOR;
-		const Texture* _texture;
+		FBO _fbo;
 
 		void preDraw();
 		void postDraw();
@@ -67,5 +66,4 @@ namespace Temporal
 		LightLayer& operator=(const LightLayer&);
 	};
 }
-*/
 #endif

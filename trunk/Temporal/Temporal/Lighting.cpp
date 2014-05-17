@@ -1,4 +1,4 @@
-/*#include "Lighting.h"
+#include "Lighting.h"
 #include "Vector.h"
 #include "Math.h"
 #include "Grid.h"
@@ -11,11 +11,11 @@
 #include "PhysicsEnums.h"
 #include "Graphics.h"
 #include <SDL.h>
-#include <SDL_opengl.h>
+#include <gl/glew.h>
 
 namespace Temporal
 {
-	const Hash LightGem::TYPE = Hash("light-gem");
+	/*const Hash LightGem::TYPE = Hash("light-gem");
 	const Hash Light::TYPE = Hash("light");
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
@@ -207,11 +207,11 @@ namespace Temporal
 			glDisableClientState(GL_COLOR_ARRAY);
 		}
 		glPopMatrix();
-	}
+	}*/
 
-	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor)
+	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _fbo(Graphics::get().getSpriteBatch())
 	{
-		_texture = Texture::load(Graphics::get().getLogicalView());
+		_fbo.init();
 	}
 
 	void LightLayer::draw()
@@ -223,18 +223,15 @@ namespace Temporal
 
 	void LightLayer::preDraw()
 	{
-		Graphics::get().bindTexture(_texture->getID());
-		glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, static_cast<int>(_texture->getSize().getX()), static_cast<int>(_texture->getSize().getY()), 0);
-
+		_fbo.bind();
 		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
-		Graphics::get().bindTexture(0);
 	}
 
 	void LightLayer::postDraw()
 	{
-		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		/*void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		float matrix[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
@@ -243,38 +240,10 @@ namespace Temporal
 		GLubyte alpha[4];
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
-		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
-
-		glPushMatrix();
-		{
-			glLoadIdentity();
-			glBlendFunc(GL_DST_COLOR, GL_ZERO);
-
-			Graphics::get().bindTexture(_texture->getID());
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			GLfloat screenVertices[] = { 0.0f, 0.0f,
-										 0.0f, _texture->getSize().getY(),
-										 _texture->getSize().getX(), _texture->getSize().getY(),
-										 _texture->getSize().getX(), 0.0f };
-
-			GLfloat textureVertices[] = { 0.0f, 0.0f,
-										  0.0f, 1.0f,
-										  1.0f, 1.0f,
-										  1.0f, 0.0f };
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
- 
-			glVertexPointer(2, GL_FLOAT, 0, screenVertices);
-			glTexCoordPointer(2, GL_FLOAT, 0, textureVertices);
- 
-			glDrawArrays(GL_QUADS, 0, 4);
- 
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		}
-		glPopMatrix();
+		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));*/
+		_fbo.unbind();
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		_fbo.draw();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-}*/
+}

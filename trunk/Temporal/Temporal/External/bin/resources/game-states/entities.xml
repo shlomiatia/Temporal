@@ -1,5 +1,7 @@
 <game-state>
-	<layers-manager camera-follow-player="1" />
+	<layers-manager camera-follow-player="1">
+		<ambient-color r="0.0625" g="0.125" b="0.25" />
+	</layers-manager>
 	<grid tile-size="128">
 		<world-size x="3840" y="720" />
 	</grid>

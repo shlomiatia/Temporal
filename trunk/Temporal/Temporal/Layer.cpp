@@ -8,7 +8,7 @@
 #include "Timer.h"
 #include "Log.h"
 #include "Camera.h"
-//#include "Lighting.h"
+#include "Lighting.h"
 #include "StaticBody.h"
 #include "Sensor.h"
 #include "DynamicBody.h"
@@ -25,12 +25,11 @@ namespace Temporal
 		_camera = new Camera(this, _cameraFollowPlayer);
 		_spriteLayer = new SpriteLayer(this);
 		_guiLayer = new GUILayer(this);
-		
 			
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);
-/*		if(_ambientColor != Color::White)
-			_layers.push_back(new LightLayer(this, _ambientColor));*/
+		if(_ambientColor != Color::White)
+			_layers.push_back(new LightLayer(this, _ambientColor));
 		_layers.push_back(new DebugLayer(this));
 		_layers.push_back(_guiLayer);
 	}
@@ -60,7 +59,6 @@ namespace Temporal
 	void SpriteLayer::draw()
 	{
 		spriteLayerTimer.measure();
-		Graphics::get().getSpriteBatch().end();
 		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
@@ -71,6 +69,7 @@ namespace Temporal
 				(**j).handleMessage(Message(MessageID::DRAW));
 			}
 		}
+		Graphics::get().getSpriteBatch().end();
 		spriteLayerTimer.print("SPRITE");
 	}
 
@@ -79,7 +78,6 @@ namespace Temporal
 	{
 		guiLayerTimer.measure();
 		Graphics::get().getMatrixStack().reset();
-		//Graphics::get().getSpriteBatch().end();
 		//Graphics::get().getSpriteBatch().begin();
 		//Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
@@ -99,6 +97,7 @@ namespace Temporal
 		{
 			(**i).handleMessage(Message(MessageID::DRAW_TEXT));
 		}
+		//Graphics::get().getSpriteBatch().end();
 		guiLayerTimer.print("GUI");
 	}
 
@@ -113,8 +112,8 @@ namespace Temporal
 	void DebugLayer::draw()
 	{
 		debugLayerTimer.measure();
-		Graphics::get().getSpriteBatch().end();
 		Graphics::get().getSpriteBatch().begin();
+
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		filter.push_back(StaticBody::TYPE);
@@ -123,6 +122,7 @@ namespace Temporal
 		//Grid::get().draw();
 		//NavigationGraph::get().draw();
 
+		Graphics::get().getSpriteBatch().end();
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
 	}
