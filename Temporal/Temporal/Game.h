@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "FBO.h"
-
 namespace Temporal
 {
 	class GameState;
@@ -24,8 +22,6 @@ namespace Temporal
 
 		bool _isRunning;
 		float _lastFrameTime;
-		FBO _fbo1;
-		FBO _fbo2;
 
 		void init(const char* gameState);
 		void dispose();
