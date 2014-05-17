@@ -3,7 +3,7 @@
 #include "MovingPlatform.h"
 #include "Renderer.h"
 #include "Particles.h"
-//#include "Lighting.h"
+#include "Lighting.h"
 #include "CollisionFilter.h"
 #include "Sight.h"
 #include "StaticBody.h"
@@ -39,8 +39,8 @@ namespace Temporal
 			serialize(key, (Animator*&)component, serializer);
 		else if(strcmp(key, Renderer::TYPE.getString()) == 0)
 			serialize(key, (Renderer*&)component, serializer);
-		/*else if(strcmp(key, Light::TYPE.getString()) == 0)
-			serialize(key, (Light*&)component, serializer);*/
+		else if(strcmp(key, Light::TYPE.getString()) == 0)
+			serialize(key, (Light*&)component, serializer);
 		else if(strcmp(key, ParticleEmitter::TYPE.getString()) == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, InputController::TYPE.getString()) == 0)

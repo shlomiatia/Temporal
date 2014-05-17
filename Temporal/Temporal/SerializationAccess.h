@@ -30,7 +30,7 @@ namespace Temporal
 	class Transform;
 	class Animator;
 	class Renderer;
-	//class Light;
+	class Light;
 	class ParticleEmitter;
 	class CollisionFilter;
 	class Sight;
@@ -275,14 +275,14 @@ namespace Temporal
 			serializer.serialize("scene-node", renderer._root);
 		}
 		
-		/*template<class T>
+		template<class T>
 		static void serialize(const char* key, Light& light, T& serializer)
 		{
 			serializer.serialize("color", light._color);
 			serializer.serialize("radius", light._radius);
 			serializer.serialize("center", light._beamCenter);
 			serializer.serialize("size", light._beamSize);
-		}*/
+		}
 		
 		template<class T>
 		static void serialize(const char* key, ParticleEmitter& particleEmitter, T& serializer)

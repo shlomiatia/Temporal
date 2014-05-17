@@ -5,7 +5,7 @@
 #include "Shapes.h"
 #include "Settings.h"
 #include "Timer.h"
-#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <gl/glew.h>
 #include <SDL.h>
