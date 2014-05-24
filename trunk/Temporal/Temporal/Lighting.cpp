@@ -99,13 +99,8 @@ namespace Temporal
 		Graphics::get().getSpriteBatch().end();
 	}
 
-	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _batch(_program), _fbo(_batch)
+	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _fbo(Graphics::get().getFXSpriteBatch())
 	{
-		_program.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
-		_program.setUniform(_program.getUniform("u_type"), 0);
-		glm::mat4 projection = glm::ortho(0.0f, Graphics::get().getResolution().getX(), Graphics::get().getResolution().getY(), 0.0f, -1.0f, 1.0f);
-		_program.setUniform(_program.getUniform("u_projection"), glm::value_ptr(projection));
-		_batch.init();
 		_fbo.init();
 	}
 

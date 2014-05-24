@@ -63,7 +63,7 @@ namespace Temporal
 		float currentFrameTime = Time::now();
 		GameStateManager::get().update(currentFrameTime - _lastFrameTime);
 		_lastFrameTime = currentFrameTime;
-		updateTimer.print("Update");
+		updateTimer.print("UPDATE");
 	}
 
 	PerformanceTimer& drawTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DRAW"));

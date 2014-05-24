@@ -65,8 +65,6 @@ namespace Temporal
 	private:
 		const Color AMBIENT_COLOR;
 		FBO _fbo;
-		ShaderProgram _program;
-		SpriteBatch _batch;
 		ComponentCollection _components;
 
 		void preDraw();
