@@ -3,7 +3,6 @@
 
 #include "Color.h"
 #include "EntitySystem.h"
-#include "Math.h"
 #include "Layer.h"
 #include "FBO.h"
 #include "SpriteBatch.h"
@@ -33,24 +32,25 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		explicit Light(const Color& color = Color::White, float radius = 256.0, float beamCenter = 0.0f, float beamSize = 2 * PI)
-			: _color(color), _radius(radius), _beamCenter(beamCenter), _beamSize(beamSize) {}
+		explicit Light(const Color& color = Color::White, float radius = 256.0)
+			: _color(color), _radius(radius) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new Light(_color, _radius, _beamCenter, _beamSize); }
+		Component* clone() const { return new Light(_color, _radius); }
 
 		static const Hash TYPE;
 	private:
-		std::shared_ptr<SpriteSheet> _spriteSheet;
+		std::shared_ptr<SpriteSheet> _lightTexture;
+		std::shared_ptr<SpriteSheet> _shadowTexture;
 
 		Color _color;
 		float _radius;
-		float _beamCenter;
-		float _beamSize;
 
-		void draw() const;
+		void draw();
+		void drawShadow(const Vector& lightCenter, const OBB& shape);
+		void drawShadowPart(const Vector& lightCenter, const Vector& point1, const Vector& point2);
 
 		friend class SerializationAccess;
 	};

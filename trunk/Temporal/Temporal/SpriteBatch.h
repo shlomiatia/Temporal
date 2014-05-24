@@ -54,24 +54,22 @@ namespace Temporal
 		void init();
 		void begin();
 
-		// texture
+		// obb
 		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB::Zero, const Color& color = Color::White, float rotation = 0.0f, 
 			const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero, bool ignoreMatrixStack = false);
 
-		// Shape
-		void add(const Vector& translation, const Vector& radius = Vector::Zero, const Color& color = Color::White, float rotation = 0.0f)
-		{
-			add(0, translation, AABB::Zero, color, rotation, Vector::Zero, Vector(1.0f, 1.0f), false, false, radius);
-		}
+		// quad
+		void add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart = AABB::Zero, const Color& color = Color::White, bool ignoreMatrixStack = false);
+
 		// OBB
 		void add(const OBB& obb, const Color& color = Color::White)
 		{
-			add(obb.getCenter(), obb.getRadius(), color, obb.getAngle());
+			add(0, obb.getCenter(), AABB::Zero, color, obb.getAngle(), Vector::Zero, Vector::Zero, false, false, obb.getRadius());
 		}
 		// AABB
 		void add(const AABB& aabb, const Color& color = Color::White)
 		{
-			add(aabb.getCenter(), aabb.getRadius(), color);
+			add(0, aabb.getCenter(), AABB::Zero, color, 0.0f, Vector::Zero, Vector::Zero, false, false, aabb.getRadius());
 		}
 		void end();
 	
@@ -110,7 +108,6 @@ namespace Temporal
 		int iboVertices(int size) {	return size * iboFloats(); }
 		int vboBytes(int size) { return vboVertices(size) * sizeof(float); }
 		int iboBytes(int size) { return iboVertices(size) * sizeof(unsigned short); }
-		void add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m);
 	};
 
 }

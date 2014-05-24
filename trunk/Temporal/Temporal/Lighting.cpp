@@ -13,6 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL.h>
 #include <gl/glew.h>
+#include <math.h>
 
 namespace Temporal
 {
@@ -39,7 +40,8 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			_spriteSheet = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/light.png");
+			_lightTexture = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/light.png");
+			_shadowTexture = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/shadow.png");
 		}
 		else if(message.getID() == MessageID::DRAW_LIGHTS)
 		{
@@ -47,173 +49,50 @@ namespace Temporal
 		}
 	}
 
-	/*void getPoints(float x, float y, const OBB& shape, Vector& point1, Vector& point2, Vector& point3)
+	void Light::drawShadowPart(const Vector& lightCenter, const Vector& point1, const Vector& point2)
 	{
-		if(x < shape.getLeft())
-		{
-			if(y < -shape.getYRadius())
-			{
-				point1 = shape.getTopLeft();
-				point2 = shape.getBottomLeft();
-				point3 = shape.getBottomRight();
-			}
-			else if(y > shape.getYRadius())
-			{
-				point1 = shape.getBottomLeft();
-				point2 = shape.getTopLeft();
-				point3 = shape.getTopRight();
-			}
-			else
-			{
-				point1 = shape.getBottomLeft();
-				point2 = shape.getTopLeft();
-				point3 = shape.getTopLeft();
-			}
-		}
-		else if(x > shape.getRight())
-		{
-			if(y < -shape.getYRadius())
-			{
-				point1 = shape.getBottomLeft();
-				point2 = shape.getBottomRight();
-				point3 = shape.getTopRight();
-			}
-			else if(y > shape.getYRadius())
-			{
-				point1 = shape.getTopLeft();
-				point2 = shape.getTopRight();
-				point3 = shape.getBottomRight();
-			}
-			else
-			{
-				point1 = shape.getBottomRight();
-				point2 = shape.getTopRight();
-				point3 = shape.getTopRight();
-			}
-		}
-		else
-		{
-			if(y < -shape.getYRadius())
-			{
-				point1 = shape.getBottomLeft();
-				point2 = shape.getBottomRight();
-				point3 = shape.getBottomRight();				
-			}
-			else
-			{
-				point1 = shape.getTopLeft();
-				point2 = shape.getTopRight();
-				point3 = shape.getTopRight();
-			}
-		}
+		float shadowSize = 100000.0f;
+		Vector point3 = point2 + (point2 - lightCenter).normalize() * shadowSize;
+		Vector point4 = point1 + (point1 - lightCenter).normalize() * shadowSize;
+
+		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), point1, point2, point3, point4, AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f));
+
 	}
 	
-	void drawShadow(const Vector& lightCenter, const OBB& shape)
+	void Light::drawShadow(const Vector& lightCenter, const OBB& shape)
 	{
-		// BRODER
-		float shadowSize = 10000.0f;
+		Vector point1 = shape.getPoint(Axis::Y, false);
+		Vector point2 = shape.getPoint(Axis::X, true);
+		Vector point3 = shape.getPoint(Axis::Y, true);
+		Vector point4 = shape.getPoint(Axis::X, false);
 
-		// Translate light and shape to origin
-		const Vector& slopedRadius = shape.getSlopedRadius();
-		float angle = -slopedRadius.getAngle();
-		Vector relativeCenter = lightCenter - shape.getCenter();
-		float rotatedY = relativeCenter.getX() * sin(angle) + relativeCenter.getY() * cos(angle);
-		
-		Vector point1;
-		Vector point2;
-		Vector point3;
-		getPoints(lightCenter.getX(), rotatedY, shape, point1, point2, point3);
-
-		Vector relativePoint1 = point1 - lightCenter;
-		Vector relativePoint2 = point2 - lightCenter;
-		Vector relativePoint3 = point3 - lightCenter;
-
-		Vector vector1 = relativePoint1.normalize();
-		Vector vector2 = relativePoint2.normalize();
-		Vector vector3 = relativePoint3.normalize();
-
-		float vertices[12];
-		
-		vertices[0] = point1.getX();
-		vertices[1] = point1.getY();
-		vertices[2] = point1.getX() + vector1.getX() * shadowSize;
-		vertices[3] = point1.getY() + vector1.getY() * shadowSize;
-		vertices[4] = point2.getX();
-		vertices[5] = point2.getY();
-		vertices[6] = point2.getX() + vector2.getX() * shadowSize;
-		vertices[7] = point2.getY() + vector2.getY() * shadowSize;
-		vertices[8] = point3.getX();
-		vertices[9] = point3.getY();
-		vertices[10] = point3.getX() + vector3.getX() * shadowSize;
-		vertices[11] = point3.getY() + vector3.getY() * shadowSize;
-		
-		
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
- 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
- 
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}*/
+		drawShadowPart(lightCenter, point1, point2);
+		drawShadowPart(lightCenter, point2, point3);
+		drawShadowPart(lightCenter, point3, point4);
+		drawShadowPart(lightCenter, point4, point1);
+	}
 	
-	void Light::draw() const
+	void Light::draw()
 	{
 		const Vector& position = getPosition(*this);
-		/*Side::Enum* orientation = static_cast<Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
-		bool isFlipped = orientation != 0 && *orientation == Side::LEFT;
-
 		glDisable(GL_BLEND);
 		glColorMask(false, false, false, true);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
-		OBB lightBounds = YABPAABB(position, Vector(_radius, _radius));
+		
+		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
 
 		FixtureCollection result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
+
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());
 		}
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().begin();
 		glColorMask(true, true, true, true);
-
 		glEnable(GL_BLEND);
-		glPushMatrix();
-		{
-			glTranslatef(position.getX(), position.getY(), 0.0f);
-
-			int lightParts = static_cast<int>((_beamSize / (PI * 2.0f)) * MAX_LIGHT_PARTS);
-			
-			float vertices[(MAX_LIGHT_PARTS + 1) * 2];
-			float colors[(MAX_LIGHT_PARTS + 1) * 4] = { _color.getR(), _color.getG(), _color.getB(), _color.getA() };
-
-			vertices[0] = 0.0f;
-			vertices[1] = 0.0f;
-
-			for(int i = 0; i < lightParts; ++i)
-			{
-				float angle = _beamCenter - _beamSize / 2.0f + _beamSize * (static_cast<float>(i) / (static_cast<float>(lightParts - 1)));
-				if(isFlipped)
-					angle = PI - angle;
-				vertices[i*2 + 2] = _radius * cos(angle);
-				vertices[i*2 + 3] = _radius * sin(angle);
-			}
-
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_COLOR_ARRAY);
-
-			glVertexPointer(2, GL_FLOAT, 0, vertices);
-			glColorPointer(4, GL_FLOAT, 0, colors);
- 
-			glDrawArrays(GL_TRIANGLE_FAN, 0, lightParts + 1);
- 
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_COLOR_ARRAY);
-		}
-		glPopMatrix();*/
-		Graphics::get().getSpriteBatch().add(&_spriteSheet->getTexture(), position, AABB::Zero, _color, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Vector(_radius, _radius));
+		Graphics::get().getSpriteBatch().add(&_lightTexture->getTexture(), position, AABB::Zero, _color, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Vector(_radius, _radius));
 	}
 
 	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _batch(_program), _fbo(_batch)
