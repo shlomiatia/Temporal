@@ -233,7 +233,7 @@ namespace Temporal
 		const Vector& position = getPosition(*this);
 		_obb.setCenter(position);
 		const Color& color = _isHover ? _hoverColor : _backgroundColor;
-		Graphics::get().getSpriteBatch().add(_box.getCenter(), _box.getRadius(), color);
+		Graphics::get().getSpriteBatch().add(_box.getOBB(), color);
 
 	}
 
@@ -245,6 +245,6 @@ namespace Temporal
 
 	void Control::drawBorder()
 	{
-		Graphics::get().getLinesSpriteBatch().add(_box.getCenter(), _box.getRadius(), _borderColor);
+		Graphics::get().getLinesSpriteBatch().add(_box.getOBB(), _borderColor);
 	}
 }

@@ -140,32 +140,26 @@ namespace Temporal
 		_size = 0;
 	}
 
-	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, const Vector& radius, bool ignoreMatrixStack)
+	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, 
+		const Vector& radius, bool ignoreMatrixStack)
 	{
-		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
-		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
-		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-		m = glm::translate(m, glm::vec3(pivot.getX(), pivot.getY(), 0.0f));
+		// Setting default value
+		AABB actualTexturePart = AABB::Zero;
+		if(texturePart == AABB::Zero)
+			actualTexturePart = AABB(0.5f, 0.5f, 1.0f, 1.0f);
+		else if(texture)
+			actualTexturePart = AABB(Vector(texturePart.getCenterX() / texture->getSize().getX(), texturePart.getCenterY() / texture->getSize().getY()),
+										Vector(texturePart.getRadiusX() / texture->getSize().getX(), texturePart.getRadiusY() / texture->getSize().getY()));
+
 		Vector actualScale = scale;
+		if(actualScale == Vector::Zero)
+			actualScale = Vector(1.0f, 1.0f);
 		if(flipX)
 			actualScale.setX(-actualScale.getX());
 		if(flipY)
 			actualScale.setX(-actualScale.getY());
-		m = glm::scale(m, glm::vec3(actualScale.getX(), actualScale.getY(), 0.0f));
-		
-		add(texture, texturePart, color, radius, m);
-	}
 
-	void SpriteBatch::add(const Texture* texture, const AABB& texturePart, const Color& color, const Vector& radius, const glm::mat4& m)
-	{
-		if(_size == _items.size())
-		{
-			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
-			_items.resize(size);
-			expand(_items.size());
-		}
-		
-		Vector actualRadius = Vector::Zero; radius != Vector::Zero ? radius : texturePart.getRadius();
+		Vector actualRadius = Vector::Zero;
 		if(radius != Vector::Zero)
 			actualRadius = radius;
 		else if(texturePart != AABB::Zero)
@@ -177,20 +171,66 @@ namespace Temporal
 			actualRadius.setY(1.0f);
 		else if(actualRadius.getX() == 0.0f)
 			actualRadius.setX(1.0f);
-		SpriteBatchItem& item = _items[_size];
-		item.texture = texture;
-		if(texture) {
-			if(texturePart == AABB::Zero)
-				item.texturePart = AABB(0.5f, 0.5f, 1.0f, 1.0f);
-			else
-				item.texturePart = AABB(Vector(texturePart.getCenterX() / texture->getSize().getX(), texturePart.getCenterY() / texture->getSize().getY()),
-										Vector(texturePart.getRadiusX() / texture->getSize().getX(), texturePart.getRadiusY() / texture->getSize().getY()));
-		}
-			
+
+		// Calculate matrix
+		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
+		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
+		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+		m = glm::translate(m, glm::vec3(pivot.getX(), pivot.getY(), 0.0f));
+		m = glm::scale(m, glm::vec3(actualScale.getX(), actualScale.getY(), 0.0f));
+
 		glm::vec4 a = m * glm::vec4(-actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 b = m * glm::vec4(actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 c = m * glm::vec4(actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
 		glm::vec4 d = m * glm::vec4(-actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
+
+		// Expanding if needed
+		if(_size == _items.size())
+		{
+			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
+			_items.resize(size);
+			expand(_items.size());
+		}
+
+		// Add item
+		SpriteBatchItem& item = _items[_size];
+		item.texture = texture;
+		item.texturePart = actualTexturePart;
+		item.a = Vector(a.x, a.y);
+		item.b = Vector(b.x, b.y);
+		item.c = Vector(c.x, c.y);
+		item.d = Vector(d.x, d.y);
+		item.color = color;
+		++_size;
+	}
+
+	void SpriteBatch::add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart, const Color& color, bool ignoreMatrixStack)
+	{
+		// Setting default value
+		AABB actualTexturePart = AABB::Zero;
+		if(texturePart == AABB::Zero)
+			actualTexturePart = AABB(0.5f, 0.5f, 1.0f, 1.0f);
+		else if(texture)
+			actualTexturePart = AABB(Vector(texturePart.getCenterX() / texture->getSize().getX(), texturePart.getCenterY() / texture->getSize().getY()),
+										Vector(texturePart.getRadiusX() / texture->getSize().getX(), texturePart.getRadiusY() / texture->getSize().getY()));
+
+		// Expanding if needed
+		if(_size == _items.size())
+		{
+			int size = _items.size() == 0 ? INITLAL_MAX_SPRITES : _items.size() * 2;
+			_items.resize(size);
+			expand(_items.size());
+		}
+		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
+		glm::vec4 a = m * glm::vec4(alpha.getX(), alpha.getY(), 0.0f, 1.0f);
+		glm::vec4 b = m * glm::vec4(beta.getX(), beta.getY(), 0.0f, 1.0f);
+		glm::vec4 c = m * glm::vec4(gamma.getX(), gamma.getY(), 0.0f, 1.0f);
+		glm::vec4 d = m * glm::vec4(delta.getX(), delta.getY(), 0.0f, 1.0f);
+
+		// Add item
+		SpriteBatchItem& item = _items[_size];
+		item.texture = texture;
+		item.texturePart = actualTexturePart;
 		item.a = Vector(a.x, a.y);
 		item.b = Vector(b.x, b.y);
 		item.c = Vector(c.x, c.y);
