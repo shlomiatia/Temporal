@@ -30,8 +30,6 @@ namespace Temporal
 	
 		_typeUniform = _program.getUniform("u_type");
 
-		_program.setUniform(_typeUniform, 0);
-
 		glGenBuffers(1, &_vbo);
 		glGenBuffers(1, &_ibo);
 

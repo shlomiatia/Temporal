@@ -6,6 +6,7 @@
 #include "Color.h"
 #include <vector>
 #include <unordered_map>
+#include "FBO.h"
 
 namespace Temporal
 {
@@ -60,6 +61,8 @@ namespace Temporal
 
 	private:
 		LayerComponentsMap _layers;
+
+		void innerDraw();
 	};
 
 	class GUILayer : public Layer
@@ -85,6 +88,21 @@ namespace Temporal
 		void drawFPS();
 	};
 
+	class FXLayer : public Layer
+	{
+	public:
+		FXLayer(LayersManager* manager);
+
+		void preDraw();
+		void draw();
+		void draw2();
+	private:
+		int _fxTimeUniform;
+		float _fxTime;
+		FBO _fbo1;
+		FBO _fbo2;
+	};
+
 	typedef std::vector<Layer*> LayerCollection;
 	typedef LayerCollection::const_iterator LayerIterator;
 
@@ -101,6 +119,7 @@ namespace Temporal
 		Camera& getCamera() { return *_camera; }
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
+		FXLayer& getFXLayer() { return *_fxLayer; }
 		void draw();
 
 	private:
@@ -112,6 +131,7 @@ namespace Temporal
 		SpriteLayer* _spriteLayer;
 		GUILayer* _guiLayer;
 		LightLayer* _lightLayer;
+		FXLayer* _fxLayer;
 
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);

@@ -75,7 +75,7 @@ namespace Temporal
 		GameStateManager::get().draw();
 		drawTimer.print("DRAW");
 		finishDrawingTimer.measure();
-		finishDrawingTimer.print("FINISH DRAWING");
 		Graphics::get().finishDrawing();
+		finishDrawingTimer.print("FINISH DRAWING");
 	}
 }

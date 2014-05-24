@@ -6,7 +6,6 @@
 #include "MatrixStack.h"
 #include "ShaderProgram.h"
 #include "SpriteBatch.h"
-#include "FBO.h"
 
 class SDL_Window;
 
@@ -32,8 +31,10 @@ namespace Temporal
 		SDL_Window* getWindow() { return _window; }
 		MatrixStack& getMatrixStack() { return _matrixStack; }
 		ShaderProgram& getShaderProgram() { return _shaderProgram; }
+		ShaderProgram& getFXShaderProgram() { return _fxShaderProgram; }
 		SpriteBatch& getSpriteBatch() { return _spriteBatch; }
 		SpriteBatch& getLinesSpriteBatch() { return _linesSpriteBatch; }
+		SpriteBatch& getFXSpriteBatch() { return _fxSpriteBatch; }
 
 		void setTitle(const char* title) const;
 
@@ -54,13 +55,8 @@ namespace Temporal
 		SpriteBatch _linesSpriteBatch;
 		ShaderProgram _fxShaderProgram;
 		SpriteBatch _fxSpriteBatch;
-		int _fxTimeUniform;
-		float _fxTime;
-		FBO _fbo1;
-		//FBO _fbo2;
 
-		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0), _linesSpriteBatch(_shaderProgram, SpriteBatchMode::LINES), _spriteBatch(_shaderProgram), _fxSpriteBatch(_fxShaderProgram),
-			_fbo1(_fxSpriteBatch), _fxTimeUniform(0) {}
+		Graphics() : _resolution(Vector::Zero), _logicalView(Vector::Zero), _window(0), _linesSpriteBatch(_shaderProgram, SpriteBatchMode::LINES), _spriteBatch(_shaderProgram), _fxSpriteBatch(_fxShaderProgram) {}
 		~Graphics() { dispose(); }
 		Graphics(const Graphics&);
 		Graphics& operator=(const Graphics&);

@@ -80,11 +80,7 @@ namespace Temporal
 		_fxShaderProgram.init("resources/shaders/v.glsl", "resources/shaders/xf.glsl");
 		projection = glm::ortho(0.0f, _resolution.getX(), _resolution.getY(), 0.0f, -1.0f, 1.0f);
 		_fxShaderProgram.setUniform(_fxShaderProgram.getUniform("u_projection"), glm::value_ptr(projection));
-		_fxShaderProgram.setUniform(_fxShaderProgram.getUniform("u_type"), 0);
-		_fxTimeUniform = _fxShaderProgram.getUniform("u_time");
 		_fxSpriteBatch.init();
-		_fxTime = 0.0f;
-		_fbo1.init();
 	}
 
 	void Graphics::setTitle(const char* title) const
@@ -106,31 +102,14 @@ namespace Temporal
 		_matrixStack.reset();
 		_spriteBatch.begin();
 		_linesSpriteBatch.begin();
-		//_fbo1.bind();
 	}
 
-
-	PerformanceTimer& swapTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SWAP"));
 	void Graphics::finishDrawing()
 	{
-		_fxTime += 1.0f/60.0f;
-		_fxShaderProgram.setUniform(_fxTimeUniform, _fxTime);
-		//_fbo1.unbind();
-		//_fbo1.draw();
-		/*_fbo1.unbind();
-		_fbo2.bind();
-		_fbo1.draw();
-		_fbo2.unbind();
-		GameStateManager::get().draw();
-		glBlendFunc(GL_ONE, GL_ONE);
-		_fbo2.draw();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 		_linesSpriteBatch.end();
 		_spriteBatch.end();
-		swapTimer.measure();
 		SDL_GL_SwapWindow(_window);
 		validate();
-		swapTimer.print("SWAP");
 	}
 
 	void Graphics::validate() const
