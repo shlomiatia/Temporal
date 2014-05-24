@@ -108,6 +108,8 @@ namespace Temporal
 		int iboVertices(int size) {	return size * iboFloats(); }
 		int vboBytes(int size) { return vboVertices(size) * sizeof(float); }
 		int iboBytes(int size) { return iboVertices(size) * sizeof(unsigned short); }
+
+		void innerAdd(const Texture* texture, const Vector& a, const Vector& b, const Vector& c, const Vector& d, const AABB& actualTexturePart, const Color& color);
 	};
 
 }

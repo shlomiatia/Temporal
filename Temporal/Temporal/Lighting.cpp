@@ -42,6 +42,8 @@ namespace Temporal
 		{
 			_lightTexture = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/light.png");
 			_shadowTexture = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/shadow.png");
+			getEntity().getManager().getGameState().getLayersManager().addLight(this);
+
 		}
 		else if(message.getID() == MessageID::DRAW_LIGHTS)
 		{
@@ -74,6 +76,7 @@ namespace Temporal
 	
 	void Light::draw()
 	{
+		Graphics::get().getSpriteBatch().begin();
 		const Vector& position = getPosition(*this);
 		glDisable(GL_BLEND);
 		glColorMask(false, false, false, true);
@@ -93,6 +96,7 @@ namespace Temporal
 		glColorMask(true, true, true, true);
 		glEnable(GL_BLEND);
 		Graphics::get().getSpriteBatch().add(&_lightTexture->getTexture(), position, AABB::Zero, _color, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Vector(_radius, _radius));
+		Graphics::get().getSpriteBatch().end();
 	}
 
 	LightLayer::LightLayer(LayersManager* manager, const Color& ambientColor) : Layer(manager), AMBIENT_COLOR(ambientColor), _batch(_program), _fbo(_batch)
@@ -107,7 +111,10 @@ namespace Temporal
 	void LightLayer::draw()
 	{
 		preDraw();
-		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_LIGHTS, this));
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			(**i).handleMessage(Message(MessageID::DRAW_LIGHTS, this));
+		}
 		postDraw();
 	}
 

@@ -59,6 +59,7 @@ namespace Temporal
 	{
 	public:
 		LightLayer(LayersManager* manager, const Color& ambientColor);
+		void add(Component* component) { _components.push_back(component); }
 		void draw();
 
 	private:
@@ -66,6 +67,7 @@ namespace Temporal
 		FBO _fbo;
 		ShaderProgram _program;
 		SpriteBatch _batch;
+		ComponentCollection _components;
 
 		void preDraw();
 		void postDraw();
