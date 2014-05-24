@@ -25,6 +25,7 @@ namespace Temporal
 		_camera = new Camera(this, _cameraFollowPlayer);
 		_spriteLayer = new SpriteLayer(this);
 		_guiLayer = new GUILayer(this);
+		_fxLayer = new FXLayer(this);
 			
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);
@@ -64,10 +65,8 @@ namespace Temporal
 			_layers[static_cast<LayerType::Enum>(i)] = ComponentCollection();
 	}
 
-	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
-	void SpriteLayer::draw()
+	void SpriteLayer::innerDraw()
 	{
-		spriteLayerTimer.measure();
 		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
@@ -79,7 +78,18 @@ namespace Temporal
 			}
 		}
 		Graphics::get().getSpriteBatch().end();
-		spriteLayerTimer.print("SPRITE");
+	}
+
+	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
+	void SpriteLayer::draw()
+	{
+		spriteLayerTimer.measure();
+		getManager().getFXLayer().preDraw();
+		innerDraw();
+		getManager().getFXLayer().draw();
+		innerDraw();
+		getManager().getFXLayer().draw2();
+		spriteLayerTimer.print("SPRITE LAYER");
 	}
 
 	PerformanceTimer& guiLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_GUI_LAYER"));
@@ -87,27 +97,27 @@ namespace Temporal
 	{
 		guiLayerTimer.measure();
 		Graphics::get().getMatrixStack().reset();
-		//Graphics::get().getSpriteBatch().begin();
-		//Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
+		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
+		Graphics::get().getSpriteBatch().begin();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW));
 		}
+		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getLinesSpriteBatch().begin();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW_BORDERS));
 		}
-		Graphics::get().getSpriteBatch().end();
-		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getLinesSpriteBatch().end();
-		Graphics::get().getLinesSpriteBatch().begin();
+		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 1);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			(**i).handleMessage(Message(MessageID::DRAW_TEXT));
 		}
-		//Graphics::get().getSpriteBatch().end();
-		guiLayerTimer.print("GUI");
+		Graphics::get().getSpriteBatch().end();
+		guiLayerTimer.print("GUI LAYER");
 	}
 
 	void DebugLayer::drawFPS()
@@ -134,5 +144,38 @@ namespace Temporal
 		Graphics::get().getSpriteBatch().end();
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
+	}
+
+	FXLayer::FXLayer(LayersManager* manager) : Layer(manager), _fbo1(Graphics::get().getFXSpriteBatch(), 10.0f), _fbo2(Graphics::get().getFXSpriteBatch(), 10.0f), _fxTimeUniform(0)
+	{
+		_fxTime = 0.0f;
+		_fbo1.init();
+		_fbo2.init();
+		_fxTimeUniform = Graphics::get().getFXShaderProgram().getUniform("u_time");
+	}
+
+	void FXLayer::preDraw()
+	{
+		_fbo1.bind();
+	}
+
+	void FXLayer::draw()
+	{
+		_fbo1.unbind();
+		_fxTime += 1.0f/60.0f;
+		Graphics::get().getFXShaderProgram().setUniform(_fxTimeUniform, _fxTime);
+		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), 1);
+		_fbo1.draw();
+		_fbo2.bind();
+		_fbo1.draw();
+		_fbo2.unbind();
+	}
+	
+	void FXLayer::draw2()
+	{
+		glBlendFunc(GL_ONE, GL_ONE);
+		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), 2);
+		_fbo2.draw();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }
