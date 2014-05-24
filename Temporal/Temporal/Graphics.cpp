@@ -71,16 +71,18 @@ namespace Temporal
 		
 		validate();
 
-		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");		
+		_shaderProgram.init("resources/shaders/v.glsl", "resources/shaders/f.glsl");
 		glm::mat4 projection = glm::ortho(0.0f, _logicalView.getX(), 0.0f, _logicalView.getY(), -1.0f, 1.0f);
 		_shaderProgram.setUniform(_shaderProgram.getUniform("u_projection"), glm::value_ptr(projection));
 		_spriteBatch.init();
 		_linesSpriteBatch.init();
+		_shaderProgram.setUniform(_spriteBatch.getTypeUniform(), 0);
 
 		_fxShaderProgram.init("resources/shaders/v.glsl", "resources/shaders/xf.glsl");
 		projection = glm::ortho(0.0f, _resolution.getX(), _resolution.getY(), 0.0f, -1.0f, 1.0f);
 		_fxShaderProgram.setUniform(_fxShaderProgram.getUniform("u_projection"), glm::value_ptr(projection));
 		_fxSpriteBatch.init();
+		_fxShaderProgram.setUniform(_fxSpriteBatch.getTypeUniform(), 0);
 	}
 
 	void Graphics::setTitle(const char* title) const

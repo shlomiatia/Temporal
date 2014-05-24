@@ -49,7 +49,6 @@ namespace Temporal
 	{		
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
-			
 			(**i).draw();
 		}
 	}
@@ -84,11 +83,11 @@ namespace Temporal
 	void SpriteLayer::draw()
 	{
 		spriteLayerTimer.measure();
-		getManager().getFXLayer().preDraw();
+		//getManager().getFXLayer().preDraw();
 		innerDraw();
-		getManager().getFXLayer().draw();
+		/*getManager().getFXLayer().draw();
 		innerDraw();
-		getManager().getFXLayer().draw2();
+		getManager().getFXLayer().draw2();*/
 		spriteLayerTimer.print("SPRITE LAYER");
 	}
 
@@ -165,7 +164,6 @@ namespace Temporal
 		_fxTime += 1.0f/60.0f;
 		Graphics::get().getFXShaderProgram().setUniform(_fxTimeUniform, _fxTime);
 		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), 1);
-		_fbo1.draw();
 		_fbo2.bind();
 		_fbo1.draw();
 		_fbo2.unbind();

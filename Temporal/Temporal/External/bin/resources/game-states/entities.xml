@@ -129,12 +129,12 @@
 			</transform>
 			<text font-family="c:/windows/fonts/Arial.ttf" font-size="12" text="this is a very long line of text that will be wrapped in the middle" />
 		</entity>
-		<entity id="ENT_LIGHT">
+		!--><entity id="ENT_LIGHT">
 			<transform>
 				<position x="512" y="300" />
 			</transform>
 			<light />
-		</entity>
+		</entity><!--
 		<entity id="ENT_CHASER">
 			<transform>
 				<position x="3000" y="512" />
