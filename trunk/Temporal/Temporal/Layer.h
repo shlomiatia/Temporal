@@ -9,6 +9,8 @@
 
 namespace Temporal
 {
+	class LightLayer;
+
 	namespace LayerType
 	{
 		enum Enum
@@ -95,6 +97,7 @@ namespace Temporal
 		void init(GameState* gameState);
 		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
+		void addLight(Component* component);
 		Camera& getCamera() { return *_camera; }
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
@@ -108,6 +111,7 @@ namespace Temporal
 		Camera* _camera;
 		SpriteLayer* _spriteLayer;
 		GUILayer* _guiLayer;
+		LightLayer* _lightLayer;
 
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);

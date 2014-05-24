@@ -29,10 +29,14 @@ namespace Temporal
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);
 		if(_ambientColor != Color::White)
-			_layers.push_back(new LightLayer(this, _ambientColor));
+		{
+			_lightLayer = new LightLayer(this, _ambientColor);
+			_layers.push_back(_lightLayer);
+		}
 		_layers.push_back(new DebugLayer(this));
 		_layers.push_back(_guiLayer);
 	}
+
 
 	LayersManager::~LayersManager()
 	{
@@ -47,6 +51,11 @@ namespace Temporal
 			
 			(**i).draw();
 		}
+	}
+
+	void LayersManager::addLight(Component* component)
+	{
+		_lightLayer->add(component);
 	}
 
 	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
