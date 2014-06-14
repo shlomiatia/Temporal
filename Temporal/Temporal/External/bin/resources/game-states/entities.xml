@@ -178,7 +178,7 @@
 				<scene-node sprite-sheet="resources/spritesheets/pop.xml" />
 			</renderer>
 		</entity>
-		--><entity id="ENT_SENTRY">
+		<entity id="ENT_SENTRY">
 			<transform>
 				<position x="512" y="384" />
 			</transform>
@@ -214,17 +214,17 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity><!--
+		</entity>-->
 		<entity id="ENT_CAMERA">
 			<transform>
-				<position x="256" y="384" />
+				<position x="256" y="416" />
 			</transform>
 			<collision-filter category="4" />
 			<security-camera />
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>
+		</entity><!--
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="3000" y="512" />
