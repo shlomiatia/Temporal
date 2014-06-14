@@ -14,7 +14,7 @@ namespace Temporal
 
 		Vector() : _x(0.0f), _y(0.0f) {}
 		Vector(float x, float y) : _x(x), _y(y) {}
-		Vector(float angle);
+		explicit Vector(float angle);
 
 		float getX() const { return (_x); }
 		void setX(float x) { _x = x; }

@@ -9,7 +9,6 @@
 #include "Log.h"
 #include "Camera.h"
 #include "Lighting.h"
-#include "StaticBody.h"
 #include "Sensor.h"
 #include "DynamicBody.h"
 #include <SDL_opengl.h>
@@ -55,7 +54,8 @@ namespace Temporal
 
 	void LayersManager::addLight(Component* component)
 	{
-		_lightLayer->add(component);
+		if(_lightLayer)
+			_lightLayer->add(component);
 	}
 
 	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
@@ -134,10 +134,13 @@ namespace Temporal
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
-		filter.push_back(StaticBody::TYPE);
+		static const Hash STATIC_BODY_STYPE = Hash("static-body");
+		static const Hash SIGHT_TYPE = Hash("sight");
+		filter.push_back(STATIC_BODY_STYPE);
+		filter.push_back(SIGHT_TYPE);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
-		//Grid::get().draw();
+		getManager().getGameState().getGrid().draw();
 		//NavigationGraph::get().draw();
 
 		Graphics::get().getSpriteBatch().end();

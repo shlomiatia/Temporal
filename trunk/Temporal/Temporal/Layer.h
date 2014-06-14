@@ -109,7 +109,7 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() : _cameraFollowPlayer(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0) {};
+		LayersManager() : _cameraFollowPlayer(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0) {};
 		~LayersManager();
 
 		void init(GameState* gameState);
