@@ -8,7 +8,6 @@ namespace Temporal
 	static Hash OPEN_ANIMATION = Hash("DOR_ANM_OPEN");
 	static Hash CLOSE_ANIMATION = Hash("DOR_ANM_CLOSE");
 	static Hash OPENING_ANIMATION = Hash("DOR_ANM_OPENING");
-	static Hash CLOSING_ANIMATION = Hash("DOR_ANM_CLOSING");
 
 	static const Hash OPEN_STATE = Hash("DOR_STT_OPEN");
 	static const Hash CLOSE_STATE = Hash("DOR_STT_CLOSE");
@@ -74,7 +73,7 @@ namespace Temporal
 
 		void Closing::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(CLOSING_ANIMATION)));
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPENING_ANIMATION, true)));
 		}
 
 		void Closing::handleMessage(Message& message) const
