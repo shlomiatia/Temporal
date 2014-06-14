@@ -40,7 +40,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_fixture->init(*this);
-			_dynamicBodyBounds.setOBB(_fixture->getGlobalShape());
+			_dynamicBodyBounds.setOBB(__dynamicBodyBounds);
 			getEntity().getManager().getGameState().getGrid().add(_fixture);
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
 		}
@@ -97,6 +97,7 @@ namespace Temporal
 	void DynamicBody::update(float framePeriod)
 	{
 		_fixture->update();
+		__dynamicBodyBounds = _fixture->getGlobalShape();
 		if(_ground)
 			_groundSegment = getGroundSegment(*_ground, _dynamicBodyBounds);
 

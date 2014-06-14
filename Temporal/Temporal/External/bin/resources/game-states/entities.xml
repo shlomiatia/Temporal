@@ -185,6 +185,7 @@
 			<collision-filter category="4" />
 			<sentry />
 			<sight size="60" />
+			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="20" />
