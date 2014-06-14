@@ -84,7 +84,8 @@ namespace Temporal
 		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
 		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
 		Vector targetPosition = Vector(targetX, targetY);
-		//Graphics::get().draw(SegmentPP(sourcePosition, targetPosition), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		Vector radius = targetPosition - sourcePosition;
+		Graphics::get().getLinesSpriteBatch().add(OBB(sourcePosition + radius / 2.0f, radius.normalize(), Vector(radius.getLength() / 2.0f, 0.5f)), Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
@@ -95,13 +96,16 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
+		Graphics::get().getLinesSpriteBatch().begin();
 		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
 
 		drawFieldOfView(sourcePosition, sourceSide);
 		if(_pointOfIntersection != Vector::Zero)
 		{
-			//Graphics::get().draw(SegmentPP(sourcePosition, _pointOfIntersection), _isSeeing ? Color::Green : Color::Red);
+			Vector radius = _pointOfIntersection - sourcePosition;
+			Graphics::get().getLinesSpriteBatch().add(OBB(sourcePosition + radius / 2.0f, radius.normalize(), Vector(radius.getLength() / 2.0f, 0.5f)), _isSeeing ? Color::Green : Color::Red);
 		}
+		Graphics::get().getLinesSpriteBatch().end();
 	}
 }

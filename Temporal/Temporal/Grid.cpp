@@ -38,6 +38,7 @@ namespace Temporal
 
 	void Grid::draw() const
 	{
+		Graphics::get().getLinesSpriteBatch().begin();
 		for(int i = 0; i < _gridWidth; ++i)
 		{
 			for(int j = 0; j < _gridHeight; ++j)
@@ -45,10 +46,21 @@ namespace Temporal
 				FixtureCollection* fixtures = getTile(i, j);
 				if(fixtures && fixtures->size() != 0)
 				{
-					Graphics::get().getSpriteBatch().add(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					
+					Graphics::get().getLinesSpriteBatch().add(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
+					for(FixtureIterator k = fixtures->begin(); k != fixtures->end(); ++k)
+					{
+						if((**k).getEntityId() == Hash("ENT_PLAYER")) 
+						{
+							Graphics::get().getLinesSpriteBatch().add(getTileShape(i, j), Color(1.0f, 0.0f, 1.0f, 1.0f));
+							break;
+						}
+					}
+					
 				}
 			}
 		}
+		Graphics::get().getLinesSpriteBatch().end();
 	}
 
 	void Grid::add(const Fixture* body, int i, int j)
@@ -98,6 +110,7 @@ namespace Temporal
 		const OBB& current = body->getGlobalShape();
 		OBBAABBWrapper currentAABB = current.getAABBWrapper();
 		int leftIndex = getAxisIndex(currentAABB.getLeft());
+
 		int rightIndex = getAxisIndex(currentAABB.getRight());
 		int topIndex = getAxisIndex(currentAABB.getTop());
 		int bottomIndex = getAxisIndex(currentAABB.getBottom());	
@@ -105,7 +118,7 @@ namespace Temporal
 		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
 		{
 			for(int j = bottomRemoveIndex; j <= topRemoveIndex; ++j)
-			{
+			{				
 				if(i >= leftIndex && i <= rightIndex && j >= bottomIndex && j <= topIndex)
 					continue;
 				FixtureCollection* bodies = getTile(i, j);
