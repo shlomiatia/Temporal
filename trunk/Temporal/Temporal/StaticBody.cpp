@@ -35,8 +35,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
-			OBB* shape = &_fixture->getGlobalShape();
-			message.setParam(shape);
+			const OBB* shape = &_fixture->getGlobalShape();
+			message.setParam(const_cast<OBB*>(shape));
 		}
 		else if(message.getID() == MessageID::SET_POSITION)
 		{

@@ -30,8 +30,8 @@ namespace Temporal
 
 		float _maxMovementStepSize;
 		Fixture* _fixture;
+		OBB __dynamicBodyBounds;
 		OBBAABBWrapper _dynamicBodyBounds;
-		
 		
 		// Persistent state
 		bool _gravityEnabled;
