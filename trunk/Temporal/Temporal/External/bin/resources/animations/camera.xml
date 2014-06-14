@@ -1,28 +1,27 @@
 <animation-set>
     <animation id="CAM_ANM_SEARCH" repeat="1">
-        <sample-set>
-            <sample sprite-group="CAM_ANM_SEARCH" />
-        </sample-set>
+        <scene-graph-sample>
+            <scene-node-sample sprite-group="CAM_ANM_SEARCH" />
+        </scene-graph-sample>
     </animation>
     <animation id="CAM_ANM_SEE" repeat="1">
-        <sample-set>
-            <sample sprite-group="CAM_ANM_SEE" />
-        </sample-set>
+        <scene-graph-sample>
+            <scene-node-sample sprite-group="CAM_ANM_SEE" />
+        </scene-graph-sample>
     </animation>
     <animation id="CAM_ANM_TURN">
-        <sample-set>
-            <sample sprite-group="CAM_ANM_TURN" duration="0.2" />
-        </sample-set>
-    </animation>
-    <animation id="CAM_ANM_TURN2" rewind="1">
-        <sample-set>
-            <sample sprite-group="CAM_ANM_TURN" duration="0.2" />
-        </sample-set>
+        <scene-graph-sample index="0">
+            <scene-node-sample sprite-group="CAM_ANM_TURN" />
+        </scene-graph-sample>
+		<scene-graph-sample index="3"/>
     </animation>
     <animation id="CAM_ANM_ACQUIRE" repeat="1">
-        <sample-set>
-            <sample sprite-group="CAM_ANM_SEARCH" duration="0.2" />
-            <sample sprite-group="CAM_ANM_SEE" duration="0.2" />
-        </sample-set>
+        <scene-graph-sample index="0">
+            <scene-node-sample sprite-group="CAM_ANM_SEARCH" />
+		</scene-graph-sample>
+		<scene-graph-sample index="3">
+            <scene-node-sample sprite-group="CAM_ANM_SEE" />
+        </scene-graph-sample>
+		<scene-graph-sample index="6"/>
     </animation>
 </animation-set>

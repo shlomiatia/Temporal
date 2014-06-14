@@ -10,7 +10,6 @@ namespace Temporal
 		static Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");
 		static Hash SEE_ANIMATION = Hash("CAM_ANM_SEE");
 		static Hash TURN_ANIMATION = Hash("CAM_ANM_TURN");
-		static Hash TURN_ANIMATION2 = Hash("CAM_ANM_TURN2");
 		static Hash ACQUIRE_ANIMATION = Hash("CAM_ANM_ACQUIRE");
 
 		static const Hash SEARCH_STATE = Hash("CAM_STT_SEARCH");
@@ -74,7 +73,7 @@ namespace Temporal
 				else
 				{
 					_stateMachine->raiseMessage(Message(MessageID::FLIP_ORIENTATION));
-					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(TURN_ANIMATION2)));
+					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(TURN_ANIMATION, true)));
 					_hasTurned = true;
 				}
 			}
