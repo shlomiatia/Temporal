@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="450" y="512" />
+				<position x="3000" y="512" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
@@ -214,7 +214,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>-->
+		</entity>
 		<entity id="ENT_CAMERA">
 			<transform>
 				<position x="256" y="416" />
@@ -224,39 +224,63 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity><!--
+		</entity>-->
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="3000" y="512" />
 			</transform>
 			<collision-filter category="4" />
-			<draw-position>
-				<offset y="-40" />
-			</draw-position>
 			<patrol />
 			<dynamic-body>
 				<fixture>
 					<obb angle="0">
-	<center x="0" y="0" />
-	<radius x="10" y="40" />
-</obb>
+						<center x="0" y="0" />
+						<radius x="10" y="40" />
+					</obb>
 				</fixture>
 			</dynamic-body>
 			<sensor id="SNS_FRONT_EDGE" category-mask="1">
 				<fixture>
 					<obb angle="0">
-	<center x="30" y="-40" />
-	<radius x="10" y="1" />
-</obb>
+						<center x="20" y="-50" />
+						<radius x="10" y="10" />
+					</obb>
 				</fixture>
 			</sensor>
 			<sight size="60" />
 			<action-controller />
-			<animator animation-set="resources/animations/pop.xml" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/pop.xml" />
-			<temporal-echo />
-			<temporal-period period="1" />
-		</entity>
+			<animator animation-set="resources/animations/aquaria.xml" />
+			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
+				<scene-node id="SCN_ROOT" transform="1" flip="0">
+					<translation x="0" y="20" />
+					<scale x="0.45" y="0.45" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+				</scene-node>
+			</renderer>
+			<!--<temporal-echo />
+			<temporal-period period="1" />-->
+		</entity><!--
 		<entity id="ENT_LASER">
 			<transform />
 			<collision-filter category="4" />
