@@ -3,21 +3,21 @@
 #include "SerializationAccess.h"
 #include "Color.h"
 #include "MessageUtils.h"
-#include "Transform.h"
-#include "Renderer.h"
-#include "Animator.h"
 
 namespace Temporal
 {
 	const Hash TemporalEcho::TYPE = Hash("temporal-echo");
+	const Hash TRANSFORM_TYPE = Hash("transform");
+	const Hash RENDERER_TYPE = Hash("renderer");
+	const Hash ANIMATOR_TYPE = Hash("animator");
 	const float TemporalEcho::ECHO_READY_TIME = 4.5f;
 
 	HashCollection TemporalEcho::getFilter() const
 	{
 		HashCollection result;
-		result.push_back(Transform::TYPE);
-		result.push_back(Renderer::TYPE);
-		result.push_back(Animator::TYPE);
+		result.push_back(TRANSFORM_TYPE);
+		result.push_back(RENDERER_TYPE);
+		result.push_back(ANIMATOR_TYPE);
 		return result;
 	}
 
@@ -73,6 +73,7 @@ namespace Temporal
 	void TemporalEcho::init()
 	{
 		_echo = getEntity().clone();
+		_echo->setId(Hash("ENT_ECHO"));
 		float alpha = 0.2f;
 		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 	}

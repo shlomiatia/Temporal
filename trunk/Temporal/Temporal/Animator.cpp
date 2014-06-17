@@ -124,4 +124,10 @@ namespace Temporal
 		}
 		update();
 	}
+
+	void Animator::resetHalhaza()
+	{
+		if(_animationId != Hash::INVALID)
+			reset(AnimationParams(_animationId, _isRewined));
+	}
 }

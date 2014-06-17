@@ -59,6 +59,7 @@ namespace Temporal
 
 		void update();
 		void reset(AnimationParams& animationParams);
+		void resetHalhaza();
 	};
 }
 #endif
