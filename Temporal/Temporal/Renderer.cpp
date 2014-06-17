@@ -37,7 +37,10 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
 			const Color& color = *static_cast<Color*>(message.getParam());
-			_color = color;
+			_color.setR(color.getR());
+			_color.setG(color.getG());
+			_color.setB(color.getB());
+
 		}
 		else if(message.getID() == MessageID::SET_ALPHA)
 		{
@@ -56,6 +59,10 @@ namespace Temporal
 	
 	void Renderer::draw()
 	{
+		if(getEntity().getId() == Hash("ENT_LASER"))
+		{
+			int i = 0;
+		}
 		const Vector& position = getPosition(*this);
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
@@ -78,9 +85,13 @@ namespace Temporal
 		{	
 			if(sceneNode.isFlip())
 				Graphics::get().getMatrixStack().scale(Vector(-1.0f, 1.0f));
-			Graphics::get().getMatrixStack().scale(sceneNode.getScale());
 			Graphics::get().getMatrixStack().translate(sceneNode.getTranslation());
 			Graphics::get().getMatrixStack().rotate(sceneNode.getRotation());
+			Graphics::get().getMatrixStack().scale(sceneNode.getScale());
+			if(sceneNode.getScale() != Vector(1.0f, 1.0f))
+			{
+				int i = 0;
+			}
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{
