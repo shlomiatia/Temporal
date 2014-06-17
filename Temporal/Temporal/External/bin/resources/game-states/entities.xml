@@ -90,7 +90,7 @@
 			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
 			<!--<player-period period="2" />-->
 		</entity>
-		<entity id="ENT_DOOR">
+		<!--<entity id="ENT_DOOR">
 			<transform>
 				<position x="512" y="512" />
 			</transform>
@@ -121,7 +121,7 @@
 				</fixture>
 			</static-body>
 			<button target="ENT_DOOR" />
-		</entity><!--
+		</entity>
 		<entity id="ENT_TEXT">
 			<transform>
 				<position x="16" y="256" />
@@ -221,7 +221,7 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>
+		</entity>-->
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="3000" y="512" />
@@ -275,9 +275,9 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<temporal-echo />
-			<temporal-period period="1" />-->
-		<!--</entity>
+			<temporal-echo />
+			<!--<temporal-period period="1" />-->
+		</entity><!--
 		<entity id="ENT_LASER">
 			<transform />
 			<collision-filter category="4" />

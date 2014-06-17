@@ -257,11 +257,14 @@ namespace Temporal
 			serializer.serialize("orientation", (int&)transform._orientation);
 		}
 		
+		// TODO:
 		template<class T>
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
-			serializer.serialize("animation", animator._animationId); 
+			serializer.serialize("animation", animator._animationId);
+			if(serializer.type() == SerializationDirection::DESERIALIZATION)
+				animator.resetHalhaza();
 			serializer.serialize("timer", animator._timer); // memory
 		}
 		
@@ -271,7 +274,7 @@ namespace Temporal
 			serializer.serialize("texture", renderer._textureFile);
 			serializer.serialize("sprite-sheet", renderer._spriteSheetFile);
 			serializer.serialize("layer", (int&)renderer._layer);
-			serializer.serialize("color", renderer._color);
+			//serializer.serialize("color", renderer._color);
 			serializer.serialize("scene-node", renderer._root);
 		}
 		
