@@ -135,7 +135,7 @@ namespace Temporal
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		static const Hash STATIC_BODY_STYPE = Hash("static-body");
-		//static const Hash SIGHT_TYPE = Hash("sight");
+		static const Hash SIGHT_TYPE = Hash("dynamic-body");
 		filter.push_back(STATIC_BODY_STYPE);
 		//filter.push_back(SIGHT_TYPE);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);

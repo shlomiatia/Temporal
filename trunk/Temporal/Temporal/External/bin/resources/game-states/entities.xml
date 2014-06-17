@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="3000" y="512" />
+				<position x="512" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
@@ -58,7 +58,7 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="20" />
+					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
@@ -88,7 +88,7 @@
 				<color r="1.0" g="0.0" b="0.0" />
 			</light>
 			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
-			<!--<player-period period="2" />-->
+			<player-period period="2" />
 		</entity>
 		<!--<entity id="ENT_DOOR">
 			<transform>
@@ -185,7 +185,7 @@
 			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="20" />
+					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
@@ -224,7 +224,7 @@
 		</entity>-->
 		<entity id="ENT_PATROL">
 			<transform>
-				<position x="3000" y="512" />
+				<position x="512" y="256" />
 			</transform>
 			<collision-filter category="4" />
 			<patrol />
@@ -249,7 +249,7 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="20" />
+					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
@@ -275,16 +275,18 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<temporal-echo />
-			<!--<temporal-period period="1" />-->
-		</entity><!--
+			<!--<temporal-echo />-->
+			<temporal-period period="1" />
+		</entity>
 		<entity id="ENT_LASER">
-			<transform />
+			<transform>
+				<position x="672 " y="191" />
+			</transform>
 			<collision-filter category="4" />
-			<laser platform="ENT_LOWER_MIDDLE_PLATFORM" />
+			<laser />
 			<renderer layer="4" texture="resources/textures/laser.png" />
 			<temporal-period period="2" />
-		</entity>-->
+		</entity>
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />
