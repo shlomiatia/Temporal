@@ -50,9 +50,11 @@ namespace Temporal
 			abort();
 		_job = job;
 		_job->setStarted();
-		
-		_job->execute();
 		//_semaphore.notify();
+
+		_job->execute();
+		_job = 0;
+
 	}
 
 	void IOThread::init()
