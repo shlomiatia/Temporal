@@ -50,7 +50,9 @@ namespace Temporal
 			abort();
 		_job = job;
 		_job->setStarted();
-		_semaphore.notify();
+		
+		_job->execute();
+		//_semaphore.notify();
 	}
 
 	void IOThread::init()
@@ -191,22 +193,28 @@ namespace Temporal
 
 	void ResourceManager::collectGarbage()
 	{
-		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end(); ++i)
+		for(SpriteSheetIterator i = _spritesheets.begin(); i != _spritesheets.end();)
 		{
 			if(i->second.unique())
 				i = _spritesheets.erase(i);
+			else
+				++i;
 		}
 
-		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end(); ++i)
+		for(AnimationSetIterator i = _animationSets.begin(); i != _animationSets.end();)
 		{
 			if(i->second.unique())
 				i = _animationSets.erase(i);
+			else
+				++i;
 		}
 
-		for(FontIterator i = _fonts.begin(); i != _fonts.end(); ++i)
+		for(FontIterator i = _fonts.begin(); i != _fonts.end(); )
 		{
 			if(i->second.unique())
 				i = _fonts.erase(i);
+			else
+				++i;
 		}
 	}
 
