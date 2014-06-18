@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "Timer.h"
 #include "MessageUtils.h"
+#include "Control.h"
 
 // Game state loader/Game saver loader/navigation/merge to temporal echoes
 namespace Temporal
@@ -46,7 +47,7 @@ namespace Temporal
 
 	const Hash GameStateLoaderComponent::TYPE = Hash("game-state-loader");
 
-	class MyGameStateListener : public GameStateListener
+	class GSLGameStateListener : public GameStateListener
 	{
 	public:
 		void onUpdate(float framePeriod)
@@ -55,7 +56,6 @@ namespace Temporal
 			{
 				const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-				getEntitiesManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 			}*/
 		}
 		virtual void onLoaded(Hash id, GameState& gameState)
@@ -66,8 +66,19 @@ namespace Temporal
 				entity->add(new GameSaverLoader());
 				gameState.getEntitiesManager().add(Hash("ENT_SAVER_LOADER"), entity);*/
 				Entity* entity = new Entity();
+				entity->setId(Hash("ENT_LOADER"));
 				entity->add(new GameStateLoaderComponent());
-				gameState.getEntitiesManager().add(Hash("ENT_TEST"), entity);
+				gameState.getEntitiesManager().add(entity);
+
+				entity = new Entity(Hash("ENT_LOADING"));
+				Transform* transform = new Transform(Vector(455.0f, 256.0f));
+				Control* control = new Control();
+				control->setText("Loading...");
+				control->setWidth(100.0f);
+				control->setHeight(100.0f);
+				entity->add(transform);
+				entity->add(control);
+				gameState.getEntitiesManager().add(entity);
 			}
 		}
 	};

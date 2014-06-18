@@ -121,14 +121,8 @@
 				</fixture>
 			</static-body>
 			<button target="ENT_DOOR" />
-		</entity>
-		<entity id="ENT_TEXT">
-			<transform>
-				<position x="16" y="256" />
-			</transform>
-			<text font-family="c:/windows/fonts/Arial.ttf" font-size="12" text="this is a very long line of text that will be wrapped in the middle" />
-		</entity>
-		!--><entity id="ENT_LIGHT">
+		</entity>-->
+		<entity id="ENT_LIGHT">
 			<transform>
 				<position x="512" y="300" />
 			</transform>

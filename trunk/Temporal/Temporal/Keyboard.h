@@ -52,6 +52,7 @@ namespace Temporal
 		bool getKey(Key::Enum key) const { return _keys.at(key); }
 
 		void add(Component* component) { _components.push_back(component); }
+		void clear() { _components.clear(); }
 		void setFocus(Component* component) { _focus = component; }
 		void clearFocus() { _focus = 0; }
 	private:

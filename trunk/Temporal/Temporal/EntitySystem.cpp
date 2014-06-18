@@ -87,6 +87,7 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::ENTITY_DISPOSED));
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
+		Keyboard::get().clear();
 	}
 
 	void EntitiesManager::init(GameState* gameState)

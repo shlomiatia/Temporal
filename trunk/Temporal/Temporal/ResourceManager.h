@@ -101,7 +101,7 @@ namespace Temporal
 	class GameStateLoader : public IOJob
 	{
 	public:
-		GameStateLoader(const char* file = "");
+		GameStateLoader(const char* file = 0);
 		void executeImpl();
 
 		void add(const char* file);
