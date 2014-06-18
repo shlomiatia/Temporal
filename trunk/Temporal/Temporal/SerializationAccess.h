@@ -263,8 +263,8 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("animation", animator._animationId);
-			if(serializer.type() == SerializationDirection::DESERIALIZATION)
-				animator.resetHalhaza();
+			/*if(serializer.type() == SerializationDirection::DESERIALIZATION)
+				animator.resetHalhaza();*/
 			serializer.serialize("timer", animator._timer); // memory
 		}
 		

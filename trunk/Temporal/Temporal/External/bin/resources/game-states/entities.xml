@@ -87,8 +87,8 @@
 			<light>
 				<color r="1.0" g="0.0" b="0.0" />
 			</light>
-			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
-			<player-period period="2" />
+			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
+			<player-period period="2" />-->
 			<saver-loader />
 		</entity>
 		<!--<entity id="ENT_DOOR">
@@ -270,10 +270,10 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<temporal-echo />-->
-			<temporal-period period="1" />
+			<temporal-echo />
+			<!--<temporal-period period="1" />-->
 		</entity>
-		<entity id="ENT_LASER">
+		<!--<entity id="ENT_LASER">
 			<transform>
 				<position x="672 " y="191" />
 			</transform>
@@ -281,7 +281,7 @@
 			<laser />
 			<renderer layer="4" texture="resources/textures/laser.png" />
 			<temporal-period period="2" />
-		</entity>
+		</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />

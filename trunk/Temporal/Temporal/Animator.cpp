@@ -68,6 +68,10 @@ namespace Temporal
 
 	void Animator::update()
 	{
+		if(_animationId != _halhazaAnimationId)
+		{
+			reset(AnimationParams(_animationId, _isRewined));
+		}
 		float currentTime = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
 		int animationDuration = animation.getDuration();
@@ -112,6 +116,7 @@ namespace Temporal
 	void Animator::reset(AnimationParams& animationParams)
 	{
 		_animationId = animationParams.getAnimationId();
+		_halhazaAnimationId = _animationId;
 		_isRewined = animationParams.isRewind();
 		const Animation& animation = _animationSet->get(_animationId);
 		const SceneGraphSample& sgs = **animation.getSamples().begin();
@@ -123,11 +128,5 @@ namespace Temporal
 			binding.setSample(sceneNodeSample);
 		}
 		update();
-	}
-
-	void Animator::resetHalhaza()
-	{
-		if(_animationId != Hash::INVALID)
-			reset(AnimationParams(_animationId, _isRewined));
 	}
 }

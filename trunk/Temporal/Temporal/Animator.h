@@ -35,7 +35,7 @@ namespace Temporal
 	{
 	public:
 		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId), _isPaused(false), _isRewined(false) {}
+			_animationSetFile(animationSetFile), _animationId(animationId), _halhazaAnimationId(animationId), _isPaused(false), _isRewined(false) {}
 		~Animator();
 		
 		Hash getType() const { return TYPE; }
@@ -51,6 +51,7 @@ namespace Temporal
 		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeBindingCollection _bindings;
 		Hash _animationId;
+		Hash _halhazaAnimationId;
 		Timer _timer;
 		bool _isPaused;
 		bool _isRewined;
@@ -59,7 +60,6 @@ namespace Temporal
 
 		void update();
 		void reset(AnimationParams& animationParams);
-		void resetHalhaza();
 	};
 }
 #endif
