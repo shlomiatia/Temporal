@@ -9,8 +9,9 @@ namespace Temporal
 	{
 	public:
 		void handleMessage(Message& message);
-		Hash getType() const { return Hash::INVALID;; }
+		Hash getType() const { return TYPE; }
 		Component* clone() const { return new EntitySaverLoader(); }
+		static Hash TYPE;
 	private:
 	};
 

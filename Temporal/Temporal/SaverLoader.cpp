@@ -20,6 +20,8 @@ namespace Temporal
 		}
 	}
 
+	Hash EntitySaverLoader::TYPE = Hash("saver-loader");
+
 	void GameLoader::executeImpl()
 	{
 		FileStream fileStream(_path, false, true);
@@ -52,7 +54,6 @@ namespace Temporal
 					Stream* stream = new MemoryStream();
 					BinarySerializer serializer(stream);
 					getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SAVE, &serializer));
-					//serializer.save();
 					_saver.setStream(stream);
 					IOThread::get().setJob(&_saver);
 				}
@@ -61,7 +62,10 @@ namespace Temporal
 					IOThread::get().setJob(&_loader);
 				}
 			}
-			else if(_saver.isFinished())
+		}
+		else if(message.getID() == MessageID::UPDATE)
+		{
+			if(_saver.isFinished())
 			{
 				_saver.reset();
 			}

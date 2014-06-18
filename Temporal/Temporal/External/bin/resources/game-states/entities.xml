@@ -89,6 +89,7 @@
 			</light>
 			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
 			<player-period period="2" />
+			<saver-loader />
 		</entity>
 		<!--<entity id="ENT_DOOR">
 			<transform>

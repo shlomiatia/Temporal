@@ -79,6 +79,8 @@ namespace Temporal
 			serialize(key, (TemporalPeriod*&)component, serializer);
 		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
+		else if(strcmp(key, EntitySaverLoader::TYPE.getString()) == 0)
+			serialize(key, (EntitySaverLoader*&)component, serializer);
 		else
 			abort();
 	}
