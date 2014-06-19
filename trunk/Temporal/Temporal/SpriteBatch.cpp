@@ -141,9 +141,9 @@ namespace Temporal
 	AABB getActualTexturePart(const Texture* texture, const AABB& texturePart)
 	{
 		AABB actualTexturePart = AABB::Zero;
-		if(texturePart == AABB::Zero)
+		/*if(texturePart == AABB::Zero)
 			actualTexturePart = AABB(0.5f, 0.5f, 1.0f, 1.0f);
-		else if(texture)
+		else*/ if(texture)
 			actualTexturePart = AABB(Vector(texturePart.getCenterX() / texture->getSize().getX(), texturePart.getCenterY() / texture->getSize().getY()),
 										Vector(texturePart.getRadiusX() / texture->getSize().getX(), texturePart.getRadiusY() / texture->getSize().getY()));
 		return actualTexturePart;
