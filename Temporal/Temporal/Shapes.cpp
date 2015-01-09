@@ -10,16 +10,17 @@ namespace Temporal
 	 *********************************************************************************************/
 	const Segment Segment::Zero(Vector::Zero, Vector::Zero);
 
-	Segment::Segment(const Vector& center, const Vector& radius) 
-		: _center(center), _radius(radius) 
+	Segment::Segment(const Vector& center, const Vector& radius) : _center(center), _radius(radius) 
 	{
 		assert(getRadiusX() >= 0.0f);
 	}
 
-	float Segment::getLength() const
+	Segment::Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) 
 	{
-		return getRadius().getLength() * 2.0f;
+		
 	}
+
+	
 
 	float Segment::get(Axis::Enum axis, float otherAxisValue) const
 	{
@@ -58,15 +59,12 @@ namespace Temporal
 	 *********************************************************************************************/
 	const OBB OBB::Zero(Vector::Zero, 0.0f, Vector::Zero);
 
-	Vector OBB::getPoint(Axis::Enum axis, bool positive) const
+	void OBB::setAxis0(const Vector& axis0)
 	{
-		Vector axis1 = (getAxisX().getAxis(axis) < 0.0f ^ positive) ? getAxisX() : -getAxisX();
-
-		// Fix for AABB
-		if(getAxisX().getAxis(axis) == 0.0f && axis == Axis::Y)
-			axis1 = -axis1;
-		Vector axis2 = (getAxisY().getAxis(axis) < 0.0f ^ positive) ? getAxisY() : -getAxisY();
-		return getCenter() + axis1 * getRadiusX() + axis2 * getRadiusY(); 
+		assert(axis0.getX() > 0.0f);
+		assert(axis0.getY() >= 0.0f);
+		_axes[0] = axis0;	
+		_axes[1] = _axes[0].getLeftNormal();
 	}
 
 	OBBAABBWrapper OBB::getAABBWrapper()

@@ -18,7 +18,7 @@ namespace Temporal
 		static const Segment Zero;
 		 
 		Segment() {}
-		Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) {}
+		Segment(float x1, float y1, float x2, float y2);
 		Segment(const Vector& center, const Vector& radius);
 		
 		const Vector& getCenter() const { return _center; }
@@ -50,7 +50,7 @@ namespace Temporal
 		float getRight() const { return getRightPoint().getX(); }
 		float getBottom() const { return getBottomPoint().getY(); }
 		float getTop() const { return getTopPoint().getY(); }
-		float getLength() const;
+		float getLength() const { return getRadius().getLength() * 2.0f; }
 
 		float getY(float x) const { return get(Axis::Y, x); }
 		float getX(float y) const  { return get(Axis::X, y); }
@@ -172,21 +172,16 @@ namespace Temporal
 
 		void translate(const Vector& translation) { _center += translation; }
 
-		Vector getPoint(Axis::Enum axis, bool positive) const;
-		Vector getPoint(Side::Enum side) const { return getPoint(Axis::X, side == Side::RIGHT ? true : false); }
-		Vector getLeftVertex() const { return getPoint(Axis::X, false); } 
-		Vector getRightVertex() const { return getPoint(Axis::X, true); }
-		Vector getBottomVertex() const { return getPoint(Axis::Y, false); }
-		Vector getTopVertex() const { return getPoint(Axis::Y, true); }
 		Vector getBottomLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
 		Vector getTopLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); } 
 		Vector getBottomRightVertex() const { return getCenter() + getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
 		Vector getTopRightVertex() const { return getCenter() + getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); }
-		float getSide(Side::Enum side) const { return getPoint(side).getX(); }
-		float getLeft() const { return getLeftVertex().getX(); }
-		float getRight() const { return getRightVertex().getX(); }
-		float getBottom() const { return getBottomVertex().getY(); }
-		float getTop() const { return getTopVertex().getY(); }
+		
+		float getLeft() const { return getTopLeftVertex().getX(); }
+		float getRight() const { return getBottomRightVertex().getX(); }
+		float getBottom() const { return getBottomLeftVertex().getY(); }
+		float getTop() const { return getTopRightVertex().getY(); }
+		float getSide(Side::Enum side) const { return side == Side::LEFT ? getLeft() : getRight(); }
 		OBBAABBWrapper getAABBWrapper();
 		const OBBAABBWrapper getAABBWrapper() const;
 
@@ -199,11 +194,7 @@ namespace Temporal
 		}
 
 		// axis0 => unit vector. x>0, y>=0
-		void setAxis0(const Vector& axis0)
-		{
-			_axes[0] = axis0;	
-			_axes[1] = _axes[0].getLeftNormal();
-		}
+		void setAxis0(const Vector& axis0);
 	private:
 		Vector _center;
 		Vector _axes[2];
