@@ -174,21 +174,34 @@ namespace Temporal
 
 		Vector getPoint(Axis::Enum axis, bool positive) const;
 		Vector getPoint(Side::Enum side) const { return getPoint(Axis::X, side == Side::RIGHT ? true : false); }
+		Vector getLeftVertex() const { return getPoint(Axis::X, false); } 
+		Vector getRightVertex() const { return getPoint(Axis::X, true); }
+		Vector getBottomVertex() const { return getPoint(Axis::Y, false); }
+		Vector getTopVertex() const { return getPoint(Axis::Y, true); }
+		Vector getBottomLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
+		Vector getTopLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); } 
+		Vector getBottomRightVertex() const { return getCenter() + getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
+		Vector getTopRightVertex() const { return getCenter() + getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); }
+		float getSide(Side::Enum side) const { return getPoint(side).getX(); }
+		float getLeft() const { return getLeftVertex().getX(); }
+		float getRight() const { return getRightVertex().getX(); }
+		float getBottom() const { return getBottomVertex().getY(); }
+		float getTop() const { return getTopVertex().getY(); }
 		OBBAABBWrapper getAABBWrapper();
 		const OBBAABBWrapper getAABBWrapper() const;
 
 		float getAngle() const { return _axes[0].getAngle(); }
 
-		// angle>0<90
+		// angle>=0<90
 		void setAngle(float angle)
 		{
 			setAxis0(Vector(angle));
 		}
 
-		// axis0 => unit vector. x>=0, y>=0
+		// axis0 => unit vector. x>0, y>=0
 		void setAxis0(const Vector& axis0)
 		{
-			_axes[0] = axis0;
+			_axes[0] = axis0;	
 			_axes[1] = _axes[0].getLeftNormal();
 		}
 	private:
