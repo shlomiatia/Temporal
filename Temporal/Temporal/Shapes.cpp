@@ -20,8 +20,6 @@ namespace Temporal
 		
 	}
 
-	
-
 	float Segment::get(Axis::Enum axis, float otherAxisValue) const
 	{
 		Vector normalizedRadius = getRadius().normalize();
@@ -61,9 +59,24 @@ namespace Temporal
 
 	void OBB::setAxis0(const Vector& axis0)
 	{
-		assert(axis0.getX() > 0.0f);
-		assert(axis0.getY() >= 0.0f);
-		_axes[0] = axis0;	
+		if(axis0.getX() <= 0.0f && axis0.getY() > 0.0f)
+		{
+			_axes[0] = axis0.getRightNormal();
+			_radius = Vector(_radius.getY(), _radius.getX());
+		}
+		else if(axis0.getX() < 0.0f && axis0.getY() <= 0.0f)
+		{
+			_axes[0] = -axis0;
+		}
+		else if(axis0.getX() >= 0.0f && axis0.getY() < 0.0f)
+		{
+			_axes[0] = axis0.getLeftNormal();
+			_radius = Vector(_radius.getY(), _radius.getX());
+		}
+		else
+		{
+			_axes[0] = axis0;
+		}
 		_axes[1] = _axes[0].getLeftNormal();
 	}
 

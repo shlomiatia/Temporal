@@ -80,7 +80,7 @@ namespace Temporal
 			for(OBBIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
 				OBB area = *j;
-			
+				
 				if(intersects(area, platform))
 				{
 					j = areas.erase(j);
@@ -230,7 +230,7 @@ namespace Temporal
 		}
 		else
 		{
-			if(node1.getArea().getLeft() > node2.getArea().getLeft())	
+			if(node1.getArea().getRight() > node2.getArea().getRight())	
 				x = (node1.getArea().getLeft() + node2.getArea().getRight()) / 2.0f;
 			else
 				x = (node1.getArea().getRight() + node1.getArea().getLeft()) / 2.0f;
@@ -412,24 +412,8 @@ namespace Temporal
 				Vector segmentRadius = segment.getRadius();
 				Vector axis = segmentRadius.normalize();
 				Vector radius  = Vector(segmentRadius.getLength(), 1.0);
-				if(axis.getX() <= 0.0f && axis.getY() > 0.0f)
-				{
-					axis = axis.getRightNormal();
-					radius = Vector(radius.getY(), radius.getX());
-				}
-				else if(axis.getX() < 0.0f && axis.getY() <= 0.0f)
-				{
-					axis = -axis;
-				}
-				else if(axis.getX() >= 0.0f && axis.getY() < 0.0f)
-				{
-					axis = axis.getLeftNormal();
-					radius = Vector(radius.getY(), radius.getX());
-				}
-
-				OBB o = OBB(segment.getCenter(), axis, radius);
-				o.setCenterX(o.getCenterX());
-				Graphics::get().getLinesSpriteBatch().add(o, color);
+				OBB obb = OBB(segment.getCenter(), axis, radius);
+				Graphics::get().getLinesSpriteBatch().add(obb, color);
 			}
 		}
 		Graphics::get().getLinesSpriteBatch().end();
