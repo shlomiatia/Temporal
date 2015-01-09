@@ -3,7 +3,7 @@
 #include "Graphics.h"
 #include "Thread.h"
 #include "Grid.h"
-//#include "NavigationGraph.h"
+#include "NavigationGraph.h"
 #include "Hash.h"
 #include "Timer.h"
 #include "Log.h"
@@ -140,10 +140,11 @@ namespace Temporal
 		//filter.push_back(SIGHT_TYPE);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
-		//getManager().getGameState().getGrid().draw();
-		//NavigationGraph::get().draw();
+		
 
 		Graphics::get().getSpriteBatch().end();
+		//getManager().getGameState().getGrid().draw();
+		getManager().getGameState().getNavigationGraph().draw();
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
 	}

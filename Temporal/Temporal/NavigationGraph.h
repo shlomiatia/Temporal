@@ -1,6 +1,6 @@
 #ifndef NAVIGATIONGRAPH_H
 #define NAVIGATIONGRAPH_H
-/*
+
 #include "GameState.h"
 #include "BaseEnums.h"
 #include "Vector.h"
@@ -72,8 +72,8 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeCollection;
 	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const OBB> YABPCollection;
-	typedef YABPCollection::const_iterator YABPIterator;
+	typedef std::vector<const OBB> OBBCollection;
+	typedef OBBCollection::const_iterator OBBIterator;
 	typedef std::vector<const OBB*> ShapeCollection;
 	typedef ShapeCollection::const_iterator ShapeIterator;
 
@@ -98,9 +98,10 @@ namespace Temporal
 		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
 		void createEdges(ShapeCollection& platforms);
+		void cutAreasByPlatforms(OBBCollection& areas, ShapeCollection& platforms);
 		
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);
 	};
-}*/
+}
 #endif

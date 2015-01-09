@@ -1,4 +1,4 @@
-/*#include "NavigationGraph.h"
+#include "NavigationGraph.h"
 #include "Shapes.h"
 #include "ShapeOperations.h"
 #include "Math.h"
@@ -11,6 +11,7 @@
 #include "Graphics.h"
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"
+#include "Grid.h"
 
 namespace Temporal
 {
@@ -34,82 +35,63 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
 	{
-		Vector normalizedSlopedVector = area.getSlopedRadius().normalize();
+		Axis::Enum axisSign = isModerateAngle(area.getAxisX().getAngle()) ? Axis::X : Axis::Y;
+		Vector normalizedSlopedVector = area.getAxis(axisSign);
 		float length = cutAmount / normalizedSlopedVector.getX();
 		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
 
 		// Move center in the opposite direction
 		Vector center = area.getCenter() + static_cast<float>(Side::getOpposite(direction)) * cutRadius;
-		Vector slopedRadius = area.getSlopedRadius() - cutRadius;
-		if(slopedRadius.getX() > 0.0f)
+		Vector radius = area.getRadius() - cutRadius;
+		
+		if(radius.getX() > 0.0f)
 		{
-			const OBB nodeAfterCut = OBB(center, slopedRadius, area.getYRadius());
+			const OBB nodeAfterCut = OBB(center, area.getAxisX(), radius);
 			iterator = areas.insert(iterator, nodeAfterCut);
 		}
 	}
 
-	void cutAreaLeft(float x, const OBB& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutAreaLeft(float x, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
 	{
 		float amount = x - area.getLeft();
 		cutArea(Side::LEFT, amount, area, areas, iterator);
 	}
 
-	void cutAreaRight(float x, const OBB& area, YABPCollection& areas, YABPIterator& iterator)
+	void cutAreaRight(float x, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
 	{
 		float amount = area.getRight() - x;
 		cutArea(Side::RIGHT, amount, area, areas, iterator);
 	}
 
-	Segment getUpperSegment(const OBB& obb)
-	{
-		return Segment(obb.getCenter() + obb.getYVector(), obb.getSlopedRadius());
-	}
-
 	Segment getLowerSegment(const OBB& obb)
 	{
-		return Segment(obb.getCenter() - obb.getYVector(), obb.getSlopedRadius());
+		return Segment(obb.getCenter() - obb.getAxisY() * obb.getRadiusY(), obb.getAxisX() * obb.getRadiusX());
 	}
 
-	void updateMinMax(const Vector& point, const Vector& segmentVector, const Vector& slopedRadius, float& val1, float& val2)
-	{
-		if(point != Vector::Zero)
-		if(segmentVector.getY() > 0.0f || (segmentVector.getY() == 0.0f && slopedRadius.getY() < 0.0f))
-			val1 = point.getX();
-		else
-			val2 = point.getX();	
-	}
-
-	void cutAreasByPlatforms(YABPCollection& areas, ShapeCollection& platforms)
+	// TODO: Ray cast from each area vertice inward. Take min length from each side and cut
+	void NavigationGraph::cutAreasByPlatforms(OBBCollection& areas, ShapeCollection& platforms)
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			const OBB& platform = **i;
-			for(YABPIterator j = areas.begin(); j != areas.end(); ++j)
+
+			for(OBBIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
-				const OBB area = *j;
+				OBB area = *j;
+			
 				if(intersects(area, platform))
 				{
 					j = areas.erase(j);
-					Vector yVector = area.getYVector();
-					const Vector& slopedRadius = area.getSlopedRadius();
-					Segment upperSeg = getUpperSegment(area);
-					DirectedSegment upperSlope = DirectedSegment(upperSeg.getNaturalOrigin(), upperSeg.getNaturalVector());
-					Segment lowerSeg = getLowerSegment(area);
-					DirectedSegment lowerSlope = DirectedSegment(lowerSeg.getNaturalOrigin(), lowerSeg.getNaturalVector());
-					Vector upperSlopePoint = Vector::Zero;
-					Vector lowerSlopePoint = Vector::Zero;
-					intersects(upperSlope, platform, &upperSlopePoint);
-					intersects(lowerSlope, platform, &lowerSlopePoint);
+					
 					float min = platform.getLeft();
 					float max = platform.getRight();
-					Vector segmentVector = platform.getSlopedRadius();
-//					updateMinMax(upperSlopePoint, segmentVector, slopedRadius, max, min);
-//					updateMinMax(lowerSlopePoint, segmentVector, slopedRadius, min, max);
-					if(max >= area.getLeft() && max <= area.getRight())
+					float left = area.getLeft();
+					float right = area.getRight();
+					if(max >= left && max <= right)
 						cutAreaLeft(max + 1.0f, area, areas, j);
-					if(min >= area.getLeft() && min <= area.getRight())
+					if(min >= left && min <= right)
 						cutAreaRight(min - 1.0f, area, areas, j);
 					if(j == areas.end())
 					{
@@ -187,27 +169,28 @@ namespace Temporal
 		{
 			// Create area from platform
 			const OBB& platform = **i;
-			Vector vector = platform.getSlopedRadius();
-			float angle = vector.getAngle();
-			if(!isModerateAngle(angle))
-				continue;
-			
-			// Create area
-			Vector center = Vector(platform.getCenterX(), platform.getCenterY() + platform.getYRadius() + 1.0f + MIN_AREA_SIZE.getY() / 2.0f);
-			float yRadius = MIN_AREA_SIZE.getY() / 2.0f;
-			OBB area = OBB(center, vector, yRadius);
+			Vector axisX = platform.getAxisX();
+			float axisXAngle = axisX.getAngle();
+			Axis::Enum platformAxis = isModerateAngle(axisXAngle) ? Axis::X : Axis::Y;
+			Axis::Enum platformOppositeAxis = Axis::getOpposite(platformAxis);
+			Vector center = platform.getCenter() + platform.getAxis(platformOppositeAxis) * (platform.getRadius().getAxis(platformOppositeAxis) + MIN_AREA_SIZE.getY() / 2.0f + 1.0f);
+			Vector radius = Vector::Zero;
+			radius.setAxis(platformAxis, platform.getRadius().getAxis(platformAxis));
+			radius.setAxis(platformOppositeAxis, MIN_AREA_SIZE.getY() / 2.0f);
+			OBB area = OBB(center, axisX, radius);
 
-			YABPCollection areas;
+			OBBCollection areas;
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
 			
 			// Create nodes from areas
-			for(YABPIterator j = areas.begin(); j != areas.end(); ++j)
+			for(OBBIterator j = areas.begin(); j != areas.end(); ++j)
 			{
 				const OBB& area = *j;
 
+				Vector areaVector = area.getAxis(platformAxis) * area.getRadius().getAxis(platformAxis);
 				// Check min width
-				if(area.getSlopedRadius().getLength() * 2.0f >= MIN_AREA_SIZE.getX())
+				if(areaVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX())
 					_nodes.push_back(new NavigationNode(area));
 			}
 		}
@@ -279,9 +262,9 @@ namespace Temporal
 		const OBB& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float y1low = area1.getCenterY() + area1.getSlopedRadiusY() - area1.getYRadius();
-		float y2low = area2.getCenterY() - area2.getSlopedRadiusY() - area2.getYRadius();
-		float y2high = area2.getCenterY() - area2.getSlopedRadiusY() + area2.getYRadius();
+		float y1low = area1.getBottomRightVertex().getY();
+		float y2low = area1.getBottomLeftVertex().getY();
+		float y2high = area1.getTopLeftVertex().getY();
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
 		{
@@ -381,10 +364,11 @@ namespace Temporal
 
 	void NavigationGraph::draw() const
 	{
+		Graphics::get().getLinesSpriteBatch().begin();
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
-			Graphics::get().draw(node.getArea(), Color::Yellow);
+			Graphics::get().getLinesSpriteBatch().add(node.getArea(), Color::Yellow);
 		}
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
@@ -395,7 +379,7 @@ namespace Temporal
 				const NavigationEdge& edge = **j;
 				const OBB& area2 = edge.getTarget().getArea();
 				float x1 = edge.getX();
-				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD) ? area2.getOppositeSide(edge.getSide()) : x1;
+				float x2 = (edge.getType() == NavigationEdgeType::JUMP_FORWARD) ? area2.getSide(Side::getOpposite(edge.getSide())) : x1;
 				float y1 = edge.getType() == NavigationEdgeType::WALK ? node.getArea().getCenterY() : node.getArea().getBottom();
 				float y2 = edge.getType() == NavigationEdgeType::WALK ? area2.getCenterY() : area2.getBottom();
 				Color color = Color::White;
@@ -424,8 +408,32 @@ namespace Temporal
 				{
 					color = Color::Magenta;
 				}
-				Graphics::get().draw(SegmentPP(Vector(x1, y1), Vector(x2, y2)), color);
+				Segment s = SegmentPP(Vector(x1, y1), Vector(x2, y2));
+				Vector r = s.getRadius();
+				Vector a = r.normalize();
+				Vector nr  = Vector(r.getLength(), 1.0);
+				if(a.getX() <= 0.0f && a.getY() > 0.0f)
+				{
+					a = a.getRightNormal();
+					nr = Vector(nr.getY(), nr.getX());
+				}
+				else if(a.getX() < 0.0f && a.getY() <= 0.0f)
+				{
+					a = -a;
+				}
+				else if(a.getX() >= 0.0f && a.getY() < 0.0f)
+				{
+					a = a.getLeftNormal();
+					nr = Vector(nr.getY(), nr.getX());
+				}
+				
+
+
+				OBB o = OBB(s.getCenter(), a, nr);
+				o.setCenterX(o.getCenterX());
+				Graphics::get().getLinesSpriteBatch().add(o, color);
 			}
 		}
+		Graphics::get().getLinesSpriteBatch().end();
 	}
-}*/
+}
