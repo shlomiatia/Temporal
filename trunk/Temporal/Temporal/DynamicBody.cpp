@@ -85,11 +85,11 @@ namespace Temporal
 
 	Segment getGroundSegment(const Fixture& ground, OBBAABBWrapper body)
 	{
-		Vector highPoint = ground.getGlobalShape().getPoint(Axis::Y, true);
+		Vector highPoint = ground.getGlobalShape().getTopRightVertex();
 		if(body.getRight() < highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getPoint(Side::LEFT));
+			return SegmentPP(highPoint, ground.getGlobalShape().getTopLeftVertex());
 		else if(body.getLeft() > highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getPoint(Side::RIGHT));
+			return SegmentPP(highPoint, ground.getGlobalShape().getBottomRightVertex());
 		else
 			return SegmentPP(highPoint, highPoint);
 	}

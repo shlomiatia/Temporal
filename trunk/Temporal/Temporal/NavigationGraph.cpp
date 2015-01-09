@@ -408,28 +408,26 @@ namespace Temporal
 				{
 					color = Color::Magenta;
 				}
-				Segment s = SegmentPP(Vector(x1, y1), Vector(x2, y2));
-				Vector r = s.getRadius();
-				Vector a = r.normalize();
-				Vector nr  = Vector(r.getLength(), 1.0);
-				if(a.getX() <= 0.0f && a.getY() > 0.0f)
+				Segment segment = SegmentPP(Vector(x1, y1), Vector(x2, y2));
+				Vector segmentRadius = segment.getRadius();
+				Vector axis = segmentRadius.normalize();
+				Vector radius  = Vector(segmentRadius.getLength(), 1.0);
+				if(axis.getX() <= 0.0f && axis.getY() > 0.0f)
 				{
-					a = a.getRightNormal();
-					nr = Vector(nr.getY(), nr.getX());
+					axis = axis.getRightNormal();
+					radius = Vector(radius.getY(), radius.getX());
 				}
-				else if(a.getX() < 0.0f && a.getY() <= 0.0f)
+				else if(axis.getX() < 0.0f && axis.getY() <= 0.0f)
 				{
-					a = -a;
+					axis = -axis;
 				}
-				else if(a.getX() >= 0.0f && a.getY() < 0.0f)
+				else if(axis.getX() >= 0.0f && axis.getY() < 0.0f)
 				{
-					a = a.getLeftNormal();
-					nr = Vector(nr.getY(), nr.getX());
+					axis = axis.getLeftNormal();
+					radius = Vector(radius.getY(), radius.getX());
 				}
-				
 
-
-				OBB o = OBB(s.getCenter(), a, nr);
+				OBB o = OBB(segment.getCenter(), axis, radius);
 				o.setCenterX(o.getCenterX());
 				Graphics::get().getLinesSpriteBatch().add(o, color);
 			}
