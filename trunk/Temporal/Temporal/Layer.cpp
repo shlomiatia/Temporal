@@ -134,17 +134,15 @@ namespace Temporal
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
-		static const Hash STATIC_BODY_STYPE = Hash("static-body");
-		static const Hash SIGHT_TYPE = Hash("dynamic-body");
-		filter.push_back(STATIC_BODY_STYPE);
-		//filter.push_back(SIGHT_TYPE);
+		filter.push_back(Hash("static-body"));
+		filter.push_back(Hash("navigator"));
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
-		
+				Graphics::get().getSpriteBatch().end();
 
-		Graphics::get().getSpriteBatch().end();
-		//getManager().getGameState().getGrid().draw();
 		getManager().getGameState().getNavigationGraph().draw();
+		//getManager().getGameState().getGrid().draw();
+		
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
 	}

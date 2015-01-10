@@ -250,8 +250,12 @@ namespace Temporal
 				const NavigationEdge& edge = **i;
 				const NavigationNode& next = edge.getTarget();
 				Vector nextPoint = next.getArea().getCenter();
-				//Segment segment = SegmentPP(currentPoint, nextPoint);
-				//Graphics::get().draw(segment, Color::Cyan);
+				Segment segment = SegmentPP(currentPoint, nextPoint);
+				Vector segmentRadius = segment.getRadius();
+				Vector axis = segmentRadius.normalize();
+				Vector radius  = Vector(segmentRadius.getLength(), 1.0);
+				OBB obb = OBB(segment.getCenter(), axis, radius);
+				Graphics::get().getSpriteBatch().add(obb, Color::Cyan);
 				currentPoint = nextPoint;
 			}
 		}
