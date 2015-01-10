@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="3000" y="256" />
+				<position x="2000" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
