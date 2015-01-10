@@ -1,6 +1,6 @@
 <game-state>
 	<layers-manager camera-follow-player="1">
-		<!--<ambient-color r="0.0625" g="0.125" b="0.25" />-->
+		<ambient-color r="0.0625" g="0.125" b="0.25" />
 	</layers-manager>
 	<grid tile-size="128">
 		<world-size x="3840" y="720" />
@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="2000" y="256" />
+				<position x="512" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
@@ -84,11 +84,10 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<light>
-				<color r="1.0" g="0.0" b="0.0" />
-			</light>
+			<light-gem />
+			<!--<light><color r="1.0" g="0.0" b="0.0" /></light>-->
 			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
-			<player-period period="2" />
+			<!--<player-period period="2" />
 			<saver-loader />-->
 		</entity>
 		<!--<entity id="ENT_DOOR">
@@ -122,16 +121,16 @@
 				</fixture>
 			</static-body>
 			<button target="ENT_DOOR" />
-		</entity>
+		</entity>-->
 		<entity id="ENT_LIGHT">
 			<transform>
-				<position x="512" y="300" />
+				<position x="612" y="384" />
 			</transform>
 			<light>
-				<color r="0.0" g="0.0" b="1.0" />
+				<color r="0.5" g="0.5" b="0.5" />
 			</light>
-		</entity>-->
-		<entity id="ENT_CHASER">
+		</entity>
+		<!--<entity id="ENT_CHASER">
 			<transform>
 				<position x="1000" y="512" />
 			</transform>
@@ -183,14 +182,23 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>
-		<!--<entity id="ENT_SENTRY">
+		</entity>-->
+		<entity id="ENT_SENTRY">
 			<transform>
 				<position x="512" y="384" />
 			</transform>
 			<collision-filter category="4" />
 			<sentry />
+			<dynamic-body>
+				<fixture>
+					<obb angle="0">
+						<center x="0" y="0" />
+						<radius x="10" y="40" />
+					</obb>
+				</fixture>
+			</dynamic-body>
 			<sight size="60" />
+			<action-controller />
 			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
@@ -223,14 +231,14 @@
 		</entity>
 		<entity id="ENT_CAMERA">
 			<transform>
-				<position x="256" y="416" />
+				<position x="512" y="416" />
 			</transform>
 			<collision-filter category="4" />
 			<security-camera />
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>
+		</entity><!--
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="512" y="256" />

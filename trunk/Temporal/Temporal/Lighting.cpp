@@ -9,6 +9,7 @@
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
 #include "Graphics.h"
+#include "Camera.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL.h>
@@ -20,11 +21,11 @@ namespace Temporal
 	const Hash Light::TYPE = Hash("light");
 	static const int MAX_LIGHT_PARTS = 32;
 
-	/*const Hash LightGem::TYPE = Hash("light-gem");
+	const Hash LightGem::TYPE = Hash("light-gem");
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	
 
-	/*void LightGem::handleMessage(Message& message)
+	void LightGem::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::SET_LIT)
 		{
@@ -34,7 +35,7 @@ namespace Temporal
 		{
 			message.setParam(&_isLit);
 		}
-	}*/
+	}
 
 	void Light::handleMessage(Message& message)
 	{
@@ -126,16 +127,18 @@ namespace Temporal
 	void LightLayer::postDraw()
 	{
 		Graphics::get().getSpriteBatch().end();
-		/*void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
-		float matrix[16];
-		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-		Vector translation = Vector(matrix[12], matrix[13]);
-		Vector relativePosition = playerPosition + translation;
+		
+		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
+		Vector relativePosition = playerPosition - layersManager.getCamera().getBottomLeft();
+		relativePosition.setX(relativePosition.getX() * Graphics::get().getResolution().getX() / Graphics::get().getLogicalView().getX());
+		relativePosition.setY(relativePosition.getY() * Graphics::get().getResolution().getY() / Graphics::get().getLogicalView().getY());
 		GLubyte alpha[4];
+		
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
 		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
-		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));*/
+		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 		_fbo.unbind();
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 		_fbo.draw();

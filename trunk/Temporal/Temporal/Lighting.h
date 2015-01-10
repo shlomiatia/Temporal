@@ -13,7 +13,7 @@ namespace Temporal
 {
 	class SpriteSheet;
 
-	/*class LightGem : public Component
+	class LightGem : public Component
 	{
 	public:
 		LightGem()
@@ -27,7 +27,7 @@ namespace Temporal
 	private:
 
 		bool _isLit;
-	};*/
+	};
 
 	class Light : public Component
 	{
