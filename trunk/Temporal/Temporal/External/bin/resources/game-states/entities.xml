@@ -84,11 +84,11 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
+			<saver-loader />
 			<!--<player-period period="2" />
 			<light-gem />
 			<light><color r="1.0" g="0.0" b="0.0" /></light>
-			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
-			<saver-loader />-->
+			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
 		</entity>
 		<!--<entity id="ENT_DOOR">
 			<transform>

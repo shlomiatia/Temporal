@@ -35,8 +35,8 @@ namespace Temporal
 
 		void draw(const char* string, const Vector& position = Vector::Zero, const Color& color = Color::White);
 	private:
-
 		float _newLineAdvance;
+		float _spaceAdvance;
 
 		const Texture* _texture;
 		std::unordered_map<char, Glyph> _glyphs;
