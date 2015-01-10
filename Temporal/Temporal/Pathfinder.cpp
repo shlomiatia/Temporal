@@ -1,4 +1,4 @@
-/*#include "Pathfinder.h"
+#include "Pathfinder.h"
 #include "Segment.h"
 #include <assert.h>
 
@@ -142,4 +142,4 @@ namespace Temporal
 		deleteCollection(closed);
 		return 0;
 	}
-}*/
+}

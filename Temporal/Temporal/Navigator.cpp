@@ -1,4 +1,4 @@
-/*#include "Navigator.h"
+#include "Navigator.h"
 #include "Serialization.h"
 #include "Segment.h"
 #include "MessageUtils.h"
@@ -30,9 +30,9 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const OBB& startPosition = *static_cast<OBB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBBAABBWrapper& startPosition = *static_cast<OBBAABBWrapper*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			
-			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
+			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition.getOBB());
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
 			if(start && goal)
 			{
@@ -221,7 +221,7 @@ namespace Temporal
 		return WAIT_STATE;
 	}
 
-	void Navigator::deserialize(const Serialization& serialization)
+	/*void Navigator::deserialize(const Serialization& serialization)
 	{
 		if(_path)
 		{
@@ -236,7 +236,7 @@ namespace Temporal
 			
 		if(destination != AABB::Zero)
 			plotPath(*this, destination);
-	}
+	}*/
 
 	void Navigator::debugDraw() const
 	{
@@ -250,8 +250,8 @@ namespace Temporal
 				const NavigationEdge& edge = **i;
 				const NavigationNode& next = edge.getTarget();
 				Vector nextPoint = next.getArea().getCenter();
-				Segment segment = SegmentPP(currentPoint, nextPoint);
-				Graphics::get().draw(segment, Color::Cyan);
+				//Segment segment = SegmentPP(currentPoint, nextPoint);
+				//Graphics::get().draw(segment, Color::Cyan);
 				currentPoint = nextPoint;
 			}
 		}
@@ -260,7 +260,7 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if(message.getID() == MessageID::SERIALIZE)
+		/*if(message.getID() == MessageID::SERIALIZE)
 		{
 			Serialization& serialization = getSerializationParam(message.getParam());
 			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
@@ -271,9 +271,9 @@ namespace Temporal
 			const Serialization& serialization = getConstSerializationParam(message.getParam());
 			deserialize(serialization);
 		}
-		else if(message.getID() == MessageID::DRAW_DEBUG)
+		else*/ if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}
 	}
-}*/
+}

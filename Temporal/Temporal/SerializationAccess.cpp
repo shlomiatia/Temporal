@@ -11,7 +11,7 @@
 #include "Patrol.h"
 #include "Sentry.h"
 #include "SecurityCamera.h"
-//#include "Navigator.h"
+#include "Navigator.h"
 #include "TemporalEcho.h"
 #include "TemporalPeriod.h"
 #include "SceneNode.h"
@@ -65,8 +65,8 @@ namespace Temporal
 			serialize(key, (SecurityCamera*&)component, serializer);
 		else if(strcmp(key, Patrol::TYPE.getString()) == 0)
 			serialize(key, (Patrol*&)component, serializer);
-		/*else if(strcmp(key, Navigator::TYPE.getString()) == 0)
-			serialize(key, (Navigator*&)component, serializer);*/
+		else if(strcmp(key, Navigator::TYPE.getString()) == 0)
+			serialize(key, (Navigator*&)component, serializer);
 		else if(strcmp(key, Door::TYPE.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
 		else if(strcmp(key, Button::TYPE.getString()) == 0)
@@ -128,8 +128,8 @@ namespace Temporal
 			serialize(key, *(Sensor*&)component, serializer);
 		else if(component->getType() == StaticBody::TYPE)
 			serialize(key, *(StaticBody*&)component, serializer);
-		/*else if(component->getType() == Navigator::TYPE)
-			serialize(key, *(Navigator*&)component, serializer);*/
+		else if(component->getType() == Navigator::TYPE)
+			serialize(key, *(Navigator*&)component, serializer);
 		else if(component->getType() == Door::TYPE)
 			serialize(key, *(Door*&)component, serializer);
 		else if(component->getType() == Button::TYPE)

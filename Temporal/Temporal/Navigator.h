@@ -1,6 +1,6 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-/*#include "Shapes.h"
+#include "Shapes.h"
 #include "StateMachineComponent.h"
 #include "Pathfinder.h"
 
@@ -68,10 +68,11 @@ namespace Temporal
 		void setPath(NavigationEdgeCollection* path) { if(_path) delete _path; _path = path; }
 		Component* clone() const { return new Navigator(); }
 
+		static const Hash TYPE;
+
 	protected:
 		Hash getInitialState() const;
 
-		static const Hash TYPE;
 	private:
 
 		OBB _destination;
@@ -82,5 +83,5 @@ namespace Temporal
 
 		StateCollection getStates() const;
 	};
-}*/
+}
 #endif

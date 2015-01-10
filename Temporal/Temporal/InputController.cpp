@@ -3,6 +3,7 @@
 #include "BaseEnums.h"
 #include "MessageUtils.h"
 #include "Input.h"
+#include "Shapes.h"
 
 namespace Temporal
 {
@@ -35,8 +36,10 @@ namespace Temporal
 			if(Keyboard::get().getKey(Key::Q) || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
 			{
 				//raiseMessage(Message(MessageID::ACTION_ACTIVATE));
-				
-				getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+				//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+
+				const OBBAABBWrapper& bounds = *static_cast<const OBBAABBWrapper*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<OBB*>(&bounds.getOBB())));
 			}
 		}
 	}
