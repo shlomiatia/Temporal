@@ -1,6 +1,6 @@
 <game-state>
 	<layers-manager camera-follow-player="1">
-		<ambient-color r="0.0625" g="0.125" b="0.25" />
+		<!--<ambient-color r="0.0625" g="0.125" b="0.25" />-->
 	</layers-manager>
 	<grid tile-size="128">
 		<world-size x="3840" y="720" />
@@ -84,10 +84,10 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<light-gem />
-			<!--<light><color r="1.0" g="0.0" b="0.0" /></light>-->
-			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
 			<!--<player-period period="2" />
+			<light-gem />
+			<light><color r="1.0" g="0.0" b="0.0" /></light>
+			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
 			<saver-loader />-->
 		</entity>
 		<!--<entity id="ENT_DOOR">
@@ -182,7 +182,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>-->
+		</entity>
 		<entity id="ENT_SENTRY">
 			<transform>
 				<position x="512" y="384" />
@@ -238,7 +238,17 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity><!--
+		</entity>
+		<entity id="ENT_LASER">
+			<transform>
+				<position x="672 " y="191" />
+			</transform>
+			<collision-filter category="4" />
+			<laser />
+			<renderer layer="4" texture="resources/textures/laser.png" />
+			<temporal-period period="2" />
+		</entity>
+		-->
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="512" y="256" />
@@ -292,18 +302,9 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<temporal-echo />
-			<temporal-period period="1" />
+			<!--<temporal-echo />
+			<temporal-period period="1" />-->
 		</entity>
-		<entity id="ENT_LASER">
-			<transform>
-				<position x="672 " y="191" />
-			</transform>
-			<collision-filter category="4" />
-			<laser />
-			<renderer layer="4" texture="resources/textures/laser.png" />
-			<temporal-period period="2" />
-		</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />
@@ -892,7 +893,7 @@
 				</fixture>
 			</static-body>
 		</entity>
-		<!--<entity id="ENT_ELEVATOR">
+		<entity id="ENT_ELEVATOR">
 			<transform>
 				<position x="2624" y="384" />
 			</transform>
@@ -909,6 +910,6 @@
 				<point1 x="2024" y="384" />
 				<point2 x="2924" y="384" />
 			</moving-platform>
-		</entity>-->
+		</entity>
 	</entities-manager>
 </game-state>
