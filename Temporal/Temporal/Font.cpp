@@ -8,7 +8,7 @@
 
 namespace Temporal
 {
-	Font::Font(const char* name, int size) : _newLineAdvance(0.0f), _texture(0)
+	Font::Font(const char* name, int size) : _newLineAdvance(0.0f), _spaceAdvance(0.0f), _texture(0)
 	{
 		const FT_Library& ftLib = FontManager::get().getFTLib();
 		FT_Face face;
@@ -21,7 +21,7 @@ namespace Temporal
 			abort();
 
 		Vector textureSize = Vector::Zero;
-		for(char i = ' '; i <= '~'; ++i)
+		for(char i = '!'; i <= '~'; ++i)
 		{
 			error = FT_Load_Char(face, i, FT_LOAD_RENDER);
 			if(error != 0)
@@ -35,7 +35,8 @@ namespace Temporal
 		_texture = Texture::load(textureSize, true);
 
 		int x = 0;
-		for(char i = ' '; i <= '~'; ++i)
+		int j = 0;
+		for(char i = '!'; i <= '~'; ++i)
 		{
 			FT_Load_Char(face, i, FT_LOAD_RENDER);
 			if(error != 0)
@@ -58,14 +59,16 @@ namespace Temporal
 			x += slot->bitmap.width + 1;
 			Glyph glyph(texturePart, bearing, advance);
 			float newLineAdvance = 2 * bitmap.rows - bearingY;
-			_newLineAdvance = std::max(newLineAdvance, _newLineAdvance);
+			if(newLineAdvance, _newLineAdvance)
+				_newLineAdvance = newLineAdvance;
+			float spaceAdvance = bitmap.width - bearingX;
+			++j;
+			_spaceAdvance = _spaceAdvance + (spaceAdvance - _spaceAdvance) / j;
 			_glyphs[i] = glyph;
 		}
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
 
 		error = FT_Done_Face(face);
 		if(error != 0)
@@ -87,6 +90,11 @@ namespace Temporal
 			char c = string[i];
 			if(!c)
 				break;
+			if(c == ' ')
+			{
+				width += _spaceAdvance;
+				continue;
+			}
 			const Glyph& glyph = _glyphs[c];
 			width += glyph.getAdvance().getX();
 			height = std::max(height, glyph.getBearing().getY());
@@ -98,7 +106,11 @@ namespace Temporal
 			char c = string[i];
 			if(!c)
 				break;
-
+			if(c == ' ')
+			{
+				currentPosition.setX(currentPosition.getX() + _spaceAdvance);
+				continue;
+			}
 			/*if(c == '\n')
 			{
 				currentPosition.setX(position.getX());
