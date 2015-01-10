@@ -128,11 +128,10 @@ namespace Temporal
 	{
 		const OBB& staticBodyBounds = _ground->getGlobalShape();
 
-		// Moving platform
+		// Moving platform - position is set later (executeWalk)
 		if(staticBodyBounds.getCenter() != _previousGroundCenter)
 		{
-			Vector newPosition = _dynamicBodyBounds.getCenter() + staticBodyBounds.getCenter() - _previousGroundCenter;
-			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
+			_dynamicBodyBounds.getOBB().translate(staticBodyBounds.getCenter() - _previousGroundCenter);
 		}
 		
 		// Fix when static
