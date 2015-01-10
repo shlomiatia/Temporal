@@ -84,7 +84,7 @@ namespace Temporal
 				Vector correction;
 
 				// BRODER
-				if(intersects(area, platform, &correction) && correction.getLength() > 10.0f)
+				if(intersects(area, platform, &correction) && correction.getLength() > 20.0f)
 				{
 					j = areas.erase(j);
 					
@@ -191,9 +191,10 @@ namespace Temporal
 			{
 				const OBB& area = *j;
 
-				Vector areaVector = area.getAxis(platformAxis) * area.getRadius().getAxis(platformAxis);
+				Vector axisVector = area.getAxis(platformAxis) * area.getRadius().getAxis(platformAxis);
+				Vector oppositeAxisVector = area.getAxis(platformOppositeAxis) * area.getRadius().getAxis(platformOppositeAxis);
 				// Check min width
-				if(areaVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX())
+				if(axisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX() && oppositeAxisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getY())
 					_nodes.push_back(new NavigationNode(area));
 			}
 		}
@@ -305,13 +306,13 @@ namespace Temporal
 					}
 				}
 				// check jump up/descend
-				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() <= area2.getRight() && area1.getRight() >= area2.getLeft())
+				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() < area2.getRight() && area1.getRight() > area2.getLeft())
 				{
 					checkVerticalEdges(node1, node2, platforms);
 				}
 				// check fall
 				// BRODER
-				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() -20.f <= area2.getRight() && area1.getRight() + 20.0f >= area2.getLeft())
+				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() -20.f < area2.getRight() && area1.getRight() + 20.0f > area2.getLeft())
 				{
 					if(area1.getLeft() >= area2.getLeft())
 						checkVerticalEdges(node1, node2, area1.getLeft(), Side::LEFT, platforms);

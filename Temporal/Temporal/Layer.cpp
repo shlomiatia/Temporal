@@ -140,7 +140,7 @@ namespace Temporal
 		
 		Graphics::get().getSpriteBatch().end();
 
-		getManager().getGameState().getNavigationGraph().draw();
+		//getManager().getGameState().getNavigationGraph().draw();
 		//getManager().getGameState().getGrid().draw();
 		
 		drawFPS();
