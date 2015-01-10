@@ -138,7 +138,7 @@ namespace Temporal
 		filter.push_back(Hash("navigator"));
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
-				Graphics::get().getSpriteBatch().end();
+		Graphics::get().getSpriteBatch().end();
 
 		getManager().getGameState().getNavigationGraph().draw();
 		//getManager().getGameState().getGrid().draw();

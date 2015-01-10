@@ -1,6 +1,5 @@
 #include "Navigator.h"
 #include "Serialization.h"
-#include "Segment.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
 
@@ -37,9 +36,15 @@ namespace Temporal
 			if(start && goal)
 			{
 				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
-				navigator.setDestination(goalPosition);
-				navigator.setPath(path);
-				navigator.changeState(WALK_STATE);
+				if(path)
+				{
+					if(path->size() != 0)
+					{
+						navigator.setPath(path);
+					}
+					navigator.setDestination(goalPosition);
+					navigator.changeState(WALK_STATE);
+				}
 			}
 		}
 
@@ -172,8 +177,8 @@ namespace Temporal
 
 		void JumpForward::enter() const
 		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
 		}
 
 		void JumpForward::handleMessage(Message& message) const
@@ -183,6 +188,10 @@ namespace Temporal
 				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(WALK_STATE);
+			}
+			else if(message.getID() == MessageID::UPDATE)
+			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
 			}
 		}
 

@@ -81,7 +81,10 @@ namespace Temporal
 			{	
 				OBB area = *j;
 				
-				if(intersects(area, platform))
+				Vector correction;
+
+				// BRODER
+				if(intersects(area, platform, &correction) && correction.getLength() > 10.0f)
 				{
 					j = areas.erase(j);
 					
