@@ -51,6 +51,7 @@ namespace Temporal
 	class Door;
 	class TemporalEcho;
 	class EntitySaverLoader;
+	class LightGem;
 
 	class SerializationAccess
 	{
@@ -405,6 +406,9 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, EntitySaverLoader& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, LightGem& component, T& serializer) {}
 	};
 }
 

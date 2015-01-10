@@ -41,6 +41,8 @@ namespace Temporal
 			serialize(key, (Renderer*&)component, serializer);
 		else if(strcmp(key, Light::TYPE.getString()) == 0)
 			serialize(key, (Light*&)component, serializer);
+		else if(strcmp(key, LightGem::TYPE.getString()) == 0)
+			serialize(key, (LightGem*&)component, serializer);
 		else if(strcmp(key, ParticleEmitter::TYPE.getString()) == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, InputController::TYPE.getString()) == 0)
