@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="512" y="256" />
+				<position x="3000" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
@@ -84,12 +84,12 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<light>
+			<!--<light>
 				<color r="1.0" g="0.0" b="0.0" />
 			</light>
-			<!--<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
-			<player-period period="2" />-->
-			<saver-loader />
+			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />
+			<player-period period="2" />
+			<saver-loader />-->
 		</entity>
 		<!--<entity id="ENT_DOOR">
 			<transform>
@@ -122,7 +122,7 @@
 				</fixture>
 			</static-body>
 			<button target="ENT_DOOR" />
-		</entity>-->
+		</entity>
 		<entity id="ENT_LIGHT">
 			<transform>
 				<position x="512" y="300" />
@@ -130,47 +130,61 @@
 			<light>
 				<color r="0.0" g="0.0" b="1.0" />
 			</light>
-		</entity><!--
+		</entity>-->
 		<entity id="ENT_CHASER">
 			<transform>
-				<position x="3000" y="512" />
+				<position x="1000" y="512" />
 			</transform>
 			<collision-filter category="4" />
-			<draw-position>
-				<offset y="-40" />
-			</draw-position>
 			<navigator />
 			<dynamic-body>
 				<fixture>
 					<obb angle="0">
-	<center x="0" y="0" />
-	<radius x="10" y="40" />
-</obb>
+						<center x="0" y="0" />
+						<radius x="10" y="40" />
+					</obb>
 				</fixture>
 			</dynamic-body>
-			<sensor id="SNS_HANG" category-mask="1">
+			<sensor id="SNS_LEDGE" category-mask="1">
 				<fixture>
 					<obb angle="0">
-	<center x="0" y="80" />
-	<radius x="9" y="40" />
-</obb>
-				</fixture>
-			</sensor>
-			<sensor id="SNS_DESCEND" category-mask="1">
-				<fixture>
-					<obb angle="0">
-	<center x="0" y="-80" />
-	<radius x="9" y="40" />
-</obb>
+						<center x="1" y="0" />
+						<radius x="10" y="120" />
+					</obb>
 				</fixture>
 			</sensor>
 			<action-controller />
-			<animator animation-set="resources/animations/pop.xml" />
-			<renderer layer="4">
-				<scene-node sprite-sheet="resources/spritesheets/pop.xml" />
+			<animator animation-set="resources/animations/aquaria.xml" />
+			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
+				<scene-node id="SCN_ROOT" transform="1" flip="0">
+					<translation x="0" y="10" />
+					<scale x="0.45" y="0.45" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+						</scene-node>
+					</scene-node>
+				</scene-node>
 			</renderer>
 		</entity>
-		<entity id="ENT_SENTRY">
+		<!--<entity id="ENT_SENTRY">
 			<transform>
 				<position x="512" y="384" />
 			</transform>
@@ -216,7 +230,7 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>-->
+		</entity>
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="512" y="256" />
@@ -271,9 +285,9 @@
 				</scene-node>
 			</renderer>
 			<temporal-echo />
-			<!--<temporal-period period="1" />-->
+			<temporal-period period="1" />
 		</entity>
-		<!--<entity id="ENT_LASER">
+		<entity id="ENT_LASER">
 			<transform>
 				<position x="672 " y="191" />
 			</transform>

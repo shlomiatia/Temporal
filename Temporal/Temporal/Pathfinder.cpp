@@ -76,10 +76,6 @@ namespace Temporal
 	{
 		assert(start);
 		assert(goal);
-
-		if (start == goal)
-			return 0;
-
 		PathNodeCollection open;
 		PathNodeCollection closed;
 		open.push_back(new PathNode(*start, *goal));
