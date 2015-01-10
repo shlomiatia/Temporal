@@ -53,11 +53,6 @@ namespace Temporal
 	public:
 		void onUpdate(float framePeriod)
 		{
-			/*if(Keyboard::get().isStartPressing(Key::Q))
-			{
-				const AABB& bounds = *static_cast<AABB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<AABB*>(&bounds)));
-			}*/
 		}
 		virtual void onLoaded(Hash id, GameState& gameState)
 		{

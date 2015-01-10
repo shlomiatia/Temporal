@@ -47,7 +47,7 @@ namespace Temporal
 	class Patrol;
 	class SecurityCamera;
 	class InputController;
-	//class Navigator;
+	class Navigator;
 	class Door;
 	class TemporalEcho;
 	class EntitySaverLoader;
@@ -394,8 +394,8 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, InputController& component, T& serializer) {}
 
-		/*template<class T>
-		static void serialize(const char* key, Navigator& component, T& serializer) {}*/
+		template<class T>
+		static void serialize(const char* key, Navigator& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, Door& component, T& serializer) {}
