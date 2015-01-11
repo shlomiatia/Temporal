@@ -45,7 +45,7 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-		static const int FPS;
+		static const float FPS;
 
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
@@ -60,6 +60,8 @@ namespace Temporal
 
 		void update();
 		void reset(AnimationParams& animationParams);
+		float frameToTime(float frame) { return frame / FPS; }
+		float timeToFrame(float time) { return time * FPS; }
 	};
 }
 #endif

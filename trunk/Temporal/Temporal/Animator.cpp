@@ -9,7 +9,7 @@
 namespace Temporal
 {
 	const Hash Animator::TYPE = Hash("animator");
-	const int Animator::FPS = 15;
+	const float Animator::FPS = 15;
 	
 	void bindSceneNodes(SceneNodeBindingCollection& bindings, SceneNode& node)
 	{
@@ -53,7 +53,8 @@ namespace Temporal
 		else if(message.getID() == MessageID::SET_ANIMATION_FRAME)
 		{
 			int index = getIntParam(message.getParam());
-				_timer.reset((float)index / (float)FPS);
+			float time = frameToTime(static_cast<float>(index));
+			_timer.reset(time);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -75,7 +76,7 @@ namespace Temporal
 		float currentTime = _timer.getElapsedTime();
 		const Animation& animation = _animationSet->get(_animationId);
 		int animationDuration = animation.getDuration();
-		float currentIndex = currentTime * FPS;
+		float currentIndex = timeToFrame(currentTime);
 
 		if(currentIndex > animationDuration && !animation.repeat())
 		{
@@ -120,7 +121,8 @@ namespace Temporal
 		_isRewined = animationParams.isRewind();
 		const Animation& animation = _animationSet->get(_animationId);
 		const SceneGraphSample& sgs = **animation.getSamples().begin();
-		_timer.reset();
+		float time = frameToTime(animationParams.getInterpolation() * animation.getDuration());
+		_timer.reset(time);
 		for(SceneNodeBindingIterator i = _bindings.begin(); i != _bindings.end(); ++i)
 		{
 			SceneNodeBinding& binding = **i;
