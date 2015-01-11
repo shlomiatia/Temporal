@@ -429,7 +429,7 @@ namespace Temporal
 			{
 				Vector climbVector(1.0f *  getOrientation(*_stateMachine), *(float*)message.getParam());
 				getActionController(_stateMachine).setClimbVector(climbVector);
-				_stateMachine->changeState(HANG_STATE);
+				_stateMachine->changeState(CLIMB_STATE);
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
@@ -476,7 +476,7 @@ namespace Temporal
 
 		void Hang::enter() const
 		{
-			bool gravityEnabled = false;
+			bool gravityEnabled = false; 
 			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(HANG_ANIMATION)));
 		}
@@ -498,15 +498,19 @@ namespace Temporal
 
 		void Climb::enter() const
 		{
+			bool gravityEnabled = false; 
+			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
-			float climbForceY = shape.getHeight();
+			float bodyHeight = shape.getHeight();
 			Vector climbForce = getActionController(_stateMachine).getClimbVector();
 			if(climbForce == Vector::Zero)
-				climbForce = Vector(0.0f, climbForceY);
+				climbForce = Vector(0.0f, bodyHeight);
+			
 			getActionController(_stateMachine).setClimbVector(Vector::Zero);
 			Vector position = shape.getCenter() + climbForce;
 			_stateMachine->raiseMessage(Message(MessageID::SET_POSITION, &position));
-			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(DESCEND_ANIMATION, true)));
+			float interpolation = 1.0f - (climbForce.getY() / bodyHeight);
+			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(DESCEND_ANIMATION, true, interpolation)));
 		}
 
 		void Climb::exit() const
