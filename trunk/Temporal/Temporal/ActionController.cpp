@@ -129,6 +129,7 @@ namespace Temporal
 		{
 			_max = std::min(_max, y);
 		}
+		// Blocks from below
 		else if(y > _body->getBottom())
 		{
 			_frontFound = false;
@@ -140,20 +141,12 @@ namespace Temporal
 	{
 		if(_frontFailed)
 			return;
-		const OBB& sensor = contact.getSource().getGlobalShape();
 		const OBB& platform = contact.getTarget().getGlobalShape();
 
-		// Need to improve this, it's too sensitive
-		if(platform.getAxisX().getY() != 0.0f)
-		{
-			_frontFound = false;
-			_frontFailed = true;
-			return;
-		}
-		const OBBAABBWrapper platformAABB = platform.getAABBWrapper();
 		Side::Enum opposite = Side::getOpposite(_side);
-		float topSide = platformAABB.getTop();
-		if(equals(_body->getSide(_side), platformAABB.getSide(opposite)) &&
+		float topSide = platform.getTop();
+		if(platform.getAxisX().getY() == 0.0f &&
+			equals(_body->getSide(_side), platform.getSide(opposite)) &&
 			_body->getTop() >= topSide &&
 			_body->getBottom() <= topSide)
 		{
@@ -164,8 +157,8 @@ namespace Temporal
 		}
 		else
 		{
-			handleFrontCheckY(platformAABB.getTop());
-			handleFrontCheckY(platformAABB.getBottom());
+			handleFrontCheckY(platform.getTop());
+			handleFrontCheckY(platform.getBottom());
 		}
 	}
 
@@ -183,7 +176,8 @@ namespace Temporal
 		if(_downFound)
 			getOwner().raiseMessage(Message(MessageID::SENSOR_DESCEND));
 
-		if(_body->getHeight() + _height > _max)
+		// Blocks from above
+		if(_body->getTop() + _height > _max)
 		{
 			_frontFound = false;
 			_frontFailed = true;
@@ -238,10 +232,13 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::ACTION_FORWARD)
 			{
-				_stateMachine->changeState(WALK_STATE);
+				// Permanent flag 2 - front collision
+				if(!_stateMachine->getStateMachineFlag())
+					_stateMachine->changeState(WALK_STATE);
 			}
 			else if(message.getID() == MessageID::ACTION_BACKWARD)
 			{
+				_stateMachine->setStateMachineFlag(false);
 				_stateMachine->changeState(TURN_STATE);
 			}
 			else if(message.getID() == MessageID::ACTION_UP)
@@ -252,19 +249,19 @@ namespace Temporal
 			// TempFlag1 - Is descending
 			else if(message.getID() == MessageID::ACTION_DOWN)
 			{
-				_stateMachine->setTempFlag1(true);
+				_stateMachine->setFrameFlag1(true);
 			}
 			else if(message.getID() == MessageID::SENSOR_DESCEND)
 			{
-				if(_stateMachine->getTempFlag1())
+				if(_stateMachine->getFrameFlag1())
 					_stateMachine->changeState(DESCEND_STATE);
 			}
 			// TempFlag2 - is activating
 			else if(message.getID() == MessageID::ACTION_ACTIVATE)
 			{
-				_stateMachine->setTempFlag2(true);
+				_stateMachine->setFrameFlag2(true);
 			}
-			else if (_stateMachine->getTempFlag2() && message.getID() == MessageID::SENSOR_SENSE)
+			else if (_stateMachine->getFrameFlag2() && message.getID() == MessageID::SENSOR_SENSE)
 			{
 				const SensorParams& params = getSensorParams(message.getParam());
 				if(params.getSensorId() == ACTIVATE_SENSOR_ID)
@@ -302,7 +299,7 @@ namespace Temporal
 				}
 				else
 				{
-					_stateMachine->setTempFlag1(true);
+					_stateMachine->setFrameFlag1(true);
 				}
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
@@ -323,7 +320,7 @@ namespace Temporal
 		void Walk::enter() const
 		{
 			// TempFlag 1 - still walking
-			_stateMachine->setTempFlag1(true);
+			_stateMachine->setFrameFlag1(true);
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(WALK_ANIMATION)));
 		}
 
@@ -338,7 +335,17 @@ namespace Temporal
 			// TempFlag 2 - no floor
 			else if(message.getID() == MessageID::ACTION_FORWARD)
 			{
-				_stateMachine->setTempFlag1(true);
+				_stateMachine->setFrameFlag1(true);
+			}
+			else if(message.getID() == MessageID::BODY_COLLISION)
+			{
+				const Vector& collision = getVectorParam(message.getParam());
+				Side::Enum side = getOrientation(*_stateMachine);
+				if(sameSign(side, collision.getX()) && !isSteepAngle(collision.getAngle()))
+				{
+					_stateMachine->setStateMachineFlag(true);
+					_stateMachine->changeState(STAND_STATE);
+				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{			
@@ -347,7 +354,7 @@ namespace Temporal
 				{
 					_stateMachine->changeState(FALL_STATE);
 				}
-				else if(!_stateMachine->getTempFlag1())
+				else if(!_stateMachine->getFrameFlag1())
 				{
 					_stateMachine->changeState(STAND_STATE);
 				}
@@ -409,20 +416,19 @@ namespace Temporal
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(animation)));
 
 			// Pressed on transition
-			_stateMachine->setTempFlag1(true);
+			_stateMachine->setFrameFlag1(true);
 		}
 
 		void Jump::handleMessage(Message& message) const
 		{
-			
 			// TempFlag 1 - Want to hang
 			if(message.getID() == MessageID::ACTION_UP)
 			{
-				_stateMachine->setTempFlag1(true);
+				_stateMachine->setFrameFlag1(true);
 			}
 			else if (message.getID() == MessageID::SENSOR_HANG_UP)
 			{
-				if(_stateMachine->getTempFlag1())
+				if(_stateMachine->getFrameFlag1())
 					_stateMachine->changeState(HANG_STATE);
 			}
 			else if(message.getID() == MessageID::SENSOR_HANG_FRONT)
@@ -431,28 +437,38 @@ namespace Temporal
 				getActionController(_stateMachine).setClimbVector(climbVector);
 				_stateMachine->changeState(CLIMB_STATE);
 			}
+
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
 				const Vector& collision = getVectorParam(message.getParam());
+				Side::Enum side = getOrientation(*_stateMachine);
+				if(sameSign(side, collision.getX()) && !isSteepAngle(collision.getAngle()) && _stateMachine->getTimer().getElapsedTime() <= ActionController::FALL_ALLOW_JUMP_TIME)
+				{
+					// Permanenet flag 2 - front collision
+					_stateMachine->setStateMachineFlag(true);
+				}
 				if(collision.getY() < 0.0f)
 				{
-					const Segment& ground = *static_cast<Segment*>(_stateMachine->raiseMessage(Message(MessageID::GET_GROUND)));
-					if(!isModerateAngle(ground.getNaturalVector().getAngle()))
+					if(isModerateAngle(collision.getAngle()))
+					{
 						_stateMachine->changeState(SLIDE_STATE);
+					}
 					else
+					{
 						_stateMachine->changeState(JUMP_END_STATE);
+					}
 				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				// Permanent flag - stopped jumping
-				if(!_stateMachine->getPermanentFlag() && !_stateMachine->getTempFlag1())
+				// Permanent flag 1 - stopped jumping
+				if(!_stateMachine->getStateFlag() && !_stateMachine->getFrameFlag1())
 				{
 					Vector& velocity = *static_cast<Vector*>(_stateMachine->raiseMessage(Message(MessageID::GET_VELOCITY)));
 					if(velocity.getY() > 0.0f)
 					{
 						velocity.setY(velocity.getY() * ActionController::JUMP_STOP_MODIFIER);
-						_stateMachine->setPermanentFlag(true);
+						_stateMachine->setStateFlag(true);
 					}
 				}
 			}
@@ -498,6 +514,8 @@ namespace Temporal
 
 		void Climb::enter() const
 		{
+			// Permanent flag - front collision
+			_stateMachine->setStateMachineFlag(false);
 			bool gravityEnabled = false; 
 			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
@@ -507,8 +525,7 @@ namespace Temporal
 				climbForce = Vector(0.0f, bodyHeight);
 			
 			getActionController(_stateMachine).setClimbVector(Vector::Zero);
-			Vector position = shape.getCenter() + climbForce;
-			_stateMachine->raiseMessage(Message(MessageID::SET_POSITION, &position));
+			_stateMachine->raiseMessage(Message(MessageID::TRANSLATE_POSITION, &climbForce));
 			float interpolation = 1.0f - (climbForce.getY() / bodyHeight);
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(DESCEND_ANIMATION, true, interpolation)));
 		}
@@ -529,6 +546,8 @@ namespace Temporal
 
 		void Descend::enter() const
 		{
+			// Permanent flag - front collision
+			_stateMachine->setStateMachineFlag(false);
 			bool gravityEnabled = false;
 			_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(DESCEND_ANIMATION)));
@@ -541,8 +560,8 @@ namespace Temporal
 				const OBBAABBWrapper& size = *static_cast<OBBAABBWrapper*>(_stateMachine->raiseMessage(Message(MessageID::GET_SHAPE)));
 				float forceX = 0.0f;
 				float forceY = -(size.getHeight());
-				Vector position = size.getCenter() + Vector(forceX, forceY);
-				_stateMachine->raiseMessage(Message(MessageID::SET_POSITION, &position));
+				Vector translation = Vector(forceX, forceY);
+				_stateMachine->raiseMessage(Message(MessageID::TRANSLATE_POSITION, &translation));
 				_stateMachine->changeState(HANG_STATE);
 			}
 		}

@@ -80,11 +80,10 @@ namespace Temporal
 	void Grid::add(const Fixture* body)
 	{
 		const OBB& shape = body->getGlobalShape();
-		OBBAABBWrapper aabb = shape.getAABBWrapper();
-		int leftIndex = getAxisIndex(aabb.getLeft());
-		int rightIndex = getAxisIndex(aabb.getRight());
-		int topIndex = getAxisIndex(aabb.getTop());
-		int bottomIndex = getAxisIndex(aabb.getBottom());	
+		int leftIndex = getAxisIndex(shape.getLeft());
+		int rightIndex = getAxisIndex(shape.getRight());
+		int topIndex = getAxisIndex(shape.getTop());
+		int bottomIndex = getAxisIndex(shape.getBottom());	
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
@@ -100,20 +99,17 @@ namespace Temporal
 	void Grid::update(Fixture* body)
 	{
 		const OBB& previous = body->getGlobalShape();
-		OBBAABBWrapper previousAABB = previous.getAABBWrapper();
-		int leftRemoveIndex = getAxisIndex(previousAABB.getLeft());
-		int rightRemoveIndex = getAxisIndex(previousAABB.getRight());
-		int topRemoveIndex = getAxisIndex(previousAABB.getTop());
-		int bottomRemoveIndex = getAxisIndex(previousAABB.getBottom());
+		int leftRemoveIndex = getAxisIndex(previous.getLeft());
+		int rightRemoveIndex = getAxisIndex(previous.getRight());
+		int topRemoveIndex = getAxisIndex(previous.getTop());
+		int bottomRemoveIndex = getAxisIndex(previous.getBottom());
 
 		body->update();
 		const OBB& current = body->getGlobalShape();
-		OBBAABBWrapper currentAABB = current.getAABBWrapper();
-		int leftIndex = getAxisIndex(currentAABB.getLeft());
-
-		int rightIndex = getAxisIndex(currentAABB.getRight());
-		int topIndex = getAxisIndex(currentAABB.getTop());
-		int bottomIndex = getAxisIndex(currentAABB.getBottom());	
+		int leftIndex = getAxisIndex(current.getLeft());
+		int rightIndex = getAxisIndex(current.getRight());
+		int topIndex = getAxisIndex(current.getTop());
+		int bottomIndex = getAxisIndex(current.getBottom());	
 
 		for(int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
 		{
@@ -241,11 +237,10 @@ namespace Temporal
 
 	FixtureCollection Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
 	{
-		OBBAABBWrapper shapeAABB = shape.getAABBWrapper();
-		int leftIndex = getAxisIndex(shapeAABB.getLeft());
-		int rightIndex = getAxisIndex(shapeAABB.getRight());
-		int topIndex = getAxisIndex(shapeAABB.getTop());
-		int bottomIndex = getAxisIndex(shapeAABB.getBottom());
+		int leftIndex = getAxisIndex(shape.getLeft());
+		int rightIndex = getAxisIndex(shape.getRight());
+		int topIndex = getAxisIndex(shape.getTop());
+		int bottomIndex = getAxisIndex(shape.getBottom());
 
 		FixtureCollection result;
 

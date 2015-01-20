@@ -248,7 +248,8 @@ namespace Temporal
 			if(serializer.type() == SerializationDirection::DESERIALIZATION)
 				stateMachineComponent.setState(stateMachineComponent._currentStateID);
 			serializer.serialize("timer", stateMachineComponent._timer);
-			serializer.serialize("permanent-flag", stateMachineComponent._permanentFlag);
+			serializer.serialize("state-flag", stateMachineComponent._stateFlag);
+			serializer.serialize("state-machine-flag", stateMachineComponent._stateMachineFlag);
 		}
 		
 		template<class T>

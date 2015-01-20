@@ -42,7 +42,7 @@ namespace Temporal
 		{
 			float framePeriod = getFloatParam(message.getParam());
 			_timer.update(framePeriod);
-			resetTempState();
+			resetFrameFlags();
 		}
 	}
 
@@ -50,8 +50,8 @@ namespace Temporal
 	{
 		_currentState = _states[stateID];
 		_currentStateID = stateID;
-		resetTempState();
+		resetFrameFlags();
 		_timer.reset();
-		_permanentFlag = false;
+		_stateFlag = false;
 	}
 }
