@@ -45,14 +45,14 @@ namespace Temporal
 
 		// Temp flags. Used when some messages combinations make something happen, or if during update we need to check if someting didn't happen. 
 		// This flags are cleared every update and state change
-		bool getTempFlag1() const { return _tempFlag1; }
-		void setTempFlag1(bool value) { _tempFlag1 = value; }
-		bool getTempFlag2() const { return _tempFlag2; }
-		void setTempFlag2(bool value) { _tempFlag2 = value; }
-		bool getTempFlag3() const { return _tempFlag3; }
-		void setTempFlag3(bool value) { _tempFlag3 = value; }
-		bool getPermanentFlag() const { return _permanentFlag; }
-		void setPermanentFlag(bool value) { _permanentFlag = value; }
+		bool getFrameFlag1() const { return _frameFlag1; }
+		void setFrameFlag1(bool value) { _frameFlag1 = value; }
+		bool getFrameFlag2() const { return _frameFlag2; }
+		void setFrameFlag2(bool value) { _frameFlag2 = value; }
+		bool getStateFlag() const { return _stateFlag; }
+		void setStateFlag(bool value) { _stateFlag = value; }
+		bool getStateMachineFlag() const { return _stateMachineFlag; }
+		void setStateMachineFlag(bool value) { _stateMachineFlag = value; }
 
 		// Record amount of time spent in a single state. Expose non const object to allow state to record sub periods
 		Timer& getTimer() { return _timer; }
@@ -69,12 +69,12 @@ namespace Temporal
 		Timer _timer;
 
 		// Temp state
-		bool _permanentFlag;
-		bool _tempFlag1;
-		bool _tempFlag2;
-		bool _tempFlag3;
+		bool _stateMachineFlag;
+		bool _stateFlag;
+		bool _frameFlag1;
+		bool _frameFlag2;
 
-		void resetTempState() { _tempFlag1 = _tempFlag2 = _tempFlag3 = false; }
+		void resetFrameFlags() { _frameFlag1 = _frameFlag2 = false; }
 		void setState(Hash stateID);
 
 		StateMachineComponent(const StateMachineComponent&);

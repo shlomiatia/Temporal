@@ -8,9 +8,8 @@
 #include "Fixture.h"
 #include "PhysicsEnums.h"
 #include "MessageUtils.h"
-#include <algorithm>
-
 #include "Utils.h"
+#include <algorithm>
 
 namespace Temporal
 {
@@ -83,6 +82,17 @@ namespace Temporal
 		}
 	}
 
+	Segment getGroundSegment(const Fixture& ground, const Vector& point)
+	{
+		Vector highPoint = ground.getGlobalShape().getTopRightVertex();
+		if(point.getX() < highPoint.getX())
+			return SegmentPP(highPoint, ground.getGlobalShape().getTopLeftVertex());
+		else if(point.getX() > highPoint.getX())
+			return SegmentPP(highPoint, ground.getGlobalShape().getBottomRightVertex());
+		else
+			return SegmentPP(highPoint, highPoint);
+	}
+
 	Segment getGroundSegment(const Fixture& ground, OBBAABBWrapper body)
 	{
 		Vector highPoint = ground.getGlobalShape().getTopRightVertex();
@@ -98,9 +108,7 @@ namespace Temporal
 	{
 		_fixture->update();
 		__dynamicBodyBounds = _fixture->getGlobalShape();
-		if(_ground)
-			_groundSegment = getGroundSegment(*_ground, _dynamicBodyBounds);
-
+			
 		// Slide
 		if(_ground && !isModerateAngle(_groundSegment.getRadius().getAngle()))
 		{
@@ -144,18 +152,21 @@ namespace Temporal
 		
 		// Calculate platform touch point, or front if flat
 		Side::Enum side = Side::get(_velocity.getX());
+		Side::Enum oppositeSide = Side::getOpposite(side);
+
+		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
 		Vector direction = (_groundSegment.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) :  _groundSegment.getNaturalDirection()) * static_cast<float>(side);
-		Vector curr = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(Side::getOpposite(side)), _dynamicBodyBounds.getBottom());
+		Vector curr = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
 
 		float movementAmount = _velocity.getLength();
 		Vector velocity = _velocity;
 
-		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
 		velocity = direction * movementAmount;
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
 		Vector max = _groundSegment.getPoint(side);
+		
 
 		// Still on platform
 		if((dest.getX() - max.getX()) * side <= 0.0f)
@@ -164,15 +175,36 @@ namespace Temporal
 		}
 		else
 		{			
-			// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
 			Vector actualMovement = max - curr;
 			executeMovement(actualMovement);
-			_ground = 0;
-			if(direction.getY() <= 0.0f )
-				_velocity = velocity;
 			float leftPeriod = framePeriod * (1.0 - actualMovement.getLength() / movement.getLength());
-			executeMovement(determineMovement(leftPeriod));
-			// TODO: Find next platform
+			_velocity = Vector(velocity.getLength() * side, 0.0f);
+			Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
+			Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
+			RayCastResult result;
+			if(getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
+			  (result.getPoint() - rayOrigin).getLength() < 10.0f &&
+			   isModerateAngle(getGroundSegment(result.getFixture(), rayOrigin).getNaturalDirection().getAngle()))
+			{
+				_ground = &result.getFixture();
+				_groundSegment = getGroundSegment(*_ground, rayOrigin);
+				_previousGroundCenter = _ground->getGlobalShape().getCenter();
+				_dynamicBodyBounds.getOBB().translate(_groundSegment.getPoint(oppositeSide) - bodyPoint);
+				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
+				walk(leftPeriod);
+			} 
+			else
+			{
+				_ground = 0;
+				
+				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
+				if(direction.getY() <= 0.0f )
+					_velocity = velocity; 
+				
+				_velocity += GRAVITY * framePeriod;
+				Vector movementLeft = _velocity * framePeriod; 
+				executeMovement(movementLeft);
+			}
 		}
 	}
 
@@ -239,7 +271,8 @@ namespace Temporal
 		Vector correction = Vector::Zero;
 		if(intersects(_dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
 		{
-			correctCollision(staticBodyBounds, correction, collision, movement);
+			if(fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
+				correctCollision(staticBodyBounds, correction, collision, movement);
 		}
 	}
 
@@ -247,14 +280,6 @@ namespace Temporal
 	{
 		modifyCorrection(staticBodyBounds, correction, movement);
 		modifyVelocity(correction);
-		
-		Side::Enum side = getOrientation(*this);
-
-		// If got collision from below, calculate ground vector. Take front ground when there is a dellima
-		if(correction.getY() > 0.0f)
-		{
-			_ground = staticBodyBounds;
-		}
 
 		_dynamicBodyBounds.getOBB().translate(correction);
 		collision -= correction;
@@ -262,8 +287,24 @@ namespace Temporal
 
 	void DynamicBody::modifyCorrection(const Fixture* staticBodyBounds, Vector& correction, Vector& movement)
 	{
-		// If actor don't want to move horizontally, we allow to correct by y if small enough. This is good to prevent falling from edges
-		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON) 
+		bool modifyGround = true;
+		// Fix minor gaps in transitions /*\ /*- BRODER
+		if(_ground && differentSign(movement.getX(), correction.getX()) &&
+			staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom() < 5.0f && staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom() > EPSILON)
+		{
+			correction = Vector(0, staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom());
+		}
+		if(_ground && 
+				// Don't allow to fix into ground _*\ 
+				(correction.getY() < -EPSILON || 
+				// Don't climb on steep slope _*/
+				 (differentSign(movement.getX(), correction.getX()) && isSteepAngle(correction.getRightNormal().getAngle()))))
+		{
+ 			correction = -movement;
+			modifyGround = false;
+		}
+		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
+		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && isModerateAngle(correction.getRightNormal().getAngle()))
 		{	
 			Segment shape = getGroundSegment(*staticBodyBounds, _dynamicBodyBounds);
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();
@@ -274,14 +315,18 @@ namespace Temporal
 			float yCorrection = y - _dynamicBodyBounds.getBottom();
 
 			// BRODER
-			if(yCorrection > 0.0f && yCorrection < 10.0f)
+			if(yCorrection > 0.0f && yCorrection < 10.0f) {
 				correction = Vector(0, yCorrection);
+			}
 		}
-		// Don't allow to fix into ground _* \ 
-		else if(correction.getY() < -EPSILON && _ground)
+
+		// If got collision from below, calculate ground vector. Take front ground when there is a dellima
+		if(correction.getY() > 0.0f && modifyGround)
 		{
-			correction = -movement;
+			_ground = staticBodyBounds;
+			_groundSegment = getGroundSegment(*_ground, _dynamicBodyBounds);
 		}
+		
 	}
 
 	void DynamicBody::modifyVelocity(const Vector& correction)

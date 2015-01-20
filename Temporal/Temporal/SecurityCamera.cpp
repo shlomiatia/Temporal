@@ -47,11 +47,11 @@ namespace Temporal
 			// TempFlag 1 - Have line of sight
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setTempFlag1(true);
+				_stateMachine->setFrameFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_stateMachine->getTempFlag1())
+				if(!_stateMachine->getFrameFlag1())
 					_stateMachine->changeState(SEARCH_STATE);
 			}
 		}
@@ -84,14 +84,14 @@ namespace Temporal
 		void Acquire::enter() const
 		{
 			// TempFlag 1 - have LOS
-			_stateMachine->setTempFlag1(true);
+			_stateMachine->setFrameFlag1(true);
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(ACQUIRE_ANIMATION)));
 		}
 
 		void Acquire::update() const
 		{
 			float elapsedTime = _stateMachine->getTimer().getElapsedTime();
-			if(!_stateMachine->getTempFlag1())
+			if(!_stateMachine->getFrameFlag1())
 				_stateMachine->changeState(SEARCH_STATE);
 			else if(elapsedTime >= ACQUIRE_TIME)
 				_stateMachine->changeState(SEE_STATE);
@@ -101,7 +101,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setTempFlag1(true);
+				_stateMachine->setFrameFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
