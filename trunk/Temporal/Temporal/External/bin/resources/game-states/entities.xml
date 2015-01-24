@@ -26,7 +26,7 @@
 		</entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="2500" y="256" />
+				<position x="500" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
@@ -90,7 +90,7 @@
 			<light><color r="1.0" g="0.0" b="0.0" /></light>
 			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
 		</entity>
-		<!--<entity id="ENT_DOOR">
+		<entity id="ENT_DOOR">
 			<transform>
 				<position x="512" y="512" />
 			</transform>
@@ -121,8 +121,8 @@
 				</fixture>
 			</static-body>
 			<button target="ENT_DOOR" />
-		</entity>-->
-		<entity id="ENT_LIGHT">
+		</entity>
+		<!--<entity id="ENT_LIGHT">
 			<transform>
 				<position x="612" y="384" />
 			</transform>
@@ -130,7 +130,7 @@
 				<color r="0.5" g="0.5" b="0.5" />
 			</light>
 		</entity>
-		<!--<entity id="ENT_CHASER">
+		<entity id="ENT_CHASER">
 			<transform>
 				<position x="1000" y="512" />
 			</transform>
@@ -228,7 +228,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>
+		</entity>-->
 		<entity id="ENT_CAMERA">
 			<transform>
 				<position x="512" y="416" />
@@ -238,7 +238,7 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity>
+		</entity><!--
 		<entity id="ENT_LASER">
 			<transform>
 				<position x="672 " y="191" />

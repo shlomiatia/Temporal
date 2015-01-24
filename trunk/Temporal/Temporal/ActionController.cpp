@@ -455,7 +455,7 @@ namespace Temporal
 					}
 					else
 					{
-						_stateMachine->changeState(JUMP_END_STATE);
+						_stateMachine->changeState(STAND_STATE);
 					}
 				}
 			}

@@ -35,7 +35,7 @@ namespace Temporal
 			}
 			if(Keyboard::get().getKey(Key::Q) || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
 			{
-				//raiseMessage(Message(MessageID::ACTION_ACTIVATE));
+				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 				//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
 				/*const OBBAABBWrapper& bounds = *static_cast<const OBBAABBWrapper*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));

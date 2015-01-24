@@ -5,6 +5,7 @@
 #include "EntitySystem.h"
 #include "Hash.h"
 #include "Animation.h"
+#include "SceneNode.h"
 #include <memory>
 
 namespace Temporal
@@ -13,30 +14,11 @@ namespace Temporal
 	class SceneNode;
 	class AnimationParams;
 
-	class SceneNodeBinding
-	{
-	public:
-		SceneNodeBinding(SceneNode& node)
-			: _node(node), _sample(0) {}
-
-		SceneNode& getSceneNode() { return _node; }
-		const SceneNodeSample* getSample() { return _sample; }
-		void setSample(const SceneNodeSample* sample) { _sample = sample; }
-
-	private:
-		SceneNode& _node;	
-		const SceneNodeSample* _sample;
-	};
-
-	typedef std::vector<SceneNodeBinding*> SceneNodeBindingCollection;
-	typedef SceneNodeBindingCollection::const_iterator SceneNodeBindingIterator;
-
 	class Animator : public Component
 	{
 	public:
 		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId), _halhazaAnimationId(animationId), _isPaused(false), _isRewined(false) {}
-		~Animator();
+			_animationSetFile(animationSetFile), _animationId(animationId), _memoryAnimationId(animationId), _previousAnimationId(Hash::INVALID), _isPaused(false), _isRewined(false), _previousIsRewined(false) {}
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -46,15 +28,21 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 		static const float FPS;
+		static const float CROSS_FADE_DURATION;
 
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
-		SceneNodeBindingCollection _bindings;
-		Hash _animationId;
-		Hash _halhazaAnimationId;
+		SceneNodeCollection _sceneNodes;
 		Timer _timer;
-		bool _isPaused;
+		Hash _animationId;
 		bool _isRewined;
+		bool _isPaused;
+
+		Hash _memoryAnimationId;
+
+		Timer _previousTimer;
+		Hash _previousAnimationId;
+		bool _previousIsRewined;
 
 		friend class SerializationAccess;
 

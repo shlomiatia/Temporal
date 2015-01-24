@@ -98,4 +98,12 @@ namespace Temporal
 		for(AnimationIterator i = _animations.begin(); i != _animations.end(); ++i)
 			delete i->second;
 	}
+
+	int Animation::getDuration() const 
+	{ 
+		int duration = (**(getSamples().end()-1)).getIndex(); 
+		if(isRepeat())
+			duration++;
+		return duration;
+	}
 }
