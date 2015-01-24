@@ -90,11 +90,13 @@ namespace Temporal
 		  _id(id), _repeat(repeat) {}
 		~Animation();
 		
-		int getDuration() const { return(**(getSamples().end()-1)).getIndex() + 1; }
+		int getDuration() const;
 		void setId(Hash id) { _id = id; }
 		Hash getId() const { return _id; }
-		bool repeat() const { return _repeat; }
+		bool isRepeat() const { return _repeat; }
 		void setRepeat(bool repeat) { _repeat = repeat; }
+		bool isCrossFade() const { return _crossFade; }
+		void setCrossFade(bool value) { _crossFade = value; }
 		SceneGraphSampleCollection& getSamples() { return _samples; }
 		const SceneGraphSampleCollection& getSamples() const { return _samples; }
 
@@ -104,6 +106,7 @@ namespace Temporal
 	private:
 		Hash _id;
 		bool _repeat;
+		bool _crossFade;
 		SceneGraphSampleCollection _samples;
 
 		Animation(const Animation&);

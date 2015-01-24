@@ -188,6 +188,7 @@ namespace Temporal
 			serializer.serialize("id", animation._id);
 			serializer.serialize("repeat", animation._repeat);
 			serializer.serialize("scene-graph-sample", animation._samples);
+			serializer.serialize("cross-fase", animation._crossFade);
 		}
 		
 		template<class T>
@@ -265,8 +266,6 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("animation", animator._animationId);
-			/*if(serializer.type() == SerializationDirection::DESERIALIZATION)
-				animator.resetHalhaza();*/
 			serializer.serialize("timer", animator._timer); // memory
 		}
 		
