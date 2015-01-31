@@ -83,6 +83,6 @@ namespace Temporal
 	inline Vector operator-(const Vector& vector, float scalar) { return vector + -scalar; }
 	inline Vector operator*(const Vector& vector, float scalar) { return Vector(vector.getX() * scalar, vector.getY() * scalar); }
 	inline Vector operator*(float scalar, const Vector& vector) { return vector * scalar; }
-	inline Vector operator/(const Vector& vector, float scalar) { return vector * (1.0f / scalar); }
+	inline Vector operator/(const Vector& vector, float scalar) { return Vector(vector.getX() / scalar, vector.getY() / scalar); }
 }
 #endif

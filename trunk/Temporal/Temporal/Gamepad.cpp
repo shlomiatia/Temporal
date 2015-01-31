@@ -1,15 +1,17 @@
 #include "Gamepad.h"
+#include "GameState.h"
+#include "EntitySystem.h"
 #include <SDL.h>
 
 namespace Temporal
 {
 	void updateAxis(SDL_Event& e, int axis, float& value)
 	{
-		if(e.jaxis.axis == axis) 
+		if(e.caxis.axis == axis) 
 		{
-			if(abs(e.jaxis.value) > 16000)
+			if(abs(e.caxis.value) > 16000)
 			{
-				value = e.jaxis.value;
+				value = e.caxis.value;
 			}
 			else
 			{
@@ -31,62 +33,59 @@ namespace Temporal
 		for(int i = 0; i < GamepadButton::SIZE; ++i)
 			_buttons[i] = false;
 
-		_buttonsMap[0] = GamepadButton::FRONT_DOWN;
-		_buttonsMap[1] = GamepadButton::FRONT_RIGHT;
-		_buttonsMap[2] = GamepadButton::FRONT_LEFT;
-		_buttonsMap[3] = GamepadButton::FRONT_UP;
-		_buttonsMap[4] = GamepadButton::BACK_LEFT;
-		_buttonsMap[5] = GamepadButton::BACK_RIGHT;
-		_buttonsMap[6] = GamepadButton::UTILITY_OTHER;
-		_buttonsMap[7] = GamepadButton::UTILITY_START;
-		_buttonsMap[8] = GamepadButton::STICK_LEFT;
-		_buttonsMap[9] = GamepadButton::STICK_RIGHT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_A] = GamepadButton::ACTION_DOWN;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_B] = GamepadButton::ACTION_RIGHT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_X] = GamepadButton::ACTION_LEFT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_Y] = GamepadButton::ACTION_UP;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_LEFTSHOULDER] = GamepadButton::SHOULDER_LEFT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_RIGHTSHOULDER] = GamepadButton::SHOULDER_RIGHT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_BACK] = GamepadButton::UTILITY_OTHER;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_START] = GamepadButton::UTILITY_START;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_LEFTSTICK] = GamepadButton::STICK_LEFT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_RIGHTSTICK] = GamepadButton::STICK_RIGHT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] = GamepadButton::DPAD_DOWN;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] = GamepadButton::DPAD_RIGHT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_DPAD_LEFT] = GamepadButton::DPAD_LEFT;
+		_buttonsMap[SDL_CONTROLLER_BUTTON_DPAD_UP] = GamepadButton::DPAD_UP;
 	}
 
 	void Gamepad::init()
 	{
-		_joystick = SDL_JoystickOpen(0);
+		_gamepad = SDL_GameControllerOpen(0);
 	}
 
 	void Gamepad::dispose()
 	{
-		SDL_JoystickClose(_joystick);
+		SDL_GameControllerClose(static_cast<SDL_GameController*>(_gamepad));
 	}
 
 	void Gamepad::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
 		
-		if (e.type == SDL_JOYAXISMOTION)
+		if (e.type == SDL_CONTROLLERAXISMOTION)
 		{
-			updateAxis(e, 0, _leftStick, Axis::X);
-			updateAxis(e, 1, _leftStick, Axis::Y);
-			updateAxis(e, 3, _rightStick, Axis::X);
-			updateAxis(e, 4, _rightStick, Axis::Y);
-			float temp = -1.0f;
-			updateAxis(e, 2, temp);
-			if(temp != -1.0f)
+			updateAxis(e, SDL_CONTROLLER_AXIS_LEFTX, _leftStick, Axis::X);
+			updateAxis(e, SDL_CONTROLLER_AXIS_LEFTY, _leftStick, Axis::Y);
+			updateAxis(e, SDL_CONTROLLER_AXIS_RIGHTX, _rightStick, Axis::X);
+			updateAxis(e, SDL_CONTROLLER_AXIS_RIGHTY, _rightStick, Axis::Y);
+			updateAxis(e, SDL_CONTROLLER_AXIS_TRIGGERLEFT, _leftTrigger);
+			updateAxis(e, SDL_CONTROLLER_AXIS_TRIGGERLEFT, _rightTrigger);
+		}
+		else if(e.type == SDL_CONTROLLERBUTTONDOWN)
+		{
+			GamepadButton::Enum button = _buttonsMap[e.cbutton.button];
+			if(!_buttons[button])
 			{
-				if(temp < 0)
-					_leftTrigger = temp;
-				else
-					_rightTrigger = temp;
+				_buttons[button] = true;
+				GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::GAMEPAD_BUTTON_DOWN, &button));
 			}
 		}
-		else if(e.type == SDL_JOYBUTTONDOWN)
+		else if(e.type == SDL_CONTROLLERBUTTONUP)
 		{
-			_buttons[_buttonsMap[e.button.button]] = true;
-		}
-		else if(e.type == SDL_JOYBUTTONUP)
-		{
-			_buttons[_buttonsMap[e.button.button]] = false;
-		}
-		else if(e.type == SDL_JOYHATMOTION)
-		{
-			_buttons[GamepadButton::DPAD_UP] = e.jhat.value & SDL_HAT_UP;
-			_buttons[GamepadButton::DPAD_DOWN] = e.jhat.value & SDL_HAT_DOWN;
-			_buttons[GamepadButton::DPAD_LEFT] = e.jhat.value & SDL_HAT_LEFT;
-			_buttons[GamepadButton::DPAD_RIGHT] = e.jhat.value & SDL_HAT_RIGHT;
+			GamepadButton::Enum button = _buttonsMap[e.cbutton.button];
+			GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::GAMEPAD_BUTTON_UP, &button));
+			_buttons[button] = false;
 		}
 	}
 }

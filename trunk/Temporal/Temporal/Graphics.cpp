@@ -25,7 +25,7 @@ namespace Temporal
 		float logicalViewWidth = settings.getViewY() * _resolution.getX() / _resolution.getY();
 		_logicalView = Vector(logicalViewWidth, settings.getViewY());
 
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0)
 		{
 			abort();
 			// ERROR: Error Failed initializing SDL video

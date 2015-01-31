@@ -76,32 +76,44 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SET_POSITION)
+		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::TRANSLATE_POSITION)
 		{
 			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
 	}
 
-	Segment getGroundSegment(const Fixture& ground, const Vector& point)
+	Segment getTopSegment(const OBB& shape, float leftX, float rightX)
 	{
-		Vector highPoint = ground.getGlobalShape().getTopRightVertex();
-		if(point.getX() < highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getTopLeftVertex());
-		else if(point.getX() > highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getBottomRightVertex());
+		if(shape.getAxisX().getX() == 0.0f || shape.getAxisX().getY() == 0.0f)
+		{
+			return SegmentPP(shape.getCenter() + Vector(-shape.getRadiusX(), shape.getRadiusY()), shape.getCenter() + shape.getRadius());
+		}
+		Vector topPoint = shape.getCenter() + 
+			(shape.getAxisX().getY() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() + 
+			(shape.getAxisY().getY() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+		if(rightX < topPoint.getX())
+		{
+			Vector leftPoint = shape.getCenter() -
+				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() -
+				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+			return SegmentPP(leftPoint, topPoint);
+		}
+		else if(leftX > topPoint.getX())
+		{
+			Vector rightPoint = shape.getCenter() +
+				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() +
+				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+			return SegmentPP(topPoint, rightPoint);
+		}
 		else
-			return SegmentPP(highPoint, highPoint);
+		{
+			return SegmentPP(topPoint, topPoint);
+		}
 	}
 
-	Segment getGroundSegment(const Fixture& ground, OBBAABBWrapper body)
+	Segment getTopSegment(const OBB& shape, float x)
 	{
-		Vector highPoint = ground.getGlobalShape().getTopRightVertex();
-		if(body.getRight() < highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getTopLeftVertex());
-		else if(body.getLeft() > highPoint.getX())
-			return SegmentPP(highPoint, ground.getGlobalShape().getBottomRightVertex());
-		else
-			return SegmentPP(highPoint, highPoint);
+		return getTopSegment(shape, x, x);
 	}
 
 	void DynamicBody::update(float framePeriod)
@@ -139,7 +151,9 @@ namespace Temporal
 		// Moving platform - position is set later (executeWalk)
 		if(staticBodyBounds.getCenter() != _previousGroundCenter)
 		{
-			_dynamicBodyBounds.getOBB().translate(staticBodyBounds.getCenter() - _previousGroundCenter);
+			Vector vector = staticBodyBounds.getCenter() - _previousGroundCenter;
+			_dynamicBodyBounds.getOBB().translate(vector);
+			_groundSegment.translate(vector);
 		}
 		
 		// Fix when static
@@ -184,10 +198,10 @@ namespace Temporal
 			RayCastResult result;
 			if(getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
 			  (result.getPoint() - rayOrigin).getLength() < 10.0f &&
-			   isModerateAngle(getGroundSegment(result.getFixture(), rayOrigin).getNaturalDirection().getAngle()))
+			  isModerateAngle(getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX()).getNaturalDirection().getAngle()))
 			{
-				_ground = &result.getFixture();
-				_groundSegment = getGroundSegment(*_ground, rayOrigin);
+ 				_ground = &result.getFixture();
+				_groundSegment = getTopSegment(_ground->getGlobalShape(), rayOrigin.getX());
 				_previousGroundCenter = _ground->getGlobalShape().getCenter();
 				_dynamicBodyBounds.getOBB().translate(_groundSegment.getPoint(oppositeSide) - bodyPoint);
 				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
@@ -306,7 +320,7 @@ namespace Temporal
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
 		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && isModerateAngle(correction.getRightNormal().getAngle()))
 		{	
-			Segment shape = getGroundSegment(*staticBodyBounds, _dynamicBodyBounds);
+			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();
 			float x = normalizedRadius.getY() >= 0.0f ? _dynamicBodyBounds.getRight() : _dynamicBodyBounds.getLeft();
 			float length = (x - shape.getCenter().getX()) / normalizedRadius.getX();
@@ -324,7 +338,7 @@ namespace Temporal
 		if(correction.getY() > 0.0f && modifyGround)
 		{
 			_ground = staticBodyBounds;
-			_groundSegment = getGroundSegment(*_ground, _dynamicBodyBounds);
+			_groundSegment = getTopSegment(_ground->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
 		}
 		
 	}

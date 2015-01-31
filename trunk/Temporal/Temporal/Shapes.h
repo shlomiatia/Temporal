@@ -3,7 +3,6 @@
 
 #include "BaseEnums.h"
 #include "Vector.h"
-#include <math.h>
 
 namespace Temporal
 {
@@ -141,15 +140,8 @@ namespace Temporal
 
 		OBB () {}
 
-		OBB(const Vector& center, float angle, const Vector& radius) : _center(center), _radius(radius) 
-		{
-			setAngle(angle);
-		}
-
-		OBB(const Vector& center, const Vector& axis0, const Vector& radius) : _center(center), _radius(radius) 
-		{
-			setAxis0(axis0);
-		}
+		OBB(const Vector& center, float angle, const Vector& radius);
+		OBB(const Vector& center, const Vector& axis0, const Vector& radius);
 
 		const Vector& getCenter() const { return _center; }
 		void setCenter(const Vector& center) { _center = center; }
@@ -171,37 +163,29 @@ namespace Temporal
 		const Vector& getAxisY() const { return getAxis(Axis::Y); }
 
 		void translate(const Vector& translation) { _center += translation; }
-
-		Vector getBottomLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
-		Vector getTopLeftVertex() const { return getCenter() - getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); } 
-		Vector getBottomRightVertex() const { return getCenter() + getAxisX() * getRadiusX() - getAxisY() * getRadiusY(); }
-		Vector getTopRightVertex() const { return getCenter() + getAxisX() * getRadiusX() + getAxisY() * getRadiusY(); }
 		
-		float getLeft() const { return getTopLeftVertex().getX(); }
-		float getRight() const { return getBottomRightVertex().getX(); }
-		float getBottom() const { return getBottomLeftVertex().getY(); }
-		float getTop() const { return getTopRightVertex().getY(); }
+		float getLeft() const;
+		float getRight() const;
+		float getBottom() const;
+		float getTop() const;
 		float getSide(Side::Enum side) const { return side == Side::LEFT ? getLeft() : getRight(); }
+		float getWidth() const { return getRight() - getLeft(); }
+		float getHeight() const { return getTop() - getBottom(); }
 		OBBAABBWrapper getAABBWrapper();
 		const OBBAABBWrapper getAABBWrapper() const;
 
 		float getAngle() const { return _axes[0].getAngle(); }
 
-		// angle>=0<90
-		void setAngle(float angle)
-		{
-			setAxis0(Vector(angle));
-		}
-
-		// axis0 => unit vector. x>0, y>=0
+		void setAngle(float angle) { setAxis0(Vector(angle)); }
 		void setAxis0(const Vector& axis0);
 	private:
 		Vector _center;
 		Vector _axes[2];
 		Vector _radius;
 
-		friend class SerializationAccess;
+		void validate() const;
 
+		friend class SerializationAccess;
 	};
 
 	class OBBAABBWrapper

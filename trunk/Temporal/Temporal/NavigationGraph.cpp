@@ -65,6 +65,7 @@ namespace Temporal
 		cutArea(Side::RIGHT, amount, area, areas, iterator);
 	}
 
+	// TODO: Do according to angle
 	Segment getLowerSegment(const OBB& obb)
 	{
 		return Segment(obb.getCenter() - obb.getAxisY() * obb.getRadiusY(), obb.getAxisX() * obb.getRadiusX());
@@ -175,11 +176,16 @@ namespace Temporal
 			Vector axisX = platform.getAxisX();
 			float axisXAngle = axisX.getAngle();
 			Axis::Enum platformAxis = isModerateAngle(axisXAngle) ? Axis::X : Axis::Y;
-			Axis::Enum platformOppositeAxis = Axis::getOpposite(platformAxis);
-			Vector center = platform.getCenter() + platform.getAxis(platformOppositeAxis) * (platform.getRadius().getAxis(platformOppositeAxis) + MIN_AREA_SIZE.getY() / 2.0f + 1.0f);
+			Axis::Enum platformOppositeAxisSign = Axis::getOpposite(platformAxis);
+			Vector platformOppositeAxis = platform.getAxis(platformOppositeAxisSign);
+			if(platformOppositeAxis.getY() < 0.0f)
+			{
+				platformOppositeAxis = -platformOppositeAxis;
+			}
+			Vector center = platform.getCenter() +  platformOppositeAxis * (platform.getRadius().getAxis(platformOppositeAxisSign) + MIN_AREA_SIZE.getY() / 2.0f + 1.0f);
 			Vector radius = Vector::Zero;
 			radius.setAxis(platformAxis, platform.getRadius().getAxis(platformAxis));
-			radius.setAxis(platformOppositeAxis, MIN_AREA_SIZE.getY() / 2.0f);
+			radius.setAxis(platformOppositeAxisSign, MIN_AREA_SIZE.getY() / 2.0f);
 			OBB area = OBB(center, axisX, radius);
 
 			OBBCollection areas;
@@ -192,7 +198,7 @@ namespace Temporal
 				const OBB& area = *j;
 
 				Vector axisVector = area.getAxis(platformAxis) * area.getRadius().getAxis(platformAxis);
-				Vector oppositeAxisVector = area.getAxis(platformOppositeAxis) * area.getRadius().getAxis(platformOppositeAxis);
+				Vector oppositeAxisVector = area.getAxis(platformOppositeAxisSign) * area.getRadius().getAxis(platformOppositeAxisSign);
 				// Check min width
 				if(axisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX() && oppositeAxisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getY())
 					_nodes.push_back(new NavigationNode(area));
@@ -266,13 +272,10 @@ namespace Temporal
 		const OBB& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float y1low = area1.getBottomRightVertex().getY();
-		float y2low = area1.getBottomLeftVertex().getY();
-		float y2high = area1.getTopLeftVertex().getY();
 		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
-		if(y1low >= y2low && y1low <= y2high  && horizontalDistance <= maxJumpForwardDistance)
+		if(horizontalDistance <= maxJumpForwardDistance)
 		{
-			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, y1low - 1.0f, area2.getLeft() - 1.0f, y2low + 1.0f);
+			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, area1.getBottom() - 1.0f, area2.getLeft() - 1.0f, area1.getTop() + 1.0f);
 			if(!intersectWithPlatform(jumpArea, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, area1.getRight(), Side::RIGHT, NavigationEdgeType::JUMP_FORWARD));
@@ -305,19 +308,19 @@ namespace Temporal
 						node2.addEdge(new NavigationEdge(node2, node1, area1.getRight(), Side::LEFT, NavigationEdgeType::WALK));
 					}
 				}
-				// check jump up/descend
-				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() < area2.getRight() && area1.getRight() > area2.getLeft())
-				{
-					checkVerticalEdges(node1, node2, platforms);
-				}
-				// check fall
 				// BRODER
 				else if(area1.getBottom() > area2.getBottom() && area1.getLeft() -20.f < area2.getRight() && area1.getRight() + 20.0f > area2.getLeft())
 				{
+					// check jump up/descend
+					if(area1.getBottom() > area2.getBottom() && area1.getLeft() < area2.getRight() && area1.getRight() > area2.getLeft())
+						checkVerticalEdges(node1, node2, platforms);
+
+					// check fall
 					if(area1.getLeft() >= area2.getLeft())
 						checkVerticalEdges(node1, node2, area1.getLeft(), Side::LEFT, platforms);
 					if(area1.getRight() <= area2.getRight())
 						checkVerticalEdges(node1, node2, area1.getRight(), Side::RIGHT, platforms);
+					
 				}
 				// check jump forward
 				else if(area1.getRight() < area2.getLeft() && area1.getTop() == area2.getTop())
@@ -415,6 +418,7 @@ namespace Temporal
 				Segment segment = SegmentPP(Vector(x1, y1), Vector(x2, y2));
 				Vector segmentRadius = segment.getRadius();
 				Vector axis = segmentRadius.normalize();
+				axis = axis == Vector::Zero ? Vector(1.0f, 0.0f) : axis;
 				Vector radius  = Vector(segmentRadius.getLength(), 1.0);
 				OBB obb = OBB(segment.getCenter(), axis, radius);
 				Graphics::get().getLinesSpriteBatch().add(obb, color);

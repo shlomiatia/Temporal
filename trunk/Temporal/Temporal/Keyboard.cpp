@@ -137,8 +137,12 @@ namespace Temporal
 		else if (e.type == SDL_KEYDOWN)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
-			_keys[key] = true;
-			raiseEvent(Message(MessageID::KEY_DOWN, &key));
+			if(!_keys[key])
+			{
+				_keys[key] = true;
+				raiseEvent(Message(MessageID::KEY_DOWN, &key));
+			}
+			
 		}
 		else if (e.type == SDL_KEYUP)
 		{

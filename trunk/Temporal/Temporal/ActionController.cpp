@@ -241,7 +241,7 @@ namespace Temporal
 				_stateMachine->setStateMachineFlag(false);
 				_stateMachine->changeState(TURN_STATE);
 			}
-			else if(message.getID() == MessageID::ACTION_UP)
+			else if(message.getID() == MessageID::ACTION_UP_START)
 			{
 				getActionController(_stateMachine).getJumpHelper().setType(JumpType::UP);
 				_stateMachine->changeState(JUMP_STATE);
@@ -289,7 +289,7 @@ namespace Temporal
 		void Fall::handleMessage(Message& message) const
 		{
 			// TempFlag 1 - want to hang
-			if(message.getID() == MessageID::ACTION_UP)
+			if(message.getID() == MessageID::ACTION_UP_START)
 			{
 				// Need to be in start jump start, because can occur on fall from ledge
 				if(_stateMachine->getTimer().getElapsedTime() <= ActionController::FALL_ALLOW_JUMP_TIME)
@@ -326,7 +326,7 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message) const
 		{
-			if(message.getID() == MessageID::ACTION_UP)
+			if(message.getID() == MessageID::ACTION_UP_START)
 			{
 				getActionController(_stateMachine).getJumpHelper().setType(JumpType::FORWARD);
 				_stateMachine->changeState(JUMP_STATE);
@@ -422,7 +422,7 @@ namespace Temporal
 		void Jump::handleMessage(Message& message) const
 		{
 			// TempFlag 1 - Want to hang
-			if(message.getID() == MessageID::ACTION_UP)
+			if(message.getID() == MessageID::ACTION_UP_CONTINUE)
 			{
 				_stateMachine->setFrameFlag1(true);
 			}
@@ -506,7 +506,7 @@ namespace Temporal
 				_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 				_stateMachine->changeState(FALL_STATE);
 			}
-			else if(message.getID() == MessageID::ACTION_UP)
+			else if(message.getID() == MessageID::ACTION_UP_CONTINUE)
 			{	
 				_stateMachine->changeState(CLIMB_STATE);
 			}

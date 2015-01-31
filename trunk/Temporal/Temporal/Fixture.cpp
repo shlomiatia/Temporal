@@ -15,6 +15,10 @@ namespace Temporal
 
 	void Fixture::update()
 	{
+		if(_localShape.getAngle() != _globalShape.getAngle() || _localShape.getRadius() != _globalShape.getRadius())
+		{
+			_globalShape = _localShape;
+		}
 		Vector center = _localShape.getCenter();
 		center.setX(center.getX() * _transform->getOrientation());
 		center += _transform->getPosition();

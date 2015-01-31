@@ -15,6 +15,11 @@ namespace Temporal
 		{
 			Keyboard::get().add(this);
 		}
+		else if ((message.getID() == MessageID::KEY_DOWN && static_cast<Key::Enum>(getIntParam(message.getParam())) == Key::SPACE) ||
+			(message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && static_cast<Key::Enum>(getIntParam(message.getParam())) == GamepadButton::ACTION_DOWN))
+		{
+ 			raiseMessage(Message(MessageID::ACTION_UP_START));
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
@@ -25,21 +30,21 @@ namespace Temporal
 			{
 				sendDirectionAction(*this, Side::LEFT);
 			}
-			if(Keyboard::get().getKey(Key::SPACE) || Keyboard::get().getKey(Key::W) || (Input::get().getGamepad().getLeftStick().getY() <= 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().getKey(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
 			{
-				raiseMessage(Message(MessageID::ACTION_UP));
+				raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 			}
-			if(Keyboard::get().getKey(Key::S) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f && Input::get().getGamepad().getButton(GamepadButton::FRONT_DOWN)))
+			if(Keyboard::get().getKey(Key::S) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f))
 			{
 				raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
-			if(Keyboard::get().getKey(Key::Q) || Input::get().getGamepad().getButton(GamepadButton::FRONT_LEFT))
+			if(Keyboard::get().getKey(Key::Q) || Input::get().getGamepad().getButton(GamepadButton::ACTION_LEFT))
 			{
-				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
+				//raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 				//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 
-				/*const OBBAABBWrapper& bounds = *static_cast<const OBBAABBWrapper*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<OBB*>(&bounds.getOBB())));*/
+				const OBBAABBWrapper& bounds = *static_cast<const OBBAABBWrapper*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, const_cast<OBB*>(&bounds.getOBB())));
 			}
 		}
 	}

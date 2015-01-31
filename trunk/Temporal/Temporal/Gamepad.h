@@ -3,7 +3,6 @@
 
 #include "Vector.h"
 #include <unordered_map>
-#include <SDL.h>
 
 namespace Temporal
 {
@@ -11,9 +10,9 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			FRONT_LEFT, FRONT_RIGHT, FRONT_UP, FRONT_DOWN,
+			ACTION_LEFT, ACTION_RIGHT, ACTION_UP, ACTION_DOWN,
 
-			BACK_LEFT, BACK_RIGHT,
+			SHOULDER_LEFT, SHOULDER_RIGHT,
 
 			STICK_LEFT, STICK_RIGHT,
 
@@ -25,7 +24,7 @@ namespace Temporal
 		};
 	}
 
-	typedef std::unordered_map<int, int> GamepadButtonCollection;
+	typedef std::unordered_map<int, GamepadButton::Enum> GamepadButtonCollection;
 	typedef GamepadButtonCollection::const_iterator GamepadButtonIterator;
 
 	class Gamepad
@@ -48,7 +47,7 @@ namespace Temporal
 
 		// TODO:
 		GamepadButtonCollection _buttonsMap;
-		SDL_Joystick* _joystick;
+		void* _gamepad;
 
 		bool _buttons[GamepadButton::SIZE];
 		Vector _leftStick;

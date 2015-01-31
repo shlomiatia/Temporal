@@ -37,6 +37,7 @@ namespace Temporal
 		class JumpUp : public ComponentState
 		{
 		public:
+			void enter() const;
 			void handleMessage(Message& message) const;
 		};
 
