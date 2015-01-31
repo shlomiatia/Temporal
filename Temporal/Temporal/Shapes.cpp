@@ -57,28 +57,34 @@ namespace Temporal
 	 *********************************************************************************************/
 	const OBB OBB::Zero(Vector::Zero, 0.0f, Vector::Zero);
 
+	OBB::OBB(const Vector& center, float angle, const Vector& radius) : _center(center), _radius(radius) 
+	{
+		setAngle(angle);
+	}
+
+	OBB::OBB(const Vector& center, const Vector& axis0, const Vector& radius) : _center(center), _radius(radius) 
+	{
+		setAxis0(axis0);
+	}
+
+	void OBB::validate() const
+	{
+		assert(getRadiusX() >= 0.0f);
+		assert(getRadiusY() >= 0.0f);
+		assert(fabsf(_axes[0].getLength()-1.0f)<EPSILON);
+	}
+
 	void OBB::setAxis0(const Vector& axis0)
 	{
-		if(axis0.getX() <= 0.0f && axis0.getY() > 0.0f)
-		{
-			_axes[0] = axis0.getRightNormal();
-			_radius = Vector(_radius.getY(), _radius.getX());
-		}
-		else if(axis0.getX() < 0.0f && axis0.getY() <= 0.0f)
-		{
-			_axes[0] = -axis0;
-		}
-		else if(axis0.getX() >= 0.0f && axis0.getY() < 0.0f)
-		{
-			_axes[0] = axis0.getLeftNormal();
-			_radius = Vector(_radius.getY(), _radius.getX());
-		}
-		else
-		{
-			_axes[0] = axis0;
-		}
+		_axes[0] = axis0;
 		_axes[1] = _axes[0].getLeftNormal();
+		validate();
 	}
+
+	float OBB::getLeft() const { return getCenterX() - fabsf(getAxisX().getX()) * getRadiusX() - fabsf(getAxisY().getX()) * getRadiusY(); }
+	float OBB::getRight() const { return getCenterX() + fabsf(getAxisX().getX()) * getRadiusX() + fabsf(getAxisY().getX()) * getRadiusY(); }
+	float OBB::getBottom() const { return getCenterY() - fabsf(getAxisX().getY()) * getRadiusX() - fabsf(getAxisY().getY()) * getRadiusY(); }
+	float OBB::getTop() const { return getCenterY() + fabsf(getAxisX().getY()) * getRadiusX() + fabsf(getAxisY().getY()) * getRadiusY(); }
 
 	OBBAABBWrapper OBB::getAABBWrapper()
 	{

@@ -64,10 +64,10 @@ namespace Temporal
 	
 	void Light::drawShadow(const Vector& lightCenter, const OBB& shape)
 	{
-		Vector point1 = shape.getBottomLeftVertex();
-		Vector point2 = shape.getBottomRightVertex();
-		Vector point3 = shape.getTopRightVertex();
-		Vector point4 = shape.getTopLeftVertex();
+		Vector point1 = shape.getCenter() - shape.getAxisX() * shape.getRadiusX() - shape.getAxisY() * shape.getRadiusY();
+		Vector point2 = shape.getCenter() + shape.getAxisX() * shape.getRadiusX() - shape.getAxisY() * shape.getRadiusY();
+		Vector point3 = shape.getCenter() + shape.getAxisX() * shape.getRadiusX() + shape.getAxisY() * shape.getRadiusY();
+		Vector point4 = shape.getCenter() - shape.getAxisX() * shape.getRadiusX() + shape.getAxisY() * shape.getRadiusY();
 
 		drawShadowPart(lightCenter, point1, point2);
 		drawShadowPart(lightCenter, point2, point3);

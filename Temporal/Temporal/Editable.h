@@ -11,14 +11,14 @@ namespace Temporal
 	class Editable : public Component
 	{
 	public:
-		explicit Editable() : _translation(false), /*_rotation(false),*/ _offset(Vector::Zero) {}
+		explicit Editable() : _translation(false), _rotation(false), _offset(Vector::Zero) {}
 
 		Hash getType() const { return Hash::INVALID; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Editable(); }
 	private:
 		bool _translation;
-		//bool _rotation;
+		bool _rotation;
 		Vector _offset;
 
 		void leftMouseDown(const MouseParams& params);

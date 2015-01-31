@@ -18,7 +18,7 @@ namespace Temporal
 		static const Hash TURN_STATE = Hash("NAV_STT_TURN");
 
 		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
-		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
+		static const Hash ACTION_JUMP_STATE = Hash("ACT_STT_JUMP");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 
 		Navigator& getNavigator(StateMachineComponent& stateMachine)
@@ -161,6 +161,11 @@ namespace Temporal
 			}
 		}
 
+		void JumpUp::enter() const
+		{
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
+		}
+
 		void JumpUp::handleMessage(Message& message) const
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
@@ -171,14 +176,14 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 			}
 		}
 
 		void JumpForward::enter() const
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
 		}
 
 		void JumpForward::handleMessage(Message& message) const
@@ -186,12 +191,12 @@ namespace Temporal
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_JUMP_END_STATE)
+				if(state == ACTION_JUMP_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 			}
 		}
 

@@ -44,8 +44,9 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_ROTATION)
 		{
-			float angle = getFloatParam(message.getParam());
-			//_fixture->getLocalShape().setAngle(angle);
+			const Vector& vector = getVectorParam(message.getParam());
+			_fixture->getLocalShape().setAxis0(vector);
+			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
 	}
 }
