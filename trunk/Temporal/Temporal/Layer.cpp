@@ -135,6 +135,7 @@ namespace Temporal
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashCollection filter;
 		filter.push_back(Hash("static-body"));
+		filter.push_back(Hash("editable"));
 		//filter.push_back(Hash("dynamic-body"));
 		//filter.push_back(Hash("sensor"));
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
