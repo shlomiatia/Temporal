@@ -11,19 +11,26 @@ namespace Temporal
 	class Editable : public Component
 	{
 	public:
-		explicit Editable() : _translation(false), _rotation(false), _offset(Vector::Zero) {}
+		explicit Editable() : _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
 
-		Hash getType() const { return Hash::INVALID; }
+		Hash getType() const;
 		void handleMessage(Message& message);
 		Component* clone() const { return new Editable(); }
 	private:
 		bool _translation;
 		bool _rotation;
-		Vector _offset;
+		bool _scale;
+		bool _isPositiveScale;
+		Axis::Enum _scaleAxis;
+		Vector _translationOffset;
+		OBB _positiveXScale;
+		OBB _negativeXScale;
+		OBB _positiveYScale;
+		OBB _negativeYScale;
 
-		void leftMouseDown(const MouseParams& params);
-		void rightMouseDown(const MouseParams& params);
 		void mouseMove(const MouseParams& params);
+		void mouseDown(const MouseParams& params);
+		void reset();
 	};
 }
 #endif

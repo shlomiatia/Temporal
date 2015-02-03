@@ -27,7 +27,18 @@ namespace Temporal
 			(**i).init(this);
 	}
 
-	Component* Entity::get(Hash type) const
+	Component* Entity::get(Hash type)
+	{
+		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			Component* component = *i;
+			if(component->getType() == type)
+				return component;
+		}
+		return 0;
+	}
+
+	const Component* Entity::get(Hash type) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{

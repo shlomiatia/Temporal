@@ -34,7 +34,8 @@ namespace Temporal
 		Component() : _entity(0) {}
 		virtual ~Component() {}
 
-		Entity& getEntity() const { return *_entity; }
+		Entity& getEntity() { return *_entity; }
+		const Entity& getEntity() const { return *_entity; }
 		void init(Entity* entity) { _entity = entity; }
 		virtual Hash getType() const = 0;
 
@@ -66,7 +67,8 @@ namespace Temporal
 
 		void init(EntitiesManager* manager);
 		void add(Component* component);
-		Component* get(Hash type) const;
+		Component* get(Hash type);
+		const Component* get(Hash type) const;
 		void* handleMessage(Message& message, const HashCollection* filter = 0) const;
 		Entity* clone() const;
 	private:

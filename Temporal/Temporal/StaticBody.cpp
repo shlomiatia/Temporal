@@ -42,11 +42,5 @@ namespace Temporal
 		{
 			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
-		else if(message.getID() == MessageID::SET_ROTATION)
-		{
-			const Vector& vector = getVectorParam(message.getParam());
-			_fixture->getLocalShape().setAxis0(vector);
-			getEntity().getManager().getGameState().getGrid().update(_fixture);
-		}
 	}
 }
