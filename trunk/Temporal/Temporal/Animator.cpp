@@ -79,8 +79,11 @@ namespace Temporal
 	{
 		int animationDuration = animation.getDuration();
 
+		// If animation doesn't repeat, clamp it. Otherwise, calculate cyclic index
 		float relativeIndex = (currentIndex >= animationDuration && !animation.isRepeat()) ? animationDuration : fmod(currentIndex, animationDuration);
 		Direction::Enum direction = Direction::FORWARD;
+
+		// If animation rewind, calculate mirror index
 		if(isRewind)
 		{
 			relativeIndex = animationDuration - relativeIndex;
@@ -88,10 +91,14 @@ namespace Temporal
 		}
 		const SceneGraphSample& sceneGraphSample = **animation.getSamples().begin();
 		const SceneNodeSample* currentSample = sceneGraphSample.getSamples().at(sceneNode.getID());
-		while(currentSample->getParent().getIndex() > relativeIndex ||
-			  (currentSample->getNext()->getParent().getIndex() < relativeIndex && 
-			   currentSample->getParent().getIndex() < currentSample->getNext()->getParent().getIndex()))
+		while(!(relativeIndex >= currentSample->getParent().getIndex() && 
+		       (relativeIndex < currentSample->getNext()->getParent().getIndex() ||
+			    currentSample->getParent().getIndex() >= currentSample->getNext()->getParent().getIndex())))
+		{
 			currentSample = currentSample->getSibling(direction);
+		}
+			   
+		// If animation doesn't repeat, use current sample for both samples. Otherwise use current and next
 		const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !animation.isRepeat()) ? currentSample : currentSample->getNext();
 		float sampleOffset = relativeIndex - currentSample->getParent().getIndex();
 		int sampleDuration = animationDuration == 0 ? 0 : (animationDuration + nextSample->getParent().getIndex() - currentSample->getParent().getIndex()) % animationDuration;
@@ -109,13 +116,6 @@ namespace Temporal
 		const Animation& animation = _animationSet->get(_animationId);
 		float time = _timer.getElapsedTime();
 		float frame = timeToFrame(time);
-		int animationDuration = animation.getDuration();
-
-		if(frame >= animationDuration && !animation.isRepeat())
-		{
-			raiseMessage(Message(MessageID::ANIMATION_ENDED));			
-			return;
-		}
 		
 		for(SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 		{
@@ -128,7 +128,7 @@ namespace Temporal
 
 			animateSceneNode(animation, _isRewined, frame, sceneNode, spriteGroupId, interpolation, translation, rotation);
 			
-			if(_previousAnimationId != Hash::INVALID && time <= CROSS_FADE_DURATION && animation.isCrossFade() && _animationSet->get(_previousAnimationId).isCrossFade())
+			if(_previousAnimationId != Hash::INVALID && time <= CROSS_FADE_DURATION && animation.isCrossFade() && _animationSet->get(_previousAnimationId).isCrossFade() && !_isDisableCrossFade)
 			{
 				const Animation& previousAnimation = _animationSet->get(_previousAnimationId);	
 				float previousTime = _previousTimer.getElapsedTime();
@@ -153,6 +153,12 @@ namespace Temporal
 			sceneNode.setSpriteInterpolation(interpolation);
 			sceneNode.setTranslation(translation);
 			sceneNode.setRotation(rotation);
+		}
+
+		int animationDuration = animation.getDuration();
+		if(frame >= animationDuration && !animation.isRepeat())
+		{
+			raiseMessage(Message(MessageID::ANIMATION_ENDED));
 		}
 	}
 

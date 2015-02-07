@@ -20,7 +20,7 @@ namespace Temporal
 	public:
 		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false, bool transformOnly = false) :
 			_id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero), _flip(false), _rotation(0.0f),
-			_scale(Vector(1.0f, 1.0f)), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f) {}
+			_scale(Vector(1.0f, 1.0f)), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f), _parent(0) {}
 		~SceneNode();
 
 		Hash getID() const { return _id; }
@@ -29,6 +29,7 @@ namespace Temporal
 		bool isTransformOnly() const { return _transformOnly; }
 		
 		const Vector& getTranslation() const { return _translation; }
+		Vector getGlobalTranslation() const;
 		void setTranslation(const Vector& translation) { _translation = translation; }
 		const Vector& getScale() const { return _scale; }
 		void setScale(const Vector& scale) { _scale = scale; }
@@ -47,7 +48,10 @@ namespace Temporal
 		void add(SceneNode* child) { _children.push_back(child);}
 		SceneNode* clone() const;
 		const SceneNode* get(Hash id) const;
+		SceneNode* get(Hash id);
+		void init();
 
+	private:
 		Hash _id;
 		bool _drawBehindParent;	
 		bool _transformOnly;
@@ -60,6 +64,7 @@ namespace Temporal
 		Hash _spriteGroupId;
 		float _spriteInterpolation;
 
+		SceneNode* _parent;
 		SceneNodeCollection _children;
 
 		SceneNode(const SceneNode&);

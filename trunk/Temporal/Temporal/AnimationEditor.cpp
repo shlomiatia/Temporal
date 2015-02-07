@@ -52,7 +52,10 @@ namespace Temporal
 			bool isEmptySgs = sgs && sgs->getSamples().size() == 0;
 			for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 			{
+				if(*j == Hash("SCN_ROOT"))
+					continue;
 				Hash id = getSnsId(i, *j);
+
 				Control* control = static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
 				if(!control)
 					continue;
@@ -360,7 +363,7 @@ namespace Temporal
 		const Vector BUTTON_SIZE(WINDOW_SIZE.getX() / 4.0f - PADDING * 2.0f, 32.0f);
 		const Vector PADDED_BUTTON_SIZE(BUTTON_SIZE + PADDING_VECTOR  * 2.0f);
 		const Vector PADDED_PANEL_SIZE(WINDOW_SIZE / 2.0f);
-		const Vector PANEL_SIZE(PADDED_PANEL_SIZE.getX(), PADDED_PANEL_SIZE.getY() - PADDING);
+		const Vector PANEL_SIZE(PADDED_PANEL_SIZE.getX(), PADDED_PANEL_SIZE.getY() - PADDING * 2.0f);
 		const float GRID_START_Y = PADDED_PANEL_SIZE.getY() - CELL_SIZE;
 		GRID_FRAMES = (WINDOW_SIZE.getX() - PADDED_BUTTON_SIZE.getX()) / CELL_SIZE;
 			
@@ -373,6 +376,7 @@ namespace Temporal
 		Control* control = addControl(Hash("skeletonPanel"), AABBLT(PADDED_BUTTON_SIZE.getX(), WINDOW_SIZE.getY() - PADDING, PANEL_SIZE.getX(), PANEL_SIZE.getY()));
 		control->setBackgroundColor(Color::Transparent);
 		control->setLeftMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonLeftMouseDown));
+		control->setMiddleMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMiddleMouseDown));
 		control->setRightMouseDownEvent(createAction1(AnimationEditor, const MouseParams&, skeletonRightMouseDown));
 		control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
@@ -405,6 +409,8 @@ namespace Temporal
 		addControl(Hash::INVALID, AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX(), CELL_SIZE));
 		for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 		{
+			if(*i == Hash("SCN_ROOT"))
+				continue;
 			y -= CELL_SIZE;
 			addLabel(AABBLT(PADDING, y, PADDED_BUTTON_SIZE.getX() - PADDING, CELL_SIZE), i->getString());
 		}
@@ -419,6 +425,8 @@ namespace Temporal
 			float y = GRID_START_Y;
 			for(HashIterator j = _sceneNodes.begin(); j != _sceneNodes.end(); ++j)
 			{
+				if(*j == Hash("SCN_ROOT"))
+					continue;
 				Hash id = getSnsId(i, *j); 
 				Control* control = addControl(id, AABBLT(PADDED_BUTTON_SIZE.getX() + i * CELL_SIZE, y, CELL_SIZE, CELL_SIZE));
 				control->setLeftMouseClickEvent(createAction1(AnimationEditor, const MouseParams&, snsLeftClick));
@@ -441,27 +449,47 @@ namespace Temporal
 		_offset = params.getPosition() - getCreateSceneNodeSample().getTranslation();
 		_translation = true;
 		_rotation = false;
+		_move = false;
+	}
+
+	void AnimationEditor::skeletonMiddleMouseDown(const MouseParams& params)
+	{
+		Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
+		_offset = params.getPosition() - position;
+		_translation = false;
+		_rotation = false;
+		_move = true;
 	}
 
 	void AnimationEditor::skeletonRightMouseDown(const MouseParams& params)
 	{
 		addUndo();
-		_offset = params.getPosition() - getCreateSceneNodeSample().getTranslation();
 		_translation = false;
 		_rotation = true;
+		_move = false;
 	}
 
 	void AnimationEditor::skeletonMouseMove(const MouseParams& params)
 	{
 		if(_translation)
 		{
-			getCreateSceneNodeSample().setTranslation(params.getPosition() - _offset);
+			Vector translation = params.getPosition() - _offset;
+			getCreateSceneNodeSample().setTranslation(translation);
 		}
 		else if(_rotation)
 		{
-			const Vector vector = params.getPosition() - _offset;
+			Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
+			SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+			const SceneNode& node = *root.get(_sceneNodeId);
+			position += node.getGlobalTranslation();
+			Vector vector = params.getPosition() - position;
 			float rotation = fromRadians(vector.getAngle());
 			getCreateSceneNodeSample().setRotation(rotation);
+		}
+		else if(_move)
+		{
+			Vector position = params.getPosition() - _offset;
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_POSITION, &position));
 		}
 		setSample();
 	}

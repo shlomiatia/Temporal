@@ -14,8 +14,7 @@ namespace Temporal
 	 * Constants
 	 *********************************************************************************************/
 	const Hash ActionController::TYPE = Hash("action-controller");
-	float ActionController::WALK_ACC_PER_SECOND(2500.0f);
-	float ActionController::MAX_WALK_FORCE_PER_SECOND(250.0f);
+	float ActionController::WALK_ACC_PER_SECOND(1250.0f);
 	float ActionController::JUMP_FORCE_PER_SECOND(400.0f);
 	float ActionController::FALL_ALLOW_JUMP_TIME(0.15f);
 	float ActionController::JUMP_STOP_MODIFIER(0.5f);
@@ -190,7 +189,7 @@ namespace Temporal
 	 * Action controller
 	 *********************************************************************************************/
 	ActionController::ActionController() :
-		StateMachineComponent(getStates(), "ACT"), _ledgeDetector(LEDGE_SENSOR_ID, *this), _climbVector(Vector::Zero) {}
+		StateMachineComponent(getStates(), "ACT"), _ledgeDetector(LEDGE_SENSOR_ID, *this), _climbVector(Vector::Zero), MAX_WALK_FORCE_PER_SECOND(125.0f) {}
 
 	void ActionController::handleMessage(Message& message)
 	{
@@ -362,8 +361,8 @@ namespace Temporal
 				{
 					// We need to apply this every update because the ground has infinite restitution. 
 					float x = ActionController::WALK_ACC_PER_SECOND * _stateMachine->getTimer().getElapsedTime();
-					if(x > ActionController::MAX_WALK_FORCE_PER_SECOND)
-						x = ActionController::MAX_WALK_FORCE_PER_SECOND; 
+					if(x > getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND)
+						x = getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND; 
 					Vector force = Vector(x, 0.0f);
 					_stateMachine->raiseMessage(Message(MessageID::SET_IMPULSE, &force));
 				}

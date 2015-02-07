@@ -51,7 +51,7 @@ namespace Temporal
 	{
 	public:
 		explicit Sensor(const Hash& id = Hash::INVALID, Fixture* fixture = 0, int categoryMask = -1)
-			: _id(id), _fixture(fixture), _categoryMask(categoryMask) {}
+			: _id(id), _fixture(fixture), _categoryMask(categoryMask), _sensing(false) {}
 		~Sensor() { delete _fixture; }
 		
 		void handleMessage(Message& message);
@@ -67,6 +67,7 @@ namespace Temporal
 		int _categoryMask;
 		Fixture* _fixture;
 		ContactListener* _listener;
+		bool _sensing;
 
 		void update();
 

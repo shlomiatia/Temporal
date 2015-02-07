@@ -8,7 +8,7 @@
 			<transform orientation="1">
 				<position x="455" y="384" />
 			</transform>
-			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" />
+			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" disable-cross-fade="true" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1">
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">

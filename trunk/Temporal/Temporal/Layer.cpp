@@ -130,6 +130,7 @@ namespace Temporal
 	void DebugLayer::draw()
 	{
 		debugLayerTimer.measure();
+		Graphics::get().getLinesSpriteBatch().begin();
 		Graphics::get().getSpriteBatch().begin();
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
@@ -141,6 +142,7 @@ namespace Temporal
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		Graphics::get().getSpriteBatch().end();
+		Graphics::get().getLinesSpriteBatch().end();
 
 		//getManager().getGameState().getNavigationGraph().draw();
 		//getManager().getGameState().getGrid().draw();
