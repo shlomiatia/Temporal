@@ -23,6 +23,7 @@ namespace Temporal
 		_fixture->update();
 		const OBB& sensorShape = _fixture->getGlobalShape();
 		FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
+		_sensing = false;
 		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
@@ -30,6 +31,7 @@ namespace Temporal
 			const OBB& shape = fixture.getGlobalShape();
 
 			Contact contact(*_fixture, fixture);
+			_sensing = true;
 			raiseMessage(Message(MessageID::SENSOR_SENSE, &SensorParams(_id, &contact)));
 		}
 		raiseMessage(Message(MessageID::SENSOR_END, &_id));
@@ -47,7 +49,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(1.0f, 1.0f, 1.0f, 0.5f));
+			Graphics::get().getLinesSpriteBatch().add(_fixture->getGlobalShape(), _sensing ? Color(0.0f, 1.0f, 0.0f, 0.5f) : Color(1.0f, 1.0f, 1.0f, 0.5f));
 		}
 	}
 

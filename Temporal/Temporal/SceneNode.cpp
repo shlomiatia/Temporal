@@ -13,6 +13,16 @@ namespace Temporal
 		}
 	}
 
+	void SceneNode::init()
+	{
+		for(SceneNodeIterator i = _children.begin(); i != _children.end(); ++i)
+		{
+			SceneNode& child = (**i);
+			child._parent = this;
+			child.init();
+		}
+	}
+
 	SceneNode* SceneNode::clone() const
 	{
 		SceneNode* clone = new SceneNode(_id, _spriteGroupId, _drawBehindParent, _transformOnly);
@@ -41,5 +51,22 @@ namespace Temporal
 				return result;
 		}
 		return 0;
+	}
+
+	SceneNode* SceneNode::get(Hash id)
+	{
+		return const_cast<SceneNode*>(const_cast<const SceneNode*>(this)->get(id));
+	}
+
+	Vector SceneNode::getGlobalTranslation() const
+	{
+		Vector result = Vector::Zero;
+		const SceneNode* sceneNode = this;
+		while(sceneNode)
+		{
+			result += sceneNode->getTranslation();
+			sceneNode = sceneNode->_parent;
+		}
+		return result;
 	}
 }

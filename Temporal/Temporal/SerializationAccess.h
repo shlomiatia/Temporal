@@ -266,6 +266,7 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("animation", animator._animationId);
+			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade);
 			serializer.serialize("timer", animator._timer); // memory
 		}
 		
@@ -357,6 +358,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
+			serializer.serialize("max-walk-force-per-second", actionController.MAX_WALK_FORCE_PER_SECOND);
 			serializer.serialize("jump-type", (int&)actionController.getJumpHelper()._type);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}

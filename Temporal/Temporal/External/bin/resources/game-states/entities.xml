@@ -54,7 +54,15 @@
 					</obb>
 				</fixture>
 			</sensor>
-			<action-controller />
+			<sensor id="SNS_TAKEDOWN" category-mask="4">
+				<fixture>
+					<obb angle="0">
+						<center x="20" y="0" />
+						<radius x="10" y="40" />
+					</obb>
+				</fixture>
+			</sensor>
+			<action-controller max-walk-force-per-second="250.0" />
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
@@ -90,7 +98,7 @@
 			<light><color r="1.0" g="0.0" b="0.0" /></light>
 			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
 		</entity>
-		<entity id="ENT_DOOR">
+		<!--<entity id="ENT_DOOR">
 			<transform>
 				<position x="512" y="512" />
 			</transform>
@@ -228,7 +236,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>-->
+		</entity>
 		<entity id="ENT_CAMERA">
 			<transform>
 				<position x="512" y="416" />
@@ -238,7 +246,7 @@
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
-		</entity><!--
+		</entity>
 		<entity id="ENT_LASER">
 			<transform>
 				<position x="672 " y="191" />
@@ -301,7 +309,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<temporal-echo />
+			<temporal-echo />
 			<temporal-period period="1" />
 		</entity>-->
 		<entity id="ENT_FLOOR">

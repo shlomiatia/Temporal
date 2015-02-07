@@ -20,7 +20,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _index(0), _copyIndex(0), GRID_FRAMES(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _move(false), _index(0), _copyIndex(0), GRID_FRAMES(0) {}
 
 		Hash getType() const { return Hash::INVALID; }
 		void handleMessage(Message& message);
@@ -39,6 +39,7 @@ namespace Temporal
 		Vector _offset;
 		bool _translation;
 		bool _rotation;
+		bool _move;
 		std::vector<AnimationSet*> _undo;
 		int _copyIndex;
 
@@ -74,6 +75,7 @@ namespace Temporal
 		void update();
 
 		void skeletonLeftMouseDown(const MouseParams& params);
+		void skeletonMiddleMouseDown(const MouseParams& params);
 		void skeletonRightMouseDown(const MouseParams& params);
 		void skeletonMouseMove(const MouseParams& params);
 		void snsLeftClick(const MouseParams& params);

@@ -67,8 +67,8 @@ namespace Temporal
 
 		void init(EntitiesManager* manager);
 		void add(Component* component);
-		Component* get(Hash type);
 		const Component* get(Hash type) const;
+		Component* get(Hash type);
 		void* handleMessage(Message& message, const HashCollection* filter = 0) const;
 		Entity* clone() const;
 	private:

@@ -33,6 +33,7 @@ namespace Temporal
 				_spriteSheet = ResourceManager::get().getSingleTextureSpritesheet(_textureFile.c_str());
 			if(!_root)
 				_root = new SceneNode();
+			_root->init();
 		}
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
@@ -59,10 +60,6 @@ namespace Temporal
 	
 	void Renderer::draw()
 	{
-		if(getEntity().getId() == Hash("ENT_LASER"))
-		{
-			int i = 0;
-		}
 		const Vector& position = getPosition(*this);
 
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
@@ -88,10 +85,6 @@ namespace Temporal
 			Graphics::get().getMatrixStack().translate(sceneNode.getTranslation());
 			Graphics::get().getMatrixStack().rotate(sceneNode.getRotation());
 			Graphics::get().getMatrixStack().scale(sceneNode.getScale());
-			if(sceneNode.getScale() != Vector(1.0f, 1.0f))
-			{
-				int i = 0;
-			}
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{

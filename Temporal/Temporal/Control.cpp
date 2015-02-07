@@ -76,6 +76,9 @@ namespace Temporal
 		deleteEvent(_leftMouseDownEvent);
 		deleteEvent(_leftMouseClickEvent);
 		deleteEvent(_leftMouseUpEvent);
+		deleteEvent(_middleMouseDownEvent);
+		deleteEvent(_middleMouseClickEvent);
+		deleteEvent(_middleMouseUpEvent);
 		deleteEvent(_rightMouseDownEvent);
 		deleteEvent(_rightMouseClickEvent);
 		deleteEvent(_rightMouseUpEvent);
@@ -151,6 +154,8 @@ namespace Temporal
 			params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
 				raiseMouseDown(_leftMouseDownEvent, params, _isLeftDown, _isLeftClick);
+			else if(params.getButton() == MouseButton::MIDDLE)
+				raiseMouseDown(_middleMouseDownEvent, params, _isMiddleDown, _isMiddleClick);
 			else if(params.getButton() == MouseButton::RIGHT)
 				raiseMouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
 			else
@@ -164,6 +169,10 @@ namespace Temporal
 		if(params.getButton() == MouseButton::RIGHT)
 		{
 			raiseMouseUp(_rightMouseClickEvent, _rightMouseUpEvent, params, _isRightDown, _isRightClick);
+		}
+		else if(params.getButton() == MouseButton::MIDDLE)
+		{
+			raiseMouseUp(_middleMouseClickEvent, _middleMouseUpEvent, params, _isMiddleDown, _isMiddleClick);
 		}
 		else
 		{
@@ -185,9 +194,10 @@ namespace Temporal
 	void Control::mouseMove(MouseParams& params)
 	{
 		_isLeftClick = false;
+		_isMiddleClick = false;
 		_isRightClick = false;
 		params.setSender(this);
-		if(_isLeftDown || _isRightDown)
+		if(_isLeftDown || _isMiddleDown || _isRightDown)
 		{
 			params.setHandled(true);
 			raiseEvent(_mouseMoveEvent, params);
@@ -222,7 +232,7 @@ namespace Temporal
 			if (_textbox.size() > 0)
 				_textbox.resize(_textbox.size () - 1);
 		}
-		else
+		else if(key != Key::NONE)
 		{
 			_textbox += static_cast<char>(key);
 		}

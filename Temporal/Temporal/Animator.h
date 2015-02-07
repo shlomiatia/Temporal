@@ -18,7 +18,8 @@ namespace Temporal
 	{
 	public:
 		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId), _memoryAnimationId(animationId), _previousAnimationId(Hash::INVALID), _isPaused(false), _isRewined(false), _previousIsRewined(false) {}
+			_animationSetFile(animationSetFile), _animationId(animationId), _memoryAnimationId(animationId), _previousAnimationId(Hash::INVALID), 
+			_isPaused(false), _isRewined(false), _previousIsRewined(false), _isDisableCrossFade(false) {}
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -37,6 +38,7 @@ namespace Temporal
 		Hash _animationId;
 		bool _isRewined;
 		bool _isPaused;
+		bool _isDisableCrossFade;
 
 		Hash _memoryAnimationId;
 
