@@ -17,34 +17,35 @@
 
 namespace Temporal
 {
-	const float AnimationEditor::FRAME_TIME = 0.067f;
+	const float AnimationEditor::FRAME_TIME = 1000.0f / 15.0f;
 
-	void AnimationEditor::setAnimation(int index)
+	void AnimationEditor::setAnimation(Hash animationId)
 	{
+		_animationId = animationId;
 		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::RESET_ANIMATION, &AnimationParams(_animationId)));
-		setIndex(index);
-		setSample();
-		initSns();
+		setFrame();
+		updateGrid();
 	}
 
-	void AnimationEditor::setSample()
+	void AnimationEditor::setFrame()
 	{
-		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_index));
+		if(_paused)
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_ANIMATION_FRAME, &_index));
 	}
 
-	void AnimationEditor::setIndex(int index)
+	void AnimationEditor::setSceneGraphIndex(int index)
 	{
 		_index = index;
-		initSns();
+		updateGrid();
 	}
 
 	void AnimationEditor::setSceneNodeId(Hash sceneNodeId)
 	{
 		_sceneNodeId = sceneNodeId;
-		initSns();
+		updateGrid();
 	}
 
-	void AnimationEditor::initSns()
+	void AnimationEditor::updateGrid()
 	{
 		for(int i = 0;  i < GRID_FRAMES; ++i)
 		{
@@ -91,18 +92,20 @@ namespace Temporal
 		return Hash(sid.c_str());
 	}
 
-	SceneGraphSample* AnimationEditor::getSceneGraphSample(int index, bool createSceneGraphSample, bool deleteSceneGraphSample)
+	SceneGraphSample* AnimationEditor::getSceneGraphSample(int index, SceneNodeAction::Enum action, Hash animationId)
 	{
 		if(index == -1)
 			index = _index;
-		SceneGraphSampleCollection& samples = _animationSet->get(_animationId).getSamples();
+		if(animationId == Hash::INVALID)
+			animationId = _animationId;
+		SceneGraphSampleCollection& samples = _animationSet->get(animationId).getSamples();
 		for(SceneGraphSampleIterator i = samples.begin();; ++i)
 		{
-			if(createSceneGraphSample && (i == samples.end() || (**i).getIndex() > index))
+			if(action == SceneNodeAction::CREATE && (i == samples.end() || (**i).getIndex() > index))
 			{
 				SceneGraphSample* result = *samples.insert(i, new SceneGraphSample(index));
-				_animationSet->get(_animationId).init();
-				initSns();
+				_animationSet->get(animationId).init();
+				updateGrid();
 				return result;
 			}
 			else if(i == samples.end())
@@ -111,36 +114,29 @@ namespace Temporal
 			}
 			else if((**i).getIndex() == index)
 			{
-				if(!deleteSceneGraphSample)
+				if(action != SceneNodeAction::DELETE)
 					return *i;
 				delete *i;
 				i = samples.erase(i);
+				_animationSet->get(animationId).init();
+				updateGrid();
 				return 0;
 			}
 		}
 	}
 
-	SceneNodeSample* AnimationEditor::addSample(SceneNodeSampleCollection& samples, SceneNodeSampleIterator iterator)
-	{
-		const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-		const SceneNode& node = *root.get(_sceneNodeId);
-		SceneNodeSample* sample = new SceneNodeSample(_sceneNodeId);
-		sample->setTranslation(node.getTranslation());
-		sample->setRotation(node.getRotation());
-		samples[sample->getId()] = sample;
-		return sample;
-	}
-
-	SceneNodeSample* AnimationEditor::getSceneNodeSample(int index, Hash sceneNodeId, bool createSceneNodeSample, bool deleteSceneNodeSample)
+	SceneNodeSample* AnimationEditor::getSceneNodeSample(int index, Hash sceneNodeId, SceneNodeAction::Enum action, Hash animationId)
 	{
 		if(sceneNodeId == Hash::INVALID)
 			sceneNodeId = _sceneNodeId;
-		SceneGraphSample* sceneGraphSample = getSceneGraphSample(index, createSceneNodeSample);
+		if(animationId == Hash::INVALID)
+			animationId = _animationId;
+		SceneGraphSample* sceneGraphSample = getSceneGraphSample(index, action == SceneNodeAction::CREATE ? action : SceneNodeAction::NONE, animationId);
 		if(!sceneGraphSample)
 			return 0;
 		SceneNodeSampleCollection& samples = sceneGraphSample->getSamples();
 		SceneNodeSampleIterator i = samples.find(sceneNodeId);
-		if(deleteSceneNodeSample)
+		if(action == SceneNodeAction::DELETE)
 		{
 			if(i != samples.end())
 			{
@@ -148,18 +144,18 @@ namespace Temporal
 				i = samples.erase(i);
 			}
 			if(sceneGraphSample->getSamples().size() == 0)
-				getSceneGraphSample(index, false, true);
-			_animationSet->get(_animationId).init();
-			initSns();
+				getSceneGraphSample(index, action);
+			_animationSet->get(animationId).init();
+			updateGrid();
 			return 0;
 		}
 		else if(i == samples.end())
 		{
-			if(!createSceneNodeSample)
+			if(action != SceneNodeAction::CREATE)
 				return 0;
-			SceneNodeSample* result = addSample(samples, i);
-			_animationSet->get(_animationId).init();
-			initSns();
+			SceneNodeSample* result = addSample(samples, sceneNodeId);
+			_animationSet->get(animationId).init();
+			updateGrid();
 			return result;
 		}
 		else
@@ -168,9 +164,20 @@ namespace Temporal
 		}
 	}
 
-	SceneNodeSample& AnimationEditor::getCreateSceneNodeSample(int index, Hash sceneNodeId)
+	SceneNodeSample& AnimationEditor::getCreateSceneNodeSample(int index, Hash sceneNodeId, Hash animationId)
 	{
-		return *getSceneNodeSample(index, sceneNodeId, true);
+		return *getSceneNodeSample(index, sceneNodeId, SceneNodeAction::CREATE, animationId);
+	}
+
+	SceneNodeSample* AnimationEditor::addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId)
+	{
+		const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+		const SceneNode& node = *root.get(sceneNodeId);
+		SceneNodeSample* sample = new SceneNodeSample(sceneNodeId);
+		sample->setTranslation(node.getTranslation());
+		sample->setRotation(node.getRotation());
+		samples[sample->getId()] = sample;
+		return sample;
 	}
 
 	void AnimationEditor::handleArrows(const Vector& vector)
@@ -189,7 +196,6 @@ namespace Temporal
 			}
 			sample.setRotation(angle);
 		}
-		setSample();
 	}
 
 	void AnimationEditor::addUndo()
@@ -207,7 +213,6 @@ namespace Temporal
 			undo->init();
 			_animationSet = undo;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
-			setAnimation(_index);
 		}
 	}
 
@@ -223,12 +228,12 @@ namespace Temporal
 	{
 		addUndo();
 		Animation* animation = _animationSet->get(_animationId).clone();
-		_animationId = Hash(name);
-		animation->setId(_animationId);
+		Hash animationId = Hash(name);
+		animation->setId(animationId);
 		animation->setRepeat(true);
 		animation->init();
 		_animationSet->add(animation);
-		setAnimation();
+		setAnimation(animationId);
 	}
 
 	void AnimationEditor::deleteAnimation()
@@ -244,8 +249,7 @@ namespace Temporal
 		AnimationIterator i = _animationSet->getAnimations().find(_animationId);
 		++i;
 		if(i != _animationSet->getAnimations().end())
-			_animationId = i->first;
-		setAnimation();
+			setAnimation(i->first);
 	}
 
 	void AnimationEditor::previousAnimation()
@@ -254,19 +258,20 @@ namespace Temporal
 		if(i != _animationSet->getAnimations().begin())
 		{
 			--i;
-			_animationId = i->first;
+			setAnimation(i->first);
 		}
-		setAnimation();
 	}
 
 	void AnimationEditor::toggleAnimation()
 	{
-		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION));
-		setSample();
+		_paused = !_paused;
+		getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::TOGGLE_ANIMATION, &_paused));
+		setFrame();
 	}
 
 	void AnimationEditor::copy()
 	{
+		_copyAnimation = _animationId;
 		_copyIndex = _index;
 	}
 
@@ -276,7 +281,7 @@ namespace Temporal
 		for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 		{
 			SceneNodeSampleCollection* sceneNodeSamples = 0;
-			SceneNodeSample* copy = getSceneNodeSample(_copyIndex, *i);
+			SceneNodeSample* copy = getSceneNodeSample(_copyIndex, *i, SceneNodeAction::NONE, _copyAnimation);
 			if(!copy)
 				continue;
 			SceneNodeSample& paste = getCreateSceneNodeSample(_index, *i);
@@ -287,7 +292,7 @@ namespace Temporal
 
 	void AnimationEditor::newSgs()
 	{
-		getSceneGraphSample(_index, true);
+		getSceneGraphSample(_index, SceneNodeAction::CREATE);
 	}
 
 	void AnimationEditor::deleteSs()
@@ -295,8 +300,7 @@ namespace Temporal
 		if(_index == 0)
 			return;
 		addUndo();
-		getSceneNodeSample(_index, _sceneNodeId, false, true);
-		setAnimation(_index);
+		getSceneNodeSample(_index, _sceneNodeId, SceneNodeAction::DELETE);
 	}
 
 	void AnimationEditor::handleKey(Key::Enum key)
@@ -343,14 +347,14 @@ namespace Temporal
 		}
 		else if(key == Key::D)
 		{
-			setIndex(_index + 1);
-			setSample();
+			setSceneGraphIndex(_index + 1);
+			setFrame();
 		}
 		else if(key == Key::A)
 		{
 			if(_index > 0)
-				setIndex(_index - 1);
-			setSample();
+				setSceneGraphIndex(_index - 1);
+			setFrame();
 		}
 	}
 
@@ -368,10 +372,9 @@ namespace Temporal
 		GRID_FRAMES = (WINDOW_SIZE.getX() - PADDED_BUTTON_SIZE.getX()) / CELL_SIZE;
 			
 		_animationSet = ResourceManager::get().getAnimationSet("resources/animations/aquaria.xml");
-		_animationId = _animationSet->getAnimations().begin()->first;
+		
 		SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 		bindSceneNodes(sceneNode);
-		_sceneNodeId = *_sceneNodes.begin();
 
 		Control* control = addControl(Hash("skeletonPanel"), AABBLT(PADDED_BUTTON_SIZE.getX(), WINDOW_SIZE.getY() - PADDING, PANEL_SIZE.getX(), PANEL_SIZE.getY()));
 		control->setBackgroundColor(Color::Transparent);
@@ -434,6 +437,8 @@ namespace Temporal
 			}
 				
 		}
+		setSceneGraphIndex(0);
+		setSceneNodeId(*(_sceneNodes.begin()+1));
 	}
 
 	void AnimationEditor::update()
@@ -491,7 +496,6 @@ namespace Temporal
 			Vector position = params.getPosition() - _offset;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_POSITION, &position));
 		}
-		setSample();
 	}
 
 	void AnimationEditor::snsLeftClick(const MouseParams& params)
@@ -499,9 +503,9 @@ namespace Temporal
 		Control* panel = static_cast<Control*>(params.getSender());
 		Hash id = panel->getEntity().getId();
 		std::vector<std::string> parts = Utils::split(id.getString(), '.');
-		setIndex(Utils::parseInt(parts[0].c_str()));
+		setSceneGraphIndex(Utils::parseInt(parts[0].c_str()));
 		setSceneNodeId(Hash(parts[1].c_str()));
-		setSample();
+		setFrame();
 	}
 
 	Control* AnimationEditor::addControl(Hash id, const AABB& shape)
@@ -523,6 +527,7 @@ namespace Temporal
 		control->setText(text);
 		return control;
 	}
+
 	Control* AnimationEditor::addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey)
 	{
 		Control* control = addControl(id, shape);
@@ -552,7 +557,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			setAnimation();
+			setAnimation(_animationSet->getAnimations().begin()->first);
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{
@@ -573,11 +578,5 @@ namespace Temporal
 			entity->add(new AnimationEditor());
 			gameState.getEntitiesManager().add(entity);
 		}
-	}
-
-	void AEGameStateListener::onPreDraw()
-	{
-		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
-		Graphics::get().getSpriteBatch().add(AABB(Graphics::get().getLogicalView() / 2.0f, Graphics::get().getLogicalView()), Color(0.933f,0.933f,0.933f));
 	}
 }
