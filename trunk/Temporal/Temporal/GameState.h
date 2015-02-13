@@ -60,8 +60,6 @@ namespace Temporal
 		GameStateListener() {}
 		virtual void onUpdate(float framePeriod) {};
 		virtual void onLoaded(Hash id, GameState& gameState) {};
-		virtual void onPreDraw() {}
-		virtual void onPostDraw() {}
 	private:
 		GameStateListener(const GameStateListener&);
 		GameStateListener& operator=(const GameStateListener&);

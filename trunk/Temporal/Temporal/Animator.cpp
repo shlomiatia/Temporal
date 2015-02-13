@@ -40,7 +40,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::TOGGLE_ANIMATION)
 		{
-			_isPaused = !_isPaused;
+			_isPaused = getBoolParam(message.getParam());
 		}
 		else if(message.getID() == MessageID::SET_ANIMATION_FRAME)
 		{
@@ -53,7 +53,7 @@ namespace Temporal
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
-				_timer.update(1.0f/60.0f);
+				_timer.update(framePeriod);
 				// For load
 				if(_animationId != _memoryAnimationId)
 				{

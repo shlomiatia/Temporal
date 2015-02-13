@@ -17,10 +17,20 @@ namespace Temporal
 	class AABB;
 	class Control;
 
+	namespace SceneNodeAction
+	{
+		enum Enum
+		{
+			NONE,
+			CREATE,
+			DELETE
+		};
+	}
+
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _move(false), _index(0), _copyIndex(0), GRID_FRAMES(0) {}
+		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _move(false), _paused(false), _index(0), _copyIndex(0), GRID_FRAMES(0), _copyAnimation(Hash::INVALID) {}
 
 		Hash getType() const { return Hash::INVALID; }
 		void handleMessage(Message& message);
@@ -35,26 +45,28 @@ namespace Temporal
 		HashCollection _sceneNodes;
 		Hash _sceneNodeId;
 		int _index;
+		bool _paused;
 
 		Vector _offset;
 		bool _translation;
 		bool _rotation;
 		bool _move;
 		std::vector<AnimationSet*> _undo;
+		Hash _copyAnimation;
 		int _copyIndex;
 
-		void setAnimation(int index = 0);
-		void setSample();
-		void setIndex(int index);
+		void setAnimation(Hash animationId);
+		void setFrame();
+		void setSceneGraphIndex(int index);
 		void setSceneNodeId(Hash sceneNodeId);
-		void initSns();
+		void updateGrid();
 		void bindSceneNodes(SceneNode& sceneNode);
 
 		Hash getSnsId(int index, Hash snId);
-		SceneGraphSample* getSceneGraphSample(int index = -1, bool createSceneGraphSample = false, bool deleteSceneGraphSample = false);
-		SceneNodeSample* addSample(SceneNodeSampleCollection& samples, SceneNodeSampleIterator iterator);
-		SceneNodeSample* getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, bool createSceneNodeSample = false, bool deleteSceneNodeSample = false);
-		SceneNodeSample& getCreateSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID);
+		SceneGraphSample* getSceneGraphSample(int index = -1, SceneNodeAction::Enum action = SceneNodeAction::NONE, Hash animationId = Hash::INVALID);
+		SceneNodeSample* getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, SceneNodeAction::Enum action = SceneNodeAction::NONE, Hash animationId = Hash::INVALID);
+		SceneNodeSample& getCreateSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, Hash animationId = Hash::INVALID);
+		SceneNodeSample* addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId);
 
 		void handleArrows(const Vector& vector);
 		void addUndo();
@@ -90,7 +102,6 @@ namespace Temporal
 	{
 	public:
 		void onLoaded(Hash id, GameState& gameState);
-		void onPreDraw();
 	};
 }
 #endif
