@@ -60,8 +60,8 @@ namespace Temporal
 		// Check field of view
 		Vector vector = targetPosition - sourcePosition;
 		float angle = vector.getAngle();
-		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : mirroredAngle(_sightCenter);
-		float distance = minAnglesDistance(sightCenter, angle);
+		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : AngleUtils::radian().mirror(_sightCenter);
+		float distance = AngleUtils::radian().minDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
 
 		RayCastResult result;

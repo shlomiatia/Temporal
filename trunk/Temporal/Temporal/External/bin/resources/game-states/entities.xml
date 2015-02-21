@@ -68,26 +68,26 @@
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
-					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BODY" sprite-group="SCN_BODY" center="0" radius="90" />
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" center="-11.25" radius="33.75" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
 				</scene-node>
@@ -166,26 +166,26 @@
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
-					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BODY" sprite-group="SCN_BODY" center="0" radius="90" />
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" center="-11.25" radius="33.75" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
 				</scene-node>
@@ -212,26 +212,26 @@
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
-					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BODY" sprite-group="SCN_BODY" center="0" radius="90" />
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" center="-11.25" radius="33.75" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
 				</scene-node>
@@ -285,26 +285,26 @@
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
+							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_BODY"  sprite-group="SCN_BODY"/>
-					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" />
+					<scene-node id="SCN_BODY" sprite-group="SCN_BODY" center="0" radius="90" />
+					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" center="-11.25" radius="33.75" />
+					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
+						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
+							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
 						</scene-node>
 					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" />
+					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
+						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
 						</scene-node>
 					</scene-node>
 				</scene-node>

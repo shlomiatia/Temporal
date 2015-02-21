@@ -211,7 +211,7 @@ namespace Temporal
 
 	void Control::buttonKeyUp(Key::Enum key)
 	{
-		if(key == _shortcutKey)
+		if(key != Key::NONE && key == _shortcutKey)
 		{
 			if(_commandEvent)
 				(*_commandEvent)();

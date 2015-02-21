@@ -177,7 +177,7 @@ namespace Temporal
 
 	void XmlSerializer::serializeRadians(const char* key, float& value)
 	{
-		_current->ToElement()->SetAttribute(key, fromRadians(value));
+		_current->ToElement()->SetAttribute(key, AngleUtils::radiansToDegrees(value));
 	}
 
 	void XmlSerializer::save()
@@ -253,6 +253,6 @@ namespace Temporal
 	{
 		float degrees = 0.0f;
 		serialize(key, degrees);
-		value = toRadians(degrees);
+		value = AngleUtils::degreesToRadians(degrees);
 	}
 }

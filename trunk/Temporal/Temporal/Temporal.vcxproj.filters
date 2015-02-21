@@ -212,9 +212,6 @@
     <ClInclude Include="GameStateEditor.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixStack.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderProgram.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -226,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="FBO.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +416,6 @@
     <ClCompile Include="GameStateEditor.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="MatrixStack.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -430,6 +427,9 @@
     </ClCompile>
     <ClCompile Include="FBO.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

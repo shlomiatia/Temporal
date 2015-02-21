@@ -3,6 +3,7 @@
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
+#include "Math.h"
 #include <math.h>
 
 namespace Temporal
@@ -75,6 +76,25 @@ namespace Temporal
 			   endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);
 	}
 
+	float getTargetRotation(const SceneNode& sceneNode, float sourceRotation, float targetRotation)
+	{
+		bool notShortestPath = fabsf(targetRotation - sourceRotation) > 180.0f;
+
+		float clockwiseDist = AngleUtils::degree().clockwiseDistance(sourceRotation, targetRotation);
+		float counterclockwiseDist = AngleUtils::degree().counterclockwiseDistance(sourceRotation, targetRotation);
+		bool clockwise = clockwiseDist < counterclockwiseDist;
+		float minDist = clockwise ? clockwiseDist : counterclockwiseDist;
+		float centerDist = clockwise ? AngleUtils::degree().clockwiseDistance(sceneNode.getCenter(), sourceRotation) : AngleUtils::degree().counterclockwiseDistance(sceneNode.getCenter(), sourceRotation);
+		bool outsideBoneRange = (sceneNode.getRadius() > 0.0f && centerDist < 180.0f && centerDist + minDist > sceneNode.getRadius());
+
+		// XOR
+		if(notShortestPath != outsideBoneRange)
+		{
+			targetRotation = AngleUtils::degree().turn(targetRotation);
+		}
+		return targetRotation;
+	}
+
 	void animateSceneNode(const Animation& animation, bool isRewind, float currentIndex, const SceneNode& sceneNode, Hash& spriteGroupId, float& interpolation, Vector& translation, float& rotation)
 	{
 		int animationDuration = animation.getDuration();
@@ -108,7 +128,12 @@ namespace Temporal
 		
 		translation.setX(easeInOutBezier(interpolation, currentSample->getTranslation().getX(), nextSample->getTranslation().getX()));
 		translation.setY(easeInOutBezier(interpolation, currentSample->getTranslation().getY(), nextSample->getTranslation().getY()));
-		rotation = easeInOutBezier(interpolation, currentSample->getRotation(), nextSample->getRotation());
+
+		float sourceRotation = currentSample->getRotation();
+		float targetRotation = nextSample->getRotation();
+		
+		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
+		rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
 	}
 
 	void Animator::update()
@@ -145,6 +170,10 @@ namespace Temporal
 
 				translation.setX(easeInOutBezier(animationsInterpolation, previousTranslation.getX(), translation.getX()));
 				translation.setY(easeInOutBezier(animationsInterpolation, previousTranslation.getY(), translation.getY()));
+
+				previousRotation = AngleUtils::degree().normalize(previousRotation);
+				rotation = AngleUtils::degree().normalize(rotation);
+				rotation = getTargetRotation(sceneNode, previousRotation, rotation);
 				rotation = easeInOutBezier(animationsInterpolation, previousRotation, rotation);
 			}
 

@@ -95,7 +95,7 @@ namespace Temporal
 	void GUILayer::draw()
 	{
 		guiLayerTimer.measure();
-		Graphics::get().getMatrixStack().reset();
+		Graphics::get().getMatrixStack().top().reset();
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		Graphics::get().getSpriteBatch().begin();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)

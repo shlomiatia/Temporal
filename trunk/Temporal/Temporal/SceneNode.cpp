@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "SpriteSheet.h"
 #include "ResourceManager.h"
+#include "Matrix.h"
 
 namespace Temporal
 {
@@ -58,15 +59,19 @@ namespace Temporal
 		return const_cast<SceneNode*>(const_cast<const SceneNode*>(this)->get(id));
 	}
 
-	Vector SceneNode::getGlobalTranslation() const
+	Matrix SceneNode::getGlobalMatrix() const
 	{
-		Vector result = Vector::Zero;
 		const SceneNode* sceneNode = this;
+		Matrix result;
 		while(sceneNode)
 		{
-			result += sceneNode->getTranslation();
+			Matrix temp;
+			temp.translate(sceneNode->getTranslation());
+			temp.rotate(sceneNode->getRotation());
+			result = temp * result;
 			sceneNode = sceneNode->_parent;
 		}
+		
 		return result;
 	}
 }

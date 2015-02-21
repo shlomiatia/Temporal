@@ -37,7 +37,7 @@ namespace Temporal
 
 	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
 	{
-		Axis::Enum axisSign = isModerateAngle(area.getAxisX().getAngle()) ? Axis::X : Axis::Y;
+		Axis::Enum axisSign = AngleUtils::radian().isModerate(area.getAxisX().getAngle()) ? Axis::X : Axis::Y;
 		Vector normalizedSlopedVector = area.getAxis(axisSign);
 		float length = cutAmount / normalizedSlopedVector.getX();
 		Vector cutRadius = (normalizedSlopedVector * length) / 2.0f;
@@ -175,7 +175,7 @@ namespace Temporal
 			const OBB& platform = **i;
 			Vector axisX = platform.getAxisX();
 			float axisXAngle = axisX.getAngle();
-			Axis::Enum platformAxis = isModerateAngle(axisXAngle) ? Axis::X : Axis::Y;
+			Axis::Enum platformAxis = AngleUtils::radian().isModerate(axisXAngle) ? Axis::X : Axis::Y;
 			Axis::Enum platformOppositeAxisSign = Axis::getOpposite(platformAxis);
 			Vector platformOppositeAxis = platform.getAxis(platformOppositeAxisSign);
 			if(platformOppositeAxis.getY() < 0.0f)
@@ -259,9 +259,9 @@ namespace Temporal
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
 			node1.addEdge(new NavigationEdge(node1, node2, x, Side::LEFT, NavigationEdgeType::DESCEND));
-
+			
 			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
+			float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
 				node2.addEdge(new NavigationEdge(node2, node1, x, Side::LEFT, NavigationEdgeType::JUMP_UP));
 		}
@@ -273,7 +273,7 @@ namespace Temporal
 		const OBB& area2 = node2.getArea();
 		float horizontalDistance = area2.getLeft() - area1.getRight();
 
-		float maxJumpForwardDistance = getMaxJumpDistance(ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
+		float maxJumpForwardDistance = getMaxJumpDistance(AngleUtils::radian().ANGLE_45_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY());
 		if(horizontalDistance <= maxJumpForwardDistance)
 		{
 			DirectedSegment jumpArea = DirectedSegment(area1.getRight() + 1.0f, area1.getBottom() - 1.0f, area2.getLeft() - 1.0f, area1.getTop() + 1.0f);

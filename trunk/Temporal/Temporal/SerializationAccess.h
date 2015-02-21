@@ -163,6 +163,8 @@ namespace Temporal
 			serializer.serialize("rotation", sceneNode._rotation);
 			serializer.serialize("translation", sceneNode._translation);
 			serializer.serialize("scale", sceneNode._scale);
+			serializer.serialize("center", sceneNode._center);
+			serializer.serialize("radius", sceneNode._radius);
 			serializer.serialize("scene-node", sceneNode._children);
 		}
 
