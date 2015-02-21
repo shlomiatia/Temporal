@@ -67,9 +67,9 @@ namespace Temporal
 		
 		Graphics::get().getMatrixStack().push();
 		{
-			Graphics::get().getMatrixStack().translate(position);
+			Graphics::get().getMatrixStack().top().translate(position);
 			if(entityOrientation != Side::RIGHT)
-				Graphics::get().getMatrixStack().scale(Vector(-1.0f, 1.0f));
+				Graphics::get().getMatrixStack().top().scale(Vector(-1.0f, 1.0f));
 			draw(*_root);
 		}
 		Graphics::get().getMatrixStack().pop();
@@ -81,10 +81,10 @@ namespace Temporal
 		Graphics::get().getMatrixStack().push();
 		{	
 			if(sceneNode.isFlip())
-				Graphics::get().getMatrixStack().scale(Vector(-1.0f, 1.0f));
-			Graphics::get().getMatrixStack().translate(sceneNode.getTranslation());
-			Graphics::get().getMatrixStack().rotate(sceneNode.getRotation());
-			Graphics::get().getMatrixStack().scale(sceneNode.getScale());
+				Graphics::get().getMatrixStack().top().scale(Vector(-1.0f, 1.0f));
+			Graphics::get().getMatrixStack().top().translate(sceneNode.getTranslation());
+			Graphics::get().getMatrixStack().top().rotate(sceneNode.getRotation());
+			Graphics::get().getMatrixStack().top().scale(sceneNode.getScale());
 
 			for(SceneNodeIterator i = sceneNode.getChildren().begin(); i != sceneNode.getChildren().end(); ++i)
 			{

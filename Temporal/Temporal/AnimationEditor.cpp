@@ -171,8 +171,7 @@ namespace Temporal
 
 	SceneNodeSample* AnimationEditor::addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId)
 	{
-		const SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-		const SceneNode& node = *root.get(sceneNodeId);
+		const SceneNode& node = getSceneNode(sceneNodeId);
 		SceneNodeSample* sample = new SceneNodeSample(sceneNodeId);
 		sample->setTranslation(node.getTranslation());
 		sample->setRotation(node.getRotation());
@@ -185,16 +184,13 @@ namespace Temporal
 		SceneNodeSample& sample = getCreateSceneNodeSample();
 		if(_translation)
 		{
-			sample.setTranslation(sample.getTranslation() + vector);
+			Vector translation = getTranslation(vector);
+			sample.setTranslation(sample.getTranslation() + translation);
 		}
 		else
 		{
 			float angle = sample.getRotation() + vector.getX() + vector.getY();
-			if(abs(angle) > 180.0f)
-			{
-				angle = (angle > 0.0f ? -360.0f : 360.0f) + angle;
-			}
-			sample.setRotation(angle);
+			setRotation(angle);
 		}
 	}
 
@@ -213,6 +209,7 @@ namespace Temporal
 			undo->init();
 			_animationSet = undo;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::ENTITY_INIT));
+			updateGrid();
 		}
 	}
 
@@ -295,7 +292,7 @@ namespace Temporal
 		getSceneGraphSample(_index, SceneNodeAction::CREATE);
 	}
 
-	void AnimationEditor::deleteSs()
+	void AnimationEditor::deleteSns()
 	{
 		if(_index == 0)
 			return;
@@ -400,7 +397,7 @@ namespace Temporal
 		bounds = AABB(PADDED_BUTTON_SIZE.getX() + PADDED_PANEL_SIZE.getX() + PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f, BUTTON_SIZE.getX(), BUTTON_SIZE.getY());
 		control = addButton(Hash("newSgs"), bounds, "New Sgs", createAction(AnimationEditor, newSgs), Key::N);		
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
-		control = addButton(Hash("deleteSs"), bounds, "Delete Ss", createAction(AnimationEditor, deleteSs), Key::DEL);
+		control = addButton(Hash("deleteSs"), bounds, "Delete Sns", createAction(AnimationEditor, deleteSns), Key::DEL);
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
 		control = addButton(Hash("copySgs"), bounds, "Copy Sgs", createAction(AnimationEditor, copy), Key::C);
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
@@ -443,15 +440,63 @@ namespace Temporal
 
 	void AnimationEditor::update()
 	{
+		SceneNodeSample* sample = getSceneNodeSample();
 		std::stringstream s;
-		s << _animationId.getString() << " " << _sceneNodeId.getString() << " " << _index;
+		s << "[Animation: " << _animationId.getString() << "][Frame: " << _index << "][Node: " << _sceneNodeId.getString() << "]";
+		if(sample)
+			s << "[X: " << sample->getTranslation().getX() << "][Y: " << sample->getTranslation().getY() << "][Angle: " << sample->getRotation() << "]";
 		Graphics::get().setTitle(s.str().c_str());
+	}
+
+	const SceneNode& AnimationEditor::getSceneNode(Hash sceneNodeId)
+	{
+		if(sceneNodeId == Hash::INVALID)
+			sceneNodeId = _sceneNodeId;
+		SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
+		const SceneNode& node = *root.get(_sceneNodeId);
+		return node;
+	}
+
+	Vector AnimationEditor::getParentGlobalPosition()
+	{
+		Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
+		const SceneNode& node = getSceneNode().parent();
+		Matrix globalMatrix = node.getGlobalMatrix();
+		Vector globalTranslation = globalMatrix * Vector::Zero;
+		position += globalTranslation;
+		return position;
+	}
+
+	Vector AnimationEditor::getGlobalPosition()
+	{
+		Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
+		const SceneNode& node = getSceneNode();
+		Matrix globalMatrix = node.getGlobalMatrix();
+		Vector globalTranslation = globalMatrix * Vector::Zero;
+		position += globalTranslation;
+		return position;
+	}
+
+	void AnimationEditor::setRotation(float rotation)
+	{
+		const SceneNode& node = getSceneNode();
+		if(AngleUtils::degree().minDistance(rotation, node.getCenter()) <= node.getRadius())
+			getCreateSceneNodeSample().setRotation(rotation);
+	}
+
+	Vector AnimationEditor::getTranslation(const Vector& translation)
+	{
+		const SceneNode& node = getSceneNode();
+		Matrix globalMatrix = node.parent().getGlobalMatrix();
+		globalMatrix.resetTranslation();
+		globalMatrix.inverse();
+		return globalMatrix * translation;
 	}
 
 	void AnimationEditor::skeletonLeftMouseDown(const MouseParams& params)
 	{
 		addUndo();
-		_offset = params.getPosition() - getCreateSceneNodeSample().getTranslation();
+		_offsetTranslation = params.getPosition() - getGlobalPosition();
 		_translation = true;
 		_rotation = false;
 		_move = false;
@@ -460,7 +505,7 @@ namespace Temporal
 	void AnimationEditor::skeletonMiddleMouseDown(const MouseParams& params)
 	{
 		Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
-		_offset = params.getPosition() - position;
+		_offsetTranslation = params.getPosition() - position;
 		_translation = false;
 		_rotation = false;
 		_move = true;
@@ -469,6 +514,9 @@ namespace Temporal
 	void AnimationEditor::skeletonRightMouseDown(const MouseParams& params)
 	{
 		addUndo();
+		Vector position = getGlobalPosition();
+		const SceneNode& node = getSceneNode();
+		_offsetAngle = (params.getPosition() - position).getAngle() - AngleUtils::degreesToRadians(node.getRotation());
 		_translation = false;
 		_rotation = true;
 		_move = false;
@@ -478,22 +526,24 @@ namespace Temporal
 	{
 		if(_translation)
 		{
-			Vector translation = params.getPosition() - _offset;
+			
+			Vector translation = params.getPosition() - _offsetTranslation - getParentGlobalPosition();
+			translation = getTranslation(translation);
 			getCreateSceneNodeSample().setTranslation(translation);
 		}
 		else if(_rotation)
 		{
-			Vector position = getVectorParam(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_POSITION)));
-			SceneNode& root = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), (Message(MessageID::GET_ROOT_SCENE_NODE))));
-			const SceneNode& node = *root.get(_sceneNodeId);
-			position += node.getGlobalTranslation();
+		
+			Vector position = getGlobalPosition();
+			const SceneNode& node = getSceneNode();
 			Vector vector = params.getPosition() - position;
-			float rotation = fromRadians(vector.getAngle());
-			getCreateSceneNodeSample().setRotation(rotation);
+			float angle = AngleUtils::radian().normalize(vector.getAngle() - _offsetAngle);
+			float rotation = AngleUtils::radiansToDegrees(angle);
+			setRotation(rotation);
 		}
 		else if(_move)
 		{
-			Vector position = params.getPosition() - _offset;
+			Vector position = params.getPosition() - _offsetTranslation;
 			getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::SET_POSITION, &position));
 		}
 	}

@@ -3,7 +3,7 @@
 
 #include "Color.h"
 #include "Vector.h"
-#include "MatrixStack.h"
+#include "Matrix.h"
 #include "ShaderProgram.h"
 #include "SpriteBatch.h"
 

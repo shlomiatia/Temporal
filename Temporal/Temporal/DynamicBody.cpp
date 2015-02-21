@@ -122,7 +122,7 @@ namespace Temporal
 		__dynamicBodyBounds = _fixture->getGlobalShape();
 			
 		// Slide
-		if(_ground && !isModerateAngle(_groundSegment.getRadius().getAngle()))
+		if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
 		{
 			// BRODER
 			_velocity = _groundSegment.getNaturalDirection() * 250.0f;
@@ -198,7 +198,7 @@ namespace Temporal
 			RayCastResult result;
 			if(getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
 			  (result.getPoint() - rayOrigin).getLength() < 10.0f &&
-			  isModerateAngle(getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX()).getNaturalDirection().getAngle()))
+			  AngleUtils::radian().isModerate(getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX()).getNaturalDirection().getAngle()))
 			{
  				_ground = &result.getFixture();
 				_groundSegment = getTopSegment(_ground->getGlobalShape(), rayOrigin.getX());
@@ -312,13 +312,13 @@ namespace Temporal
 				// Don't allow to fix into ground _*\ 
 				(correction.getY() < -EPSILON || 
 				// Don't climb on steep slope _*/
-				 (differentSign(movement.getX(), correction.getX()) && isSteepAngle(correction.getRightNormal().getAngle()))))
+				(differentSign(movement.getX(), correction.getX()) && AngleUtils::radian().isSteep(correction.getRightNormal().getAngle()))))
 		{
  			correction = -movement;
 			modifyGround = false;
 		}
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
-		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && isModerateAngle(correction.getRightNormal().getAngle()))
+		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && AngleUtils::radian().isModerate(correction.getRightNormal().getAngle()))
 		{	
 			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();

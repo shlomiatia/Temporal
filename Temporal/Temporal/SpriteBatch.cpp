@@ -3,9 +3,8 @@
 #include "Texture.h"
 #include "Math.h"
 #include "ShaderProgram.h"
+#include "Matrix.h"
 #include <GL/glew.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <algorithm>
 
 namespace Temporal
@@ -208,30 +207,30 @@ namespace Temporal
 		Vector actualRadius = getActualRadius(radius, texture, texturePart);
 
 		// Calculate matrix
-		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
-		m = glm::translate(m, glm::vec3(translation.getX(), translation.getY(), 0.0f));
-		m = glm::rotate(m, fromRadians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-		m = glm::translate(m, glm::vec3(pivot.getX(), pivot.getY(), 0.0f));
-		m = glm::scale(m, glm::vec3(actualScale.getX(), actualScale.getY(), 0.0f));
+		Matrix m = ignoreMatrixStack ? Matrix() : Graphics::get().getMatrixStack().top();
+		m.translate(translation);
+		m.rotate(AngleUtils::radiansToDegrees(rotation));
+		m.translate(pivot);
+		m.scale(actualScale);
 
-		glm::vec4 a = m * glm::vec4(-actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
-		glm::vec4 b = m * glm::vec4(actualRadius.getX(), -actualRadius.getY(), 0.0f, 1.0f);
-		glm::vec4 c = m * glm::vec4(actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
-		glm::vec4 d = m * glm::vec4(-actualRadius.getX(), actualRadius.getY(), 0.0f, 1.0f);
+		Vector a = m * Vector(-actualRadius.getX(), -actualRadius.getY());
+		Vector b = m * Vector(actualRadius.getX(), -actualRadius.getY());
+		Vector c = m * Vector(actualRadius.getX(), actualRadius.getY());
+		Vector d = m * Vector(-actualRadius.getX(), actualRadius.getY());
 
-		innerAdd(texture, Vector(a.x, a.y), Vector(b.x, b.y), Vector(c.x, c.y), Vector(d.x, d.y), actualTexturePart, color);
+		innerAdd(texture, a, b, c, d, actualTexturePart, color);
 	}
 
 	void SpriteBatch::add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart, const Color& color, bool ignoreMatrixStack)
 	{
 		AABB actualTexturePart = getActualTexturePart(texture, texturePart);
-		glm::mat4 m = ignoreMatrixStack ? glm::mat4() : Graphics::get().getMatrixStack().top();
-		glm::vec4 a = m * glm::vec4(alpha.getX(), alpha.getY(), 0.0f, 1.0f);
-		glm::vec4 b = m * glm::vec4(beta.getX(), beta.getY(), 0.0f, 1.0f);
-		glm::vec4 c = m * glm::vec4(gamma.getX(), gamma.getY(), 0.0f, 1.0f);
-		glm::vec4 d = m * glm::vec4(delta.getX(), delta.getY(), 0.0f, 1.0f);
+		Matrix m = ignoreMatrixStack ? Matrix() : Graphics::get().getMatrixStack().top();
+		Vector a = m * alpha;
+		Vector b = m * beta;
+		Vector c = m * gamma;
+		Vector d = m * delta;
 
-		innerAdd(texture, Vector(a.x, a.y), Vector(b.x, b.y), Vector(c.x, c.y), Vector(d.x, d.y), actualTexturePart, color);
+		innerAdd(texture, a, b, c, d, actualTexturePart, color);
 	}
 
 	void SpriteBatch::end()

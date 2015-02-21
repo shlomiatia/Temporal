@@ -30,7 +30,7 @@ namespace Temporal
 	class AnimationEditor : public Component
 	{
 	public:
-		AnimationEditor() : _offset(Vector::Zero), _translation(false), _rotation(false), _move(false), _paused(false), _index(0), _copyIndex(0), GRID_FRAMES(0), _copyAnimation(Hash::INVALID) {}
+		AnimationEditor() : _offsetTranslation(Vector::Zero), _copyAnimation(Hash::INVALID), _translation(false), _rotation(false), _move(false), _paused(false), _index(0), _copyIndex(0), GRID_FRAMES(0), _offsetAngle(0.0f) {}
 
 		Hash getType() const { return Hash::INVALID; }
 		void handleMessage(Message& message);
@@ -47,7 +47,8 @@ namespace Temporal
 		int _index;
 		bool _paused;
 
-		Vector _offset;
+		Vector _offsetTranslation;
+		float _offsetAngle;
 		bool _translation;
 		bool _rotation;
 		bool _move;
@@ -67,6 +68,11 @@ namespace Temporal
 		SceneNodeSample* getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, SceneNodeAction::Enum action = SceneNodeAction::NONE, Hash animationId = Hash::INVALID);
 		SceneNodeSample& getCreateSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, Hash animationId = Hash::INVALID);
 		SceneNodeSample* addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId);
+		Vector getParentGlobalPosition();
+		Vector getGlobalPosition();
+		const SceneNode& getSceneNode(Hash sceneNodeId = Hash::INVALID);
+		void setRotation(float rotation);
+		Vector getTranslation(const Vector& translation);
 
 		void handleArrows(const Vector& vector);
 		void addUndo();
@@ -80,7 +86,7 @@ namespace Temporal
 		void copy();
 		void paste();
 		void newSgs();
-		void deleteSs();
+		void deleteSns();
 
 		void handleKey(Key::Enum key);
 		void init();

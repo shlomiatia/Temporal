@@ -101,7 +101,7 @@ namespace Temporal
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		_matrixStack.reset();
+		_matrixStack.top().reset();
 		_spriteBatch.begin();
 		_linesSpriteBatch.begin();
 	}
