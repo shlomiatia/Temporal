@@ -18,9 +18,9 @@ namespace Temporal
 		{
 			BACKGROUND,
 			STATIC,
-			PC,
-			COVER,
 			NPC,
+			COVER,
+			PC,
 			PARTICLES,
 			SIZE
 		};

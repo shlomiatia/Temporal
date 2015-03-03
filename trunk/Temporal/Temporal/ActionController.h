@@ -104,6 +104,8 @@ namespace Temporal
 		JumpHelper& getJumpHelper() { return _jumpHelper; }
 		void setClimbVector(const Vector& vector) { _climbVector = vector; }
 		const Vector& getClimbVector() const { return _climbVector; } 
+		void setTakedownEntityId(Hash takedownEntityId) { _takedownEntityId = takedownEntityId; }
+		Hash getTakedownEntityId() const { return _takedownEntityId; } 
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
@@ -121,6 +123,7 @@ namespace Temporal
 
 	private:
 		Vector _climbVector; 
+		Hash _takedownEntityId;
 		JumpHelper _jumpHelper;
 		LedgeDetector _ledgeDetector;
 
@@ -201,6 +204,20 @@ namespace Temporal
 		public:
 			void enter() const;
 			void handleMessage(Message& message) const;
+		};
+
+		class Takedown : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const;
+		};
+
+		class Dying : public ComponentState
+		{
+		public:
+			void enter() const;
+			void handleMessage(Message& message) const {}
 		};
 	}
 }
