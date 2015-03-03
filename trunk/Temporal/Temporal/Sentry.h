@@ -10,15 +10,15 @@ namespace Temporal
 		class Search : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Acquire : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 
 		private:
 			static const float ACQUIRE_TIME;
@@ -27,8 +27,8 @@ namespace Temporal
 		class See : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 	}
 

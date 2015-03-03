@@ -361,7 +361,6 @@ namespace Temporal
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
 			serializer.serialize("max-walk-force-per-second", actionController.MAX_WALK_FORCE_PER_SECOND);
-			serializer.serialize("jump-type", (int&)actionController.getJumpHelper()._type);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}
 		

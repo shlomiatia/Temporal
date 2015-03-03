@@ -46,27 +46,27 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 
 		class See : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Wait : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 
 		private:
 			static const float WAIT_TIME;
