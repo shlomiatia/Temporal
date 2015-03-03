@@ -11,12 +11,12 @@ namespace Temporal
 		static const Hash ACQUIRE_STATE = Hash("SEN_STT_ACQUIRE");
 		static const Hash SEE_STATE = Hash("SEN_STT_SEE");
 
-		void Search::enter() const
+		void Search::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Red)));
 		}
 
-		void Search::handleMessage(Message& message) const
+		void Search::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -26,14 +26,14 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME(1.0f);
 
-		void Acquire::enter() const
+		void Acquire::enter(void* param)
 		{
 			// TempFlag 1 - LOS
 			_stateMachine->setFrameFlag1(true);
 			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Yellow)));
 		}
 
-		void Acquire::handleMessage(Message& message) const
+		void Acquire::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -48,12 +48,12 @@ namespace Temporal
 			}
 		}
 
-		void See::enter() const
+		void See::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::SET_COLOR, const_cast<Color*>(&Color::Green)));
 		}
 
-		void See::handleMessage(Message& message) const
+		void See::handleMessage(Message& message)
 		{	
 			// TempFlag 1 - LOS
 			if(message.getID() == MessageID::LINE_OF_SIGHT)

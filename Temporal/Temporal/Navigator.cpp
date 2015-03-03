@@ -48,7 +48,7 @@ namespace Temporal
 			}
 		}
 
-		void Wait::handleMessage(Message& message) const
+		void Wait::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
@@ -57,7 +57,7 @@ namespace Temporal
 			}
 		}
 
-		void Walk::handleMessage(Message& message) const
+		void Walk::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
@@ -109,7 +109,7 @@ namespace Temporal
 			}
 		}
 
-		void Turn::handleMessage(Message& message) const
+		void Turn::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::UPDATE)
 			{
@@ -147,7 +147,7 @@ namespace Temporal
 			}
 		}
 
-		void Fall::handleMessage(Message& message) const
+		void Fall::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -161,12 +161,12 @@ namespace Temporal
 			}
 		}
 
-		void JumpUp::enter() const
+		void JumpUp::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
 		}
 
-		void JumpUp::handleMessage(Message& message) const
+		void JumpUp::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -180,13 +180,13 @@ namespace Temporal
 			}
 		}
 
-		void JumpForward::enter() const
+		void JumpForward::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
 		}
 
-		void JumpForward::handleMessage(Message& message) const
+		void JumpForward::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -200,7 +200,7 @@ namespace Temporal
 			}
 		}
 
-		void Descend::handleMessage(Message& message) const
+		void Descend::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_ENTERED)
 			{

@@ -28,14 +28,14 @@ namespace Temporal
 
 	namespace DoorStates
 	{
-		void Open::enter() const
+		void Open::enter(void* param)
 		{
 			bool isEnabled = false;
 			_stateMachine->raiseMessage(Message(MessageID::SET_BODY_ENABLED, &isEnabled));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPEN_ANIMATION)));
 		}
 
-		void Open::handleMessage(Message& message) const
+		void Open::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ACTIVATE)
 			{
@@ -43,14 +43,14 @@ namespace Temporal
 			}
 		}
 
-		void Close::enter() const
+		void Close::enter(void* param)
 		{
 			bool isEnabled = true;
 			_stateMachine->raiseMessage(Message(MessageID::SET_BODY_ENABLED, &isEnabled));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(CLOSE_ANIMATION)));
 		}
 
-		void Close::handleMessage(Message& message) const
+		void Close::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ACTIVATE)
 			{
@@ -58,12 +58,12 @@ namespace Temporal
 			}
 		}
 
-		void Opening::enter() const
+		void Opening::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPENING_ANIMATION)));
 		}
 
-		void Opening::handleMessage(Message& message) const
+		void Opening::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
@@ -71,12 +71,12 @@ namespace Temporal
 			}
 		}
 
-		void Closing::enter() const
+		void Closing::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(OPENING_ANIMATION, true)));
 		}
 
-		void Closing::handleMessage(Message& message) const
+		void Closing::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{

@@ -19,12 +19,12 @@ namespace Temporal
 
 		const float Search::SEARCH_TIME(5.0f);
 
-		void Search::enter() const
+		void Search::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEARCH_ANIMATION)));
 		}
 
-		void Search::handleMessage(Message& message) const
+		void Search::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -37,12 +37,12 @@ namespace Temporal
 			}
 		}
 
-		void See::enter() const
+		void See::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEE_ANIMATION)));
 		}
 
-		void See::handleMessage(Message& message) const
+		void See::handleMessage(Message& message)
 		{	
 			// TempFlag 1 - Have line of sight
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
@@ -56,13 +56,13 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter() const
+		void Turn::enter(void* param)
 		{
 			_hasTurned = false;
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(TURN_ANIMATION)));
 		}
 
-		void Turn::handleMessage(Message& message) const
+		void Turn::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
@@ -81,7 +81,7 @@ namespace Temporal
 
 		const float Acquire::ACQUIRE_TIME(1.0f);
 
-		void Acquire::enter() const
+		void Acquire::enter(void* param)
 		{
 			// TempFlag 1 - have LOS
 			_stateMachine->setFrameFlag1(true);
@@ -97,7 +97,7 @@ namespace Temporal
 				_stateMachine->changeState(SEE_STATE);
 		}
 
-		void Acquire::handleMessage(Message& message) const
+		void Acquire::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{

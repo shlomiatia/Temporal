@@ -19,9 +19,9 @@ namespace Temporal
 
 		void setStateMachine(StateMachineComponent* stateMachine) { _stateMachine = stateMachine; }
 
-		virtual void enter() const {}
-		virtual void exit() const {}
-		virtual void handleMessage(Message& message) const = 0;
+		virtual void enter(void* param) {}
+		virtual void exit(void* param) {}
+		virtual void handleMessage(Message& message) = 0;
 
 	protected:
 		StateMachineComponent* _stateMachine;
@@ -40,7 +40,7 @@ namespace Temporal
 		explicit StateMachineComponent(StateCollection states, const char* prefix);
 		virtual ~StateMachineComponent();
 
-		void changeState(Hash stateID);
+		void changeState(Hash stateID, void* param = 0);
 		virtual void handleMessage(Message& message);
 
 		// Temp flags. Used when some messages combinations make something happen, or if during update we need to check if someting didn't happen. 
@@ -66,7 +66,7 @@ namespace Temporal
 		StateCollection _states;
 
 		// Persistent state
-		const ComponentState* _currentState;
+		ComponentState* _currentState;
 		Hash _currentStateID;
 		Timer _timer;
 

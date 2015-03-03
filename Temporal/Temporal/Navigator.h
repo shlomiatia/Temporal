@@ -13,45 +13,45 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 
 		class Walk : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 
 		class Fall : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 
 		class JumpUp : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class JumpForward : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Descend : public ComponentState
 		{
 		public:
-			void handleMessage(Message& message) const;
+			void handleMessage(Message& message);
 		};
 	}
 

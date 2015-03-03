@@ -17,15 +17,15 @@ namespace Temporal
 			delete (*i).second;
 	}
 
-	void StateMachineComponent::changeState(Hash stateID)
+	void StateMachineComponent::changeState(Hash stateID, void* param)
 	{
 		if(_currentState)
 		{
-			_currentState->exit();
+			_currentState->exit(param);
 			raiseMessage(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
 		setState(stateID);
-		_currentState->enter();
+		_currentState->enter(param);
 		raiseMessage(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
 
@@ -36,7 +36,7 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			setState(getInitialState());
-			_currentState->enter();
+			_currentState->enter(0);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{

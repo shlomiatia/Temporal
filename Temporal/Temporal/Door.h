@@ -28,29 +28,29 @@ namespace Temporal
 		class Open : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Close : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Opening : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Closing : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 	}
 }

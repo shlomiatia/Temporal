@@ -61,7 +61,7 @@ namespace Temporal
 
 	namespace PatrolStates
 	{
-		void Walk::handleMessage(Message& message) const
+		void Walk::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -85,13 +85,13 @@ namespace Temporal
 			}
 		}
 
-		void See::enter() const
+		void See::enter(void* param)
 		{
 			// TempFlag1 - have line of sight
 			_stateMachine->setFrameFlag1(true);
 		}
 
-		void See::handleMessage(Message& message) const
+		void See::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
@@ -104,12 +104,12 @@ namespace Temporal
 			}
 		}
 
-		void Turn::enter() const
+		void Turn::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
 		}
 
-		void Turn::handleMessage(Message& message) const
+		void Turn::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
@@ -121,7 +121,7 @@ namespace Temporal
 
 		const float Wait::WAIT_TIME(5.0f);
 
-		void Wait::handleMessage(Message& message) const
+		void Wait::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{

@@ -10,7 +10,7 @@
 namespace Temporal
 {
 	/**********************************************************************************************
-	 * Jump Helpers
+	 * Helper classes
 	 *********************************************************************************************/
 	class JumpInfo
 	{
@@ -43,10 +43,9 @@ namespace Temporal
 	class JumpHelper
 	{
 	public:
-		JumpHelper() : _type(JumpType::UP) {}
+		explicit JumpHelper(JumpType::Enum type) : _type(type) {}
 
 		JumpType::Enum getType() const { return _type; }
-		void setType(JumpType::Enum type) { _type = type; }
 		const JumpInfo& getInfo() const { return _type == JumpType::UP ? JUMP_UP_INFO : JUMP_FORWARD_INFO; }
 	private:
 		static const JumpInfo JUMP_UP_INFO;
@@ -91,6 +90,22 @@ namespace Temporal
 		void handleFrontCheckY(float y);
 	};
 
+	class HandleMessageHelper
+	{
+	public:
+		HandleMessageHelper(StateMachineComponent& controller) : _controller(controller), _isDescending(false), _isActivating(false), _isTakingDown(false) {}
+
+		bool handleStandWalkMessage(Message& message);
+		bool handleFallJumpMessage(Message& message);
+		void handleMessage(Message& message);
+
+	private:
+		bool _isDescending;
+		bool _isActivating;
+		bool _isTakingDown;
+
+		StateMachineComponent& _controller;
+	};
 
 	/**********************************************************************************************
 	 * Action controller
@@ -101,11 +116,8 @@ namespace Temporal
 		ActionController();
 
 		Hash getType() const { return TYPE; }
-		JumpHelper& getJumpHelper() { return _jumpHelper; }
-		void setClimbVector(const Vector& vector) { _climbVector = vector; }
-		const Vector& getClimbVector() const { return _climbVector; } 
-		void setTakedownEntityId(Hash takedownEntityId) { _takedownEntityId = takedownEntityId; }
-		Hash getTakedownEntityId() const { return _takedownEntityId; } 
+
+		HandleMessageHelper& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(); }
@@ -122,10 +134,8 @@ namespace Temporal
 		Hash getInitialState() const;
 
 	private:
-		Vector _climbVector; 
-		Hash _takedownEntityId;
-		JumpHelper _jumpHelper;
 		LedgeDetector _ledgeDetector;
+		HandleMessageHelper _handleMessageHelper;
 
 		StateCollection getStates() const;
 	};
@@ -138,86 +148,86 @@ namespace Temporal
 		class Stand : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Fall : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Walk : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Slide : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Turn : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Jump : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class JumpEnd : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Hang : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Climb : public ComponentState
 		{
 		public:
-			void enter() const;
-			void exit() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void exit(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Descend : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Takedown : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const;
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 
 		class Dying : public ComponentState
 		{
 		public:
-			void enter() const;
-			void handleMessage(Message& message) const {}
+			void enter(void* param);
+			void handleMessage(Message& message) {}
 		};
 	}
 }
