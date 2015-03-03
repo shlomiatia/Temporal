@@ -64,7 +64,7 @@
 			</sensor>
 			<action-controller max-walk-force-per-second="250.0" />
 			<animator animation-set="resources/animations/aquaria.xml" />
-			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
+			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="10" />
 					<scale x="0.45" y="0.45" />
@@ -113,7 +113,7 @@
 			</static-body>
 			<door />
 			<animator animation-set="resources/animations/door.xml" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/door.xml" />
+			<renderer layer="2" sprite-sheet="resources/spritesheets/door.xml" />
 		</entity>
 		<entity id="ENT_BUTTON">
 			<transform>
@@ -245,7 +245,7 @@
 			<security-camera />
 			<sight center="-30" size="30" />
 			<animator animation-set="resources/animations/camera.xml" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/camera.xml" />
+			<renderer layer="2" sprite-sheet="resources/spritesheets/camera.xml" />
 		</entity>
 		<entity id="ENT_LASER">
 			<transform>
@@ -253,9 +253,9 @@
 			</transform>
 			<collision-filter category="4" />
 			<laser />
-			<renderer layer="4" texture="resources/textures/laser.png" />
+			<renderer layer="2" texture="resources/textures/laser.png" />
 			<temporal-period period="2" />
-		</entity>
+		</entity>-->
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="512" y="256" />
@@ -309,9 +309,9 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<temporal-echo />
-			<temporal-period period="1" />
-		</entity>-->
+			<!--<temporal-echo />
+			<temporal-period period="1" />-->
+		</entity>
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />

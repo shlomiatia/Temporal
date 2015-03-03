@@ -7,6 +7,52 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.871535">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.000000">
+                <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-0.863152">
+                <translation x="-7.888947" y="-25.888885"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
+                <translation x="17.022278" y="-19.755554"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.251616">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="38.609608">
+                <translation x="-9.822235" y="15.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.499626">
+                <translation x="-23.333374" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
+                <translation x="17.911133" y="-20.000000"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+    </animation>
+    <animation id="POP_ANM_DYING" repeat="0" cross-fase="1">
+        <scene-graph-sample index="0">
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="0.536000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
                 <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
@@ -44,11 +90,157 @@
                 <translation x="17.911133" y="-20.000000"/>
             </scene-node-sample>
         </scene-graph-sample>
+        <scene-graph-sample index="4">
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="78.365181">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-40.893242">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-8.949419">
+                <translation x="-6.133362" y="31.733337"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.363072">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="73.891998">
+                <translation x="-9.822235" y="15.066651"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="10.305733">
+                <translation x="-4.000000" y="0.536000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.271715">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-38.059475">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="24.530802">
+                <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="18.945459">
+                <translation x="-7.888947" y="-25.888885"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="7">
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="103.925255">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-40.893242">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-2.890577">
+                <translation x="1.977783" y="31.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.363072">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="2.148217">
+                <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-6.162968">
+                <translation x="-1.312500" y="0.536000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.271715">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-38.059475">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="101.654167">
+                <translation x="-7.822235" y="16.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-7.798894">
+                <translation x="-7.888947" y="-25.888885"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-26.231173">
+                <translation x="-18.417404" y="-21.521549"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-31.724981">
+                <translation x="-19.011826" y="-20.560364"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="9">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.363072">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-44.123131">
+                <translation x="24.733337" y="-18.777771"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-96.822075">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="132.308624">
+                <translation x="28.688873" y="-33.822266"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-27.532301">
+                <translation x="4.000000" y="-68.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-47.171509">
+                <translation x="-18.417404" y="-21.521549"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-90.594093">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.271715">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-26.685169">
+                <translation x="9.665283" y="-41.686218"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-22.318352">
+                <translation x="-7.888947" y="-65.888885"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="133.004105">
+                <translation x="9.955536" y="-23.755554"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-54.432129">
+                <translation x="-19.011826" y="-20.560364"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="11">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.363072">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-44.123131">
+                <translation x="35.399994" y="-88.466675"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-53.528603">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="132.308624">
+                <translation x="28.688873" y="-95.688934"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-40.760902">
+                <translation x="-10.933350" y="-83.222229"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-89.537010">
+                <translation x="-23.394899" y="-21.047644"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-55.104832">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.271715">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-88.475494">
+                <translation x="9.665283" y="-86.486237"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-44.209824">
+                <translation x="-17.133392" y="-82.955566"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="116.660255">
+                <translation x="24.888885" y="-75.666656"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-94.916756">
+                <translation x="-24.826338" y="-20.997911"/>
+            </scene-node-sample>
+        </scene-graph-sample>
     </animation>
     <animation id="POP_ANM_STAND" repeat="1" cross-fase="1">
         <scene-graph-sample index="0">
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
-                <translation x="10.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.871535">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
                 <translation x="-2.266693" y="-33.000000"/>
@@ -56,8 +248,8 @@
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-3.000000" y="33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.871535">
-                <translation x="1.466675" y="-40.644440"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="-2.000000" y="0.536000"/>
@@ -65,11 +257,11 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.000000">
                 <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
                 <translation x="17.022278" y="-19.755554"/>
@@ -91,25 +283,25 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="7">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-2.000000">
-                <translation x="-3.000000" y="35.000000"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="43.784748">
                 <translation x="10.911102" y="20.088837"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="2.000000">
-                <translation x="-2.000000" y="2.536000"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-2.000000">
+                <translation x="-3.000000" y="35.000000"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="36.609608">
                 <translation x="-9.822235" y="17.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="2.000000">
+                <translation x="-2.000000" y="2.536000"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="15"/>
     </animation>
     <animation id="POP_ANM_FALL" repeat="1" cross-fase="1">
         <scene-graph-sample index="0">
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.554352">
-                <translation x="10.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-14.391625">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
                 <translation x="-2.266693" y="-33.000000"/>
@@ -117,8 +309,8 @@
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-3.000000" y="33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-14.391625">
-                <translation x="1.466675" y="-40.644440"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.554352">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="-2.000000" y="0.536000"/>
@@ -126,11 +318,11 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="13.529361">
                 <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
                 <translation x="17.022278" y="-19.755554"/>
@@ -152,433 +344,38 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="7">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-150.853210">
-                <translation x="-9.822235" y="15.066650"/>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-2.000000">
+                <translation x="-2.000000" y="0.536000"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-18.204586">
                 <translation x="1.288940" y="-40.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-2.000000">
-                <translation x="-2.000000" y="0.536000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-141.689392">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="2.000000">
-                <translation x="-3.000000" y="33.000000"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-150.853210">
+                <translation x="-9.822235" y="15.066650"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-16.391624">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="2.000000">
+                <translation x="-3.000000" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-141.689392">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-8.213230">
                 <translation x="-7.888947" y="-25.888885"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-81.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="17.400478">
                 <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-81.129143">
+                <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-74.499626">
                 <translation x="-23.333374" y="-21.711121"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="15"/>
-    </animation>
-    <animation id="POP_ANM_WALK" repeat="1" cross-fase="1">
-        <scene-graph-sample index="0">
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-43.871536">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="0.536000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="20.000000">
-                <translation x="4.000000" y="-23.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
-                <translation x="17.022278" y="-19.755554"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-0.863152">
-                <translation x="-7.888947" y="-25.888885"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.251616">
-                <translation x="1.288940" y="-40.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="38.609608">
-                <translation x="-9.822235" y="15.066650"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-57.499626">
-                <translation x="-21.333374" y="-21.711121"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
-                <translation x="17.911133" y="-20.000000"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="1">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="32.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="17.940588">
-                <translation x="-1.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="17.784748">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-18.871536">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-66.499626">
-                <translation x="-22.333374" y="-21.711121"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="-0.464000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="7.959045">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-14.251616">
-                <translation x="1.288940" y="-40.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="56.609608">
-                <translation x="-9.822235" y="15.066650"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="22.000000">
-                <translation x="4.000000" y="-23.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-6.863152">
-                <translation x="-7.888947" y="-28.888885"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="2">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="16.083447">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.657251">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="7.499033">
-                <translation x="10.911102" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-15.537330">
-                <translation x="1.288940" y="-40.799984"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-4.469526">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="63.323895">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-18.434582">
-                <translation x="-6.888947" y="-28.674601"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-61.856766">
-                <translation x="-22.261946" y="-21.711121"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="23.857143">
-                <translation x="4.000000" y="-23.288910"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="3">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-16.669197">
-                <translation x="1.288940" y="-40.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.024979">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="59.422794">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="3.072457">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.750658">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="13.136395">
-                <translation x="10.911102" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="13.560440">
-                <translation x="4.000000" y="-23.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-14.507295">
-                <translation x="-6.965869" y="-28.460316"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-63.521603">
-                <translation x="-22.190517" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="4">
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-74.019775">
-                <translation x="-22.119089" y="-21.711121"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="33.214287"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.670737">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="27.523758">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-2.677398">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-55.634399">
-                <translation x="1.288940" y="-38.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="0.750286"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="0.936152">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="51.688362">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="1.097069">
-                <translation x="4.000000" y="-26.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="0.629717">
-                <translation x="-7.042792" y="-28.246031"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="5">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="5.812756">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.422320">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="35.650414">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-64.963242">
-                <translation x="1.288940" y="-39.981808"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.029142">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="42.499386">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-4.184483">
-                <translation x="4.000000" y="-26.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="12.494001">
-                <translation x="-7.119715" y="-28.031744"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-74.517944">
-                <translation x="-23.047661" y="-21.711119"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="6">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-56.892078">
-                <translation x="1.288940" y="-40.063625"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.922132">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="36.110409">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.525539">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-7.067242">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="36.263847">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-14.766033">
-                <translation x="4.000000" y="-30.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="23.158287">
-                <translation x="-7.196638" y="-27.817457"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-80.816109">
-                <translation x="-22.876232" y="-21.711119"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="7">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="32.155846"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.904989">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="47.877281">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.156608">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.043137">
-                <translation x="1.288940" y="-40.145443"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="-0.308156"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="9.037346">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-23.903141">
-                <translation x="4.000000" y="-28.622242"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="27.489239">
-                <translation x="-6.273561" y="-28.603172"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="31.388096">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-75.225388">
-                <translation x="-22.704803" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="8">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-2.465561">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.995974">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="54.115715">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-0.694197">
-                <translation x="1.288940" y="-40.227261"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="9.152558">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="21.290787">
-                <translation x="-9.822235" y="15.066649"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-26.415249">
-                <translation x="4.000000" y="-27.955576"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="29.945190">
-                <translation x="-7.475484" y="-27.263885"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-75.009666">
-                <translation x="-22.533375" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="9">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.575594">
-                <translation x="0.288940" y="-41.309082"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="-1.097117"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="13.124913">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="31.366882"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-2.693254">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="62.354149">
-                <translation x="10.911103" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-32.938293">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-11.784498">
-                <translation x="4.000000" y="-26.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="23.543999">
-                <translation x="-7.534551" y="-29.067457"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="28.764904">
-                <translation x="-9.822235" y="15.066650"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-82.508232">
-                <translation x="-23.361946" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="10">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-7.354931">
-                <translation x="0.455607" y="-41.224232"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="-2.000000" y="0.175069"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="7.481718">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="-3.000000" y="32.639069"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="0.245720">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="47.925915">
-                <translation x="10.911102" y="18.088835"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-40.760502">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-9.487082">
-                <translation x="4.000000" y="-25.788910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="7.476141">
-                <translation x="-7.593616" y="-27.704361"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="35.405685">
-                <translation x="-9.822235" y="15.066650"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.340134">
-                <translation x="-23.023851" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
-        <scene-graph-sample index="11">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="1.784693">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-66.382706">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="34.697681">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.734268">
-                <translation x="0.622273" y="-41.139381"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="2.377183">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="42.046471">
-                <translation x="-9.822235" y="15.066651"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="5.410335">
-                <translation x="4.000000" y="-25.288910"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="3.808282">
-                <translation x="-7.652683" y="-27.341267"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-82.572029">
-                <translation x="-22.685757" y="-21.711121"/>
-            </scene-node-sample>
-        </scene-graph-sample>
     </animation>
     <animation id="POP_ANM_HANG" repeat="1" cross-fase="1">
         <scene-graph-sample index="0">
@@ -588,8 +385,8 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-10.040955">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.780655">
-                <translation x="10.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.391625">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-16.059412">
                 <translation x="-2.266693" y="-33.000000"/>
@@ -597,14 +394,14 @@
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-3.000000" y="33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.391625">
-                <translation x="1.466675" y="-40.644440"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.780655">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-0.470639">
                 <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="2.136848">
                 <translation x="-7.888947" y="-25.888885"/>
@@ -626,17 +423,17 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="5">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-137.492065">
-                <translation x="-7.822235" y="15.066650"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="0.000000" y="0.536000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-142.616714">
-                <translation x="12.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-137.492065">
+                <translation x="-7.822235" y="15.066650"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-1.000000" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-142.616714">
+                <translation x="12.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="1.529361">
                 <translation x="6.000000" y="-23.288910"/>
@@ -646,17 +443,17 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="10">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-142.105499">
-                <translation x="-12.864685" y="15.066650"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="-4.909091" y="0.536000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-147.078522">
-                <translation x="7.313110" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-142.105499">
+                <translation x="-12.864685" y="15.066650"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-5.909091" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-147.078522">
+                <translation x="7.313110" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-3.379730">
                 <translation x="1.090909" y="-23.288910"/>
@@ -667,420 +464,405 @@
         </scene-graph-sample>
         <scene-graph-sample index="15"/>
     </animation>
-    <animation id="POP_ANM_DESCEND" repeat="0" cross-fase="0">
+    <animation id="POP_ANM_WALK" repeat="1" cross-fase="1">
         <scene-graph-sample index="0">
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="9.940588">
-                <translation x="-2.266693" y="-33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-2.000000">
-                <translation x="-3.000000" y="33.000000"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-19.871534">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-43.871536">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-2.000000">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="-2.000000" y="0.536000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="10.959045">
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="20.000000">
+                <translation x="4.000000" y="-23.288910"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
                 <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="6.000000">
-                <translation x="4.000000" y="-23.288910"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
                 <translation x="17.022278" y="-19.755554"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="10.136848">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-0.863152">
                 <translation x="-7.888947" y="-25.888885"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.251616">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.251616">
                 <translation x="1.288940" y="-40.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="38.609608">
                 <translation x="-9.822235" y="15.066650"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.499626">
-                <translation x="-23.333374" y="-21.711121"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-57.499626">
+                <translation x="-21.333374" y="-21.711121"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
                 <translation x="17.911133" y="-20.000000"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="1">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-13.902439">
-                <translation x="4.000000" y="25.000000"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-18.871536">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="12.940588">
-                <translation x="-2.266693" y="-33.000000"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="17.784748">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
-                <translation x="13.911103" y="13.064447"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="32.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-37.773972">
-                <translation x="1.466675" y="-40.644444"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="17.940588">
+                <translation x="-1.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-39.154053">
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-66.499626">
+                <translation x="-22.333374" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="56.609608">
+                <translation x="-9.822235" y="15.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-14.251616">
                 <translation x="1.288940" y="-40.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
-                <translation x="-4.846625" y="11.042259"/>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="-0.464000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="19.959045">
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="7.959045">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-13.902439">
-                <translation x="-2.000000" y="-5.464000"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="22.000000">
+                <translation x="4.000000" y="-23.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="22.039288">
-                <translation x="-13.840166" y="-28.913275"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="17.902439">
-                <translation x="-3.000000" y="-29.288910"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-6.863152">
+                <translation x="-7.888947" y="-28.888885"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="2">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-28.897060">
-                <translation x="18.263660" y="1.125629"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="7.499033">
+                <translation x="10.911102" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="21.790588">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.657251">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="16.083447">
                 <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
-                <translation x="18.761105" y="-6.958693"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="63.323895">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-73.109627">
-                <translation x="1.466675" y="-40.644444"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-4.469526">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-65.999954">
-                <translation x="1.288940" y="-40.799988"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-15.537330">
+                <translation x="1.288940" y="-40.799984"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
-                <translation x="4.802030" y="-4.082161"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-61.856766">
+                <translation x="-22.261946" y="-21.711121"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-44.897060">
-                <translation x="-2.000000" y="-21.464001"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-18.434582">
+                <translation x="-6.888947" y="-28.674601"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="37.033909">
-                <translation x="-22.414400" y="-37.190262"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="32.897060">
-                <translation x="-19.263660" y="-32.391472"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="23.857143">
+                <translation x="4.000000" y="-23.288910"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="3">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-19.589535">
-                <translation x="22.090466" y="-31.273586"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="59.422794">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="22.007587">
-                <translation x="-2.266693" y="-32.999996"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-55.848167">
-                <translation x="1.466675" y="-40.644444"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="29.879879">
-                <translation x="10.005304" y="-23.178171"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-66.423103">
-                <translation x="-2.000000" y="-36.464001"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-8.876507">
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.024979">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-77.533829">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-16.669197">
                 <translation x="1.288940" y="-40.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="47.402058">
-                <translation x="-26.702179" y="-41.824799"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="13.136395">
+                <translation x="10.911102" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="9.454399">
-                <translation x="-26.877094" y="-42.046104"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.750658">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-54.970291">
-                <translation x="-21.333374" y="-21.711121"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="3.072457">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="6.433397">
-                <translation x="19.347948" y="-28.798298"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="13.560440">
+                <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-63.521603">
+                <translation x="-22.190517" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-14.507295">
+                <translation x="-6.965869" y="-28.460316"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="4">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="11.488672">
-                <translation x="8.903775" y="-34.966156"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-74.019775">
+                <translation x="-22.119089" y="-21.711121"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-77.301186">
-                <translation x="-2.000000" y="-43.464001"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-2.677398">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-31.403103">
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="27.523758">
+                <translation x="10.911103" y="18.088835"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="33.214287"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.670737">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="51.688362">
+                <translation x="-9.822235" y="15.066649"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="0.750286"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="0.936152">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-82.403862">
-                <translation x="1.288940" y="-40.799984"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-55.634399">
+                <translation x="1.288940" y="-38.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.012339">
-                <translation x="21.667978" y="-49.386959"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="1.097069">
+                <translation x="4.000000" y="-26.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-5.249466">
-                <translation x="1.466675" y="-40.644444"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="53.217484">
-                <translation x="-29.542713" y="-45.137882"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-15.480652">
-                <translation x="-18.530199" y="-19.768263"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.291059">
-                <translation x="-28.075985" y="-46.173878"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="0.184663">
-                <translation x="18.879234" y="-35.249012"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="0.629717">
+                <translation x="-7.042792" y="-28.246031"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="5">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="74.440903">
-                <translation x="-29.268963" y="-55.593826"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="35.650414">
+                <translation x="10.911103" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-40.039703">
-                <translation x="-19.812738" y="-19.882549"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.422320">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="9.911116">
-                <translation x="11.802245" y="-37.611286"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="5.812756">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-102.681900">
-                <translation x="1.288940" y="-40.799984"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="42.499386">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-68.992912">
-                <translation x="-2.000000" y="-49.464001"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.029142">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="0.968626">
-                <translation x="18.410521" y="-40.699726"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-64.963242">
+                <translation x="1.288940" y="-39.981808"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.070436">
-                <translation x="25.126009" y="-50.189507"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-4.184483">
+                <translation x="4.000000" y="-26.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-8.993950">
-                <translation x="-23.511108" y="-21.288879"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-74.517944">
+                <translation x="-23.047661" y="-21.711119"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.512798">
-                <translation x="-27.158859" y="-57.355331"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="12.494001">
+                <translation x="-7.119715" y="-28.031744"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="6">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="49.665161">
-                <translation x="6.450715" y="-41.443916"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="36.110409">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-115.717514">
-                <translation x="1.288940" y="-40.799988"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="18.922132">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-53.063919">
-                <translation x="-2.000000" y="-56.464001"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-56.892078">
+                <translation x="1.288940" y="-40.063625"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="89.905777">
-                <translation x="-27.932713" y="-71.700974"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="36.263847">
+                <translation x="10.911103" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-80.066017">
-                <translation x="-21.032778" y="-19.996836"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-7.067242">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="7.918827">
-                <translation x="17.941807" y="-47.150440"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.525539">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.128534">
-                <translation x="26.303616" y="-52.211937"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-14.766033">
+                <translation x="4.000000" y="-30.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="59.958099">
-                <translation x="17.911133" y="-20.000000"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-80.816109">
+                <translation x="-22.876232" y="-21.711119"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.726716">
-                <translation x="-24.211432" y="-70.254410"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="23.158287">
+                <translation x="-7.196638" y="-27.817457"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="7">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="67.907387">
-                <translation x="-26.596458" y="-78.446838"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-70.035156">
-                <translation x="-21.186150" y="-20.111120"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.186632">
-                <translation x="22.384523" y="-51.434589"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.120153">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.156608">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="45.728127">
-                <translation x="5.331368" y="-45.511024"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="47.877281">
+                <translation x="10.911103" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-41.797588">
-                <translation x="-2.000000" y="-62.464001"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="32.155846"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-22.540333">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="13.904989">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="-0.308156"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="9.037346">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-117.001396">
-                <translation x="1.288940" y="-40.799984"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.043137">
+                <translation x="1.288940" y="-40.145443"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="8.811602">
-                <translation x="-24.296185" y="-78.888893"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-23.903141">
+                <translation x="4.000000" y="-28.622242"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="59.025681">
-                <translation x="17.911133" y="-19.999998"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="27.489239">
+                <translation x="-6.273561" y="-28.603172"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="26.330578">
-                <translation x="17.473093" y="-52.601158"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="31.388096">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-10.760849">
-                <translation x="-23.511108" y="-21.288879"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-75.225388">
+                <translation x="-22.704803" y="-21.711121"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="8">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="54.076805">
-                <translation x="1.360079" y="-52.684048"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="54.115715">
+                <translation x="10.911103" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-31.103054">
-                <translation x="-2.000000" y="-69.464005"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.519148">
-                <translation x="-1.711060" y="-33.711105"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-82.156837">
-                <translation x="1.288940" y="-40.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.244730">
-                <translation x="15.682455" y="-51.014656"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-6.163241">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.995974">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="41.632774">
-                <translation x="-23.260208" y="-88.192696"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-2.465561">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-47.089497">
-                <translation x="-21.339523" y="-20.225405"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="21.290787">
+                <translation x="-9.822235" y="15.066649"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.462625">
-                <translation x="-22.275032" y="-86.417465"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="9.152558">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="31.191061">
-                <translation x="16.041418" y="-58.088909"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-0.694197">
+                <translation x="1.288940" y="-40.227261"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-7.644299">
-                <translation x="-23.511108" y="-21.288877"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-26.415249">
+                <translation x="4.000000" y="-27.955576"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-75.009666">
+                <translation x="-22.533375" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="29.945190">
+                <translation x="-7.475484" y="-27.263885"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="9">
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="85.596977">
-                <translation x="-2.500099" y="-81.857071"/>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="-1.097117"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-30.546131">
-                <translation x="1.288940" y="-40.799984"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="13.124913">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-21.024357">
-                <translation x="-2.000000" y="-99.464005"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.575594">
+                <translation x="0.288940" y="-41.309082"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.302827">
-                <translation x="13.205342" y="-76.976608"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.414932">
-                <translation x="-2.266693" y="-32.999996"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-11.217726">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-32.938293">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="19.850012">
-                <translation x="-19.117802" y="-120.784714"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="62.354149">
+                <translation x="10.911103" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-40.711815">
-                <translation x="-20.532896" y="-20.339689"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="31.366882"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.420884">
-                <translation x="-17.373873" y="-117.946037"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-2.693254">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="71.181351">
-                <translation x="13.686778" y="-82.733696"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-11.784498">
+                <translation x="4.000000" y="-26.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-22.623133">
-                <translation x="-18.511108" y="-19.288877"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="23.543999">
+                <translation x="-7.534551" y="-29.067457"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="28.764904">
+                <translation x="-9.822235" y="15.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-82.508232">
+                <translation x="-23.361946" y="-21.711121"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="10">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="19.214495">
-                <translation x="-11.269020" y="-173.210052"/>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="-2.000000" y="0.175069"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-108.949028">
-                <translation x="-23.766268" y="-19.453976"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="7.481718">
+                <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="174.157990">
-                <translation x="-11.066799" y="-134.156906"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-7.354931">
+                <translation x="0.455607" y="-41.224232"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-5.612907">
-                <translation x="-2.000000" y="-149.464005"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-40.760502">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="169.452484">
-                <translation x="7.672862" y="-130.752106"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="47.925915">
+                <translation x="10.911102" y="18.088835"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.360925">
-                <translation x="4.985332" y="-121.232178"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="-3.000000" y="32.639069"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-106.586746">
-                <translation x="-22.927774" y="-19.455545"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="0.245720">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="19.401108">
-                <translation x="-2.810109" y="-171.391281"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-9.487082">
+                <translation x="4.000000" y="-25.788910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="7.476141">
+                <translation x="-7.593616" y="-27.704361"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="35.405685">
+                <translation x="-9.822235" y="15.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.340134">
+                <translation x="-23.023851" y="-21.711121"/>
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="11">
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-16.059412">
-                <translation x="-2.266693" y="-33.000000"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="34.697681">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="7.133301" y="-168.244446"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.391625">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-66.382706">
                 <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.771286">
-                <translation x="16.022217" y="-184.844482"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="1.784693">
+                <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-0.470639">
-                <translation x="11.111115" y="-221.400024"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="42.046471">
+                <translation x="-9.822235" y="15.066651"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="2.136848">
-                <translation x="-0.777832" y="-221.177795"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
-                <translation x="17.022278" y="-19.755554"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-10.040955">
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="2.377183">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
-                <translation x="5.111084" y="-195.863983"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.734268">
+                <translation x="0.622273" y="-41.139381"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.204586">
-                <translation x="1.288940" y="-40.799988"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="5.410335">
+                <translation x="4.000000" y="-25.288910"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-139.356796">
-                <translation x="-4.977783" y="-184.333344"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-82.572029">
+                <translation x="-22.685757" y="-21.711121"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-83.499626">
-                <translation x="-23.333374" y="-21.711121"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
-                <translation x="17.911133" y="-20.000000"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="3.808282">
+                <translation x="-7.652683" y="-27.341267"/>
             </scene-node-sample>
         </scene-graph-sample>
     </animation>
     <animation id="POP_ANM_JUMP" repeat="1" cross-fase="1">
         <scene-graph-sample index="0">
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-160.543259">
-                <translation x="10.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-21.873356">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
                 <translation x="-2.266693" y="-33.000000"/>
@@ -1088,8 +870,8 @@
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="-4.000000">
                 <translation x="5.244446" y="30.155548"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-21.873356">
-                <translation x="1.466675" y="-40.644440"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-160.543259">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="-13.593460">
                 <translation x="-2.000000" y="0.536000"/>
@@ -1097,11 +879,11 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
-                <translation x="-23.511108" y="-21.288879"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="35.246174">
                 <translation x="-1.844421" y="-26.422241"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
                 <translation x="17.022278" y="-19.755554"/>
@@ -1123,17 +905,17 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="7">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-46.038208">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="-4.229665">
                 <translation x="-2.000000" y="0.536000"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-22.040955">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-46.038208">
-                <translation x="1.288940" y="-40.799988"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-138.384003">
-                <translation x="10.911102" y="18.088837"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-65.487610">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="-4.000000">
                 <translation x="2.244446" y="30.155548"/>
@@ -1141,8 +923,8 @@
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-38.059410">
                 <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-65.487610">
-                <translation x="1.466675" y="-40.644440"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-138.384003">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-3.187057">
                 <translation x="-10.888916" y="-26.733307"/>
@@ -1156,7 +938,417 @@
         </scene-graph-sample>
         <scene-graph-sample index="15"/>
     </animation>
-    <animation id="POP_ANM_TAKEDOWN" repeat="1" cross-fase="1">
+    <animation id="POP_ANM_DESCEND" repeat="0" cross-fase="0">
+        <scene-graph-sample index="0">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-19.871534">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="9.940588">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-2.000000">
+                <translation x="-3.000000" y="33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
+                <translation x="10.911102" y="18.088837"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-2.000000">
+                <translation x="-2.000000" y="0.536000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="10.959045">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="6.000000">
+                <translation x="4.000000" y="-23.288910"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
+                <translation x="17.022278" y="-19.755554"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="10.136848">
+                <translation x="-7.888947" y="-25.888885"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-23.251616">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
+                <translation x="-9.822235" y="15.066650"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.499626">
+                <translation x="-23.333374" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
+                <translation x="17.911133" y="-20.000000"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="1">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-37.773972">
+                <translation x="1.466675" y="-40.644444"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
+                <translation x="13.911103" y="13.064447"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-13.902439">
+                <translation x="4.000000" y="25.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="12.940588">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="19.959045">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-13.902439">
+                <translation x="-2.000000" y="-5.464000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
+                <translation x="-4.846625" y="11.042259"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-39.154053">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="22.039288">
+                <translation x="-13.840166" y="-28.913275"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="17.902439">
+                <translation x="-3.000000" y="-29.288910"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="2">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-73.109627">
+                <translation x="1.466675" y="-40.644444"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="49.784748">
+                <translation x="18.761105" y="-6.958693"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-28.897060">
+                <translation x="18.263660" y="1.125629"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="21.790588">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-44.897060">
+                <translation x="-2.000000" y="-21.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="50.609608">
+                <translation x="4.802030" y="-4.082161"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-65.999954">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="37.033909">
+                <translation x="-22.414400" y="-37.190262"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="32.897060">
+                <translation x="-19.263660" y="-32.391472"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="3">
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-55.848167">
+                <translation x="1.466675" y="-40.644444"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-19.589535">
+                <translation x="22.090466" y="-31.273586"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="22.007587">
+                <translation x="-2.266693" y="-32.999996"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-77.533829">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-66.423103">
+                <translation x="-2.000000" y="-36.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-8.876507">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="29.879879">
+                <translation x="10.005304" y="-23.178171"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="47.402058">
+                <translation x="-26.702179" y="-41.824799"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="9.454399">
+                <translation x="-26.877094" y="-42.046104"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-54.970291">
+                <translation x="-21.333374" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="6.433397">
+                <translation x="19.347948" y="-28.798298"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="4">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-82.403862">
+                <translation x="1.288940" y="-40.799984"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-77.301186">
+                <translation x="-2.000000" y="-43.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-31.403103">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="11.488672">
+                <translation x="8.903775" y="-34.966156"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-5.249466">
+                <translation x="1.466675" y="-40.644444"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.012339">
+                <translation x="21.667978" y="-49.386959"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-15.480652">
+                <translation x="-18.530199" y="-19.768263"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="53.217484">
+                <translation x="-29.542713" y="-45.137882"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.291059">
+                <translation x="-28.075985" y="-46.173878"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="0.184663">
+                <translation x="18.879234" y="-35.249012"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="5">
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-40.039703">
+                <translation x="-19.812738" y="-19.882549"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="74.440903">
+                <translation x="-29.268963" y="-55.593826"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-68.992912">
+                <translation x="-2.000000" y="-49.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-102.681900">
+                <translation x="1.288940" y="-40.799984"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="9.911116">
+                <translation x="11.802245" y="-37.611286"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.070436">
+                <translation x="25.126009" y="-50.189507"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="0.968626">
+                <translation x="18.410521" y="-40.699726"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.512798">
+                <translation x="-27.158859" y="-57.355331"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-8.993950">
+                <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="6">
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-53.063919">
+                <translation x="-2.000000" y="-56.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-115.717514">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="49.665161">
+                <translation x="6.450715" y="-41.443916"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-80.066017">
+                <translation x="-21.032778" y="-19.996836"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="89.905777">
+                <translation x="-27.932713" y="-71.700974"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.128534">
+                <translation x="26.303616" y="-52.211937"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="7.918827">
+                <translation x="17.941807" y="-47.150440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.726716">
+                <translation x="-24.211432" y="-70.254410"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="59.958099">
+                <translation x="17.911133" y="-20.000000"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="7">
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-70.035156">
+                <translation x="-21.186150" y="-20.111120"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="67.907387">
+                <translation x="-26.596458" y="-78.446838"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.120153">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.186632">
+                <translation x="22.384523" y="-51.434589"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-117.001396">
+                <translation x="1.288940" y="-40.799984"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-41.797588">
+                <translation x="-2.000000" y="-62.464001"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-22.540333">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="45.728127">
+                <translation x="5.331368" y="-45.511024"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="8.811602">
+                <translation x="-24.296185" y="-78.888893"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="59.025681">
+                <translation x="17.911133" y="-19.999998"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="26.330578">
+                <translation x="17.473093" y="-52.601158"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-10.760849">
+                <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="8">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-82.156837">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-31.103054">
+                <translation x="-2.000000" y="-69.464005"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="3.519148">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="54.076805">
+                <translation x="1.360079" y="-52.684048"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-6.163241">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.244730">
+                <translation x="15.682455" y="-51.014656"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-47.089497">
+                <translation x="-21.339523" y="-20.225405"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="41.632774">
+                <translation x="-23.260208" y="-88.192696"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.462625">
+                <translation x="-22.275032" y="-86.417465"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="31.191061">
+                <translation x="16.041418" y="-58.088909"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-7.644299">
+                <translation x="-23.511108" y="-21.288877"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="9">
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-21.024357">
+                <translation x="-2.000000" y="-99.464005"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-30.546131">
+                <translation x="1.288940" y="-40.799984"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="85.596977">
+                <translation x="-2.500099" y="-81.857071"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-11.217726">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.302827">
+                <translation x="13.205342" y="-76.976608"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="8.414932">
+                <translation x="-2.266693" y="-32.999996"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-40.711815">
+                <translation x="-20.532896" y="-20.339689"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="19.850012">
+                <translation x="-19.117802" y="-120.784714"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="4.420884">
+                <translation x="-17.373873" y="-117.946037"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="71.181351">
+                <translation x="13.686778" y="-82.733696"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-22.623133">
+                <translation x="-18.511108" y="-19.288877"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="10">
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-108.949028">
+                <translation x="-23.766268" y="-19.453976"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="19.214495">
+                <translation x="-11.269020" y="-173.210052"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-5.612907">
+                <translation x="-2.000000" y="-149.464005"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="174.157990">
+                <translation x="-11.066799" y="-134.156906"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.360925">
+                <translation x="4.985332" y="-121.232178"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="169.452484">
+                <translation x="7.672862" y="-130.752106"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="19.401108">
+                <translation x="-2.810109" y="-171.391281"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-106.586746">
+                <translation x="-22.927774" y="-19.455545"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+        <scene-graph-sample index="11">
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-144.771286">
+                <translation x="16.022217" y="-184.844482"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-0.391625">
+                <translation x="1.466675" y="-40.644440"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-16.059412">
+                <translation x="-2.266693" y="-33.000000"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="7.133301" y="-168.244446"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
+                <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-0.470639">
+                <translation x="11.111115" y="-221.400024"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM3" rotation="31.004665">
+                <translation x="17.022278" y="-19.755554"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="2.136848">
+                <translation x="-0.777832" y="-221.177795"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
+                <translation x="5.111084" y="-195.863983"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="-10.040955">
+                <translation x="-1.711060" y="-33.711105"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-4.204586">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="-139.356796">
+                <translation x="-4.977783" y="-184.333344"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-83.499626">
+                <translation x="-23.333374" y="-21.711121"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM3" rotation="31.958099">
+                <translation x="17.911133" y="-20.000000"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+    </animation>
+    <animation id="POP_ANM_TAKEDOWN" repeat="0" cross-fase="1">
         <scene-graph-sample index="0">
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="-2.000000" y="0.536000"/>
@@ -1164,23 +1356,23 @@
             <scene-node-sample scene-node-id="SCN_BACKLEG3" rotation="1.959046">
                 <translation x="-1.711060" y="-33.711105"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.871535">
-                <translation x="1.466675" y="-40.644440"/>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
+                <translation x="10.911102" y="18.088837"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="2.940588">
+            <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="3.940588">
                 <translation x="-2.266693" y="-33.000000"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
                 <translation x="-3.000000" y="33.000000"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="41.784748">
-                <translation x="10.911102" y="18.088837"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.000000">
-                <translation x="4.000000" y="-23.288910"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG2" rotation="-1.871535">
+                <translation x="1.466675" y="-40.644440"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-79.129143">
                 <translation x="-23.511108" y="-21.288879"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="0.000000">
+                <translation x="4.000000" y="-23.288910"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="-0.863152">
                 <translation x="-7.888947" y="-25.888885"/>
@@ -1202,43 +1394,46 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="4">
-            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
-                <translation x="28.352783" y="28.733337"/>
-            </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="-135.982681">
                 <translation x="39.750793" y="17.432770"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-31.773911">
-                <translation x="35.577789" y="-21.830597"/>
+            <scene-node-sample scene-node-id="SCN_HEAD" rotation="0.000000">
+                <translation x="28.352783" y="28.733337"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-1.735183">
                 <translation x="-17.409546" y="-19.921692"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="94.975838">
-                <translation x="19.530518" y="14.524994"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-29.023245">
-                <translation x="1.288940" y="-40.799988"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-31.773911">
+                <translation x="35.577789" y="-21.830597"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BODY" rotation="0.000000">
                 <translation x="26.444412" y="-1.597351"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="0.702169">
-                <translation x="-16.333374" y="-19.711121"/>
+            <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-29.023245">
+                <translation x="1.288940" y="-40.799988"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="94.975838">
+                <translation x="19.530518" y="14.524994"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG1" rotation="35.764313">
                 <translation x="23.597687" y="-27.444977"/>
             </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="7.702169">
+                <translation x="-16.333374" y="-19.711121"/>
+            </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="7">
-            <scene-node-sample scene-node-id="SCN_BODY" rotation="-5.000000">
-                <translation x="26.444412" y="-1.597351"/>
+            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="89.975838">
+                <translation x="21.530518" y="16.524994"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG2" rotation="-29.023245">
                 <translation x="1.288940" y="-40.799988"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="89.975838">
-                <translation x="21.530518" y="16.524994"/>
+            <scene-node-sample scene-node-id="SCN_BODY" rotation="-5.000000">
+                <translation x="26.444412" y="-1.597351"/>
+            </scene-node-sample>
+            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="1.263748">
+                <translation x="39.750793" y="17.432770"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTLEG3" rotation="-2.059412">
                 <translation x="-2.266693" y="-33.000000"/>
@@ -1246,14 +1441,11 @@
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="-5.000000">
                 <translation x="28.352783" y="28.733337"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="1.263748">
-                <translation x="39.750793" y="17.432770"/>
+            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-31.773911">
+                <translation x="30.577789" y="-21.830597"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-1.735183">
                 <translation x="-17.409546" y="-19.921692"/>
-            </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKLEG1" rotation="-31.773911">
-                <translation x="30.577789" y="-21.830597"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="5.702169">
                 <translation x="-16.333374" y="-20.711121"/>

@@ -49,6 +49,8 @@ namespace Temporal
 		void setFrameFlag1(bool value) { _frameFlag1 = value; }
 		bool getFrameFlag2() const { return _frameFlag2; }
 		void setFrameFlag2(bool value) { _frameFlag2 = value; }
+		bool getFrameFlag3() const { return _frameFlag3; }
+		void setFrameFlag3(bool value) { _frameFlag3 = value; }
 		bool getStateFlag() const { return _stateFlag; }
 		void setStateFlag(bool value) { _stateFlag = value; }
 		bool getStateMachineFlag() const { return _stateMachineFlag; }
@@ -73,8 +75,9 @@ namespace Temporal
 		bool _stateFlag;
 		bool _frameFlag1;
 		bool _frameFlag2;
+		bool _frameFlag3;
 
-		void resetFrameFlags() { _frameFlag1 = _frameFlag2 = false; }
+		void resetFrameFlags() { _frameFlag1 = _frameFlag2 = _frameFlag3 = false; }
 		void setState(Hash stateID);
 
 		StateMachineComponent(const StateMachineComponent&);
