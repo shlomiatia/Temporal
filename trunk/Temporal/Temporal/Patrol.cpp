@@ -9,6 +9,7 @@ namespace Temporal
 	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
 
 	static const Hash WALK_STATE = Hash("PAT_STT_WALK");
+	static const Hash ACQUIRE_STATE = Hash("PAT_STT_ACQUIRE");
 	static const Hash SEE_STATE = Hash("PAT_STT_SEE");
 	static const Hash TURN_STATE = Hash("PAT_STT_TURN");
 	static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
@@ -53,6 +54,7 @@ namespace Temporal
 		StateCollection states;
 		
 		states[WALK_STATE] = new Walk();
+		states[ACQUIRE_STATE] = new Acquire();
 		states[SEE_STATE] = new See();
 		states[TURN_STATE] = new Turn();
 		states[WAIT_STATE] = new Wait();
@@ -61,11 +63,16 @@ namespace Temporal
 
 	namespace PatrolStates
 	{
+		void Walk::enter(void* param)
+		{
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_HOLSTER));
+		}
+
 		void Walk::handleMessage(Message& message)
 		{	
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(SEE_STATE);
+				_stateMachine->changeState(ACQUIRE_STATE);
 			}
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
@@ -85,22 +92,47 @@ namespace Temporal
 			}
 		}
 
-		void See::enter(void* param)
+		const float Acquire::ACQUIRE_TIME(1.0f);
+
+		void Acquire::enter(void* param)
 		{
-			// TempFlag1 - have line of sight
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_AIM));
+			// TempFlag 1 - LOS
 			_stateMachine->setFrameFlag1(true);
 		}
 
-		void See::handleMessage(Message& message)
-		{	
+		void Acquire::handleMessage(Message& message)
+		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
 				_stateMachine->setFrameFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(!_stateMachine->getFrameFlag1())
-					_stateMachine->changeState(WALK_STATE);
+				if(_stateMachine->getTimer().getElapsedTime() >= ACQUIRE_TIME) 
+				{
+					if(!_stateMachine->getFrameFlag1())
+					{
+						_stateMachine->changeState(WALK_STATE);
+					}
+					else
+					{
+						_stateMachine->changeState(SEE_STATE);
+					}
+				}
+			}
+		}
+
+		void See::enter(void* param)
+		{
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_FIRE));
+		}
+
+		void See::handleMessage(Message& message)
+		{	
+			if(message.getID() == MessageID::ANIMATION_ENDED)
+			{
+				_stateMachine->changeState(WALK_STATE);
 			}
 		}
 
@@ -125,7 +157,7 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(SEE_STATE);
+				_stateMachine->changeState(ACQUIRE_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{

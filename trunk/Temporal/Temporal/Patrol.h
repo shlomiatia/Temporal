@@ -46,7 +46,18 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
+			void enter(void* param);
 			void handleMessage(Message& message);
+		};
+
+		class Acquire : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+
+		private:
+			static const float ACQUIRE_TIME;
 		};
 
 		class See : public ComponentState

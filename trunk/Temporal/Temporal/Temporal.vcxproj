@@ -11,10 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="Door.h" />
     <ClInclude Include="Editable.h" />
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Font.h" />
@@ -32,13 +30,11 @@
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SaverLoader.h" />
-    <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="BaseEnums.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Hash.h" />
-    <ClInclude Include="Laser.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Patrol.h" />
@@ -47,7 +43,6 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Math.h" />
-    <ClInclude Include="Sentry.h" />
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="SerializationAccess.h" />
     <ClInclude Include="Settings.h" />
@@ -90,9 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationEditor.cpp" />
-    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Editable.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -110,19 +103,16 @@
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaverLoader.cpp" />
-    <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="CollisionFilter.cpp" />
     <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Hash.cpp" />
-    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="SerializationAccess.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

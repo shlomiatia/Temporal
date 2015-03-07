@@ -193,9 +193,12 @@ namespace Temporal
 
 	void Animator::reset(AnimationParams& animationParams)
 	{
-		_previousAnimationId = _animationId;
-		_previousIsRewined = _isRewined;
-		_previousTimer.reset(_timer.getElapsedTime());
+		if(_timer.getElapsedTime() > CROSS_FADE_DURATION)
+		{
+			_previousAnimationId = _animationId;
+			_previousIsRewined = _isRewined;
+			_previousTimer.reset(_timer.getElapsedTime());
+		}
 
 		_animationId = animationParams.getAnimationId();
 		_isRewined = animationParams.isRewind();

@@ -50,9 +50,11 @@ namespace Temporal
 			ACTION_BACKWARD,
 			ACTION_ACTIVATE,
 			ACTION_TAKEDOWN,
+			ACTION_HOLSTER,
+			ACTION_AIM,
+			ACTION_FIRE,
 			
 			GET_GROUND,
-			SET_BODY_ENABLED,
 			SET_GRAVITY_ENABLED,
 			SET_IMPULSE,
 			SENSOR_START,
@@ -62,6 +64,8 @@ namespace Temporal
 			LINE_OF_SIGHT,
 			SET_COLLISION_GROUP,
 			GET_COLLISION_GROUP,
+			// For doors
+			SET_BODY_ENABLED,
 
 			STATE_ENTERED,
 			STATE_EXITED,
@@ -88,6 +92,7 @@ namespace Temporal
 			SET_LIT,
 			IS_LIT,
 
+			// For buttons/doors
 			ACTIVATE,
 			DIE
 		};

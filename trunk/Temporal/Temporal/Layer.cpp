@@ -137,6 +137,7 @@ namespace Temporal
 		HashCollection filter;
 		filter.push_back(Hash("static-body"));
 		filter.push_back(Hash("editable"));
+		//filter.push_back(Hash("sight"));
 		//filter.push_back(Hash("dynamic-body"));
 		//filter.push_back(Hash("sensor"));
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);

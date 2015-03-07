@@ -37,18 +37,13 @@ namespace Temporal
 	class Sensor;
 	class DynamicBody;
 	class StaticBody;
-	class Laser;
 	class TemporalPeriod;
 	class PlayerPeriod;
 	class ActionController;
 	class MovingPlatform;
-	class Button;
-	class Sentry;
 	class Patrol;
-	class SecurityCamera;
 	class InputController;
 	class Navigator;
-	class Door;
 	class TemporalEcho;
 	class EntitySaverLoader;
 	class LightGem;
@@ -190,7 +185,7 @@ namespace Temporal
 			serializer.serialize("id", animation._id);
 			serializer.serialize("repeat", animation._repeat);
 			serializer.serialize("scene-graph-sample", animation._samples);
-			serializer.serialize("cross-fase", animation._crossFade);
+			serializer.serialize("cross-fade", animation._crossFade);
 		}
 		
 		template<class T>
@@ -341,11 +336,6 @@ namespace Temporal
 		}
 		
 		template<class T>
-		static void serialize(const char* key, Laser& laser, T& serializer)
-		{
-		}
-		
-		template<class T>
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
@@ -370,24 +360,6 @@ namespace Temporal
 			serializer.serialize("point1", component._point1);
 			serializer.serialize("point2", component._point2);
 		}
-		
-		template<class T>
-		static void serialize(const char* key, Button& button, T& serializer)
-		{
-			serializer.serialize("target", button._target);
-		}
-
-		template<class T>
-		static void serialize(const char* key, Sentry& component, T& serializer)
-		{
-			serialize(key, (StateMachineComponent&)component, serializer);
-		}
-
-		template<class T>
-		static void serialize(const char* key, SecurityCamera& component, T& serializer)
-		{
-			serialize(key, (StateMachineComponent&)component, serializer);
-		}
 
 		template<class T>
 		static void serialize(const char* key, Patrol& component, T& serializer)
@@ -400,9 +372,6 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, Navigator& component, T& serializer) {}
-
-		template<class T>
-		static void serialize(const char* key, Door& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}

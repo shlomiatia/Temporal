@@ -223,11 +223,25 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class Dying : public ComponentState
+		class Die : public ComponentState
 		{
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message) {}
+		};
+
+		class Aim : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class Fire : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
 		};
 	}
 }

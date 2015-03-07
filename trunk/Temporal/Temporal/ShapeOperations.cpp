@@ -19,72 +19,65 @@ namespace Temporal
 		return true;
 	}
 
-	bool clip(float denom, float numer, float& t0, float& t1)
-	{
-		// Return value is 'true' if line rayment intersects the current test
-		// plane.  Otherwise 'false' is returned in which case the line rayment
-		// is entirely clipped.
-
-		if (denom > 0.0f)
-		{
-			if (numer > denom*t1)
-			{
-				return false;
-			}
-			if (numer > denom*t0)
-			{
-				t0 = numer/denom;
-			}
-			return true;
-		}
-		else if (denom < 0.0f)
-		{
-			if (numer > denom*t0)
-			{
-				return false;
-			}
-			if (numer > denom*t1)
-			{
-				t1 = numer/denom;
-			}
-			return true;
-		}
-		else
-		{
-			return numer <= 0.0f;
-		}
-	}
-		
 	bool intersects(const DirectedSegment& ray, const OBB& obb, Vector* pointOfIntersection, float* distance)
 	{
-		float t0 = 0.0f;
-		float t1 = ray.getVector().getLength();
-		// Convert linear component to obb coordinates.
-		Vector diff = ray.getOrigin() - obb.getCenter();
-		Vector BOrigin(
-			diff * (obb.getAxis(Axis::X)),
-			diff * (obb.getAxis(Axis::Y))
-		);
-		Vector BDirection(
-			ray.getDirection() * (obb.getAxis(Axis::X)),
-			ray.getDirection() * (obb.getAxis(Axis::Y))
-		);
+		float maxS = -FLT_MAX;
+		float minT = FLT_MAX;
 
-		float saveT0 = t0, saveT1 = t1;
-		bool notAllClipped =
-			clip(+BDirection.getX(), -BOrigin.getX()-obb.getRadius().getX(), t0, t1) &&
-			clip(-BDirection.getX(), +BOrigin.getX()-obb.getRadius().getX(), t0, t1) &&
-			clip(+BDirection.getY(), -BOrigin.getY()-obb.getRadius().getY(), t0, t1) &&
-			clip(-BDirection.getY(), +BOrigin.getY()-obb.getRadius().getY(), t0, t1);
+		// compute difference vector
+		Vector diff = obb.getCenter() - ray.getOrigin();
 
-		if (!notAllClipped)
-			return false;
+		// for each axis do
+		for(Axis::Enum i = Axis::X; i <= Axis::Y; i++) 
+		{
+			// get axis i
+			Vector axis = obb.getAxis(i);
+
+			// project relative vector onto axis
+			float e = axis * diff;
+			float f = ray.getDirection().normalize() * axis;
+
+			float axisRadius = obb.getRadius().getAxis(i);
+
+			// ray is parallel to plane
+			if (equals(f, 0.0f))
+			{
+				// ray passes by box
+				if (-e - axisRadius > 0.0f || -e + axisRadius < 0.0f )
+					return false;
+				continue;
+			}
+
+			float s = (e - axisRadius)/f;
+			float t = (e + axisRadius)/f;
+
+			// fix order
+			if ( s > t )
+			{
+				float temp = s;
+				s = t;
+				t = temp;
+			}
+
+			// adjust min and max values
+			if ( s > maxS )
+				maxS = s;
+			if ( t < minT )
+				minT = t;
+
+			// check for intersection failure
+			if ( minT < 0.0f || maxS > minT )
+				return false;
+		}
+
 		if(pointOfIntersection)
-			*pointOfIntersection = ray.getOrigin() + ray.getDirection() * t0;
+			*pointOfIntersection = ray.getOrigin() + ray.getDirection() * maxS;
 		if(distance)
-			*distance = t0;
+			*distance = maxS;
+
+		// done, have intersection
 		return true;
-	}	
+	}
 
 	bool intersects(const OBB& obb1, const OBB& obb2, Vector* correction)
 	{
