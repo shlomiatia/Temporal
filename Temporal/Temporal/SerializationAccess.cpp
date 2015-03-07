@@ -9,25 +9,18 @@
 #include "StaticBody.h"
 #include "Sensor.h"
 #include "Patrol.h"
-#include "Sentry.h"
-#include "SecurityCamera.h"
 #include "Navigator.h"
 #include "TemporalEcho.h"
 #include "TemporalPeriod.h"
 #include "SceneNode.h"
 #include "InputController.h"
 #include "Shapes.h"
-#include "Button.h"
-#include "Door.h"
 #include "SaverLoader.h"
 #include "Transform.h"
 #include "Animator.h"
 #include "ActionController.h"
 #include "DynamicBody.h"
-#include "Laser.h"
-#include "SecurityCamera.h"
 #include "Patrol.h"
-#include "Sentry.h"
 
 namespace Temporal
 {
@@ -61,20 +54,10 @@ namespace Temporal
 			serialize(key, (DynamicBody*&)component, serializer);
 		else if(strcmp(key, StaticBody::TYPE.getString()) == 0)
 			serialize(key, (StaticBody*&)component, serializer);
-		else if(strcmp(key, Sentry::TYPE.getString()) == 0)
-			serialize(key, (Sentry*&)component, serializer);
-		else if(strcmp(key, SecurityCamera::TYPE.getString()) == 0)
-			serialize(key, (SecurityCamera*&)component, serializer);
 		else if(strcmp(key, Patrol::TYPE.getString()) == 0)
 			serialize(key, (Patrol*&)component, serializer);
 		else if(strcmp(key, Navigator::TYPE.getString()) == 0)
 			serialize(key, (Navigator*&)component, serializer);
-		else if(strcmp(key, Door::TYPE.getString()) == 0)
-			serialize(key, (Door*&)component, serializer);
-		else if(strcmp(key, Button::TYPE.getString()) == 0)
-			serialize(key, (Button*&)component, serializer);
-		else if(strcmp(key, Laser::TYPE.getString()) == 0)
-			serialize(key, (Laser*&)component, serializer);
 		else if(strcmp(key, TemporalEcho::TYPE.getString()) == 0)
 			serialize(key, (TemporalEcho*&)component, serializer);
 		else if(strcmp(key, TemporalPeriod::TYPE.getString()) == 0)
@@ -103,14 +86,8 @@ namespace Temporal
 			serialize(key, *(ActionController*&)component, serializer);
 		else if(component->getType() == DynamicBody::TYPE)
 			serialize(key, *(DynamicBody*&)component, serializer);
-		else if(component->getType() == Laser::TYPE)
-			serialize(key, *(Laser*&)component, serializer);
-		else if(component->getType() == Sentry::TYPE)
-			serialize(key, *(Sentry*&)component, serializer);
 		else if(component->getType() == Patrol::TYPE)
 			serialize(key, *(Patrol*&)component, serializer);
-		else if(component->getType() == SecurityCamera::TYPE)
-			serialize(key, *(SecurityCamera*&)component, serializer);
 		// XML ONLY
 		else if(component->getType() == Renderer::TYPE)
 			serialize(key, *(Renderer*&)component, serializer);
@@ -132,10 +109,6 @@ namespace Temporal
 			serialize(key, *(StaticBody*&)component, serializer);
 		else if(component->getType() == Navigator::TYPE)
 			serialize(key, *(Navigator*&)component, serializer);
-		else if(component->getType() == Door::TYPE)
-			serialize(key, *(Door*&)component, serializer);
-		else if(component->getType() == Button::TYPE)
-			serialize(key, *(Button*&)component, serializer);
 		else if(component->getType() == TemporalEcho::TYPE)
 			serialize(key, *(TemporalEcho*&)component, serializer);
 		else if(component->getType() == TemporalPeriod::TYPE)

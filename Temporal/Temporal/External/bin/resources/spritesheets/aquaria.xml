@@ -71,4 +71,13 @@
 			<offset x="-9" y="3" />
 		</sprite>
 	</sprite-group>
+	<sprite-group id="SCN_GUN">
+		<sprite>
+			<bounds>
+				<center x="25.5" y="36.5" />
+				<radius x="20" y="18" />
+			</bounds>
+			<offset x="0" y="0" />
+		</sprite>
+	</sprite-group>
 </sprite-sheet>

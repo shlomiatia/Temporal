@@ -101,9 +101,10 @@ namespace Temporal
 		Side::Enum sourceSide = getOrientation(*this);
 
 		drawFieldOfView(sourcePosition, sourceSide);
-		if(_pointOfIntersection != Vector::Zero)
+		Vector radius = _pointOfIntersection - sourcePosition;
+
+		if(_pointOfIntersection != Vector::Zero && radius != Vector::Zero)
 		{
-			Vector radius = _pointOfIntersection - sourcePosition;
 			Graphics::get().getLinesSpriteBatch().add(OBB(sourcePosition + radius / 2.0f, radius.normalize(), Vector(radius.getLength() / 2.0f, 0.5f)), _isSeeing ? Color::Green : Color::Red);
 		}
 		Graphics::get().getLinesSpriteBatch().end();

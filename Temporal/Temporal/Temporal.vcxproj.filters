@@ -5,9 +5,6 @@
     <ClInclude Include="Patrol.h">
       <Filter>AI</Filter>
     </ClInclude>
-    <ClInclude Include="Sentry.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="BaseEnums.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
     <ClInclude Include="Debug.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Laser.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="TemporalPeriod.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -122,9 +116,6 @@
     <ClInclude Include="Vector.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="SecurityCamera.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -150,12 +141,6 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="MovingPlatform.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Door.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Keyboard.h">
@@ -233,9 +218,6 @@
     <ClCompile Include="Patrol.cpp">
       <Filter>AI</Filter>
     </ClCompile>
-    <ClCompile Include="Sentry.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -302,9 +284,6 @@
     <ClCompile Include="StaticBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Laser.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="TemporalPeriod.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -335,9 +314,6 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="SecurityCamera.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -360,12 +336,6 @@
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="MovingPlatform.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Door.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
