@@ -95,8 +95,8 @@
 			<saver-loader />
 			<!--<player-period period="2" />
 			<light-gem />
-			<light><color r="1.0" g="0.0" b="0.0" /></light>
-			<particle-emitter lifetime="3" birth-threshold="0.5" texture="resources/textures/bubble.png" birth-radius="50" velocity="50" center="180" size="180" />-->
+			<light><color r="1.0" g="0.0" b="0.0" /></light>-->
+			
 		</entity>
 		<!--<entity id="ENT_LIGHT">
 			<transform>
@@ -208,11 +208,16 @@
 					</scene-node>
 					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
+							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30">
+								<scene-node id="SCN_GUN" sprite-group="SCN_GUN" behind-parent="1" rotation="-90">
+									<translation x="7.0" y="-20.0" />
+								</scene-node>
+							</scene-node>
 						</scene-node>
 					</scene-node>
 				</scene-node>
 			</renderer>
+			<particle-emitter lifetime="1" texture="resources/textures/bullet.png" birth-radius="0" velocity="2000" center="0" size="5" attachment="SCN_GUN" />
 			<!--<temporal-echo />
 			<temporal-period period="1" />-->
 		</entity>

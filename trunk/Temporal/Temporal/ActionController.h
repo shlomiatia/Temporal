@@ -198,6 +198,7 @@ namespace Temporal
 		{
 		public:
 			void enter(void* param);
+			void exit(void* param);
 			void handleMessage(Message& message);
 		};
 

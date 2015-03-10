@@ -295,6 +295,7 @@ namespace Temporal
 			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);
 			serializer.serialize("velocity", particleEmitter._velocity);
+			serializer.serialize("attachment", particleEmitter._attachment);
 			serializer.serializeRadians("center", particleEmitter._directionCenter);
 			serializer.serializeRadians("size", particleEmitter._directionSize);
 		}

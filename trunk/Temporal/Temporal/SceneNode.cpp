@@ -68,6 +68,7 @@ namespace Temporal
 			Matrix temp;
 			temp.translate(sceneNode->getTranslation());
 			temp.rotate(sceneNode->getRotation());
+			temp.scale(sceneNode->getScale());
 			result = temp * result;
 			sceneNode = sceneNode->_parent;
 		}
