@@ -55,6 +55,7 @@ namespace Temporal
 		void setStateFlag(bool value) { _stateFlag = value; }
 		bool getStateMachineFlag() const { return _stateMachineFlag; }
 		void setStateMachineFlag(bool value) { _stateMachineFlag = value; }
+		Hash getCurrentStateID() const { return _currentStateID; }
 
 		// Record amount of time spent in a single state. Expose non const object to allow state to record sub periods
 		Timer& getTimer() { return _timer; }

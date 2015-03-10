@@ -95,7 +95,7 @@ namespace Temporal
 		return targetRotation;
 	}
 
-	void animateSceneNode(const Animation& animation, bool isRewind, float currentIndex, const SceneNode& sceneNode, Hash& spriteGroupId, float& interpolation, Vector& translation, float& rotation)
+	bool animateSceneNode(const Animation& animation, bool isRewind, float currentIndex, const SceneNode& sceneNode, Hash& spriteGroupId, float& interpolation, Vector& translation, float& rotation)
 	{
 		int animationDuration = animation.getDuration();
 
@@ -109,8 +109,11 @@ namespace Temporal
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;
 		}
-		const SceneGraphSample& sceneGraphSample = **animation.getSamples().begin();
-		const SceneNodeSample* currentSample = sceneGraphSample.getSamples().at(sceneNode.getID());
+		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
+		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
+		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end())
+			return false;
+		const SceneNodeSample* currentSample = sceneNodeSampleIterator->second;
 		while(!(relativeIndex >= currentSample->getParent().getIndex() && 
 		       (relativeIndex < currentSample->getNext()->getParent().getIndex() ||
 			    currentSample->getParent().getIndex() >= currentSample->getNext()->getParent().getIndex())))
@@ -134,6 +137,7 @@ namespace Temporal
 		
 		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
 		rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
+		return true;
 	}
 
 	void Animator::update()
@@ -151,7 +155,8 @@ namespace Temporal
 			Vector translation;
 			float rotation = 0.0f;
 
-			animateSceneNode(animation, _isRewined, frame, sceneNode, spriteGroupId, interpolation, translation, rotation);
+			if(!animateSceneNode(animation, _isRewined, frame, sceneNode, spriteGroupId, interpolation, translation, rotation))
+				continue;
 			
 			if(_previousAnimationId != Hash::INVALID && time <= CROSS_FADE_DURATION && animation.isCrossFade() && _animationSet->get(_previousAnimationId).isCrossFade() && !_isDisableCrossFade)
 			{

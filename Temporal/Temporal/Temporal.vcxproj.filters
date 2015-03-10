@@ -20,9 +20,6 @@
     <ClInclude Include="ShapeOperations.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="ActionController.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -36,9 +33,6 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="StateMachineComponent.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="TemporalEcho.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
@@ -82,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="TemporalPeriod.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="SceneNode.h">
       <Filter>Graphics</Filter>
@@ -134,14 +125,8 @@
     <ClInclude Include="Serialization.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="SerializationAccess.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingPlatform.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>Input</Filter>
@@ -212,6 +197,21 @@
     <ClInclude Include="Matrix.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="ActionController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalEcho.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalPeriod.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializationAccess.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -230,9 +230,6 @@
     <ClCompile Include="ShapeOperations.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="ActionController.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="StateMachineComponent.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="TemporalEcho.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Thread.cpp">
@@ -283,9 +277,6 @@
     </ClCompile>
     <ClCompile Include="StaticBody.cpp">
       <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="TemporalPeriod.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
       <Filter>Graphics</Filter>
@@ -335,9 +326,6 @@
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="MovingPlatform.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>Input</Filter>
     </ClCompile>
@@ -346,9 +334,6 @@
     </ClCompile>
     <ClCompile Include="Gamepad.cpp">
       <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="SerializationAccess.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Common</Filter>
@@ -401,6 +386,21 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="ActionController.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalEcho.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalPeriod.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializationAccess.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -423,6 +423,9 @@
     </Filter>
     <Filter Include="Tools">
       <UniqueIdentifier>{b252260c-8069-44bf-b12b-892df903542c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{7cc3a81d-f970-433d-80f6-677135c3355a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

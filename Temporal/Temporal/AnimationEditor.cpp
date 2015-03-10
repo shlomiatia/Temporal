@@ -372,11 +372,6 @@ namespace Temporal
 		
 		SceneNode& sceneNode = *static_cast<SceneNode*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_SKELETON"), Message(MessageID::GET_ROOT_SCENE_NODE)));
 		bindSceneNodes(sceneNode);
-		SceneNode* hand = sceneNode.get(Hash("SCN_FRONTARM3"));
-		/*SceneNode* gun = new SceneNode(Hash("SCN_GUN"), Hash("SCN_GUN"), true);
-		gun->setTranslation(Vector(7.0f, -20.0f));
-		gun->setRotation(-90.0f);
-		hand->add(gun);*/
 
 		Control* control = addControl(Hash("skeletonPanel"), AABBLT(PADDED_BUTTON_SIZE.getX(), WINDOW_SIZE.getY() - PADDING, PANEL_SIZE.getX(), PANEL_SIZE.getY()));
 		control->setBackgroundColor(Color::Transparent);

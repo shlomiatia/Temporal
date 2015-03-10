@@ -7,6 +7,9 @@
 #include "Layer.h"
 #include "ResourceManager.h"
 #include "SpriteSheet.h"
+#include "SceneNode.h"
+#include "Grid.h"
+#include "Fixture.h"
 #include <cstdlib>
 #include <SDL_opengl.h>
 
@@ -25,7 +28,7 @@ namespace Temporal
 		delete[] _particles;
 	}
 
-	int ParticleEmitter::getLength() { return static_cast<int>(_lifetime / _birthThreshold); }
+	int ParticleEmitter::getLength() { return _birthThreshold == 0 ? 1 : static_cast<int>(_lifetime / _birthThreshold); }
 	
 	void ParticleEmitter::handleMessage(Message& message)
 	{
@@ -41,6 +44,10 @@ namespace Temporal
 		else if(message.getID() == MessageID::DRAW)
 		{
 			draw();
+		}
+		else if (message.getID() == MessageID::EMIT_PARTICLE)
+		{
+			_emit = true;
 		}
 	}
 
@@ -68,6 +75,18 @@ namespace Temporal
 	void ParticleEmitter::update(float framePeriod)
 	{
 		int length = getLength();
+		Vector emitterPosition = getPosition(*this);;
+		Side::Enum side =  getOrientation(*this);
+		if(_attachment != Hash::INVALID)
+		{
+			SceneNode& root = *static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
+			const SceneNode& node = *root.get(_attachment);
+			Matrix nodeMatrix = node.getGlobalMatrix();
+			Vector nodeTranslation = nodeMatrix * Vector::Zero;
+			nodeTranslation.setX(nodeTranslation.getX() * side);
+			emitterPosition += nodeTranslation;
+		}
+		
 		for(int i = 0; i < length; ++i)
 		{
 			Particle& particle = _particles[i];
@@ -78,39 +97,56 @@ namespace Temporal
 				{
 					particle.setAlive(false);	
 				}
+				RayCastResult result;
+				if(getEntity().getManager().getGameState().getGrid().cast(particle.getPosition(), particle.getVelocity().normalize(), result) &&
+					(result.getPoint() - particle.getPosition()).getLength() < particle.getVelocity().getLength() * framePeriod)
+				{
+					getEntity().getManager().sendMessageToEntity(result.getFixture().getEntityId(), Message(MessageID::DIE));
+					particle.resetAge(_lifetime);
+				}
+				
 			}
 		}
 		_birthTimer.update(framePeriod);
 		float timeSinceLastBirth = _birthTimer.getElapsedTime();
-		if(timeSinceLastBirth > _birthThreshold)
+		if(_birthThreshold > 0.0f && timeSinceLastBirth > _birthThreshold)
 		{
 			_birthTimer.reset();
-			const Vector& emitterPosition = *static_cast<const Vector*>(raiseMessage(Message(MessageID::GET_POSITION)));
-
 			int bornParticles = static_cast<int>(timeSinceLastBirth / _birthThreshold);
 			for(int i = 0; i < bornParticles; ++i)
 			{
-				float angle = randomF(1000) * _directionSize + _directionCenter - _directionSize / 2.0f;
-				Vector position = emitterPosition + Vector(-_birthRadius + randomF(1000) * _birthRadius * 2.0f, -_birthRadius + randomF(1000) * _birthRadius * 2.0f);
-				Vector velocity = Vector(_velocity * cos(angle), _velocity * sin(angle));
-				_particles[_birthIndex].setAlive(true);
-				_particles[_birthIndex].setPosition(position);
-				_particles[_birthIndex].setVelocity(velocity);
-				_particles[_birthIndex].resetAge();
-				_birthIndex = (_birthIndex + 1) % length;
+				emit(emitterPosition, side, length);
 			}
 		}
+		if(_emit)
+		{
+			emit(emitterPosition, side, length);
+			_emit = false;
+		}
+	}
+
+	void ParticleEmitter::emit(Vector emitterPosition, Side::Enum side, int length)
+	{
+		float angle = randomF(1000) * _directionSize + _directionCenter - _directionSize / 2.0f;
+		Vector position = emitterPosition + Vector(-_birthRadius + randomF(1000) * _birthRadius * 2.0f, -_birthRadius + randomF(1000) * _birthRadius * 2.0f);
+		Vector velocity = Vector(_velocity * cos(angle), _velocity * sin(angle));
+		_particles[_birthIndex].setAlive(true);
+		_particles[_birthIndex].setPosition(position);
+		_particles[_birthIndex].setVelocity(velocity * side);
+		_particles[_birthIndex].resetAge();
+		_birthIndex = (_birthIndex + 1) % length;
 	}
 
 	void ParticleEmitter::draw()
 	{
+		Side::Enum side =  getOrientation(*this);
 		int length = getLength();
 		for(int i = 0; i < length; ++i)
 		{
 			const Particle& particle = _particles[i];
 			if(particle.isAlive())
 			{
-				Graphics::get().getSpriteBatch().add(&_spritesheet->getTexture(), particle.getPosition());
+				Graphics::get().getSpriteBatch().add(&_spritesheet->getTexture(), particle.getPosition(), AABB::Zero, Color::White, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), side == Side::LEFT);
 			}
 		}
 	}

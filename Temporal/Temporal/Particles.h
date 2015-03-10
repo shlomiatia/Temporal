@@ -14,10 +14,11 @@ namespace Temporal
 	{
 	public:
 		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _isAlive(true) {}
-		void resetAge() { _ageTimer.reset(); }
+		void resetAge(float time = 0.0f) { _ageTimer.reset(time); }
 		float getAge() const { return _ageTimer.getElapsedTime(); }
 		const Vector& getPosition() const { return _position; }
 		void setPosition(const Vector& position) { _position = position; }
+		const Vector& getVelocity() const { return _velocity; }
 		void setVelocity(const Vector& velocity) { _velocity = velocity; }
 		bool isAlive() const { return _isAlive; }
 		void setAlive(bool isAlive) { _isAlive = isAlive; } 
@@ -39,8 +40,8 @@ namespace Temporal
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter() : _lifetime(0.0f), _birthThreshold(0.0f), _particles(0), _birthIndex(0),
-			_spritesheetFile(), _textureFile(), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f) {}
+		ParticleEmitter() : 
+			_lifetime(0.0f), _birthThreshold(0.0f), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f), _birthIndex(0), _particles(0), _emit(false), _attachment(Hash::INVALID) {}
 		~ParticleEmitter();
 
 		Hash getType() const { return TYPE; }
@@ -57,7 +58,6 @@ namespace Temporal
 		
 		float _lifetime;
 		float _birthThreshold;
-		
 		float _birthRadius;
 		float _velocity;
 		float _directionCenter;
@@ -66,11 +66,14 @@ namespace Temporal
 		Timer _birthTimer;
 		int _birthIndex;
 		Particle* _particles;
+		bool _emit;
+		Hash _attachment;
 		
 		void init();
 		void update(float framePeriod);
 		void draw();
 		int getLength();
+		void emit(Vector emitterPosition, Side::Enum side, int length);
 
 		friend class SerializationAccess;
 	};
