@@ -11,6 +11,7 @@
 
 namespace Temporal
 {
+	class Animator;
 	class ResetAnimationParams;
 	class SceneNode;
 	class AnimationParams;
@@ -36,20 +37,24 @@ namespace Temporal
 	class SingleAnimator
 	{
 	public:
-		SingleAnimator() : _animation(0), _isRewind(false) {}
+		SingleAnimator(const Animator& owner) : _owner(owner), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
 
-		void reset(const Animation* animation = 0, bool isRewind = false) { _animation = animation; _isRewind = isRewind; }
+		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, float weight = 1.0f) { _animationId = animationId; _isRewind = isRewind; _weight = weight; }
+		Hash getAnimationId() const { return _animationId; }
 		float getTime() const { return _timer.getElapsedTime(); }
 		void setTime(float time) { _timer.reset(time); }
+		float getWeight() const { return _weight; }
 		void update(float time) { _timer.update(time); }
 		
-		const Animation* getAnimation() const { return _animation; }
 		bool animate(const SceneNode& sceneNode, SRT& srt);
 		bool isEnded() const;
+		bool isCrossFade() const;
 
 	private:
-		const Animation* _animation;
+		const Animator& _owner;
+		Hash _animationId;
 		bool _isRewind;
+		float _weight;
 		Timer _timer;
 
 		SingleAnimator(const SingleAnimator&);
@@ -62,14 +67,15 @@ namespace Temporal
 	class CompositeAnimator
 	{
 	public:
-		CompositeAnimator();
+		CompositeAnimator(const Animator& owner);
 		~CompositeAnimator();
 		
 		float getTime() const { return _singleAnimators[0]->getTime(); }
 		bool isEnded() const { return _singleAnimators[0]->isEnded(); }
-		const Animation* getAnimation() const { return _singleAnimators[0]->getAnimation(); }
+		bool isActive() const { return _singleAnimators[0]->getAnimationId() != Hash::INVALID; }
+		bool isCrossFade() const { return isActive() && _singleAnimators[0]->isCrossFade(); };
 
-		void reset(const Animation* animation = 0, bool isRewind = false, int layer = 0);
+		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, int layer = 0, float weight = 1.0f);
 		void setTime(float time);
 		void update(float time);
 		bool animate(const SceneNode& sceneNode, SRT& srt);
@@ -86,8 +92,9 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _crossFade(false), _useAimator2(false), _isDisableCrossFade(false) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _crossFade(false), _useAimator2(false), _isDisableCrossFade(false), _animator1(*this), _animator2(*this) {}
 		
+		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		

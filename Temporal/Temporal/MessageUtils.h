@@ -68,18 +68,21 @@ namespace Temporal
 	class AnimationParams
 	{
 	public:
-		explicit AnimationParams(Hash animationId, bool rewind = false, float interpolation = 0.0f, int layer = 0) : _animationId(animationId), _rewind(rewind), _interpolation(interpolation), _layer(layer) {}
+		explicit AnimationParams(Hash animationId, bool rewind = false, float interpolation = 0.0f, int layer = 0, float weight = 1.0f) :
+		_animationId(animationId), _rewind(rewind), _interpolation(interpolation), _layer(layer), _weight(weight) {}
 
 		Hash getAnimationId() const { return _animationId; }
 		bool isRewind() const { return _rewind; }
 		float getInterpolation() const { return _interpolation; }
 		int getLayer() const { return _layer; }
+		float getWeight() const { return _weight; }
 
 	private:
 		Hash _animationId;
 		bool _rewind;
 		float _interpolation;
 		int _layer;
+		float _weight;
 		
 		AnimationParams(const AnimationParams&);
 		AnimationParams& operator=(const AnimationParams&);

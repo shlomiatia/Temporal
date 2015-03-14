@@ -63,6 +63,9 @@ namespace Temporal
 		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : AngleUtils::radian().mirror(_sightCenter);
 		float distance = AngleUtils::radian().minDistance(sightCenter, angle);
 		if(distance > _sightSize / 2.0f) return;
+		float direction = distance / AngleUtils::radian().ANGLE_90_IN_RADIANS;
+		if(angle < 0.0f)
+			direction *= -1.0f;
 
 		RayCastResult result;
 		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
@@ -73,7 +76,7 @@ namespace Temporal
 		}
 		
 		if(_isSeeing)
-			raiseMessage(Message(MessageID::LINE_OF_SIGHT));
+			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &direction));
 	}
 
 	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Vector &sourcePosition)

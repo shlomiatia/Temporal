@@ -185,8 +185,8 @@ namespace Temporal
 		{
 			serializer.serialize("id", animation._id);
 			serializer.serialize("repeat", animation._repeat);
-			serializer.serialize("scene-graph-sample", animation._samples);
 			serializer.serialize("cross-fade", animation._crossFade);
+			serializer.serialize("scene-graph-sample", animation._samples);
 		}
 		
 		template<class T>
