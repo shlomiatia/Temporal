@@ -14,7 +14,157 @@ namespace Temporal
 
 	float frameToTime(float frame) { return frame / FPS; }
 	float timeToFrame(float time) { return time * FPS; }
-	
+
+	float easeInOutBezier(float interpolation, float startValue, float endValue)
+	{
+		float inverseInterpolation = 1 - interpolation;
+		return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) + 
+			   endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);
+	}
+
+	float getTargetRotation(const SceneNode& sceneNode, float sourceRotation, float targetRotation)
+	{
+		bool notShortestPath = fabsf(targetRotation - sourceRotation) > 180.0f;
+
+		float clockwiseDist = AngleUtils::degree().clockwiseDistance(sourceRotation, targetRotation);
+		float counterclockwiseDist = AngleUtils::degree().counterclockwiseDistance(sourceRotation, targetRotation);
+		bool clockwise = clockwiseDist < counterclockwiseDist;
+		float minDist = clockwise ? clockwiseDist : counterclockwiseDist;
+		float centerDist = clockwise ? AngleUtils::degree().clockwiseDistance(sceneNode.getCenter(), sourceRotation) : AngleUtils::degree().counterclockwiseDistance(sceneNode.getCenter(), sourceRotation);
+		bool outsideBoneRange = (sceneNode.getRadius() > 0.0f && centerDist < 180.0f && centerDist + minDist > sceneNode.getRadius());
+
+		// XOR
+		if(notShortestPath != outsideBoneRange)
+		{
+			targetRotation = AngleUtils::degree().turn(targetRotation);
+		}
+		return targetRotation;
+	}
+
+	void lerp(float interpolation, const SceneNode& sceneNode, float sourceRotation, float targetRotation, const Vector& sourceTranslation, const Vector& targetTranslation, SRT& result)
+	{
+		sourceRotation = AngleUtils::degree().normalize(sourceRotation);
+		targetRotation = AngleUtils::degree().normalize(targetRotation);
+		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
+		float rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
+
+		Vector translation(
+			easeInOutBezier(interpolation, sourceTranslation.getX(), targetTranslation.getX()),
+			easeInOutBezier(interpolation, sourceTranslation.getY(), targetTranslation.getY()));
+
+		result.setRotation(rotation);
+		result.setTranslation(translation);
+	}
+
+	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
+	{
+		const Animation& animation = _owner.getAnimation(_animationId);
+		float time = _timer.getElapsedTime();
+		float frame = timeToFrame(time);
+		int animationDuration = animation.getDuration();
+
+		// If animation doesn't repeat, clamp it. Otherwise, calculate cyclic index
+		float relativeIndex = (frame >= animationDuration && !animation.isRepeat()) ? animationDuration : fmod(frame, animationDuration);
+		Direction::Enum direction = Direction::FORWARD;
+
+		// If animation rewind, calculate mirror index
+		if(_isRewind)
+		{
+			relativeIndex = animationDuration - relativeIndex;
+			direction = Direction::BACKWARD;
+		}
+		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
+		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
+		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end() || sceneNodeSampleIterator->second->isIgnore())
+			return false;
+		const SceneNodeSample* currentSample = sceneNodeSampleIterator->second;
+		while(!(relativeIndex >= currentSample->getParent().getIndex() && 
+		       (relativeIndex < currentSample->getNext()->getParent().getIndex() ||
+			    currentSample->getParent().getIndex() >= currentSample->getNext()->getParent().getIndex())))
+		{
+			currentSample = currentSample->getSibling(direction);
+		}
+			   
+		// If animation doesn't repeat, use current sample for both samples. Otherwise use current and next
+		const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !animation.isRepeat()) ? currentSample : currentSample->getNext();
+		float sampleOffset = relativeIndex - currentSample->getParent().getIndex();
+		int sampleDuration = animationDuration == 0 ? 0 : (animationDuration + nextSample->getParent().getIndex() - currentSample->getParent().getIndex()) % animationDuration;
+		
+		float interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
+
+		lerp(interpolation, sceneNode, currentSample->getRotation(), nextSample->getRotation(), currentSample->getTranslation(), nextSample->getTranslation(), srt);
+		//srt.setSpriteGroupId(currentSample->getSpriteGroupId());
+
+		return true;
+	}
+
+	bool SingleAnimator::isEnded() const
+	{
+		const Animation& animation = _owner.getAnimation(_animationId);
+		int animationDuration = animation.getDuration();
+		float time = _timer.getElapsedTime();
+		float frame = timeToFrame(time);
+		return frame >= animationDuration && !animation.isRepeat();
+	}
+
+	bool SingleAnimator::isCrossFade() const
+	{
+		const Animation& animation = _owner.getAnimation(_animationId);
+		return animation.isCrossFade();
+	}
+
+	CompositeAnimator::CompositeAnimator(const Animator& owner)
+	{
+		for(int i = 0; i < 3; ++i)
+			_singleAnimators.push_back(new SingleAnimator(owner));
+	}
+
+	CompositeAnimator::~CompositeAnimator()
+	{
+		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+
+	void CompositeAnimator::reset(Hash animationId, bool isRewind, int layer, float weight)
+	{
+		_singleAnimators[layer]->reset(animationId, isRewind, weight);
+		if(layer == 0)
+		{
+			for(SingleAnimatorIterator i = _singleAnimators.begin() + 1; i != _singleAnimators.end(); ++i)
+				(**i).reset();
+		}
+	}
+
+	void CompositeAnimator::setTime(float time)
+	{
+		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
+			(**i).setTime(time);
+	}
+
+	void CompositeAnimator::update(float time)
+	{
+		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
+			(**i).update(time);
+	}
+
+	bool CompositeAnimator::animate(const SceneNode& sceneNode, SRT& srt)
+	{
+		
+		bool result = _singleAnimators[0]->animate(sceneNode, srt);
+		for(SingleAnimatorIterator i = _singleAnimators.begin() + 1; i != _singleAnimators.end() && (**i).getAnimationId() != Hash::INVALID; ++i)
+		{
+			SingleAnimator& singleAnimator = **i;
+			SRT temp;
+			if(singleAnimator.animate(sceneNode, temp))
+			{
+				lerp(singleAnimator.getWeight(), sceneNode, srt.getRotation(), temp.getRotation(), srt.getTranslation(), temp.getTranslation(), srt);
+			}
+		}
+		return result;
+	}
+
 	void createSceneNodesList(SceneNodeCollection& sceneNodes, SceneNode* node)
 	{
 		if(!node->isTransformOnly())
@@ -72,47 +222,6 @@ namespace Temporal
 		}
 	}
 
-	float easeInOutBezier(float interpolation, float startValue, float endValue)
-	{
-		float inverseInterpolation = 1 - interpolation;
-		return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) + 
-			   endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);
-	}
-
-	float getTargetRotation(const SceneNode& sceneNode, float sourceRotation, float targetRotation)
-	{
-		bool notShortestPath = fabsf(targetRotation - sourceRotation) > 180.0f;
-
-		float clockwiseDist = AngleUtils::degree().clockwiseDistance(sourceRotation, targetRotation);
-		float counterclockwiseDist = AngleUtils::degree().counterclockwiseDistance(sourceRotation, targetRotation);
-		bool clockwise = clockwiseDist < counterclockwiseDist;
-		float minDist = clockwise ? clockwiseDist : counterclockwiseDist;
-		float centerDist = clockwise ? AngleUtils::degree().clockwiseDistance(sceneNode.getCenter(), sourceRotation) : AngleUtils::degree().counterclockwiseDistance(sceneNode.getCenter(), sourceRotation);
-		bool outsideBoneRange = (sceneNode.getRadius() > 0.0f && centerDist < 180.0f && centerDist + minDist > sceneNode.getRadius());
-
-		// XOR
-		if(notShortestPath != outsideBoneRange)
-		{
-			targetRotation = AngleUtils::degree().turn(targetRotation);
-		}
-		return targetRotation;
-	}
-
-	void lerp(float interpolation, const SceneNode& sceneNode, float sourceRotation, float targetRotation, const Vector& sourceTranslation, const Vector& targetTranslation, SRT& result)
-	{
-		sourceRotation = AngleUtils::degree().normalize(sourceRotation);
-		targetRotation = AngleUtils::degree().normalize(targetRotation);
-		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
-		float rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
-
-		Vector translation(
-			easeInOutBezier(interpolation, sourceTranslation.getX(), targetTranslation.getX()),
-			easeInOutBezier(interpolation, sourceTranslation.getY(), targetTranslation.getY()));
-
-		result.setRotation(rotation);
-		result.setTranslation(translation);
-	}
-
 	void Animator::update()
 	{
 		for(SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
@@ -153,21 +262,21 @@ namespace Temporal
 		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
 		if(animationParams.getLayer() != 0.0f)
 		{
-			getCurrentAnimator().reset(&nextAnimation, animationParams.isRewind(), animationParams.getLayer());
+			getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight());
 			return;
 		}
 
 		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION;
-		_crossFade = !_isDisableCrossFade && getCurrentAnimator().getAnimation() && getCurrentAnimator().getAnimation()->isCrossFade() && nextAnimation.isCrossFade();
+		_crossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
 		if(!_crossFade)
 		{
 			getPreviousAnimator().reset();
 		}
-		else if(previousCrossFadeFinished || !getPreviousAnimator().getAnimation())
+		else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
 		{
 			_useAimator2 = !_useAimator2;
 		}
-		getCurrentAnimator().reset(&nextAnimation, animationParams.isRewind());
+		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind());
 		if(!_crossFade || previousCrossFadeFinished)
 		{
 			float time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
@@ -175,111 +284,5 @@ namespace Temporal
 		}
 
 		update();
-	}
-
-	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
-	{
-		float time = _timer.getElapsedTime();
-		float frame = timeToFrame(time);
-		int animationDuration = _animation->getDuration();
-
-		// If animation doesn't repeat, clamp it. Otherwise, calculate cyclic index
-		float relativeIndex = (frame >= animationDuration && !_animation->isRepeat()) ? animationDuration : fmod(frame, animationDuration);
-		Direction::Enum direction = Direction::FORWARD;
-
-		// If animation rewind, calculate mirror index
-		if(_isRewind)
-		{
-			relativeIndex = animationDuration - relativeIndex;
-			direction = Direction::BACKWARD;
-		}
-		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**_animation->getSamples().begin()).getSamples();
-		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
-		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end() || sceneNodeSampleIterator->second->isIgnore())
-			return false;
-		const SceneNodeSample* currentSample = sceneNodeSampleIterator->second;
-		while(!(relativeIndex >= currentSample->getParent().getIndex() && 
-		       (relativeIndex < currentSample->getNext()->getParent().getIndex() ||
-			    currentSample->getParent().getIndex() >= currentSample->getNext()->getParent().getIndex())))
-		{
-			currentSample = currentSample->getSibling(direction);
-		}
-			   
-		// If animation doesn't repeat, use current sample for both samples. Otherwise use current and next
-		const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !_animation->isRepeat()) ? currentSample : currentSample->getNext();
-		float sampleOffset = relativeIndex - currentSample->getParent().getIndex();
-		int sampleDuration = animationDuration == 0 ? 0 : (animationDuration + nextSample->getParent().getIndex() - currentSample->getParent().getIndex()) % animationDuration;
-		
-		float interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
-
-		lerp(interpolation, sceneNode, currentSample->getRotation(), nextSample->getRotation(), currentSample->getTranslation(), nextSample->getTranslation(), srt);
-		//srt.setSpriteGroupId(currentSample->getSpriteGroupId());
-
-		return true;
-	}
-
-	bool SingleAnimator::isEnded() const
-	{
-		int animationDuration = _animation->getDuration();
-		float time = _timer.getElapsedTime();
-		float frame = timeToFrame(time);
-		return frame >= animationDuration && !_animation->isRepeat();
-	}
-
-	CompositeAnimator::CompositeAnimator()
-	{
-		for(int i = 0; i < 3; ++i)
-			_singleAnimators.push_back(new SingleAnimator());
-	}
-
-	CompositeAnimator::~CompositeAnimator()
-	{
-		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
-		{
-			delete *i;
-		}
-	}
-
-	void CompositeAnimator::reset(const Animation* animation, bool isRewind, int layer)
-	{
-		_singleAnimators[layer]->reset(animation, isRewind);
-		if(layer == 0)
-		{
-			for(SingleAnimatorIterator i = _singleAnimators.begin() + 1; i != _singleAnimators.end(); ++i)
-				(**i).reset();
-		}
-	}
-
-	void CompositeAnimator::setTime(float time)
-	{
-		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
-			(**i).setTime(time);
-	}
-
-	void CompositeAnimator::update(float time)
-	{
-		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
-			(**i).update(time);
-	}
-
-	bool CompositeAnimator::animate(const SceneNode& sceneNode, SRT& srt)
-	{
-		bool result = false;
-		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end() && (**i).getAnimation(); ++i)
-		{
-			if(i == _singleAnimators.begin())
-			{
-				result = (**i).animate(sceneNode, srt);
-			}
-			else
-			{
-				SRT temp;
-				if((**i).animate(sceneNode, temp))
-				{
-					lerp(1.0f, sceneNode, srt.getRotation(), temp.getRotation(), srt.getTranslation(), temp.getTranslation(), srt);
-				}
-			}
-		}
-		return result;
 	}
 }
