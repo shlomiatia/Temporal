@@ -20,8 +20,8 @@ namespace Temporal
 	class SceneNodeSample
 	{
 	public:
-		explicit SceneNodeSample(Hash sceneNodeId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f) :
-		  _sceneNodeId(sceneNodeId), _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _parent(0), _next(0), _previous(0) {}
+		explicit SceneNodeSample(Hash sceneNodeId = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, const Vector& translation = Vector::Zero, float rotation = 0.0f, bool isIgnore = false) :
+		  _sceneNodeId(sceneNodeId), _spriteGroupId(spriteGroupId), _translation(translation), _rotation(rotation), _isIgnore(isIgnore), _parent(0), _next(0), _previous(0) {}
 
 		Hash getId() const { return _sceneNodeId; }
 		Hash getSpriteGroupId() const { return _spriteGroupId; }
@@ -36,6 +36,8 @@ namespace Temporal
 		void setPrevious(const SceneNodeSample* next) { _previous = next; }
 		const SceneGraphSample& getParent() const { return * _parent; }
 		void setParent(SceneGraphSample& parent) { _parent = &parent; }
+		bool isIgnore() const { return _isIgnore; }
+		void setIgnore(bool isIgnore) { _isIgnore = isIgnore; }
 
 		SceneNodeSample* clone() const { return new SceneNodeSample(getId(), getSpriteGroupId(),  getTranslation(), getRotation()); }
 
@@ -44,6 +46,7 @@ namespace Temporal
 		Hash _spriteGroupId;
 		Vector _translation;
 		float _rotation;
+		bool _isIgnore;
 		const SceneGraphSample* _parent;
 		const SceneNodeSample* _next;
 		const SceneNodeSample* _previous;
@@ -86,8 +89,7 @@ namespace Temporal
 	class Animation
 	{
 	public:
-		Animation(Hash id = Hash::INVALID, bool repeat = false, bool rewind = false) :
-		  _id(id), _repeat(repeat) {}
+		Animation(Hash id = Hash::INVALID, bool repeat = false, bool rewind = false) : _id(id), _repeat(repeat) {}
 		~Animation();
 		
 		int getDuration() const;

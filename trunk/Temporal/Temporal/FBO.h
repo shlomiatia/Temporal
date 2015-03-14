@@ -25,6 +25,9 @@ namespace Temporal
 		SpriteBatch& _batch;
 		const Texture* _texture;
 		unsigned int _fbo;
+
+		FBO(const FBO&);
+		FBO& operator=(const FBO&);
 	};
 
 }
