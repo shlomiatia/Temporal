@@ -182,7 +182,7 @@
 					</obb>
 				</fixture>
 			</sensor>
-			<sight size="45" />
+			<sight size="30" />
 			<action-controller />
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">

@@ -170,6 +170,7 @@ namespace Temporal
 			serializer.serialize("sprite-group", sample._spriteGroupId);
 			serializer.serialize("translation", sample._translation);
 			serializer.serialize("rotation", sample._rotation);
+			serializer.serialize("ignore", sample._isIgnore);
 		}
 		
 		template<class T>
@@ -262,6 +263,7 @@ namespace Temporal
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
+			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade); // xml
 			//serializer.serialize("timer", animator._timer); // memory
 		}
 		

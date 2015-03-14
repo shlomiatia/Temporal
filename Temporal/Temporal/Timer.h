@@ -24,6 +24,9 @@ namespace Temporal
 
 	private:
 		float _elapsedTime;
+
+		Timer(const Timer&);
+		Timer& operator=(const Timer&);
 	};
 
 	class PerformanceTimer

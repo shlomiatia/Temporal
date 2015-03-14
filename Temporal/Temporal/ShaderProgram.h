@@ -23,6 +23,9 @@ namespace Temporal
 		unsigned int createProgram(unsigned int vertexShaderId, unsigned int fragmentShaderId);
 
 		unsigned int _program;
+
+		ShaderProgram(const ShaderProgram&);
+		ShaderProgram& operator=(const ShaderProgram&);
 	};
 }
 
