@@ -3,6 +3,7 @@
 #include "tinyxml2.h"
 #include <vector>
 #include <unordered_map>
+#include <map>
 
 namespace Temporal
 {
@@ -118,8 +119,9 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
 		{
-			typedef std::unordered_map<Hash, T*>::iterator TIterator;
-			for(TIterator i = value.begin(); i != value.end(); ++i)
+			std::map<Hash, T*> orderedValue(value.begin(), value.end());
+			typedef std::map<Hash, T*>::iterator TIterator;
+			for(TIterator i = orderedValue.begin(); i != orderedValue.end(); ++i)
 				serialize(key, i->second);
 		}
 	protected:

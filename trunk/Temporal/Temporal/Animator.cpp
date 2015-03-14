@@ -47,22 +47,22 @@ namespace Temporal
 		{
 			int index = getIntParam(message.getParam());
 			float time = frameToTime(static_cast<float>(index));
-			_timer.reset(time);
+			_currentAnimator.getTimer().reset(time);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
-				_timer.update(framePeriod);
+				_currentAnimator.getTimer().update(framePeriod);
 				// For load
-				if(_animationId != _memoryAnimationId)
+				/*if(_animationId != _memoryAnimationId)
 				{
 					reset(AnimationParams(_animationId, _isRewined));
 					_previousAnimationId = Hash::INVALID;
 					_previousIsRewined = false;
 					_previousTimer.reset();
-				}
+				}*/
 			}
 
 			update();
@@ -95,21 +95,91 @@ namespace Temporal
 		return targetRotation;
 	}
 
-	bool animateSceneNode(const Animation& animation, bool isRewind, float currentIndex, const SceneNode& sceneNode, Hash& spriteGroupId, float& interpolation, Vector& translation, float& rotation)
+	void Animator::update()
 	{
-		int animationDuration = animation.getDuration();
+		for(SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+		{
+			SceneNode& sceneNode = **i;
+
+			SRT currentSRT;
+
+			if(!_currentAnimator.animate(sceneNode, currentSRT))
+				continue;
+			
+			float time = _currentAnimator.getTimer().getElapsedTime();
+			if(_crossFade &&  time <= CROSS_FADE_DURATION)
+			{
+ 				SRT previousSRT;
+				_previousAnimator.animate(sceneNode, previousSRT);
+
+				float animationsInterpolation = time / CROSS_FADE_DURATION;
+
+				Vector translation(
+					easeInOutBezier(animationsInterpolation, previousSRT.getTranslation().getX(), currentSRT.getTranslation().getX()),
+					easeInOutBezier(animationsInterpolation, previousSRT.getTranslation().getY(), currentSRT.getTranslation().getY()));
+
+				float previousRotation = AngleUtils::degree().normalize(previousSRT.getRotation());
+				float rotation = AngleUtils::degree().normalize(currentSRT.getRotation());
+				rotation = getTargetRotation(sceneNode, previousRotation, rotation);
+				rotation = easeInOutBezier(animationsInterpolation, previousRotation, rotation);
+
+				currentSRT.setRotation(rotation);
+				currentSRT.setTranslation(translation);
+			}
+
+			/*if(currentSRT.getSpriteGroupId() != Hash::INVALID)
+				sceneNode.setSpriteGroupId(currentSRT.getSpriteGroupId());
+			sceneNode.setSpriteInterpolation(interpolation);*/
+			sceneNode.setRotation(currentSRT.getRotation());
+			sceneNode.setTranslation(currentSRT.getTranslation());
+		}
+
+		if(_currentAnimator.isEnded())
+		{
+			raiseMessage(Message(MessageID::ANIMATION_ENDED));
+		}
+	}
+
+	void Animator::reset(AnimationParams& animationParams)
+	{
+		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
+		bool previousCrossFadeFinished = _currentAnimator.getTimer().getElapsedTime() > CROSS_FADE_DURATION;
+		_crossFade = _currentAnimator.getAnimation() && _currentAnimator.getAnimation()->isCrossFade() && nextAnimation.isCrossFade();
+		if(!_crossFade)
+		{
+			_previousAnimator.reset(0, false);
+		}
+		else if(previousCrossFadeFinished || !_previousAnimator.getAnimation())
+		{
+			_previousAnimator = _currentAnimator;
+		}
+		_currentAnimator.reset(&nextAnimation, animationParams.isRewind());
+		if(!_crossFade || previousCrossFadeFinished)
+		{
+			float time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
+			_currentAnimator.getTimer().reset(time);
+		}
+
+		update();
+	}
+
+	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
+	{
+		float time = _timer.getElapsedTime();
+		float frame = time * 15.0f;
+		int animationDuration = _animation->getDuration();
 
 		// If animation doesn't repeat, clamp it. Otherwise, calculate cyclic index
-		float relativeIndex = (currentIndex >= animationDuration && !animation.isRepeat()) ? animationDuration : fmod(currentIndex, animationDuration);
+		float relativeIndex = (frame >= animationDuration && !_animation->isRepeat()) ? animationDuration : fmod(frame, animationDuration);
 		Direction::Enum direction = Direction::FORWARD;
 
 		// If animation rewind, calculate mirror index
-		if(isRewind)
+		if(_isRewind)
 		{
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;
 		}
-		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
+		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**_animation->getSamples().begin()).getSamples();
 		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
 		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end())
 			return false;
@@ -122,97 +192,32 @@ namespace Temporal
 		}
 			   
 		// If animation doesn't repeat, use current sample for both samples. Otherwise use current and next
-		const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !animation.isRepeat()) ? currentSample : currentSample->getNext();
+		const SceneNodeSample* nextSample = (currentSample->getParent().getIndex() > currentSample->getNext()->getParent().getIndex() && !_animation->isRepeat()) ? currentSample : currentSample->getNext();
 		float sampleOffset = relativeIndex - currentSample->getParent().getIndex();
 		int sampleDuration = animationDuration == 0 ? 0 : (animationDuration + nextSample->getParent().getIndex() - currentSample->getParent().getIndex()) % animationDuration;
-
-		spriteGroupId = currentSample->getSpriteGroupId();
-		interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
 		
-		translation.setX(easeInOutBezier(interpolation, currentSample->getTranslation().getX(), nextSample->getTranslation().getX()));
-		translation.setY(easeInOutBezier(interpolation, currentSample->getTranslation().getY(), nextSample->getTranslation().getY()));
-
+		float interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
+		
+		Vector translation(
+			easeInOutBezier(interpolation, currentSample->getTranslation().getX(), nextSample->getTranslation().getX()),
+			easeInOutBezier(interpolation, currentSample->getTranslation().getY(), nextSample->getTranslation().getY()));
+		
 		float sourceRotation = currentSample->getRotation();
 		float targetRotation = nextSample->getRotation();
-		
 		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
-		rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
+		float rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
+
+		srt.setRotation(rotation);
+		srt.setTranslation(translation);
+		//srt.setSpriteGroupId(currentSample->getSpriteGroupId());
 		return true;
 	}
 
-	void Animator::update()
+	bool SingleAnimator::isEnded() const
 	{
-		const Animation& animation = _animationSet->get(_animationId);
+		int animationDuration = _animation->getDuration();
 		float time = _timer.getElapsedTime();
-		float frame = timeToFrame(time);
-		
-		for(SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
-		{
-			SceneNode& sceneNode = **i;
-
-			Hash spriteGroupId;
-			float interpolation = 0.0f;;
-			Vector translation;
-			float rotation = 0.0f;
-
-			if(!animateSceneNode(animation, _isRewined, frame, sceneNode, spriteGroupId, interpolation, translation, rotation))
-				continue;
-			
-			if(_previousAnimationId != Hash::INVALID && time <= CROSS_FADE_DURATION && animation.isCrossFade() && _animationSet->get(_previousAnimationId).isCrossFade() && !_isDisableCrossFade)
-			{
-				const Animation& previousAnimation = _animationSet->get(_previousAnimationId);	
-				float previousTime = _previousTimer.getElapsedTime();
-				float previousFrame = timeToFrame(previousTime);
-
-				Hash previousSpriteGroupId;
-				float previousInterpolation = 0.0f;;
-				Vector previousTranslation;
-				float previousRotation = 0.0f;
-
-				animateSceneNode(previousAnimation, _previousIsRewined, previousFrame, sceneNode, previousSpriteGroupId, previousInterpolation, previousTranslation, previousRotation);
-
-				float animationsInterpolation = time / CROSS_FADE_DURATION;
-
-				translation.setX(easeInOutBezier(animationsInterpolation, previousTranslation.getX(), translation.getX()));
-				translation.setY(easeInOutBezier(animationsInterpolation, previousTranslation.getY(), translation.getY()));
-
-				previousRotation = AngleUtils::degree().normalize(previousRotation);
-				rotation = AngleUtils::degree().normalize(rotation);
-				rotation = getTargetRotation(sceneNode, previousRotation, rotation);
-				rotation = easeInOutBezier(animationsInterpolation, previousRotation, rotation);
-			}
-
-			if(spriteGroupId != Hash::INVALID)
-				sceneNode.setSpriteGroupId(spriteGroupId);
-			sceneNode.setSpriteInterpolation(interpolation);
-			sceneNode.setTranslation(translation);
-			sceneNode.setRotation(rotation);
-		}
-
-		int animationDuration = animation.getDuration();
-		if(frame >= animationDuration && !animation.isRepeat())
-		{
-			raiseMessage(Message(MessageID::ANIMATION_ENDED));
-		}
-	}
-
-	void Animator::reset(AnimationParams& animationParams)
-	{
-		if(_timer.getElapsedTime() > CROSS_FADE_DURATION)
-		{
-			_previousAnimationId = _animationId;
-			_previousIsRewined = _isRewined;
-			_previousTimer.reset(_timer.getElapsedTime());
-		}
-
-		_animationId = animationParams.getAnimationId();
-		_isRewined = animationParams.isRewind();
-		const Animation& animation = _animationSet->get(_animationId);
-		float time = frameToTime(animationParams.getInterpolation() * animation.getDuration());
-		_timer.reset(time);
-		
-		_memoryAnimationId = _animationId;
-
-		update();
+		float frame = time * 15.0f;
+		return frame >= animationDuration && !_animation->isRepeat();
 	}
 }

@@ -331,7 +331,7 @@
             </scene-node-sample>
         </scene-graph-sample>
     </animation>
-    <animation id="POP_ANM_BASE" repeat="0" cross-fade="1">
+    <animation id="POP_ANM_BASE" repeat="0" cross-fade="0">
         <scene-graph-sample index="0">
             <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-76.499626">
                 <translation x="-23.333374" y="-21.711121"/>

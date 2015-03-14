@@ -14,17 +14,47 @@ namespace Temporal
 	class SceneNode;
 	class AnimationParams;
 
+	class SRT
+	{
+	public:
+		explicit SRT(float rotation = 0.0f, Vector translation = Vector::Zero) : _rotation(rotation), _translation(translation) {}
+
+		float getRotation() const { return _rotation; }
+		void setRotation(float rotation) { _rotation = rotation; }
+		const Vector& getTranslation() const { return _translation; }
+		void setTranslation(const Vector& translation) { _translation = translation; }
+
+	private:
+		float _rotation;
+		Vector _translation;
+	};
+
+	class SingleAnimator
+	{
+	public:
+		SingleAnimator() : _animation(0), _isRewind(false) {}
+
+		void reset(const Animation* animation, bool isRewind) { _animation = animation; _isRewind = isRewind; }
+		const Animation* getAnimation() const { return _animation; }
+		Timer& getTimer() { return _timer; }
+		bool animate(const SceneNode& sceneNode, SRT& srt);
+		bool isEnded() const;
+
+	private:
+		const Animation* _animation;
+		bool _isRewind;
+		Timer _timer;
+	};
+
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "", Hash animationId = Hash::INVALID) :
-			_animationSetFile(animationSetFile), _animationId(animationId), _memoryAnimationId(animationId), _previousAnimationId(Hash::INVALID), 
-			_isPaused(false), _isRewined(false), _previousIsRewined(false), _isDisableCrossFade(false) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _crossFade(false) {}
 		
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		
-		Component* clone() const { return new Animator(_animationSetFile.c_str(), _animationId); }
+		Component* clone() const { return new Animator(_animationSetFile.c_str()); }
 
 		static const Hash TYPE;
 	private:
@@ -34,17 +64,11 @@ namespace Temporal
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
 		SceneNodeCollection _sceneNodes;
-		Timer _timer;
-		Hash _animationId;
-		bool _isRewined;
 		bool _isPaused;
-		bool _isDisableCrossFade;
 
-		Hash _memoryAnimationId;
-
-		Timer _previousTimer;
-		Hash _previousAnimationId;
-		bool _previousIsRewined;
+		SingleAnimator _currentAnimator;
+		SingleAnimator _previousAnimator;
+		bool _crossFade;
 
 		friend class SerializationAccess;
 
@@ -53,5 +77,16 @@ namespace Temporal
 		float frameToTime(float frame) { return frame / FPS; }
 		float timeToFrame(float time) { return time * FPS; }
 	};
+
+	/*typedef std::vector<SingleAnimator*> SingleAnimatorCollection;
+	typedef SingleAnimatorCollection::const_iterator SingleAnimatorIterator;
+
+	class CompositeAnimator
+	{
+	public:
+		SRT animate(Hash sceneNodeId);
+	private:
+		SingleAnimatorCollection _singleAnimators;
+	};*/
 }
 #endif
