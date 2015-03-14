@@ -10,7 +10,7 @@ namespace Temporal
 
 	void Matrix::scale(const Vector& scaleVec)
 	{
-		_matrix = glm::scale(_matrix, glm::vec3(scaleVec.getX(), scaleVec.getY(), 0.0f));
+		_matrix = glm::scale(_matrix, glm::vec3(scaleVec.getX(), scaleVec.getY(), 1.0f));
 	}
 
 	void Matrix::translate(const Vector& offsetVec)

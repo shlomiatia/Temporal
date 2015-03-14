@@ -12,7 +12,6 @@ namespace Temporal
 
 		int getCategory() const { return _category; }
 		int getGroup() const { return _group; }
-		bool isEnabled() const { return _isEnabled; }
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -24,7 +23,6 @@ namespace Temporal
 
 		int _category;
 		int _group;
-		bool _isEnabled;
 
 		friend class SerializationAccess;
 	};

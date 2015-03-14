@@ -262,9 +262,7 @@ namespace Temporal
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
-			serializer.serialize("animation", animator._animationId);
-			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade);
-			serializer.serialize("timer", animator._timer); // memory
+			//serializer.serialize("timer", animator._timer); // memory
 		}
 		
 		template<class T>

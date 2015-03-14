@@ -7,11 +7,12 @@ namespace Temporal
 	{
 		enum Enum
 		{
+			NONE = 0,
 			OBSTACLE = 1,
 			COVER = 2,
 			CHARACTER = 4,
 			PLAYER = 8,
-			BUTTON = 16
+			BUTTON = 16,
 		};
 	}
 }

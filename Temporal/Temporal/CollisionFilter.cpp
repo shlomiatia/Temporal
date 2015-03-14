@@ -6,7 +6,7 @@ namespace Temporal
 	const Hash CollisionFilter::TYPE = Hash("collision-filter");
 
 	CollisionFilter::CollisionFilter(int category, int group)
-		: _category(category), _group(group), _isEnabled(true) {}
+		: _category(category), _group(group) {}
 
 	void CollisionFilter::handleMessage(Message& message)
 	{
@@ -19,17 +19,16 @@ namespace Temporal
 		{
 			message.setParam(&_group);
 		}
-		else if(message.getID() == MessageID::SET_BODY_ENABLED)
+		else if(message.getID() == MessageID::SET_COLLISION_CATEGORY)
 		{
-			bool value = getBoolParam(message.getParam());
-			_isEnabled = value;
+			int category = getIntParam(message.getParam());
+			_category = category;
 		}
 	}
 
 	bool CollisionFilter::canCollide(int mask, int group) const
 	{
-		return _isEnabled &&
-				(mask & _category) != 0 &&
+		return (mask & _category) != 0 &&
 			   (_group == -1 ||
 			    group == -1 ||
 			    _group == group);
