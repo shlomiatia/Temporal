@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <math.h>
 
 namespace Temporal
 {
@@ -21,5 +22,10 @@ namespace Temporal
 	void Matrix::inverse()
 	{
 		_matrix = glm::inverse(_matrix);
+	}
+
+	float Matrix::getAngle() const
+	{
+		return (*this * Vector(1.0, 0.0f) - *this * Vector::Zero).getAngle();
 	}
 }

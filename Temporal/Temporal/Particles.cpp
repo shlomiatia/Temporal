@@ -34,6 +34,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			srand(Time::now() * 1000.0f);
 			init();
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -76,13 +77,17 @@ namespace Temporal
 	{
 		int length = getLength();
 		Vector emitterPosition = getPosition(*this);;
+		float emitterAngle = 0.0f;
 		Side::Enum side =  getOrientation(*this);
 		if(_attachment != Hash::INVALID)
 		{
 			SceneNode& root = *static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
 			const SceneNode& node = *root.get(_attachment);
 			Matrix nodeMatrix = node.getGlobalMatrix();
-			Vector nodeTranslation = nodeMatrix * Vector::Zero;
+			Vector nodeTranslation = nodeMatrix.getTranslation();
+			emitterAngle = nodeMatrix.getAngle();
+			if(side == Side::LEFT)
+				emitterAngle = AngleUtils::radian().mirror(emitterAngle);
 			nodeTranslation.setX(nodeTranslation.getX() * side);
 			emitterPosition += nodeTranslation;
 		}
@@ -115,24 +120,25 @@ namespace Temporal
 			int bornParticles = static_cast<int>(timeSinceLastBirth / _birthThreshold);
 			for(int i = 0; i < bornParticles; ++i)
 			{
-				emit(emitterPosition, side, length);
+				emit(emitterPosition, emitterAngle, length);
 			}
 		}
 		if(_emit)
 		{
-			emit(emitterPosition, side, length);
+			emit(emitterPosition, emitterAngle, length);
 			_emit = false;
 		}
 	}
 
-	void ParticleEmitter::emit(Vector emitterPosition, Side::Enum side, int length)
+	void ParticleEmitter::emit(Vector emitterPosition, float emitterAngle, int length)
 	{
-		float angle = randomF(1000) * _directionSize + _directionCenter - _directionSize / 2.0f;
+		float angle = randomF(1000) * _directionSize + _directionCenter + emitterAngle - _directionSize / 2.0f;
 		Vector position = emitterPosition + Vector(-_birthRadius + randomF(1000) * _birthRadius * 2.0f, -_birthRadius + randomF(1000) * _birthRadius * 2.0f);
 		Vector velocity = Vector(_velocity * cos(angle), _velocity * sin(angle));
 		_particles[_birthIndex].setAlive(true);
 		_particles[_birthIndex].setPosition(position);
-		_particles[_birthIndex].setVelocity(velocity * side);
+		_particles[_birthIndex].setVelocity(velocity);
+		_particles[_birthIndex].setAngle(emitterAngle);
 		_particles[_birthIndex].resetAge();
 		_birthIndex = (_birthIndex + 1) % length;
 	}
@@ -146,7 +152,7 @@ namespace Temporal
 			const Particle& particle = _particles[i];
 			if(particle.isAlive())
 			{
-				Graphics::get().getSpriteBatch().add(&_spritesheet->getTexture(), particle.getPosition(), AABB::Zero, Color::White, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), side == Side::LEFT);
+				Graphics::get().getSpriteBatch().add(&_spritesheet->getTexture(), particle.getPosition(), AABB::Zero, Color::White, particle.getAngle());
 			}
 		}
 	}

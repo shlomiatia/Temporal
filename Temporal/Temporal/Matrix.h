@@ -19,6 +19,8 @@ namespace Temporal
 		void scale(const Vector& scaleVec);
 		void translate(const Vector& offsetVec);
 		void inverse();
+		Vector getTranslation() const { return Vector(_matrix[3].x, _matrix[3].y); }
+		float getAngle() const;
 
 		Vector operator*(const Vector& vector) const
 		{
