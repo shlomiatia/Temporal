@@ -10,8 +10,10 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::LOAD)
 		{
+			getEntity().handleMessage(Message(MessageID::PRE_LOAD));
 			BinaryDeserializer* deserializer = static_cast<BinaryDeserializer*>(message.getParam());
 			deserializer->serialize("entity", getEntity());
+			getEntity().handleMessage(Message(MessageID::POST_LOAD));
 		}
 		else if(message.getID() == MessageID::SAVE)
 		{

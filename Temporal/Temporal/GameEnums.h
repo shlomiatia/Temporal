@@ -16,7 +16,9 @@ namespace Temporal
 			LEVEL_DISPOSED,
 
 			SAVE,
+			PRE_LOAD,
 			LOAD,
+			POST_LOAD,
 
 			UPDATE,
 			DRAW,

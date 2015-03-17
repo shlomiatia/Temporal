@@ -76,7 +76,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::TRANSLATE_POSITION)
+		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::TRANSLATE_POSITION || message.getID() == MessageID::POST_LOAD)
 		{
 			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
