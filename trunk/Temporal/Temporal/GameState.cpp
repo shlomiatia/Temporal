@@ -7,6 +7,7 @@
 #include "Keyboard.h"
 #include "Input.h"
 #include "Game.h"
+#include "SaverLoader.h"
 
 namespace Temporal
 {
@@ -47,6 +48,16 @@ namespace Temporal
 	GameState& GameStateManager::getCurrentState() const
 	{
 		return *_states.at(_currentStateId);
+	}
+
+	void BasicGameStateListener::onLoaded(Hash id, GameState& gameState)
+	{
+		if(id == Hash("resources/game-states/entities.xml"))
+		{
+			Entity* entity = new Entity(Hash("ENT_SAVER_LOADER"));
+			entity->add(new GameSaverLoader());
+			gameState.getEntitiesManager().add(entity);
+		}
 	}
 
 	void GameStateManager::init(const char* gameStateFile)

@@ -61,7 +61,7 @@ namespace Temporal
 
 	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
 	{
-		const Animation& animation = _owner.getAnimation(_animationId);
+		const Animation& animation = _owner->getAnimation(_animationId);
 		float time = _timer.getElapsedTime();
 		float frame = timeToFrame(time);
 		int animationDuration = animation.getDuration();
@@ -103,7 +103,7 @@ namespace Temporal
 
 	bool SingleAnimator::isEnded() const
 	{
-		const Animation& animation = _owner.getAnimation(_animationId);
+		const Animation& animation = _owner->getAnimation(_animationId);
 		int animationDuration = animation.getDuration();
 		float time = _timer.getElapsedTime();
 		float frame = timeToFrame(time);
@@ -112,7 +112,7 @@ namespace Temporal
 
 	bool SingleAnimator::isCrossFade() const
 	{
-		const Animation& animation = _owner.getAnimation(_animationId);
+		const Animation& animation = _owner->getAnimation(_animationId);
 		return animation.isCrossFade();
 	}
 
@@ -236,6 +236,33 @@ namespace Temporal
 		}
 	}
 
+	void Animator::reset(AnimationParams& animationParams)
+	{
+		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
+		bool mainLayer = animationParams.getLayer() == 0.0f;
+		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION || !getPreviousAnimator().isCrossFade();
+		bool isCrossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
+		if(mainLayer)
+		{
+			if(!isCrossFade)
+			{
+				getPreviousAnimator().reset();
+			}
+			else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
+			{
+				_useAnimator2 = !_useAnimator2;
+			}
+		}
+		float time = -1.0f;
+		if(!mainLayer || !isCrossFade || previousCrossFadeFinished)
+		{
+			time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
+		}
+		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), time);
+		if(mainLayer)
+			update();
+	}
+
 	void Animator::update()
 	{
 		for(SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
@@ -248,7 +275,7 @@ namespace Temporal
 				continue;
 			
 			float time = getCurrentAnimator().getTime();
-			if(_crossFade &&  time <= CROSS_FADE_DURATION)
+			if(isCrossFade() && time <= CROSS_FADE_DURATION)
 			{
  				SRT previousSRT;
 				getPreviousAnimator().animate(sceneNode, previousSRT);
@@ -271,34 +298,8 @@ namespace Temporal
 		}
 	}
 
-	void Animator::reset(AnimationParams& animationParams)
+	bool Animator::isCrossFade() const
 	{
-		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
-		bool mainLayer = animationParams.getLayer() == 0.0f;
-		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION || !getPreviousAnimator().isCrossFade();
-		if(mainLayer)
-		{
-			_crossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
-			if(!_crossFade)
-			{
-				getPreviousAnimator().reset();
-			}
-			else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
-			{
-				_useAimator2 = !_useAimator2;
-			}
-		}
-		float time = -1.0f;
-		if(!mainLayer || !_crossFade || previousCrossFadeFinished)
-		{
-			time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
-		}
-		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), time);
-		
-		if(mainLayer)
-		{
-			update();
-		}
-		
+		return !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && getPreviousAnimator().isCrossFade();
 	}
 }

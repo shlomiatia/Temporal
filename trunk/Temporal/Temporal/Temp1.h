@@ -56,13 +56,8 @@ namespace Temporal
 		}
 		virtual void onLoaded(Hash id, GameState& gameState)
 		{
-			if(id == Hash("resources/game-states/entities.xml"))
-			{
-				Entity* entity = new Entity(Hash("ENT_SAVER_LOADER"));
-				entity->add(new GameSaverLoader());
-				gameState.getEntitiesManager().add(entity);
-			}
-			else if(id == Hash("resources/game-states/loading.xml"))
+			
+			if(id == Hash("resources/game-states/loading.xml"))
 			{
 				Entity* entity = new Entity(Hash("ENT_LOADER"));
 				entity->add(new GameStateLoaderComponent());

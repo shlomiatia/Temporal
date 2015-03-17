@@ -37,7 +37,8 @@ namespace Temporal
 	class SingleAnimator
 	{
 	public:
-		SingleAnimator(const Animator& owner) : _owner(owner), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
+		SingleAnimator() : _owner(0) {}
+		explicit SingleAnimator(const Animator& owner) : _owner(&owner), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
 
 		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, float weight = 1.0f, float time = -1.0f) 
 			{ _animationId = animationId; _isRewind = isRewind; _weight = weight; if(time != -1.0f) _timer.reset(time); }
@@ -52,7 +53,7 @@ namespace Temporal
 		bool isCrossFade() const;
 
 	private:
-		const Animator& _owner;
+		const Animator* _owner;
 		Hash _animationId;
 		bool _isRewind;
 		float _weight;
@@ -60,6 +61,8 @@ namespace Temporal
 
 		SingleAnimator(const SingleAnimator&);
 		SingleAnimator& operator=(const SingleAnimator&);
+
+		friend class SerializationAccess;
 	};
 
 	typedef std::vector<SingleAnimator*> SingleAnimatorCollection;
@@ -86,12 +89,14 @@ namespace Temporal
 
 		CompositeAnimator(const CompositeAnimator&);
 		CompositeAnimator& operator=(const CompositeAnimator&);
+
+		friend class SerializationAccess;
 	};
 
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _crossFade(false), _useAimator2(false), _isDisableCrossFade(false), _animator1(*this), _animator2(*this) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _useAnimator2(false), _isDisableCrossFade(false), _animator1(*this), _animator2(*this) {}
 		
 		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
 		Hash getType() const { return TYPE; }
@@ -108,18 +113,19 @@ namespace Temporal
 		SceneNodeCollection _sceneNodes;
 		bool _isPaused;
 		bool _isDisableCrossFade;
-
+		bool _useAnimator2;
 		CompositeAnimator _animator1;
 		CompositeAnimator _animator2;
-		bool _useAimator2;
-		bool _crossFade;
 
-		friend class SerializationAccess;
-
-		CompositeAnimator& getPreviousAnimator() { return _useAimator2 ? _animator1 : _animator2; }
-		CompositeAnimator& getCurrentAnimator() { return _useAimator2 ? _animator2 : _animator1; }
+		CompositeAnimator& getPreviousAnimator() { return _useAnimator2 ? _animator1 : _animator2; }
+		const CompositeAnimator& getPreviousAnimator() const { return _useAnimator2 ? _animator1 : _animator2; }
+		CompositeAnimator& getCurrentAnimator() { return _useAnimator2 ? _animator2 : _animator1; }
+		const CompositeAnimator& getCurrentAnimator() const { return _useAnimator2 ? _animator2 : _animator1; }
+		bool isCrossFade() const;
 		void update();
 		void reset(AnimationParams& animationParams);
+		
+		friend class SerializationAccess;
 	};
 }
 #endif

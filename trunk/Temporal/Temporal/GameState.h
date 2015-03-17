@@ -65,6 +65,14 @@ namespace Temporal
 		GameStateListener& operator=(const GameStateListener&);
 	};
 
+	class BasicGameStateListener : public GameStateListener
+	{
+	public:
+		void onUpdate(float framePeriod) {}
+		void onLoaded(Hash id, GameState& gameState);
+	private:
+	};
+
 	class GameStateManager
 	{
 	public:

@@ -44,6 +44,10 @@ namespace Temporal
 			_timer.update(framePeriod);
 			resetFrameFlags();
 		}
+		else if(message.getID() == MessageID::POST_LOAD)
+		{
+			setState(_currentStateID);
+		}
 	}
 
 	void StateMachineComponent::setState(Hash stateID)

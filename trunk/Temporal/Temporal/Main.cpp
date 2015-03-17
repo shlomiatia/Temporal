@@ -10,6 +10,8 @@ using namespace Temporal;
 
 int main(int argc, char* argv[])
 {
+	
+	GameStateManager::get().setListener(new BasicGameStateListener());
 	//GameStateManager::get().setListener(new GSEGameStateListener());
 	Game::get().run("resources/game-states/entities.xml");
 
@@ -20,8 +22,6 @@ int main(int argc, char* argv[])
 	//Game::get().run("resources/game-states/loading.xml");
 	
 	//Game::get().run("resources/game-states/save-test.xml");
-	
-	
 	
 //	_CrtDumpMemoryLeaks();
 	return 0;

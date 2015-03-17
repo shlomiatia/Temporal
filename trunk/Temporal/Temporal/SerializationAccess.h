@@ -29,6 +29,8 @@ namespace Temporal
 	class StateMachineComponent;
 	class Transform;
 	class Animator;
+	class CompositeAnimator;
+	class SingleAnimator;
 	class Renderer;
 	class Light;
 	class ParticleEmitter;
@@ -244,8 +246,6 @@ namespace Temporal
 		static void serialize(const char* key, StateMachineComponent& stateMachineComponent, T& serializer)
 		{
 			serializer.serialize("state", stateMachineComponent._currentStateID);
-			if(serializer.type() == SerializationDirection::DESERIALIZATION)
-				stateMachineComponent.setState(stateMachineComponent._currentStateID);
 			serializer.serialize("timer", stateMachineComponent._timer);
 			serializer.serialize("state-flag", stateMachineComponent._stateFlag);
 			serializer.serialize("state-machine-flag", stateMachineComponent._stateMachineFlag);
@@ -258,13 +258,30 @@ namespace Temporal
 			serializer.serialize("orientation", (int&)transform._orientation);
 		}
 		
-		// TODO:
 		template<class T>
 		static void serialize(const char* key, Animator& animator, T& serializer)
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade); // xml
-			//serializer.serialize("timer", animator._timer); // memory
+			serializer.serialize("use-animator2", animator._useAnimator2); // memory
+			serializer.serialize("animator1", animator._animator1); // memory
+			serializer.serialize("animator2", animator._animator2); // memory
+		}
+
+		template<class T>
+		static void serialize(const char* key, CompositeAnimator& animator, T& serializer)
+		{
+			serializer.serialize("single-animators", animator._singleAnimators);
+			
+		}
+
+		template<class T>
+		static void serialize(const char* key, SingleAnimator& animator, T& serializer)
+		{
+			serializer.serialize("animation-id", animator._animationId);
+			serializer.serialize("is-rewind", animator._isRewind);
+			serializer.serialize("weight", animator._weight);
+			serializer.serialize("timer", animator._timer);
 		}
 		
 		template<class T>
@@ -273,7 +290,6 @@ namespace Temporal
 			serializer.serialize("texture", renderer._textureFile);
 			serializer.serialize("sprite-sheet", renderer._spriteSheetFile);
 			serializer.serialize("layer", (int&)renderer._layer);
-			//serializer.serialize("color", renderer._color);
 			serializer.serialize("scene-node", renderer._root);
 		}
 		
