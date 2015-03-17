@@ -18,8 +18,11 @@ namespace Temporal
 	float easeInOutBezier(float interpolation, float startValue, float endValue)
 	{
 		float inverseInterpolation = 1 - interpolation;
-		return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) + 
-			   endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);
+		return startValue * inverseInterpolation + endValue * interpolation;
+
+		// TODO: Check if it's usefull. If so, interpolation between aim/fire should be linear
+		/*return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) + 
+			   endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);*/
 	}
 
 	float getTargetRotation(const SceneNode& sceneNode, float sourceRotation, float targetRotation)
@@ -127,14 +130,25 @@ namespace Temporal
 		}
 	}
 
-	void CompositeAnimator::reset(Hash animationId, bool isRewind, int layer, float weight)
+	void CompositeAnimator::reset(Hash animationId, bool isRewind, int layer, float weight, float time)
 	{
-		_singleAnimators[layer]->reset(animationId, isRewind, weight);
+		_singleAnimators[layer]->reset(animationId, isRewind, weight, time);
 		if(layer == 0)
 		{
 			for(SingleAnimatorIterator i = _singleAnimators.begin() + 1; i != _singleAnimators.end(); ++i)
 				(**i).reset();
 		}
+	}
+
+	bool CompositeAnimator::isEnded() const
+	{
+		for(SingleAnimatorIterator i = _singleAnimators.begin(); i != _singleAnimators.end(); ++i)
+		{
+			const SingleAnimator& animator = (**i);
+			if(animator.getAnimationId() != Hash::INVALID && animator.isEnded())
+				return true;
+		}
+		return false;
 	}
 
 	void CompositeAnimator::setTime(float time)
@@ -260,29 +274,31 @@ namespace Temporal
 	void Animator::reset(AnimationParams& animationParams)
 	{
 		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
-		if(animationParams.getLayer() != 0.0f)
+		bool mainLayer = animationParams.getLayer() == 0.0f;
+		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION || !getPreviousAnimator().isCrossFade();
+		if(mainLayer)
 		{
-			getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight());
-			return;
+			_crossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
+			if(!_crossFade)
+			{
+				getPreviousAnimator().reset();
+			}
+			else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
+			{
+				_useAimator2 = !_useAimator2;
+			}
 		}
-
-		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION;
-		_crossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
-		if(!_crossFade)
+		float time = -1.0f;
+		if(!mainLayer || !_crossFade || previousCrossFadeFinished)
 		{
-			getPreviousAnimator().reset();
+			time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
 		}
-		else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
+		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), time);
+		
+		if(mainLayer)
 		{
-			_useAimator2 = !_useAimator2;
+			update();
 		}
-		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind());
-		if(!_crossFade || previousCrossFadeFinished)
-		{
-			float time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
-			getCurrentAnimator().setTime(time);
-		}
-
-		update();
+		
 	}
 }

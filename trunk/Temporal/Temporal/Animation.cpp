@@ -63,7 +63,7 @@ namespace Temporal
 
 	Animation* Animation::clone() const
 	{
-		Animation* clone = new Animation(getId(), _repeat);
+		Animation* clone = new Animation(getId(), isRepeat(), isCrossFade());
 		for(SceneGraphSampleIterator i = getSamples().begin(); i != getSamples().end(); ++i)
 		{
 			clone->getSamples().push_back((**i).clone());

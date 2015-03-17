@@ -13,7 +13,7 @@ namespace Temporal
 	class Particle
 	{
 	public:
-		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _isAlive(true) {}
+		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _angle(0.0f), _isAlive(true) {}
 		void resetAge(float time = 0.0f) { _ageTimer.reset(time); }
 		float getAge() const { return _ageTimer.getElapsedTime(); }
 		const Vector& getPosition() const { return _position; }
@@ -22,12 +22,15 @@ namespace Temporal
 		void setVelocity(const Vector& velocity) { _velocity = velocity; }
 		bool isAlive() const { return _isAlive; }
 		void setAlive(bool isAlive) { _isAlive = isAlive; } 
+		float getAngle() const { return _angle; }
+		void setAngle(float angle) { _angle = angle; }
 
 		void update(float time);
 	private:
 
 		Vector _position;
 		Vector _velocity;
+		float _angle;
 		Timer _ageTimer;
 		bool _isAlive;
 
@@ -73,7 +76,7 @@ namespace Temporal
 		void update(float framePeriod);
 		void draw();
 		int getLength();
-		void emit(Vector emitterPosition, Side::Enum side, int length);
+		void emit(Vector emitterPosition, float emitterAngle, int length);
 
 		friend class SerializationAccess;
 	};

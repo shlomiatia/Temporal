@@ -39,7 +39,7 @@ namespace Temporal
 		bool isIgnore() const { return _isIgnore; }
 		void setIgnore(bool isIgnore) { _isIgnore = isIgnore; }
 
-		SceneNodeSample* clone() const { return new SceneNodeSample(getId(), getSpriteGroupId(),  getTranslation(), getRotation()); }
+		SceneNodeSample* clone() const { return new SceneNodeSample(getId(), getSpriteGroupId(),  getTranslation(), getRotation(), isIgnore()); }
 
 	private:
 		Hash _sceneNodeId;
@@ -89,7 +89,7 @@ namespace Temporal
 	class Animation
 	{
 	public:
-		Animation(Hash id = Hash::INVALID, bool repeat = false, bool rewind = false) : _id(id), _repeat(repeat) {}
+		Animation(Hash id = Hash::INVALID, bool repeat = false, bool crossFade = true) : _id(id), _repeat(repeat), _crossFade(crossFade) {}
 		~Animation();
 		
 		int getDuration() const;
