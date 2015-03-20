@@ -59,6 +59,11 @@ namespace Temporal
 		result.setTranslation(translation);
 	}
 
+	float SingleAnimator::getNormalizedTime() const
+	{
+		return timeToFrame(getTime()) / _owner->getAnimation(_animationId).getDuration();
+	}
+
 	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
 	{
 		const Animation& animation = _owner->getAnimation(_animationId);
@@ -216,20 +221,16 @@ namespace Temporal
 			float time = frameToTime(static_cast<float>(index));
 			getCurrentAnimator().setTime(time);
 		}
+		else if(message.getID() == MessageID::GET_ANIMATION_NORMALIZED_TIME)
+		{
+			*static_cast<float*>(message.getParam()) = getCurrentAnimator().getNormalizedTime();
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
 				getCurrentAnimator().update(framePeriod);
-				// For load
-				/*if(_animationId != _memoryAnimationId)
-				{
-					reset(AnimationParams(_animationId, _isRewined));
-					_previousAnimationId = Hash::INVALID;
-					_previousIsRewined = false;
-					_previousTimer.reset();
-				}*/
 			}
 
 			update();

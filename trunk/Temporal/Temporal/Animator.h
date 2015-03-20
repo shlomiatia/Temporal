@@ -44,6 +44,7 @@ namespace Temporal
 			{ _animationId = animationId; _isRewind = isRewind; _weight = weight; if(time != -1.0f) _timer.reset(time); }
 		Hash getAnimationId() const { return _animationId; }
 		float getTime() const { return _timer.getElapsedTime(); }
+		float getNormalizedTime() const;
 		void setTime(float time) { _timer.reset(time); }
 		float getWeight() const { return _weight; }
 		void update(float time) { _timer.update(time); }
@@ -75,6 +76,7 @@ namespace Temporal
 		~CompositeAnimator();
 		
 		float getTime() const { return _singleAnimators[0]->getTime(); }
+		float getNormalizedTime() const { return _singleAnimators[0]->getNormalizedTime(); }
 		bool isActive() const { return _singleAnimators[0]->getAnimationId() != Hash::INVALID; }
 		bool isCrossFade() const { return isActive() && _singleAnimators[0]->isCrossFade(); };
 

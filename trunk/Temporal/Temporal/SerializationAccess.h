@@ -342,7 +342,7 @@ namespace Temporal
 		static void serialize(const char* key, DynamicBody& dynamicBody, T& serializer)
 		{
 			serializer.serialize("fixture", dynamicBody._fixture); // xml
-			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // memory
+			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 		}
 		

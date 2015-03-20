@@ -66,17 +66,18 @@ namespace Temporal
 			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
 			_velocity = impulse;
 		}
-		else if(message.getID() == MessageID::SET_GRAVITY_ENABLED)
+		else if(message.getID() == MessageID::SET_BODY_ENABLED)
 		{
-			_gravityEnabled = getBoolParam(message.getParam());
+			_bodyEnabled = getBoolParam(message.getParam());
 			_velocity = Vector::Zero;
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
-			update(framePeriod);
+			if(_bodyEnabled)
+				update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::TRANSLATE_POSITION || message.getID() == MessageID::POST_LOAD)
+		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::POST_LOAD)
 		{
 			getEntity().getManager().getGameState().getGrid().update(_fixture);
 		}
@@ -224,10 +225,7 @@ namespace Temporal
 
 	Vector DynamicBody::determineMovement(float framePeriod)
 	{
-		if(_gravityEnabled)
-		{
-			_velocity += GRAVITY * framePeriod;
-		}
+		_velocity += GRAVITY * framePeriod;
 			
 		Vector movement = _velocity * framePeriod;
 		return movement;

@@ -205,16 +205,28 @@ namespace Temporal
 		class Climb : public ComponentState
 		{
 		public:
+			Climb() : _yPosition(0.0f), _yTranslation(0.0f) {}
+
 			void enter(void* param);
 			void exit(void* param);
 			void handleMessage(Message& message);
+
+		private:
+			float _yPosition;
+			float _yTranslation;
+			Vector _movement;
 		};
 
 		class Descend : public ComponentState
 		{
 		public:
+			Descend() : _yPosition(0.0f), _yTranslation(0.0f) {}
+
 			void enter(void* param);
 			void handleMessage(Message& message);
+		private:
+			float _yPosition;
+			float _yTranslation;
 		};
 
 		class Takedown : public ComponentState
