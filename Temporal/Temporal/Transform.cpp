@@ -16,10 +16,6 @@ namespace Temporal
 		{
 			_position = *static_cast<Vector*>(message.getParam());
 		}
-		else if(message.getID() == MessageID::TRANSLATE_POSITION)
-		{
-			_position += *static_cast<Vector*>(message.getParam());		
-		}
 		else if(message.getID() == MessageID::GET_ORIENTATION)
 		{
 			message.setParam(&_orientation);
