@@ -40,8 +40,7 @@ namespace Temporal
 		SingleAnimator() : _owner(0) {}
 		explicit SingleAnimator(const Animator& owner) : _owner(&owner), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
 
-		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, float weight = 1.0f, float time = -1.0f) 
-			{ _animationId = animationId; _isRewind = isRewind; _weight = weight; if(time != -1.0f) _timer.reset(time); }
+		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, float weight = 1.0f, float normalizedTime = -1.0f);
 		Hash getAnimationId() const { return _animationId; }
 		float getTime() const { return _timer.getElapsedTime(); }
 		float getNormalizedTime() const;
@@ -80,7 +79,7 @@ namespace Temporal
 		bool isActive() const { return _singleAnimators[0]->getAnimationId() != Hash::INVALID; }
 		bool isCrossFade() const { return isActive() && _singleAnimators[0]->isCrossFade(); };
 
-		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, int layer = 0, float weight = 1.0f, float time = -1.0f);
+		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, int layer = 0, float weight = 1.0f, float normalizedTime = -1.0f);
 		void setTime(float time);
 		bool isEnded() const;
 		void update(float time);

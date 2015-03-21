@@ -53,8 +53,6 @@ namespace Temporal
 		void setFrameFlag3(bool value) { _frameFlag3 = value; }
 		bool getStateFlag() const { return _stateFlag; }
 		void setStateFlag(bool value) { _stateFlag = value; }
-		bool getStateMachineFlag() const { return _stateMachineFlag; }
-		void setStateMachineFlag(bool value) { _stateMachineFlag = value; }
 		Hash getCurrentStateID() const { return _currentStateID; }
 
 		// Record amount of time spent in a single state. Expose non const object to allow state to record sub periods
@@ -72,7 +70,6 @@ namespace Temporal
 		Timer _timer;
 
 		// Temp state
-		bool _stateMachineFlag;
 		bool _stateFlag;
 		bool _frameFlag1;
 		bool _frameFlag2;

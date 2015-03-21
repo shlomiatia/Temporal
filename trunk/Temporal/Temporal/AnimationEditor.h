@@ -36,8 +36,6 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return 0; }
 	private:
-		static const float FRAME_TIME;
-
 		int GRID_FRAMES;
 
 		std::shared_ptr<AnimationSet> _animationSet;

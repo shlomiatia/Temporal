@@ -2,13 +2,14 @@
 #define INPUTCONTROLLER_H
 
 #include "EntitySystem.h"
+#include "Timer.h";
 
 namespace Temporal
 {
 	class InputController : public Component
 	{
 	public:
-		InputController() {}
+		InputController() : _isJump(false) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -17,6 +18,8 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
+		Timer _timer;
+		bool _isJump;
 	};
 }
 

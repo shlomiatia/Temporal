@@ -17,8 +17,6 @@
 
 namespace Temporal
 {
-	const float AnimationEditor::FRAME_TIME = 1000.0f / 15.0f;
-
 	void AnimationEditor::setAnimation(Hash animationId)
 	{
 		_animationId = animationId;

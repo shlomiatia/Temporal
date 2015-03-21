@@ -59,9 +59,21 @@ namespace Temporal
 		result.setTranslation(translation);
 	}
 
+	void SingleAnimator::reset(Hash animationId, bool isRewind, float weight, float normalizedTime)
+	{ 
+		_animationId = animationId;
+		_isRewind = isRewind;
+		_weight = weight;
+		if(normalizedTime != -1.0f)
+		{
+			float time = frameToTime(normalizedTime * _owner->getAnimation(_animationId).getFrames());	
+			_timer.reset(time); 
+		}
+	}
+
 	float SingleAnimator::getNormalizedTime() const
 	{
-		return timeToFrame(getTime()) / _owner->getAnimation(_animationId).getDuration();
+		return timeToFrame(getTime()) / _owner->getAnimation(_animationId).getFrames();
 	}
 
 	bool SingleAnimator::animate(const SceneNode& sceneNode, SRT& srt)
@@ -69,7 +81,7 @@ namespace Temporal
 		const Animation& animation = _owner->getAnimation(_animationId);
 		float time = _timer.getElapsedTime();
 		float frame = timeToFrame(time);
-		int animationDuration = animation.getDuration();
+		int animationDuration = animation.getFrames();
 
 		// If animation doesn't repeat, clamp it. Otherwise, calculate cyclic index
 		float relativeIndex = (frame >= animationDuration && !animation.isRepeat()) ? animationDuration : fmod(frame, animationDuration);
@@ -109,7 +121,7 @@ namespace Temporal
 	bool SingleAnimator::isEnded() const
 	{
 		const Animation& animation = _owner->getAnimation(_animationId);
-		int animationDuration = animation.getDuration();
+		int animationDuration = animation.getFrames();
 		float time = _timer.getElapsedTime();
 		float frame = timeToFrame(time);
 		return frame >= animationDuration && !animation.isRepeat();
@@ -135,9 +147,9 @@ namespace Temporal
 		}
 	}
 
-	void CompositeAnimator::reset(Hash animationId, bool isRewind, int layer, float weight, float time)
+	void CompositeAnimator::reset(Hash animationId, bool isRewind, int layer, float weight, float normalizedTime)
 	{
-		_singleAnimators[layer]->reset(animationId, isRewind, weight, time);
+		_singleAnimators[layer]->reset(animationId, isRewind, weight, normalizedTime);
 		if(layer == 0)
 		{
 			for(SingleAnimatorIterator i = _singleAnimators.begin() + 1; i != _singleAnimators.end(); ++i)
@@ -254,12 +266,12 @@ namespace Temporal
 				_useAnimator2 = !_useAnimator2;
 			}
 		}
-		float time = -1.0f;
+		float normalizedTime = -1.0f;
 		if(!mainLayer || !isCrossFade || previousCrossFadeFinished)
 		{
-			time = frameToTime(animationParams.getInterpolation() * nextAnimation.getDuration());	
+			normalizedTime = animationParams.getNormalizedTime();
 		}
-		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), time);
+		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), normalizedTime);
 		if(mainLayer)
 			update();
 	}

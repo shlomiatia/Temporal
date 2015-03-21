@@ -248,7 +248,6 @@ namespace Temporal
 			serializer.serialize("state", stateMachineComponent._currentStateID);
 			serializer.serialize("timer", stateMachineComponent._timer);
 			serializer.serialize("state-flag", stateMachineComponent._stateFlag);
-			serializer.serialize("state-machine-flag", stateMachineComponent._stateMachineFlag);
 		}
 		
 		template<class T>
