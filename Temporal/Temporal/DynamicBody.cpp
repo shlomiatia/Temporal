@@ -60,6 +60,11 @@ namespace Temporal
 			if(_ground)
 				message.setParam(&_groundSegment);
 		}
+		else if(message.getID() == MessageID::SET_GROUND)
+		{
+			_ground = static_cast<Fixture*>(message.getParam());
+			_previousGroundCenter = _ground->getGlobalShape().getCenter();
+		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
 			const Vector& param = getVectorParam(message.getParam());
@@ -74,8 +79,7 @@ namespace Temporal
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
-			if(_bodyEnabled)
-				update(framePeriod);
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::POST_LOAD)
 		{
@@ -121,41 +125,52 @@ namespace Temporal
 	{
 		_fixture->update();
 		__dynamicBodyBounds = _fixture->getGlobalShape();
+
+		// Moving platform - position is set later
+		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
+		{
+			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
+			_dynamicBodyBounds.getOBB().translate(vector);
+			_groundSegment.translate(vector);
+		}
 			
-		// Slide
-		if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
+		if(_bodyEnabled)
 		{
-			// BRODER
-			_velocity = _groundSegment.getNaturalDirection() * 250.0f;
-			if(_velocity.getY() > 0.0f)
-				_velocity = -_velocity;
-			_ground = 0;
-			executeMovement(determineMovement(framePeriod));
+			// Slide
+			if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
+			{
+				// BRODER
+				_velocity = _groundSegment.getNaturalDirection() * 250.0f;
+				if(_velocity.getY() > 0.0f)
+					_velocity = -_velocity;
+				_ground = 0;
+				executeMovement(determineMovement(framePeriod));
+			}
+			// Walk
+			else if(_ground && _velocity.getY() == 0.0f)
+			{
+				walk(framePeriod);
+			}
+			// Air
+			else
+			{
+				_ground = 0;
+				executeMovement(determineMovement(framePeriod));
+			}
 		}
-		// Walk
-		else if(_ground && _velocity.getY() == 0.0f)
+
+		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
+		
+		if(_ground)
 		{
-			walk(framePeriod);
-		}
-		// Air
-		else
-		{
-			_ground = 0;
-			executeMovement(determineMovement(framePeriod));
+			_velocity = Vector::Zero;
+			_previousGroundCenter = _ground->getGlobalShape().getCenter();
 		}
 	}
 
 	void DynamicBody::walk(float framePeriod)
 	{
 		const OBB& staticBodyBounds = _ground->getGlobalShape();
-
-		// Moving platform - position is set later (executeWalk)
-		if(staticBodyBounds.getCenter() != _previousGroundCenter)
-		{
-			Vector vector = staticBodyBounds.getCenter() - _previousGroundCenter;
-			_dynamicBodyBounds.getOBB().translate(vector);
-			_groundSegment.translate(vector);
-		}
 		
 		// Fix when static
 		if(_velocity.getX() == 0)
@@ -267,13 +282,7 @@ namespace Temporal
 		}
 		while(movement != Vector::Zero);
 
-		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
 		
-		if(_ground)
-		{
-			_velocity = Vector::Zero;
-			_previousGroundCenter = _ground->getGlobalShape().getCenter();
-		}
 		if(collision != Vector::Zero)
 			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 	}

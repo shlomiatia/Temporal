@@ -63,8 +63,7 @@ namespace Temporal
 	{
 	public:
 		explicit LedgeDetector(Hash sensorId, Component& owner)
-			: ContactListener(sensorId, owner), _upFound(false), _upFailed(false), _downFound(false), _downFailed(false), 
-										 _frontFound(false), _frontFailed(false), _height(0.0f), _max(0.0f), _body(0), _side(Side::LEFT) {}
+			: ContactListener(sensorId, owner), _up(0), _upFailed(false), _down(0), _downFailed(false), _front(0), _frontFailed(false), _height(0.0f), _max(0.0f), _body(0), _side(Side::LEFT) {}
 
 	protected:
 		void start();
@@ -72,11 +71,11 @@ namespace Temporal
 		void end();
 
 	private:
-		bool _upFound;
+		Fixture* _up;
 		bool _upFailed;
-		bool _downFound;
+		Fixture* _down;
 		bool _downFailed;
-		bool _frontFound;
+		Fixture* _front;
 		bool _frontFailed;
 		float _height;
 		float _max;
