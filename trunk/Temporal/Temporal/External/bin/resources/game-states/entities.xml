@@ -34,7 +34,7 @@
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
-						<radius x="10" y="40" />
+						<radius x="10" y="45" />
 					</obb>
 				</fixture>
 			</dynamic-body>
@@ -66,7 +66,7 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="10" />
+					<translation x="0" y="5" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
@@ -170,7 +170,7 @@
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
-						<radius x="10" y="40" />
+						<radius x="10" y="45" />
 					</obb>
 				</fixture>
 			</dynamic-body>
@@ -187,7 +187,7 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="10" />
+					<translation x="0" y="5" />
 					<scale x="0.45" y="0.45" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">

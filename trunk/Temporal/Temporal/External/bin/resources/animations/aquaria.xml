@@ -894,7 +894,7 @@
             </scene-node-sample>
         </scene-graph-sample>
         <scene-graph-sample index="10">
-            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-108.949028" ignore="0">
+            <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="-94.024521" ignore="0">
                 <translation x="-23.766268" y="-19.453976"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_BACKARM1" rotation="169.452484" ignore="0">
@@ -912,7 +912,7 @@
             <scene-node-sample scene-node-id="SCN_FRONTARM1" rotation="174.157990" ignore="0">
                 <translation x="-11.066799" y="-134.156906"/>
             </scene-node-sample>
-            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-106.586746" ignore="0">
+            <scene-node-sample scene-node-id="SCN_BACKARM2" rotation="-94.576111" ignore="0">
                 <translation x="-22.927774" y="-19.455545"/>
             </scene-node-sample>
             <scene-node-sample scene-node-id="SCN_HEAD" rotation="-1.360925" ignore="0">
