@@ -207,7 +207,7 @@ namespace Temporal
 		{			
 			Vector actualMovement = max - curr;
 			executeMovement(actualMovement);
-			float leftPeriod = framePeriod * (1.0 - actualMovement.getLength() / movement.getLength());
+			float leftPeriod = framePeriod * (1.0f - actualMovement.getLength() / movement.getLength());
 			_velocity = Vector(velocity.getLength() * side, 0.0f);
 			Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
 			Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
