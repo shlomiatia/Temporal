@@ -56,6 +56,7 @@ namespace Temporal
 			ACTION_FIRE,
 			
 			GET_GROUND,
+			SET_GROUND,
 			SET_BODY_ENABLED,
 			SET_IMPULSE,
 			SENSOR_START,
