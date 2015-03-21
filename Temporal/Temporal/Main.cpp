@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	
 	//Game::get().run("resources/game-states/save-test.xml");
 	
-//	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }
 
