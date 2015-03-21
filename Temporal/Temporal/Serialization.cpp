@@ -12,6 +12,11 @@ namespace Temporal
 	/**********************************************************************************************
 	 * Memory serializer
 	 *********************************************************************************************/
+	Stream::~Stream() 
+	{
+		delete _buffer; 
+	}
+
 	void Stream::write(int value)
 	{
 		_buffer->write((const char*)&value, sizeof(int));

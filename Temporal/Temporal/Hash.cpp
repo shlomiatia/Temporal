@@ -106,7 +106,7 @@ namespace Temporal
 		HashStringIterator i = _hashStrings.find(key);
 		if(i == _hashStrings.end())
 		{
-			_hashStrings[key] = strdup(string);
+			_hashStrings[key] = _strdup(string);
 		}
 		else
 		{

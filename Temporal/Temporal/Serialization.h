@@ -28,7 +28,7 @@ namespace Temporal
 	{
 	public:
 		Stream(std::iostream* buffer) : _buffer(buffer) {};
-		virtual ~Stream() { delete _buffer; }
+		virtual ~Stream();
 
 		virtual void close() {};
 		void write(int value);

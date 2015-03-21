@@ -2,7 +2,7 @@
 #define INPUTCONTROLLER_H
 
 #include "EntitySystem.h"
-#include "Timer.h";
+#include "Timer.h"
 
 namespace Temporal
 {
