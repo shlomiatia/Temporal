@@ -7,10 +7,13 @@
 
 namespace Temporal
 {
+	const float JUMP_LEEWAY = 0.1f;
 	const Hash InputController::TYPE = Hash("input-controller");
 
 	void InputController::handleMessage(Message& message)
 	{
+		static bool b = false;
+		static float f = 1.0f;
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			Keyboard::get().add(this);
@@ -18,7 +21,9 @@ namespace Temporal
 		else if ((message.getID() == MessageID::KEY_DOWN && *static_cast<Key::Enum*>(message.getParam()) == Key::SPACE) ||
 				 (message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && *static_cast<Key::Enum*>(message.getParam()) == GamepadButton::ACTION_DOWN))
 		{
- 			raiseMessage(Message(MessageID::ACTION_UP_START));
+			_isJump = true;
+			_timer.reset();
+ 			
 		}
 		else if((message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && *static_cast<Key::Enum*>(message.getParam()) == GamepadButton::ACTION_LEFT) || 
 				 message.getID() == MessageID::MOUSE_DOWN ) 
@@ -27,6 +32,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
+			
 			if(Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
 			{
 				sendDirectionAction(*this, Side::RIGHT);
@@ -34,6 +40,15 @@ namespace Temporal
 			if(Keyboard::get().getKey(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
 			{
 				sendDirectionAction(*this, Side::LEFT);
+			}
+			if(_isJump)
+			{
+				float time = getFloatParam(message.getParam());
+				_timer.update(time);
+				if(_timer.getElapsedTime() < JUMP_LEEWAY)
+					raiseMessage(Message(MessageID::ACTION_UP_START));
+				else
+					_isJump = false;
 			}
 			if(Keyboard::get().getKey(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
 			{

@@ -92,7 +92,7 @@ namespace Temporal
 		Animation(Hash id = Hash::INVALID, bool repeat = false, bool crossFade = true) : _id(id), _repeat(repeat), _crossFade(crossFade) {}
 		~Animation();
 		
-		int getDuration() const;
+		int getFrames() const;
 		void setId(Hash id) { _id = id; }
 		Hash getId() const { return _id; }
 		bool isRepeat() const { return _repeat; }

@@ -99,7 +99,7 @@ namespace Temporal
 			delete i->second;
 	}
 
-	int Animation::getDuration() const 
+	int Animation::getFrames() const 
 	{ 
 		int duration = (**(getSamples().end()-1)).getIndex(); 
 		if(isRepeat())

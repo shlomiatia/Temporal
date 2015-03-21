@@ -5,7 +5,7 @@
 namespace Temporal
 {
 	StateMachineComponent::StateMachineComponent(StateCollection states, const char* prefix)
-		: _states(states), _currentState(0), _currentStateID(Hash::INVALID), _stateMachineFlag(false), _stateFlag(false), _frameFlag1(false), _frameFlag2(false), _frameFlag3(false)
+		: _states(states), _currentState(0), _currentStateID(Hash::INVALID), _stateFlag(false), _frameFlag1(false), _frameFlag2(false), _frameFlag3(false)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			(*(*i).second).setStateMachine(this);
