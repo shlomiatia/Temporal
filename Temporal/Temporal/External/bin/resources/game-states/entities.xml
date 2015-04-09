@@ -34,7 +34,7 @@
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
-						<radius x="10" y="45" />
+						<radius x="10" y="40" />
 					</obb>
 				</fixture>
 			</dynamic-body>
@@ -67,7 +67,7 @@
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="5" />
-					<scale x="0.45" y="0.45" />
+					<scale x="0.40" y="0.40" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
 							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
@@ -132,8 +132,8 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="10" />
-					<scale x="0.45" y="0.45" />
+					<translation x="0" y="5" />
+					<scale x="0.4" y="0.4" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
 							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
@@ -170,7 +170,7 @@
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
-						<radius x="10" y="45" />
+						<radius x="10" y="40" />
 					</obb>
 				</fixture>
 			</dynamic-body>
@@ -188,7 +188,7 @@
 			<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
 					<translation x="0" y="5" />
-					<scale x="0.45" y="0.45" />
+					<scale x="0.4" y="0.4" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
 							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
@@ -219,8 +219,8 @@
 			</renderer>
 			<particle-emitter lifetime="1" texture="resources/textures/bullet.png" birth-radius="0" velocity="3000" center="0" size="5" attachment="SCN_GUN" />
 			<saver-loader />
-			<!--<temporal-echo />
-			<temporal-period period="1" />-->
+			<temporal-echo />
+			<!--<temporal-period period="1" />-->
 		</entity>
 		<entity id="ENT_FLOOR">
 			<transform>
