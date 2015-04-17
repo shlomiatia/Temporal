@@ -57,8 +57,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::unordered_map<Hash, SceneNodeSample*> SceneNodeSampleCollection;
-	typedef SceneNodeSampleCollection::const_iterator SceneNodeSampleIterator;
+	typedef std::unordered_map<Hash, SceneNodeSample*> HashSceneNodeSampleMap;
+	typedef HashSceneNodeSampleMap::const_iterator SceneNodeSampleIterator;
 	
 	class SceneGraphSample
 	{
@@ -67,15 +67,15 @@ namespace Temporal
 		~SceneGraphSample();
 
 		int getIndex() const { return _index; }
-		SceneNodeSampleCollection& getSamples() { return _samples; }
-		const SceneNodeSampleCollection& getSamples() const { return _samples; }
+		HashSceneNodeSampleMap& getSamples() { return _samples; }
+		const HashSceneNodeSampleMap& getSamples() const { return _samples; }
 
 		SceneGraphSample* clone() const;
 		void init();
 
 	private:
 		int _index;
-		SceneNodeSampleCollection _samples;
+		HashSceneNodeSampleMap _samples;
 
 		SceneGraphSample(const SceneGraphSample&);
 		SceneGraphSample& operator=(const SceneGraphSample&);
@@ -117,8 +117,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::unordered_map<Hash, Animation*> AnimationCollection;
-	typedef AnimationCollection::const_iterator AnimationIterator;
+	typedef std::unordered_map<Hash, Animation*> HashAnimationMap;
+	typedef HashAnimationMap::const_iterator AnimationIterator;
 
 	class AnimationSet
 	{
@@ -129,13 +129,13 @@ namespace Temporal
 		void add(Animation* animation) { _animations[animation->getId()] = animation; }
 		void remove(Hash id);
 		Animation& get(Hash id) const { if(!_animations.count(id)) id = Hash("POP_ANM_BASE"); return *_animations.at(id); }
-		AnimationCollection& getAnimations() { return _animations; }
-		const AnimationCollection& getAnimations() const { return _animations; }
+		HashAnimationMap& getAnimations() { return _animations; }
+		const HashAnimationMap& getAnimations() const { return _animations; }
 		AnimationSet* clone() const;
 		void init();
 		
 	private:
-		AnimationCollection _animations;
+		HashAnimationMap _animations;
 
 		AnimationSet(const AnimationSet&);
 		AnimationSet& operator=(const AnimationSet&);

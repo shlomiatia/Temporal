@@ -65,7 +65,7 @@ namespace Temporal
 		SceneGraphSample* getSceneGraphSample(int index = -1, SceneNodeAction::Enum action = SceneNodeAction::NONE, Hash animationId = Hash::INVALID);
 		SceneNodeSample* getSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, SceneNodeAction::Enum action = SceneNodeAction::NONE, Hash animationId = Hash::INVALID);
 		SceneNodeSample& getCreateSceneNodeSample(int index = -1, Hash sceneNodeId = Hash::INVALID, Hash animationId = Hash::INVALID);
-		SceneNodeSample* addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId);
+		SceneNodeSample* addSample(HashSceneNodeSampleMap& samples, Hash sceneNodeId);
 		Vector getParentGlobalPosition();
 		Vector getGlobalPosition();
 		const SceneNode& getSceneNode(Hash sceneNodeId = Hash::INVALID);

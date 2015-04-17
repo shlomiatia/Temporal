@@ -132,7 +132,7 @@ namespace Temporal
 		SceneGraphSample* sceneGraphSample = getSceneGraphSample(index, action == SceneNodeAction::CREATE ? action : SceneNodeAction::NONE, animationId);
 		if(!sceneGraphSample)
 			return 0;
-		SceneNodeSampleCollection& samples = sceneGraphSample->getSamples();
+		HashSceneNodeSampleMap& samples = sceneGraphSample->getSamples();
 		SceneNodeSampleIterator i = samples.find(sceneNodeId);
 		if(action == SceneNodeAction::DELETE)
 		{
@@ -167,7 +167,7 @@ namespace Temporal
 		return *getSceneNodeSample(index, sceneNodeId, SceneNodeAction::CREATE, animationId);
 	}
 
-	SceneNodeSample* AnimationEditor::addSample(SceneNodeSampleCollection& samples, Hash sceneNodeId)
+	SceneNodeSample* AnimationEditor::addSample(HashSceneNodeSampleMap& samples, Hash sceneNodeId)
 	{
 		const SceneNode& node = getSceneNode(sceneNodeId);
 		SceneNodeSample* sample = new SceneNodeSample(sceneNodeId);
@@ -275,7 +275,7 @@ namespace Temporal
 		addUndo();
 		for(HashIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
 		{
-			SceneNodeSampleCollection* sceneNodeSamples = 0;
+			HashSceneNodeSampleMap* sceneNodeSamples = 0;
 			SceneNodeSample* copy = getSceneNodeSample(_copyIndex, *i, SceneNodeAction::NONE, _copyAnimation);
 			if(!copy)
 				continue;

@@ -98,7 +98,7 @@ namespace Temporal
 		GameState& getCurrentState() const; 
 
 	private:
-		GameStateCollection _states;
+		HashGameStateMap _states;
 		
 		GameStateListener* _listener;
 		GameStateLoader* _loader;

@@ -54,8 +54,8 @@ namespace Temporal
 	};
 
 	class Texture;
-	typedef std::unordered_map<Hash, SpriteGroup*> SpriteGroupCollection;
-	typedef SpriteGroupCollection::const_iterator SpriteGroupIterator;
+	typedef std::unordered_map<Hash, SpriteGroup*> HashSpriteGroupMap;
+	typedef HashSpriteGroupMap::const_iterator SpriteGroupIterator;
 
 	class SpriteSheet
 	{
@@ -75,7 +75,7 @@ namespace Temporal
 		std::string _textureFile;
 		const Texture* _texture;
 		Side::Enum _orientation;
-		SpriteGroupCollection _spriteGroups;
+		HashSpriteGroupMap _spriteGroups;
 
 		SpriteSheet(const SpriteSheet&);
 		SpriteSheet& operator=(const SpriteSheet&);

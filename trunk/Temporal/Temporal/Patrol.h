@@ -38,7 +38,7 @@ namespace Temporal
 	private:
 		EdgeDetector _edgeDetector;
 
-		StateCollection getStates() const;
+		HashStateMap getStates() const;
 	};
 
 	namespace PatrolStates

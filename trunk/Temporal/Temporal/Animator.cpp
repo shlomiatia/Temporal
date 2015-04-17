@@ -93,7 +93,7 @@ namespace Temporal
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;
 		}
-		const SceneNodeSampleCollection& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
+		const HashSceneNodeSampleMap& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
 		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
 		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end() || sceneNodeSampleIterator->second->isIgnore())
 			return false;
