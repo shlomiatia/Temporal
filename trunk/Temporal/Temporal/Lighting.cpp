@@ -86,7 +86,7 @@ namespace Temporal
 		
 		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
 
-		FixtureCollection result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
+		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
 
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{

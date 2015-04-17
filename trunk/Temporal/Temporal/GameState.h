@@ -92,7 +92,7 @@ namespace Temporal
 		void draw() const;
 
 		void load(GameStateLoader* loader);
-		void unload(StringCollection files);
+		void unload(StringList files);
 		void show(const char* gameStateFile);
 
 		GameState& getCurrentState() const; 
@@ -103,7 +103,7 @@ namespace Temporal
 		GameStateListener* _listener;
 		GameStateLoader* _loader;
 		bool _unload;
-		StringCollection _files;
+		StringList _files;
 		Hash _currentStateId;
 		Hash _nextStateId;
 

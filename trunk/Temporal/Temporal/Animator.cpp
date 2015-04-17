@@ -93,9 +93,9 @@ namespace Temporal
 			relativeIndex = animationDuration - relativeIndex;
 			direction = Direction::BACKWARD;
 		}
-		const HashSceneNodeSampleMap& sceneGraphSampleCollection = (**animation.getSamples().begin()).getSamples();
-		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleCollection.find(sceneNode.getID());
-		if(sceneNodeSampleIterator == sceneGraphSampleCollection.end() || sceneNodeSampleIterator->second->isIgnore())
+		const HashSceneNodeSampleMap& sceneGraphSampleList = (**animation.getSamples().begin()).getSamples();
+		SceneNodeSampleIterator sceneNodeSampleIterator = sceneGraphSampleList.find(sceneNode.getID());
+		if(sceneNodeSampleIterator == sceneGraphSampleList.end() || sceneNodeSampleIterator->second->isIgnore())
 			return false;
 		const SceneNodeSample* currentSample = sceneNodeSampleIterator->second;
 		while(!(relativeIndex >= currentSample->getParent().getIndex() && 
@@ -196,7 +196,7 @@ namespace Temporal
 		return result;
 	}
 
-	void createSceneNodesList(SceneNodeCollection& sceneNodes, SceneNode* node)
+	void createSceneNodesList(SceneNodeList& sceneNodes, SceneNode* node)
 	{
 		if(!node->isTransformOnly())
 			sceneNodes.push_back(node);

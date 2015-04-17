@@ -23,8 +23,8 @@ namespace Temporal
 		};
 	}
 
-	typedef std::vector<const NavigationEdge*> NavigationEdgeCollection;
-	typedef NavigationEdgeCollection::const_iterator NavigationEdgeIterator;
+	typedef std::vector<const NavigationEdge*> NavigationEdgeList;
+	typedef NavigationEdgeList::const_iterator NavigationEdgeIterator;
 
 	class NavigationNode
 	{
@@ -34,11 +34,11 @@ namespace Temporal
 
 		const OBB& getArea() const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
-		const NavigationEdgeCollection& getEdges() const { return _edges; }
+		const NavigationEdgeList& getEdges() const { return _edges; }
 
 	private:
 		const OBB _area;
-		NavigationEdgeCollection _edges;
+		NavigationEdgeList _edges;
 
 		NavigationNode(const NavigationNode&);
 		NavigationNode& operator=(const NavigationNode&);
@@ -70,12 +70,12 @@ namespace Temporal
 		NavigationEdge& operator=(const NavigationEdge&);
 	};
 
-	typedef std::vector<NavigationNode*> NavigationNodeCollection;
-	typedef NavigationNodeCollection::const_iterator NavigationNodeIterator;
-	typedef std::vector<const OBB> OBBCollection;
-	typedef OBBCollection::const_iterator OBBIterator;
-	typedef std::vector<const OBB*> ShapeCollection;
-	typedef ShapeCollection::const_iterator ShapeIterator;
+	typedef std::vector<NavigationNode*> NavigationNodeList;
+	typedef NavigationNodeList::const_iterator NavigationNodeIterator;
+	typedef std::vector<const OBB> OBBList;
+	typedef OBBList::const_iterator OBBIterator;
+	typedef std::vector<const OBB*> ShapeList;
+	typedef ShapeList::const_iterator ShapeIterator;
 
 	class NavigationGraph : public GameStateComponent
 	{
@@ -91,14 +91,14 @@ namespace Temporal
 	private:
 		static const Vector MIN_AREA_SIZE;
 
-		NavigationNodeCollection _nodes; 
+		NavigationNodeList _nodes; 
 
-		void createNodes(ShapeCollection& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeCollection& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
-		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms);
-		void createEdges(ShapeCollection& platforms);
-		void cutAreasByPlatforms(OBBCollection& areas, ShapeCollection& platforms);
+		void createNodes(ShapeList& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms);
+		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
+		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
+		void createEdges(ShapeList& platforms);
+		void cutAreasByPlatforms(OBBList& areas, ShapeList& platforms);
 		
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);

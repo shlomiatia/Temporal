@@ -35,7 +35,7 @@ namespace Temporal
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
 			if(start && goal)
 			{
-				NavigationEdgeCollection* path = Pathfinder::get().findPath(start, goal);
+				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
 				if(path)
 				{
 					if(path->size() != 0)
@@ -64,7 +64,7 @@ namespace Temporal
 				const Vector& position = getPosition(*_stateMachine);
 				float sourceX = position.getX();
 				Navigator& navigator = getNavigator(*_stateMachine);
-				NavigationEdgeCollection* path = navigator.getPath();
+				NavigationEdgeList* path = navigator.getPath();
 				float targetX;
 				bool reachedTargetPlatform;
 				if(!path)
@@ -114,7 +114,7 @@ namespace Temporal
 			if(message.getID() == MessageID::UPDATE)
 			{
 				Navigator& navigator = getNavigator(*_stateMachine);
-				NavigationEdgeCollection* path = navigator.getPath();
+				NavigationEdgeList* path = navigator.getPath();
 				const NavigationEdge* edge = (*path)[0];
 				Side::Enum currentSide = getOrientation(*_stateMachine);
 				Side::Enum targetSide = edge->getSide();
@@ -255,7 +255,7 @@ namespace Temporal
 	void Navigator::debugDraw() const
 	{
 		Vector currentPoint = getPosition(*this);
-		NavigationEdgeCollection* path = getPath();
+		NavigationEdgeList* path = getPath();
 			
 		if(path)
 		{	

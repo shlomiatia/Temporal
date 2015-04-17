@@ -4,8 +4,8 @@
 
 namespace Temporal
 {
-	typedef std::vector<PathNode*> PathNodeCollection;
-	typedef PathNodeCollection::const_iterator PathNodeIterator;
+	typedef std::vector<PathNode*> PathNodeList;
+	typedef PathNodeList::const_iterator PathNodeIterator;
 
 	float PathNode::calculateHeuristicCost(const NavigationNode& goal)
 	{
@@ -16,9 +16,9 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	NavigationEdgeCollection* buildPath(const PathNode& pathNode)
+	NavigationEdgeList* buildPath(const PathNode& pathNode)
 	{
-		NavigationEdgeCollection* result = new NavigationEdgeCollection();
+		NavigationEdgeList* result = new NavigationEdgeList();
 
 		const PathNode* current = &pathNode;
 		while(current->getEdge())
@@ -29,7 +29,7 @@ namespace Temporal
 		return result;
 	}
 
-	PathNode* find(PathNodeCollection& where, const NavigationNode* what)
+	PathNode* find(PathNodeList& where, const NavigationNode* what)
 	{
 		for(PathNodeIterator i = where.begin(); i != where.end(); ++i)
 		{
@@ -42,7 +42,7 @@ namespace Temporal
 		return 0;
 	}
 
-	void remove(PathNodeCollection& where, const PathNode* what)
+	void remove(PathNodeList& where, const PathNode* what)
 	{
 		for(PathNodeIterator i = where.begin(); i != where.end(); ++i)
 		{
@@ -55,7 +55,7 @@ namespace Temporal
 		}
 	}
 
-	void add(PathNodeCollection& where, PathNode* what)
+	void add(PathNodeList& where, PathNode* what)
 	{
 		PathNodeIterator smaller;
 		for(smaller = where.begin(); smaller != where.end(); ++smaller)
@@ -66,18 +66,18 @@ namespace Temporal
 		where.insert(smaller, what);
 	}
 
-	void deleteCollection(PathNodeCollection& collection)
+	void deleteList(PathNodeList& collection)
 	{
 		for(PathNodeIterator i = collection.begin(); i != collection.end(); ++i)
 			delete *i;
 	}
 
-	NavigationEdgeCollection* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
+	NavigationEdgeList* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
 	{
 		assert(start);
 		assert(goal);
-		PathNodeCollection open;
-		PathNodeCollection closed;
+		PathNodeList open;
+		PathNodeList closed;
 		open.push_back(new PathNode(*start, *goal));
 		// Check all open nodes
 		while (!open.empty())
@@ -88,9 +88,9 @@ namespace Temporal
 			// Reached goal
 			if (&navigationNode == goal)
 			{
-				NavigationEdgeCollection* result = buildPath(pathNode);
-				deleteCollection(open);
-				deleteCollection(closed);
+				NavigationEdgeList* result = buildPath(pathNode);
+				deleteList(open);
+				deleteList(closed);
 				return result;
 			}
 			
@@ -99,7 +99,7 @@ namespace Temporal
 			closed.push_back(&pathNode);
 
 			// Explore all neighbours
-			const NavigationEdgeCollection& edges = navigationNode.getEdges();
+			const NavigationEdgeList& edges = navigationNode.getEdges();
 			for(NavigationEdgeIterator i = edges.begin(); i != edges.end(); ++i)
 			{
 				const NavigationEdge& edge = **i;
@@ -134,8 +134,8 @@ namespace Temporal
 				add(open, pathNeighbour);
 			}
 		}
-		deleteCollection(open);
-		deleteCollection(closed);
+		deleteList(open);
+		deleteList(closed);
 		return 0;
 	}
 }

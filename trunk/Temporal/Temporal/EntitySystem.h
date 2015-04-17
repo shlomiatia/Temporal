@@ -50,8 +50,8 @@ namespace Temporal
 		Component& operator=(const Component&);
 	};
 
-	typedef std::vector<Component*> ComponentCollection;
-	typedef ComponentCollection::const_iterator ComponentIterator;
+	typedef std::vector<Component*> ComponentList;
+	typedef ComponentList::const_iterator ComponentIterator;
 
 	class EntitiesManager;
 
@@ -69,11 +69,11 @@ namespace Temporal
 		void add(Component* component);
 		const Component* get(Hash type) const;
 		Component* get(Hash type);
-		void* handleMessage(Message& message, const HashCollection* filter = 0) const;
+		void* handleMessage(Message& message, const HashList* filter = 0) const;
 		Entity* clone() const;
 	private:
 		Hash _id;
-		ComponentCollection _components;
+		ComponentList _components;
 
 		EntitiesManager* _manager;
 
@@ -91,7 +91,7 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		void sendMessageToAllEntities(Message& message, const HashCollection* filter = 0) const;
+		void sendMessageToAllEntities(Message& message, const HashList* filter = 0) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;

@@ -65,7 +65,7 @@ namespace Temporal
 	private:
 		const Color AMBIENT_COLOR;
 		FBO _fbo;
-		ComponentCollection _components;
+		ComponentList _components;
 
 		void preDraw();
 		void postDraw();

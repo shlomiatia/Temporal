@@ -12,9 +12,9 @@ namespace Temporal
 	const Hash ANIMATOR_TYPE = Hash("animator");
 	const float TemporalEcho::ECHO_READY_TIME = 4.5f;
 
-	HashCollection TemporalEcho::getFilter() const
+	HashList TemporalEcho::getFilter() const
 	{
-		HashCollection result;
+		HashList result;
 		result.push_back(TRANSFORM_TYPE);
 		result.push_back(RENDERER_TYPE);
 		result.push_back(ANIMATOR_TYPE);

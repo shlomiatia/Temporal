@@ -12,8 +12,8 @@ namespace Temporal
 	class Fixture;
 	class DirectedSegment;
 
-	typedef std::vector<const Fixture*> FixtureCollection;
-	typedef FixtureCollection::const_iterator FixtureIterator;
+	typedef std::vector<const Fixture*> FixtureList;
+	typedef FixtureList::const_iterator FixtureIterator;
 
 	class RayCastResult
 	{
@@ -44,12 +44,12 @@ namespace Temporal
 		void update(Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
-		FixtureCollection iterateTiles(const OBB& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;
+		FixtureList iterateTiles(const OBB& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;
 
 		void draw() const;
 
 	private:
-		FixtureCollection** _grid;
+		FixtureList** _grid;
 		Vector _worldSize;
 		float _tileSize;
 		int _gridWidth;
@@ -62,7 +62,7 @@ namespace Temporal
 		int getSize() const { return _gridWidth * _gridHeight; }
 
 		void add(const Fixture* body, int i, int j);
-		FixtureCollection* getTile(int i, int j) const;
+		FixtureList* getTile(int i, int j) const;
 
 		Grid(const Grid&);
 		Grid& operator=(const Grid&);

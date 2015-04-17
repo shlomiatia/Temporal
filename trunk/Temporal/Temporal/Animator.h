@@ -65,8 +65,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::vector<SingleAnimator*> SingleAnimatorCollection;
-	typedef SingleAnimatorCollection::const_iterator SingleAnimatorIterator;
+	typedef std::vector<SingleAnimator*> SingleAnimatorList;
+	typedef SingleAnimatorList::const_iterator SingleAnimatorIterator;
 
 	class CompositeAnimator
 	{
@@ -86,7 +86,7 @@ namespace Temporal
 		bool animate(const SceneNode& sceneNode, SRT& srt);
 		
 	private:
-		SingleAnimatorCollection _singleAnimators;
+		SingleAnimatorList _singleAnimators;
 
 		CompositeAnimator(const CompositeAnimator&);
 		CompositeAnimator& operator=(const CompositeAnimator&);
@@ -111,7 +111,7 @@ namespace Temporal
 
 		std::string _animationSetFile;
 		std::shared_ptr<AnimationSet> _animationSet;
-		SceneNodeCollection _sceneNodes;
+		SceneNodeList _sceneNodes;
 		bool _isPaused;
 		bool _isDisableCrossFade;
 		bool _useAnimator2;

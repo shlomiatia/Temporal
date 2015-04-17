@@ -26,8 +26,8 @@ namespace Temporal
 	typedef std::unordered_map<Hash, std::shared_ptr<Font>> HashFontMap;
 	typedef HashFontMap::const_iterator FontIterator;
 
-	typedef std::vector<std::string> StringCollection;
-	typedef StringCollection::const_iterator StringIterator;
+	typedef std::vector<std::string> StringList;
+	typedef StringList::const_iterator StringIterator;
 	typedef std::unordered_map<Hash, GameState*> HashGameStateMap;
 	typedef HashGameStateMap::const_iterator GameStateIterator;
 
@@ -108,7 +108,7 @@ namespace Temporal
 		const HashGameStateMap& getResult() const { return _result; }
 
 	private:
-		StringCollection _files;
+		StringList _files;
 		HashGameStateMap _result;
 	};
 

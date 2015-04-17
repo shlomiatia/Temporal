@@ -83,8 +83,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::vector<SceneGraphSample*> SceneGraphSampleCollection;
-	typedef SceneGraphSampleCollection::const_iterator SceneGraphSampleIterator;
+	typedef std::vector<SceneGraphSample*> SceneGraphSampleList;
+	typedef SceneGraphSampleList::const_iterator SceneGraphSampleIterator;
 
 	class Animation
 	{
@@ -99,8 +99,8 @@ namespace Temporal
 		void setRepeat(bool repeat) { _repeat = repeat; }
 		bool isCrossFade() const { return _crossFade; }
 		void setCrossFade(bool value) { _crossFade = value; }
-		SceneGraphSampleCollection& getSamples() { return _samples; }
-		const SceneGraphSampleCollection& getSamples() const { return _samples; }
+		SceneGraphSampleList& getSamples() { return _samples; }
+		const SceneGraphSampleList& getSamples() const { return _samples; }
 
 		void init();
 		Animation* clone() const;
@@ -109,7 +109,7 @@ namespace Temporal
 		Hash _id;
 		bool _repeat;
 		bool _crossFade;
-		SceneGraphSampleCollection _samples;
+		SceneGraphSampleList _samples;
 
 		Animation(const Animation&);
 		Animation& operator=(const Animation&);

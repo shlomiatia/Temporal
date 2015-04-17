@@ -83,7 +83,7 @@ namespace Temporal
 		IOThread::get().setJob(_loader);
 	}
 
-	void GameStateManager::unload(StringCollection files)
+	void GameStateManager::unload(StringList files)
 	{
 		_files = files;
 		_unload = true;

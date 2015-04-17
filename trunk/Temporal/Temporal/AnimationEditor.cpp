@@ -96,7 +96,7 @@ namespace Temporal
 			index = _index;
 		if(animationId == Hash::INVALID)
 			animationId = _animationId;
-		SceneGraphSampleCollection& samples = _animationSet->get(animationId).getSamples();
+		SceneGraphSampleList& samples = _animationSet->get(animationId).getSamples();
 		for(SceneGraphSampleIterator i = samples.begin();; ++i)
 		{
 			if(action == SceneNodeAction::CREATE && (i == samples.end() || (**i).getIndex() > index))
