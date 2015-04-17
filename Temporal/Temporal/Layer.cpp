@@ -61,7 +61,7 @@ namespace Temporal
 	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
 	{
 		for(int i = 0; i <= LayerType::SIZE; ++i)
-			_layers[static_cast<LayerType::Enum>(i)] = ComponentCollection();
+			_layers[static_cast<LayerType::Enum>(i)] = ComponentList();
 	}
 
 	void SpriteLayer::innerDraw()
@@ -70,7 +70,7 @@ namespace Temporal
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
-			ComponentCollection& components = _layers.at(static_cast<LayerType::Enum>(i));
+			ComponentList& components = _layers.at(static_cast<LayerType::Enum>(i));
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
 				(**j).handleMessage(Message(MessageID::DRAW));
@@ -134,7 +134,7 @@ namespace Temporal
 		Graphics::get().getSpriteBatch().begin();
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
-		HashCollection filter;
+		HashList filter;
 		filter.push_back(Hash("static-body"));
 		filter.push_back(Hash("editable"));
 		//filter.push_back(Hash("sight"));

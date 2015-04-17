@@ -28,8 +28,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::vector<Sprite*> SpriteCollection;
-	typedef SpriteCollection::const_iterator SpriteIterator;
+	typedef std::vector<Sprite*> SpriteList;
+	typedef SpriteList::const_iterator SpriteIterator;
 
 	class SpriteGroup
 	{
@@ -45,7 +45,7 @@ namespace Temporal
 
 	private:
 		Hash _id;
-		SpriteCollection _sprites;
+		SpriteList _sprites;
 
 		SpriteGroup(const SpriteGroup&);
 		SpriteGroup& operator=(const SpriteGroup&);

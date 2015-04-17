@@ -37,8 +37,8 @@ namespace Temporal
 		};
 	}
 
-	typedef std::vector<SpriteBatchItem> SpriteBatchItemCollection;
-	typedef SpriteBatchItemCollection::const_iterator SpriteBatchItemIterator;
+	typedef std::vector<SpriteBatchItem> SpriteBatchItemList;
+	typedef SpriteBatchItemList::const_iterator SpriteBatchItemIterator;
 
 	class SpriteBatch
 	{

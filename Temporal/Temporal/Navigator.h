@@ -65,8 +65,8 @@ namespace Temporal
 
 		const OBB& getDestination() const { return _destination; }
 		void setDestination(const OBB& destination) { _destination = destination; }
-		NavigationEdgeCollection* getPath() const { return _path; }
-		void setPath(NavigationEdgeCollection* path) { if(_path) delete _path; _path = path; }
+		NavigationEdgeList* getPath() const { return _path; }
+		void setPath(NavigationEdgeList* path) { if(_path) delete _path; _path = path; }
 		Component* clone() const { return new Navigator(); }
 
 		static const Hash TYPE;
@@ -77,7 +77,7 @@ namespace Temporal
 	private:
 
 		OBB _destination;
-		NavigationEdgeCollection* _path;
+		NavigationEdgeList* _path;
 
 		//void deserialize(const Serialization& serialization);
 		void debugDraw() const;

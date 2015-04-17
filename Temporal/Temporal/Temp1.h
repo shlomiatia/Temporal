@@ -32,7 +32,7 @@ namespace Temporal
 				}
 				if(_loader.isFinished())
 				{
-					StringCollection files;
+					StringList files;
 					files.push_back(std::string("resources/game-states/loading.xml"));
 					GameStateManager::get().unload(files);
 					GameStateManager::get().show("resources/game-states/entities.xml");

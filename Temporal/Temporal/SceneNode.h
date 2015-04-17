@@ -13,8 +13,8 @@ namespace Temporal
 	class SceneNode;
 	class SpriteSheet;
 
-	typedef std::vector<SceneNode*> SceneNodeCollection;
-	typedef SceneNodeCollection::const_iterator SceneNodeIterator;
+	typedef std::vector<SceneNode*> SceneNodeList;
+	typedef SceneNodeList::const_iterator SceneNodeIterator;
 
 	class SceneNode
 	{
@@ -47,7 +47,7 @@ namespace Temporal
 		float getCenter() const { return _center; }
 		float getRadius() const { return _radius; }
 
-		const SceneNodeCollection& getChildren() const { return _children; }
+		const SceneNodeList& getChildren() const { return _children; }
 
 		void add(SceneNode* child) { _children.push_back(child);}
 		SceneNode* clone() const;
@@ -73,7 +73,7 @@ namespace Temporal
 		float _radius;
 
 		SceneNode* _parent;
-		SceneNodeCollection _children;
+		SceneNodeList _children;
 
 		SceneNode(const SceneNode&);
 		SceneNode& operator=(const SceneNode&);

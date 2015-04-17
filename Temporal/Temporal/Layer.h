@@ -103,8 +103,8 @@ namespace Temporal
 		FBO _fbo2;
 	};
 
-	typedef std::vector<Layer*> LayerCollection;
-	typedef LayerCollection::const_iterator LayerIterator;
+	typedef std::vector<Layer*> LayerList;
+	typedef LayerList::const_iterator LayerIterator;
 
 	class LayersManager : public GameStateComponent
 	{
@@ -126,7 +126,7 @@ namespace Temporal
 		bool _cameraFollowPlayer;
 		Color _ambientColor;
 
-		LayerCollection _layers;
+		LayerList _layers;
 		Camera* _camera;
 		SpriteLayer* _spriteLayer;
 		GUILayer* _guiLayer;

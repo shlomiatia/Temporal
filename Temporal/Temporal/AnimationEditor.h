@@ -40,7 +40,7 @@ namespace Temporal
 
 		std::shared_ptr<AnimationSet> _animationSet;
 		Hash _animationId;
-		HashCollection _sceneNodes;
+		HashList _sceneNodes;
 		Hash _sceneNodeId;
 		int _index;
 		bool _paused;

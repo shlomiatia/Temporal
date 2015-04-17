@@ -35,7 +35,7 @@ namespace Temporal
 		return segment.getLength();
 	}
 
-	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
+	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, OBBList& areas, OBBIterator& iterator)
 	{
 		Axis::Enum axisSign = AngleUtils::radian().isModerate(area.getAxisX().getAngle()) ? Axis::X : Axis::Y;
 		Vector normalizedSlopedVector = area.getAxis(axisSign);
@@ -53,13 +53,13 @@ namespace Temporal
 		}
 	}
 
-	void cutAreaLeft(float x, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
+	void cutAreaLeft(float x, const OBB& area, OBBList& areas, OBBIterator& iterator)
 	{
 		float amount = x - area.getLeft();
 		cutArea(Side::LEFT, amount, area, areas, iterator);
 	}
 
-	void cutAreaRight(float x, const OBB& area, OBBCollection& areas, OBBIterator& iterator)
+	void cutAreaRight(float x, const OBB& area, OBBList& areas, OBBIterator& iterator)
 	{
 		float amount = area.getRight() - x;
 		cutArea(Side::RIGHT, amount, area, areas, iterator);
@@ -72,7 +72,7 @@ namespace Temporal
 	}
 
 	// TODO: Ray cast from each area vertice inward. Take min length from each side and cut
-	void NavigationGraph::cutAreasByPlatforms(OBBCollection& areas, ShapeCollection& platforms)
+	void NavigationGraph::cutAreasByPlatforms(OBBList& areas, ShapeList& platforms)
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
@@ -106,7 +106,7 @@ namespace Temporal
 		}
 	}
 
-	bool intersectWithPlatform(const DirectedSegment& area, ShapeCollection& platforms)
+	bool intersectWithPlatform(const DirectedSegment& area, ShapeList& platforms)
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
@@ -119,7 +119,7 @@ namespace Temporal
 		return false;
 	}
 
-	void removeNodesWithoutEdges(NavigationNodeCollection& nodes)
+	void removeNodesWithoutEdges(NavigationNodeList& nodes)
 	{
 		for(NavigationNodeIterator i = nodes.begin(); i != nodes.end();)
 		{
@@ -167,7 +167,7 @@ namespace Temporal
 		return 0;
 	}
 
-	void NavigationGraph::createNodes(ShapeCollection& platforms)
+	void NavigationGraph::createNodes(ShapeList& platforms)
 	{
 		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
@@ -188,7 +188,7 @@ namespace Temporal
 			radius.setAxis(platformOppositeAxisSign, MIN_AREA_SIZE.getY() / 2.0f);
 			OBB area = OBB(center, axisX, radius);
 
-			OBBCollection areas;
+			OBBList areas;
 			areas.push_back(area);
 			cutAreasByPlatforms(areas, platforms);
 			
@@ -206,7 +206,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeCollection& platforms)
+	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms)
 	{
 		const OBB& area1 = node1.getArea();
 		const OBB& area2 = node2.getArea();
@@ -229,7 +229,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms)
+	void NavigationGraph::checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms)
 	{
 		float x;
 		if(node1.getArea().getLeft() < node2.getArea().getLeft())
@@ -267,7 +267,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeCollection& platforms)
+	void NavigationGraph::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms)
 	{
 		const OBB& area1 = node1.getArea();
 		const OBB& area2 = node2.getArea();
@@ -285,7 +285,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::createEdges(ShapeCollection& platforms)
+	void NavigationGraph::createEdges(ShapeList& platforms)
 	{
 		// Create edges
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
@@ -337,7 +337,7 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(StaticBody& body, ShapeCollection& platforms) 
+	void addPlatform(StaticBody& body, ShapeList& platforms) 
 	{
 		if(body.getFixture().getFilter().getCategory() == CollisionCategory::OBSTACLE)
 		{
@@ -349,7 +349,7 @@ namespace Temporal
 	void NavigationGraph::init(GameState* gameState)
 	{
 		GameStateComponent::init(gameState);
-		ShapeCollection platforms;
+		ShapeList platforms;
 		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
 		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
@@ -381,7 +381,7 @@ namespace Temporal
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
-			const NavigationEdgeCollection& edges = node.getEdges();
+			const NavigationEdgeList& edges = node.getEdges();
 			for(NavigationEdgeIterator j = edges.begin(); j != edges.end(); ++j)
 			{
 				const NavigationEdge& edge = **j;

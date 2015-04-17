@@ -271,7 +271,7 @@ namespace Temporal
 			movement -= stepMovement;
 			_dynamicBodyBounds.getOBB().translate(stepMovement);
 			
-			FixtureCollection info = getEntity().getManager().getGameState().getGrid().iterateTiles(_dynamicBodyBounds.getOBB(), COLLISION_MASK, -1, false);
+			FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(_dynamicBodyBounds.getOBB(), COLLISION_MASK, -1, false);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* fixture = *i;

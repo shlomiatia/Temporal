@@ -60,7 +60,7 @@ namespace Temporal
 		return clone;
 	}
 
-	void* Entity::handleMessage(Message& message, const HashCollection* filter) const
+	void* Entity::handleMessage(Message& message, const HashList* filter) const
 	{
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
@@ -106,7 +106,7 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
-	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashCollection* filter) const
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter) const
 	{
 		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			(*(*i).second).handleMessage(message, filter);

@@ -22,7 +22,7 @@ namespace Temporal
 		_gridHeight = getAxisIndex(getWorldSize().getY()) + 1;
 		
 		int size = getSize();
-		_grid = new FixtureCollection*[size];
+		_grid = new FixtureList*[size];
 		for(int i = 0; i < size; ++i)
 			_grid[i] = 0;
 	}
@@ -43,7 +43,7 @@ namespace Temporal
 		{
 			for(int j = 0; j < _gridHeight; ++j)
 			{
-				FixtureCollection* fixtures = getTile(i, j);
+				FixtureList* fixtures = getTile(i, j);
 				if(fixtures && fixtures->size() != 0)
 				{
 					
@@ -68,10 +68,10 @@ namespace Temporal
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
 			return;
-		FixtureCollection* bodies = getTile(i, j);
+		FixtureList* bodies = getTile(i, j);
 		if(!bodies)
 		{
-			bodies = new FixtureCollection();
+			bodies = new FixtureList();
 			_grid[index] = bodies;
 		}
 		bodies->push_back(body);
@@ -117,7 +117,7 @@ namespace Temporal
 			{				
 				if(i >= leftIndex && i <= rightIndex && j >= bottomIndex && j <= topIndex)
 					continue;
-				FixtureCollection* bodies = getTile(i, j);
+				FixtureList* bodies = getTile(i, j);
 				if(!bodies)
 					continue;
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
@@ -142,7 +142,7 @@ namespace Temporal
 
 	}
 
-	FixtureCollection* Grid::getTile(int i, int j) const
+	FixtureList* Grid::getTile(int i, int j) const
 	{
 		int index = getIndex(i, j);
 		if(index < 0 || index >= getSize())
@@ -195,7 +195,7 @@ namespace Temporal
 		// Main loop. Visits cells until last cell reached
 		while(true)
 		{
-			FixtureCollection* bodies = getTile(i, j);
+			FixtureList* bodies = getTile(i, j);
 			OBB tile = getTileShape(i, j);
 			if(bodies)
 			{
@@ -235,20 +235,20 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureCollection Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
+	FixtureList Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
 		int bottomIndex = getAxisIndex(shape.getBottom());
 
-		FixtureCollection result;
+		FixtureList result;
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
 			for(int j = bottomIndex; j <= topIndex; ++j)
 			{
-				FixtureCollection* bodies = getTile(i, j);
+				FixtureList* bodies = getTile(i, j);
 				if(bodies)
 				{
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)

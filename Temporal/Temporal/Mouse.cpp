@@ -36,7 +36,7 @@ namespace Temporal
 	{
 		Message message(messageId, &params);
 		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
-		ComponentCollection& components = layersManager.getGUILayer().get();
+		ComponentList& components = layersManager.getGUILayer().get();
 		for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 		{
 			(**j).raiseMessage(message);
@@ -50,7 +50,7 @@ namespace Temporal
 		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
 		for(int i = LayerType::SIZE - 1; i >= 0 ; --i)
 		{
-			ComponentCollection& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
+			ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
 				(**j).raiseMessage(offsetMessage);

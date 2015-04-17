@@ -8,8 +8,8 @@ namespace Temporal
 {
 	class Entity;
 	class Stream;
-	typedef std::vector<Stream*> EchoCollection;
-	typedef EchoCollection::const_iterator EchoIterator;
+	typedef std::vector<Stream*> EchoList;
+	typedef EchoList::const_iterator EchoIterator;
 	
 	class TemporalEcho : public Component
 	{
@@ -29,9 +29,9 @@ namespace Temporal
 		void init();
 		void update(float framePeriod);
 		void mergeToTemporalEchoes();
-		HashCollection getFilter() const;
+		HashList getFilter() const;
 
-		EchoCollection _echoesData;
+		EchoList _echoesData;
 		Entity* _echo;
 		bool _echoReady;
 	};

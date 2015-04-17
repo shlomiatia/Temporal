@@ -49,8 +49,8 @@ namespace Temporal
 	typedef std::unordered_map<Hash, const char*> HashStringMap;
 	typedef HashStringMap::const_iterator HashStringIterator;
 
-	typedef std::vector<Hash> HashCollection;
-	typedef HashCollection::const_iterator HashIterator;
+	typedef std::vector<Hash> HashList;
+	typedef HashList::const_iterator HashIterator;
 
 	class HashToString
 	{
