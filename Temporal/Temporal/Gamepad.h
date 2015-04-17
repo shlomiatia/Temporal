@@ -24,8 +24,8 @@ namespace Temporal
 		};
 	}
 
-	typedef std::unordered_map<int, GamepadButton::Enum> GamepadButtonCollection;
-	typedef GamepadButtonCollection::const_iterator GamepadButtonIterator;
+	typedef std::unordered_map<int, GamepadButton::Enum> IntGamepadButtonMap;
+	typedef IntGamepadButtonMap::const_iterator GamepadButtonIterator;
 
 	class Gamepad
 	{
@@ -46,7 +46,7 @@ namespace Temporal
 	private:
 
 		// TODO:
-		GamepadButtonCollection _buttonsMap;
+		IntGamepadButtonMap _buttonsMap;
 		void* _gamepad;
 
 		bool _buttons[GamepadButton::SIZE];

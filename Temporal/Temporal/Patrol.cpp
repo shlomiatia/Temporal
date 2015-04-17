@@ -48,10 +48,10 @@ namespace Temporal
 		return WALK_STATE;
 	}
 
-	StateCollection Patrol::getStates() const
+	HashStateMap Patrol::getStates() const
 	{
 		using namespace PatrolStates;
-		StateCollection states;
+		HashStateMap states;
 		
 		states[WALK_STATE] = new Walk();
 		states[ACQUIRE_STATE] = new Acquire();

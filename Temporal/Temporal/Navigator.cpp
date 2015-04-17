@@ -216,9 +216,9 @@ namespace Temporal
 	}
 
 	using namespace NavigatorStates;
-	StateCollection Navigator::getStates() const
+	HashStateMap Navigator::getStates() const
 	{
-		StateCollection states;
+		HashStateMap states;
 		
 		states[WALK_STATE] = new Walk();
 		states[FALL_STATE] = new Fall();

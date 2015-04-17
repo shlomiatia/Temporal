@@ -19,17 +19,17 @@ namespace Temporal
 	class Texture;
 	class Stream;
 	
-	typedef std::unordered_map<Hash, std::shared_ptr<SpriteSheet>> SpriteSheetCollection;
-	typedef SpriteSheetCollection::const_iterator SpriteSheetIterator;
-	typedef std::unordered_map<Hash, std::shared_ptr<AnimationSet>> AnimationSetCollection;
-	typedef AnimationSetCollection::const_iterator AnimationSetIterator;
-	typedef std::unordered_map<Hash, std::shared_ptr<Font>> FontCollection;
-	typedef FontCollection::const_iterator FontIterator;
+	typedef std::unordered_map<Hash, std::shared_ptr<SpriteSheet>> HashSpriteSheetMap;
+	typedef HashSpriteSheetMap::const_iterator SpriteSheetIterator;
+	typedef std::unordered_map<Hash, std::shared_ptr<AnimationSet>> HashAnimationSetMap;
+	typedef HashAnimationSetMap::const_iterator AnimationSetIterator;
+	typedef std::unordered_map<Hash, std::shared_ptr<Font>> HashFontMap;
+	typedef HashFontMap::const_iterator FontIterator;
 
 	typedef std::vector<std::string> StringCollection;
 	typedef StringCollection::const_iterator StringIterator;
-	typedef std::unordered_map<Hash, GameState*> GameStateCollection;
-	typedef GameStateCollection::const_iterator GameStateIterator;
+	typedef std::unordered_map<Hash, GameState*> HashGameStateMap;
+	typedef HashGameStateMap::const_iterator GameStateIterator;
 
 	class IOJob
 	{
@@ -105,11 +105,11 @@ namespace Temporal
 		void executeImpl();
 
 		void add(const char* file);
-		const GameStateCollection& getResult() const { return _result; }
+		const HashGameStateMap& getResult() const { return _result; }
 
 	private:
 		StringCollection _files;
-		GameStateCollection _result;
+		HashGameStateMap _result;
 	};
 
 	class ResourceManager
@@ -132,9 +132,9 @@ namespace Temporal
 		const std::shared_ptr<Font> getFont(const char* name, unsigned int size);
 
 	private:
-		SpriteSheetCollection _spritesheets;
-		AnimationSetCollection _animationSets;
-		FontCollection _fonts;
+		HashSpriteSheetMap _spritesheets;
+		HashAnimationSetMap _animationSets;
+		HashFontMap _fonts;
 
 		ResourceManager() {}
 		ResourceManager(const ResourceManager&);

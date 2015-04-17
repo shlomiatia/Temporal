@@ -31,13 +31,13 @@ namespace Temporal
 		ComponentState& operator=(const ComponentState&);
 	};
 
-	typedef std::unordered_map<Hash, ComponentState*> StateCollection;
-	typedef StateCollection::const_iterator StateIterator;
+	typedef std::unordered_map<Hash, ComponentState*> HashStateMap;
+	typedef HashStateMap::const_iterator StateIterator;
 
 	class StateMachineComponent : public Component
 	{
 	public:
-		explicit StateMachineComponent(StateCollection states, const char* prefix);
+		explicit StateMachineComponent(HashStateMap states, const char* prefix);
 		virtual ~StateMachineComponent();
 
 		void changeState(Hash stateID, void* param = 0);
@@ -62,7 +62,7 @@ namespace Temporal
 		virtual Hash getInitialState() const = 0;
 
 	private:
-		StateCollection _states;
+		HashStateMap _states;
 
 		// Persistent state
 		ComponentState* _currentState;

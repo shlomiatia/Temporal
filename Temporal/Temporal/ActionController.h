@@ -136,7 +136,7 @@ namespace Temporal
 		LedgeDetector _ledgeDetector;
 		HandleMessageHelper _handleMessageHelper;
 
-		StateCollection getStates() const;
+		HashStateMap getStates() const;
 	};
 
 	/**********************************************************************************************

@@ -82,7 +82,7 @@ namespace Temporal
 		//void deserialize(const Serialization& serialization);
 		void debugDraw() const;
 
-		StateCollection getStates() const;
+		HashStateMap getStates() const;
 	};
 }
 #endif

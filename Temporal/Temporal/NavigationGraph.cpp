@@ -350,7 +350,7 @@ namespace Temporal
 	{
 		GameStateComponent::init(gameState);
 		ShapeCollection platforms;
-		const EntityCollection& entities = getGameState().getEntitiesManager().getEntities();
+		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
 		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = (*(*i).second);

@@ -80,8 +80,8 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
-	typedef std::unordered_map<Hash, Entity*> EntityCollection;
-	typedef EntityCollection::const_iterator EntityIterator;
+	typedef std::unordered_map<Hash, Entity*> HashEntityMap;
+	typedef HashEntityMap::const_iterator EntityIterator;
 
 	class EntitiesManager : public GameStateComponent
 	{
@@ -93,11 +93,11 @@ namespace Temporal
 
 		void sendMessageToAllEntities(Message& message, const HashCollection* filter = 0) const;
 		void* sendMessageToEntity(Hash id, Message& message) const;
-		EntityCollection& getEntities() { return _entities; }
+		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
 		void add(Entity* entity);
 	private:
-		EntityCollection _entities;
+		HashEntityMap _entities;
 		
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);

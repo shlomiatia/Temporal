@@ -46,8 +46,8 @@ namespace Temporal
 		PerformanceTimer& operator=(const PerformanceTimer&);
 	};
 
-	typedef std::unordered_map<Hash, PerformanceTimer*> PerformanceTimerCollection;
-	typedef PerformanceTimerCollection::const_iterator PerformanceTimerIterator;
+	typedef std::unordered_map<Hash, PerformanceTimer*> HashPerformanceTimerMap;
+	typedef HashPerformanceTimerMap::const_iterator PerformanceTimerIterator;
 
 	class PerformanceTimerManager
 	{
@@ -62,7 +62,7 @@ namespace Temporal
 
 	private:
 		// TODO:
-		PerformanceTimerCollection _timers;
+		HashPerformanceTimerMap _timers;
 
 		PerformanceTimerManager() {};
 		PerformanceTimerManager(const PerformanceTimerManager&);
