@@ -35,6 +35,8 @@ namespace Temporal
 		const Color& getForegroundColor() const { return _foregroundColor; }
 		void setBorderColor(const Color& borderColor) { _borderColor = borderColor; }
 		const Color& getBorderColor() const { return _borderColor; }
+		void setHoverColor(const Color& color) { _hoverColor = color; }
+		const Color& getHoverColor() const { return _hoverColor; }
 		void setWidth(float width) { _box.setWidth(width);	}
 		void Control::setHeight(float height) { _box.setHeight(height);	}
 		float Control::getWidth() const	{ return _box.getWidth(); }

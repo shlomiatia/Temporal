@@ -37,7 +37,10 @@ namespace Temporal
 
 	void GameState::update(float framePeriod)
 	{
-		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
+		HashList* updateFilter = 0;
+		if (_updateFilter.size() != 0)
+			updateFilter = &_updateFilter;
+		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod), updateFilter);	
 	}
 
 	void GameState::draw() const
@@ -110,8 +113,6 @@ namespace Temporal
 		{
 			unload();
 		}
-		if(_listener)
-			_listener->onUpdate(framePeriod);
 		getCurrentState().update(framePeriod);
 	}
 
