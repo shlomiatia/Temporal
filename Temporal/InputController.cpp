@@ -12,8 +12,6 @@ namespace Temporal
 
 	void InputController::handleMessage(Message& message)
 	{
-		static bool b = false;
-		static float f = 1.0f;
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			Keyboard::get().add(this);

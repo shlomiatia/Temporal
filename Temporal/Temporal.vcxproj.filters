@@ -212,6 +212,9 @@
     <ClInclude Include="SerializationAccess.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="ToolComponent.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -400,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="SerializationAccess.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolComponent.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

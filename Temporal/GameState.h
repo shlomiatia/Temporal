@@ -27,8 +27,12 @@ namespace Temporal
 		void init();
 		void update(float framePeriod);
 		void draw() const;
+
+		void setUpdateFilter(HashList updateFilter) { _updateFilter = updateFilter; }
+		const HashList& getUpdateFilter() const { return _updateFilter; }
 		
 	private:
+		HashList _updateFilter;
 		Grid* _grid;
 		EntitiesManager* _entitiesManager;
 		NavigationGraph* _navigationGraph;
@@ -58,7 +62,6 @@ namespace Temporal
 	{
 	public:
 		GameStateListener() {}
-		virtual void onUpdate(float framePeriod) {};
 		virtual void onLoaded(Hash id, GameState& gameState) {};
 	private:
 		GameStateListener(const GameStateListener&);
@@ -68,7 +71,6 @@ namespace Temporal
 	class BasicGameStateListener : public GameStateListener
 	{
 	public:
-		void onUpdate(float framePeriod) {}
 		void onLoaded(Hash id, GameState& gameState);
 	private:
 	};

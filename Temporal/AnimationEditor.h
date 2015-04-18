@@ -6,6 +6,7 @@
 #include "Keyboard.h"
 #include "Animation.h"
 #include "Delegate.h"
+#include "ToolComponent.h"
 #include <memory>
 #include <vector>
 
@@ -27,7 +28,7 @@ namespace Temporal
 		};
 	}
 
-	class AnimationEditor : public Component
+	class AnimationEditor : public ToolComponent
 	{
 	public:
 		AnimationEditor() : _offsetTranslation(Vector::Zero), _copyAnimation(Hash::INVALID), _translation(false), _rotation(false), _move(false), _paused(false), _index(0), _copyIndex(0), GRID_FRAMES(0), _offsetAngle(0.0f) {}
@@ -96,10 +97,7 @@ namespace Temporal
 		void skeletonMouseMove(const MouseParams& params);
 		void snsLeftClick(const MouseParams& params);
 
-		Control* addControl(Hash id, const AABB& shape);
-		Control* addLabel(const AABB& shape, const char* text);
-		Control* addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey = Key::NONE);
-		Control* addTextBox(Hash id, const AABB& shape, const char* text, IAction1<const char*>* textChangedEvent);
+		
 	};
 
 	class AEGameStateListener : public GameStateListener
