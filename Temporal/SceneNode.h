@@ -19,8 +19,8 @@ namespace Temporal
 	class SceneNode
 	{
 	public:
-		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false, bool transformOnly = false) :
-			_id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero), _flip(false), _rotation(0.0f), _center(0.0f), _radius(0.0f),
+		explicit SceneNode(Hash id = Hash::INVALID, Hash spriteGroupId = Hash::INVALID, bool drawBehindParent = false, bool transformOnly = false, float center = 0.0f, float radius = 0.0f) :
+			_id(id), _drawBehindParent(drawBehindParent), _transformOnly(transformOnly), _translation(Vector::Zero), _flip(false), _rotation(0.0f), _center(center), _radius(radius),
 			_scale(Vector(1.0f, 1.0f)), _spriteGroupId(spriteGroupId), _spriteInterpolation(0.0f), _parent(0) {}
 		~SceneNode();
 
