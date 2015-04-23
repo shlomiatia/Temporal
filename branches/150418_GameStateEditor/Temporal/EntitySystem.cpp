@@ -131,11 +131,6 @@ namespace Temporal
 			abort();
 		_entities[entity->getId()] = entity;
 		entity->init(this);
-	}
-
-	void EntitiesManager::add2(Entity* entity)
-	{
-		add(entity);
 		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_POST_INIT));
