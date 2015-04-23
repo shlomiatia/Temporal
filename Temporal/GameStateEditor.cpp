@@ -7,7 +7,6 @@
 #include "Layer.h"
 #include "Camera.h"
 #include "Graphics.h"
-#include "Control.h"
 #include "MessageUtils.h"
 #include "Utils.h"
 #include "Game.h"

@@ -102,11 +102,6 @@ namespace Temporal
 			}
 			_echoReady = false;
 		}
-		else if(message.getID() == MessageID::DRAW) 
-		{
-			if(_echoReady)
-				_echo->handleMessage(message, &getFilter());
-		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
 			init();
