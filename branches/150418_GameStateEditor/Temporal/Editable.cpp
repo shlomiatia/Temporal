@@ -134,15 +134,9 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::MOUSE_UP)
 		{
-			MouseParams& params = getMouseParams(message.getParam());
-			const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-			if (intersects(shape, params.getPosition()))
-			{ 
-				_translation = false;
-				_rotation = false;
-				_scale = false;
-				params.setHandled(true);
-			}
+			_translation = false;
+			_rotation = false;
+			_scale = false;
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -151,10 +145,6 @@ namespace Temporal
 			_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
 			_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
 			_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
-		}
-		else if(message.getID() == MessageID::ENTITY_INIT)
-		{
-			getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::STATIC, this);
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
