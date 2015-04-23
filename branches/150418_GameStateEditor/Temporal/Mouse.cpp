@@ -32,7 +32,7 @@ namespace Temporal
 		
 	}
 
-	void sendMessage(MessageID::Enum messageId, MouseParams& params)
+	void Mouse::sendMessage(MessageID::Enum messageId, MouseParams& params)
 	{
 		Message message(messageId, &params);
 		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
@@ -54,10 +54,13 @@ namespace Temporal
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
 				(**j).raiseMessage(offsetMessage);
-				if(params.isHandled())
+				if (offsetParams.isHandled())
 					return;
 			}
 		}
+
+		if (_focus)
+			_focus->raiseMessage(offsetMessage);
 	}
 
 	void Mouse::dispatchEvent(void* obj)
