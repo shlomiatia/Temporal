@@ -16,6 +16,8 @@ namespace Temporal
 		Hash getType() const;
 		void handleMessage(Message& message);
 		Component* clone() const { return new Editable(); }
+
+		static const Hash TYPE;
 	private:
 		bool _translation;
 		bool _rotation;
@@ -28,8 +30,8 @@ namespace Temporal
 		OBB _positiveYScale;
 		OBB _negativeYScale;
 
-		void mouseMove(const MouseParams& params);
-		void mouseDown(const MouseParams& params);
+		void mouseMove(MouseParams& params);
+		void mouseDown(MouseParams& params);
 		void reset();
 	};
 }

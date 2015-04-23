@@ -11,6 +11,7 @@
 #include "MessageUtils.h"
 #include "Utils.h"
 #include "Game.h"
+#include "Mouse.h"
 
 namespace Temporal
 {
@@ -19,7 +20,7 @@ namespace Temporal
 	void GameStateEditor::handleMessage(Message& message)
 	{
 		bool editorMode = getEntity().getManager().getGameState().getUpdateFilter().size() != 0;
-		if(message.getID() == MessageID::LEVEL_INIT)
+		if (message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			Hash rendererComponentID = Hash("static-body");
@@ -29,19 +30,12 @@ namespace Temporal
 				if(entity.get(rendererComponentID))
 					entity.add(new Editable());
 			}
-
-			Vector size = Graphics::get().getLogicalView();
-			Control* control = addControl(Hash("skeletonPanel"), AABB(size / 2.0f, size));
-			control->setBackgroundColor(Color::Transparent);
-			control->setHoverColor(Color::Transparent);
-
-			control->setLeftMouseClickEvent(createAction1(GameStateEditor, const MouseParams&, leftClick));
-			
 		}
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			setEditorMode(true);
 			Keyboard::get().add(this);
+			Mouse::get().setFocus(this);
 
 			XmlDeserializer deserializer(new FileStream("resources/game-states/templates.xml", false, false));
 			deserializer.serialize("entity", _templates);
@@ -79,13 +73,23 @@ namespace Temporal
 				setEditorMode(!editorMode);
 			}
 		}
+		else if (message.getID() == MessageID::MOUSE_UP)
+		{
+			MouseParams& params = getMouseParams(message.getParam());
+			if (params.getButton() == MouseButton::LEFT)
+				leftClick(params);
+		}
 	}
 
 	void GameStateEditor::setEditorMode(bool editorMode)
 	{
 		HashList ids;
-		if (editorMode)
+		if (editorMode) 
+		{
 			ids.push_back(GameStateEditor::TYPE);
+			ids.push_back(Editable::TYPE);
+		}
+			
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(!editorMode);
 
