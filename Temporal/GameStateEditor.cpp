@@ -19,7 +19,7 @@ namespace Temporal
 	void GameStateEditor::handleMessage(Message& message)
 	{
 		bool editorMode = getEntity().getManager().getGameState().getUpdateFilter().size() != 0;
-		if(message.getID() == MessageID::ENTITY_PRE_INIT)
+		if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			Hash rendererComponentID = Hash("static-body");
@@ -106,7 +106,7 @@ namespace Temporal
 			idIndex++;
 		} while (getEntity().getManager().getEntity(id));
 		newEntity->setId(id);
-		getEntity().getManager().add2(newEntity);
+		getEntity().getManager().add(newEntity);
 	}
 
 	void GameStateEditor::moveCamera(const Vector& direction)

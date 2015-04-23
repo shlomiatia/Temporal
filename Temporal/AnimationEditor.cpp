@@ -558,17 +558,14 @@ namespace Temporal
 
 	void AnimationEditor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_PRE_INIT)
+		if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			init();
+			setAnimation(_animationSet->getAnimations().begin()->first);
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			Keyboard::get().add(this);
-		}
-		else if(message.getID() == MessageID::ENTITY_POST_INIT)
-		{
-			setAnimation(_animationSet->getAnimations().begin()->first);
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{

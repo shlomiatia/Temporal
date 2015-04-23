@@ -96,7 +96,6 @@ namespace Temporal
 		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
 		void add(Entity* entity);
-		void add2(Entity* entity);
 	private:
 		HashEntityMap _entities;
 		
