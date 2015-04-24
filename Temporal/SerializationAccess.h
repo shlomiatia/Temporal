@@ -56,6 +56,7 @@ namespace Temporal
 		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 		static void getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize);
+		static void getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize);
 
 		template<class T, class S>
 		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize)

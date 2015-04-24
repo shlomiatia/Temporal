@@ -40,6 +40,8 @@ namespace Temporal
 		delete _stream;
 	}
 
+	const Hash GameSaverLoader::TYPE("game-saver-loader");
+
 	void GameSaverLoader::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)

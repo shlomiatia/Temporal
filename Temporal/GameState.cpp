@@ -57,7 +57,7 @@ namespace Temporal
 	{
 		if(id == Hash("resources/game-states/entities.xml"))
 		{
-			Entity* entity = new Entity(Hash("ENT_SAVER_LOADER"));
+			Entity* entity = new Entity(Hash(GameSaverLoader::TYPE));
 			entity->add(new GameSaverLoader());
 			gameState.getEntitiesManager().add(entity);
 		}
