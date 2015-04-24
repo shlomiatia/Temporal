@@ -51,7 +51,6 @@
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Temp1.h" />
-    <ClInclude Include="Temp2.h" />
     <ClInclude Include="AnimationEditor.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Control.h" />
@@ -64,6 +63,7 @@
     <ClInclude Include="TemporalEcho.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="ToolComponent.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Animator.h" />
@@ -124,6 +124,7 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="ToolComponent.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="EntitySystem.cpp" />

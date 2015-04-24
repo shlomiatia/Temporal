@@ -31,7 +31,6 @@ namespace Temporal
 	}
 
 	class Message;
-	class Component;
 	typedef std::unordered_map<int, Key::Enum> IntKeyMap;
 	typedef IntKeyMap::const_iterator IntKeyMapIterator;
 	typedef std::unordered_map<Key::Enum, bool> KeyBoolMap;
@@ -50,17 +49,10 @@ namespace Temporal
 		void dispatchEvent(void* obj);
 
 		bool getKey(Key::Enum key) const { return _keys.at(key); }
-
-		void add(Component* component) { _components.push_back(component); }
-		void clear() { _components.clear(); }
-		void setFocus(Component* component) { _focus = component; }
-		void clearFocus() { _focus = 0; }
 	private:
 		// TODO:
 		IntKeyMap _keysMap;
 		KeyBoolMap _keys;
-		std::vector<Component*> _components;
-		Component* _focus;
 
 		void raiseEvent(Message& message) const;
 

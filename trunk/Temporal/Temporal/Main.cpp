@@ -4,15 +4,15 @@
 
 #include "AnimationEditor.h"
 #include "GameStateEditor.h"
-//#include "Temp1.h"
+#include "Temp1.h"
 
 using namespace Temporal;
 
 int main(int argc, char* argv[])
 {
 	
-	GameStateManager::get().setListener(new BasicGameStateListener());
-	//GameStateManager::get().setListener(new GSEGameStateListener());
+	//GameStateManager::get().setListener(new BasicGameStateListener());
+	GameStateManager::get().setListener(new GSEGameStateListener());
 	Game::get().run("resources/game-states/entities.xml");
 
 	//GameStateManager::get().setListener(new AEGameStateListener());

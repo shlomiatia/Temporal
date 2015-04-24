@@ -8,6 +8,8 @@
 #include "Settings.h"
 #include "Font.h"
 
+#include "Log.h"
+
 namespace Temporal
 {
 	const float Game::FRAME_PERIOD(1.0f / /*FPS*/ 60.0f);
@@ -18,6 +20,7 @@ namespace Temporal
 		loader.execute();
 		Settings* settings = loader.getResult();
 		
+		Log::init();
 		Graphics::get().init(*settings);
 		Input::get().init();
 		FontManager::get().init();
@@ -35,6 +38,7 @@ namespace Temporal
 		FontManager::get().dispose();
 		Input::get().dispose();
 		Graphics::get().dispose();
+		Log::dispose();
 	}
 
 	void Game::run(const char* gameState)

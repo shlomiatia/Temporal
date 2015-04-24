@@ -22,7 +22,7 @@ namespace Temporal
 		}
 	}
 
-	Hash EntitySaverLoader::TYPE = Hash("saver-loader");
+	Hash EntitySaverLoader::TYPE = Hash("entity-saver-loader");
 
 	void GameLoader::executeImpl()
 	{
@@ -40,11 +40,21 @@ namespace Temporal
 		delete _stream;
 	}
 
+	const Hash GameSaverLoader::TYPE("game-saver-loader");
+
 	void GameSaverLoader::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			Keyboard::get().add(this);
+			getEntity().getManager().addInputComponent(this);
+			HashEntityMap& entities = getEntity().getManager().getEntities();
+			Hash saverLoaderFilter = Hash("action-controller");
+			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
+			{
+				Entity& entity = *i->second;
+				if (entity.get(saverLoaderFilter))
+					entity.add(new EntitySaverLoader());
+			}
 		}
 		else if(message.getID() == MessageID::KEY_DOWN)
 		{

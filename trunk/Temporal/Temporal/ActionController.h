@@ -112,14 +112,14 @@ namespace Temporal
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController();
+		ActionController(float maxWalkForcePerSecond = 125.0f);
 
 		Hash getType() const { return TYPE; }
 
 		HandleMessageHelper& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
-		Component* clone() const { return new ActionController(); }
+		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND); }
 
 		float MAX_WALK_FORCE_PER_SECOND;
 		static float WALK_ACC_PER_SECOND;

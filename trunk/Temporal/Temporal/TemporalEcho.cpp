@@ -57,6 +57,7 @@ namespace Temporal
 	{
 		if(_echoReady)
 		{
+			getEntity().handleMessage(Message(MessageID::PRE_LOAD));
 			EchoIterator first = _echoesData.begin();
 			Stream* deserialization = *first;
 			BinaryDeserializer deserializer(deserialization);
@@ -67,6 +68,7 @@ namespace Temporal
 				i = _echoesData.erase(i);
 			}
 			_echoReady = false;
+			getEntity().handleMessage(Message(MessageID::POST_LOAD));
 		}
 	}
 
@@ -99,11 +101,6 @@ namespace Temporal
 				i = _echoesData.erase(i);
 			}
 			_echoReady = false;
-		}
-		else if(message.getID() == MessageID::DRAW) 
-		{
-			if(_echoReady)
-				_echo->handleMessage(message, &getFilter());
 		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{

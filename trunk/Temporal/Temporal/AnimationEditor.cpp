@@ -556,55 +556,12 @@ namespace Temporal
 		setFrame();
 	}
 
-	Control* AnimationEditor::addControl(Hash id, const AABB& shape)
-	{		
-		Transform* transform = new Transform(shape.getCenter());
-		Control* control = new Control();
-		control->setWidth(shape.getWidth());
-		control->setHeight(shape.getHeight());
-		Entity* entity = new Entity(id);
-		entity->add(transform);
-		entity->add(control);
-		getEntity().getManager().add(entity);
-		return control;
-	}
-
-	Control* AnimationEditor::addLabel(const AABB& shape, const char* text)
-	{
-		Control* control = addControl(Hash(text), shape);
-		control->setText(text);
-		return control;
-	}
-
-	Control* AnimationEditor::addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey)
-	{
-		Control* control = addControl(id, shape);
-		control->setText(text);
-		control->setCommandEvent(commandEvent);
-		control->setShortcutKey(shortcutKey);
-		return control;
-	}
-
-	Control* AnimationEditor::addTextBox(Hash id, const AABB& shape, const char* text, IAction1<const char*>* textChangedEvent)
-	{
-		Control* control = addControl(id, shape);
-		control->setText(text);
-		control->setTextChangedEvent(textChangedEvent);
-		return control;
-	}
-
 	void AnimationEditor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_PRE_INIT)
+		if(message.getID() == MessageID::ENTITY_INIT)
 		{
+			getEntity().getManager().addInputComponent(this);
 			init();
-		}
-		else if(message.getID() == MessageID::ENTITY_INIT)
-		{
-			Keyboard::get().add(this);
-		}
-		else if(message.getID() == MessageID::ENTITY_POST_INIT)
-		{
 			setAnimation(_animationSet->getAnimations().begin()->first);
 		}
 		else if(message.getID() == MessageID::KEY_UP)

@@ -43,14 +43,16 @@ namespace Temporal
 	class ParticleEmitter : public Component
 	{
 	public:
-		ParticleEmitter() : 
-			_lifetime(0.0f), _birthThreshold(0.0f), _birthRadius(0.0f), _velocity(0.0f), _directionCenter(0.0f), _directionSize(0.0f), _birthIndex(0), _particles(0), _emit(false), _attachment(Hash::INVALID) {}
+		ParticleEmitter(const char* textureFile = "", const char* spritesheetFile = "", float lifetime = 0.0f, float birthTreshold = 0.0f, float birthRadius = 0.0f, float velocity = 0.0f, 
+			float directionCenter = 0.0f, float directionSize = 0.0f, Hash attachment = Hash::INVALID) :
+			_textureFile(textureFile), _spritesheetFile(spritesheetFile), _lifetime(lifetime), _birthThreshold(birthTreshold), _birthRadius(birthRadius), _velocity(velocity), _directionCenter(directionCenter), 
+			_directionSize(directionSize), _attachment(attachment), _birthIndex(0), _particles(0), _emit(false) {}
 		~ParticleEmitter();
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new ParticleEmitter(); }
+		Component* clone() const { return new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _lifetime, _birthThreshold, _birthRadius, _velocity, _directionCenter, _directionSize, _attachment); }
 
 		static const Hash TYPE;
 	private:

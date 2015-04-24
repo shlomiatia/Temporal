@@ -51,9 +51,6 @@ namespace Temporal
 	class GSLGameStateListener : public GameStateListener
 	{
 	public:
-		void onUpdate(float framePeriod)
-		{
-		}
 		virtual void onLoaded(Hash id, GameState& gameState)
 		{
 			

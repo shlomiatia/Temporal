@@ -32,30 +32,46 @@ namespace Temporal
 		
 	}
 
-	void sendMessage(MessageID::Enum messageId, MouseParams& params)
+	Vector Mouse::getOffsetPosition() const
 	{
-		Message message(messageId, &params);
 		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
-		ComponentList& components = layersManager.getGUILayer().get();
-		for(ComponentIterator j = components.begin(); j != components.end(); ++j)
-		{
-			(**j).raiseMessage(message);
-			if(params.isHandled())
-				return;
-		}
-		
-		Vector offsetPosition = layersManager.getCamera().getBottomLeft() + params.getPosition();
+		Vector offsetPosition = layersManager.getCamera().getBottomLeft() + getPosition();
+		return offsetPosition;
+	}
+
+	void Mouse::sendMessage(MessageID::Enum messageId, MouseParams& params)
+	{
+		Vector offsetPosition = getOffsetPosition();
 		MouseParams offsetParams(params.getButton(), offsetPosition);
 		Message offsetMessage(messageId, &offsetParams);
-		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
-		for(int i = LayerType::SIZE - 1; i >= 0 ; --i)
+		Component* focusComponent = GameStateManager::get().getCurrentState().getEntitiesManager().getFocusInputComponent();
+		if (focusComponent)
+		{ 
+			focusComponent->raiseMessage(offsetMessage);
+		}
+		else
 		{
-			ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
-			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
+			LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
+			Message message(messageId, &params);
+
+			ComponentList& components = layersManager.getGUILayer().get();
+			for (ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
-				(**j).raiseMessage(offsetMessage);
-				if(params.isHandled())
+				(**j).raiseMessage(message);
+				if (params.isHandled())
 					return;
+			}
+
+			LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
+			for (int i = LayerType::SIZE - 1; i >= 0; --i)
+			{
+				ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
+				for (ComponentIterator j = components.begin(); j != components.end(); ++j)
+				{
+					(**j).raiseMessage(offsetMessage);
+					if (offsetParams.isHandled())
+						return;
+				}
 			}
 		}
 	}

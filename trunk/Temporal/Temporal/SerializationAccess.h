@@ -47,7 +47,6 @@ namespace Temporal
 	class InputController;
 	class Navigator;
 	class TemporalEcho;
-	class EntitySaverLoader;
 	class LightGem;
 
 	class SerializationAccess
@@ -57,6 +56,7 @@ namespace Temporal
 		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 		static void getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize);
+		static void getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize);
 
 		template<class T, class S>
 		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize)
@@ -391,9 +391,6 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}
-
-		template<class T>
-		static void serialize(const char* key, EntitySaverLoader& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, LightGem& component, T& serializer) {}
