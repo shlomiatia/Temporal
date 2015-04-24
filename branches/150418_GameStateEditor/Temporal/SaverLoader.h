@@ -44,9 +44,11 @@ namespace Temporal
 	{
 	public:
 		GameSaverLoader() : _loader("save.dat"), _saver("save.dat") {}
-		Hash getType() const { return Hash::INVALID;; }
+		Hash getType() const { return TYPE; }
 		virtual Component* clone() const { return 0; }
 		void handleMessage(Message& message);
+
+		static const Hash TYPE;
 	private:
 
 		GameSaver _saver;
