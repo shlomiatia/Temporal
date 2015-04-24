@@ -351,7 +351,7 @@ namespace Temporal
 		GameStateComponent::init(gameState);
 		ShapeList platforms;
 		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
-		for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
+		for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = (*(*i).second);
 			const Component* component = entity.get(StaticBody::TYPE);

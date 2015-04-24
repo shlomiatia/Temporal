@@ -37,7 +37,10 @@ namespace Temporal
 
 	void GameState::update(float framePeriod)
 	{
-		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod));	
+		HashList* updateFilter = 0;
+		if (_updateFilter.size() != 0)
+			updateFilter = &_updateFilter;
+		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod), updateFilter);	
 	}
 
 	void GameState::draw() const
@@ -54,7 +57,7 @@ namespace Temporal
 	{
 		if(id == Hash("resources/game-states/entities.xml"))
 		{
-			Entity* entity = new Entity(Hash("ENT_SAVER_LOADER"));
+			Entity* entity = new Entity(Hash(GameSaverLoader::TYPE));
 			entity->add(new GameSaverLoader());
 			gameState.getEntitiesManager().add(entity);
 		}
@@ -110,8 +113,6 @@ namespace Temporal
 		{
 			unload();
 		}
-		if(_listener)
-			_listener->onUpdate(framePeriod);
 		getCurrentState().update(framePeriod);
 	}
 

@@ -15,12 +15,14 @@
 #include "SceneNode.h"
 #include "InputController.h"
 #include "Shapes.h"
-#include "SaverLoader.h"
 #include "Transform.h"
 #include "Animator.h"
 #include "ActionController.h"
 #include "DynamicBody.h"
 #include "Patrol.h"
+#include "Editable.h"
+#include "SaverLoader.h"
+#include "GameStateEditor.h"
 
 namespace Temporal
 {
@@ -64,16 +66,20 @@ namespace Temporal
 			serialize(key, (TemporalPeriod*&)component, serializer);
 		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
-		else if(strcmp(key, EntitySaverLoader::TYPE.getString()) == 0)
-			serialize(key, (EntitySaverLoader*&)component, serializer);
 		else
 			abort();
 	}
 
 	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
 	{
-		key = value->getType().getString();
-		shouldSerialize = key != 0;
+		Hash type = value->getType();
+		shouldSerialize = type != Editable::TYPE && type != EntitySaverLoader::TYPE;
+		key = type.getString();
+	}
+
+	void SerializationAccess::getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize)
+	{
+		shouldSerialize = value->getId() != GameStateEditor::TYPE && value->getId() != GameSaverLoader::TYPE;
 	}
 
 	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)

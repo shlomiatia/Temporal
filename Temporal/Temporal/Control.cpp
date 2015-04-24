@@ -93,7 +93,7 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			Keyboard::get().add(this);
+			getEntity().getManager().addInputComponent(this);
 			getEntity().getManager().getGameState().getLayersManager().addGUI(this);
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_box.setOBB(_obb);
@@ -180,7 +180,7 @@ namespace Temporal
 			{
 				if(_isTextBox)
 				{
-					Keyboard::get().setFocus(this);
+					getEntity().getManager().setFocusInputComponent(this);
 					_isTextBoxMode = true;
 				}
 				if(_commandEvent)
@@ -223,7 +223,7 @@ namespace Temporal
 		if(key == Key::ENTER)
 		{
 			_isTextBoxMode = false;
-			Keyboard::get().clearFocus();
+			getEntity().getManager().clearFocusInputComponent();
 			if(_textChangedEvent)
 				(*_textChangedEvent)(_textbox.c_str());
 		}

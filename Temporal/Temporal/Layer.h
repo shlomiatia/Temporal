@@ -57,6 +57,7 @@ namespace Temporal
 
 		void draw();
 		void add(LayerType::Enum layer, Component* component) { _layers.at(layer).push_back(component); }
+		void remove(LayerType::Enum layer, Component* component);
 		LayerComponentsMap& get() { return _layers; }
 
 	private:
@@ -114,6 +115,7 @@ namespace Temporal
 
 		void init(GameState* gameState);
 		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
+		void removeSprite(LayerType::Enum layer, Component* component) { _spriteLayer->remove(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
 		void addLight(Component* component);
 		Camera& getCamera() { return *_camera; }

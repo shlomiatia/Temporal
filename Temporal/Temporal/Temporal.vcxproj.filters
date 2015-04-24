@@ -152,9 +152,6 @@
     <ClInclude Include="Temp1.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Temp2.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -211,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="SerializationAccess.h">
       <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolComponent.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +401,9 @@
     <ClCompile Include="SerializationAccess.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="ToolComponent.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -415,9 +418,6 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{d43079ae-f5fd-46da-9429-00cde396dd24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{5751b9a1-ba8e-44ca-8a00-453fe852e022}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{014c8123-e9c4-4975-8753-42e8924c5704}</UniqueIdentifier>
     </Filter>
@@ -426,6 +426,9 @@
     </Filter>
     <Filter Include="Scripts">
       <UniqueIdentifier>{7cc3a81d-f970-433d-80f6-677135c3355a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{5751b9a1-ba8e-44ca-8a00-453fe852e022}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

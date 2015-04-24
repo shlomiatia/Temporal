@@ -108,10 +108,10 @@ namespace Temporal
 			XmlDeserializer deserializer(new FileStream(file, false, false));
 			GameState* state = new GameState();
 			deserializer.serialize("game-state", *state);
-			Hash id = Hash(file);
-			if(GameStateManager::get().getListener())
-				GameStateManager::get().getListener()->onLoaded(id, *state);
 			state->init();
+			Hash id = Hash(file);
+			if (GameStateManager::get().getListener())
+				GameStateManager::get().getListener()->onLoaded(id, *state);
 			_result[id] = state;
 		}
 	}

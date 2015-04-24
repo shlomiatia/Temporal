@@ -26,7 +26,7 @@ namespace Temporal
 
 	SceneNode* SceneNode::clone() const
 	{
-		SceneNode* clone = new SceneNode(_id, _spriteGroupId, _drawBehindParent, _transformOnly);
+		SceneNode* clone = new SceneNode(_id, _spriteGroupId, _drawBehindParent, _transformOnly, _center, _radius);
 
 		clone->_translation = _translation;
 		clone->_rotation = _rotation;

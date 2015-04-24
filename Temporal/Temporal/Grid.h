@@ -42,6 +42,7 @@ namespace Temporal
 
 		void add(const Fixture* body);
 		void update(Fixture* body);
+		void remove(Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
 		FixtureList iterateTiles(const OBB& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;

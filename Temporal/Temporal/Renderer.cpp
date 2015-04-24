@@ -35,6 +35,10 @@ namespace Temporal
 				_root = new SceneNode();
 			_root->init();
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getLayersManager().removeSprite(_layer, this);
+		}
 		else if(message.getID() == MessageID::SET_COLOR)
 		{
 			const Color& color = *static_cast<Color*>(message.getParam());
