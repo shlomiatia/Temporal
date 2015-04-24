@@ -139,7 +139,33 @@ namespace Temporal
 				add(body, i, j);
 			}
 		}
+	}
 
+	void Grid::remove(Fixture* body)
+	{
+		const OBB& previous = body->getGlobalShape();
+		int leftRemoveIndex = getAxisIndex(previous.getLeft());
+		int rightRemoveIndex = getAxisIndex(previous.getRight());
+		int topRemoveIndex = getAxisIndex(previous.getTop());
+		int bottomRemoveIndex = getAxisIndex(previous.getBottom());
+
+		for (int i = leftRemoveIndex; i <= rightRemoveIndex; ++i)
+		{
+			for (int j = bottomRemoveIndex; j <= topRemoveIndex; ++j)
+			{
+				FixtureList* bodies = getTile(i, j);
+				if (!bodies)
+					continue;
+				for (FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
+				{
+					if ((**iterator).getEntityId() == body->getEntityId())
+					{
+						bodies->erase(iterator);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	FixtureList* Grid::getTile(int i, int j) const

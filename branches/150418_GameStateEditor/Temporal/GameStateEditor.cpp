@@ -15,6 +15,7 @@
 namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
+	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
 
 	void GameStateEditor::handleMessage(Message& message)
 	{
@@ -23,7 +24,7 @@ namespace Temporal
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			Hash rendererComponentID = Hash("static-body");
-			for(EntityIterator i = entities.begin(); i != entities.end(); ++i)
+			for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;
 				if(entity.get(rendererComponentID))
@@ -34,10 +35,10 @@ namespace Temporal
 		{
 			setEditorMode(true);
 			Keyboard::get().add(this);
-			Mouse::get().setFocus(this);
 
 			XmlDeserializer deserializer(new FileStream("resources/game-states/templates.xml", false, false));
 			deserializer.serialize("entity", _templates);
+			_templateIterator = _templates.begin();
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -57,20 +58,67 @@ namespace Temporal
 			{
 				moveCamera(Vector(1.0f, 0.0f));
 			}
+			if (Mouse::get().hasFocus()) 
+			{
+				Vector position = Mouse::get().getPosition();
+				getEntity().getManager().sendMessageToEntity(CUSROR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
+			}
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if(key == Key::F2)
+			if (key == Key::Q)
 			{
-				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
-				serializer.serialize("game-state", getEntity().getManager().getGameState());
-				serializer.save();
+				if (Mouse::get().hasFocus())
+				{
+					if (_templateIterator == _templates.begin())
+					{
+						_templateIterator = _templates.end();
+					}
+					--_templateIterator;
+					getEntity().getManager().remove(CUSROR_ENTITY_ID);
+					Vector position = Mouse::get().getPosition();
+					cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+				}
+			}
+			else if (key == Key::E)
+			{
+				if (Mouse::get().hasFocus())
+				{
+					++_templateIterator;
+					if (_templateIterator == _templates.end())
+						_templateIterator = _templates.begin();
+					getEntity().getManager().remove(CUSROR_ENTITY_ID);
+					Vector position = Mouse::get().getPosition();
+					cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+				}
 			}
 			else if (key == Key::F1)
 			{
 				setEditorMode(!editorMode);
 			}
+			else if (key == Key::F2)
+			{
+				if (Mouse::get().hasFocus())
+				{ 
+					getEntity().getManager().remove(CUSROR_ENTITY_ID);
+					Mouse::get().clearFocus();
+				}
+				else
+				{
+					Vector position = Mouse::get().getPosition();
+					cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+					Mouse::get().setFocus(this);
+				}
+					
+			}
+			else if (key == Key::F5)
+			{
+				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
+				serializer.serialize("game-state", getEntity().getManager().getGameState());
+				serializer.save();
+			}
+			
 		}
 		else if (message.getID() == MessageID::MOUSE_UP)
 		{
@@ -96,18 +144,24 @@ namespace Temporal
 
 	void GameStateEditor::leftClick(const MouseParams& params)
 	{
-		Entity* newEntity = _templates.at(Hash("TEM_PATROL"))->clone();
-		Vector position = params.getPosition();
-		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
 		int idIndex = 0;
-		const char * idStringFormat = "ENT_PATROL%d";
+		const char* key = (*_templateIterator).first.getString();
 		Hash id;
 		do
 		{
-			std::string idString = Utils::format(idStringFormat, idIndex);
+			std::string idString = Utils::format("%s%d", key, idIndex);
 			id = Hash(idString.c_str());
 			idIndex++;
 		} while (getEntity().getManager().getEntity(id));
+		Vector position = params.getPosition();
+		cloneEntityFromTemplate(id, position);
+	}
+
+	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position)
+	{
+		Entity* newEntity = (*_templateIterator).second->clone();
+		newEntity->add(new Editable());
+		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
 		newEntity->setId(id);
 		getEntity().getManager().add(newEntity);
 	}

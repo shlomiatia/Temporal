@@ -43,6 +43,10 @@ namespace Temporal
 			getEntity().getManager().getGameState().getGrid().add(_fixture);
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getGrid().remove(_fixture);
+		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
 			message.setParam(&_dynamicBodyBounds);

@@ -47,6 +47,7 @@ namespace Temporal
 		bool getButton(MouseButton::Enum button) const { return _buttons.at(button); }
 		const Vector& getPosition() const { return _position; }
 		void setFocus(Component* component) { _focus = component; }
+		bool hasFocus() const { return !!_focus;  }
 		void clearFocus() { _focus = 0; }
 
 	private:

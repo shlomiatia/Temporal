@@ -37,6 +37,10 @@ namespace Temporal
 			srand(Time::now() * 1000.0f);
 			init();
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::PARTICLES, this);
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
