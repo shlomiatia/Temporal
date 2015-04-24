@@ -90,7 +90,7 @@ namespace Temporal
 	{
 		sendMessageToAllEntities(Message(MessageID::LEVEL_DISPOSED));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_DISPOSED));
-		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
 		Keyboard::get().clear();
 	}
@@ -98,7 +98,7 @@ namespace Temporal
 	void EntitiesManager::init(GameState* gameState)
 	{
 		GameStateComponent::init(gameState);
-		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			i->second->init(this);
 		sendMessageToAllEntities(Message(MessageID::ENTITY_PRE_INIT));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
@@ -108,7 +108,7 @@ namespace Temporal
 
 	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter) const
 	{
-		for(EntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			(*(*i).second).handleMessage(message, filter);
 	}
 
@@ -119,7 +119,7 @@ namespace Temporal
 
 	Entity* EntitiesManager::getEntity(Hash id) const
 	{
-		EntityIterator i = _entities.find(id);
+		HashEntityIterator i = _entities.find(id);
 		if(i == _entities.end())
 			return 0;
 		return i->second;
@@ -134,6 +134,14 @@ namespace Temporal
 		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_POST_INIT));
-		entity->handleMessage(Message(MessageID::LEVEL_INIT));
+	}
+
+	void EntitiesManager::remove(Hash id)
+	{
+		HashEntityIterator i = _entities.find(id);
+		Entity* entity = i->second;
+		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
+		_entities.erase(i);
+		delete entity;
 	}
 }

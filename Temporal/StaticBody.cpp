@@ -25,13 +25,18 @@ namespace Temporal
 			_fixture->init(*this);
 			getEntity().getManager().getGameState().getGrid().add(_fixture);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getGrid().remove(_fixture);
+			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::STATIC, this);
+		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::STATIC, this);
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.5f, 0.25f, 0.125f));
+			Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{

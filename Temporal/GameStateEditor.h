@@ -22,6 +22,9 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 		HashEntityMap _templates;
+		HashEntityIterator _templateIterator;
+
+		void cloneEntityFromTemplate(Hash id, Vector& position);
 
 		void moveCamera(const Vector& direction);
 		void leftClick(const MouseParams& params);

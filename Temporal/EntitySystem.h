@@ -81,7 +81,7 @@ namespace Temporal
 	};
 
 	typedef std::unordered_map<Hash, Entity*> HashEntityMap;
-	typedef HashEntityMap::const_iterator EntityIterator;
+	typedef HashEntityMap::const_iterator HashEntityIterator;
 
 	class EntitiesManager : public GameStateComponent
 	{
@@ -96,6 +96,7 @@ namespace Temporal
 		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
 		void add(Entity* entity);
+		void remove(Hash id);
 	private:
 		HashEntityMap _entities;
 		

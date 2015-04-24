@@ -34,33 +34,39 @@ namespace Temporal
 
 	void Mouse::sendMessage(MessageID::Enum messageId, MouseParams& params)
 	{
-		Message message(messageId, &params);
 		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
-		ComponentList& components = layersManager.getGUILayer().get();
-		for(ComponentIterator j = components.begin(); j != components.end(); ++j)
-		{
-			(**j).raiseMessage(message);
-			if(params.isHandled())
-				return;
-		}
-		
 		Vector offsetPosition = layersManager.getCamera().getBottomLeft() + params.getPosition();
 		MouseParams offsetParams(params.getButton(), offsetPosition);
 		Message offsetMessage(messageId, &offsetParams);
-		LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
-		for(int i = LayerType::SIZE - 1; i >= 0 ; --i)
+		if (_focus)
+		{ 
+			_focus->raiseMessage(offsetMessage);
+		}
+		else
 		{
-			ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
-			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
+			Message message(messageId, &params);
+
+			ComponentList& components = layersManager.getGUILayer().get();
+			for (ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
-				(**j).raiseMessage(offsetMessage);
-				if (offsetParams.isHandled())
+				(**j).raiseMessage(message);
+				if (params.isHandled())
 					return;
 			}
-		}
 
-		if (_focus)
-			_focus->raiseMessage(offsetMessage);
+
+			LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
+			for (int i = LayerType::SIZE - 1; i >= 0; --i)
+			{
+				ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
+				for (ComponentIterator j = components.begin(); j != components.end(); ++j)
+				{
+					(**j).raiseMessage(offsetMessage);
+					if (offsetParams.isHandled())
+						return;
+				}
+			}
+		}
 	}
 
 	void Mouse::dispatchEvent(void* obj)
