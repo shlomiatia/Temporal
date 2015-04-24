@@ -86,7 +86,7 @@ namespace Temporal
 	class EntitiesManager : public GameStateComponent
 	{
 	public:
-		EntitiesManager() {};
+		EntitiesManager() : _focusInputComponent(0) {};
 		~EntitiesManager();
 
 		void init(GameState* gameState);
@@ -97,8 +97,16 @@ namespace Temporal
 		Entity* getEntity(Hash id) const;
 		void add(Entity* entity);
 		void remove(Hash id);
+
+		ComponentList& getInputComponents() { return _inputComponents; }
+		void addInputComponent(Component* component) { _inputComponents.push_back(component); }
+		void setFocusInputComponent(Component* component) { _focusInputComponent = component; }
+		void clearFocusInputComponent() { _focusInputComponent = 0; }
+		Component* getFocusInputComponent() const { return _focusInputComponent; }
 	private:
 		HashEntityMap _entities;
+		ComponentList _inputComponents;
+		Component* _focusInputComponent;
 		
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);

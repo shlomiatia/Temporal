@@ -2,10 +2,6 @@
 #include "Serialization.h"
 #include "SerializationAccess.h"
 
-#include "Keyboard.h"
-#include "Input.h"
-#include "Game.h"
-
 namespace Temporal
 {
 	void* Component::raiseMessage(Message& message) const
@@ -92,7 +88,6 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::ENTITY_DISPOSED));
 		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
-		Keyboard::get().clear();
 	}
 
 	void EntitiesManager::init(GameState* gameState)
