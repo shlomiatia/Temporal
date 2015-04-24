@@ -47,7 +47,6 @@ namespace Temporal
 	class InputController;
 	class Navigator;
 	class TemporalEcho;
-	class EntitySaverLoader;
 	class LightGem;
 
 	class SerializationAccess
@@ -391,9 +390,6 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}
-
-		template<class T>
-		static void serialize(const char* key, EntitySaverLoader& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, LightGem& component, T& serializer) {}

@@ -6,7 +6,7 @@
 
 namespace Temporal
 {
-	Keyboard::Keyboard() : _focus(0)
+	Keyboard::Keyboard()
 	{
 		_keysMap[SDLK_ESCAPE] = Key::ESC;
 		_keysMap[SDLK_F1] = Key::F1;
@@ -115,13 +115,15 @@ namespace Temporal
 
 	void Keyboard::raiseEvent(Message& message) const
 	{
-		if(_focus)
+		Component* focusComponent = GameStateManager::get().getCurrentState().getEntitiesManager().getFocusInputComponent();
+		if (focusComponent)
 		{
-			_focus->handleMessage(message);
+			focusComponent->handleMessage(message);
 		}
 		else
 		{
-			for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+			ComponentList& components = GameStateManager::get().getCurrentState().getEntitiesManager().getInputComponents();
+			for (ComponentIterator i = components.begin(); i != components.end(); ++i)
 				(**i).handleMessage(message);
 		}
 	}
