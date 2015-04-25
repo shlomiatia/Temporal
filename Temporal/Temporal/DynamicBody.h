@@ -16,7 +16,7 @@ namespace Temporal
 		static Vector GRAVITY;
 
 		explicit DynamicBody(Fixture* fixture = 0) :
-		_fixture(fixture), _velocity(Vector::Zero), _bodyEnabled(true), _ground(0), _maxMovementStepSize(0.0f), _previousGroundCenter(Vector::Zero) {}
+			_fixture(fixture), _velocity(Vector::Zero), _bodyEnabled(true), _ground(0), _maxMovementStepSize(0.0f), _previousGroundCenter(Vector::Zero), _dynamicBodyBounds(&_globalShapeClone) {}
 
 		~DynamicBody();
 
@@ -30,7 +30,7 @@ namespace Temporal
 
 		float _maxMovementStepSize;
 		Fixture* _fixture;
-		OBB __dynamicBodyBounds;
+		OBB _globalShapeClone;
 		OBBAABBWrapper _dynamicBodyBounds;
 		
 		// Persistent state

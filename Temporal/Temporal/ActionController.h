@@ -79,7 +79,7 @@ namespace Temporal
 		bool _frontFailed;
 		float _height;
 		float _max;
-		const OBBAABBWrapper* _body;
+		OBBAABBWrapper _body;
 		Side::Enum _side;
 
 		void handleUp(const Contact& contact);

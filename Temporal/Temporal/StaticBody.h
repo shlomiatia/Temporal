@@ -14,6 +14,7 @@ namespace Temporal
 		~StaticBody();
 
 		Fixture& getFixture() { return *_fixture; }
+		const Fixture& getFixture() const { return *_fixture; }
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);

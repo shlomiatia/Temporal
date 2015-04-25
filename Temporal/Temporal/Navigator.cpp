@@ -29,9 +29,9 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const OBBAABBWrapper& startPosition = *static_cast<OBBAABBWrapper*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBB& startPosition = *static_cast<OBB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
 			
-			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition.getOBB());
+			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
 			if(start && goal)
 			{
