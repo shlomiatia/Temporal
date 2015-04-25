@@ -157,7 +157,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>-->
+		</entity>
 		<entity id="ENT_PATROL">
 			<transform>
 				<position x="512" y="256" />
@@ -217,7 +217,7 @@
 			</renderer>
 			<particle-emitter lifetime="1" texture="resources/textures/bullet.png" birth-radius="0" velocity="3000" center="0" size="5" attachment="SCN_GUN" />
 			<!--<temporal-echo />-->
-		</entity>
+		<!--</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />

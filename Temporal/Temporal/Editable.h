@@ -19,6 +19,7 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
+		static Editable* _selected;
 		bool _translation;
 		bool _rotation;
 		bool _scale;
