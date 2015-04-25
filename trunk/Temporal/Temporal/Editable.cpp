@@ -7,11 +7,13 @@
 #include "StaticBody.h"
 #include "Fixture.h"
 #include "Grid.h"
+#include "Math.h"
 
 namespace Temporal
 {
 	static Hash STATIC_BODY_TYPE("static-body");
 	const Hash Editable::TYPE("editable");
+	Editable* Editable::_selected = 0;
 
 	Hash Editable::getType() const
 	{
@@ -32,6 +34,7 @@ namespace Temporal
 		{
 			if(params.getButton() == MouseButton::LEFT)
 			{
+				_selected = this;
 				reset();
 				_translation = true;
 				_translationOffset = params.getPosition() - getPosition(*this);
@@ -82,17 +85,34 @@ namespace Temporal
 		}
 	}
 
+	float snap(float val, float target, float maxSnap)
+	{
+		float valModTarget = fmodf(val, target);
+		float targetMinusValModTarget = target - valModTarget;
+		if (valModTarget <= maxSnap)
+			return val - valModTarget;
+		else if (targetMinusValModTarget <= maxSnap)
+			return val + targetMinusValModTarget;
+		else
+			return val;
+	}
+
 	void Editable::mouseMove(MouseParams& params)
 	{
+		
 		if(_translation)
 		{
 			Vector newPosition = params.getPosition() - _translationOffset;
+			newPosition.setX(snap(newPosition.getX(), getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
+			newPosition.setY(snap(newPosition.getY(), getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 			params.setHandled(true);
 		}
 		else if(_rotation)
 		{
 			Vector vector = (params.getPosition() - getPosition(*this)).normalize();
+			float angle = snap(vector.getAngle(), AngleUtils::radian().ANGLE_15_IN_RADIANS, AngleUtils::degreesToRadians(5.0f));
+			vector = Vector(angle) * vector.getLength();
 			StaticBody& staticBody = *static_cast<StaticBody*>(getEntity().get(STATIC_BODY_TYPE));
 			staticBody.getFixture().getLocalShape().setAxis0(vector);
 			getEntity().getManager().getGameState().getGrid().update(&staticBody.getFixture());
@@ -109,8 +129,9 @@ namespace Temporal
 			Vector radius = shape.getRadius();
 			float axisRadius = radius.getAxis(_scaleAxis);
 			float delta = (vector * axis - axisRadius) / 2.0f;
-			radius.setAxis(_scaleAxis, axisRadius + delta);
-			if(radius.getAxis(_scaleAxis) < 0.0f) return;
+			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
+			delta = radius.getAxis(_scaleAxis) - axisRadius;
+
 			StaticBody& staticBody = *static_cast<StaticBody*>(getEntity().get(STATIC_BODY_TYPE));
 			staticBody.getFixture().getLocalShape().setRadius(radius);
 			getEntity().getManager().getGameState().getGrid().update(&staticBody.getFixture());
@@ -148,7 +169,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			if(_translation || _scale || _rotation)
+			if(_selected == this)
 			{
 				Graphics::get().getSpriteBatch().add(_positiveXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
 				Graphics::get().getSpriteBatch().add(_negativeXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));

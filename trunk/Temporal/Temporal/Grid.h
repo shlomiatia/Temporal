@@ -39,6 +39,7 @@ namespace Temporal
 		virtual void init(GameState* gameState);
 
 		const Vector& getWorldSize() const { return _worldSize; }
+		float getTileSize() const { return _tileSize; }
 
 		void add(const Fixture* body);
 		void update(Fixture* body);
