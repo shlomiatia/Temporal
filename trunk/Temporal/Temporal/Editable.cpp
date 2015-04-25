@@ -40,46 +40,49 @@ namespace Temporal
 				_translationOffset = params.getPosition() - getPosition(*this);
 				params.setHandled(true);
 			}
-			else if(intersects(_positiveXScale, params.getPosition()))
+			else if (!_translationOnly)
 			{
-				reset();
-				_scale =  true;
-				_isPositiveScale = true;
-				_scaleAxis = Axis::X;
-				params.setHandled(true);
-			}
-			else if(intersects(_negativeXScale, params.getPosition()))
-			{
-				reset();
-				_scale =  true;
-				_isPositiveScale = false;
-				_scaleAxis = Axis::X;
-				params.setHandled(true);
-			}
-			else if(intersects(_positiveYScale, params.getPosition()))
-			{
-				reset();
-				_scale =  true;
-				_isPositiveScale = true;
-				_scaleAxis = Axis::Y;
-				params.setHandled(true);
-			}
-			else if(intersects(_negativeYScale, params.getPosition()))
-			{
-				reset();
-				_scale =  true;
-				_isPositiveScale = false;
-				_scaleAxis = Axis::Y;
-				params.setHandled(true);
-			}
-			else if (_selected == this)
-			{
-				_selected = 0;
+				if (intersects(_positiveXScale, params.getPosition()))
+				{
+					reset();
+					_scale = true;
+					_isPositiveScale = true;
+					_scaleAxis = Axis::X;
+					params.setHandled(true);
+				}
+				else if (intersects(_negativeXScale, params.getPosition()))
+				{
+					reset();
+					_scale = true;
+					_isPositiveScale = false;
+					_scaleAxis = Axis::X;
+					params.setHandled(true);
+				}
+				else if (intersects(_positiveYScale, params.getPosition()))
+				{
+					reset();
+					_scale = true;
+					_isPositiveScale = true;
+					_scaleAxis = Axis::Y;
+					params.setHandled(true);
+				}
+				else if (intersects(_negativeYScale, params.getPosition()))
+				{
+					reset();
+					_scale = true;
+					_isPositiveScale = false;
+					_scaleAxis = Axis::Y;
+					params.setHandled(true);
+				}
+				else if (_selected == this)
+				{
+					_selected = 0;
+				}
 			}
 		}
 		else if (params.getButton() == MouseButton::RIGHT)
 		{
-			if (_selected == this)
+			if (!_translationOnly && _selected == this)
 			{
 				reset();
 				_rotation = true;
@@ -163,15 +166,19 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-			_positiveXScale = OBB(shape.getCenter() + shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
-			_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
-			_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
-			_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
+			if (!_translationOnly)
+			{
+				const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+				_positiveXScale = OBB(shape.getCenter() + shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
+				_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
+				_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
+				_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
+			}
+			
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			if(_selected == this)
+			if (!_translationOnly && _selected == this)
 			{
 				Graphics::get().getSpriteBatch().add(_positiveXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
 				Graphics::get().getSpriteBatch().add(_negativeXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));

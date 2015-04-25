@@ -11,7 +11,7 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
 		Component* clone() const { return new EntitySaverLoader(); }
-		static Hash TYPE;
+		static const Hash TYPE;
 	private:
 	};
 

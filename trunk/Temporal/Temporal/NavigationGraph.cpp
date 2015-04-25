@@ -337,7 +337,7 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(StaticBody& body, ShapeList& platforms) 
+	void addPlatform(const StaticBody& body, ShapeList& platforms) 
 	{
 		if(body.getFixture().getFilter().getCategory() == CollisionCategory::OBSTACLE)
 		{
@@ -353,10 +353,10 @@ namespace Temporal
 		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
 		for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
-			const Entity& entity = (*(*i).second);
+			const Entity& entity = *(i->second);
 			const Component* component = entity.get(StaticBody::TYPE);
 			if(component)
-				addPlatform((StaticBody&)(*component), platforms);
+				addPlatform(*static_cast<const StaticBody*>(component), platforms);
 		}
 		createNodes(platforms);
 		createEdges(platforms);

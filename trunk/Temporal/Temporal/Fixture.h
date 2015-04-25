@@ -20,6 +20,7 @@ namespace Temporal
 		const OBB& getLocalShape() const { return _localShape; }
 		OBB& getLocalShape() { return _localShape; }
 		const OBB& getGlobalShape() const { return _globalShape; }
+		OBB& getGlobalShape() { return _globalShape; }
 		const CollisionFilter& getFilter() const { return *_filter; }
 		Hash getEntityId() const;
 

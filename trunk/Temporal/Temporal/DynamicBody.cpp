@@ -40,8 +40,6 @@ namespace Temporal
 		{
 			_fixture->init(*this);
 			getEntity().getManager().getGameState().getGrid().add(_fixture);
-			__dynamicBodyBounds = _fixture->getGlobalShape();
-			_dynamicBodyBounds.setOBB(__dynamicBodyBounds);
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
@@ -50,7 +48,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
-			message.setParam(&_dynamicBodyBounds);
+			const OBB* shape = &_fixture->getGlobalShape();
+			message.setParam(const_cast<OBB*>(shape));
 		}
 		else if(message.getID() == MessageID::GET_VELOCITY)
 		{
@@ -129,7 +128,7 @@ namespace Temporal
 	void DynamicBody::update(float framePeriod)
 	{
 		_fixture->update();
-		__dynamicBodyBounds = _fixture->getGlobalShape();
+		_globalShapeClone = _fixture->getGlobalShape();
 
 		// Moving platform - position is set later
 		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)

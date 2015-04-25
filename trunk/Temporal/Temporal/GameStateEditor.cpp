@@ -16,7 +16,16 @@ namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
+	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
 	const Hash EDITABLE_FILTER("static-body");
+
+	void addEditableToEntity(Entity& entity)
+	{
+		if (entity.get(EDITABLE_FILTER))
+			entity.add(new Editable(false));
+		else if (entity.get(TRANSLATION_ONLY_EDITABLE_FILTER))
+			entity.add(new Editable(true));
+	}
 
 	void GameStateEditor::handleMessage(Message& message)
 	{
@@ -27,8 +36,7 @@ namespace Temporal
 			for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;
-				if(entity.get(EDITABLE_FILTER))
-					entity.add(new Editable());
+				addEditableToEntity(entity);
 			}
 		}
 		if(message.getID() == MessageID::ENTITY_INIT)
@@ -178,8 +186,7 @@ namespace Temporal
 	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position)
 	{
 		Entity* newEntity = (*_templateIterator).second->clone();
-		if (newEntity->get(EDITABLE_FILTER))
-			newEntity->add(new Editable());
+		addEditableToEntity(*newEntity);
 		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
 		newEntity->setId(id);
 		getEntity().getManager().add(newEntity);

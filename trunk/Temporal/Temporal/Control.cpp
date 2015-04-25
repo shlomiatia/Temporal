@@ -114,7 +114,7 @@ namespace Temporal
 		{
 			const Vector& position = getPosition(*this);
 			_obb.setCenter(position);
-			message.setParam(&_box);
+			message.setParam(&_obb);
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{
@@ -147,7 +147,7 @@ namespace Temporal
 
 	void Control::mouseDown(MouseParams& params)
 	{
-		const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+		const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
 		params.setSender(this);
 		if(intersects(shape.getOBB(), params.getPosition()))
 		{
@@ -204,7 +204,7 @@ namespace Temporal
 		}
 		if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
 		{
-			const OBBAABBWrapper& shape = *static_cast<OBBAABBWrapper*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+			const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
 			_isHover = intersects(shape.getOBB(), params.getPosition());
 		}
 	}

@@ -11,17 +11,18 @@ namespace Temporal
 	class Editable : public Component
 	{
 	public:
-		explicit Editable() : _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
+		explicit Editable(bool translationOnly) : _translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
 
 		Hash getType() const;
 		void handleMessage(Message& message);
-		Component* clone() const { return new Editable(); }
+		Component* clone() const { return new Editable(_translationOnly); }
 
 		static const Hash TYPE;
 		static void clearSelected() { _selected = 0; }
 		static Editable* getSelected() { return _selected;  }
 	private:
 		static Editable* _selected;
+		bool _translationOnly;
 		bool _translation;
 		bool _rotation;
 		bool _scale;

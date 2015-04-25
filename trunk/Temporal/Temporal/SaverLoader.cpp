@@ -22,7 +22,7 @@ namespace Temporal
 		}
 	}
 
-	Hash EntitySaverLoader::TYPE = Hash("entity-saver-loader");
+	const Hash EntitySaverLoader::TYPE = Hash("entity-saver-loader");
 
 	void GameLoader::executeImpl()
 	{
