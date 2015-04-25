@@ -30,9 +30,9 @@ namespace Temporal
 	void Editable::mouseDown(MouseParams& params)
 	{
 		const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-		if(intersects(shape, params.getPosition()))
+		if (params.getButton() == MouseButton::LEFT)
 		{
-			if(params.getButton() == MouseButton::LEFT)
+			if (intersects(shape, params.getPosition()))
 			{
 				_selected = this;
 				reset();
@@ -40,16 +40,7 @@ namespace Temporal
 				_translationOffset = params.getPosition() - getPosition(*this);
 				params.setHandled(true);
 			}
-			else
-			{
-				reset();
-				_rotation = true;
-				params.setHandled(true);
-			}
-		}
-		else if(params.getButton() == MouseButton::LEFT)
-		{
-			if(intersects(_positiveXScale, params.getPosition()))
+			else if(intersects(_positiveXScale, params.getPosition()))
 			{
 				reset();
 				_scale =  true;
@@ -81,7 +72,19 @@ namespace Temporal
 				_scaleAxis = Axis::Y;
 				params.setHandled(true);
 			}
-			
+			else if (_selected == this)
+			{
+				_selected = 0;
+			}
+		}
+		else if (params.getButton() == MouseButton::RIGHT)
+		{
+			if (_selected == this)
+			{
+				reset();
+				_rotation = true;
+				params.setHandled(true);
+			}
 		}
 	}
 
@@ -99,7 +102,6 @@ namespace Temporal
 
 	void Editable::mouseMove(MouseParams& params)
 	{
-		
 		if(_translation)
 		{
 			Vector newPosition = params.getPosition() - _translationOffset;
