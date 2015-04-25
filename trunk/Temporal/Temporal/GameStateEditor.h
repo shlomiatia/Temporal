@@ -24,6 +24,7 @@ namespace Temporal
 		HashEntityMap _templates;
 		HashEntityIterator _templateIterator;
 
+		void clearCursor();
 		void cloneEntityFromTemplate(Hash id, Vector& position);
 
 		void moveCamera(const Vector& direction);

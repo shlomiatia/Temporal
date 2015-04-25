@@ -44,21 +44,21 @@ namespace Temporal
 		{
 			if(Keyboard::get().getKey(Key::W))
 			{
-				moveCamera(Vector(0.0f, 1.0f));
+				moveCamera(Vector(0.0f, 2.0f));
 			}
 			if(Keyboard::get().getKey(Key::A))
 			{
-				moveCamera(Vector(-1.0f, 0.0f));
+				moveCamera(Vector(-2.0f, 0.0f));
 			}
 			if(Keyboard::get().getKey(Key::S))
 			{
-				moveCamera(Vector(0.0f, -1.0f));
+				moveCamera(Vector(0.0f, -2.0f));
 			}
 			if(Keyboard::get().getKey(Key::D))
 			{
-				moveCamera(Vector(1.0f, 0.0f));
+				moveCamera(Vector(2.0f, 0.0f));
 			}
-			if (getEntity().getManager().getFocusInputComponent()) 
+			if (getEntity().getManager().getFocusInputComponent() == this) 
 			{
 				Vector position = Mouse::get().getOffsetPosition();
 				getEntity().getManager().sendMessageToEntity(CUSROR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
@@ -69,7 +69,7 @@ namespace Temporal
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if (key == Key::Q)
 			{
-				if (getEntity().getManager().getFocusInputComponent())
+				if (getEntity().getManager().getFocusInputComponent() == this)
 				{
 					if (_templateIterator == _templates.begin())
 					{
@@ -83,7 +83,7 @@ namespace Temporal
 			}
 			else if (key == Key::E)
 			{
-				if (getEntity().getManager().getFocusInputComponent())
+				if (getEntity().getManager().getFocusInputComponent() == this)
 				{
 					++_templateIterator;
 					if (_templateIterator == _templates.end())
@@ -99,12 +99,11 @@ namespace Temporal
 			}
 			else if (key == Key::F2)
 			{
-				if (getEntity().getManager().getFocusInputComponent())
+				if (getEntity().getManager().getFocusInputComponent() == this)
 				{ 
-					getEntity().getManager().remove(CUSROR_ENTITY_ID);
-					getEntity().getManager().clearFocusInputComponent();
+					clearCursor();
 				}
-				else
+				else if (editorMode)
 				{
 					Vector position = Mouse::get().getOffsetPosition();
 					cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
@@ -117,6 +116,14 @@ namespace Temporal
 				XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
 				serializer.serialize("game-state", getEntity().getManager().getGameState());
 				serializer.save();
+			}
+			else if (key == Key::DEL)
+			{
+				if (Editable::getSelected())
+				{
+					getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
+					Editable::clearSelected();
+				}
 			}
 			
 		}
@@ -136,7 +143,9 @@ namespace Temporal
 			ids.push_back(GameStateEditor::TYPE);
 			ids.push_back(Editable::TYPE);
 		}
-			
+		
+		Editable::clearSelected();
+		clearCursor();
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(!editorMode);
 
@@ -155,6 +164,15 @@ namespace Temporal
 		} while (getEntity().getManager().getEntity(id));
 		Vector position = params.getPosition();
 		cloneEntityFromTemplate(id, position);
+	}
+
+	void GameStateEditor::clearCursor()
+	{
+		if (getEntity().getManager().getFocusInputComponent() == this)
+		{
+			getEntity().getManager().remove(CUSROR_ENTITY_ID);
+			getEntity().getManager().clearFocusInputComponent();
+		}
 	}
 
 	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position)

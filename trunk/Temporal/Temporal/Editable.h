@@ -18,6 +18,8 @@ namespace Temporal
 		Component* clone() const { return new Editable(); }
 
 		static const Hash TYPE;
+		static void clearSelected() { _selected = 0; }
+		static Editable* getSelected() { return _selected;  }
 	private:
 		static Editable* _selected;
 		bool _translation;
