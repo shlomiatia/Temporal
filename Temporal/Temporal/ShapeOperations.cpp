@@ -66,7 +66,7 @@ namespace Temporal
 				minT = t;
 
 			// check for intersection failure
-			if ( minT < 0.0f || maxS > minT )
+			if ( minT < 0.0f || maxS > minT || maxS > ray.getVector().getLength())
 				return false;
 		}
 
