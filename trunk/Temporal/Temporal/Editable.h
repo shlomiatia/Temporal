@@ -11,7 +11,8 @@ namespace Temporal
 	class Editable : public Component
 	{
 	public:
-		explicit Editable(bool translationOnly) : _translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
+		explicit Editable(bool translationOnly) : 
+			_translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
 
 		Hash getType() const;
 		void handleMessage(Message& message);
@@ -35,6 +36,8 @@ namespace Temporal
 		OBB _negativeYScale;
 
 		void mouseMove(MouseParams& params);
+		void leftMouseDown(MouseParams& params);
+		void rightMouseDown(MouseParams& params);
 		void mouseDown(MouseParams& params);
 		void reset();
 	};

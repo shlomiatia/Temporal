@@ -27,67 +27,77 @@ namespace Temporal
 		_scale = false;
 	}
 
-	void Editable::mouseDown(MouseParams& params)
+	void Editable::leftMouseDown(MouseParams& params)
 	{
 		const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-		if (params.getButton() == MouseButton::LEFT)
+		if (intersects(shape, params.getPosition()))
 		{
-			if (intersects(shape, params.getPosition()))
+			_selected = this;
+			reset();
+			_translation = true;
+			_translationOffset = params.getPosition() - getPosition(*this);
+			params.setHandled(true);
+		}
+		else if (!_translationOnly)
+		{
+			if (intersects(_positiveXScale, params.getPosition()))
 			{
-				_selected = this;
 				reset();
-				_translation = true;
-				_translationOffset = params.getPosition() - getPosition(*this);
+				_scale = true;
+				_isPositiveScale = true;
+				_scaleAxis = Axis::X;
 				params.setHandled(true);
 			}
-			else if (!_translationOnly)
+			else if (intersects(_negativeXScale, params.getPosition()))
 			{
-				if (intersects(_positiveXScale, params.getPosition()))
-				{
-					reset();
-					_scale = true;
-					_isPositiveScale = true;
-					_scaleAxis = Axis::X;
-					params.setHandled(true);
-				}
-				else if (intersects(_negativeXScale, params.getPosition()))
-				{
-					reset();
-					_scale = true;
-					_isPositiveScale = false;
-					_scaleAxis = Axis::X;
-					params.setHandled(true);
-				}
-				else if (intersects(_positiveYScale, params.getPosition()))
-				{
-					reset();
-					_scale = true;
-					_isPositiveScale = true;
-					_scaleAxis = Axis::Y;
-					params.setHandled(true);
-				}
-				else if (intersects(_negativeYScale, params.getPosition()))
-				{
-					reset();
-					_scale = true;
-					_isPositiveScale = false;
-					_scaleAxis = Axis::Y;
-					params.setHandled(true);
-				}
-				else if (_selected == this)
-				{
-					_selected = 0;
-				}
+				reset();
+				_scale = true;
+				_isPositiveScale = false;
+				_scaleAxis = Axis::X;
+				params.setHandled(true);
 			}
+			else if (intersects(_positiveYScale, params.getPosition()))
+			{
+				reset();
+				_scale = true;
+				_isPositiveScale = true;
+				_scaleAxis = Axis::Y;
+				params.setHandled(true);
+			}
+			else if (intersects(_negativeYScale, params.getPosition()))
+			{
+				reset();
+				_scale = true;
+				_isPositiveScale = false;
+				_scaleAxis = Axis::Y;
+				params.setHandled(true);
+			}
+			else if (_selected == this)
+			{
+				_selected = 0;
+			}
+		}
+	}
+
+	void Editable::rightMouseDown(MouseParams& params)
+	{
+		if (!_translationOnly && _selected == this)
+		{
+			reset();
+			_rotation = true;
+			params.setHandled(true);
+		}
+	}
+
+	void Editable::mouseDown(MouseParams& params)
+	{
+		if (params.getButton() == MouseButton::LEFT)
+		{
+			leftMouseDown(params);
 		}
 		else if (params.getButton() == MouseButton::RIGHT)
 		{
-			if (!_translationOnly && _selected == this)
-			{
-				reset();
-				_rotation = true;
-				params.setHandled(true);
-			}
+			rightMouseDown(params);
 		}
 	}
 

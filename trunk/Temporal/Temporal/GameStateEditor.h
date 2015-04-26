@@ -26,7 +26,8 @@ namespace Temporal
 
 		void clearCursor();
 		void cloneEntityFromTemplate(Hash id, Vector& position);
-
+		void update();
+		void handleKey(Key::Enum key);
 		void moveCamera(const Vector& direction);
 		void leftClick(const MouseParams& params);
 	};
