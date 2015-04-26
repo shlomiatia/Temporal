@@ -30,15 +30,15 @@ namespace Temporal
 		else if(message.getID() == MessageID::KEY_UP)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if(key == Key::Q)
+			if(key == Key::D1)
 			{
 				changePeriod(Period::PAST);
 			}
-			if(key == Key::W)
+			if(key == Key::D2)
 			{
 				changePeriod(Period::PRESENT);
 			}
-			if(key == Key::E)
+			if(key == Key::D3)
 			{
 				changePeriod(Period::FUTURE);
 			}

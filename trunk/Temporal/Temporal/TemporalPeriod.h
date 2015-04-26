@@ -9,9 +9,9 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			PAST = 1,
-			PRESENT = 2,
-			FUTURE = 4
+			PAST,
+			PRESENT,
+			FUTURE
 		};
 	}
 

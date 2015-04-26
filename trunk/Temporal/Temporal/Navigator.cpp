@@ -140,6 +140,7 @@ namespace Temporal
 					else if(edge->getType() == NavigationEdgeType::WALK)
 					{
 						navigator.changeState(WALK_STATE);
+
 						// Prevent stop when edge is walk
 						navigator.handleMessage(message);
 					}
@@ -163,7 +164,7 @@ namespace Temporal
 
 		void JumpUp::enter(void* param)
 		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
+			
 		}
 
 		void JumpUp::handleMessage(Message& message)
@@ -176,6 +177,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 			}
 		}

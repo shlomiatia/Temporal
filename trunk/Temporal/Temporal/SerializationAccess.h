@@ -290,6 +290,7 @@ namespace Temporal
 			serializer.serialize("sprite-sheet", renderer._spriteSheetFile);
 			serializer.serialize("layer", (int&)renderer._layer);
 			serializer.serialize("scene-node", renderer._root);
+			serializer.serialize("color", renderer._color);
 		}
 		
 		template<class T>

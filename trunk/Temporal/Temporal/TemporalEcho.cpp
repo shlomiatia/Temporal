@@ -3,6 +3,7 @@
 #include "SerializationAccess.h"
 #include "Color.h"
 #include "MessageUtils.h"
+#include "Utils.h"
 
 namespace Temporal
 {
@@ -46,11 +47,20 @@ namespace Temporal
 			deserializer.serialize("entity", _echo);
 			delete deserialization;
 			_echoesData.erase(first);
+			float alpha = 0.2f;
+			_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
 		Stream* serialization = new MemoryStream();
 		BinarySerializer serializer(serialization);
 		serializer.serialize("entity", getEntity());
 		_echoesData.push_back(serialization);
+	}
+
+	void TemporalEcho::disableEcho()
+	{
+		float alpha = 0.0f;
+		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+		_echoReady = false;
 	}
 
 	void TemporalEcho::mergeToTemporalEchoes()
@@ -67,7 +77,7 @@ namespace Temporal
 				delete *i;
 				i = _echoesData.erase(i);
 			}
-			_echoReady = false;
+			disableEcho();
 			getEntity().handleMessage(Message(MessageID::POST_LOAD));
 		}
 	}
@@ -75,9 +85,9 @@ namespace Temporal
 	void TemporalEcho::init()
 	{
 		_echo = getEntity().clone();
-		_echo->setId(Hash("ENT_ECHO"));
-		float alpha = 0.2f;
-		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+		std::string idString = Utils::format("%s_TEMPORAL_ECHO", getEntity().getId().getString());
+		_echo->setId(Hash(idString.c_str()));
+		disableEcho();
 	}
 
 	void TemporalEcho::handleMessage(Message& message)
@@ -100,7 +110,7 @@ namespace Temporal
 				delete *i;
 				i = _echoesData.erase(i);
 			}
-			_echoReady = false;
+			disableEcho();
 		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
@@ -111,6 +121,10 @@ namespace Temporal
 			_echo->handleMessage(message, &getFilter());
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
+		{
+			_echo->handleMessage(message, &getFilter());
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
 			_echo->handleMessage(message, &getFilter());
 		}

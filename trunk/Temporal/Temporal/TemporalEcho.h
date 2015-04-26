@@ -29,6 +29,7 @@ namespace Temporal
 		void init();
 		void update(float framePeriod);
 		void mergeToTemporalEchoes();
+		void disableEcho();
 		HashList getFilter() const;
 
 		EchoList _echoesData;
