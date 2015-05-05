@@ -12,7 +12,6 @@ namespace Temporal
 
 	Segment::Segment(const Vector& center, const Vector& radius) : _center(center), _radius(radius) 
 	{
-		assert(getRadiusX() >= 0.0f);
 	}
 
 	Segment::Segment(float x1, float y1, float x2, float y2) : _center((x1+x2)/2.0f, (y1+y2)/2.0f), _radius((x2-x1)/2.0f, (y2-y1)/2.0f) 

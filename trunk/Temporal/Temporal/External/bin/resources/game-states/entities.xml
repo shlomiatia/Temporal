@@ -104,7 +104,7 @@
 			<light>
 				<color r="0.5" g="0.5" b="0.5" />
 			</light>
-		</entity>
+		</entity>-->
 		<entity id="ENT_CHASER">
 			<transform>
 				<position x="1000" y="512" />
@@ -157,7 +157,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>-->
+		</entity>
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />

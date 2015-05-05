@@ -144,7 +144,7 @@ namespace Temporal
 			if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
 			{
 				// BRODER
-				_velocity = _groundSegment.getNaturalDirection() * 250.0f;
+				_velocity = _groundSegment.getNaturalDirection() * 500.0f;
 				if(_velocity.getY() > 0.0f)
 					_velocity = -_velocity;
 				_ground = 0;
@@ -170,6 +170,33 @@ namespace Temporal
 			_velocity = Vector::Zero;
 			_previousGroundCenter = _ground->getGlobalShape().getCenter();
 		}
+	}
+
+	bool DynamicBody::transitionPlatform(const Vector& direction, Side::Enum side, float leftPeriod)
+	{
+		const float MAX_DISTANCE = 10.0f;
+
+		Side::Enum oppositeSide = Side::getOpposite(side);
+		Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
+		Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
+		RayCastResult result;
+		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
+			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
+		{
+			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());
+			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) - bodyPoint;
+			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundSegment.getNaturalDirection().getAngle()))
+			{
+				_ground = &result.getFixture();
+				_groundSegment = groundSegment;
+				_previousGroundCenter = _ground->getGlobalShape().getCenter();
+				_dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
+				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
+				walk(leftPeriod);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void DynamicBody::walk(float framePeriod)
@@ -213,30 +240,17 @@ namespace Temporal
 			executeMovement(actualMovement);
 			float leftPeriod = framePeriod * (1.0f - actualMovement.getLength() / movement.getLength());
 			_velocity = Vector(velocity.getLength() * side, 0.0f);
-			Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
-			Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
-			RayCastResult result;
-			if(getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
-			  (result.getPoint() - rayOrigin).getLength() < 10.0f &&
-			  AngleUtils::radian().isModerate(getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX()).getNaturalDirection().getAngle()))
-			{
- 				_ground = &result.getFixture();
-				_groundSegment = getTopSegment(_ground->getGlobalShape(), rayOrigin.getX());
-				_previousGroundCenter = _ground->getGlobalShape().getCenter();
-				_dynamicBodyBounds.getOBB().translate(_groundSegment.getPoint(oppositeSide) - bodyPoint);
-				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
-				walk(leftPeriod);
-			} 
-			else
+
+			if (!transitionPlatform(direction, side, leftPeriod))
 			{
 				_ground = 0;
-				
+
 				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
-				if(direction.getY() <= 0.0f )
-					_velocity = velocity; 
-				
+				if (direction.getY() <= 0.0f)
+					_velocity = velocity;
+
 				_velocity += GRAVITY * framePeriod;
-				Vector movementLeft = _velocity * framePeriod; 
+				Vector movementLeft = _velocity * framePeriod;
 				executeMovement(movementLeft);
 			}
 		}

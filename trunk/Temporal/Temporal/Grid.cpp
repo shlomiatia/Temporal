@@ -43,6 +43,7 @@ namespace Temporal
 		{
 			for(int j = 0; j < _gridHeight; ++j)
 			{
+				Graphics::get().getLinesSpriteBatch().add(getTileShape(i, j), Color(0.0f, 0.0f, 0.5f, 0.3f));
 				FixtureList* fixtures = getTile(i, j);
 				if(fixtures && fixtures->size() != 0)
 				{
