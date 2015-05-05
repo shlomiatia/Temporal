@@ -1,0 +1,791 @@
+<game-state>
+    <layers-manager camera-follow-player="1">
+        <ambient-color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+    </layers-manager>
+    <grid tile-size="128.000000">
+        <world-size x="7680.000000" y="2160.000000"/>
+    </grid>
+    <entities-manager>
+
+        <entity id="ENT_BLOCK13">
+            <transform orientation="1">
+                <position x="2528.000000" y="128.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="128.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK17">
+            <transform orientation="1">
+                <position x="2400.000000" y="672.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="96.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK42">
+            <transform orientation="1">
+                <position x="636.728882" y="952.846619"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="15.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="416.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK46">
+            <transform orientation="1">
+                <position x="320.000000" y="1024.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK33">
+            <transform orientation="1">
+                <position x="1376.000000" y="896.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK37">
+            <transform orientation="1">
+                <position x="928.000000" y="704.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="128.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK23">
+            <transform orientation="1">
+                <position x="1824.000000" y="800.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="96.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK6">
+            <transform orientation="1">
+                <position x="2240.000000" y="32.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="448.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK2">
+            <transform orientation="1">
+                <position x="1343.999878" y="32.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="448.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK27">
+            <transform orientation="1">
+                <position x="1088.000122" y="1056.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="704.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK26">
+            <transform orientation="1">
+                <position x="2240.000000" y="1056.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="448.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK3">
+            <transform orientation="1">
+                <position x="1152.000000" y="128.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="128.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK7">
+            <transform orientation="1">
+                <position x="2112.000000" y="544.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="320.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK22">
+            <transform orientation="1">
+                <position x="1856.000000" y="640.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK36">
+            <transform orientation="1">
+                <position x="1184.000000" y="960.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_PLAYER">
+            <transform orientation="-1">
+                <position x="128.445251" y="256.486450"/>
+            </transform>
+            <collision-filter category="8" group="-1"/>
+            <input-controller/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_LEDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="1.000000" y="0.000000"/>
+                        <radius x="10.000000" y="120.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_ACTIVATE" category-mask="16">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="4">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="20.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <action-controller max-walk-force-per-second="250.000000" state="ACT_STT_STAND" timer="0.734009" state-flag="0"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
+                <animator1>
+                    <single-animators animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="0.785034"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="172.171021"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="172.171021"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="172.322021"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="276.966187"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="276.966187"/>
+                </animator1>
+                <animator2>
+                    <single-animators animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="0.048950"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="197.650940"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="197.650940"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="199.000916"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="330.996490"/>
+                    <single-animators is-rewind="0" weight="1.000000" timer="330.996490"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="4">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="42.723522" center="112.500000" radius="112.500000">
+                        <translation x="10.911102" y="19.027611"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-23.288910"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.938775" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="1.474775"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="-0.938775" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="33.938774"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                        <translation x="-7.888947" y="-25.888885"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.799988"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="37.670834" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="16.005424"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                            <translation x="-23.333374" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK32">
+            <transform orientation="1">
+                <position x="1376.000000" y="640.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK16">
+            <transform orientation="1">
+                <position x="2528.000000" y="768.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK12">
+            <transform orientation="1">
+                <position x="2464.000000" y="672.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="224.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK43">
+            <transform orientation="1">
+                <position x="128.000000" y="768.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK41">
+            <transform orientation="1">
+                <position x="159.999985" y="608.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="96.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK18">
+            <transform orientation="1">
+                <position x="2336.000000" y="960.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK45">
+            <transform orientation="1">
+                <position x="128.000000" y="1056.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="128.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK10">
+            <transform orientation="1">
+                <position x="2560.000000" y="448.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK14">
+            <transform orientation="1">
+                <position x="2560.000000" y="576.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK20">
+            <transform orientation="1">
+                <position x="928.000000" y="544.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="864.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK5">
+            <transform orientation="1">
+                <position x="1792.000000" y="128.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK1">
+            <transform orientation="1">
+                <position x="32.000000" y="608.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="416.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK24">
+            <transform orientation="1">
+                <position x="2112.000244" y="768.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK9">
+            <transform orientation="1">
+                <position x="2560.000000" y="256.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK28">
+            <transform orientation="1">
+                <position x="1632.000122" y="896.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="128.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK38">
+            <transform orientation="1">
+                <position x="992.000000" y="704.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK30">
+            <transform orientation="1">
+                <position x="1728.000000" y="767.999878"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK34">
+            <transform orientation="1">
+                <position x="1312.000000" y="736.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="160.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK39">
+            <transform orientation="1">
+                <position x="1024.000000" y="832.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK35">
+            <transform orientation="1">
+                <position x="1216.000000" y="704.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="-120.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="192.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK31">
+            <transform orientation="1">
+                <position x="1568.000000" y="800.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK25">
+            <transform orientation="1">
+                <position x="1856.000000" y="864.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK0">
+            <transform orientation="1">
+                <position x="448.000000" y="96.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="448.000000" y="96.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK4">
+            <transform orientation="1">
+                <position x="1472.000000" y="128.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK21">
+            <transform orientation="1">
+                <position x="1984.000000" y="576.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="-15.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="128.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK29">
+            <transform orientation="1">
+                <position x="1728.000000" y="896.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK8">
+            <transform orientation="1">
+                <position x="2656.000000" y="544.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="480.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK44">
+            <transform orientation="1">
+                <position x="128.000000" y="896.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK19">
+            <transform orientation="1">
+                <position x="2240.000000" y="880.137695"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="143.862152"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK40">
+            <transform orientation="1">
+                <position x="581.451782" y="694.588867"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="-165.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="352.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK15">
+            <transform orientation="1">
+                <position x="2592.000000" y="704.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK11">
+            <transform orientation="1">
+                <position x="2144.000000" y="128.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+    </entities-manager>
+</game-state>

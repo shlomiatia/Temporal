@@ -4,7 +4,7 @@
 
 namespace Temporal
 {
-	const float EPSILON = std::numeric_limits<float>::epsilon() * 768.0f;
+	const float EPSILON = std::numeric_limits<float>::epsilon() * 10240.0f;
 
 	const float RadianAngleUtils::ANGLE_0_IN_RADIANS = 0.0f;
 	const float RadianAngleUtils::ANGLE_15_IN_RADIANS = PI / 12.0f; // 15 = 1 * PI / 12 

@@ -46,7 +46,7 @@ namespace Temporal
 		Vector center = area.getCenter() + static_cast<float>(Side::getOpposite(direction)) * cutRadius;
 		Vector radius = area.getRadius() - cutRadius;
 		
-		if(radius.getX() > 0.0f)
+		if (radius.getX() > 0.0f && radius.getY() > 0.0f)
 		{
 			const OBB nodeAfterCut = OBB(center, area.getAxisX(), radius);
 			iterator = areas.insert(iterator, nodeAfterCut);

@@ -210,7 +210,7 @@ namespace Temporal
 
 	void GSEGameStateListener::onLoaded(Hash id, GameState& gameState)
 	{
-		if(id == Hash("resources/game-states/entities.xml"))
+		if(id == Hash("resources/game-states/save-test.xml"))
 		{
 			Entity* entity = new Entity(GameStateEditor::TYPE);
 			entity->add(new GameStateEditor());
