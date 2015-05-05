@@ -7,7 +7,6 @@
 #include "GameState.h"
 #include "Settings.h"
 #include "Font.h"
-
 #include "Log.h"
 
 namespace Temporal

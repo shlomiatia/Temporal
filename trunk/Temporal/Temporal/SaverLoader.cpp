@@ -2,7 +2,6 @@
 #include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Keyboard.h"
-#include "Log.h"
 
 namespace Temporal
 {

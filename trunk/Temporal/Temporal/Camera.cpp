@@ -2,7 +2,6 @@
 #include "Graphics.h"
 #include "EntitySystem.h"
 #include "Grid.h"
-#include "Log.h"
 
 namespace Temporal
 {
