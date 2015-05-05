@@ -6,11 +6,8 @@
 #include "NavigationGraph.h"
 #include "Hash.h"
 #include "Timer.h"
-#include "Log.h"
 #include "Camera.h"
 #include "Lighting.h"
-#include "Sensor.h"
-#include "DynamicBody.h"
 #include <SDL_opengl.h>
 #include <algorithm>
 
