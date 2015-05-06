@@ -46,7 +46,7 @@ namespace Temporal
 		ParticleEmitter(const char* textureFile = "", const char* spritesheetFile = "", float lifetime = 0.0f, float birthTreshold = 0.0f, float birthRadius = 0.0f, float velocity = 0.0f, 
 			float directionCenter = 0.0f, float directionSize = 0.0f, Hash attachment = Hash::INVALID) :
 			_textureFile(textureFile), _spritesheetFile(spritesheetFile), _lifetime(lifetime), _birthThreshold(birthTreshold), _birthRadius(birthRadius), _velocity(velocity), _directionCenter(directionCenter), 
-			_directionSize(directionSize), _attachment(attachment), _birthIndex(0), _particles(0), _emit(false) {}
+			_directionSize(directionSize), _attachment(attachment), _birthIndex(0), _particles(0) {}
 		~ParticleEmitter();
 
 		Hash getType() const { return TYPE; }
@@ -71,7 +71,6 @@ namespace Temporal
 		Timer _birthTimer;
 		int _birthIndex;
 		Particle* _particles;
-		bool _emit;
 		Hash _attachment;
 		
 		void init();
