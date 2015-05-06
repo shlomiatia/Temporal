@@ -50,10 +50,6 @@ namespace Temporal
 		{
 			draw();
 		}
-		else if (message.getID() == MessageID::EMIT_PARTICLE)
-		{
-			_emit = true;
-		}
 	}
 
 	void ParticleEmitter::init()
@@ -106,14 +102,6 @@ namespace Temporal
 				{
 					particle.setAlive(false);	
 				}
-				RayCastResult result;
-				if(getEntity().getManager().getGameState().getGrid().cast(particle.getPosition(), particle.getVelocity().normalize(), result) &&
-					(result.getPoint() - particle.getPosition()).getLength() < particle.getVelocity().getLength() * framePeriod)
-				{
-					getEntity().getManager().sendMessageToEntity(result.getFixture().getEntityId(), Message(MessageID::DIE));
-					particle.resetAge(_lifetime);
-				}
-				
 			}
 		}
 		_birthTimer.update(framePeriod);
@@ -126,11 +114,6 @@ namespace Temporal
 			{
 				emit(emitterPosition, emitterAngle, length);
 			}
-		}
-		if(_emit)
-		{
-			emit(emitterPosition, emitterAngle, length);
-			_emit = false;
 		}
 	}
 

@@ -152,7 +152,7 @@ namespace Temporal
 		Graphics::get().getLinesSpriteBatch().end();
 
 		//getManager().getGameState().getNavigationGraph().draw();
-		//getManager().getGameState().getGrid().draw();
+		getManager().getGameState().getGrid().draw();
 		
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");

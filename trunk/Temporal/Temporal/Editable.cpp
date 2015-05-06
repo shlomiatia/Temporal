@@ -146,7 +146,7 @@ namespace Temporal
 			Vector radius = shape.getRadius();
 			float axisRadius = radius.getAxis(_scaleAxis);
 			float delta = (vector * axis - axisRadius) / 2.0f;
-			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
+			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 10.0f));
 			delta = radius.getAxis(_scaleAxis) - axisRadius;
 
 			StaticBody& staticBody = *static_cast<StaticBody*>(getEntity().get(STATIC_BODY_TYPE));

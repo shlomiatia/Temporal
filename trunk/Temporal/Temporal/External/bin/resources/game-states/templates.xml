@@ -13,8 +13,8 @@
 	<sensor id="SNS_FRONT_EDGE" category-mask="1">
 		<fixture>
 			<obb angle="0">
-				<center x="20" y="-50" />
-				<radius x="10" y="10" />
+				<center x="15" y="-45" />
+				<radius x="5" y="5" />
 			</obb>
 		</fixture>
 	</sensor>
@@ -53,7 +53,6 @@
 			</scene-node>
 		</scene-node>
 	</renderer>
-	<particle-emitter lifetime="1" texture="resources/textures/bullet.png" birth-radius="0" velocity="3000" center="0" size="5" attachment="SCN_GUN" />
 	<!--<temporal-echo />
 	<temporal-period period="0" />-->
 </entity>
