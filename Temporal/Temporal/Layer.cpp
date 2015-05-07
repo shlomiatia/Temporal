@@ -23,6 +23,7 @@ namespace Temporal
 		_spriteLayer = new SpriteLayer(this);
 		_guiLayer = new GUILayer(this);
 		_fxLayer = new FXLayer(this);
+		_debugLayer = new DebugLayer(this);
 			
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);
@@ -31,7 +32,7 @@ namespace Temporal
 			_lightLayer = new LightLayer(this, _ambientColor);
 			_layers.push_back(_lightLayer);
 		}
-		_layers.push_back(new DebugLayer(this));
+		_layers.push_back(_debugLayer);
 		_layers.push_back(_guiLayer);
 	}
 
@@ -143,16 +144,21 @@ namespace Temporal
 		HashList filter;
 		filter.push_back(Hash("static-body"));
 		filter.push_back(Hash("editable"));
-		//filter.push_back(Hash("sight"));
-		//filter.push_back(Hash("dynamic-body"));
-		//filter.push_back(Hash("sensor"));
+		if (_sight)
+			filter.push_back(Hash("sight"));
+		if (_dynamicBody)
+			filter.push_back(Hash("dynamic-body"));
+		if (_sensor)
+			filter.push_back(Hash("sensor"));
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		Graphics::get().getSpriteBatch().end();
 		Graphics::get().getLinesSpriteBatch().end();
 
-		//getManager().getGameState().getNavigationGraph().draw();
-		getManager().getGameState().getGrid().draw();
+		if (_navigationGraph)
+			getManager().getGameState().getNavigationGraph().draw();
+		if (_grid)
+			getManager().getGameState().getGrid().draw();
 		
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");

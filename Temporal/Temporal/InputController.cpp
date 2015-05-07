@@ -58,9 +58,14 @@ namespace Temporal
 			}
 			if(Keyboard::get().getKey(Key::E) || Input::get().getGamepad().getButton(GamepadButton::ACTION_RIGHT))
 			{
-				//raiseMessage(Message(MessageID::ACTION_ACTIVATE));
-				//getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-
+				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
+			}
+			if (Keyboard::get().getKey(Key::TILDE))
+			{
+				getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+			}
+			if (Keyboard::get().getKey(Key::TAB))
+			{
 				OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
 				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
 			}

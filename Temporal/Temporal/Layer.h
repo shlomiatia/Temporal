@@ -82,11 +82,22 @@ namespace Temporal
 	class DebugLayer : public Layer
 	{
 	public:
-		DebugLayer(LayersManager* manager) : Layer(manager) {}
+		DebugLayer(LayersManager* manager) : Layer(manager), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false) {}
 
 		void draw();
+		void toggleSight() { _sight = !_sight; }
+		void toggleDynamicBody() { _dynamicBody = !_dynamicBody; }
+		void toggleSensor() { _sensor = !_sensor; }
+		void toggleGrid() { _grid = !_grid; }
+		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
 	private:
 		void drawFPS();
+
+		bool _sight;
+		bool _dynamicBody;
+		bool _sensor;
+		bool _grid;
+		bool _navigationGraph;
 	};
 
 	class FXLayer : public Layer
@@ -110,7 +121,7 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() : _cameraFollowPlayer(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0) {};
+		LayersManager() : _cameraFollowPlayer(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0), _debugLayer(0){};
 		~LayersManager();
 
 		void init(GameState* gameState);
@@ -122,6 +133,7 @@ namespace Temporal
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		FXLayer& getFXLayer() { return *_fxLayer; }
+		DebugLayer& getDebugLater() { return *_debugLayer; }
 		void draw();
 
 	private:
@@ -134,6 +146,7 @@ namespace Temporal
 		GUILayer* _guiLayer;
 		LightLayer* _lightLayer;
 		FXLayer* _fxLayer;
+		DebugLayer* _debugLayer;
 
 		LayersManager(const LayersManager&);
 		LayersManager& operator=(const LayersManager&);
