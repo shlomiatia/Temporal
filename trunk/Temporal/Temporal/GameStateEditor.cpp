@@ -56,7 +56,27 @@ namespace Temporal
 	{
 		bool editorMode = getEntity().getManager().getGameState().getUpdateFilter().size() != 0;
 
-		if (key == Key::Q)
+		if (key == Key::R)
+		{
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSensor();
+		}
+		else if (key == Key::G)
+		{
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleGrid();
+		}
+		else if (key == Key::L)
+		{
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSight();
+		}
+		else if (key == Key::B)
+		{
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleDynamicBody();
+		}
+		else if (key == Key::N)
+		{
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleNavigationGraph();
+		}
+		else if (key == Key::Q)
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{

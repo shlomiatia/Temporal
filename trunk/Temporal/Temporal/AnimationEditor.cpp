@@ -308,14 +308,6 @@ namespace Temporal
 		{
 			handleArrows(Vector(0.0f, -1.0f));
 		}
-		else if(key == Key::BACKSLASH)
-		{
-			handleArrows(Vector(0.0f, 10.0f));
-		}
-		else if(key == Key::SLASH)
-		{
-			handleArrows(Vector(0.0f, -10.0f));
-		}
 		else if(key == Key::LEFT)
 		{
 			handleArrows(Vector(-1.0f, 0.0f));
