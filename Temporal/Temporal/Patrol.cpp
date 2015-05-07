@@ -13,8 +13,10 @@ namespace Temporal
 	static const Hash SEE_STATE = Hash("PAT_STT_SEE");
 	static const Hash TURN_STATE = Hash("PAT_STT_TURN");
 	static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
+	static const Hash TAKEDOWN_STATE = Hash("PAT_STT_TAKEDOWN");
 
 	static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
+	static const Hash TAKEDOWN_SENSOR_ID = Hash("SNS_TAKEDOWN");
 
 	void EdgeDetector::start()
 	{
@@ -39,6 +41,14 @@ namespace Temporal
 
 	void Patrol::handleMessage(Message& message)
 	{
+		if (message.getID() == MessageID::SENSOR_SENSE)
+		{
+			const SensorParams& params = getSensorParams(message.getParam());
+			if (params.getSensorId() == TAKEDOWN_SENSOR_ID)
+			{
+				changeState(TAKEDOWN_STATE);
+			}
+		}
 		_edgeDetector.handleMessage(message);
 		StateMachineComponent::handleMessage(message);
 	}
@@ -58,6 +68,7 @@ namespace Temporal
 		states[SEE_STATE] = new See();
 		states[TURN_STATE] = new Turn();
 		states[WAIT_STATE] = new Wait();
+		states[TAKEDOWN_STATE] = new Takedown();
 		return states;
 	}
 
@@ -165,6 +176,19 @@ namespace Temporal
 				{
 					_stateMachine->changeState(TURN_STATE);
 				}
+			}
+		}
+
+		void Takedown::enter(void* param)
+		{
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
+		}
+
+		void Takedown::handleMessage(Message& message)
+		{
+			if (message.getID() == MessageID::ANIMATION_ENDED)
+			{
+				_stateMachine->changeState(WAIT_STATE);
 			}
 		}
 	}

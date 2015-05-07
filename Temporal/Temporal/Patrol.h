@@ -82,6 +82,13 @@ namespace Temporal
 		private:
 			static const float WAIT_TIME;
 		};
+
+		class Takedown : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
 	}
 }
 
