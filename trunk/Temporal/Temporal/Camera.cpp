@@ -6,8 +6,6 @@
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	// BRODER
-	const float MAX_CHANGE = 10.0f;
 
 	void Camera::draw()
 	{
@@ -45,13 +43,7 @@ namespace Temporal
 		float cameraBottomPosition = bottomLeft.getY() + cameraHeight < levelHeight ? bottomLeft.getY():  (levelHeight - cameraHeight);
 		cameraBottomPosition = cameraBottomPosition < 0.0f ? 0.0f : cameraBottomPosition;
 		Vector newBottomLeft = Vector(cameraLeftPosition, cameraBottomPosition);
-		Vector movement = newBottomLeft - _bottomLeft;
-
-		float modifier = abs(MAX_CHANGE  / movement.getY());
-		if(modifier < 1.0f && modifier > 0.0f)
-			movement.setY(movement.getY() * modifier);
-		
-
+		Vector movement = newBottomLeft - _bottomLeft;		
 		_bottomLeft += movement;
 	}
 }

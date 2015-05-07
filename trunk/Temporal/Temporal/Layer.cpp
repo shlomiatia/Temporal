@@ -129,7 +129,7 @@ namespace Temporal
 	void DebugLayer::drawFPS()
 	{
 		PerformanceTimer& timer = PerformanceTimerManager::get().getTimer(FPS_TIMER);
-		timer.print("FPS");
+		timer.print("=== FPS ===");
 		timer.measure();
 	}
 

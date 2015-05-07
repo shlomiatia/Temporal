@@ -27,23 +27,24 @@ namespace Temporal
 			entity.add(new Editable(true));
 	}
 
-	void GameStateEditor::update()
+	void GameStateEditor::update(float framePeriod)
 	{
+		float movement = 1.0f * framePeriod * 60.0f;
 		if (Keyboard::get().getKey(Key::W))
 		{
-			moveCamera(Vector(0.0f, 2.0f));
+			moveCamera(Vector(0.0f, movement));
 		}
 		if (Keyboard::get().getKey(Key::A))
 		{
-			moveCamera(Vector(-2.0f, 0.0f));
+			moveCamera(Vector(-movement, 0.0f));
 		}
 		if (Keyboard::get().getKey(Key::S))
 		{
-			moveCamera(Vector(0.0f, -2.0f));
+			moveCamera(Vector(0.0f, -movement));
 		}
 		if (Keyboard::get().getKey(Key::D))
 		{
-			moveCamera(Vector(2.0f, 0.0f));
+			moveCamera(Vector(movement, 0.0f));
 		}
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
@@ -158,7 +159,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			update();
+			float framePeriod = getFloatParam(message.getParam());
+			update(framePeriod);
 		}
 		else if(message.getID() == MessageID::KEY_UP)
 		{
@@ -225,7 +227,7 @@ namespace Temporal
 	void GameStateEditor::moveCamera(const Vector& direction)
 	{
 		Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
-		camera.setBottomLeft(camera.getBottomLeft() + direction * 5.0f);
+		camera.setBottomLeft(camera.getBottomLeft() + direction * 10.0f);
 	}
 
 	void GSEGameStateListener::onLoaded(Hash id, GameState& gameState)
