@@ -18,7 +18,15 @@
 			</obb>
 		</fixture>
 	</sensor>
-	<sight size="30" />
+	<sensor id="SNS_TAKEDOWN" category-mask="8">
+		<fixture>
+			<obb angle="0.000000">
+				<center x="10.000000" y="0.000000"/>
+				<radius x="20.000000" y="40.000000"/>
+			</obb>
+		</fixture>
+	</sensor>
+	<sight />
 	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
 	<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">

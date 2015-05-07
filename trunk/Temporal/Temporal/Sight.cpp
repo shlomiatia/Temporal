@@ -59,13 +59,7 @@ namespace Temporal
 
 		// Check field of view
 		Vector vector = targetPosition - sourcePosition;
-		float angle = vector.getAngle();
-		float sightCenter = sourceSide == Side::RIGHT ? _sightCenter : AngleUtils::radian().mirror(_sightCenter);
-		float distance = AngleUtils::radian().minDistance(sightCenter, angle);
-		if(distance > _sightSize / 2.0f) return;
-		float direction = distance / AngleUtils::radian().ANGLE_90_IN_RADIANS;
-		if(angle < 0.0f)
-			direction *= -1.0f;
+		if (fabsf(vector.getY() > _sightSize)) return;
 
 		RayCastResult result;
 		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
@@ -75,26 +69,26 @@ namespace Temporal
 				_isSeeing = true;
 		}
 		
-		if(_isSeeing)
-			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &direction));
+		if (_isSeeing)
+		{
+			float angle = vector.getAngle();
+			if (sourceSide == Side::LEFT)
+				angle = AngleUtils::radian().mirror(angle);
+			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &angle));
+		}
 	}
 
-	void drawFieldOfViewSegment(float angle, Side::Enum sourceSide, const Vector &sourcePosition)
+	void drawFieldOfViewSegment(const Vector &sourcePosition, Side::Enum sourceSide, float yDelta)
 	{
-		if(sourceSide == Side::LEFT)
-			angle = PI - angle;
 		static const float SIGHT_SEGMENT_LENGTH = 512.0f;
-		float targetX = (SIGHT_SEGMENT_LENGTH * cos(angle)) + sourcePosition.getX();
-		float targetY = (SIGHT_SEGMENT_LENGTH * sin(angle)) + sourcePosition.getY();
-		Vector targetPosition = Vector(targetX, targetY);
-		Vector radius = targetPosition - sourcePosition;
-		Graphics::get().getLinesSpriteBatch().add(OBB(sourcePosition + radius / 2.0f, radius.normalize(), Vector(radius.getLength() / 2.0f, 0.5f)), Color(0.0f, 1.0f, 1.0f, 0.3f));
+		OBB line(sourcePosition + Vector(SIGHT_SEGMENT_LENGTH / 2.0f * sourceSide, yDelta), Vector(sourceSide, 0.0f), Vector(SIGHT_SEGMENT_LENGTH / 2.0f, 0.5f));
+		Graphics::get().getLinesSpriteBatch().add(line, Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
 	{
-		drawFieldOfViewSegment(_sightCenter + (_sightSize / 2.0f), sourceSide, sourcePosition);
-		drawFieldOfViewSegment(_sightCenter - (_sightSize / 2.0f), sourceSide, sourcePosition);
+		drawFieldOfViewSegment(sourcePosition, sourceSide, -_sightSize);
+		drawFieldOfViewSegment(sourcePosition, sourceSide, _sightSize);
 	}
 
 	void Sight::drawDebugInfo() const
