@@ -36,7 +36,7 @@ namespace Temporal
 	float BaseAngleUtils::mirror(float angle) const
 	{
 		assertAngle(angle, STRAIGHT);
-		return STRAIGHT - angle;
+		return angle > 0.0f ? STRAIGHT - angle : -STRAIGHT - angle;
 	}
 
 	float BaseAngleUtils::opposite(float angle) const

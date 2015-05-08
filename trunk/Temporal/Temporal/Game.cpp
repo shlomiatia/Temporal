@@ -64,7 +64,10 @@ namespace Temporal
 		updateTimer.measure();
 		Input::get().update();
 		float currentFrameTime = Time::now();
-		GameStateManager::get().update(currentFrameTime - _lastFrameTime);
+		float framePeriod = currentFrameTime - _lastFrameTime;
+		if (framePeriod > 1.0f / 10.0f)
+			framePeriod = 1.0f / 60.0f;
+		GameStateManager::get().update(framePeriod);
 		_lastFrameTime = currentFrameTime;
 		updateTimer.print("UPDATE");
 	}

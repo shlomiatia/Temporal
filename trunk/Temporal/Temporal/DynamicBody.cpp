@@ -295,8 +295,6 @@ namespace Temporal
 				const Fixture* fixture = *i;
 				detectCollision(fixture, collision, stepMovement);
 			}
-			if(collision != Vector::Zero)
-				break;
 		}
 		while(movement != Vector::Zero);
 
