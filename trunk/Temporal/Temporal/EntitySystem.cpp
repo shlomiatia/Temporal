@@ -1,6 +1,7 @@
 #include "EntitySystem.h"
 #include "Serialization.h"
 #include "SerializationAccess.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -139,4 +140,43 @@ namespace Temporal
 		_entities.erase(i);
 		delete entity;
 	}
+
+	EntityTemplatesManager::~EntityTemplatesManager()
+	{
+		for (HashEntityIterator i = _templates.begin(); i != _templates.end(); ++i)
+			delete (*i).second;
+	}
+
+	void EntityTemplatesManager::init(GameState* gameState)
+	{
+		XmlDeserializer deserializer(new FileStream("resources/game-states/templates.xml", false, false));
+		deserializer.serialize("entity", _templates);
+		_templateIterator = _templates.begin();
+	}
+
+	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId, Hash entityId, Vector& position)
+	{
+		Entity* newEntity = _templates.at(templateId)->clone();
+		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
+		newEntity->setId(entityId);
+		return newEntity;
+	}
+
+	void EntityTemplatesManager::previousTemplate()
+	{
+		if (_templateIterator == _templates.begin())
+		{
+			_templateIterator = _templates.end();
+		}
+		--_templateIterator;
+	}
+
+	void EntityTemplatesManager::nextTemplate()
+	{
+		++_templateIterator;
+		if (_templateIterator == _templates.end())
+			_templateIterator = _templates.begin();
+	}
+
+	
 }

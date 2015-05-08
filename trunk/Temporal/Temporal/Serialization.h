@@ -305,9 +305,6 @@ namespace Temporal
 		void serialize(const char* key, std::vector<T*>& value)
 		{
 			tinyxml2::XMLNode* parent = _current;
-			// TODO:
-			if(strcmp(key, "component") == 0)
-				key = 0;
 			for(_current = _current->FirstChildElement(key); _current; _current = _current->NextSiblingElement(key))
 			{
 				T* object = 0;

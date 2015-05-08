@@ -17,6 +17,7 @@ namespace Temporal
 		_entitiesManager = new EntitiesManager();
 		_navigationGraph = new NavigationGraph();
 		_layersManager = new LayersManager();
+		_entityTemplatesManager = new EntityTemplatesManager();
 	}
 
 	GameState::~GameState()
@@ -25,6 +26,7 @@ namespace Temporal
 		delete _navigationGraph;
 		delete _layersManager;
 		delete _grid;
+		delete _entityTemplatesManager;
 	}
 
 	void GameState::init()
@@ -33,6 +35,7 @@ namespace Temporal
 		_layersManager->init(this);
 		_entitiesManager->init(this);
 		_navigationGraph->init(this);
+		_entityTemplatesManager->init(this);
 	}
 
 	void GameState::update(float framePeriod)
