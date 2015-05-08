@@ -52,16 +52,15 @@ namespace Temporal
 	class SerializationAccess
 	{
 	public:
-		// Factory methods
-		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
-		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 		static void getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize);
 		static void getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize);
 
 		template<class T, class S>
-		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize)
-		{
-		}
+		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize){}
+
+		// Factory methods
+		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
+		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 
 		template<class T, class S>
 		static void serialize(const char* key, T*& value, S& serializer)
@@ -238,10 +237,9 @@ namespace Temporal
 		static void serialize(const char* key, Entity& entity, T& serializer)
 		{
 			serializer.serialize("id", entity._id);
-			serializer.serialize("component", entity._components);
+			serializer.serialize(0, entity._components);
 		}
 		
-		// TODO:
 		template<class T>
 		static void serialize(const char* key, StateMachineComponent& stateMachineComponent, T& serializer)
 		{

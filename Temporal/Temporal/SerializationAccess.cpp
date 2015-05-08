@@ -26,6 +26,19 @@
 
 namespace Temporal
 {
+	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
+	{
+		Hash type = value->getType();
+		shouldSerialize = type != Editable::TYPE && type != EntitySaverLoader::TYPE;
+		key = type.getString();
+	}
+
+	void SerializationAccess::getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize)
+	{
+		shouldSerialize = value->getId() != GameStateEditor::TYPE && value->getId() != GameSaverLoader::TYPE;
+	}
+
+
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 	{
 		if(strcmp(key, Transform::TYPE.getString()) == 0)
@@ -68,18 +81,6 @@ namespace Temporal
 			serialize(key, (PlayerPeriod*&)component, serializer);
 		else
 			abort();
-	}
-
-	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
-	{
-		Hash type = value->getType();
-		shouldSerialize = type != Editable::TYPE && type != EntitySaverLoader::TYPE;
-		key = type.getString();
-	}
-
-	void SerializationAccess::getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize)
-	{
-		shouldSerialize = value->getId() != GameStateEditor::TYPE && value->getId() != GameSaverLoader::TYPE;
 	}
 
 	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)

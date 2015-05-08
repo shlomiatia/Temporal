@@ -12,6 +12,7 @@ namespace Temporal
 	class Grid;
 	class EntitiesManager;
 	class NavigationGraph;
+	class EntityTemplatesManager;
 
 	class GameState
 	{
@@ -23,6 +24,7 @@ namespace Temporal
 		EntitiesManager& getEntitiesManager() const { return *_entitiesManager; }
 		NavigationGraph& getNavigationGraph() const { return *_navigationGraph; }
 		LayersManager& getLayersManager() const { return *_layersManager; }
+		EntityTemplatesManager& getEntityTemplatesManager() const { return *_entityTemplatesManager; }
 
 		void init();
 		void update(float framePeriod);
@@ -37,6 +39,7 @@ namespace Temporal
 		EntitiesManager* _entitiesManager;
 		NavigationGraph* _navigationGraph;
 		LayersManager* _layersManager;
+		EntityTemplatesManager* _entityTemplatesManager;
 
 		GameState(const GameState&);
 		GameState& operator=(const GameState&);

@@ -81,11 +81,8 @@ namespace Temporal
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{
-				if (_templateIterator == _templates.begin())
-				{
-					_templateIterator = _templates.end();
-				}
-				--_templateIterator;
+
+				getEntity().getManager().getGameState().getEntityTemplatesManager().previousTemplate();
 				getEntity().getManager().remove(CUSROR_ENTITY_ID);
 				Vector position = Mouse::get().getOffsetPosition();
 				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
@@ -95,9 +92,7 @@ namespace Temporal
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{
-				++_templateIterator;
-				if (_templateIterator == _templates.end())
-					_templateIterator = _templates.begin();
+				getEntity().getManager().getGameState().getEntityTemplatesManager().nextTemplate();
 				getEntity().getManager().remove(CUSROR_ENTITY_ID);
 				Vector position = Mouse::get().getOffsetPosition();
 				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
@@ -152,10 +147,6 @@ namespace Temporal
 		{
 			setEditorMode(true);
 			getEntity().getManager().addInputComponent(this);
-
-			XmlDeserializer deserializer(new FileStream("resources/game-states/templates.xml", false, false));
-			deserializer.serialize("entity", _templates);
-			_templateIterator = _templates.begin();
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -194,7 +185,7 @@ namespace Temporal
 	void GameStateEditor::leftClick(const MouseParams& params)
 	{
 		int idIndex = 0;
-		const char* key = (*_templateIterator).first.getString();
+		const char* key = getEntity().getManager().getGameState().getEntityTemplatesManager().getCurrentTemplateId().getString();
 		Hash id;
 		do
 		{
@@ -217,10 +208,8 @@ namespace Temporal
 
 	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position)
 	{
-		Entity* newEntity = (*_templateIterator).second->clone();
+		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent(id, position);
 		addEditableToEntity(*newEntity);
-		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
-		newEntity->setId(id);
 		getEntity().getManager().add(newEntity);
 	}
 

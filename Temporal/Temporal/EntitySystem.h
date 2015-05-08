@@ -113,6 +113,28 @@ namespace Temporal
 
 		friend class SerializationAccess;
 	};
+
+	class Vector;
+
+	class EntityTemplatesManager : public GameStateComponent
+	{
+	public:
+		~EntityTemplatesManager();
+
+		void init(GameState* gameState);
+
+		Entity* cloneByTemplateId(Hash templateId, Hash entityId, Vector& position);
+		Hash getCurrentTemplateId() const { return  _templateIterator->first; }
+		Entity* cloneCurrent(Hash entityId, Vector& position) { return cloneByTemplateId(_templateIterator->first, entityId, position); };
+		void previousTemplate();
+		void nextTemplate();
+
+	private:
+		HashEntityMap _templates;
+		HashEntityIterator _templateIterator;
+
+		friend class SerializationAccess;
+	};
 }
 
 #endif

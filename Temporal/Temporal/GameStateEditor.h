@@ -21,11 +21,9 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-		HashEntityMap _templates;
-		HashEntityIterator _templateIterator;
+		void cloneEntityFromTemplate(Hash id, Vector& position);
 
 		void clearCursor();
-		void cloneEntityFromTemplate(Hash id, Vector& position);
 		void update(float framePeriod);
 		void handleKey(Key::Enum key);
 		void moveCamera(const Vector& direction);
