@@ -268,7 +268,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, CompositeAnimator& animator, T& serializer)
 		{
-			serializer.serialize("single-animators", animator._singleAnimators);
+			serializer.serialize("single-animator", animator._singleAnimators);
 			
 		}
 

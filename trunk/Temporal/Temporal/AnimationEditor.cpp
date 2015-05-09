@@ -12,6 +12,7 @@
 #include "Shapes.h"
 #include "Layer.h"
 #include "MessageUtils.h"
+#include "ResourceManager.h"
 #include <algorithm>
 #include <sstream>
 

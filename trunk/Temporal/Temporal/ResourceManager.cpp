@@ -88,32 +88,15 @@ namespace Temporal
 		_result = new Settings();
 		deserializer.serialize("settings", *_result);
 	}
-
-	GameStateLoader::GameStateLoader(const char* file)
-	{
-		if(file)
-			add(file);
-	}
-
-	void GameStateLoader::add(const char* file)
-	{
-			_files.push_back(file);
-	}
-
 	void GameStateLoader::executeImpl()
 	{
-		for(StringIterator i = _files.begin(); i != _files.end(); ++i)
-		{
-			const char* file = i->c_str();
-			XmlDeserializer deserializer(new FileStream(file, false, false));
-			GameState* state = new GameState();
-			deserializer.serialize("game-state", *state);
-			state->init();
-			Hash id = Hash(file);
-			if (GameStateManager::get().getListener())
-				GameStateManager::get().getListener()->onLoaded(id, *state);
-			_result[id] = state;
-		}
+		XmlDeserializer deserializer(new FileStream(_path, false, false));
+		GameState* state = new GameState();
+		deserializer.serialize("game-state", *state);
+		state->init();
+		if (GameStateManager::get().getListener())
+			GameStateManager::get().getListener()->onLoaded(_id, *state);
+		_result = state;
 	}
 
 	const std::shared_ptr<SpriteSheet> ResourceManager::getSpritesheet(const char* file)
