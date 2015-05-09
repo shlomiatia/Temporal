@@ -29,12 +29,7 @@ namespace Temporal
 
 	void Editable::leftMouseDown(MouseParams& params)
 	{
-		OBB* shapePointer = static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
-		OBB shape;
-		if (shapePointer)
-			shape = *shapePointer;
-		else
-			shape = OBBAABB(getPosition(*this), Vector(16.0f, 16.0f));
+		OBB shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 		if (shape.getHeight() == 0.0f)
 			shape.setRadiusY(5.0f);
 		if (intersects(shape, params.getPosition()))
@@ -122,7 +117,7 @@ namespace Temporal
 
 	void Editable::mouseMove(MouseParams& params)
 	{
-		if(_translation)
+		if (_translation)
 		{
 			Vector newPosition = params.getPosition() - _translationOffset;
 			newPosition.setX(snap(newPosition.getX(), getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
@@ -130,7 +125,7 @@ namespace Temporal
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 			params.setHandled(true);
 		}
-		else if(_rotation)
+		else if (_rotation)
 		{
 			Vector vector = (params.getPosition() - getPosition(*this)).normalize();
 			float angle = snap(vector.getAngle(), AngleUtils::radian().ANGLE_15_IN_RADIANS, AngleUtils::degreesToRadians(5.0f));
@@ -140,13 +135,13 @@ namespace Temporal
 			getEntity().getManager().getGameState().getGrid().update(&staticBody.getFixture());
 			params.setHandled(true);
 		}
-		else if(_scale)
+		else if (_scale)
 		{
 			Vector position = getPosition(*this);
 			Vector vector = params.getPosition() - position;
 			const OBB& shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
 			Vector axis = shape.getAxis(_scaleAxis);
-			if(!_isPositiveScale)
+			if (!_isPositiveScale)
 				axis = -axis;
 			Vector radius = shape.getRadius();
 			float axisRadius = radius.getAxis(_scaleAxis);
@@ -165,12 +160,12 @@ namespace Temporal
 
 	void Editable::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::MOUSE_DOWN)
+		if (message.getID() == MessageID::MOUSE_DOWN)
 		{
 			MouseParams& params = getMouseParams(message.getParam());
 			mouseDown(params);
 		}
-		else if(message.getID() == MessageID::MOUSE_MOVE)
+		else if (message.getID() == MessageID::MOUSE_MOVE)
 		{
 			MouseParams& params = getMouseParams(message.getParam());
 			mouseMove(params);
@@ -181,7 +176,7 @@ namespace Temporal
 			_rotation = false;
 			_scale = false;
 		}
-		else if(message.getID() == MessageID::UPDATE)
+		else if (message.getID() == MessageID::UPDATE)
 		{
 			if (!_translationOnly)
 			{
@@ -191,9 +186,9 @@ namespace Temporal
 				_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
 				_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
 			}
-			
+
 		}
-		else if(message.getID() == MessageID::DRAW_DEBUG)
+		else if (message.getID() == MessageID::DRAW_DEBUG)
 		{
 			if (!_translationOnly && _selected == this)
 			{

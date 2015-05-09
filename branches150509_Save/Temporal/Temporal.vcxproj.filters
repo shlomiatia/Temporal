@@ -212,9 +212,6 @@
     <ClInclude Include="ToolComponent.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Spawner.h">
-      <Filter>Game</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -406,9 +403,6 @@
     </ClCompile>
     <ClCompile Include="ToolComponent.cpp">
       <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Spawner.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

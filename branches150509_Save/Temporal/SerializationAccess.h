@@ -48,7 +48,6 @@ namespace Temporal
 	class Navigator;
 	class TemporalEcho;
 	class LightGem;
-	class Spawner;
 
 	class SerializationAccess
 	{
@@ -374,13 +373,6 @@ namespace Temporal
 		{
 			serializer.serialize("point1", component._point1);
 			serializer.serialize("point2", component._point2);
-		}
-
-		template<class T>
-		static void serialize(const char* key, Spawner& component, T& serializer)
-		{
-			serializer.serialize("template-id", component._templateId);
-			serializer.serialize("entity-id", component._entityId);
 		}
 
 		template<class T>

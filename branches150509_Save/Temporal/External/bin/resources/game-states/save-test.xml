@@ -160,11 +160,196 @@
                 </fixture>
             </static-body>
         </entity>
-        <entity id="ENT_PATROL3_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL3">
+            <transform orientation="1">
                 <position x="2615.875000" y="1128.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL3" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WALK" timer="0.467003" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="125.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_WALK" timer="0.467003" state-flag="0"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="0.467003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.752001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.752001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.880001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.930000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.930000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.180004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.501190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.501190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="75.068329"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.769363"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.769363"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="92.841263"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.094177"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.094177"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="111.095261"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="139.347488"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="139.347488"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.931320"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.250931"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.250931"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="180.834946"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.885300"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.885300"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.203537"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="191.686813"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="191.686813"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.852890"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.091568"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.091568"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="228.091537"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="268.110474"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="268.110474"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="269.960083"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="282.424622"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="282.424622"/>
+                </animator1>
+                <animator2>
+                    <single-animator is-rewind="0" weight="1.000000" timer="6.568001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.821003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.821003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.393063"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.444172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.444172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="47.627190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.928482"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.928482"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="72.195526"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="95.413818"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="95.413818"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="101.996353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.676178"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.676178"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="125.243317"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="141.944077"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="141.944077"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="144.927994"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.198349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.198349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="171.015549"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.349747"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.349747"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="177.766647"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="182.850327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="182.850327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.502396"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.652634"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.652634"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.218643"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.423080"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.423080"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="236.023819"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="276.153442"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="276.153442"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="282.784485"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="288.051086"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="288.051086"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="47.908741" center="112.500000" radius="112.500000">
+                        <translation x="10.911103" y="18.088835"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-23.915810" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-28.618881"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-0.160841" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="9.037928" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.000000" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="-0.310145"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="32.153858"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="27.501623" center="22.500000" radius="67.500000">
+                        <translation x="-6.279623" y="-28.596418"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-22.930429" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.145855"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="13.822432" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="31.337175" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="15.066649"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-75.224297" center="-22.500000" radius="72.500000">
+                            <translation x="-22.703938" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
@@ -208,11 +393,196 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL2_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL2">
+            <transform orientation="-1">
                 <position x="1738.000000" y="1128.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL2" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WAIT" timer="5.000004" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="5.034004" state-flag="1"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="5.034004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.770006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.770006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.870007"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="36.954018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="36.954018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="43.154034"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.446304"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.446304"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="75.013397"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="90.730438"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="90.730438"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="95.685898"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="112.607742"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="112.607742"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.679977"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="134.880325"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="134.880325"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="136.797287"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="162.668594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="162.668594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="165.219711"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="170.318497"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="170.318497"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.485397"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.485397"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.485397"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="178.620163"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="183.704056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="183.704056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.754196"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="216.925186"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="216.925186"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.009354"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="262.244507"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="262.244507"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="267.909973"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="277.091431"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="277.091431"/>
+                </animator1>
+                <animator2>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="5.567001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.802998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.802998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.368999"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.420074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.420074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="43.370094"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.983398"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.983398"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.216415"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.452805"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.452805"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.619797"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="101.670578"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="101.670578"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="119.162704"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="146.411057"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="146.411057"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="152.495316"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.781204"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.781204"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.865250"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.916550"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.916550"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.400925"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.400925"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.400925"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="197.153000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="202.634903"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="202.634903"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="208.401962"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="235.589401"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="235.589401"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="237.205307"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="282.019318"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="282.019318"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="288.151642"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="293.384979"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="293.384979"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="42.782513" center="112.500000" radius="112.500000">
+                        <translation x="10.911102" y="19.086601"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-23.288910"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.997764" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="1.533764"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="-0.997764" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="33.997765"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                        <translation x="-7.888947" y="-25.888885"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.799988"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="37.611847" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="16.064413"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                            <translation x="-23.333374" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK3">
             <transform orientation="1">
@@ -228,11 +598,190 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL6_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL6">
+            <transform orientation="1">
                 <position x="2743.875000" y="616.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL6" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WALK" timer="0.467003" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="125.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_WALK" timer="0.467003" state-flag="0"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="1">
+                <animator1>
+                    <single-animator is-rewind="0" weight="1.000000" timer="6.568001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.821003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.821003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.393063"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.444172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.444172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="46.494175"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="47.627190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.928482"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.928482"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="72.195526"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="95.413818"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="95.413818"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="101.996353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.676178"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.676178"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="125.243317"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="141.944077"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="141.944077"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="144.927994"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.198349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.198349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="171.015549"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.349747"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.349747"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="177.766647"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="182.850327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="182.850327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.502396"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.653610"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.653610"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.221634"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.411087"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.411087"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.411087"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.411087"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="229.411087"/>
+                </animator1>
+                <animator2>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="0.467003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.752001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.752001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.880001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.930000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.930000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.513000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.180004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.501190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.501190"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="75.068329"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.769363"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.769363"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="92.841263"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.094177"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.094177"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="111.095261"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="139.347488"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="139.347488"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.931320"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.250931"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.250931"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="180.834946"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.885300"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.885300"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="186.035324"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="187.703537"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="191.685806"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="191.685806"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.368820"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.103592"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.103592"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.103592"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.103592"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="223.103592"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="47.908741" center="112.500000" radius="112.500000">
+                        <translation x="10.911103" y="18.088835"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-23.915810" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-28.618881"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-0.160841" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="9.037928" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.000000" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="-0.310145"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="32.153858"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="27.501623" center="22.500000" radius="67.500000">
+                        <translation x="-6.279623" y="-28.596418"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-22.930429" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.145855"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="13.822432" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="31.337175" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="15.066649"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-75.224297" center="-22.500000" radius="72.500000">
+                            <translation x="-22.703938" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK7">
             <transform orientation="1">
@@ -760,11 +1309,196 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL4_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL4">
+            <transform orientation="-1">
                 <position x="2727.793945" y="1000.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL4" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WALK" timer="5.334003" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="-125.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_WALK" timer="5.334003" state-flag="0"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="5.334003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.753002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.753002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.220001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.254002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.254002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.837002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.837002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.837002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="48.454082"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="74.746399"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="74.746399"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="80.313538"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.030319"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.030319"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="100.169159"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="113.387894"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="113.387894"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="116.388901"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="142.606277"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="142.606277"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="148.157181"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.393204"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.393204"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.944077"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.995102"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.995102"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.230026"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.230026"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.230026"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.732132"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.948502"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.948502"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="198.748856"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="230.418594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="230.418594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="235.986313"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="275.982056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="275.982056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="278.843323"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="291.307434"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="291.307434"/>
+                </animator1>
+                <animator2>
+                    <single-animator is-rewind="0" weight="1.000000" timer="5.567001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.820002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.820002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.086998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.120010"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.120010"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.170013"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.170013"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.170013"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.070038"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="64.683289"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="64.683289"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="64.916290"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.152924"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.152924"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.719421"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="112.382538"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="112.382538"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="117.950500"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="138.685165"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="138.685165"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="139.235123"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.056656"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.056656"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="171.139603"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="176.239243"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="176.239243"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.655289"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.655289"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.655289"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="185.305588"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.390732"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.390732"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.925705"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="222.095901"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="222.095901"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="225.578842"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="268.282043"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="268.282043"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="273.902557"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="279.169159"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="279.169159"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="54.198559" center="112.500000" radius="112.500000">
+                        <translation x="10.911103" y="18.088835"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-26.268129" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-27.938816"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.317171" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="9.192502" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.000000" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="-0.706603"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="31.757397"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="29.880823" center="22.500000" radius="67.500000">
+                        <translation x="-7.476078" y="-27.282022"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-0.924282" center="-67.500000" radius="67.500000">
+                            <translation x="1.278884" y="-40.238140"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="-2.467851" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="21.365944" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="15.066649"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-75.085068" center="-22.500000" radius="72.500000">
+                            <translation x="-22.541706" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK5">
             <transform orientation="1">
@@ -780,11 +1514,208 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL0_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL0">
+            <transform orientation="-1">
                 <position x="320.000000" y="1272.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL0" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WAIT" timer="3.784004" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.966003" state-flag="0"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="1">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="2.768002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.621006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.621006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="33.582005"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.671017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.671017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="39.254017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="39.254017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="39.254017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="39.421017"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.600380"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="68.600380"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.651405"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="92.782127"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="92.782127"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="93.799004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="110.961617"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="110.961617"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="111.762642"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="136.326172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="136.326172"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="137.043152"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="166.182220"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="166.182220"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="166.315216"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.899170"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.899170"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.732086"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.549072"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="175.549072"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.551086"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.516296"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.516296"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.832306"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="214.767517"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="214.767517"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.768066"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="263.120544"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="263.120544"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="264.331421"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="275.634155"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="275.634155"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="276.766846"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="301.286926"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="301.286926"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="327.964783"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="328.098694"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="328.098694"/>
+                </animator1>
+                <animator2>
+                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="1.049004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="30.952000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="30.952000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.718998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.702999"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.702999"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.752998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.752998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="40.752998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="45.853111"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.829330"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.829330"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="71.229340"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="94.401093"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="94.401093"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.606003"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="114.808746"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="114.808746"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="115.841751"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="144.965378"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="144.965378"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.998367"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.698349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.698349"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="177.284317"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.335251"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.335251"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.502243"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="193.336594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="193.336594"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="194.169724"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.822922"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.822922"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="202.790909"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="237.746353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="237.746353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="238.845322"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="281.143494"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="281.143494"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="283.842712"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="296.159241"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="296.159241"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="297.292236"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="315.309265"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="315.309265"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="346.938049"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="347.204956"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="347.204956"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="41.843628" center="112.500000" radius="112.500000">
+                        <translation x="10.911102" y="18.147713"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-23.288910"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.058877" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="0.594877"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="-0.058877" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="33.058876"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                        <translation x="-7.888947" y="-25.888885"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.799988"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="38.550728" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="15.125527"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                            <translation x="-23.333374" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
@@ -996,11 +1927,202 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL1_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL1">
+            <transform orientation="1">
                 <position x="1590.000000" y="1128.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL1" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WAIT" timer="5.000004" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="5.034004" state-flag="1"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="1">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="5.567001"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.802998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.802998"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.368999"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.420074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.420074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.470074"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="43.370094"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.983398"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.983398"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="70.216415"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.452805"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.452805"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="101.990570"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.136688"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="118.136688"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="124.204620"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.966080"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.966080"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="146.466080"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="173.787338"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="173.787338"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="177.637344"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="181.437119"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="181.437119"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="183.854111"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.938309"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="188.938309"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.089584"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.589615"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="195.589615"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.772659"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="235.609726"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="235.609726"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="241.693680"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="280.457489"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="280.457489"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="283.084869"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="294.316559"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="294.316559"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="295.716400"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="294.649506"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="294.649506"/>
+                </animator1>
+                <animator2>
+                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="5.034004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.770006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.770006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="31.870007"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="36.954018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="36.954018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="37.537018"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="43.154034"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.446304"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="69.446304"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="75.013397"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="90.730438"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="90.730438"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="91.265381"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.633728"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.633728"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="108.016739"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="135.325302"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="135.325302"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="141.392227"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.662308"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="168.662308"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="174.746140"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.797226"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.797226"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.947250"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.947250"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.947250"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="180.532242"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="181.532211"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="181.532211"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="189.316422"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="216.904770"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="216.904770"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="218.787827"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="263.806335"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="263.806335"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="269.843994"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="277.475647"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="277.475647"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="281.141907"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="281.408936"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="281.408936"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="42.782513" center="112.500000" radius="112.500000">
+                        <translation x="10.911102" y="19.086601"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-23.288910"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.997764" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="1.533764"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="-0.997764" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="33.997765"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                        <translation x="-7.888947" y="-25.888885"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.799988"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="37.611847" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="16.064413"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                            <translation x="-23.333374" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
@@ -1016,11 +2138,190 @@
                 </fixture>
             </static-body>
         </entity>
-		<entity id="ENT_PATROL5_SPAWNER">
-            <transform>
+        <entity id="ENT_PATROL5">
+            <transform orientation="-1">
                 <position x="2698.000000" y="616.000000"/>
             </transform>
-            <spawner entity-id="ENT_PATROL5" template-id="ENT_PATROL" />
+            <collision-filter category="4" group="-1"/>
+            <patrol state="PAT_STT_WAIT" timer="3.117004" state-flag="0"/>
+            <dynamic-body body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="10.000000" y="40.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="15.000000" y="-45.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sensor id="SNS_TAKEDOWN" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="10.000000" y="0.000000"/>
+                        <radius x="20.000000" y="20.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <sight size="64.000000"/>
+            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="3.150005" state-flag="1"/>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
+                <animator1>
+                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="3.150005"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.736004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="28.736004"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="32.998005"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.037006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.037006"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.620010"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.620010"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="38.620010"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="45.287041"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="73.608353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="73.608353"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="80.187454"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="97.510056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="97.510056"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="103.548828"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="120.224121"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="120.224121"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="126.790985"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.074295"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="145.074295"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="150.091568"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="178.395157"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="178.395157"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.978836"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.030045"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.030045"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.265701"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.265701"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.265701"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="196.766800"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.999924"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="201.999924"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="204.016922"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="233.255692"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="233.255692"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="233.255692"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="233.255692"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="233.255692"/>
+                </animator1>
+                <animator2>
+                    <single-animator animation-id="POP_ANM_WALK" is-rewind="0" weight="1.000000" timer="6.584000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.837002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="34.837002"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.337055"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.337055"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.337055"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.387058"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.387058"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="41.387058"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="42.520088"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="65.821327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="65.821327"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="66.454338"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="89.673424"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="89.673424"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="96.239815"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="105.546333"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="105.546333"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="107.946358"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="136.217499"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="136.217499"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="142.801208"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="164.054352"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="164.054352"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="166.104370"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="171.204376"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="171.204376"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.620422"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.620422"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="172.620422"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="179.254364"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.339417"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="184.339417"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="190.906555"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.258850"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.258850"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.258850"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.258850"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="219.258850"/>
+                </animator2>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="5.000000"/>
+                    <scale x="0.400000" y="0.400000"/>
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="41.951397" center="112.500000" radius="112.500000">
+                        <translation x="10.911102" y="18.255486"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                            <translation x="-23.511108" y="-21.288879"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                <translation x="17.022278" y="-19.755554"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                        <translation x="4.000000" y="-23.288910"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                            <translation x="1.466675" y="-40.644440"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                <translation x="-1.711060" y="-33.711105"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.166649" center="0.000000" radius="90.000000">
+                        <translation x="-2.000000" y="0.702649"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="-0.166649" center="-11.250000" radius="33.750000">
+                        <translation x="-3.000000" y="33.166649"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                        <translation x="-7.888947" y="-25.888885"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                            <translation x="1.288940" y="-40.799988"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                <translation x="-2.266693" y="-33.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="38.442959" center="112.500000" radius="112.500000">
+                        <translation x="-9.822235" y="15.233299"/>
+                        <scale x="1.000000" y="1.000000"/>
+                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499619" center="-22.500000" radius="72.500000">
+                            <translation x="-23.333374" y="-21.711121"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                <translation x="17.911133" y="-20.000000"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                    <translation x="7.000000" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK4">
             <transform orientation="1">

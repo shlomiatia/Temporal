@@ -16,7 +16,7 @@ namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
-	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("spawner");
+	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
 	const Hash EDITABLE_FILTER("static-body");
 
 	void addEditableToEntity(Entity& entity)
@@ -137,23 +137,23 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
-			for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
+			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;
 				addEditableToEntity(entity);
 			}
 		}
-		if(message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			setEditorMode(true);
 			getEntity().getManager().addInputComponent(this);
 		}
-		else if(message.getID() == MessageID::UPDATE)
+		else if (message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::KEY_UP)
+		else if (message.getID() == MessageID::KEY_UP)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			handleKey(key);
@@ -169,17 +169,16 @@ namespace Temporal
 	void GameStateEditor::setEditorMode(bool editorMode)
 	{
 		HashList ids;
-		if (editorMode) 
+		if (editorMode)
 		{
 			ids.push_back(GameStateEditor::TYPE);
 			ids.push_back(Editable::TYPE);
 		}
-		
+
 		Editable::clearSelected();
 		clearCursor();
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(!editorMode);
-		getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSpawner();
 
 	}
 
@@ -222,7 +221,7 @@ namespace Temporal
 
 	void GSEGameStateListener::onLoaded(Hash id, GameState& gameState)
 	{
-		if(id == Hash("resources/game-states/save-test.xml"))
+		if (id == Hash("resources/game-states/save-test.xml"))
 		{
 			Entity* entity = new Entity(GameStateEditor::TYPE);
 			entity->add(new GameStateEditor());

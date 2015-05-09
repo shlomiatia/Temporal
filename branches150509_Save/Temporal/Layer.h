@@ -82,7 +82,7 @@ namespace Temporal
 	class DebugLayer : public Layer
 	{
 	public:
-		DebugLayer(LayersManager* manager) : Layer(manager), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _spawner(false){}
+		DebugLayer(LayersManager* manager) : Layer(manager), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false) {}
 
 		void draw();
 		void toggleSight() { _sight = !_sight; }
@@ -90,7 +90,6 @@ namespace Temporal
 		void toggleSensor() { _sensor = !_sensor; }
 		void toggleGrid() { _grid = !_grid; }
 		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
-		void toggleSpawner() { _spawner = !_spawner;  }
 	private:
 		void drawFPS();
 
@@ -99,7 +98,6 @@ namespace Temporal
 		bool _sensor;
 		bool _grid;
 		bool _navigationGraph;
-		bool _spawner;
 	};
 
 	class FXLayer : public Layer

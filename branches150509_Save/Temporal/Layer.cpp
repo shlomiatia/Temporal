@@ -140,7 +140,6 @@ namespace Temporal
 	static const Hash SIGHT_ID("sight");
 	static const Hash DYNAMIC_BODY_ID("dynamic-body");
 	static const Hash SENSOR_ID("sensor");
-	static const Hash SPAWNER_ID("spawner");
 
 	void DebugLayer::draw()
 	{
@@ -158,8 +157,6 @@ namespace Temporal
 			filter.push_back(DYNAMIC_BODY_ID);
 		if (_sensor)
 			filter.push_back(SENSOR_ID);
-		if (_spawner)
-			filter.push_back(SPAWNER_ID);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		Graphics::get().getSpriteBatch().end();
