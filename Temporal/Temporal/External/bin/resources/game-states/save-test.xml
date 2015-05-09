@@ -173,7 +173,7 @@
                         <radius x="10.000000" y="40.000000"/>
                     </obb>
                 </fixture>
-                <velocity x="125.000000" y="0.000000"/>
+                <velocity x="0.000000" y="0.000000"/>
             </dynamic-body>
             <sensor id="SNS_FRONT_EDGE" category-mask="1">
                 <fixture>
@@ -194,22 +194,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -323,7 +317,7 @@
         </entity>
         <entity id="ENT_PATROL2">
             <transform orientation="-1">
-                <position x="1738.000000" y="1128.000000"/>
+                <position x="2400.000000" y="1131.555542"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -355,22 +349,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -456,7 +444,7 @@
         </entity>
         <entity id="ENT_PATROL6">
             <transform orientation="1">
-                <position x="2720.000000" y="626.666626"/>
+                <position x="2720.000000" y="621.688843"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -467,7 +455,7 @@
                         <radius x="10.000000" y="40.000000"/>
                     </obb>
                 </fixture>
-                <velocity x="125.000000" y="0.000000"/>
+                <velocity x="0.000000" y="0.000000"/>
             </dynamic-body>
             <sensor id="SNS_FRONT_EDGE" category-mask="1">
                 <fixture>
@@ -488,22 +476,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -617,7 +599,7 @@
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
-                <position x="469.726715" y="1384.000000"/>
+                <position x="96.000000" y="244.828583"/>
             </transform>
             <collision-filter category="8" group="-1"/>
             <input-controller/>
@@ -656,22 +638,16 @@
             </sensor>
             <action-controller max-walk-force-per-second="250.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="4">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -1037,22 +1013,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -1170,22 +1140,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -1467,7 +1431,7 @@
         </entity>
         <entity id="ENT_PATROL1">
             <transform orientation="1">
-                <position x="1590.000000" y="1128.000000"/>
+                <position x="913.022217" y="1135.822266"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -1499,22 +1463,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -1632,22 +1590,16 @@
             <sight size="64.000000"/>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <animator1>
+                <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
+                </composite-animator1>
+                <composite-animator2>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator1>
-                <animator2>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </animator2>
+                </composite-animator2>
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">

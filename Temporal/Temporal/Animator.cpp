@@ -133,10 +133,12 @@ namespace Temporal
 		return animation.isCrossFade();
 	}
 
-	CompositeAnimator::CompositeAnimator(const Animator& owner)
+	void CompositeAnimator::init(const Animator& owner)
 	{
-		for (int i = _singleAnimators.size(); i < 3; ++i)
-			_singleAnimators.push_back(new SingleAnimator(owner));
+		while(_singleAnimators.size() < 3)
+			_singleAnimators.push_back(new SingleAnimator());
+		for (int i = 0; i < _singleAnimators.size(); ++i)
+			_singleAnimators[i]->init(&owner);
 	}
 
 	CompositeAnimator::~CompositeAnimator()
@@ -212,6 +214,8 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_animationSet = ResourceManager::get().getAnimationSet(_animationSetFile.c_str());
+			_animator1.init(*this);
+			_animator2.init(*this);
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
