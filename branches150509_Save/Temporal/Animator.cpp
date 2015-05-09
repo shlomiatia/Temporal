@@ -135,7 +135,7 @@ namespace Temporal
 
 	CompositeAnimator::CompositeAnimator(const Animator& owner)
 	{
-		for(int i = 0; i < 3; ++i)
+		for (int i = _singleAnimators.size(); i < 3; ++i)
 			_singleAnimators.push_back(new SingleAnimator(owner));
 	}
 
