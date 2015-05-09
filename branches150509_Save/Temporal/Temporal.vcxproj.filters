@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Patrol.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnums.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Hash.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeOperations.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEnums.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageUtils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementUtils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachineComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteSheet.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensor.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sight.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputController.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="EntitySystem.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Particles.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionFilter.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEnums.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Gamepad.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SaverLoader.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Temp1.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Delegate.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEditor.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Control.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinder.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGraph.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Navigator.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Editable.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateEditor.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FBO.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalEcho.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalPeriod.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializationAccess.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolComponent.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Patrol.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Hash.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeOperations.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageUtils.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementUtils.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachineComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteSheet.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensor.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sight.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputController.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="EntitySystem.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Particles.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionFilter.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixture.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Gamepad.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SaverLoader.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Control.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEditor.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGraph.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Navigator.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinder.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Editable.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateEditor.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FBO.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionController.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalEcho.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalPeriod.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializationAccess.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolComponent.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AI">
+      <UniqueIdentifier>{34be5eff-d527-414d-a280-e41c4c46477f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{ea8febfa-ed04-4a3e-b1f6-394e71cf37c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{d2fbca07-8f90-4d10-a05a-cfba0c01e738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{d43079ae-f5fd-46da-9429-00cde396dd24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{014c8123-e9c4-4975-8753-42e8924c5704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{b252260c-8069-44bf-b12b-892df903542c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{7cc3a81d-f970-433d-80f6-677135c3355a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{5751b9a1-ba8e-44ca-8a00-453fe852e022}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
