@@ -26,11 +26,6 @@ namespace Temporal
 	typedef std::unordered_map<Hash, std::shared_ptr<Font>> HashFontMap;
 	typedef HashFontMap::const_iterator FontIterator;
 
-	typedef std::vector<std::string> StringList;
-	typedef StringList::const_iterator StringIterator;
-	typedef std::unordered_map<Hash, GameState*> HashGameStateMap;
-	typedef HashGameStateMap::const_iterator GameStateIterator;
-
 	class IOJob
 	{
 	public:
@@ -82,9 +77,6 @@ namespace Temporal
 		IOThread& operator=(const IOThread&);
 	};
 
-	typedef std::unordered_map<std::string, std::string> StringMap;
-	typedef StringMap::const_iterator StringMapIterator;
-
 	class SettingsLoader : public IOJob
 	{
 	public:
@@ -101,15 +93,16 @@ namespace Temporal
 	class GameStateLoader : public IOJob
 	{
 	public:
-		GameStateLoader(const char* file = 0);
+		GameStateLoader(const char* path = 0) : _path(path), _id(path) {}
 		void executeImpl();
 
-		void add(const char* file);
-		const HashGameStateMap& getResult() const { return _result; }
+		GameState* getResult() const { return _result; }
+		Hash getId() const { return _id;  }
 
 	private:
-		StringList _files;
-		HashGameStateMap _result;
+		const char* _path;
+		Hash _id;
+		GameState* _result;
 	};
 
 	class ResourceManager

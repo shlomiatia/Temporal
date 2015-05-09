@@ -15,6 +15,7 @@
 namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
+	const Hash GameStateEditorPreview::TYPE = Hash("ENT_GAME_STATE_EDITOR_PREVIEW");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
 	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
 	const Hash EDITABLE_FILTER("static-body");
@@ -55,8 +56,6 @@ namespace Temporal
 
 	void GameStateEditor::handleKey(Key::Enum key)
 	{
-		bool editorMode = getEntity().getManager().getGameState().getUpdateFilter().size() != 0;
-
 		if (key == Key::R)
 		{
 			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSensor();
@@ -100,7 +99,12 @@ namespace Temporal
 		}
 		else if (key == Key::F1)
 		{
-			setEditorMode(!editorMode);
+			clearCursor();
+			const char* preview = "resources/game-states/save-test-preview.xml";
+			XmlSerializer serializer(new FileStream(preview, true, false));
+			serializer.serialize("game-state", getEntity().getManager().getGameState());
+			serializer.save();
+			GameStateManager::get().syncLoadAndShow(preview);
 		}
 		else if (key == Key::F2)
 		{
@@ -108,7 +112,7 @@ namespace Temporal
 			{
 				clearCursor();
 			}
-			else if (editorMode)
+			else
 			{
 				Vector position = Mouse::get().getOffsetPosition();
 				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
@@ -126,8 +130,8 @@ namespace Temporal
 		{
 			if (Editable::getSelected())
 			{
-				getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
 				Editable::clearSelected();
+				getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
 			}
 		}
 	}
@@ -145,7 +149,7 @@ namespace Temporal
 		}
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			setEditorMode(true);
+			setEditorMode();
 			getEntity().getManager().addInputComponent(this);
 		}
 		else if (message.getID() == MessageID::UPDATE)
@@ -166,19 +170,13 @@ namespace Temporal
 		}
 	}
 
-	void GameStateEditor::setEditorMode(bool editorMode)
+	void GameStateEditor::setEditorMode()
 	{
 		HashList ids;
-		if (editorMode)
-		{
-			ids.push_back(GameStateEditor::TYPE);
-			ids.push_back(Editable::TYPE);
-		}
-
-		Editable::clearSelected();
-		clearCursor();
+		ids.push_back(GameStateEditor::TYPE);
+		ids.push_back(Editable::TYPE);
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
-		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(!editorMode);
+		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(false);
 
 	}
 
@@ -210,7 +208,6 @@ namespace Temporal
 	{
 		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent(id, position);
 		addEditableToEntity(*newEntity);
-		getEntity().getManager().add(newEntity);
 	}
 
 	void GameStateEditor::moveCamera(const Vector& direction)
@@ -219,12 +216,34 @@ namespace Temporal
 		camera.setBottomLeft(camera.getBottomLeft() + direction * 10.0f);
 	}
 
+	void GameStateEditorPreview::handleMessage(Message& message)
+	{
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			getEntity().getManager().addInputComponent(this);
+		}
+		else if (message.getID() == MessageID::KEY_UP)
+		{
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if (key == Key::F1)
+			{
+				GameStateManager::get().syncUnloadCurrent();
+			}
+		}
+	}
+
 	void GSEGameStateListener::onLoaded(Hash id, GameState& gameState)
 	{
 		if (id == Hash("resources/game-states/save-test.xml"))
 		{
 			Entity* entity = new Entity(GameStateEditor::TYPE);
 			entity->add(new GameStateEditor());
+			gameState.getEntitiesManager().add(entity);
+		}
+		else if (id == Hash("resources/game-states/save-test-preview.xml"))
+		{
+			Entity* entity = new Entity(GameStateEditorPreview::TYPE);
+			entity->add(new GameStateEditorPreview());
 			gameState.getEntitiesManager().add(entity);
 		}
 	}

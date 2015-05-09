@@ -2,7 +2,6 @@
 #define GAMESTATEMANAGER_H
 
 #include "Hash.h"
-#include "ResourceManager.h"
 #include <vector>
 #include <unordered_map>
 
@@ -31,7 +30,6 @@ namespace Temporal
 		void draw() const;
 
 		void setUpdateFilter(HashList updateFilter) { _updateFilter = updateFilter; }
-		const HashList& getUpdateFilter() const { return _updateFilter; }
 		
 	private:
 		HashList _updateFilter;
@@ -78,6 +76,9 @@ namespace Temporal
 	private:
 	};
 
+	typedef std::unordered_map<Hash, GameState*> HashGameStateMap;
+	typedef HashGameStateMap::const_iterator GameStateIterator;
+
 	class GameStateManager
 	{
 	public:
@@ -96,9 +97,8 @@ namespace Temporal
 		void update(float framePeriod);
 		void draw() const;
 
-		void load(GameStateLoader* loader);
-		void unload(StringList files);
-		void show(const char* gameStateFile);
+		void syncLoadAndShow(const char* gameStateFile);
+		void syncUnloadCurrent();
 
 		GameState& getCurrentState() const; 
 
@@ -106,16 +106,13 @@ namespace Temporal
 		HashGameStateMap _states;
 		
 		GameStateListener* _listener;
-		GameStateLoader* _loader;
-		bool _unload;
-		StringList _files;
 		Hash _currentStateId;
 		Hash _nextStateId;
+		bool _unload;
 
-		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false), _loader(0), _listener(0) {};
+		Hash load(const char* gameStateFile);
 
-		void load();
-		void unload();
+		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _listener(0), _unload(false){};
 
 		GameStateManager(const GameStateManager&);
 		GameStateManager& operator=(const GameStateManager&);

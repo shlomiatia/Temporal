@@ -2,6 +2,7 @@
 #define SAVERLOADER_H
 
 #include "EntitySystem.h"
+#include "ResourceManager.h"
 
 namespace Temporal
 {
