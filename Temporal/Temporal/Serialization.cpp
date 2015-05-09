@@ -139,7 +139,6 @@ namespace Temporal
 
 	XmlSerializer::~XmlSerializer()
 	{
-		_buffer->close();
 		delete _buffer;
 	}
 
@@ -190,6 +189,7 @@ namespace Temporal
 		tinyxml2::XMLPrinter printer;
 		_doc.Print(&printer);
 		_buffer->copy(MemoryStream(printer.CStr()));
+		_buffer->close();
 	}
 
 	void XmlSerializer::preSerialize(const char* key)

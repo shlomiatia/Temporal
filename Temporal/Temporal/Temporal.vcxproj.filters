@@ -149,9 +149,6 @@
     <ClInclude Include="SaverLoader.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Temp1.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Common</Filter>
     </ClInclude>

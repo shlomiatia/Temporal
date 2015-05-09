@@ -50,7 +50,6 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="ShapeOperations.h" />
     <ClInclude Include="SpriteBatch.h" />
-    <ClInclude Include="Temp1.h" />
     <ClInclude Include="AnimationEditor.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Control.h" />

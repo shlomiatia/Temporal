@@ -149,16 +149,18 @@ namespace Temporal
 
 	void EntityTemplatesManager::init(GameState* gameState)
 	{
+		GameStateComponent::init(gameState);
 		XmlDeserializer deserializer(new FileStream("resources/game-states/templates.xml", false, false));
 		deserializer.serialize("entity", _templates);
 		_templateIterator = _templates.begin();
 	}
 
-	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId, Hash entityId, Vector& position)
+	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position)
 	{
 		Entity* newEntity = _templates.at(templateId)->clone();
-		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &position));
+		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &const_cast<Vector&>(position)));
 		newEntity->setId(entityId);
+		getGameState().getEntitiesManager().add(newEntity);
 		return newEntity;
 	}
 

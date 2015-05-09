@@ -134,6 +134,13 @@ namespace Temporal
 	}
 
 	PerformanceTimer& debugLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DEBUG_LAYER"));
+
+	static const Hash STATIC_BODY_ID("static-body");
+	static const Hash EDITABLE_ID("editable");
+	static const Hash SIGHT_ID("sight");
+	static const Hash DYNAMIC_BODY_ID("dynamic-body");
+	static const Hash SENSOR_ID("sensor");
+
 	void DebugLayer::draw()
 	{
 		debugLayerTimer.measure();
@@ -142,14 +149,14 @@ namespace Temporal
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashList filter;
-		filter.push_back(Hash("static-body"));
-		filter.push_back(Hash("editable"));
+		filter.push_back(STATIC_BODY_ID);
+		filter.push_back(EDITABLE_ID);
 		if (_sight)
-			filter.push_back(Hash("sight"));
+			filter.push_back(SIGHT_ID);
 		if (_dynamicBody)
-			filter.push_back(Hash("dynamic-body"));
+			filter.push_back(DYNAMIC_BODY_ID);
 		if (_sensor)
-			filter.push_back(Hash("sensor"));
+			filter.push_back(SENSOR_ID);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		Graphics::get().getSpriteBatch().end();
