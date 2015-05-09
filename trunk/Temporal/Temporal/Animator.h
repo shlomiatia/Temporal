@@ -37,9 +37,9 @@ namespace Temporal
 	class SingleAnimator
 	{
 	public:
-		SingleAnimator() : _owner(0) {}
-		explicit SingleAnimator(const Animator& owner) : _owner(&owner), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
+		SingleAnimator() : _owner(0), _animationId(Hash::INVALID), _isRewind(false), _weight(1.0f) {}
 
+		void init(const Animator* owner) { _owner = owner; }
 		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, float weight = 1.0f, float normalizedTime = -1.0f);
 		Hash getAnimationId() const { return _animationId; }
 		float getTime() const { return _timer.getElapsedTime(); }
@@ -71,9 +71,10 @@ namespace Temporal
 	class CompositeAnimator
 	{
 	public:
-		CompositeAnimator(const Animator& owner);
+		CompositeAnimator() {};
 		~CompositeAnimator();
 		
+		void init(const Animator& animator);
 		float getTime() const { return _singleAnimators[0]->getTime(); }
 		float getNormalizedTime() const { return _singleAnimators[0]->getNormalizedTime(); }
 		bool isActive() const { return _singleAnimators[0]->getAnimationId() != Hash::INVALID; }
@@ -97,7 +98,7 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _useAnimator2(false), _isDisableCrossFade(false), _animator1(*this), _animator2(*this) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _useAnimator2(false), _isDisableCrossFade(false) {}
 		
 		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
 		Hash getType() const { return TYPE; }
