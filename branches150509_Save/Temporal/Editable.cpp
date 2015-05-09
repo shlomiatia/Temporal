@@ -29,7 +29,12 @@ namespace Temporal
 
 	void Editable::leftMouseDown(MouseParams& params)
 	{
-		OBB shape = *static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+		OBB* shapePointer = static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+		OBB shape;
+		if (shapePointer)
+			shape = *shapePointer;
+		else
+			shape = OBBAABB(getPosition(*this), Vector(16.0f, 16.0f));
 		if (shape.getHeight() == 0.0f)
 			shape.setRadiusY(5.0f);
 		if (intersects(shape, params.getPosition()))

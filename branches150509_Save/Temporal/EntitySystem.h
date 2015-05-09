@@ -123,9 +123,9 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		Entity* cloneByTemplateId(Hash templateId, Hash entityId, Vector& position);
+		Entity* cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position);
 		Hash getCurrentTemplateId() const { return  _templateIterator->first; }
-		Entity* cloneCurrent(Hash entityId, Vector& position) { return cloneByTemplateId(_templateIterator->first, entityId, position); };
+		Entity* cloneCurrent(Hash entityId, const Vector& position) { return cloneByTemplateId(_templateIterator->first, entityId, position); };
 		void previousTemplate();
 		void nextTemplate();
 

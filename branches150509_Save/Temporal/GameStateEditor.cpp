@@ -16,7 +16,7 @@ namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
-	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
+	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("spawner");
 	const Hash EDITABLE_FILTER("static-body");
 
 	void addEditableToEntity(Entity& entity)
@@ -179,6 +179,7 @@ namespace Temporal
 		clearCursor();
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(!editorMode);
+		getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSpawner();
 
 	}
 

@@ -23,6 +23,7 @@
 #include "Editable.h"
 #include "SaverLoader.h"
 #include "GameStateEditor.h"
+#include "Spawner.h"
 
 namespace Temporal
 {
@@ -79,6 +80,8 @@ namespace Temporal
 			serialize(key, (TemporalPeriod*&)component, serializer);
 		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
+		else if (strcmp(key, Spawner::TYPE.getString()) == 0)
+			serialize(key, (Spawner*&)component, serializer);
 		else
 			abort();
 	}

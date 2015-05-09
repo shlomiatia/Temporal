@@ -12,30 +12,26 @@
 namespace Temporal
 {
 	GameState::GameState()
+		: _grid(new Grid()), _layersManager(new LayersManager()), _entityTemplatesManager(new EntityTemplatesManager()), _entitiesManager(new EntitiesManager()), _navigationGraph(new NavigationGraph())
 	{
-		_grid = new Grid();
-		_entitiesManager = new EntitiesManager();
-		_navigationGraph = new NavigationGraph();
-		_layersManager = new LayersManager();
-		_entityTemplatesManager = new EntityTemplatesManager();
 	}
 
 	GameState::~GameState()
 	{
-		delete _entitiesManager;
 		delete _navigationGraph;
+		delete _entitiesManager;
+		delete _entityTemplatesManager;
 		delete _layersManager;
 		delete _grid;
-		delete _entityTemplatesManager;
 	}
 
 	void GameState::init()
 	{
 		_grid->init(this);
 		_layersManager->init(this);
+		_entityTemplatesManager->init(this);
 		_entitiesManager->init(this);
 		_navigationGraph->init(this);
-		_entityTemplatesManager->init(this);
 	}
 
 	void GameState::update(float framePeriod)
