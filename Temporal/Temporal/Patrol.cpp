@@ -103,7 +103,7 @@ namespace Temporal
 			}
 		}
 
-		const float Acquire::ACQUIRE_TIME(1.0f);
+		const float Acquire::ACQUIRE_TIME(0.5f);
 
 		void Acquire::enter(void* param)
 		{
@@ -162,7 +162,7 @@ namespace Temporal
 			}
 		}
 
-		const float Wait::WAIT_TIME(5.0f);
+		const float Wait::WAIT_TIME(2.0f);
 
 		void Wait::handleMessage(Message& message)
 		{

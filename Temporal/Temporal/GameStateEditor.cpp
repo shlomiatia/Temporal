@@ -130,8 +130,8 @@ namespace Temporal
 		{
 			if (Editable::getSelected())
 			{
-				Editable::clearSelected();
 				getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
+				Editable::clearSelected();
 			}
 		}
 	}
