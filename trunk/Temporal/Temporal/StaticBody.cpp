@@ -4,7 +4,6 @@
 #include "Grid.h"
 #include "MessageUtils.h"
 #include "CollisionFilter.h"
-
 #include "Layer.h"
 
 namespace Temporal
@@ -36,7 +35,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
+			if (_fixture->getFilter().getCategory() != 0)
+				Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{

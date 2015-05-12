@@ -120,14 +120,28 @@
         </entity>
         <entity id="ENT_BLOCK62">
             <transform orientation="1">
-                <position x="3008.000000" y="928.000000"/>
+                <position x="3040.000000" y="928.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="320.000000" y="32.000000"/>
+                        <radius x="352.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+        </entity>
+        <entity id="ENT_BLOCK66">
+            <transform orientation="1">
+                <position x="3104.000000" y="352.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="416.000000" y="32.000000"/>
                     </obb>
                 </fixture>
             </static-body>
@@ -162,7 +176,7 @@
         </entity>
         <entity id="ENT_PATROL3">
             <transform orientation="1">
-                <position x="2615.875000" y="1128.000000"/>
+                <position x="2707.608154" y="1137.244385"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -272,6 +286,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
@@ -317,7 +332,7 @@
         </entity>
         <entity id="ENT_PATROL2">
             <transform orientation="-1">
-                <position x="2400.000000" y="1131.555542"/>
+                <position x="2474.666748" y="1140.799927"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -427,6 +442,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK3">
             <transform orientation="1">
@@ -444,7 +460,7 @@
         </entity>
         <entity id="ENT_PATROL6">
             <transform orientation="1">
-                <position x="2720.000000" y="621.688843"/>
+                <position x="3308.088867" y="620.977783"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -554,6 +570,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK7">
             <transform orientation="1">
@@ -599,7 +616,7 @@
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
-                <position x="96.000000" y="244.828583"/>
+                <position x="96.000000" y="256.000000"/>
             </transform>
             <collision-filter category="8" group="-1"/>
             <input-controller/>
@@ -727,23 +744,9 @@
                 </fixture>
             </static-body>
         </entity>
-        <entity id="ENT_BLOCK67">
-            <transform orientation="1">
-                <position x="3552.000000" y="608.000000"/>
-            </transform>
-            <collision-filter category="1" group="-1"/>
-            <static-body>
-                <fixture>
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="96.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-        </entity>
         <entity id="ENT_BLOCK63">
             <transform orientation="1">
-                <position x="3360.000000" y="960.000000"/>
+                <position x="3424.000000" y="960.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -813,21 +816,21 @@
         </entity>
         <entity id="ENT_BLOCK57">
             <transform orientation="1">
-                <position x="1632.000000" y="1152.000000"/>
+                <position x="1664.000000" y="1152.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="64.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
                     </obb>
                 </fixture>
             </static-body>
         </entity>
         <entity id="ENT_BLOCK53">
             <transform orientation="1">
-                <position x="753.640808" y="1279.545044"/>
+                <position x="736.000000" y="1216.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -925,14 +928,14 @@
         </entity>
         <entity id="ENT_BLOCK59">
             <transform orientation="1">
-                <position x="2464.000000" y="1152.000000"/>
+                <position x="2624.000000" y="1152.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="64.000000"/>
+                        <radius x="64.000000" y="64.000000"/>
                     </obb>
                 </fixture>
             </static-body>
@@ -953,14 +956,14 @@
         </entity>
         <entity id="ENT_BLOCK55">
             <transform orientation="1">
-                <position x="1696.000000" y="1184.000000"/>
+                <position x="2848.000000" y="736.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="96.000000"/>
+                        <radius x="160.000000" y="32.000000"/>
                     </obb>
                 </fixture>
             </static-body>
@@ -981,7 +984,7 @@
         </entity>
         <entity id="ENT_PATROL4">
             <transform orientation="-1">
-                <position x="3360.000000" y="1003.555603"/>
+                <position x="3435.377930" y="1003.555603"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -1091,6 +1094,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK5">
             <transform orientation="1">
@@ -1218,6 +1222,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
@@ -1277,28 +1282,28 @@
         </entity>
         <entity id="ENT_BLOCK61">
             <transform orientation="1">
-                <position x="3424.000000" y="992.000244"/>
+                <position x="3488.000000" y="832.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="288.000000"/>
+                        <radius x="32.000000" y="448.000000"/>
                     </obb>
                 </fixture>
             </static-body>
         </entity>
         <entity id="ENT_BLOCK65">
             <transform orientation="1">
-                <position x="3103.999512" y="544.000000"/>
+                <position x="3024.000000" y="544.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="416.000000" y="32.000000"/>
+                        <radius x="336.000000" y="32.000000"/>
                     </obb>
                 </fixture>
             </static-body>
@@ -1361,28 +1366,28 @@
         </entity>
         <entity id="ENT_BLOCK64">
             <transform orientation="1">
-                <position x="3104.000000" y="736.000000"/>
+                <position x="3264.000000" y="736.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="288.000000" y="32.000000"/>
+                        <radius x="192.000000" y="32.000000"/>
                     </obb>
                 </fixture>
             </static-body>
         </entity>
         <entity id="ENT_BLOCK60">
             <transform orientation="1">
-                <position x="3040.000000" y="1088.000000"/>
+                <position x="3072.000000" y="1088.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="352.000000" y="0.000000"/>
+                        <radius x="384.000000" y="0.000000"/>
                     </obb>
                 </fixture>
             </static-body>
@@ -1541,6 +1546,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
@@ -1558,7 +1564,7 @@
         </entity>
         <entity id="ENT_PATROL5">
             <transform orientation="-1">
-                <position x="3488.000000" y="623.822205"/>
+                <position x="3424.000000" y="620.977783"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -1668,6 +1674,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK4">
             <transform orientation="1">
@@ -1727,28 +1734,28 @@
         </entity>
         <entity id="ENT_BLOCK58">
             <transform orientation="1">
-                <position x="2528.000000" y="1184.000000"/>
+                <position x="3408.000000" y="576.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="96.000000"/>
+                        <radius x="48.000000" y="0.000000"/>
                     </obb>
                 </fixture>
             </static-body>
         </entity>
         <entity id="ENT_BLOCK54">
             <transform orientation="1">
-                <position x="864.000000" y="1184.000000"/>
+                <position x="864.000000" y="1152.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="96.000000"/>
+                        <radius x="32.000000" y="64.000000"/>
                     </obb>
                 </fixture>
             </static-body>

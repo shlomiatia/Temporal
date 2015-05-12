@@ -60,7 +60,7 @@ namespace Temporal
 			{
 				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 			}
-			if (Keyboard::get().getKey(Key::TILDE))
+			if (Keyboard::get().getKey(Key::LEFT_SHIFT))
 			{
 				getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
 			}

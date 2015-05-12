@@ -6,6 +6,8 @@
 #include "SceneNode.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
+#include "Texture.h"
+#include "Math.h"
 #include <SDL_opengl.h>
 
 namespace Temporal
@@ -72,6 +74,19 @@ namespace Temporal
 			Graphics::get().getMatrixStack().top().translate(position);
 			if(entityOrientation != Side::RIGHT)
 				Graphics::get().getMatrixStack().top().scale(Vector(-1.0f, 1.0f));
+
+			if (_root->getChildren().size() == 0) 
+			{
+				const OBB* shape = static_cast<const OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+				if (shape)
+				{
+					float angle = AngleUtils::radiansToDegrees(shape->getAngle());
+					Graphics::get().getMatrixStack().top().rotate(angle);
+					Vector scale(shape->getRadiusX() / _spriteSheet->getTexture().getSize().getX() * 2.0f, shape->getRadiusY() / _spriteSheet->getTexture().getSize().getY() * 2.0f);
+					Graphics::get().getMatrixStack().top().scale(scale);
+				}
+			}
+			
 			draw(*_root);
 		}
 		Graphics::get().getMatrixStack().pop();
