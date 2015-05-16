@@ -52,6 +52,7 @@ namespace Temporal
 		virtual ~GameStateComponent() {}
 		virtual void init(GameState* gameState) { _gameState = gameState; }
 		GameState& getGameState() { return *_gameState; }
+		const GameState& getGameState() const { return *_gameState; }
 	private:
 		GameState* _gameState;
 

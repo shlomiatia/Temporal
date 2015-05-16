@@ -34,6 +34,29 @@
                 </fixture>
             </static-body>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL2">
+            <transform orientation="1">
+                <position x="3104.000000" y="672.000000"/>
+            </transform>
+            <collision-filter category="0" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <sensor id="SNS_CAMERA_CONTROL" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <camera-control/>
+        </entity>
         <entity id="ENT_BLOCK13">
             <transform orientation="1">
                 <position x="2528.000000" y="128.000000"/>
@@ -730,6 +753,29 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL0">
+            <transform orientation="1">
+                <position x="1216.000000" y="1344.000000"/>
+            </transform>
+            <collision-filter category="0" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <sensor id="SNS_CAMERA_CONTROL" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <camera-control/>
+        </entity>
         <entity id="ENT_BLOCK32">
             <transform orientation="1">
                 <position x="1376.000000" y="640.000000"/>
@@ -925,6 +971,29 @@
                     </obb>
                 </fixture>
             </static-body>
+        </entity>
+        <entity id="ENT_CAMERA_CONTROL1">
+            <transform orientation="1">
+                <position x="3104.000000" y="1184.000000"/>
+            </transform>
+            <collision-filter category="0" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <sensor id="SNS_CAMERA_CONTROL" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <camera-control/>
         </entity>
         <entity id="ENT_BLOCK59">
             <transform orientation="1">
@@ -1745,6 +1814,29 @@
                     </obb>
                 </fixture>
             </static-body>
+        </entity>
+        <entity id="ENT_CAMERA_CONTROL3">
+            <transform orientation="1">
+                <position x="2144.000000" y="1344.000000"/>
+            </transform>
+            <collision-filter category="0" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <sensor id="SNS_CAMERA_CONTROL" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <camera-control/>
         </entity>
         <entity id="ENT_BLOCK54">
             <transform orientation="1">

@@ -48,6 +48,7 @@ namespace Temporal
 	class Navigator;
 	class TemporalEcho;
 	class LightGem;
+	class CameraControl;
 
 	class SerializationAccess
 	{
@@ -391,6 +392,9 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, LightGem& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, CameraControl& component, T& serializer) {}
 	};
 }
 

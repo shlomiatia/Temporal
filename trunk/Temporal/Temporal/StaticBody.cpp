@@ -37,6 +37,8 @@ namespace Temporal
 		{
 			if (_fixture->getFilter().getCategory() != 0)
 				Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
+			else
+				Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f, 0.5f));
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)
 		{
