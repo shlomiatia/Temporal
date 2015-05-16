@@ -25,8 +25,8 @@ namespace Temporal
 
 		void init(const char* gameState);
 		void dispose();
-		void update();
-		void draw();
+		float update();
+		void draw(float framePeriod);
 
 		Game() : _isRunning(false), _lastFrameTime(0.0f) {}
 		Game(const Game&);

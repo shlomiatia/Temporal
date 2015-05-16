@@ -8,6 +8,7 @@
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+	static const float MAX_CHANGE_PER_SECOND = 1000.0f;
 
 	Camera::Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _center(Vector::Zero), _targetCenter(Vector::Zero)
 	{
@@ -16,7 +17,7 @@ namespace Temporal
 		_targetCenter = cameraSize / 2.0f;
 	}
 
-	void Camera::draw()
+	void Camera::draw(float framePeriod)
 	{
 		if(_followPlayer)
 		{
@@ -26,12 +27,12 @@ namespace Temporal
 		}
 		
 		Vector movement = _targetCenter - _center;;
-
-		const float MAX_CHANGE = 15.0f;
-		float modifierX = abs(MAX_CHANGE / movement.getX());
+		
+		float maxChange = MAX_CHANGE_PER_SECOND * framePeriod;
+		float modifierX = abs(maxChange / movement.getX());
 		if (modifierX < 1.0f && modifierX > 0.0f)
 			movement.setX(movement.getX() * modifierX);
-		float modifierY = abs(MAX_CHANGE / movement.getY());
+		float modifierY = abs(maxChange / movement.getY());
 		if (modifierY < 1.0f && modifierY > 0.0f)
 			movement.setY(movement.getY() * modifierY);
 

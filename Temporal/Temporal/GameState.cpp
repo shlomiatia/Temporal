@@ -42,9 +42,9 @@ namespace Temporal
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod), updateFilter);	
 	}
 
-	void GameState::draw() const
+	void GameState::draw(float framePeriod) const
 	{
-		_layersManager->draw();
+		_layersManager->draw(framePeriod);
 	}
 
 	GameState& GameStateManager::getCurrentState() const
@@ -115,8 +115,8 @@ namespace Temporal
 		getCurrentState().update(framePeriod);
 	}
 
-	void GameStateManager::draw() const
+	void GameStateManager::draw(float framePeriod) const
 	{
-		getCurrentState().draw();
+		getCurrentState().draw(framePeriod);
 	}
 }

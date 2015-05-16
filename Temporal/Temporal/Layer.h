@@ -34,7 +34,7 @@ namespace Temporal
 	public:
 		Layer(LayersManager* manager) : _manager(manager) {}
 		virtual ~Layer() {};
-		virtual void draw() = 0;
+		virtual void draw(float framePeriod) = 0;
 
 	protected:
 		LayersManager& getManager() { return *_manager; }
@@ -56,7 +56,7 @@ namespace Temporal
 	public:
 		SpriteLayer(LayersManager* manager);
 
-		void draw();
+		void draw(float framePeriod);
 		void add(LayerType::Enum layer, Component* component) { _layers.at(layer).push_back(component); }
 		void remove(LayerType::Enum layer, Component* component);
 		LayerComponentsMap& get() { return _layers; }
@@ -72,7 +72,7 @@ namespace Temporal
 	public:
 		GUILayer(LayersManager* manager) : Layer(manager) {}
 
-		void draw();
+		void draw(float framePeriod);
 		void add(Component* component) { _components.push_back(component); }
 		std::vector<Component*>& get() { return _components; }
 
@@ -85,7 +85,7 @@ namespace Temporal
 	public:
 		DebugLayer(LayersManager* manager) : Layer(manager), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false) {}
 
-		void draw();
+		void draw(float framePeriod);
 		void toggleSight() { _sight = !_sight; }
 		void toggleDynamicBody() { _dynamicBody = !_dynamicBody; }
 		void toggleSensor() { _sensor = !_sensor; }
@@ -107,7 +107,7 @@ namespace Temporal
 		FXLayer(LayersManager* manager);
 
 		void preDraw();
-		void draw();
+		void draw(float framePeriod);
 		void draw2();
 	private:
 		int _fxTimeUniform;
@@ -135,7 +135,7 @@ namespace Temporal
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		FXLayer& getFXLayer() { return *_fxLayer; }
 		DebugLayer& getDebugLater() { return *_debugLayer; }
-		void draw();
+		void draw(float framePeriod);
 
 	private:
 		bool _cameraFollowPlayer;

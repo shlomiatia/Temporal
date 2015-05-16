@@ -51,15 +51,15 @@ namespace Temporal
 		_lastFrameTime = Time::now();
 		while (_isRunning)
 		{
-			update();
-			draw();
+			float framePeriod = update();
+			draw(framePeriod);
 		}
 
 		dispose();
 	}
 
 	PerformanceTimer& updateTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_UPDATE"));
-	void Game::update()
+	float Game::update()
 	{
 		updateTimer.measure();
 		Input::get().update();
@@ -70,15 +70,16 @@ namespace Temporal
 		GameStateManager::get().update(framePeriod);
 		_lastFrameTime = currentFrameTime;
 		updateTimer.print("UPDATE");
+		return framePeriod;
 	}
 
 	PerformanceTimer& drawTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_DRAW"));
 	PerformanceTimer& finishDrawingTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_FINISH_DRAWING"));
-	void Game::draw()
+	void Game::draw(float framePeriod)
 	{
 		Graphics::get().prepareForDrawing();
 		drawTimer.measure();
-		GameStateManager::get().draw();
+		GameStateManager::get().draw(framePeriod);
 		drawTimer.print("DRAW");
 		finishDrawingTimer.measure();
 		Graphics::get().finishDrawing();

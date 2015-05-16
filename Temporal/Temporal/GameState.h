@@ -27,7 +27,7 @@ namespace Temporal
 
 		void init();
 		void update(float framePeriod);
-		void draw() const;
+		void draw(float framePeriod) const;
 
 		void setUpdateFilter(HashList updateFilter) { _updateFilter = updateFilter; }
 		
@@ -96,7 +96,7 @@ namespace Temporal
 		void dispose();
 
 		void update(float framePeriod);
-		void draw() const;
+		void draw(float framePeriod) const;
 
 		void syncLoadAndShow(const char* gameStateFile);
 		void syncUnloadCurrent();

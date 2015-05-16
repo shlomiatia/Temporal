@@ -2,14 +2,31 @@
 #define TEMPORALECHO_H
 
 #include "EntitySystem.h"
+#include "Timer.h"
 #include <vector>
 
 namespace Temporal
 {
 	class Entity;
 	class Stream;
-	typedef std::vector<Stream*> EchoList;
-	typedef EchoList::const_iterator EchoIterator;
+
+	class TemporalEchoData
+	{
+	public:
+		TemporalEchoData(float time, const Stream* stream) : _time(time), _stream(stream) {};
+
+		float getTime() const { return _time; }
+		const Stream* getStream() { return _stream; }
+	private:
+		float _time;
+		const Stream* _stream;
+
+		TemporalEchoData(const TemporalEchoData&);
+		TemporalEchoData& operator=(const TemporalEchoData&);
+	};
+
+	typedef std::vector<TemporalEchoData*> TemporalEchoDataList;
+	typedef TemporalEchoDataList::const_iterator TemporalEchoDataIterator;
 	
 	class TemporalEcho : public Component
 	{
@@ -32,9 +49,11 @@ namespace Temporal
 		void disableEcho();
 		HashList getFilter() const;
 
-		EchoList _echoesData;
+		TemporalEchoDataList _echoesData;
 		Entity* _echo;
 		bool _echoReady;
+		Timer _saveTimer;
+		Timer _loadTimer;
 	};
 }
 #endif

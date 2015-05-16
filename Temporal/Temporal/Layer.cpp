@@ -43,11 +43,11 @@ namespace Temporal
 			delete *i;
 	}
 
-	void LayersManager::draw()
+	void LayersManager::draw(float framePeriod)
 	{		
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
-			(**i).draw();
+			(**i).draw(framePeriod);
 		}
 	}
 
@@ -79,7 +79,7 @@ namespace Temporal
 	}
 
 	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
-	void SpriteLayer::draw()
+	void SpriteLayer::draw(float framePeriod)
 	{
 		spriteLayerTimer.measure();
 		//getManager().getFXLayer().preDraw();
@@ -99,7 +99,7 @@ namespace Temporal
 	}
 
 	PerformanceTimer& guiLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_GUI_LAYER"));
-	void GUILayer::draw()
+	void GUILayer::draw(float framePeriod)
 	{
 		guiLayerTimer.measure();
 		Graphics::get().getMatrixStack().top().reset();
@@ -141,7 +141,7 @@ namespace Temporal
 	static const Hash DYNAMIC_BODY_ID("dynamic-body");
 	static const Hash SENSOR_ID("sensor");
 
-	void DebugLayer::draw()
+	void DebugLayer::draw(float framePeriod)
 	{
 		debugLayerTimer.measure();
 		Graphics::get().getLinesSpriteBatch().begin();
@@ -184,7 +184,7 @@ namespace Temporal
 		_fbo1.bind();
 	}
 
-	void FXLayer::draw()
+	void FXLayer::draw(float framePeriod)
 	{
 		_fbo1.unbind();
 		_fxTime += 1.0f/60.0f;
