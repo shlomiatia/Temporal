@@ -11,7 +11,7 @@ namespace Temporal
 	{
 	public:
 		Camera(LayersManager* manager, bool followPlayer);
-		void draw();
+		void draw(float framePeriod);
 		
 		void setFollowPlayer(bool followPlayer) { _followPlayer = followPlayer; }
 		void setCenter(const Vector& position) { _targetCenter = position; clamp(); };

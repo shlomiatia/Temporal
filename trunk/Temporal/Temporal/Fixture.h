@@ -34,6 +34,9 @@ namespace Temporal
 		OBB _globalShape;
 
 		friend class SerializationAccess;
+
+		Fixture(const Fixture&);
+		Fixture& operator=(const Fixture&);
 	};
 }
 

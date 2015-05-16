@@ -106,7 +106,7 @@ namespace Temporal
 		_fbo.init();
 	}
 
-	void LightLayer::draw()
+	void LightLayer::draw(float framePeriod)
 	{
 		preDraw();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)

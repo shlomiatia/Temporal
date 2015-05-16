@@ -60,7 +60,7 @@ namespace Temporal
 	public:
 		LightLayer(LayersManager* manager, const Color& ambientColor);
 		void add(Component* component) { _components.push_back(component); }
-		void draw();
+		void draw(float framePeriod);
 
 	private:
 		const Color AMBIENT_COLOR;

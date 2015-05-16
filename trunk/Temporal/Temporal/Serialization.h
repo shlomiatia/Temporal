@@ -128,6 +128,7 @@ namespace Temporal
 		Stream* _buffer;
 
 		BaseSerializer(Stream* buffer) : _buffer(buffer) {}
+		BaseSerializer(const Stream* buffer) : _buffer(const_cast<Stream*>(buffer)) {}
 
 	private:
 		BaseSerializer(const BaseSerializer&);
@@ -173,7 +174,7 @@ namespace Temporal
 	class BinaryDeserializer : public BaseSerializer
 	{
 	public:
-		BinaryDeserializer(Stream* buffer) : BaseSerializer(buffer) {};
+		BinaryDeserializer(const Stream* buffer) : BaseSerializer(buffer) {};
 
 		void serialize(const char* key, int& value) { value = _buffer->readInt(); }
 		void serialize(const char* key, unsigned int& value) { value = _buffer->readUInt(); }

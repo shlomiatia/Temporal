@@ -25,7 +25,7 @@ namespace Temporal
 	TemporalEcho::~TemporalEcho()
 	{
 		delete _echo;
-		for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
+		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
 		{
 			delete *i;
 		}
@@ -35,32 +35,47 @@ namespace Temporal
 	{
 		if(!_echoReady)
 		{
-			float echoLifetime = _echoesData.size() * framePeriod;
-			if(echoLifetime > ECHO_READY_TIME)
+			if (_saveTimer.getElapsedTime() > ECHO_READY_TIME)
+			{
 				_echoReady = true;
+				_loadTimer.reset();
+			}
 		}
 		if(_echoReady)
 		{
-			EchoIterator first = _echoesData.begin();
-			Stream* deserialization = *first;
-			BinaryDeserializer deserializer(deserialization);
-			deserializer.serialize("entity", _echo);
-			delete deserialization;
-			_echoesData.erase(first);
-			float alpha = 0.2f;
-			_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+			_loadTimer.update(framePeriod);
+			TemporalEchoDataIterator first = _echoesData.begin();
+			if ((**first).getTime() <= _loadTimer.getElapsedTime())
+			{
+				const Stream* deserialization = (**first).getStream();
+				BinaryDeserializer deserializer(deserialization);
+				deserializer.serialize("entity", _echo);
+				delete deserialization;
+				_echoesData.erase(first);
+				float alpha = 0.2f;
+				_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+			}
 		}
+		_saveTimer.update(framePeriod);
 		Stream* serialization = new MemoryStream();
 		BinarySerializer serializer(serialization);
 		serializer.serialize("entity", getEntity());
-		_echoesData.push_back(serialization);
+		TemporalEchoData* data = new TemporalEchoData(_saveTimer.getElapsedTime(), serialization);
+		_echoesData.push_back(data);
+		
 	}
 
 	void TemporalEcho::disableEcho()
 	{
+		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end();)
+		{
+			delete *i;
+			i = _echoesData.erase(i);
+		}
 		float alpha = 0.0f;
 		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 		_echoReady = false;
+		_saveTimer.reset();
 	}
 
 	void TemporalEcho::mergeToTemporalEchoes()
@@ -68,15 +83,10 @@ namespace Temporal
 		if(_echoReady)
 		{
 			getEntity().handleMessage(Message(MessageID::PRE_LOAD));
-			EchoIterator first = _echoesData.begin();
-			Stream* deserialization = *first;
+			TemporalEchoDataIterator first = _echoesData.begin();
+			const Stream* deserialization = (**first).getStream();
 			BinaryDeserializer deserializer(deserialization);
 			deserializer.serialize("entity", getEntity());
-			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
-			{
-				delete *i;
-				i = _echoesData.erase(i);
-			}
 			disableEcho();
 			getEntity().handleMessage(Message(MessageID::POST_LOAD));
 		}
@@ -105,11 +115,6 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::LOAD)
 		{
-			for(EchoIterator i = _echoesData.begin(); i != _echoesData.end(); )
-			{
-				delete *i;
-				i = _echoesData.erase(i);
-			}
 			disableEcho();
 		}
 		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
