@@ -22,8 +22,12 @@ namespace Temporal
 	float getMaxMovementStepSize(const Fixture& fixture)
 	{
 		const OBB& shape = fixture.getLocalShape();
-		float maxHorizontalStepSize = shape.getRadiusX() - 1.0f;
-		float maxVerticalStepSize = shape.getRadiusY() - 1.0f;
+		float maxHorizontalStepSize = shape.getRadiusX() - EPSILON;
+		float maxVerticalStepSize = shape.getRadiusY() - EPSILON;
+		if (maxHorizontalStepSize <= 0.0f)
+			return maxVerticalStepSize;
+		if (maxVerticalStepSize <= 0.0f)
+			return maxHorizontalStepSize;
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
@@ -79,6 +83,10 @@ namespace Temporal
 		{
 			_bodyEnabled = getBoolParam(message.getParam());
 			_velocity = Vector::Zero;
+		}
+		else if (message.getID() == MessageID::SET_GRAVITY_ENABLED)
+		{
+			_gravityEnabled= getBoolParam(message.getParam());
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -249,8 +257,7 @@ namespace Temporal
 				if (direction.getY() <= 0.0f)
 					_velocity = velocity;
 
-				_velocity += GRAVITY * framePeriod;
-				Vector movementLeft = _velocity * framePeriod;
+				Vector movementLeft = determineMovement(leftPeriod);
 				executeMovement(movementLeft);
 			}
 		}
@@ -258,7 +265,8 @@ namespace Temporal
 
 	Vector DynamicBody::determineMovement(float framePeriod)
 	{
-		_velocity += GRAVITY * framePeriod;
+		if (_gravityEnabled)
+			_velocity += GRAVITY * framePeriod;
 			
 		Vector movement = _velocity * framePeriod;
 		return movement;
@@ -306,7 +314,7 @@ namespace Temporal
 	void DynamicBody::detectCollision(const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
 	{
 		Vector correction = Vector::Zero;
-		if(intersects(_dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
+		if(_fixture != staticBodyBounds && intersects(_dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
 		{
 			if(fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
 				correctCollision(staticBodyBounds, correction, collision, movement);

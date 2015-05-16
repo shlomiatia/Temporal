@@ -57,6 +57,7 @@ namespace Temporal
 			
 			GET_GROUND,
 			SET_GROUND,
+			SET_GRAVITY_ENABLED,
 			SET_BODY_ENABLED,
 			SET_IMPULSE,
 			SENSOR_START,
