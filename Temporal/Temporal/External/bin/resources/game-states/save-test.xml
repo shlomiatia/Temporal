@@ -9,6 +9,9 @@
 		<entity id="game-state-editor">
 			<game-state-editor />
 		</entity>
+		<entity id="debug-manager">
+			<debug-manager />
+		</entity>
         <entity id="ENT_BLOCK52">
             <transform orientation="1">
                 <position x="287.999939" y="1344.000000"/>
