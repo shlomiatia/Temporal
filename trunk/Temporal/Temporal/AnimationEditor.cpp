@@ -18,6 +18,8 @@
 
 namespace Temporal
 {
+	const Hash AnimationEditor::TYPE("animation-editor");
+
 	void AnimationEditor::setAnimation(Hash animationId)
 	{
 		_animationId = animationId;
@@ -565,16 +567,6 @@ namespace Temporal
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			update();
-		}
-	}
-
-	void AEGameStateListener::onLoaded(Hash id, GameState& gameState)
-	{
-		if(id == Hash("resources/game-states/animation-editor.xml"))
-		{
-			Entity* entity = new Entity(Hash("ENT_ANIMATION_EDITOR"));
-			entity->add(new AnimationEditor());
-			gameState.getEntitiesManager().add(entity);
 		}
 	}
 }

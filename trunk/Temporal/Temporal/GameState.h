@@ -60,23 +60,6 @@ namespace Temporal
 		GameStateComponent& operator=(const GameStateComponent&);
 	};
 
-	class GameStateListener
-	{
-	public:
-		GameStateListener() {}
-		virtual void onLoaded(Hash id, GameState& gameState) {};
-	private:
-		GameStateListener(const GameStateListener&);
-		GameStateListener& operator=(const GameStateListener&);
-	};
-
-	class BasicGameStateListener : public GameStateListener
-	{
-	public:
-		void onLoaded(Hash id, GameState& gameState);
-	private:
-	};
-
 	typedef std::unordered_map<Hash, GameState*> HashGameStateMap;
 	typedef HashGameStateMap::const_iterator GameStateIterator;
 
@@ -89,9 +72,6 @@ namespace Temporal
 			return (instance);
 		}
 
-		void setListener(GameStateListener* listener) { _listener = listener; }
-		GameStateListener* getListener() const { return _listener; }
-
 		void init(const char* gameStateFile);
 		void dispose();
 
@@ -102,18 +82,18 @@ namespace Temporal
 		void syncUnloadCurrent();
 
 		GameState& getCurrentState() const; 
+		GameState& getStateById(Hash id);
 
 	private:
 		HashGameStateMap _states;
 		
-		GameStateListener* _listener;
 		Hash _currentStateId;
 		Hash _nextStateId;
 		bool _unload;
 
 		Hash load(const char* gameStateFile);
 
-		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _listener(0), _unload(false){};
+		GameStateManager() : _currentStateId(Hash::INVALID), _nextStateId(Hash::INVALID), _unload(false){};
 
 		GameStateManager(const GameStateManager&);
 		GameStateManager& operator=(const GameStateManager&);

@@ -40,11 +40,5 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 	};
-
-	class GSEGameStateListener : public GameStateListener
-	{
-	public:
-		void onLoaded(Hash id, GameState& gameState);
-	};
 }
 #endif
