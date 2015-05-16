@@ -94,9 +94,7 @@ namespace Temporal
 	void SpriteLayer::remove(LayerType::Enum layer, Component* component) 
 	{ 
 		std::vector<Component*>& components = _layers.at(layer);
-		int size1 = components.size();
 		components.erase(std::remove(components.begin(), components.end(), component));
-		int size2 = components.size();
 	}
 
 	PerformanceTimer& guiLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_GUI_LAYER"));

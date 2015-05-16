@@ -124,7 +124,7 @@ namespace Temporal
 
 	void GameStateEditor::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_PRE_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
@@ -132,9 +132,6 @@ namespace Temporal
 				Entity& entity = *i->second;
 				addEditableToEntity(entity);
 			}
-		}
-		if (message.getID() == MessageID::ENTITY_INIT)
-		{
 			setEditorMode();
 			getEntity().getManager().addInputComponent(this);
 		}
