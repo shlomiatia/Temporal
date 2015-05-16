@@ -1,7 +1,5 @@
 #include "MovingPlatform.h"
 #include "MessageUtils.h"
-#include "Grid.h"
-#include "Math.h"
 
 namespace Temporal
 {
@@ -11,20 +9,17 @@ namespace Temporal
 
 	void MovingPlatform::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			float framePeriod = getFloatParam(message.getParam());			
-			const Vector& position = getPosition(*this);
-			const Vector& destination = _direction ? _point1 : _point2;
-			Vector distance = destination - position;
-			Vector direction = distance.normalize();
-			Vector movement = direction * SPEED_PER_SECOND * framePeriod;
-			Vector newPosition = position + movement;
-			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
-			
-			Vector nextDistance = destination - newPosition;
-			if(differentSign(distance.getX(), nextDistance.getX()) || differentSign(distance.getY(), nextDistance.getY()))
-				_direction = !_direction;
+			bool gravityEnabled = false;
+			raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
+			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+		}
+		else if(message.getID() == MessageID::BODY_COLLISION)
+		{
+			const Vector& collision = getVectorParam(message.getParam());
+			float modifier = collision.getX() < 0.0f ? 1.0f : -1.0f;
+			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND * modifier, 0.0f)));
 		}
 	}
 }

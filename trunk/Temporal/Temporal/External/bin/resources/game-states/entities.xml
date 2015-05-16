@@ -751,18 +751,15 @@
 				<position x="2624" y="384" />
 			</transform>
 			<collision-filter category="1" />
-			<static-body>
+			<dynamic-body>
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
 						<radius x="64" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
-			<moving-platform>
-				<point1 x="2024" y="384" />
-				<point2 x="2924" y="384" />
-			</moving-platform>
+			</dynamic-body>
+			<moving-platform />
 		</entity>
 	</entities-manager>
 </game-state>

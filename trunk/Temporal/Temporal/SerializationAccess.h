@@ -369,17 +369,13 @@ namespace Temporal
 		}
 		
 		template<class T>
-		static void serialize(const char* key, MovingPlatform& component, T& serializer)
-		{
-			serializer.serialize("point1", component._point1);
-			serializer.serialize("point2", component._point2);
-		}
-
-		template<class T>
 		static void serialize(const char* key, Patrol& component, T& serializer)
 		{
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
+
+		template<class T>
+		static void serialize(const char* key, MovingPlatform& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, InputController& component, T& serializer) {}
