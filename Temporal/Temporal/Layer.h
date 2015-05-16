@@ -38,6 +38,7 @@ namespace Temporal
 
 	protected:
 		LayersManager& getManager() { return *_manager; }
+		const LayersManager& getManager() const { return *_manager; }
 
 	private:
 		LayersManager* _manager;
