@@ -33,9 +33,11 @@ namespace Temporal
 	public:
 		AnimationEditor() : _offsetTranslation(Vector::Zero), _copyAnimation(Hash::INVALID), _translation(false), _rotation(false), _move(false), _paused(false), _index(0), _copyIndex(0), GRID_FRAMES(0), _offsetAngle(0.0f) {}
 
-		Hash getType() const { return Hash::INVALID; }
+		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		Component* clone() const { return 0; }
+
+		static const Hash TYPE;
 	private:
 		int GRID_FRAMES;
 
@@ -98,12 +100,6 @@ namespace Temporal
 		void snsLeftClick(const MouseParams& params);
 
 		
-	};
-
-	class AEGameStateListener : public GameStateListener
-	{
-	public:
-		void onLoaded(Hash id, GameState& gameState);
 	};
 }
 #endif

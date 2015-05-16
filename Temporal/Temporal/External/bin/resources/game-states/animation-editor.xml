@@ -4,6 +4,9 @@
 		<world-size x="1280" y="720" />
 	</grid>
 	<entities-manager>
+		<entity id="animation-editor ">
+			<animation-editor />
+		</entity>
 		<entity id="ENT_SKELETON">
 			<transform orientation="1">
 				<position x="455" y="384" />

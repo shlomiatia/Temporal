@@ -6,6 +6,12 @@
 		<world-size x="3840" y="720" />
 	</grid>
 	<entities-manager>
+		<entity id="game-saver-loader">
+			<game-saver-loader />
+		</entity>
+		<entity id="debug-manager">
+			<debug-manager />
+		</entity>
 		<entity id="ENT_BACKGROUND">
 			<transform>
 				<position x="640" y="360" />

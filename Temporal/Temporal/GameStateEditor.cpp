@@ -4,7 +4,6 @@
 #include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Grid.h"
-#include "Layer.h"
 #include "Camera.h"
 #include "Graphics.h"
 #include "MessageUtils.h"
@@ -14,8 +13,8 @@
 
 namespace Temporal
 {
-	const Hash GameStateEditor::TYPE = Hash("ENT_GAME_STATE_EDITOR");
-	const Hash GameStateEditorPreview::TYPE = Hash("ENT_GAME_STATE_EDITOR_PREVIEW");
+	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
+	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
 	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
 	const Hash EDITABLE_FILTER("static-body");
@@ -56,27 +55,7 @@ namespace Temporal
 
 	void GameStateEditor::handleKey(Key::Enum key)
 	{
-		if (key == Key::R)
-		{
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSensor();
-		}
-		else if (key == Key::G)
-		{
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleGrid();
-		}
-		else if (key == Key::L)
-		{
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSight();
-		}
-		else if (key == Key::B)
-		{
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleDynamicBody();
-		}
-		else if (key == Key::N)
-		{
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleNavigationGraph();
-		}
-		else if (key == Key::Q)
+		if (key == Key::Q)
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{
@@ -100,11 +79,18 @@ namespace Temporal
 		else if (key == Key::F1)
 		{
 			clearCursor();
-			const char* preview = "resources/game-states/save-test-preview.xml";
-			XmlSerializer serializer(new FileStream(preview, true, false));
+			const char* previewFile = "resources/game-states/save-test-preview.xml";
+			XmlSerializer serializer(new FileStream(previewFile, true, false));
 			serializer.serialize("game-state", getEntity().getManager().getGameState());
 			serializer.save();
-			GameStateManager::get().syncLoadAndShow(preview);
+			GameStateManager::get().syncLoadAndShow(previewFile);
+			GameState& gameState = GameStateManager::get().getStateById(Hash(previewFile));
+			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR_PREVIEW"));
+			GameStateEditorPreview* preview = new GameStateEditorPreview();
+			entity->add(preview);
+			DebugManager* debugManager = new DebugManager();
+			entity->add(debugManager);
+			gameState.getEntitiesManager().add(entity);
 		}
 		else if (key == Key::F2)
 		{
@@ -229,22 +215,6 @@ namespace Temporal
 			{
 				GameStateManager::get().syncUnloadCurrent();
 			}
-		}
-	}
-
-	void GSEGameStateListener::onLoaded(Hash id, GameState& gameState)
-	{
-		if (id == Hash("resources/game-states/save-test.xml"))
-		{
-			Entity* entity = new Entity(GameStateEditor::TYPE);
-			entity->add(new GameStateEditor());
-			gameState.getEntitiesManager().add(entity);
-		}
-		else if (id == Hash("resources/game-states/save-test-preview.xml"))
-		{
-			Entity* entity = new Entity(GameStateEditorPreview::TYPE);
-			entity->add(new GameStateEditorPreview());
-			gameState.getEntitiesManager().add(entity);
 		}
 	}
 }

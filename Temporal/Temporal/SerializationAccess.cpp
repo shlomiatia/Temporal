@@ -24,6 +24,7 @@
 #include "SaverLoader.h"
 #include "GameStateEditor.h"
 #include "Camera.h"
+#include "AnimationEditor.h"
 
 namespace Temporal
 {
@@ -38,7 +39,6 @@ namespace Temporal
 	{
 		shouldSerialize = value->getId() != GameStateEditor::TYPE && value->getId() != GameSaverLoader::TYPE;
 	}
-
 
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 	{
@@ -82,6 +82,15 @@ namespace Temporal
 			serialize(key, (PlayerPeriod*&)component, serializer);
 		else if (strcmp(key, CameraControl::TYPE.getString()) == 0)
 			serialize(key, (CameraControl*&)component, serializer);
+		// Singletons
+		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
+			serialize(key, (GameSaverLoader*&)component, serializer);
+		else if (strcmp(key, AnimationEditor::TYPE.getString()) == 0)
+			serialize(key, (AnimationEditor*&)component, serializer);
+		else if (strcmp(key, GameStateEditor::TYPE.getString()) == 0)
+			serialize(key, (GameStateEditor*&)component, serializer);
+		else if (strcmp(key, DebugManager::TYPE.getString()) == 0)
+			serialize(key, (DebugManager*&)component, serializer);
 		else
 			abort();
 	}
@@ -127,5 +136,14 @@ namespace Temporal
 			serialize(key, *(PlayerPeriod*&)component, serializer);
 		else if (component->getType() == CameraControl::TYPE)
 			serialize(key, *(CameraControl*&)component, serializer);
+		// Singletons
+		else if (component->getType() == GameSaverLoader::TYPE)
+			serialize(key, *(GameSaverLoader*&)component, serializer);
+		else if (component->getType() == AnimationEditor::TYPE)
+			serialize(key, *(AnimationEditor*&)component, serializer);
+		else if (component->getType() == GameStateEditor::TYPE)
+			serialize(key, *(GameStateEditor*&)component, serializer);
+		else if (component->getType() == DebugManager::TYPE)
+			serialize(key, *(DebugManager*&)component, serializer);
 	}
 }

@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "Camera.h"
 #include "Lighting.h"
+#include "Keyboard.h"
 #include <SDL_opengl.h>
 #include <algorithm>
 
@@ -169,6 +170,40 @@ namespace Temporal
 		
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
+	}
+
+	const Hash DebugManager::TYPE("debug-manager");
+
+	void DebugManager::handleMessage(Message& message)
+	{
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			getEntity().getManager().addInputComponent(this);
+		}
+		else  if (message.getID() == MessageID::KEY_UP)
+		{
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if (key == Key::R)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSensor();
+			}
+			else if (key == Key::G)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleGrid();
+			}
+			else if (key == Key::L)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSight();
+			}
+			else if (key == Key::B)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleDynamicBody();
+			}
+			else if (key == Key::N)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleNavigationGraph();
+			}
+		}
 	}
 
 	FXLayer::FXLayer(LayersManager* manager) : Layer(manager), _fbo1(Graphics::get().getFXSpriteBatch(), 10.0f), _fbo2(Graphics::get().getFXSpriteBatch(), 10.0f), _fxTimeUniform(0)

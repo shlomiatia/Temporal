@@ -50,6 +50,12 @@ namespace Temporal
 	class LightGem;
 	class CameraControl;
 
+	// Singletons
+	class GameSaverLoader;
+	class AnimationEditor;
+	class GameStateEditor;
+	class DebugManager;
+
 	class SerializationAccess
 	{
 	public:
@@ -391,6 +397,20 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, CameraControl& component, T& serializer) {}
+
+		// Singletons
+
+		template<class T>
+		static void serialize(const char* key, GameSaverLoader& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, AnimationEditor& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, GameStateEditor& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, DebugManager& component, T& serializer) {}
 	};
 }
 

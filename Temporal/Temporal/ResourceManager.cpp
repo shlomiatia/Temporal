@@ -88,14 +88,13 @@ namespace Temporal
 		_result = new Settings();
 		deserializer.serialize("settings", *_result);
 	}
+
 	void GameStateLoader::executeImpl()
 	{
 		XmlDeserializer deserializer(new FileStream(_path, false, false));
 		GameState* state = new GameState();
 		deserializer.serialize("game-state", *state);
 		state->init();
-		if (GameStateManager::get().getListener())
-			GameStateManager::get().getListener()->onLoaded(_id, *state);
 		_result = state;
 	}
 

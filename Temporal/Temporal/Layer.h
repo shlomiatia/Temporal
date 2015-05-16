@@ -4,9 +4,10 @@
 #include "GameState.h"
 #include "Vector.h"
 #include "Color.h"
+#include "FBO.h"
+#include "EntitySystem.h"
 #include <vector>
 #include <unordered_map>
-#include "FBO.h"
 
 namespace Temporal
 {
@@ -99,6 +100,18 @@ namespace Temporal
 		bool _sensor;
 		bool _grid;
 		bool _navigationGraph;
+	};
+
+	class DebugManager : public Component
+	{
+	public:
+		Hash getType() const { return TYPE; }
+		void handleMessage(Message& message);
+
+		Component* clone() const { return new DebugManager(); }
+
+		static const Hash TYPE;
+	private:
 	};
 
 	class FXLayer : public Layer
