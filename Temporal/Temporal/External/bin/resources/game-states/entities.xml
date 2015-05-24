@@ -68,7 +68,7 @@
 					</obb>
 				</fixture>
 			</sensor>
-			<action-controller max-walk-force-per-second="250.0" />
+			<action-controller max-walk-force-per-second="200.0" />
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
@@ -110,7 +110,7 @@
 			<light>
 				<color r="0.5" g="0.5" b="0.5" />
 			</light>
-		</entity>-->
+		</entity>
 		<entity id="ENT_CHASER">
 			<transform>
 				<position x="1000" y="512" />
@@ -163,7 +163,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>
+		</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />
@@ -752,7 +752,7 @@
 				</fixture>
 			</static-body>
 		</entity>
-		<entity id="ENT_ELEVATOR">
+		<!--<entity id="ENT_ELEVATOR">
 			<transform>
 				<position x="2624" y="384" />
 			</transform>
@@ -766,6 +766,6 @@
 				</fixture>
 			</dynamic-body>
 			<moving-platform />
-		</entity>
+		</entity>-->
 	</entities-manager>
 </game-state>

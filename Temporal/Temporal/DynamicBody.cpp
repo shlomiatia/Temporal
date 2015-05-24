@@ -152,7 +152,7 @@ namespace Temporal
 			if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
 			{
 				// BRODER
-				_velocity = _groundSegment.getNaturalDirection() * 500.0f;
+				_velocity = _groundSegment.getNaturalDirection() * 375.0f;
 				if(_velocity.getY() > 0.0f)
 					_velocity = -_velocity;
 				_ground = 0;
@@ -306,7 +306,7 @@ namespace Temporal
 		}
 		while(movement != Vector::Zero);
 
-		
+		modifyVelocity(collision);
 		if(collision != Vector::Zero)
 			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 	}
@@ -324,7 +324,7 @@ namespace Temporal
 	void DynamicBody::correctCollision(const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement)
 	{
 		modifyCorrection(staticBodyBounds, correction, movement);
-		modifyVelocity(correction);
+		
 
 		_dynamicBodyBounds.getOBB().translate(correction);
 		collision -= correction;
@@ -374,12 +374,12 @@ namespace Temporal
 		
 	}
 
-	void DynamicBody::modifyVelocity(const Vector& correction)
+	void DynamicBody::modifyVelocity(const Vector& collision)
 	{
 		// Stop the actor where the correction was applied
-		if(differentSign(correction.getX(), _velocity.getX()))
+		if (sameSign(collision.getX(), _velocity.getX()))
 			_velocity.setX(0.0f);
-		if(differentSign(correction.getY(), _velocity.getY()))
+		if (sameSign(collision.getY(), _velocity.getY()))
 			_velocity.setY(0.0f);
 	}
 }

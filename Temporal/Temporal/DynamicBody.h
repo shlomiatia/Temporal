@@ -50,7 +50,7 @@ namespace Temporal
 		void detectCollision(const Fixture* staticBodyBounds, Vector& collision, Vector& movement);
 		void correctCollision(const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement);
 		void modifyCorrection(const Fixture* staticBodyBounds, Vector& correction, Vector& movement);
-		void modifyVelocity(const Vector& correction);
+		void modifyVelocity(const Vector& collision);
 		bool transitionPlatform(const Vector& direction, Side::Enum side, float leftPeriod);
 
 		friend class SerializationAccess;

@@ -682,7 +682,7 @@
                     </obb>
                 </fixture>
             </sensor>
-            <action-controller max-walk-force-per-second="250.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
+            <action-controller max-walk-force-per-second="200.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
