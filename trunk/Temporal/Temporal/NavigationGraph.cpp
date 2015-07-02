@@ -339,7 +339,7 @@ namespace Temporal
 
 	void addPlatform(const StaticBody& body, ShapeList& platforms) 
 	{
-		if(body.getFixture().getFilter().getCategory() == CollisionCategory::OBSTACLE)
+		if(body.getFixture().getCategory() == CollisionCategory::OBSTACLE)
 		{
 			const OBB& platform = body.getFixture().getGlobalShape();
 			platforms.push_back(&platform);

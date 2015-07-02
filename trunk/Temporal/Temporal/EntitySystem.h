@@ -31,13 +31,15 @@ namespace Temporal
 	class Component
 	{
 	public:
-		Component() : _entity(0) {}
+		Component(bool bypassSave = false) : _entity(0), _bypassSave(bypassSave){}
 		virtual ~Component() {}
 
 		Entity& getEntity() { return *_entity; }
 		const Entity& getEntity() const { return *_entity; }
 		void init(Entity* entity) { _entity = entity; }
 		virtual Hash getType() const = 0;
+		bool isBypassSave() const { return _bypassSave; }
+		void setBypassSave(bool bypassSave) { _bypassSave = bypassSave; }
 
 		virtual void handleMessage(Message& message) = 0;
 		virtual Component* clone() const = 0;
@@ -45,6 +47,7 @@ namespace Temporal
 
 	private:
 		Entity* _entity;
+		bool _bypassSave;
 
 		Component(const Component&);
 		Component& operator=(const Component&);

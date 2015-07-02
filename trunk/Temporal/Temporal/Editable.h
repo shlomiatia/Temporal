@@ -11,7 +11,7 @@ namespace Temporal
 	class Editable : public Component
 	{
 	public:
-		explicit Editable(bool translationOnly) : 
+		explicit Editable(bool translationOnly) : Component(true),
 			_translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
 
 		Hash getType() const;

@@ -51,11 +51,7 @@ namespace Temporal
 					Graphics::get().getLinesSpriteBatch().add(getTileShape(i, j), Color(0.0f, 0.0f, 1.0f, 0.3f));
 					for(FixtureIterator k = fixtures->begin(); k != fixtures->end(); ++k)
 					{
-						if((**k).getEntityId() == Hash("ENT_PLAYER")) 
-						{
-							Graphics::get().getLinesSpriteBatch().add(getTileShape(i, j), Color(1.0f, 0.0f, 1.0f, 1.0f));
-							break;
-						}
+						Graphics::get().getLinesSpriteBatch().add((**k).getGlobalShape(), Color(1.0f, 0.0f, 1.0f, 1.0f));
 					}
 					
 				}
@@ -231,7 +227,7 @@ namespace Temporal
 				for(FixtureIterator iterator = bodies->begin(); iterator != bodies->end(); ++iterator)
 				{
 					const Fixture& body = **iterator;
-					if(body.getFilter().canCollide(mask, group) &&
+					if(body.canCollide(mask, group) &&
 					   intersects(ray, body.getGlobalShape(), &pointOfIntersection, &distance) &&
 					   distance < minDistance &&
 					   intersects(tile, pointOfIntersection))
@@ -281,7 +277,7 @@ namespace Temporal
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						const Fixture* body = *i;
-						if(body->getFilter().canCollide(mask, group) && (!checkIntersection || intersects(shape, body->getGlobalShape())))
+						if(body->canCollide(mask, group) && (!checkIntersection || intersects(shape, body->getGlobalShape())))
 							result.push_back(body);
 					}
 				}

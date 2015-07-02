@@ -34,4 +34,28 @@ namespace Temporal
 	{
 		return new Fixture(_localShape);
 	}
+
+	int Fixture::getCategory() const
+	{
+		if (_filter)
+			return _filter->getCategory();
+		else
+			return -1;
+	}
+
+	int Fixture::getGroup() const
+	{
+		if (_filter)
+			return _filter->getGroup();
+		else
+			return -1;
+	}
+
+	bool Fixture::canCollide(int mask, int group) const
+	{
+		return (mask & getCategory()) != 0 &&
+			(getGroup() == -1 ||
+			group == -1 ||
+			getGroup() == group);
+	}
 }

@@ -21,7 +21,9 @@ namespace Temporal
 		OBB& getLocalShape() { return _localShape; }
 		const OBB& getGlobalShape() const { return _globalShape; }
 		OBB& getGlobalShape() { return _globalShape; }
-		const CollisionFilter& getFilter() const { return *_filter; }
+		int getCategory() const;
+		int getGroup() const;
+		bool canCollide(int mask, int group) const;
 		Hash getEntityId() const;
 
 		void update();

@@ -1,6 +1,8 @@
 #include "MessageUtils.h"
 #include "EntitySystem.h"
 #include "Vector.h"
+#include "Fixture.h"
+#include "Grid.h"
 
 namespace Temporal
 {
@@ -35,5 +37,52 @@ namespace Temporal
 			component.raiseMessage(Message(MessageID::ACTION_FORWARD));
 		else
 			component.raiseMessage(Message(MessageID::ACTION_BACKWARD));
+	}
+
+	void handleFixtureMessage(Message& message, Component& component, Fixture& fixture)
+	{
+		if (message.getID() == MessageID::GET_SHAPE)
+		{
+			if (!message.getParam())
+			{
+				const OBB* shape = &fixture.getGlobalShape();
+				message.setParam(const_cast<OBB*>(shape));
+			}
+			
+		}
+		else if (message.getID() == MessageID::ENTITY_POST_INIT)
+		{
+			fixture.init(component);
+		}
+		else if (message.getID() == MessageID::UPDATE)
+		{
+			fixture.update();
+		}
+	}
+
+	void handleNonGridFixtureMessage(Message& message, Component& component, Fixture& fixture)
+	{
+		handleFixtureMessage(message, component, fixture);
+		if (message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::POST_LOAD)
+		{
+			fixture.update();
+		}
+	}
+
+	void handleGridFixtureMessage(Message& message, Component& component, Fixture& fixture)
+	{
+		handleFixtureMessage(message, component, fixture);
+		if (message.getID() == MessageID::ENTITY_POST_INIT)
+		{
+			component.getEntity().getManager().getGameState().getGrid().add(&fixture);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			component.getEntity().getManager().getGameState().getGrid().remove(&fixture);
+		}
+		else if (message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::POST_LOAD)
+		{
+			component.getEntity().getManager().getGameState().getGrid().update(&fixture);
+		}
 	}
 }
