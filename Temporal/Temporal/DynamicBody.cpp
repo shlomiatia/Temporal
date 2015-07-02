@@ -40,20 +40,10 @@ namespace Temporal
 
 	void DynamicBody::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_POST_INIT)
+		handleGridFixtureMessage(message, *this, *_fixture);
+		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			_fixture->init(*this);
-			getEntity().getManager().getGameState().getGrid().add(_fixture);
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
-		}
-		else if (message.getID() == MessageID::ENTITY_DISPOSED)
-		{
-			getEntity().getManager().getGameState().getGrid().remove(_fixture);
-		}
-		else if(message.getID() == MessageID::GET_SHAPE)
-		{
-			const OBB* shape = &_fixture->getGlobalShape();
-			message.setParam(const_cast<OBB*>(shape));
 		}
 		else if(message.getID() == MessageID::GET_VELOCITY)
 		{
@@ -93,10 +83,6 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if(message.getID() == MessageID::SET_POSITION || message.getID() == MessageID::POST_LOAD)
-		{
-			getEntity().getManager().getGameState().getGrid().update(_fixture);
-		}
 	}
 
 	Segment getTopSegment(const OBB& shape, float leftX, float rightX)
@@ -135,7 +121,6 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriod)
 	{
-		_fixture->update();
 		_globalShapeClone = _fixture->getGlobalShape();
 
 		// Moving platform - position is set later

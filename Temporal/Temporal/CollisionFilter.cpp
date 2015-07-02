@@ -25,12 +25,4 @@ namespace Temporal
 			_category = category;
 		}
 	}
-
-	bool CollisionFilter::canCollide(int mask, int group) const
-	{
-		return (mask & _category) != 0 &&
-			   (_group == -1 ||
-			    group == -1 ||
-			    _group == group);
-	}
 }

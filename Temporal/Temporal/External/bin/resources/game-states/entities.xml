@@ -6,6 +6,9 @@
 		<world-size x="3840" y="720" />
 	</grid>
 	<entities-manager>
+		<entity id="game-state-editor">
+			<game-state-editor />
+		</entity>
 		<entity id="game-saver-loader">
 			<game-saver-loader />
 		</entity>
@@ -18,7 +21,7 @@
 			</transform>
 			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
-		<entity id="ENT_BACKGROUND2">
+		<!--<entity id="ENT_BACKGROUND2">
 			<transform>
 				<position x="1920" y="360" />
 			</transform>
@@ -29,7 +32,21 @@
 				<position x="3200" y="360" />
 			</transform>
 			<renderer layer="0" texture="resources/textures/bg.png" />
-		</entity>
+		</entity>-->
+		 <entity id="ENT_CAMERA_CONTROL1">
+            <transform orientation="1">
+                <position x="500.000000" y="256.000000"/>
+            </transform>
+            <sensor id="SNS_CAMERA_CONTROL" category-mask="8">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="455.000000" y="256.000000"/>
+                    </obb>
+                </fixture>
+            </sensor>
+            <camera-control/>
+        </entity>
 		<entity id="ENT_PLAYER">
 			<transform>
 				<position x="500" y="256" />
@@ -178,7 +195,7 @@
 				</fixture>
 			</static-body>
 		</entity>
-		<entity id="ENT_LEFT_WALL">
+		<!--<entity id="ENT_LEFT_WALL">
 			<transform>
 				<position x="32" y="360" />
 			</transform>

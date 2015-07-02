@@ -16,15 +16,28 @@ namespace Temporal
 	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
 	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
-	const Hash TRANSLATION_ONLY_EDITABLE_FILTER("dynamic-body");
-	const Hash EDITABLE_FILTER("static-body");
+	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control") });
+	const HashList EDITABLE_FILTER({ Hash("static-body") });
 
 	void addEditableToEntity(Entity& entity)
 	{
-		if (entity.get(EDITABLE_FILTER))
-			entity.add(new Editable(false));
-		else if (entity.get(TRANSLATION_ONLY_EDITABLE_FILTER))
-			entity.add(new Editable(true));
+		for (HashIterator i = TRANSLATION_ONLY_EDITABLE_FILTER.begin(); i != TRANSLATION_ONLY_EDITABLE_FILTER.end(); ++i)
+		{
+			if (entity.get(*i))
+			{
+				entity.add(new Editable(true));
+				return;
+			}
+				
+		}
+		for (HashIterator i = EDITABLE_FILTER.begin(); i != EDITABLE_FILTER.end(); ++i)
+		{
+			if (entity.get(*i))
+			{
+				entity.add(new Editable(false));
+				return;
+			}
+		}
 	}
 
 	void GameStateEditor::update(float framePeriod)

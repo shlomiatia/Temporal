@@ -30,8 +30,8 @@ namespace Temporal
 {
 	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
 	{
+		shouldSerialize = !value->isBypassSave();
 		Hash type = value->getType();
-		shouldSerialize = type != Editable::TYPE && type != EntitySaverLoader::TYPE && type != DebugManager::TYPE;
 		key = type.getString();
 	}
 

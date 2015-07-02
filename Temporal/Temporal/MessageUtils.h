@@ -11,6 +11,7 @@ namespace Temporal
 	class OBB;
 	class Vector;
 	class Contact;
+	class Fixture;
 	namespace MouseButton { enum Enum; }
 
 	const Vector& getPosition(const Component& component);
@@ -23,6 +24,8 @@ namespace Temporal
 	inline bool getBoolParam(void* data) { return *static_cast<bool*>(data); }
 
 	void sendDirectionAction(const Component& component, Side::Enum direction);
+	void handleGridFixtureMessage(Message& message, Component& component, Fixture& fixture);
+	void handleNonGridFixtureMessage(Message& message, Component& component, Fixture& fixture);
 
 	class SensorParams
 	{

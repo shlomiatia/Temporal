@@ -95,7 +95,6 @@ namespace Temporal
 			SET_LIT,
 			IS_LIT,
 
-			// For buttons/doors
 			ACTIVATE,
 			DIE
 		};

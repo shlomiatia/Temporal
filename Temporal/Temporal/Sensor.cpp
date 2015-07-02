@@ -7,6 +7,9 @@
 #include "Shapes.h"
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"
+
+#include "Layer.h"
+
 #include <algorithm>
 
 namespace Temporal
@@ -20,9 +23,8 @@ namespace Temporal
 
 	void Sensor::update()
 	{
-		_fixture->update();
 		const OBB& sensorShape = _fixture->getGlobalShape();
-		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getFilter().getGroup());
+		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getGroup());
 		_sensing = false;
 		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)
@@ -39,9 +41,14 @@ namespace Temporal
 
 	void Sensor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_INIT)
+		handleNonGridFixtureMessage(message, *this, *_fixture);
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			_fixture->init(*this);
+			getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::STATIC, this);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::STATIC, this);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{

@@ -105,6 +105,7 @@ namespace Temporal
 	class DebugManager : public Component
 	{
 	public:
+		DebugManager() : Component(true) {}
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
