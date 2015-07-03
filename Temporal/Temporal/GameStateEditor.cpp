@@ -17,7 +17,7 @@ namespace Temporal
 	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
 	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control") });
-	const HashList EDITABLE_FILTER({ Hash("static-body") });
+	const HashList EDITABLE_FILTER({ Hash("static-body"), Hash("renderer") });
 
 	void addEditableToEntity(Entity& entity)
 	{
@@ -114,7 +114,7 @@ namespace Temporal
 			else
 			{
 				Vector position = Mouse::get().getOffsetPosition();
-				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position, true);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 
@@ -139,6 +139,7 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
+			getEntity().setBypassSave(true);
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
@@ -200,9 +201,10 @@ namespace Temporal
 		}
 	}
 
-	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position)
+	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position, bool bypassSave)
 	{
 		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent(id, position);
+		newEntity->setBypassSave(bypassSave);
 		addEditableToEntity(*newEntity);
 	}
 

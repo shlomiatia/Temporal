@@ -20,7 +20,7 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 		void setEditorMode();
-		void cloneEntityFromTemplate(Hash id, Vector& position);
+		void cloneEntityFromTemplate(Hash id, Vector& position, bool bypassSave = false);
 		void clearCursor();
 		void update(float framePeriod);
 		void handleKey(Key::Enum key);

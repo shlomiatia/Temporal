@@ -23,6 +23,10 @@ namespace Temporal
 		Component* clone() const;
 
 		static const Hash TYPE;
+
+		const SceneNode& getRootSceneNode() const { return *_root; }
+		SceneNode& getRootSceneNode() { return *_root; }
+		SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
 	private:
 
 		std::string _textureFile;

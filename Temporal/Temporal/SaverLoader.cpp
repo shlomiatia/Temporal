@@ -7,7 +7,11 @@ namespace Temporal
 {
 	void EntitySaverLoader::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::LOAD)
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			getEntity().setBypassSave(true);
+		}
+		else if(message.getID() == MessageID::LOAD)
 		{
 			getEntity().handleMessage(Message(MessageID::PRE_LOAD));
 			BinaryDeserializer* deserializer = static_cast<BinaryDeserializer*>(message.getParam());

@@ -66,17 +66,18 @@ namespace Temporal
 
 	void SpriteLayer::innerDraw()
 	{
-		Graphics::get().getSpriteBatch().begin();
-		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
+			Graphics::get().getSpriteBatch().begin();
+			Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
 			ComponentList& components = _layers.at(static_cast<LayerType::Enum>(i));
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
 				(**j).handleMessage(Message(MessageID::DRAW));
 			}
+			Graphics::get().getSpriteBatch().end();
 		}
-		Graphics::get().getSpriteBatch().end();
+		
 	}
 
 	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
@@ -174,8 +175,10 @@ namespace Temporal
 
 	void DebugManager::handleMessage(Message& message)
 	{
+
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
+			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
 		}
 		else  if (message.getID() == MessageID::KEY_UP)

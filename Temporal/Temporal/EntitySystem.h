@@ -61,7 +61,7 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		Entity(Hash id = Hash::INVALID) : _id(id), _manager(0) {}
+		Entity(Hash id = Hash::INVALID) : _id(id), _manager(0), _bypassSave(false) {}
 		~Entity();
 
 		Hash getId() const { return _id; }
@@ -74,9 +74,13 @@ namespace Temporal
 		Component* get(Hash type);
 		void* handleMessage(Message& message, const HashList* filter = 0) const;
 		Entity* clone() const;
+
+		bool isBypassSave() const { return _bypassSave; }
+		void setBypassSave(bool bypassSave) { _bypassSave = bypassSave; }
 	private:
 		Hash _id;
 		ComponentList _components;
+		bool _bypassSave;
 
 		EntitiesManager* _manager;
 
