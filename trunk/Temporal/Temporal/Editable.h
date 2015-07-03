@@ -14,6 +14,7 @@ namespace Temporal
 		explicit Editable(bool translationOnly) : Component(true),
 			_translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
 
+		void onInit();
 		Hash getType() const;
 		void handleMessage(Message& message);
 		Component* clone() const { return new Editable(_translationOnly); }

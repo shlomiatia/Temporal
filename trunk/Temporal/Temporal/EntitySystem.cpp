@@ -59,9 +59,9 @@ namespace Temporal
 
 	void* Entity::handleMessage(Message& message, const HashList* filter) const
 	{
-		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		for (int i = 0; i < _components.size(); ++i)
 		{
-			Component& component = **i;
+			Component& component = *_components[i];
 			
 			if(filter != 0)
 			{

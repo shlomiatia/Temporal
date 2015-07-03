@@ -9,6 +9,7 @@ namespace Temporal
 	class EntitySaverLoader : public Component
 	{
 	public:
+		EntitySaverLoader() : Component(true) {}
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
 		Component* clone() const { return new EntitySaverLoader(); }
