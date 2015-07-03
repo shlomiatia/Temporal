@@ -37,7 +37,7 @@ namespace Temporal
 
 	void SerializationAccess::getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize)
 	{
-		shouldSerialize = value->getId() != GameStateEditor::TYPE && value->getId() != GameSaverLoader::TYPE;
+		shouldSerialize = !value->isBypassSave();
 	}
 
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)

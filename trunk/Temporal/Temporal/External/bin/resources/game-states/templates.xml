@@ -88,3 +88,7 @@
 	</sensor>
 	<camera-control />
 </entity>
+<entity id="ENT_BACKGROUND">
+	<transform />
+	<renderer layer="0" texture="resources/textures/bg.png" />
+</entity>

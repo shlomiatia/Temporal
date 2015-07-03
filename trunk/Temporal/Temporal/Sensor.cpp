@@ -8,8 +8,6 @@
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"
 
-#include "Layer.h"
-
 #include <algorithm>
 
 namespace Temporal
@@ -42,15 +40,7 @@ namespace Temporal
 	void Sensor::handleMessage(Message& message)
 	{
 		handleNonGridFixtureMessage(message, *this, *_fixture);
-		if (message.getID() == MessageID::ENTITY_INIT)
-		{
-			getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::STATIC, this);
-		}
-		else if (message.getID() == MessageID::ENTITY_DISPOSED)
-		{
-			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::STATIC, this);
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			update();
 		}
