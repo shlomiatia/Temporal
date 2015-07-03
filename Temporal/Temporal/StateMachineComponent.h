@@ -76,6 +76,7 @@ namespace Temporal
 		bool _frameFlag3;
 
 		void resetFrameFlags() { _frameFlag1 = _frameFlag2 = _frameFlag3 = false; }
+		void resetState(Hash stateID);
 		void setState(Hash stateID);
 
 		StateMachineComponent(const StateMachineComponent&);
