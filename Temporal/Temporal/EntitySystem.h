@@ -36,11 +36,14 @@ namespace Temporal
 
 		Entity& getEntity() { return *_entity; }
 		const Entity& getEntity() const { return *_entity; }
-		void init(Entity* entity) { _entity = entity; }
-		virtual Hash getType() const = 0;
+		void init(Entity* entity) { _entity = entity; onInit(); }
+
 		bool isBypassSave() const { return _bypassSave; }
 		void setBypassSave(bool bypassSave) { _bypassSave = bypassSave; }
 
+		virtual void onInit() {};
+
+		virtual Hash getType() const = 0;
 		virtual void handleMessage(Message& message) = 0;
 		virtual Component* clone() const = 0;
 		void* raiseMessage(Message& message) const;

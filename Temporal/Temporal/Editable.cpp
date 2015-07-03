@@ -219,6 +219,18 @@ namespace Temporal
 		}
 	}
 
+	void Editable::onInit() 
+	{
+		if (getEntity().get(Hash("camera-control")))
+		{
+			Renderer* renderer = new Renderer("resources/textures/camera-logo-hi.png", "", 0, LayerType::PARTICLES, Color(1.0f, 1.0f, 1.0f, 0.1f));
+			renderer->setBypassSave(true);
+			getEntity().add(renderer);
+			renderer->handleMessage(Message(MessageID::ENTITY_INIT));
+		}
+	};
+
+
 	void Editable::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::MOUSE_DOWN)

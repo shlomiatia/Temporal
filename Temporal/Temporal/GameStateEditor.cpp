@@ -137,7 +137,7 @@ namespace Temporal
 
 	void GameStateEditor::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::LEVEL_INIT)
 		{
 			getEntity().setBypassSave(true);
 			HashEntityMap& entities = getEntity().getManager().getEntities();
