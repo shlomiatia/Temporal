@@ -24,7 +24,7 @@ namespace Temporal
 			_currentState->exit(param);
 			raiseMessage(Message(MessageID::STATE_EXITED, &_currentStateID));
 		}
-		setState(stateID);
+		resetState(stateID);
 		_currentState->enter(param);
 		raiseMessage(Message(MessageID::STATE_ENTERED, &_currentStateID));
 	}
@@ -35,7 +35,7 @@ namespace Temporal
 			_currentState->handleMessage(message);
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			setState(getInitialState());
+			resetState(getInitialState());
 			_currentState->enter(0);
 		}
 		else if(message.getID() == MessageID::UPDATE)
@@ -50,12 +50,17 @@ namespace Temporal
 		}
 	}
 
+	void StateMachineComponent::resetState(Hash stateID)
+	{
+		setState(stateID);
+		_timer.reset();
+		_stateFlag = false;
+	}
+
 	void StateMachineComponent::setState(Hash stateID)
 	{
 		_currentState = _states[stateID];
 		_currentStateID = stateID;
 		resetFrameFlags();
-		_timer.reset();
-		_stateFlag = false;
 	}
 }
