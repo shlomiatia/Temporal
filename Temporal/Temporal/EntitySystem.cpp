@@ -93,12 +93,14 @@ namespace Temporal
 
 	void EntitiesManager::init(GameState* gameState)
 	{
+		_initializing = true;
 		GameStateComponent::init(gameState);
 		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			i->second->init(this);
 		sendMessageToAllEntities(Message(MessageID::ENTITY_PRE_INIT));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
+		_initializing = false;
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
@@ -123,7 +125,7 @@ namespace Temporal
 
 	void EntitiesManager::add(Entity* entity)
 	{
-		if (_entities.find(entity->getId()) != _entities.end())
+		if (_entities.find(entity->getId()) != _entities.end() || _initializing)
 			abort();
 		_entities[entity->getId()] = entity;
 		entity->init(this);

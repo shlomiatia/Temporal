@@ -27,6 +27,16 @@ namespace Temporal
 		return bb;
 	}
 
+	float easeInOutBezier(float interpolation, float startValue, float endValue)
+	{
+		float inverseInterpolation = 1 - interpolation;
+		return startValue * inverseInterpolation + endValue * interpolation;
+
+		// TODO: Check if it's usefull. If so, interpolation between aim/fire should be linear
+		/*return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) +
+		endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);*/
+	}
+
 	void assertAngle(float angle, float range)
 	{
 		assert(angle >= -range);
