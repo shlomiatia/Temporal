@@ -98,7 +98,7 @@
 		<fixture>
 			<obb angle="0.000000">
 				<center x="0.000000" y="0.000000"/>
-				<radius x="455.000000" y="256.000000"/>
+				<radius x="682.000000" y="256.000000"/> <!-- 455 (half screen) + 455/2 -->
 			</obb>
 		</fixture>
 	</sensor>

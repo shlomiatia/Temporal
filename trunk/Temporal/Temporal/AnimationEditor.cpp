@@ -519,7 +519,6 @@ namespace Temporal
 	{
 		if(_translation)
 		{
-			
 			Vector translation = params.getPosition() - _offsetTranslation - getParentGlobalPosition();
 			translation = getTranslation(translation);
 			getCreateSceneNodeSample().setTranslation(translation);
@@ -553,7 +552,7 @@ namespace Temporal
 
 	void AnimationEditor::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::LEVEL_INIT)
 		{
 			getEntity().getManager().addInputComponent(this);
 			init();

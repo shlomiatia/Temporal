@@ -96,7 +96,7 @@ namespace Temporal
 	class EntitiesManager : public GameStateComponent
 	{
 	public:
-		EntitiesManager() : _focusInputComponent(0) {};
+		EntitiesManager() : _focusInputComponent(0), _initializing(false) {};
 		~EntitiesManager();
 
 		void init(GameState* gameState);
@@ -117,6 +117,7 @@ namespace Temporal
 		HashEntityMap _entities;
 		ComponentList _inputComponents;
 		Component* _focusInputComponent;
+		bool _initializing;
 		
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);
@@ -133,7 +134,6 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		Entity* cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position);
 		Hash getCurrentTemplateId() const { return  _templateIterator->first; }
 		Entity* cloneCurrent(Hash entityId, const Vector& position) { return cloneByTemplateId(_templateIterator->first, entityId, position); };
 		void previousTemplate();
@@ -143,6 +143,8 @@ namespace Temporal
 		HashEntityMap _templates;
 		HashEntityIterator _templateIterator;
 
+		Entity* cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position);
+		
 		friend class SerializationAccess;
 	};
 }

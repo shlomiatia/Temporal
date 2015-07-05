@@ -34,7 +34,7 @@ namespace Temporal
 	class CameraControl : public Component
 	{
 	public:
-		CameraControl() :  _shouldActivate(false){}
+		CameraControl() : _shouldActivate(false), _activatorPosition(Vector::Zero), _radius(Vector::Zero) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -45,6 +45,8 @@ namespace Temporal
 	private:
 		static CameraControl* _active;
 		bool _shouldActivate;
+		Vector _activatorPosition;
+		Vector _radius;
 	};
 }
 

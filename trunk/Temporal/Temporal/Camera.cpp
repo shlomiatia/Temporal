@@ -4,11 +4,13 @@
 #include "Grid.h"
 #include "GameEnums.h"
 #include "MessageUtils.h"
+#include "Sensor.h"
+#include "Math.h"
 
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	static const float MAX_CHANGE_PER_SECOND = 1000.0f;
+	static const float MAX_CHANGE_PER_SECOND = 500.0f;
 
 	Camera::Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _center(Vector::Zero), _targetCenter(Vector::Zero)
 	{
@@ -82,6 +84,8 @@ namespace Temporal
 			if (params.getSensorId() == CAMERA_CONTROL_SENSOR_ID)
 			{
 				_shouldActivate = true;
+				_radius = params.getContact().getSource().getGlobalShape().getRadius();
+				_activatorPosition = params.getContact().getTarget().getGlobalShape().getCenter();
 			}
 		}
 		else if (message.getID() == MessageID::UPDATE)
@@ -89,10 +93,26 @@ namespace Temporal
 			if (_shouldActivate && _active != this)
 			{
 				_active = this;
+			}
+			else if (_shouldActivate && _active == this)
+			{
+				Vector position = getPosition(*this);
+				
+				float diffX = _radius.getX() - fabsf(position.getX() - _activatorPosition.getX());
+				float interpolation = diffX / (_radius.getX() / 3.0f);
+				if (interpolation < 0.0f)
+				{
+					interpolation = 0.0f;
+				}
+				if (interpolation < 1.0f)
+				{
+					float newX = easeInOutBezier(interpolation, _activatorPosition.getX(), position.getX());
+					position.setX(newX);
+				}
+
 				Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
-				const Vector& vector = getPosition(*this);
 				camera.setFollowPlayer(false);
-				camera.setCenter(vector);
+				camera.setCenter(position);
 			}
 			else if (!_shouldActivate && _active == this)
 			{
