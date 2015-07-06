@@ -68,14 +68,25 @@ namespace Temporal
 	{
 		for(int i = 0; i < LayerType::SIZE; ++i)
 		{
+			LayerType::Enum layer = static_cast<LayerType::Enum>(i);
+			if (layer == LayerType::PARALLAX)
+			{
+				Graphics::get().getMatrixStack().top().translate(getManager().getCamera().getBottomLeft() * 0.9f);
+			}
+			
 			Graphics::get().getSpriteBatch().begin();
 			Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
-			ComponentList& components = _layers.at(static_cast<LayerType::Enum>(i));
+			ComponentList& components = _layers.at(layer);
 			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
 			{
 				(**j).handleMessage(Message(MessageID::DRAW));
 			}
 			Graphics::get().getSpriteBatch().end();
+
+			if (layer == LayerType::PARALLAX)
+			{
+				Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft() * 0.9f);
+			}
 		}
 		
 	}
