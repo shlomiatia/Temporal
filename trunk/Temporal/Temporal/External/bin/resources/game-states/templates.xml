@@ -29,7 +29,7 @@
 	<sight />
 	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
-	<renderer layer="2" sprite-sheet="resources/spritesheets/aquaria.xml">
+	<renderer layer="5" sprite-sheet="resources/spritesheets/aquaria.xml">
 		<scene-node id="SCN_ROOT" transform="1" flip="0">
 			<translation x="0" y="5" />
 			<scale x="0.4" y="0.4" />

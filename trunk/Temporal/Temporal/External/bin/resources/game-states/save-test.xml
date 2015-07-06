@@ -239,7 +239,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -395,7 +395,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -523,7 +523,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -686,7 +686,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="4">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="3">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -1061,7 +1061,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -1189,7 +1189,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -1541,7 +1541,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>
@@ -1669,7 +1669,7 @@
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
             </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="2">
+            <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="5">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="5.000000"/>
                     <scale x="0.400000" y="0.400000"/>

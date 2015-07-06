@@ -17,12 +17,13 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			BACKGROUND,
-			STATIC,
-			NPC,
-			COVER,
-			PC,
-			PARTICLES,
+			PARALLAX,	// 0
+			BACKGROUND,	// 1
+			STATIC,		// 2
+			PC,			// 3
+			COVER,		// 4
+			NPC,		// 5
+			PARTICLES,	// 6
 			SIZE
 		};
 	}
