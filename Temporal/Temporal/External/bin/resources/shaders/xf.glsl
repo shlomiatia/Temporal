@@ -11,7 +11,7 @@ void wave()
 {
 	float wavesPerSecond = 0.75;
 	float wavesCount = 4;
-	float waveSizeDivider = 1000; // Screen / X
+	float waveSizeDivider = 320; // Screen / X
 	float offset = u_time * 2*3.14159 * wavesPerSecond;
 	vec2 textureCoordinate = v_textureCoordinate;
 	textureCoordinate.x += sin(textureCoordinate.y * wavesCount*2*3.14159 + offset) / waveSizeDivider;

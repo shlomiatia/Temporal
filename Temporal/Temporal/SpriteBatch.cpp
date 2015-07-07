@@ -199,7 +199,7 @@ namespace Temporal
 	}
 
 	void SpriteBatch::add(const Texture* texture, const Vector& translation, const AABB& texturePart, const Color& color, float rotation, const Vector& pivot, const Vector& scale, bool flipX, bool flipY, 
-		const Vector& radius, bool ignoreMatrixStack)
+		const Vector& radius)
 	{
 		// Setting default value
 		AABB actualTexturePart = getActualTexturePart(texture, texturePart);
@@ -207,7 +207,7 @@ namespace Temporal
 		Vector actualRadius = getActualRadius(radius, texture, texturePart);
 
 		// Calculate matrix
-		Matrix m = ignoreMatrixStack ? Matrix() : Graphics::get().getMatrixStack().top();
+		Matrix m = Graphics::get().getMatrixStack().top();
 		m.translate(translation);
 		m.rotate(AngleUtils::radiansToDegrees(rotation));
 		m.translate(pivot);
@@ -221,10 +221,10 @@ namespace Temporal
 		innerAdd(texture, a, b, c, d, actualTexturePart, color);
 	}
 
-	void SpriteBatch::add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart, const Color& color, bool ignoreMatrixStack)
+	void SpriteBatch::add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart, const Color& color)
 	{
 		AABB actualTexturePart = getActualTexturePart(texture, texturePart);
-		Matrix m = ignoreMatrixStack ? Matrix() : Graphics::get().getMatrixStack().top();
+		const Matrix& m = Graphics::get().getMatrixStack().top();
 		Vector a = m * alpha;
 		Vector b = m * beta;
 		Vector c = m * gamma;

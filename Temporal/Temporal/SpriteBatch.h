@@ -55,12 +55,12 @@ namespace Temporal
 		void begin();
 
 		// obb
-		//		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB(0.5, 0.5f, 1.0f, 1.0f), const Color& color = Color::White, float rotation = 0.0f, 
+		// const AABB& texturePart = AABB(0.5, 0.5f, 1.0f, 1.0f)
 		void add(const Texture* texture, const Vector& translation, const AABB& texturePart = AABB::Zero, const Color& color = Color::White, float rotation = 0.0f, 
-				 const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero, bool ignoreMatrixStack = false);
+				 const Vector& pivot = Vector::Zero, const Vector& scale = Vector(1.0f, 1.0f), bool flipX = false, bool flipY = false, const Vector& radius = Vector::Zero);
 
 		// quad
-		void add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart = AABB::Zero, const Color& color = Color::White, bool ignoreMatrixStack = false);
+		void add(const Texture* texture, const Vector& alpha, const Vector& beta, const Vector& gamma, const Vector& delta, const AABB& texturePart = AABB::Zero, const Color& color = Color::White);
 
 		// OBB
 		void add(const OBB& obb, const Color& color = Color::White)
