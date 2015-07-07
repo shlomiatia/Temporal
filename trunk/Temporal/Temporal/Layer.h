@@ -122,12 +122,14 @@ namespace Temporal
 
 		void preDraw();
 		void draw(float framePeriod);
-		void draw2();
 	private:
 		int _fxTimeUniform;
 		float _fxTime;
 		FBO _fbo1;
 		FBO _fbo2;
+
+		
+		void draw2();
 	};
 
 	typedef std::vector<Layer*> LayerList;

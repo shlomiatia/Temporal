@@ -22,9 +22,9 @@ namespace Temporal
 
 		_camera = new Camera(this, _cameraFollowPlayer);
 		_spriteLayer = new SpriteLayer(this);
-		_guiLayer = new GUILayer(this);
-		_fxLayer = new FXLayer(this);
 		_debugLayer = new DebugLayer(this);
+		_guiLayer = new GUILayer(this);
+		
 			
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);
@@ -35,6 +35,9 @@ namespace Temporal
 		}
 		_layers.push_back(_debugLayer);
 		_layers.push_back(_guiLayer);
+
+		//_fxLayer = new FXLayer(this);
+		//_layers.push_back(_fxLayer);
 	}
 
 
@@ -46,6 +49,9 @@ namespace Temporal
 
 	void LayersManager::draw(float framePeriod)
 	{		
+
+		if (_fxLayer)
+			getFXLayer().preDraw();
 		for(LayerIterator i = _layers.begin(); i != _layers.end(); ++i)
 		{
 			(**i).draw(framePeriod);
@@ -95,11 +101,7 @@ namespace Temporal
 	void SpriteLayer::draw(float framePeriod)
 	{
 		spriteLayerTimer.measure();
-		//getManager().getFXLayer().preDraw();
 		innerDraw();
-		/*getManager().getFXLayer().draw();
-		innerDraw();
-		getManager().getFXLayer().draw2();*/
 		spriteLayerTimer.print("SPRITE LAYER");
 	}
 
@@ -233,13 +235,21 @@ namespace Temporal
 
 	void FXLayer::draw(float framePeriod)
 	{
+		Graphics::get().getMatrixStack().top().reset();
 		_fbo1.unbind();
 		_fxTime += 1.0f/60.0f;
 		Graphics::get().getFXShaderProgram().setUniform(_fxTimeUniform, _fxTime);
-		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), 1);
+		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), 0);
+
 		_fbo2.bind();
+
 		_fbo1.draw();
+
 		_fbo2.unbind();
+		getManager().getCamera().draw(framePeriod);
+		getManager().getSpriteLayer().draw(framePeriod);
+		Graphics::get().getMatrixStack().top().reset();
+		getManager().getFXLayer().draw2();
 	}
 	
 	void FXLayer::draw2()
