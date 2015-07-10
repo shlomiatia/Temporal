@@ -44,16 +44,23 @@ namespace Temporal
 	{
 		_components.push_back(component);
 		component->init(this);
+		if (_manager)
+		{
+			component->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
+			component->handleMessage(Message(MessageID::ENTITY_INIT));
+			component->handleMessage(Message(MessageID::ENTITY_POST_INIT));
+		}
+		
 	}
 
 	Entity* Entity::clone() const
 	{
 		Entity* clone = new Entity();
-		clone->init(_manager);
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
 			clone->add((**i).clone());
 		}
+		clone->init(_manager);
 		return clone;
 	}
 

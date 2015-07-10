@@ -162,8 +162,10 @@ namespace Temporal
 
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), -1);
 		HashList filter;
-		filter.push_back(STATIC_BODY_ID);
+		
 		filter.push_back(EDITABLE_ID);
+		if (_staticBody)
+			filter.push_back(STATIC_BODY_ID);
 		if (_sight)
 			filter.push_back(SIGHT_ID);
 		if (_dynamicBody)
@@ -209,13 +211,21 @@ namespace Temporal
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleSight();
 			}
-			else if (key == Key::B)
+			else if (key == Key::Y)
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleDynamicBody();
 			}
 			else if (key == Key::N)
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleNavigationGraph();
+			}
+			else if (key == Key::T)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleStaticBody();
+			}
+			else if (key == Key::C)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleCameraControl();
 			}
 		}
 	}

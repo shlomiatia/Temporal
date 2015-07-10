@@ -5,14 +5,12 @@ namespace Temporal
 {
 	const Hash MovingPlatform::TYPE = Hash("moving-platform");
 
-	static const float SPEED_PER_SECOND = 50.0f;
+	static const float SPEED_PER_SECOND = 100.0f;
 
 	void MovingPlatform::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			bool gravityEnabled = false;
-			raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &gravityEnabled));
 			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
 		}
 		else if(message.getID() == MessageID::BODY_COLLISION)

@@ -49,6 +49,7 @@ namespace Temporal
 	class TemporalEcho;
 	class LightGem;
 	class CameraControl;
+	class Laser;
 
 	// Singletons
 	class GameSaverLoader;
@@ -345,6 +346,7 @@ namespace Temporal
 		static void serialize(const char* key, DynamicBody& dynamicBody, T& serializer)
 		{
 			serializer.serialize("fixture", dynamicBody._fixture); // xml
+			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // xml
 			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 		}
@@ -379,6 +381,9 @@ namespace Temporal
 		{
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
+
+		template<class T>
+		static void serialize(const char* key, Laser& laser, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, MovingPlatform& component, T& serializer) {}

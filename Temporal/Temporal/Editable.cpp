@@ -63,10 +63,10 @@ namespace Temporal
 			staticBody->getFixture().getLocalShape().setAxis0(Vector(rotation));
 			getEntity().getManager().getGameState().getGrid().update(&staticBody->getFixture());
 		}
-		else
+		Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
+		if (renderer)
 		{
-			Renderer& renderer = *static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
-			SceneNode& root = renderer.getRootSceneNode();
+			SceneNode& root = renderer->getRootSceneNode();
 			root.setRotation(AngleUtils::radiansToDegrees(rotation));
 		}
 		
@@ -80,11 +80,11 @@ namespace Temporal
 			staticBody->getFixture().getLocalShape().setRadius(radius);
 			getEntity().getManager().getGameState().getGrid().update(&staticBody->getFixture());
 		}
-		else
+		Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
+		if (renderer)
 		{
-			Renderer& renderer = *static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
-			SceneNode& root = renderer.getRootSceneNode();
-			const SpriteSheet& spriteSheet = renderer.getSpriteSheet();
+			SceneNode& root = renderer->getRootSceneNode();
+			const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
 			const Vector& size = spriteSheet.getTexture().getSize();
 			Vector scale(radius.getX() / (size.getX() / 2.0f), radius.getY() / (size.getY() / 2.0f));
 			root.setScale(scale);
@@ -219,21 +219,19 @@ namespace Temporal
 		}
 	}
 
-	void Editable::onInit() 
-	{
-		if (getEntity().get(Hash("camera-control")))
-		{
-			Renderer* renderer = new Renderer("resources/textures/camera-logo-hi.png", "", 0, LayerType::PARTICLES, Color(1.0f, 1.0f, 1.0f, 0.1f));
-			renderer->setBypassSave(true);
-			getEntity().add(renderer);
-			renderer->handleMessage(Message(MessageID::ENTITY_INIT));
-		}
-	};
-
-
 	void Editable::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::MOUSE_DOWN)
+		if (message.getID() == MessageID::ENTITY_POST_INIT)
+		{
+			if (!_translationOnly)
+			{
+				OBB shape = getShape();
+				setRotation(shape.getAngle());
+				setRadius(shape.getRadius());
+			}
+			
+		}
+		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{
 			MouseParams& params = getMouseParams(message.getParam());
 			mouseDown(params);

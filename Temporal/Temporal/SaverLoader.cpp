@@ -43,7 +43,7 @@ namespace Temporal
 
 	void GameSaverLoader::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_INIT)
+		if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);

@@ -20,6 +20,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateEditor.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateEditor.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Matrix.cpp" />
