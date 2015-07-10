@@ -209,6 +209,9 @@
     <ClInclude Include="ToolComponent.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -400,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="ToolComponent.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

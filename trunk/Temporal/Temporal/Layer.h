@@ -85,22 +85,28 @@ namespace Temporal
 	class DebugLayer : public Layer
 	{
 	public:
-		DebugLayer(LayersManager* manager) : Layer(manager), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false) {}
+		DebugLayer(LayersManager* manager) : Layer(manager), _staticBody(true), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false) {}
 
 		void draw(float framePeriod);
+
+		void toggleStaticBody() { _staticBody = !_staticBody;  }
 		void toggleSight() { _sight = !_sight; }
 		void toggleDynamicBody() { _dynamicBody = !_dynamicBody; }
 		void toggleSensor() { _sensor = !_sensor; }
 		void toggleGrid() { _grid = !_grid; }
 		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
+		void toggleCameraControl() { _cameraControl = !_cameraControl; }
+		bool isCameraControl() const { return _cameraControl; }
 	private:
 		void drawFPS();
 
+		bool _staticBody;
 		bool _sight;
 		bool _dynamicBody;
 		bool _sensor;
 		bool _grid;
 		bool _navigationGraph;
+		bool _cameraControl;
 	};
 
 	class DebugManager : public Component

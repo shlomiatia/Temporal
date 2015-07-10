@@ -90,6 +90,8 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
+			float alpha = getEntity().getManager().getGameState().getLayersManager().getDebugLater().isCameraControl() ? 0.1f : 0.0f;
+			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 			if (_shouldActivate && _active != this)
 			{
 				_active = this;

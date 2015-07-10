@@ -1,5 +1,5 @@
 <game-state>
-	<layers-manager camera-follow-player="0">
+	<layers-manager camera-follow-player="1">
 		<!--<ambient-color r="0.0625" g="0.125" b="0.25" />-->
 	</layers-manager>
 	<grid tile-size="128">
@@ -19,9 +19,9 @@
 			<transform>
 				<position x="640" y="360" />
 			</transform>
-			<renderer layer="0" texture="resources/textures/ss_browncave.png" />
+			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
-		<!--<entity id="ENT_PLAYER">
+		<entity id="ENT_PLAYER">
 			<transform>
 				<position x="500" y="256" />
 			</transform>
@@ -93,7 +93,7 @@
 			<light-gem />
 			<light><color r="1.0" g="0.0" b="0.0" /></light>-->
 			
-		<!--</entity>-->
+		</entity>
 		<!--<entity id="ENT_LIGHT">
 			<transform>
 				<position x="612" y="384" />
@@ -154,7 +154,7 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-		</entity>--><!--
+		</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />
@@ -748,7 +748,7 @@
 				<position x="2624" y="384" />
 			</transform>
 			<collision-filter category="1" />
-			<dynamic-body>
+			<dynamic-body gravity-enabled="false">
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
@@ -757,6 +757,6 @@
 				</fixture>
 			</dynamic-body>
 			<moving-platform />
-		</entity>-->
+		</entity>
 	</entities-manager>
 </game-state>

@@ -25,6 +25,7 @@
 #include "GameStateEditor.h"
 #include "Camera.h"
 #include "AnimationEditor.h"
+#include "Laser.h"
 
 namespace Temporal
 {
@@ -82,6 +83,8 @@ namespace Temporal
 			serialize(key, (PlayerPeriod*&)component, serializer);
 		else if (strcmp(key, CameraControl::TYPE.getString()) == 0)
 			serialize(key, (CameraControl*&)component, serializer);
+		else if (strcmp(key, Laser::TYPE.getString()) == 0)
+			serialize(key, (Laser*&)component, serializer);
 		// Singletons
 		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
@@ -136,6 +139,8 @@ namespace Temporal
 			serialize(key, *(PlayerPeriod*&)component, serializer);
 		else if (component->getType() == CameraControl::TYPE)
 			serialize(key, *(CameraControl*&)component, serializer);
+		else if (component->getType() == Laser::TYPE)
+			serialize(key, *(Laser*&)component, serializer);
 		// Singletons
 		else if (component->getType() == GameSaverLoader::TYPE)
 			serialize(key, *(GameSaverLoader*&)component, serializer);

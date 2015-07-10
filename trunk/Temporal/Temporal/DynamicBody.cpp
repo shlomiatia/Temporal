@@ -36,7 +36,7 @@ namespace Temporal
 		delete _fixture;
 	}
 
-	Component* DynamicBody::clone() const { return new DynamicBody(_fixture->clone()); }
+	Component* DynamicBody::clone() const { return new DynamicBody(_fixture->clone(), _gravityEnabled); }
 
 	void DynamicBody::handleMessage(Message& message)
 	{
