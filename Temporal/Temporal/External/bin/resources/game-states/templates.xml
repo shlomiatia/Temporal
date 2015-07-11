@@ -92,7 +92,7 @@
 		</fixture>
 	</sensor>
 	<camera-control/>
-	<renderer layer="6" texture="resources/textures/camera-logo-hi.png">
+	<renderer layer="1" texture="resources/textures/camera-logo-hi.png">
 		<color a="0.1s" />
 	</renderer>
 </entity>
@@ -108,6 +108,7 @@
 		</fixture>
 	</dynamic-body>
 	<laser />
+	<temporal-echo />
 	<renderer layer="2" texture="resources/textures/laser.png">
 		<color r="1.0" g="0.0" b="0.0" />
 	</renderer>

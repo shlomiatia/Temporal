@@ -211,7 +211,7 @@ namespace Temporal
 	void GameStateEditor::moveCamera(const Vector& direction)
 	{
 		Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
-		camera.translate(direction * 10.0f);
+		camera.translate(direction * 20.0f);
 	}
 
 	void GameStateEditorPreview::handleMessage(Message& message)
