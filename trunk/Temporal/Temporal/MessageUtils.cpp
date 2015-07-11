@@ -20,6 +20,11 @@ namespace Temporal
 		return *static_cast<Side::Enum*>(component.raiseMessage(Message(MessageID::GET_ORIENTATION)));
 	}
 
+	const OBB& getShape(const Component& component)
+	{
+		return *static_cast<OBB*>(component.raiseMessage(Message(MessageID::GET_SHAPE)));
+	}
+
 	Hash getHashParam(void* data)
 	{
 		return *static_cast<Hash*>(data);

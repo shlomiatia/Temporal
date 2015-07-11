@@ -6,9 +6,6 @@
 		<world-size x="3840" y="720" />
 	</grid>
 	<entities-manager>
-		<entity id="game-state-editor">
-			<game-state-editor />
-		</entity>
 		<entity id="game-saver-loader">
 			<game-saver-loader />
 		</entity>
@@ -21,9 +18,27 @@
 			</transform>
 			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
+		<entity id="ENT_LASER">
+            <transform>
+                <position x="500" y="256"/>
+            </transform>
+            <collision-filter category="4" />
+			<laser/>
+            <dynamic-body gravity-enabled="0">
+                <fixture>
+                    <obb>
+                        <center x="0" y="0"/>
+                        <radius x="4" y="1"/>
+                    </obb>
+                </fixture>
+            </dynamic-body>
+            <renderer texture="resources/textures/laser.png" layer="5">
+				<color r="1" g="0" b="0" />
+			</renderer>
+        </entity>
 		<entity id="ENT_PLAYER">
 			<transform>
-				<position x="500" y="256" />
+				<position x="256" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />

@@ -11,19 +11,25 @@ namespace Temporal
 	{
 	public:
 		Camera(LayersManager* manager, bool followPlayer);
+
 		void draw(float framePeriod);
 		
 		void setFollowPlayer(bool followPlayer) { _followPlayer = followPlayer; }
+		bool isFollowPlayer() const { return _followPlayer;  }
 		void setCenter(const Vector& position) { _targetCenter = position; clamp(); };
+		const Vector& getCenter() const { return _targetCenter; }
 		void translate(const Vector& movement) { _targetCenter += movement; clamp(); _center = _targetCenter; };
+		void setActiveCameraControl(Hash activeCameraControl) { _activeCameraControl = activeCameraControl; }
+		Hash getActiveCameraControl() const { return _activeCameraControl; }
 
 		Vector getBottomLeft() const;
 		
 	private:
 		bool _followPlayer;
+		bool _foundPlayer;
 		Vector _center;
-		Vector _targetCenter;
-		
+		Vector _targetCenter;	
+		Hash _activeCameraControl;
 
 		void clamp();
 
@@ -34,7 +40,6 @@ namespace Temporal
 	class CameraControl : public Component
 	{
 	public:
-		CameraControl() : _shouldActivate(false), _activatorPosition(Vector::Zero), _radius(Vector::Zero) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -43,10 +48,6 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-		static CameraControl* _active;
-		bool _shouldActivate;
-		Vector _activatorPosition;
-		Vector _radius;
 	};
 }
 

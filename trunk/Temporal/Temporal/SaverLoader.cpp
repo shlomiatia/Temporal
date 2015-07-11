@@ -55,7 +55,7 @@ namespace Temporal
 		else if (message.getID() == MessageID::LEVEL_INIT)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
-			Hash saverLoaderFilter = Hash("action-controller");
+			Hash saverLoaderFilter = Hash("dynamic-body");
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;

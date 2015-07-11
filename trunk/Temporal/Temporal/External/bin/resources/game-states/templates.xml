@@ -83,18 +83,8 @@
 </entity>
 <entity id="ENT_CAMERA_CONTROL">
 	<transform />
-	<sensor id="SNS_CAMERA_CONTROL" category-mask="8">
-		<fixture>
-			<obb angle="0.000000">
-				<center x="0.000000" y="0.000000"/>
-				<radius x="682.000000" y="256.000000"/> <!-- 455 (half screen) + 455/2 -->
-			</obb>
-		</fixture>
-	</sensor>
 	<camera-control/>
-	<renderer layer="1" texture="resources/textures/camera-logo-hi.png">
-		<color a="0.1s" />
-	</renderer>
+	<renderer layer="1" texture="resources/textures/camera.png" />
 </entity>
 <entity id="ENT_LASER">
 	<transform />
@@ -109,7 +99,7 @@
 	</dynamic-body>
 	<laser />
 	<temporal-echo />
-	<renderer layer="2" texture="resources/textures/laser.png">
+	<renderer layer="5" texture="resources/textures/laser.png">
 		<color r="1.0" g="0.0" b="0.0" />
 	</renderer>
 </entity>
