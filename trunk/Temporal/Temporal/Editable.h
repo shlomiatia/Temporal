@@ -40,6 +40,7 @@ namespace Temporal
 		void rightMouseDown(MouseParams& params);
 		void mouseDown(MouseParams& params);
 		void reset();
+		void handleArrows(const Vector& params);
 
 		OBB getShape() const;
 		void setRotation(float rotation);

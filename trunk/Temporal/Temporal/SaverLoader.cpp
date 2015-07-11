@@ -43,10 +43,17 @@ namespace Temporal
 
 	void GameSaverLoader::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::LEVEL_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
+		else if (message.getID() == MessageID::LEVEL_INIT)
+		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			Hash saverLoaderFilter = Hash("action-controller");
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)

@@ -3,6 +3,8 @@
 #include "SerializationAccess.h"
 #include "Vector.h"
 
+#include <algorithm> 
+
 namespace Temporal
 {
 	void* Component::raiseMessage(Message& message) const
@@ -148,6 +150,11 @@ namespace Temporal
 		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
 		_entities.erase(i);
 		delete entity;
+	}
+
+	void EntitiesManager::removeInputComponent(Component* component)
+	{
+		_inputComponents.erase(std::remove(_inputComponents.begin(), _inputComponents.end(), component), _inputComponents.end());
 	}
 
 	EntityTemplatesManager::~EntityTemplatesManager()

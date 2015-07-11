@@ -42,7 +42,7 @@ namespace Temporal
 
 	void GameStateEditor::update(float framePeriod)
 	{
-		float movement = 1.0f * framePeriod * 60.0f;
+		float movement = 40.0f * framePeriod * 60.0f;
 		if (Keyboard::get().getKey(Key::W))
 		{
 			moveCamera(Vector(0.0f, movement));
@@ -137,9 +137,18 @@ namespace Temporal
 
 	void GameStateEditor::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::LEVEL_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			getEntity().setBypassSave(true);
+			getEntity().getManager().addInputComponent(this);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
+		else if (message.getID() == MessageID::LEVEL_INIT)
+		{
+			
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
@@ -147,7 +156,7 @@ namespace Temporal
 				addEditableToEntity(entity);
 			}
 			setEditorMode();
-			getEntity().getManager().addInputComponent(this);
+			
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
@@ -211,7 +220,7 @@ namespace Temporal
 	void GameStateEditor::moveCamera(const Vector& direction)
 	{
 		Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
-		camera.translate(direction * 20.0f);
+		camera.translate(direction);
 	}
 
 	void GameStateEditorPreview::handleMessage(Message& message)
@@ -219,6 +228,10 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			getEntity().getManager().addInputComponent(this);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
 		}
 		else if (message.getID() == MessageID::KEY_UP)
 		{

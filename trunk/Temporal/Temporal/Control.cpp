@@ -98,6 +98,10 @@ namespace Temporal
 			_font = ResourceManager::get().getFont(_fontFamily.c_str(), _fontSize);
 			_box.setOBB(_obb);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
 		else if(message.getID() == MessageID::DRAW)
 		{
 			drawControl();

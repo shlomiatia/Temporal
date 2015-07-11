@@ -32,10 +32,10 @@ namespace Temporal
 		
 		float maxChange = MAX_CHANGE_PER_SECOND * framePeriod;
 		float modifierX = abs(maxChange / movement.getX());
-		if (modifierX < 1.0f && modifierX > 0.0f)
+		if (modifierX < 1.0f && modifierX > 0.1f)
 			movement.setX(movement.getX() * modifierX);
 		float modifierY = abs(maxChange / movement.getY());
-		if (modifierY < 1.0f && modifierY > 0.0f)
+		if (modifierY < 1.0f && modifierY > 0.1f)
 			movement.setY(movement.getY() * modifierY);
 
 		_center += movement;
