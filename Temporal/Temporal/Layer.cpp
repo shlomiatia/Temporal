@@ -196,6 +196,10 @@ namespace Temporal
 			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
 		else  if (message.getID() == MessageID::KEY_UP)
 		{
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());

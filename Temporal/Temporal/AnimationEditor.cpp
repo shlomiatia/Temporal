@@ -552,9 +552,17 @@ namespace Temporal
 
 	void AnimationEditor::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::LEVEL_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			getEntity().getManager().addInputComponent(this);
+
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
+		else if (message.getID() == MessageID::LEVEL_INIT)
+		{
 			init();
 			setAnimation(_animationSet->getAnimations().begin()->first);
 		}

@@ -16,6 +16,10 @@ namespace Temporal
 		{
 			getEntity().getManager().addInputComponent(this);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
 		else if ((message.getID() == MessageID::KEY_DOWN && *static_cast<Key::Enum*>(message.getParam()) == Key::SPACE) ||
 				 (message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && *static_cast<Key::Enum*>(message.getParam()) == GamepadButton::ACTION_DOWN))
 		{

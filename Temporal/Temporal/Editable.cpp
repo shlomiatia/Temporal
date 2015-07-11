@@ -12,6 +12,7 @@
 #include "SpriteSheet.h"
 #include "SceneNode.h"
 #include "Texture.h"
+#include "Keyboard.h"
 
 namespace Temporal
 {
@@ -86,7 +87,7 @@ namespace Temporal
 			SceneNode& root = renderer->getRootSceneNode();
 			const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
 			const Vector& size = spriteSheet.getTexture().getSize();
-			Vector scale(radius.getX() / (size.getX() / 2.0f), radius.getY() / (size.getY() / 2.0f));
+			Vector scale((radius.getX() == 0.0f ? 1.0f : radius.getX()) / (size.getX() / 2.0f), (radius.getY() == 0.0f ? 1.0f : radius.getY()) / (size.getY() / 2.0f));
 			root.setScale(scale);
 		}
 		
@@ -170,6 +171,10 @@ namespace Temporal
 
 	float snap(float val, float target, float maxSnap)
 	{
+		if (Keyboard::get().getKey(Key::LEFT_SHIFT))
+		{
+			return val;
+		}
 		float valModTarget = fmodf(val, target);
 		float targetMinusValModTarget = target - valModTarget;
 		if (valModTarget <= maxSnap)
@@ -194,6 +199,10 @@ namespace Temporal
 		{
 			Vector vector = (params.getPosition() - getPosition(*this)).normalize();
 			float angle = snap(vector.getAngle(), AngleUtils::radian().ANGLE_15_IN_RADIANS, AngleUtils::degreesToRadians(5.0f));
+			if (fabsf(angle) < EPSILON)
+			{
+				angle = 0.0f;
+			}
 			setRotation(angle);
 			params.setHandled(true);
 		}
@@ -210,6 +219,10 @@ namespace Temporal
 			float delta = (vector * axis - axisRadius) / 2.0f;
 			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 10.0f));
 			delta = radius.getAxis(_scaleAxis) - axisRadius;
+			if (radius.getX() < 0.0f)
+				radius.setX(0.0f);
+			if (radius.getY() < 0.0f)
+				radius.setY(0.0f);
 
 			setRadius(radius);
 			
@@ -219,9 +232,27 @@ namespace Temporal
 		}
 	}
 
+	void Editable::handleArrows(const Vector& params)
+	{
+		if (_selected == this)
+		{
+			Vector position = getPosition(*this);
+			position += params;
+			raiseMessage(Message(MessageID::SET_POSITION, &position));
+		}
+	}
+
 	void Editable::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_POST_INIT)
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			getEntity().getManager().addInputComponent(this);
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
+		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			if (!_translationOnly)
 			{
@@ -249,24 +280,43 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			if (!_translationOnly)
-			{
-				OBB shape = getShape();
-				_positiveXScale = OBB(shape.getCenter() + shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
-				_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + 5.0f), shape.getAxisX(), Vector(5.0f, shape.getRadiusY() + 10.0f));
-				_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
-				_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + 5.0f), shape.getAxisX(), Vector(shape.getRadiusX() + 10.0f, 5.0f));
-			}
+			float radius = _translationOnly ? 1.0f : 5.0f;
+			OBB shape = getShape();
+			_positiveXScale = OBB(shape.getCenter() + shape.getAxisX() * (shape.getRadiusX() + radius), shape.getAxisX(), Vector(radius, shape.getRadiusY() + radius * 2.0f));
+			_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + radius), shape.getAxisX(), Vector(radius, shape.getRadiusY() + radius * 2.0f));
+			_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + radius), shape.getAxisX(), Vector(shape.getRadiusX() + radius * 2.0f, radius));
+			_negativeYScale = OBB(shape.getCenter() - shape.getAxisY() * (shape.getRadiusY() + radius), shape.getAxisX(), Vector(shape.getRadiusX() + radius * 2.0f, radius));
 			
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			if (!_translationOnly && _selected == this)
+			if (_selected == this)
 			{
-				Graphics::get().getSpriteBatch().add(_positiveXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
-				Graphics::get().getSpriteBatch().add(_negativeXScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
-				Graphics::get().getSpriteBatch().add(_positiveYScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
-				Graphics::get().getSpriteBatch().add(_negativeYScale, Color(1.0f, 1.0f, 1.0f, 0.5f));
+				Color color = _translationOnly ? Color(1.0f, 1.0f, 1.0f, 0.75f) : Color(1.0f, 1.0f, 1.0f, 0.5f);
+				Graphics::get().getSpriteBatch().add(_positiveXScale, color);
+				Graphics::get().getSpriteBatch().add(_negativeXScale, color);
+				Graphics::get().getSpriteBatch().add(_positiveYScale, color);
+				Graphics::get().getSpriteBatch().add(_negativeYScale, color);
+			}
+		}
+		else if (message.getID() == MessageID::KEY_UP)
+		{
+			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+			if (key == Key::UP)
+			{
+				handleArrows(Vector(0.0f, 1.0f));
+			}
+			else if (key == Key::DOWN)
+			{
+				handleArrows(Vector(0.0f, -1.0f));
+			}
+			else if (key == Key::LEFT)
+			{
+				handleArrows(Vector(-1.0f, 0.0f));
+			}
+			else if (key == Key::RIGHT)
+			{
+				handleArrows(Vector(1.0f, 0.0f));
 			}
 		}
 	}

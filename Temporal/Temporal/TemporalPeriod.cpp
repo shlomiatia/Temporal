@@ -23,6 +23,10 @@ namespace Temporal
 			getEntity().getManager().addInputComponent(this);
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
 			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));

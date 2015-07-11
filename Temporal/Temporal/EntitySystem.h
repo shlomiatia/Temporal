@@ -108,6 +108,7 @@ namespace Temporal
 
 		ComponentList& getInputComponents() { return _inputComponents; }
 		void addInputComponent(Component* component) { _inputComponents.push_back(component); }
+		void removeInputComponent(Component* component);
 		void setFocusInputComponent(Component* component) { _focusInputComponent = component; }
 		void clearFocusInputComponent() { _focusInputComponent = 0; }
 		Component* getFocusInputComponent() const { return _focusInputComponent; }
