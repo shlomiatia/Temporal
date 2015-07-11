@@ -12,7 +12,7 @@ namespace Temporal
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 	static const float MAX_CHANGE_PER_SECOND = 500.0f;
 
-	Camera::Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _center(Vector::Zero), _targetCenter(Vector::Zero)
+	Camera::Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _foundPlayer(false), _center(Vector::Zero), _targetCenter(Vector::Zero), _activeCameraControl(Hash::INVALID)
 	{
 		const Vector& cameraSize = Graphics::get().getLogicalView();
 		_center = cameraSize / 2.0f;
@@ -24,18 +24,23 @@ namespace Temporal
 		if(_followPlayer)
 		{
 			void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
-			const Vector& playerPosition = *static_cast<Vector*>(result);
+			const Vector& playerPosition = getVectorParam(result);
 			setCenter(playerPosition);
+			if (!_foundPlayer)
+			{
+				_foundPlayer = true;
+				_center = _targetCenter;
+			}
 		}
 		
 		Vector movement = _targetCenter - _center;;
 		
 		float maxChange = MAX_CHANGE_PER_SECOND * framePeriod;
 		float modifierX = abs(maxChange / movement.getX());
-		if (modifierX < 1.0f && modifierX > 0.1f)
+		if (modifierX < 1.0f && modifierX > 0.0f)
 			movement.setX(movement.getX() * modifierX);
 		float modifierY = abs(maxChange / movement.getY());
-		if (modifierY < 1.0f && modifierY > 0.1f)
+		if (modifierY < 1.0f && modifierY > 0.0f)
 			movement.setY(movement.getY() * modifierY);
 
 		_center += movement;
@@ -72,58 +77,47 @@ namespace Temporal
 			_targetCenter.setY(levelHeight - cameraRadiusY);
 	}
 
-	static Hash CAMERA_CONTROL_SENSOR_ID("SNS_CAMERA_CONTROL");
-
-	CameraControl* CameraControl::_active = 0;
-
+	const Hash CameraControl::TYPE("camera-control");
+	
 	void CameraControl::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::SENSOR_SENSE)
+		if (message.getID() == MessageID::UPDATE)
 		{
-			const SensorParams& params = getSensorParams(message.getParam());
-			if (params.getSensorId() == CAMERA_CONTROL_SENSOR_ID)
-			{
-				_shouldActivate = true;
-				_radius = params.getContact().getSource().getGlobalShape().getRadius();
-				_activatorPosition = params.getContact().getTarget().getGlobalShape().getCenter();
-			}
-		}
-		else if (message.getID() == MessageID::UPDATE)
-		{
-			float alpha = getEntity().getManager().getGameState().getLayersManager().getDebugLater().isCameraControl() ? 0.1f : 0.0f;
+			float alpha = getEntity().getManager().getGameState().getLayersManager().getDebugLater().isCameraControl() ? 1.0f : 0.0f;
 			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
-			if (_shouldActivate && _active != this)
-			{
-				_active = this;
-			}
-			else if (_shouldActivate && _active == this)
-			{
-				Vector position = getPosition(*this);
+
+			void* result = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
+			const Vector& playerPosition = getVectorParam(result);
+			Vector position = getPosition(*this);
+			const Vector& cameraSize = Graphics::get().getLogicalView();
 				
-				float diffX = _radius.getX() - fabsf(position.getX() - _activatorPosition.getX());
-				float interpolation = diffX / (_radius.getX() / 3.0f);
-				if (interpolation < 0.0f)
+			bool inY = fabsf(position.getY() - playerPosition.getY()) < cameraSize.getY() / 2.0f;
+			float diffX = cameraSize.getX() / 2.0f + cameraSize.getX() / 5.0f - fabsf(position.getX() - playerPosition.getX());
+			float interpolationX = diffX / (cameraSize.getX() / 4.0f);
+			Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
+			if (!inY || interpolationX < 0.0f)
+			{
+				if (camera.getActiveCameraControl() == getEntity().getId())
 				{
-					interpolation = 0.0f;
+					camera.setFollowPlayer(true);
+					camera.setActiveCameraControl(Hash::INVALID);
 				}
-				if (interpolation < 1.0f)
+			}
+			else if (camera.getActiveCameraControl() == Hash::INVALID ||
+					 camera.getActiveCameraControl() == getEntity().getId() ||
+					(camera.getActiveCameraControl() != getEntity().getId() && camera.getCenter().getX() < position.getX()))
+			{
+				if (interpolationX < 1.0f)
 				{
-					float newX = easeInOutBezier(interpolation, _activatorPosition.getX(), position.getX());
+					float newX = easeInOutBezier(interpolationX, playerPosition.getX(), position.getX());
 					position.setX(newX);
 				}
-
-				Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
+				
 				camera.setFollowPlayer(false);
 				camera.setCenter(position);
+				camera.setActiveCameraControl(getEntity().getId());
 			}
-			else if (!_shouldActivate && _active == this)
-			{
-				_active = 0;
-				getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(true);
-			}
-			_shouldActivate = false;
+			
 		}
 	}
-
-	const Hash CameraControl::TYPE("camera-control");
 }

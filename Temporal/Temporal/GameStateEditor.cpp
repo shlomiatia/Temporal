@@ -42,7 +42,7 @@ namespace Temporal
 
 	void GameStateEditor::update(float framePeriod)
 	{
-		float movement = 40.0f * framePeriod * 60.0f;
+		float movement = (Keyboard::get().getKey(Key::LEFT_SHIFT) ? 40.0f : 20.0f) * framePeriod * 60.0f;
 		if (Keyboard::get().getKey(Key::W))
 		{
 			moveCamera(Vector(0.0f, movement));
