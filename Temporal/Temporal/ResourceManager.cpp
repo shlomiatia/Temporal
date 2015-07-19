@@ -12,6 +12,10 @@
 #include "Serialization.h"
 #include "Graphics.h"
 #include "Font.h"
+
+// TODO: Remove
+#include "GameStateEditor.h"
+
 #include <sstream>
 #include <windows.h>
 #include <SDL.h>
@@ -94,6 +98,17 @@ namespace Temporal
 		XmlDeserializer deserializer(new FileStream(_path, false, false));
 		GameState* state = new GameState();
 		deserializer.serialize("game-state", *state);
+
+		if (strcmp(_path, "resources/game-states/save-test.xml") == 0)
+		{
+			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
+			Component* component = new GameStateEditor();
+			entity->add(component);
+			component = new DebugManager();
+			entity->add(component);
+			state->getEntitiesManager().add(entity);
+		}
+
 		state->init();
 		_result = state;
 	}

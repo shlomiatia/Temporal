@@ -6,15 +6,6 @@
         <world-size x="10000.000000" y="720.000000"/>
     </grid>
     <entities-manager>
-		<entity id="game-state-editor">
-			<game-state-editor />
-		</entity>
-		<entity id="game-saver-loader">
-			<game-saver-loader />
-		</entity>
-		<entity id="debug-manager">
-			<debug-manager />
-		</entity>
         <entity id="ENT_LASER7">
             <transform orientation="1">
                 <position x="7375.608398" y="336.066681"/>
