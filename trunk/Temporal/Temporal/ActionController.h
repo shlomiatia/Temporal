@@ -204,15 +204,15 @@ namespace Temporal
 		class Climb : public ComponentState
 		{
 		public:
-			Climb() : _yPosition(0.0f), _yTranslation(0.0f) {}
+			Climb() : _doneMovement(Vector::Zero), _translation(Vector::Zero) {}
 
 			void enter(void* param);
 			void exit(void* param);
 			void handleMessage(Message& message);
 
 		private:
-			float _yPosition;
-			float _yTranslation;
+			Vector _doneMovement;
+			Vector _translation;
 			Vector _movement;
 		};
 
