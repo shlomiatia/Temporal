@@ -18,7 +18,7 @@
 			</transform>
 			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
-		<entity id="ENT_LASER">
+		<!--<entity id="ENT_LASER">
             <transform>
                 <position x="500" y="256"/>
             </transform>
@@ -35,7 +35,7 @@
             <renderer texture="resources/textures/laser.png" layer="5">
 				<color r="1" g="0" b="0" />
 			</renderer>
-        </entity>
+        </entity>-->
 		<entity id="ENT_PLAYER">
 			<transform>
 				<position x="256" y="256" />

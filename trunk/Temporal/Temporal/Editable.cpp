@@ -189,9 +189,13 @@ namespace Temporal
 	{
 		if(_translation)
 		{
+			OBB shape = getShape();
+			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
+			float snapExtraX = tileSize / 2.0f - fmodf(shape.getRadiusX(), tileSize / 2.0f);
+			float snapExtraY = tileSize / 2.0f - fmodf(shape.getRadiusY(), tileSize / 2.0f);
 			Vector newPosition = params.getPosition() - _translationOffset;
-			newPosition.setX(snap(newPosition.getX(), getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
-			newPosition.setY(snap(newPosition.getY(), getEntity().getManager().getGameState().getGrid().getTileSize() / 4.0f, 10.0f));
+			newPosition.setX(snap(newPosition.getX() + snapExtraX, tileSize / 4.0f, 8.0f) - snapExtraX);
+			newPosition.setY(snap(newPosition.getY() + snapExtraY, tileSize / 4.0f, 8.0f) - snapExtraY);
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 			params.setHandled(true);
 		}
@@ -217,7 +221,7 @@ namespace Temporal
 			Vector radius = shape.getRadius();
 			float axisRadius = radius.getAxis(_scaleAxis);
 			float delta = (vector * axis - axisRadius) / 2.0f;
-			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 10.0f));
+			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 4.0f));
 			delta = radius.getAxis(_scaleAxis) - axisRadius;
 			if (radius.getX() < 0.0f)
 				radius.setX(0.0f);
