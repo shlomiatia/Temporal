@@ -310,7 +310,6 @@ namespace Temporal
 	{
 		modifyCorrection(staticBodyBounds, correction, movement);
 		
-
 		_dynamicBodyBounds.getOBB().translate(correction);
 		collision -= correction;
 	}
