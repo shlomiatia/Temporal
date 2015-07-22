@@ -99,6 +99,8 @@ namespace Temporal
 		GameState* state = new GameState();
 		deserializer.serialize("game-state", *state);
 
+		state->init();
+
 		if (strcmp(_path, "resources/game-states/save-test.xml") == 0 || strcmp(_path, "resources/game-states/entities.xml") == 0)
 		{
 			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
@@ -108,8 +110,6 @@ namespace Temporal
 			entity->add(component);
 			state->getEntitiesManager().add(entity);
 		}
-
-		state->init();
 		_result = state;
 	}
 
