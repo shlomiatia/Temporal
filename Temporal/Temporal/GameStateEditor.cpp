@@ -141,6 +141,14 @@ namespace Temporal
 		{
 			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
+
+			HashEntityMap& entities = getEntity().getManager().getEntities();
+			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
+			{
+				Entity& entity = *i->second;
+				addEditableToEntity(entity);
+			}
+			setEditorMode();
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
@@ -149,13 +157,13 @@ namespace Temporal
 		else if (message.getID() == MessageID::LEVEL_INIT)
 		{
 			
-			HashEntityMap& entities = getEntity().getManager().getEntities();
+			/*HashEntityMap& entities = getEntity().getManager().getEntities();
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;
 				addEditableToEntity(entity);
 			}
-			setEditorMode();
+			setEditorMode();*/
 			
 		}
 		else if (message.getID() == MessageID::UPDATE)

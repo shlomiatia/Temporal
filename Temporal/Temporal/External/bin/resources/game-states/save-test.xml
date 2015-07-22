@@ -404,8 +404,8 @@
             <sensor id="SNS_LEDGE" category-mask="1">
                 <fixture>
                     <obb angle="0.000000">
-                        <center x="1.000000" y="0.000000"/>
-                        <radius x="10.000000" y="120.000000"/>
+                        <center x="10" y="0" />
+						<radius x="20" y="120" />
                     </obb>
                 </fixture>
             </sensor>
