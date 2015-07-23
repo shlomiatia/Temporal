@@ -113,8 +113,8 @@ namespace Temporal
 		// XML ONLY
 		else if(component->getType() == Renderer::TYPE)
 			serialize(key, *(Renderer*&)component, serializer);
-		/*else if(component->getType() == Light::TYPE)
-			serialize(key, *(Light*&)component, serializer);*/
+		else if(component->getType() == Light::TYPE)
+			serialize(key, *(Light*&)component, serializer);
 		else if(component->getType() == ParticleEmitter::TYPE)
 			serialize(key, *(ParticleEmitter*&)component, serializer);
 		else if(component->getType() == InputController::TYPE)

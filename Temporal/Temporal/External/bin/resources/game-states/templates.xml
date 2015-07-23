@@ -103,3 +103,9 @@
 		<color r="1.0" g="0.0" b="0.0" />
 	</renderer>
 </entity>
+<entity id="ENT_LIGHT">
+	<transform/>
+	<light>
+		<color r="0.5" g="0.5" b="0.5" />
+	</light>
+</entity>
