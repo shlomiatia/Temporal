@@ -142,7 +142,9 @@ namespace Temporal
 		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 		_fbo.unbind();
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		Graphics::get().getMatrixStack().top().reset();
 		_fbo.draw();
+		Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft());
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }
