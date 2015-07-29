@@ -59,7 +59,9 @@ void blurV()
 }
  
 void main(void) {
-	if(u_type == 0) {
+	if(u_type == -1) {
+		gl_FragColor =  texture2D(u_texture, v_textureCoordinate) * v_color; // Standard
+	} else if(u_type == 0) {
 		wave();
 	} else if(u_type == 1) {
 		blurH();

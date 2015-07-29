@@ -64,6 +64,12 @@ namespace Temporal
 			_lightLayer->add(component);
 	}
 
+	void LayersManager::removeLight(Component* component)
+	{
+		if (_lightLayer)
+			_lightLayer->remove(component);
+	}
+
 	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
 	{
 		for(int i = 0; i <= LayerType::SIZE; ++i)
