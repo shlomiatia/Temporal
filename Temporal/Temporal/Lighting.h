@@ -32,8 +32,8 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		explicit Light(const Color& color = Color::White, float radius = 256.0)
-			: _color(color), _radius(radius) {}
+		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 2.0f)
+			: _color(color), _radius(radius), _center(center), _size(size) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -47,6 +47,8 @@ namespace Temporal
 
 		Color _color;
 		float _radius;
+		float _center;
+		float _size;
 
 		void draw();
 		void drawShadow(const Vector& lightCenter, const OBB& shape);
@@ -60,6 +62,7 @@ namespace Temporal
 	public:
 		LightLayer(LayersManager* manager, const Color& ambientColor);
 		void add(Component* component) { _components.push_back(component); }
+		void remove(Component* component);
 		void draw(float framePeriod);
 
 	private:

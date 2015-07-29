@@ -16,6 +16,7 @@
 #include <SDL.h>
 #include <gl/glew.h>
 #include <math.h>
+#include <algorithm>
 
 namespace Temporal
 {
@@ -46,6 +47,10 @@ namespace Temporal
 			_shadowTexture = ResourceManager::get().getSingleTextureSpritesheet("resources/textures/shadow.png");
 			getEntity().getManager().getGameState().getLayersManager().addLight(this);
 
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().getGameState().getLayersManager().removeLight(this);
 		}
 		else if(message.getID() == MessageID::DRAW_LIGHTS)
 		{
@@ -85,8 +90,22 @@ namespace Temporal
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
+		float shadowSize = 100000.0;
 
+		float angle = _center - _size / 2.0f;
+		Vector vector(angle);
+		Vector normal = vector.getRightNormal();
+
+		Vector center = position + normal * shadowSize / 2.0f;
+		OBB obb(center, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
+
+		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
+		normal.setX(normal.getX() * -1.0f);
+		center = position + normal * shadowSize / 2.0f;
+		obb = OBB(center, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
+		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
+
+		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
 		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
 
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
@@ -106,6 +125,11 @@ namespace Temporal
 		_fbo.init();
 	}
 
+	void LightLayer::remove(Component* component)
+	{
+		_components.erase(std::remove(_components.begin(), _components.end(), component));
+	}
+
 	void LightLayer::draw(float framePeriod)
 	{
 		preDraw();
@@ -122,12 +146,10 @@ namespace Temporal
 		glClearColor(AMBIENT_COLOR.getR(), AMBIENT_COLOR.getG(), AMBIENT_COLOR.getB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBlendFunc(GL_DST_ALPHA, GL_ONE);
-		Graphics::get().getSpriteBatch().begin();
 	}
 
 	void LightLayer::postDraw()
 	{
-		Graphics::get().getSpriteBatch().end();
 		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		
@@ -143,6 +165,7 @@ namespace Temporal
 		_fbo.unbind();
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 		Graphics::get().getMatrixStack().top().reset();
+		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), -1);
 		_fbo.draw();
 		Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft());
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

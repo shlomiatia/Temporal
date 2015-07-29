@@ -152,6 +152,7 @@ namespace Temporal
 		void removeSprite(LayerType::Enum layer, Component* component) { _spriteLayer->remove(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
 		void addLight(Component* component);
+		void removeLight(Component* component);
 		Camera& getCamera() { return *_camera; }
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
