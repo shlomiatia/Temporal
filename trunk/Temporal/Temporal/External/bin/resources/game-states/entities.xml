@@ -1,17 +1,11 @@
 <game-state>
 	<layers-manager camera-follow-player="1">
-		<ambient-color r="0.0625" g="0.125" b="0.25" />-->
+		<!--<ambient-color r="0.0625" g="0.125" b="0.25" />-->
 	</layers-manager>
 	<grid tile-size="128">
 		<world-size x="3840" y="720" />
 	</grid>
 	<entities-manager>
-		<entity id="game-saver-loader">
-			<game-saver-loader />
-		</entity>
-		<entity id="debug-manager">
-			<debug-manager />
-		</entity>
 		<entity id="ENT_BACKGROUND">
 			<transform>
 				<position x="640" y="360" />
@@ -104,8 +98,8 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<player-period period="2" />-->
-			<light-gem />
+			<!--<player-period period="2" />
+			<light-gem />-->
 			
 		</entity>
 		<!--<entity id="ENT_CHASER">

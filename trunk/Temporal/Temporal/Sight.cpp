@@ -59,7 +59,7 @@ namespace Temporal
 
 		// Check field of view
 		Vector vector = targetPosition - sourcePosition;
-		if (fabsf(vector.getY() > _sightSize)) return;
+		if (fabsf(vector.getY()) > _sightSize) return;
 
 		RayCastResult result;
 		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
