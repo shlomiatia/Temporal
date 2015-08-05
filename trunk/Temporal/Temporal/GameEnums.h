@@ -93,7 +93,7 @@ namespace Temporal
 			SENSOR_FRONG_EDGE,
 
 			SET_LIT,
-			IS_LIT,
+			IS_VISIBLE,
 
 			ACTIVATE,
 			DIE

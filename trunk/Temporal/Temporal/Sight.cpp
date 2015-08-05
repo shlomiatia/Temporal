@@ -13,7 +13,7 @@ namespace Temporal
 {
 	const Hash Sight::TYPE = Hash("sight");
 
-	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::COVER | CollisionCategory::PLAYER;
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
@@ -53,8 +53,8 @@ namespace Temporal
 		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
 			return;
 
-		void* isLit = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_LIT));
-		if(isLit && !getBoolParam(isLit))
+		void* isVisible = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_VISIBLE));
+		if (isVisible && !getBoolParam(isVisible))
 			return;
 
 		// Check field of view

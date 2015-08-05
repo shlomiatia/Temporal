@@ -46,7 +46,11 @@ namespace Temporal
 			const SensorParams& params = getSensorParams(message.getParam());
 			if (params.getSensorId() == TAKEDOWN_SENSOR_ID)
 			{
-				changeState(TAKEDOWN_STATE);
+				void* isVisible = getEntity().getManager().sendMessageToEntity(params.getContact().getTarget().getEntityId(), Message(MessageID::IS_VISIBLE));
+				if (!isVisible || getBoolParam(isVisible))
+				{
+					changeState(TAKEDOWN_STATE);
+				}
 			}
 		}
 		_edgeDetector.handleMessage(message);

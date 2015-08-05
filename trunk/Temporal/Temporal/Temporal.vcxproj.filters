@@ -212,6 +212,9 @@
     <ClInclude Include="Laser.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="VisibilityGem.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -406,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="Laser.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="VisibilityGem.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

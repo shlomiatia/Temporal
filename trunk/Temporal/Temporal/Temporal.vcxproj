@@ -82,6 +82,7 @@
     <ClInclude Include="Sight.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="StaticBody.h" />
+    <ClInclude Include="VisibilityGem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationEditor.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="Sight.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="StaticBody.cpp" />
+    <ClCompile Include="VisibilityGem.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA48D0FC-FC62-43C4-95A0-520220DD4DB6}</ProjectGuid>
