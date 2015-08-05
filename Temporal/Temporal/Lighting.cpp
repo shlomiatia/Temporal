@@ -64,6 +64,31 @@ namespace Temporal
 		drawShadowPart(lightCenter, point3, point4);
 		drawShadowPart(lightCenter, point4, point1);
 	}
+
+	void Light::drawBeamShadow(const Vector& lightCenter)
+	{
+		float shadowSize = 100000.0;
+
+		float center = _center;
+		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
+		if (entityOrientation == Side::LEFT)
+			center = AngleUtils::radian().mirror(center);
+
+		float angle = center - _size / 2.0f;
+		Vector vector(angle);
+		Vector normal = vector.getRightNormal();
+
+		Vector obbCenter = lightCenter + normal * shadowSize / 2.0f;
+		OBB obb(obbCenter, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
+		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
+
+		angle = center + _size / 2.0f;
+		vector = Vector(angle);
+		normal = vector.getLeftNormal();
+		obbCenter = lightCenter + normal * shadowSize / 2.0f;
+		obb = OBB(obbCenter, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
+		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
+	}
 	
 	void Light::draw()
 	{
@@ -73,21 +98,8 @@ namespace Temporal
 		glColorMask(false, false, false, true);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
-		float shadowSize = 100000.0;
 
-		float angle = _center - _size / 2.0f;
-		Vector vector(angle);
-		Vector normal = vector.getRightNormal();
-
-		Vector center = position + normal * shadowSize / 2.0f;
-		OBB obb(center, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
-
-		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
-		normal.setX(normal.getX() * -1.0f);
-		center = position + normal * shadowSize / 2.0f;
-		obb = OBB(center, vector, Vector(shadowSize / 2.0f, shadowSize / 2.0f));
-		Graphics::get().getSpriteBatch().add(&_shadowTexture->getTexture(), obb.getCenter(), AABB::Zero, Color(0.0f, 0.0f, 0.0f, 0.0f), obb.getAngle(), Vector::Zero, Vector(1.0f, 1.0f), false, false, obb.getRadius());
+		drawBeamShadow(position);
 
 		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
 		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);

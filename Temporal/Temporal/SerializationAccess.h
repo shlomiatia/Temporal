@@ -303,8 +303,8 @@ namespace Temporal
 		{
 			serializer.serialize("color", light._color);
 			serializer.serialize("radius", light._radius);
-			//serializer.serialize("center", light._beamCenter);
-			//serializer.serialize("size", light._beamSize);
+			serializer.serialize("center", light._center);
+			serializer.serialize("size", light._size);
 		}
 		
 		template<class T>
