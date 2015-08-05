@@ -21,23 +21,7 @@
 namespace Temporal
 {
 	const Hash Light::TYPE = Hash("light");
-	static const int MAX_LIGHT_PARTS = 32;
-
-	const Hash LightGem::TYPE = Hash("light-gem");
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	
-
-	void LightGem::handleMessage(Message& message)
-	{
-		if(message.getID() == MessageID::SET_LIT)
-		{
-			_isLit = getBoolParam(message.getParam());
-		}
-		else if(message.getID() == MessageID::IS_LIT)
-		{
-			message.setParam(&_isLit);
-		}
-	}
 
 	void Light::handleMessage(Message& message)
 	{

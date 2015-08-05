@@ -13,22 +13,6 @@ namespace Temporal
 {
 	class SpriteSheet;
 
-	class LightGem : public Component
-	{
-	public:
-		LightGem()
-			: _isLit(false) {}
-
-		Hash getType() const { return TYPE; }
-		void handleMessage(Message& message);
-
-		Component* clone() const { return new LightGem(); }
-		static const Hash TYPE;
-	private:
-
-		bool _isLit;
-	};
-
 	class Light : public Component
 	{
 	public:
