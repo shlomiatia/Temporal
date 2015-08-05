@@ -12,30 +12,13 @@
 			</transform>
 			<renderer layer="0" texture="resources/textures/bg.png" />
 		</entity>
-		<!--<entity id="ENT_LASER">
-            <transform>
-                <position x="500" y="256"/>
-            </transform>
-            <collision-filter category="4" />
-			<laser/>
-            <dynamic-body gravity-enabled="0">
-                <fixture>
-                    <obb>
-                        <center x="0" y="0"/>
-                        <radius x="4" y="1"/>
-                    </obb>
-                </fixture>
-            </dynamic-body>
-            <renderer texture="resources/textures/laser.png" layer="5">
-				<color r="1" g="0" b="0" />
-			</renderer>
-        </entity>-->
 		<entity id="ENT_PLAYER">
 			<transform>
 				<position x="256" y="256" />
 			</transform>
 			<collision-filter category="8" />
 			<input-controller />
+			<visibility-gem />
 			<dynamic-body>
 				<fixture>
 					<obb angle="0">
@@ -52,7 +35,7 @@
 					</obb>
 				</fixture>
 			</sensor>
-			<sensor id="SNS_ACTIVATE" category-mask="16">
+			<sensor id="SNS_ACTIVATE" category-mask="18">
 				<fixture>
 					<obb angle="0">
 						<center x="0" y="0" />
@@ -72,8 +55,8 @@
 			<animator animation-set="resources/animations/aquaria.xml" />
 			<renderer layer="3" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="5" />
-					<scale x="0.40" y="0.40" />
+					<translation x="0" y="7" />
+					<scale x="0.40" y="0.42" />
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
 							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
@@ -98,63 +81,8 @@
 					</scene-node>
 				</scene-node>
 			</renderer>
-			<!--<player-period period="2" />
-			<light-gem />-->
-			
+			<!--<player-period period="2" />-->
 		</entity>
-		<!--<entity id="ENT_CHASER">
-			<transform>
-				<position x="1000" y="512" />
-			</transform>
-			<collision-filter category="4" />
-			<navigator />
-			<dynamic-body>
-				<fixture>
-					<obb angle="0">
-						<center x="0" y="0" />
-						<radius x="10" y="40" />
-					</obb>
-				</fixture>
-			</dynamic-body>
-			<sensor id="SNS_LEDGE" category-mask="1">
-				<fixture>
-					<obb angle="0">
-						<center x="1" y="0" />
-						<radius x="10" y="120" />
-					</obb>
-				</fixture>
-			</sensor>
-			<action-controller />
-			<animator animation-set="resources/animations/aquaria.xml" />
-			<renderer layer="5" sprite-sheet="resources/spritesheets/aquaria.xml">
-				<scene-node id="SCN_ROOT" transform="1" flip="0">
-					<translation x="0" y="5" />
-					<scale x="0.4" y="0.4" />
-					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
-						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">
-							<scene-node id="SCN_BACKARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
-						</scene-node>
-					</scene-node>
-					<scene-node id="SCN_BACKLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
-						<scene-node id="SCN_BACKLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
-							<scene-node id="SCN_BACKLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
-						</scene-node>
-					</scene-node>
-					<scene-node id="SCN_BODY" sprite-group="SCN_BODY" center="0" radius="90" />
-					<scene-node id="SCN_HEAD" sprite-group="SCN_HEAD" center="-11.25" radius="33.75" />
-					<scene-node id="SCN_FRONTLEG1" sprite-group="SCN_LEG1" center="22.5" radius="67.5">
-						<scene-node id="SCN_FRONTLEG2" sprite-group="SCN_LEG2" behind-parent="1" center="-67.5" radius="67.5">
-							<scene-node id="SCN_FRONTLEG3" sprite-group="SCN_LEG3" behind-parent="1" center="-11.25" radius="33.75" />
-						</scene-node>
-					</scene-node>
-					<scene-node id="SCN_FRONTARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
-						<scene-node id="SCN_FRONTARM2" sprite-group="SCN_ARM2"  center="-22.5" radius="72.5">
-							<scene-node id="SCN_FRONTARM3" sprite-group="SCN_ARM3" behind-parent="1" center="30" radius="30" />
-						</scene-node>
-					</scene-node>
-				</scene-node>
-			</renderer>
-		</entity>-->
 		<entity id="ENT_FLOOR">
 			<transform>
 				<position x="1920" y="32" />
@@ -167,7 +95,7 @@
 						<radius x="1920" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LEFT_WALL">
 			<transform>
@@ -181,7 +109,7 @@
 						<radius x="32" y="360" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_RIGHT_WALL">
 			<transform>
@@ -195,7 +123,7 @@
 						<radius x="32" y="360" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_LEFT_BLOCK">
 			<transform>
@@ -209,7 +137,7 @@
 						<radius x="128" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_LEFT_BLOCK">
 			<transform>
@@ -223,7 +151,7 @@
 						<radius x="64" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_RIGHT_BLOCK">
 			<transform>
@@ -237,7 +165,7 @@
 						<radius x="128" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_RIGHT_BLOCK">
 			<transform>
@@ -251,7 +179,7 @@
 						<radius x="64" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_MIDDLE_PLATFORM">
 			<transform>
@@ -265,7 +193,7 @@
 						<radius x="256" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_MIDDLE_PLATFORM">
 			<transform>
@@ -279,7 +207,7 @@
 						<radius x="384" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPERER_LEFT_BLOCK">
 			<transform>
@@ -293,7 +221,7 @@
 						<radius x="64" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPERER_RIGHT_BLOCK">
 			<transform>
@@ -307,7 +235,7 @@
 						<radius x="64" y="64" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_LEFT_PLATFORM">
 			<transform>
@@ -321,7 +249,7 @@
 						<radius x="216" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_RIGHT_PLATFORM">
 			<transform>
@@ -335,7 +263,7 @@
 						<radius x="216" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPERER_MIDDLE_PLATFORM">
 			<transform>
@@ -349,7 +277,7 @@
 						<radius x="1920" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_30_LEFT">
 			<transform>
@@ -363,7 +291,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_30_MIDDLE">
 			<transform>
@@ -377,7 +305,7 @@
 						<radius x="32" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_30_RIGHT">
 			<transform>
@@ -391,7 +319,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_30_LEFT">
 			<transform>
@@ -405,7 +333,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_30_RIGHT">
 			<transform>
@@ -419,7 +347,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_45_LEFT">
 			<transform>
@@ -433,7 +361,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UPPER_45_RIGHT">
 			<transform>
@@ -447,7 +375,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILIY_PLATFORM1">
 			<transform>
@@ -461,7 +389,7 @@
 						<radius x="32" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILIY_PLATFORM2">
 			<transform>
@@ -475,7 +403,7 @@
 						<radius x="32" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_LEFT">
 			<transform>
@@ -489,7 +417,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_RIGHT">
 			<transform>
@@ -503,7 +431,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_LEFT2">
 			<transform>
@@ -517,7 +445,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_RIGHT2">
 			<transform>
@@ -531,7 +459,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_45_LEFT">
 			<transform>
@@ -545,7 +473,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_45_RIGHT">
 			<transform>
@@ -559,7 +487,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_LEFT3">
 			<transform>
@@ -573,7 +501,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_SNAKE_30_RIGHT3">
 			<transform>
@@ -587,7 +515,7 @@
 						<radius x="71" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_45_LEFT">
 			<transform>
@@ -601,7 +529,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_45_MIDDLE">
 			<transform>
@@ -615,7 +543,7 @@
 						<radius x="32" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_LOWER_45_RIGHT">
 			<transform>
@@ -629,7 +557,7 @@
 						<radius x="45" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_V_45_LEFT">
 			<transform>
@@ -643,7 +571,7 @@
 						<radius x="90" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_V_45_RIGHT">
 			<transform>
@@ -657,7 +585,7 @@
 						<radius x="90" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_V_30_LEFT">
 			<transform>
@@ -671,7 +599,7 @@
 						<radius x="143" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_V_30_RIGHT">
 			<transform>
@@ -685,7 +613,7 @@
 						<radius x="143" y="32" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILITY_PLATFORM3">
 			<transform>
@@ -699,7 +627,7 @@
 						<radius x="320" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILITY_PLATFORM4">
 			<transform>
@@ -713,7 +641,7 @@
 						<radius x="320" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILITY_PLATFORM5">
 			<transform>
@@ -727,7 +655,7 @@
 						<radius x="320" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_UTILITY_PLATFORM6">
 			<transform>
@@ -741,7 +669,7 @@
 						<radius x="512" y="0" />
 					</obb>
 				</fixture>
-			</static-body>
+			</static-body><renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 		</entity>
 		<entity id="ENT_ELEVATOR">
 			<transform>
@@ -757,6 +685,11 @@
 				</fixture>
 			</dynamic-body>
 			<moving-platform />
+			<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png">
+				<scene-node id="SCN_ROOT">
+					<scale x="0.5" y="0.0078125" />
+				</scene-node>
+			</renderer>
 		</entity>
 	</entities-manager>
 </game-state>

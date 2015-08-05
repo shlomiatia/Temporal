@@ -92,7 +92,7 @@ namespace Temporal
 			else if(message.getID() == MessageID::BODY_COLLISION)
 			{
 				const Vector& collision = getVectorParam(message.getParam());
-				if(collision.getX() != 0.0f)
+				if(collision.getX() != 0.0f && collision.getY() >= 0.0f)
 				{
 					_stateMachine->changeState(WAIT_STATE);
 				}
