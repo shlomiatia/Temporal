@@ -123,8 +123,9 @@ namespace Temporal
 		else
 		{
 			ComponentList& components = GameStateManager::get().getCurrentState().getEntitiesManager().getInputComponents();
-			for (ComponentIterator i = components.begin(); i != components.end(); ++i)
-				(**i).handleMessage(message);
+			// No iteration because we might add stuff to keyboard
+			for (int i = 0; i < components.size(); ++i)
+				components[i]->handleMessage(message);
 		}
 	}
 

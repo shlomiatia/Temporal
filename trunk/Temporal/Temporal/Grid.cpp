@@ -229,8 +229,8 @@ namespace Temporal
 					const Fixture& body = **iterator;
 					if(body.canCollide(mask, group) &&
 					   intersects(ray, body.getGlobalShape(), &pointOfIntersection, &distance) &&
-					   distance < minDistance &&
-					   intersects(tile, pointOfIntersection))
+					   distance < minDistance/* &&
+					   intersects(tile, pointOfIntersection)*/)
 					{
 						result.setFixture(&body);
 						result.SetPoint(pointOfIntersection);

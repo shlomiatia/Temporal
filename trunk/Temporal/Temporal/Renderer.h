@@ -27,6 +27,7 @@ namespace Temporal
 		const SceneNode& getRootSceneNode() const { return *_root; }
 		SceneNode& getRootSceneNode() { return *_root; }
 		SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
+		LayerType::Enum getLayer() const { return _layer; }
 	private:
 
 		std::string _textureFile;

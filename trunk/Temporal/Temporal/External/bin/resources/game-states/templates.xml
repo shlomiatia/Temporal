@@ -77,6 +77,19 @@
 	</static-body>
 	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 </entity>
+<entity id="ENT_COVER">
+	<transform />
+	<collision-filter category="2" />
+	<static-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="32" y="32" />
+			</obb>
+		</fixture>
+	</static-body>
+	<renderer layer="4" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
+</entity>
 <entity id="ENT_BACKGROUND">
 	<transform />
 	<renderer layer="0" texture="resources/textures/bg.png" />

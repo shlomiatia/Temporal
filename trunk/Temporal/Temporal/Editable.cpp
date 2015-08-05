@@ -95,6 +95,18 @@ namespace Temporal
 
 	void Editable::leftMouseDown(MouseParams& params)
 	{
+		
+		if (_selected && _selected != this && static_cast<Renderer*>(_selected->getEntity().get(Renderer::TYPE))->getLayer() >= static_cast<Renderer*>(this->getEntity().get(Renderer::TYPE))->getLayer())
+		{
+			OBB selectedShape = _selected->getShape();
+			if (selectedShape.getHeight() == 0.0f)
+				selectedShape.setRadiusY(5.0f);
+			selectedShape.setRadiusX(selectedShape.getRadiusX() + 5.0f);
+			selectedShape.setRadiusY(selectedShape.getRadiusY() + 5.0f);
+			if (intersects(selectedShape, params.getPosition()))
+				return;
+		}
+
 		OBB shape = getShape();
 		if (shape.getHeight() == 0.0f)
 			shape.setRadiusY(5.0f);
@@ -110,6 +122,7 @@ namespace Temporal
 		{
 			if (intersects(_positiveXScale, params.getPosition()))
 			{
+				_selected = this;
 				reset();
 				_scale = true;
 				_isPositiveScale = true;
@@ -118,6 +131,7 @@ namespace Temporal
 			}
 			else if (intersects(_negativeXScale, params.getPosition()))
 			{
+				_selected = this;
 				reset();
 				_scale = true;
 				_isPositiveScale = false;
@@ -126,6 +140,7 @@ namespace Temporal
 			}
 			else if (intersects(_positiveYScale, params.getPosition()))
 			{
+				_selected = this;
 				reset();
 				_scale = true;
 				_isPositiveScale = true;
@@ -134,6 +149,7 @@ namespace Temporal
 			}
 			else if (intersects(_negativeYScale, params.getPosition()))
 			{
+				_selected = this;
 				reset();
 				_scale = true;
 				_isPositiveScale = false;
@@ -286,6 +302,8 @@ namespace Temporal
 		{
 			float radius = _translationOnly ? 1.0f : 5.0f;
 			OBB shape = getShape();
+			if (shape.getHeight() == 0.0f)
+				shape.setRadiusY(5.0f);
 			_positiveXScale = OBB(shape.getCenter() + shape.getAxisX() * (shape.getRadiusX() + radius), shape.getAxisX(), Vector(radius, shape.getRadiusY() + radius * 2.0f));
 			_negativeXScale = OBB(shape.getCenter() - shape.getAxisX() * (shape.getRadiusX() + radius), shape.getAxisX(), Vector(radius, shape.getRadiusY() + radius * 2.0f));
 			_positiveYScale = OBB(shape.getCenter() + shape.getAxisY() * (shape.getRadiusY() + radius), shape.getAxisX(), Vector(shape.getRadiusX() + radius * 2.0f, radius));

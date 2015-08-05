@@ -167,7 +167,7 @@ namespace Temporal
 			actualRadius = radius;
 		else if(texturePart != AABB::Zero)
 			actualRadius = texturePart.getRadius();
-		else
+		else if (texture)
 			actualRadius = texture->getSize() / 2.0f;
 		if(actualRadius.getY() == 0.0f)
 			actualRadius.setY(1.0f);
