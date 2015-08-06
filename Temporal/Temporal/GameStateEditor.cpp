@@ -16,7 +16,7 @@ namespace Temporal
 	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
 	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
 	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
-	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control") });
+	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control"), Hash("light") });
 	const HashList EDITABLE_FILTER({ Hash("static-body"), Hash("renderer") });
 
 	void addEditableToEntity(Entity& entity)

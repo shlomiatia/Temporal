@@ -158,6 +158,7 @@ namespace Temporal
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		FXLayer& getFXLayer() { return *_fxLayer; }
 		DebugLayer& getDebugLater() { return *_debugLayer; }
+		LightLayer* getLightLayer() { return _lightLayer; }
 		void draw(float framePeriod);
 
 	private:
