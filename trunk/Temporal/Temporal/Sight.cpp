@@ -59,7 +59,7 @@ namespace Temporal
 
 		// Check field of view
 		Vector vector = targetPosition - sourcePosition;
-		if (fabsf(vector.getY()) > _sightSize) return;
+		if (fabsf(vector.getY()) > _sightSize.getY() || fabsf(vector.getX()) > _sightSize.getX()) return;
 
 		RayCastResult result;
 		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
@@ -78,17 +78,16 @@ namespace Temporal
 		}
 	}
 
-	void drawFieldOfViewSegment(const Vector &sourcePosition, Side::Enum sourceSide, float yDelta)
+	void drawFieldOfViewSegment(const Vector &sourcePosition, Side::Enum sourceSide, const Vector& delta)
 	{
-		static const float SIGHT_SEGMENT_LENGTH = 512.0f;
-		OBB line(sourcePosition + Vector(SIGHT_SEGMENT_LENGTH / 2.0f * sourceSide, yDelta), Vector(sourceSide, 0.0f), Vector(SIGHT_SEGMENT_LENGTH / 2.0f, 0.5f));
+		OBB line(sourcePosition + Vector(delta.getX() / 2.0f * sourceSide, delta.getY()), Vector(sourceSide, 0.0f), Vector(delta.getX() / 2.0f, 0.5f));
 		Graphics::get().getLinesSpriteBatch().add(line, Color(0.0f, 1.0f, 1.0f, 0.3f));
 	}
 
 	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
 	{
-		drawFieldOfViewSegment(sourcePosition, sourceSide, -_sightSize);
 		drawFieldOfViewSegment(sourcePosition, sourceSide, _sightSize);
+		drawFieldOfViewSegment(sourcePosition, sourceSide, Vector(_sightSize.getX(), -_sightSize.getY()));
 	}
 
 	void Sight::drawDebugInfo() const
