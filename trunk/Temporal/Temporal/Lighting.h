@@ -49,6 +49,7 @@ namespace Temporal
 		void add(Component* component) { _components.push_back(component); }
 		void remove(Component* component);
 		void draw(float framePeriod);
+		ComponentList& get() { return _components; }
 
 	private:
 		const Color AMBIENT_COLOR;

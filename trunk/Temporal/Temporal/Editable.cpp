@@ -41,16 +41,24 @@ namespace Temporal
 		}
 		else
 		{
-			const Renderer& renderer = *static_cast<const Renderer*>(getEntity().get(Renderer::TYPE));
-			const SceneNode& root = renderer.getRootSceneNode();
-			const SpriteSheet& spriteSheet = renderer.getSpriteSheet();
-			const Vector& position = getPosition(*this);
-			float rotation = AngleUtils::degreesToRadians(root.getRotation());
-			const Vector& size = spriteSheet.getTexture().getSize();
-			Vector radius = Vector(size.getX() / 2.0f * root.getScale().getX(), size.getY() / 2.0f * root.getScale().getY());
+			const Renderer* renderer = static_cast<const Renderer*>(getEntity().get(Renderer::TYPE));
+			if (renderer)
+			{
+				const SceneNode& root = renderer->getRootSceneNode();
+				const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
+				const Vector& position = getPosition(*this);
+				float rotation = AngleUtils::degreesToRadians(root.getRotation());
+				const Vector& size = spriteSheet.getTexture().getSize();
+				Vector radius = Vector(size.getX() / 2.0f * root.getScale().getX(), size.getY() / 2.0f * root.getScale().getY());
 
-			OBB shape(position, rotation, radius);
-			return shape;
+				OBB shape(position, rotation, radius);
+				return shape;
+			}
+			else
+			{
+				const Vector& position = getPosition(*this);
+				return OBBAABB(position, Vector(5.0f, 5.0f));
+			}
 
 		}	
 	}
@@ -60,7 +68,6 @@ namespace Temporal
 		StaticBody* staticBody = static_cast<StaticBody*>(getEntity().get(STATIC_BODY_TYPE));
 		if (staticBody)
 		{
-
 			staticBody->getFixture().getLocalShape().setAxis0(Vector(rotation));
 			getEntity().getManager().getGameState().getGrid().update(&staticBody->getFixture());
 		}
@@ -93,10 +100,17 @@ namespace Temporal
 		
 	}
 
+	bool isCloserThenSelected(Editable& editable)
+	{
+		const Renderer* selectedRenderer = static_cast<const Renderer*>(Editable::getSelected()->getEntity().get(Renderer::TYPE));
+		const Renderer* editableRenderer = static_cast<const Renderer*>(editable.getEntity().get(Renderer::TYPE));
+		return (selectedRenderer && editableRenderer && selectedRenderer->getLayer() >= editableRenderer->getLayer());
+	}
+
 	void Editable::leftMouseDown(MouseParams& params)
 	{
 		
-		if (_selected && _selected != this && static_cast<Renderer*>(_selected->getEntity().get(Renderer::TYPE))->getLayer() >= static_cast<Renderer*>(this->getEntity().get(Renderer::TYPE))->getLayer())
+		if (_selected && _selected != this && isCloserThenSelected(*this))
 		{
 			OBB selectedShape = _selected->getShape();
 			if (selectedShape.getHeight() == 0.0f)
@@ -280,7 +294,6 @@ namespace Temporal
 				setRotation(shape.getAngle());
 				setRadius(shape.getRadius());
 			}
-			
 		}
 		else if(message.getID() == MessageID::MOUSE_DOWN)
 		{

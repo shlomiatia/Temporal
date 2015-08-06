@@ -5,6 +5,7 @@
 #include "EntitySystem.h"
 #include "Layer.h"
 #include "Camera.h"
+#include "Lighting.h"
 
 #include <SDL.h>
 
@@ -54,12 +55,24 @@ namespace Temporal
 			LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
 			Message message(messageId, &params);
 
-			ComponentList& components = layersManager.getGUILayer().get();
-			for (ComponentIterator j = components.begin(); j != components.end(); ++j)
+			ComponentList& guiComponents = layersManager.getGUILayer().get();
+			for (ComponentIterator j = guiComponents.begin(); j != guiComponents.end(); ++j)
 			{
 				(**j).raiseMessage(message);
 				if (params.isHandled())
 					return;
+			}
+
+			LightLayer* lightLayer = layersManager.getLightLayer();
+			if (lightLayer)
+			{
+				ComponentList& lightComponents = lightLayer->get();
+				for (ComponentIterator j = lightComponents.begin(); j != lightComponents.end(); ++j)
+				{
+					(**j).raiseMessage(message);
+					if (params.isHandled())
+						return;
+				}
 			}
 
 			LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
