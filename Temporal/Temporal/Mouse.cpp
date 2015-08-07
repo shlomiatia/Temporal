@@ -69,7 +69,7 @@ namespace Temporal
 				ComponentList& lightComponents = lightLayer->get();
 				for (ComponentIterator j = lightComponents.begin(); j != lightComponents.end(); ++j)
 				{
-					(**j).raiseMessage(message);
+					(**j).raiseMessage(offsetMessage);
 					if (params.isHandled())
 						return;
 				}
