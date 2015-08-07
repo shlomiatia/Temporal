@@ -15,9 +15,10 @@ namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
 	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
-	const Hash CUSROR_ENTITY_ID("ENT_CURSOR");
+	const Hash CURSOR_ENTITY_ID("ENT_CURSOR");
 	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control"), Hash("light") });
 	const HashList EDITABLE_FILTER({ Hash("static-body"), Hash("renderer") });
+	const Hash TRANSFORM = Hash("transform");
 
 	void addEditableToEntity(Entity& entity)
 	{
@@ -62,7 +63,7 @@ namespace Temporal
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
 			Vector position = Mouse::get().getOffsetPosition();
-			getEntity().getManager().sendMessageToEntity(CUSROR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
+			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
 	}
 
@@ -72,21 +73,20 @@ namespace Temporal
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{
-
+				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().previousTemplate();
-				getEntity().getManager().remove(CUSROR_ENTITY_ID);
-				Vector position = Mouse::get().getOffsetPosition();
-				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
+				addCursor(newEntity);
 			}
 		}
 		else if (key == Key::E)
 		{
 			if (getEntity().getManager().getFocusInputComponent() == this)
 			{
+				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().nextTemplate();
-				getEntity().getManager().remove(CUSROR_ENTITY_ID);
-				Vector position = Mouse::get().getOffsetPosition();
-				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position);
+				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
+				addCursor(newEntity);
 			}
 		}
 		else if (key == Key::F1)
@@ -113,8 +113,8 @@ namespace Temporal
 			}
 			else
 			{
-				Vector position = Mouse::get().getOffsetPosition();
-				cloneEntityFromTemplate(CUSROR_ENTITY_ID, position, true);
+				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
+				addCursor(newEntity);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 
@@ -131,6 +131,16 @@ namespace Temporal
 			{
 				getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
 				Editable::clearSelected();
+			}
+		}
+		else if (key == Key::C)
+		{
+			if (Editable::getSelected())
+			{
+				clearCursor();
+				Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(Editable::getSelected()->getEntity().getId())->clone();
+				addEntity(newEntity, CURSOR_ENTITY_ID, true);
+				getEntity().getManager().setFocusInputComponent(this);
 			}
 		}
 	}
@@ -205,24 +215,36 @@ namespace Temporal
 			id = Hash(idString.c_str());
 			idIndex++;
 		} while (getEntity().getManager().getEntity(id));
+		
+
+		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
 		Vector position = params.getPosition();
-		cloneEntityFromTemplate(id, position);
+
+		addEntity(newEntity, id);
 	}
 
 	void GameStateEditor::clearCursor()
 	{
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
-			getEntity().getManager().remove(CUSROR_ENTITY_ID);
+			getEntity().getManager().remove(CURSOR_ENTITY_ID);
 			getEntity().getManager().clearFocusInputComponent();
 		}
 	}
 
-	void GameStateEditor::cloneEntityFromTemplate(Hash id, Vector& position, bool bypassSave)
+	void GameStateEditor::addCursor(Entity* newEntity)
 	{
-		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent(id, position);
-		newEntity->setBypassSave(bypassSave);
+		addEntity(newEntity, CURSOR_ENTITY_ID, true);
 		addEditableToEntity(*newEntity);
+	}
+
+	void GameStateEditor::addEntity(Entity* newEntity, Hash id, bool bypassSave)
+	{
+		Vector position = Mouse::get().getOffsetPosition();
+		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
+		newEntity->setId(id);
+		newEntity->setBypassSave(true);
+		getEntity().getManager().getGameState().getEntitiesManager().add(newEntity);
 	}
 
 	void GameStateEditor::moveCamera(const Vector& direction)

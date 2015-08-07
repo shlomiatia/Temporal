@@ -299,6 +299,7 @@
             <light radius="256.000000" center="0.000000" size="0.785000">
                 <color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
             </light>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK3">
             <transform orientation="1">
@@ -848,6 +849,7 @@
             <light radius="256.000000" center="0.000000" size="0.785000">
                 <color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
             </light>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
@@ -1113,6 +1115,7 @@
             <light radius="256.000000" center="0.000000" size="0.785000">
                 <color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
             </light>
+            <temporal-echo/>
         </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
@@ -1242,21 +1245,21 @@
         </entity>
         <entity id="ENT_COVER0">
             <transform orientation="1">
-                <position x="2400.000000" y="164.266663"/>
+                <position x="2400.000000" y="160.000000"/>
             </transform>
             <collision-filter category="2" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="68.266663"/>
+                        <radius x="32.000000" y="64.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/glass.png" sprite-sheet="" layer="4">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="0.250000" y="0.533333"/>
+                    <scale x="0.250000" y="0.500000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>

@@ -233,7 +233,7 @@ namespace Temporal
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleStaticBody();
 			}
-			else if (key == Key::C)
+			else if (key == Key::M)
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLater().toggleCameraControl();
 			}
