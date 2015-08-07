@@ -687,7 +687,7 @@
 			<moving-platform />
 			<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png">
 				<scene-node id="SCN_ROOT">
-					<scale x="0.5" y="0.0078125" />
+					<scale x="1" y="0.015625" />
 				</scene-node>
 			</renderer>
 		</entity>
