@@ -134,7 +134,7 @@ namespace Temporal
 		void init(GameState* gameState);
 
 		Hash getCurrentTemplateId() const { return  _templateIterator->first; }
-		Entity* cloneCurrent(Hash entityId, const Vector& position) { return cloneByTemplateId(_templateIterator->first, entityId, position); };
+		Entity* cloneCurrent() { return cloneByTemplateId(_templateIterator->first); };
 		void previousTemplate();
 		void nextTemplate();
 
@@ -142,7 +142,7 @@ namespace Temporal
 		HashEntityMap _templates;
 		HashEntityIterator _templateIterator;
 
-		Entity* cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position);
+		Entity* cloneByTemplateId(Hash templateId);
 		
 		friend class SerializationAccess;
 	};

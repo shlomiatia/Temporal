@@ -171,12 +171,9 @@ namespace Temporal
 		_templateIterator = _templates.begin();
 	}
 
-	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId, Hash entityId, const Vector& position)
+	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId)
 	{
 		Entity* newEntity = _templates.at(templateId)->clone();
-		newEntity->get(Hash("transform"))->handleMessage(Message(MessageID::SET_POSITION, &const_cast<Vector&>(position)));
-		newEntity->setId(entityId);
-		getGameState().getEntitiesManager().add(newEntity);
 		return newEntity;
 	}
 

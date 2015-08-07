@@ -85,7 +85,7 @@ namespace Temporal
 	class DebugLayer : public Layer
 	{
 	public:
-		DebugLayer(LayersManager* manager) : Layer(manager), _staticBody(true), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false) {}
+		DebugLayer(LayersManager* manager) : Layer(manager), _staticBody(false), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false) {}
 
 		void draw(float framePeriod);
 
