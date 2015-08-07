@@ -243,7 +243,7 @@ namespace Temporal
 		Vector position = Mouse::get().getOffsetPosition();
 		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
 		newEntity->setId(id);
-		newEntity->setBypassSave(true);
+		newEntity->setBypassSave(bypassSave);
 		getEntity().getManager().getGameState().getEntitiesManager().add(newEntity);
 	}
 

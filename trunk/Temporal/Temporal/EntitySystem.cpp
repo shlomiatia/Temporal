@@ -62,7 +62,6 @@ namespace Temporal
 		{
 			clone->add((**i).clone());
 		}
-		clone->init(_manager);
 		return clone;
 	}
 
