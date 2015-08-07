@@ -95,6 +95,7 @@ namespace Temporal
 	void TemporalEcho::init()
 	{
 		_echo = getEntity().clone();
+		_echo->init(&getEntity().getManager());
 		std::string idString = Utils::format("%s_TEMPORAL_ECHO", getEntity().getId().getString());
 		_echo->setId(Hash(idString.c_str()));
 		disableEcho();
