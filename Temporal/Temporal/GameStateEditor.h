@@ -21,7 +21,6 @@ namespace Temporal
 	private:
 		void setEditorMode();
 		void addEntity(Entity* newEntity, Hash id, bool bypassSave = false);
-		void addCursor(Entity* newEntity);
 		void clearCursor();
 		void update(float framePeriod);
 		void handleKey(Key::Enum key);

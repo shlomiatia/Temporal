@@ -76,7 +76,7 @@ namespace Temporal
 				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().previousTemplate();
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addCursor(newEntity);
+				addEntity(newEntity, CURSOR_ENTITY_ID, true);
 			}
 		}
 		else if (key == Key::E)
@@ -86,7 +86,7 @@ namespace Temporal
 				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().nextTemplate();
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addCursor(newEntity);
+				addEntity(newEntity, CURSOR_ENTITY_ID, true);
 			}
 		}
 		else if (key == Key::F1)
@@ -114,7 +114,7 @@ namespace Temporal
 			else
 			{
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addCursor(newEntity);
+				addEntity(newEntity, CURSOR_ENTITY_ID, true);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 
@@ -219,8 +219,8 @@ namespace Temporal
 
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
 		Vector position = params.getPosition();
-
 		addEntity(newEntity, id);
+		addEditableToEntity(*newEntity);
 	}
 
 	void GameStateEditor::clearCursor()
@@ -230,12 +230,6 @@ namespace Temporal
 			getEntity().getManager().remove(CURSOR_ENTITY_ID);
 			getEntity().getManager().clearFocusInputComponent();
 		}
-	}
-
-	void GameStateEditor::addCursor(Entity* newEntity)
-	{
-		addEntity(newEntity, CURSOR_ENTITY_ID, true);
-		addEditableToEntity(*newEntity);
 	}
 
 	void GameStateEditor::addEntity(Entity* newEntity, Hash id, bool bypassSave)
