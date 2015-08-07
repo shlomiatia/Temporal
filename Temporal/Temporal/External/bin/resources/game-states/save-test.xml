@@ -142,7 +142,7 @@
         </entity>
         <entity id="ENT_BLOCK27">
             <transform orientation="1">
-                <position x="2842.993652" y="48.261108"/>
+                <position x="2842.993652" y="48.683319"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -213,7 +213,9 @@
                     </obb>
                 </fixture>
             </sensor>
-            <sight size="64.000000"/>
+            <sight>
+                <size x="480.000000" y="64.000000"/>
+            </sight>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
@@ -760,7 +762,9 @@
                     </obb>
                 </fixture>
             </sensor>
-            <sight size="64.000000"/>
+            <sight>
+                <size x="480.000000" y="64.000000"/>
+            </sight>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
@@ -1023,7 +1027,9 @@
                     </obb>
                 </fixture>
             </sensor>
-            <sight size="64.000000"/>
+            <sight>
+                <size x="480.000000" y="64.000000"/>
+            </sight>
             <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
