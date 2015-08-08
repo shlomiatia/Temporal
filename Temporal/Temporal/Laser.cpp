@@ -13,7 +13,7 @@ namespace Temporal
 {
 	const Hash Laser::TYPE = Hash("laser");
 
-	static const float SPEED_PER_SECOND = 100.0f;
+	static const float SPEED_PER_SECOND = 125.0f;
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 

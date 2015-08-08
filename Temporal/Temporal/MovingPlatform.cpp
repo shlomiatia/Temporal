@@ -5,7 +5,7 @@ namespace Temporal
 {
 	const Hash MovingPlatform::TYPE = Hash("moving-platform");
 
-	static const float SPEED_PER_SECOND = 100.0f;
+	static const float SPEED_PER_SECOND = 125.0f;
 
 	void MovingPlatform::handleMessage(Message& message)
 	{

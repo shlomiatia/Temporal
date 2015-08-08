@@ -94,8 +94,8 @@ namespace Temporal
 		NavigationNodeList _nodes; 
 
 		void createNodes(ShapeList& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms);
-		void checkVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
+		void checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms);
+		void checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
 		void createEdges(ShapeList& platforms);
 		void cutAreasByPlatforms(OBBList& areas, ShapeList& platforms);
