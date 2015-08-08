@@ -24,7 +24,7 @@ namespace Temporal
 		if(_followPlayer)
 		{
 			void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
-			const Vector& playerPosition = getVectorParam(result);
+			Vector playerPosition = getVectorParam(result);
 			setCenter(playerPosition);
 			if (!_foundPlayer)
 			{
