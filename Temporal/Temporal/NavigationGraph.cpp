@@ -313,12 +313,12 @@ namespace Temporal
 		
 		if(!intersectWithPlatform(fallArea, platforms))
 		{
-			node1.addEdge(new NavigationEdge(node1, node2, x, Side::LEFT, NavigationEdgeType::DESCEND));
+			node1.addEdge(new NavigationEdge(node1, node2, x, static_cast<Side::Enum>(0), NavigationEdgeType::DESCEND));
 			
 			// BRODER
 			float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
 			if(verticalDistance <= maxJumpHeight)
-				node2.addEdge(new NavigationEdge(node2, node1, x, Side::LEFT, NavigationEdgeType::JUMP_UP));
+				node2.addEdge(new NavigationEdge(node2, node1, x, static_cast<Side::Enum>(0), NavigationEdgeType::JUMP_UP));
 		}
 	}
 

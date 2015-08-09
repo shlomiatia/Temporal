@@ -15,7 +15,6 @@ namespace Temporal
 		static const Hash JUMP_FORWARD_STATE = Hash("NAV_STT_JUMP_FORWARD");
 		static const Hash DESCEND_STATE = Hash("NAV_STT_DESCEND");
 		static const Hash WAIT_STATE = Hash("NAV_STT_WAIT");
-		static const Hash TURN_STATE = Hash("NAV_STT_TURN");
 
 		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
 		static const Hash ACTION_JUMP_STATE = Hash("ACT_STT_JUMP");
@@ -92,10 +91,7 @@ namespace Temporal
 					}
 					else
 					{
-						_stateMachine->changeState(TURN_STATE);
-						
-						// Prevent stop when edge is walk
-						_stateMachine->handleMessage(message);
+						updateNext(message);
 					}
 				}
 				else
@@ -109,43 +105,44 @@ namespace Temporal
 			}
 		}
 
-		void Turn::handleMessage(Message& message)
+		void Walk::updateNext(Message& message)
 		{
-			if(message.getID() == MessageID::UPDATE)
+			Navigator& navigator = getNavigator(*_stateMachine);
+			NavigationEdgeList* path = navigator.getPath();
+			const NavigationEdge* edge = (*path)[0];
+			Side::Enum currentSide = getOrientation(*_stateMachine);
+			Side::Enum targetSide = edge->getSide();
+			if (targetSide != 0 && currentSide != targetSide)
 			{
-				Navigator& navigator = getNavigator(*_stateMachine);
-				NavigationEdgeList* path = navigator.getPath();
-				const NavigationEdge* edge = (*path)[0];
-				Side::Enum currentSide = getOrientation(*_stateMachine);
-				Side::Enum targetSide = edge->getSide();
-				if(currentSide != targetSide)
-				{
-					_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
-				}
-				else
-				{
-					path->erase(path->begin());
-					if(path->size() == 0)
-					{
-						navigator.setPath(0);
-					}
-					if(edge->getType() == NavigationEdgeType::DESCEND)
-						navigator.changeState(DESCEND_STATE);
-					else if(edge->getType() == NavigationEdgeType::FALL)
-						navigator.changeState(FALL_STATE);
-					else if(edge->getType() == NavigationEdgeType::JUMP_FORWARD)
-						navigator.changeState(JUMP_FORWARD_STATE);
-					else if(edge->getType() == NavigationEdgeType::JUMP_UP)
-						navigator.changeState(JUMP_UP_STATE);
-					else if(edge->getType() == NavigationEdgeType::WALK)
-					{
-						navigator.changeState(WALK_STATE);
-
-						// Prevent stop when edge is walk
-						navigator.handleMessage(message);
-					}
-				}
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
 			}
+			
+			path->erase(path->begin());
+			if (path->size() == 0)
+			{
+				navigator.setPath(0);
+			}
+			if (edge->getType() == NavigationEdgeType::DESCEND)
+				navigator.changeState(DESCEND_STATE);
+			else if (edge->getType() == NavigationEdgeType::JUMP_FORWARD)
+				navigator.changeState(JUMP_FORWARD_STATE);
+			else if (edge->getType() == NavigationEdgeType::JUMP_UP)
+				navigator.changeState(JUMP_UP_STATE);
+			else if (edge->getType() == NavigationEdgeType::FALL)
+			{
+				navigator.changeState(FALL_STATE);
+
+				// Prevent stop when edge is walk
+				navigator.handleMessage(message);
+			}
+			else if (edge->getType() == NavigationEdgeType::WALK)
+			{
+				navigator.changeState(WALK_STATE);
+
+				// Prevent stop when edge is walk
+				navigator.handleMessage(message);
+			}
+			
 		}
 
 		void Fall::handleMessage(Message& message)
@@ -160,11 +157,6 @@ namespace Temporal
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
-		}
-
-		void JumpUp::enter(void* param)
-		{
-			
 		}
 
 		void JumpUp::handleMessage(Message& message)
@@ -228,7 +220,7 @@ namespace Temporal
 		states[JUMP_FORWARD_STATE] = new JumpForward();
 		states[DESCEND_STATE] = new Descend();
 		states[WAIT_STATE] = new Wait();
-		states[TURN_STATE] = new Turn();
+//		states[TURN_STATE] = new Turn();
 		return states;
 	}
 
