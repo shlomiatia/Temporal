@@ -67,7 +67,7 @@
 	<temporal-echo />
 	<!--<temporal-period period="0" />-->
 </entity>
-<!--<entity id="ENT_CHASER">
+<entity id="ENT_CHASER">
 	<transform />
 	<collision-filter category="4" />
 	<navigator/>
@@ -99,7 +99,7 @@
 	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
 	<renderer layer="5" sprite-sheet="resources/spritesheets/aquaria.xml">
-		<scene-node id="SCN_ROOT" transform="1" flip="0">
+ 		<scene-node id="SCN_ROOT" transform="1" flip="0">
 			<translation x="0" y="7" />
 			<scale x="0.40" y="0.42" />
 			<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
@@ -130,11 +130,7 @@
 			</scene-node>
 		</scene-node>
 	</renderer>
-	<light center="0" radius="256.000000">
-		<color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
-	</light>
-	<temporal-echo />
-</entity>-->
+</entity>
 <entity id="ENT_BLOCK">
 	<transform />
 	<collision-filter category="1" />

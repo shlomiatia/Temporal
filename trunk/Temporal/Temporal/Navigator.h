@@ -20,12 +20,7 @@ namespace Temporal
 		{
 		public:
 			void handleMessage(Message& message);
-		};
-
-		class Turn : public ComponentState
-		{
-		public:
-			void handleMessage(Message& message);
+			void kaki(Message& message);
 		};
 
 		class Fall : public ComponentState
@@ -37,7 +32,6 @@ namespace Temporal
 		class JumpUp : public ComponentState
 		{
 		public:
-			void enter(void* param);
 			void handleMessage(Message& message);
 		};
 
