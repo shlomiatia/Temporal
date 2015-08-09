@@ -101,7 +101,7 @@ namespace Temporal
 
 		state->init();
 
-		if (strcmp(_path, "resources/game-states/save-test.xml") == 0 || strcmp(_path, "resources/game-states/entities.xml") == 0)
+		if (strcmp(_path, "resources/game-states/save-test.xml") == 0)
 		{
 			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
 			Component* component = new GameStateEditor();

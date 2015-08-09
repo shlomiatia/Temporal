@@ -31,7 +31,7 @@ namespace Temporal
 	class TemporalEcho : public Component
 	{
 	public:
-		explicit TemporalEcho() : _echo(0), _echoReady(false) {}
+		explicit TemporalEcho() : _echo(0), _echoReady(false), _cooldown(false) {}
 		~TemporalEcho();
 
 		void handleMessage(Message& message);
@@ -42,6 +42,7 @@ namespace Temporal
 		static const Hash TYPE;
 	private:
 		static const float ECHO_READY_TIME;
+		static const float ECHO_COOLDOWN_TIME;
 
 		void init();
 		void update(float framePeriod);
@@ -52,6 +53,8 @@ namespace Temporal
 		TemporalEchoDataList _echoesData;
 		Entity* _echo;
 		bool _echoReady;
+		bool _cooldown;
+		Timer _cooldownTimer;
 		Timer _saveTimer;
 		Timer _loadTimer;
 	};
