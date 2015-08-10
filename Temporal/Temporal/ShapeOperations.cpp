@@ -69,6 +69,8 @@ namespace Temporal
 			if ( minT < 0.0f || maxS > minT || maxS > ray.getVector().getLength())
 				return false;
 		}
+		if (maxS < 0.0f)
+			maxS = 0.0f;
 
 		if(pointOfIntersection)
 			*pointOfIntersection = ray.getOrigin() + ray.getDirection() * maxS;
