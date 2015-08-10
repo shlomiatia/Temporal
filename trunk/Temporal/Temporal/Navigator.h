@@ -20,7 +20,7 @@ namespace Temporal
 		{
 		public:
 			void handleMessage(Message& message);
-			void kaki(Message& message);
+			void updateNext(Message& message);
 		};
 
 		class Fall : public ComponentState
@@ -52,7 +52,7 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(OBB::Zero), _path(0) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(OBB::Zero), _path(0), _reload(false) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -72,11 +72,13 @@ namespace Temporal
 
 		OBB _destination;
 		NavigationEdgeList* _path;
+		bool _reload;
 
-		//void deserialize(const Serialization& serialization);
 		void debugDraw() const;
 
 		HashStateMap getStates() const;
+
+		friend class SerializationAccess;
 	};
 }
 #endif

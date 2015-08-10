@@ -178,6 +178,9 @@ namespace Temporal
 
 		void setAngle(float angle) { setAxis0(Vector(angle)); }
 		void setAxis0(const Vector& axis0);
+
+		bool operator==(const OBB& other) const { return ((getCenter() == other.getCenter()) && (getAxisX() == other.getAxisX()) && (getAxisY() == other.getAxisY()) && (getRadius() == other.getRadius())); }
+		bool operator!=(const OBB& other) const { return !(*this == other); }
 	private:
 		Vector _center;
 		Vector _axes[2];

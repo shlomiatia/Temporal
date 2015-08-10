@@ -383,6 +383,12 @@ namespace Temporal
 		}
 
 		template<class T>
+		static void serialize(const char* key, Navigator& navigator, T& serializer) 
+		{
+			serializer.serialize("destination", navigator._destination);
+		}
+
+		template<class T>
 		static void serialize(const char* key, Laser& laser, T& serializer) {}
 
 		template<class T>
@@ -390,9 +396,6 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, InputController& component, T& serializer) {}
-
-		template<class T>
-		static void serialize(const char* key, Navigator& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}

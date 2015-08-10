@@ -159,6 +159,7 @@ namespace Temporal
 	static const Hash SIGHT_ID("sight");
 	static const Hash DYNAMIC_BODY_ID("dynamic-body");
 	static const Hash SENSOR_ID("sensor");
+	static const Hash NAVIGATOR_ID("navigator");
 
 	void DebugLayer::draw(float framePeriod)
 	{
@@ -178,6 +179,8 @@ namespace Temporal
 			filter.push_back(DYNAMIC_BODY_ID);
 		if (_sensor)
 			filter.push_back(SENSOR_ID);
+		if (_navigationGraph)
+			filter.push_back(NAVIGATOR_ID);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 		
 		Graphics::get().getSpriteBatch().end();

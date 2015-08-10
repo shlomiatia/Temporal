@@ -130,6 +130,7 @@
 			</scene-node>
 		</scene-node>
 	</renderer>
+	<temporal-echo />
 </entity>
 <entity id="ENT_BLOCK">
 	<transform />
