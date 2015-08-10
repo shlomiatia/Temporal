@@ -120,7 +120,7 @@ namespace Temporal
 
 					RayCastResult result;
 					getGameState().getGrid().cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
-					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape().getCenter() == platform.getCenter())
+					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f  - (result.getPoint() - startLeft).getLength() + 1.0f;
 						if (amount > 0.0f)
@@ -136,7 +136,7 @@ namespace Temporal
 					}
 					result = RayCastResult();
 					getGameState().getGrid().cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
-					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape().getCenter() == platform.getCenter())
+					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getPoint() - startRight).getLength() + 1.0f;
 						if (amount > 0.0f)

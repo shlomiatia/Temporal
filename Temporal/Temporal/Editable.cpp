@@ -192,6 +192,15 @@ namespace Temporal
 		}
 	}
 
+	void Editable::middleMouseDown(MouseParams& params)
+	{
+		if (_selected == this)
+		{
+			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+		}
+		
+	}
+
 	void Editable::mouseDown(MouseParams& params)
 	{
 		if (params.getButton() == MouseButton::LEFT)
@@ -201,6 +210,10 @@ namespace Temporal
 		else if (params.getButton() == MouseButton::RIGHT)
 		{
 			rightMouseDown(params);
+		}
+		else if (params.getButton() == MouseButton::MIDDLE)
+		{
+			middleMouseDown(params);
 		}
 	}
 

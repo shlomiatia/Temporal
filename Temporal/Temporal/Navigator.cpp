@@ -220,7 +220,6 @@ namespace Temporal
 		states[JUMP_FORWARD_STATE] = new JumpForward();
 		states[DESCEND_STATE] = new Descend();
 		states[WAIT_STATE] = new Wait();
-//		states[TURN_STATE] = new Turn();
 		return states;
 	}
 
@@ -228,23 +227,6 @@ namespace Temporal
 	{
 		return WAIT_STATE;
 	}
-
-	/*void Navigator::deserialize(const Serialization& serialization)
-	{
-		if(_path)
-		{
-			_path->clear();
-		}
-		
-		Vector center = Vector::Zero;
-		DESTINATION_CENTER_SERIALIZER.deserialize(serialization, center);
-		Vector radius = Vector::Zero;
-		DESTINATION_RADIUS_SERIALIZER.deserialize(serialization, radius);
-		AABB destination = AABB(center, radius);
-			
-		if(destination != AABB::Zero)
-			plotPath(*this, destination);
-	}*/
 
 	void Navigator::debugDraw() const
 	{
@@ -272,20 +254,30 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		/*if(message.getID() == MessageID::SERIALIZE)
-		{
-			Serialization& serialization = getSerializationParam(message.getParam());
-			DESTINATION_CENTER_SERIALIZER.serialize(serialization, _destination.getCenter());
-			DESTINATION_RADIUS_SERIALIZER.serialize(serialization, _destination.getRadius());
-		}
-		else if(message.getID() == MessageID::DESERIALIZE)
-		{
-			const Serialization& serialization = getConstSerializationParam(message.getParam());
-			deserialize(serialization);
-		}
-		else*/ if(message.getID() == MessageID::DRAW_DEBUG)
+		if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
+		}
+		else if (message.getID() == MessageID::POST_LOAD)
+		{
+			_reload = true;
+		}
+		else if (message.getID() == MessageID::UPDATE)
+		{
+			if (_reload)
+			{
+				if (_path)
+				{
+					_path->clear();
+				}
+
+				if (_destination != OBB::Zero)
+					plotPath(*this, _destination);
+				else
+					changeState(WAIT_STATE);
+				_reload = false;
+			}
+			
 		}
 	}
 }

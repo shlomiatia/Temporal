@@ -37,6 +37,7 @@ namespace Temporal
 
 		void mouseMove(MouseParams& params);
 		void leftMouseDown(MouseParams& params);
+		void middleMouseDown(MouseParams& params);
 		void rightMouseDown(MouseParams& params);
 		void mouseDown(MouseParams& params);
 		void reset();
