@@ -83,6 +83,10 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
+		else if (message.getID() == MessageID::POST_LOAD)
+		{
+			_ground = 0;
+		}
 	}
 
 	Segment getTopSegment(const OBB& shape, float leftX, float rightX)

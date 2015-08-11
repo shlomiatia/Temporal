@@ -52,7 +52,7 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(OBB::Zero), _path(0), _reload(false) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(OBB::Zero), _path(0) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -72,7 +72,6 @@ namespace Temporal
 
 		OBB _destination;
 		NavigationEdgeList* _path;
-		bool _reload;
 
 		void debugDraw() const;
 

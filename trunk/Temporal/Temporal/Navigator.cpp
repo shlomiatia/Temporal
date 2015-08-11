@@ -28,7 +28,7 @@ namespace Temporal
 		void plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
-			const OBB& startPosition = *static_cast<OBB*>(navigator.raiseMessage(Message(MessageID::GET_SHAPE)));
+			OBB startPosition = OBBAABB(getPosition(stateMachine), Vector(1.0f, 1.0f));
 			
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
@@ -53,6 +53,12 @@ namespace Temporal
 			{
 				const OBB& goalPosition = *static_cast<const OBB*>(message.getParam());
 				plotPath(*_stateMachine, goalPosition); 
+			}
+			else if (message.getID() == MessageID::UPDATE)
+			{
+				const OBB& destination = getNavigator(*_stateMachine).getDestination();
+				if (destination != OBB::Zero)
+					plotPath(*_stateMachine, destination);
 			}
 		}
 
@@ -260,24 +266,11 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::POST_LOAD)
 		{
-			_reload = true;
-		}
-		else if (message.getID() == MessageID::UPDATE)
-		{
-			if (_reload)
-			{
-				if (_path)
-				{
-					_path->clear();
-				}
-
-				if (_destination != OBB::Zero)
-					plotPath(*this, _destination);
-				else
-					changeState(WAIT_STATE);
-				_reload = false;
-			}
-			
+			setPath(0);
+			changeState(WAIT_STATE);
+			if (_destination != OBB::Zero)
+				plotPath(*this, _destination);
+				
 		}
 	}
 }
