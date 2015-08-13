@@ -19,6 +19,7 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
+			void enter(void* param) {};
 			void handleMessage(Message& message);
 			void updateNext(Message& message);
 		};
@@ -45,7 +46,12 @@ namespace Temporal
 		class Descend : public ComponentState
 		{
 		public:
+			Descend() : _afterLoad(false) {}
+
+			void enter(void* param);
 			void handleMessage(Message& message);
+		private :
+			bool _afterLoad;
 		};
 	}
 

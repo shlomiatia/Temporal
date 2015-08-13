@@ -30,6 +30,7 @@ namespace Temporal
 			Navigator& navigator = getNavigator(stateMachine);
 			OBB startPosition = OBBAABB(getPosition(stateMachine), Vector(1.0f, 1.0f));
 			
+			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
 			if(start && goal)
@@ -191,7 +192,7 @@ namespace Temporal
 			if(message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_JUMP_STATE)
+				if(state == ACTION_JUMP_STATE || state == ACTION_CLIMB_STATE)
 					_stateMachine->changeState(WALK_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
@@ -200,13 +201,18 @@ namespace Temporal
 			}
 		}
 
+		void Descend::enter(void* param)
+		{
+			_afterLoad = param && getBoolParam(param);
+		}
+
 		void Descend::handleMessage(Message& message)
 		{
 			if(message.getID() == MessageID::STATE_ENTERED)
 			{
 				Hash state = getHashParam(message.getParam());
 				if(state == ACTION_FALL_STATE)
-					_stateMachine->changeState(WALK_STATE);
+					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
@@ -267,10 +273,22 @@ namespace Temporal
 		else if (message.getID() == MessageID::POST_LOAD)
 		{
 			setPath(0);
-			changeState(WAIT_STATE);
-			if (_destination != OBB::Zero)
-				plotPath(*this, _destination);
-				
+			if (getCurrentStateID() == DESCEND_STATE)
+			{
+				bool afterLoad = true;
+				changeState(DESCEND_STATE, &afterLoad);
+			}
+			else
+			{
+				if (_destination != OBB::Zero)
+				{
+					plotPath(*this, _destination);
+				}
+				if (!_path)
+				{
+					changeState(WAIT_STATE);
+				}
+			}
 		}
 	}
 }

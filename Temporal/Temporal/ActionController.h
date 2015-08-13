@@ -129,14 +129,26 @@ namespace Temporal
 		static float MAX_WALK_JUMP_MODIFIER;
 		static const Hash TYPE;
 
+		const Vector& getHangDescendOriginalTranslation() const { return _hangDescendOriginalTranslation; }
+		void setHangDescendOriginalTranslation(const Vector& value) { _hangDescendOriginalTranslation = value; }
+		const Vector& getHangDescendStartPosition() const { return _hangDescendStartPosition; }
+		void setHangDescendStartPosition(const Vector& value) { _hangDescendStartPosition = value; }
+		const Vector& getHangDescendMovement() const { return _hangDescendMovement; }
+		void setHangDescendMovement(const Vector& value) { _hangDescendMovement = value; }
+
 	protected:
 		Hash getInitialState() const;
 
 	private:
 		LedgeDetector _ledgeDetector;
 		HandleMessageHelper _handleMessageHelper;
+		Vector _hangDescendOriginalTranslation;
+		Vector _hangDescendStartPosition;
+		Vector _hangDescendMovement;
 
 		HashStateMap getStates() const;
+
+		friend class SerializationAccess;
 	};
 
 	/**********************************************************************************************
@@ -204,28 +216,24 @@ namespace Temporal
 		class Climb : public ComponentState
 		{
 		public:
-			Climb() : _doneMovement(Vector::Zero), _translation(Vector::Zero) {}
+			Climb() {}
 
 			void enter(void* param);
 			void exit(void* param);
 			void handleMessage(Message& message);
 
 		private:
-			Vector _doneMovement;
-			Vector _translation;
-			Vector _movement;
 		};
 
 		class Descend : public ComponentState
 		{
 		public:
-			Descend() : _yPosition(0.0f), _yTranslation(0.0f) {}
+			Descend() {}
 
 			void enter(void* param);
 			void handleMessage(Message& message);
 		private:
-			float _yPosition;
-			float _yTranslation;
+			
 		};
 
 		class Takedown : public ComponentState
