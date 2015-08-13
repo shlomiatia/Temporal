@@ -29,7 +29,7 @@
         </entity>
         <entity id="ENT_BLOCK17">
             <transform orientation="1">
-                <position x="1152.000000" y="528.000000"/>
+                <position x="1376.000000" y="528.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -50,10 +50,10 @@
         </entity>
         <entity id="ENT_CHASER0">
             <transform orientation="1">
-                <position x="59.066628" y="72.000000"/>
+                <position x="55.511177" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="-1"/>
-            <navigator>
+            <navigator state="NAV_STT_WAIT" timer="0.000000" state-flag="0">
                 <destination angle="0.000000">
                     <center x="0.000000" y="0.000000"/>
                     <radius x="0.000000" y="0.000000"/>
@@ -87,7 +87,11 @@
             <sight>
                 <size x="480.000000" y="64.000000"/>
             </sight>
-            <action-controller max-walk-force-per-second="300.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
+            <action-controller max-walk-force-per-second="300.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0">
+                <hang-descend-movement x="0.000000" y="0.000000"/>
+                <hang-descnd-original-translation x="0.000000" y="0.000000"/>
+                <hang-descend-start-position x="0.000000" y="0.000000"/>
+            </action-controller>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
@@ -169,6 +173,19 @@
             </renderer>
             <temporal-echo/>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL1">
+            <transform orientation="1">
+                <position x="448.000000" y="567.000000"/>
+            </transform>
+            <camera-control/>
+            <renderer texture="resources/textures/camera.png" sprite-sheet="" layer="1">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_BLOCK6">
             <transform orientation="1">
                 <position x="495.999908" y="272.000000"/>
@@ -192,21 +209,21 @@
         </entity>
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
-                <position x="880.000000" y="336.000000"/>
+                <position x="992.000000" y="336.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="16.000000" y="304.000000"/>
+                        <radius x="128.000000" y="304.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="0.250000" y="4.750000"/>
+                    <scale x="2.000000" y="4.750000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -254,8 +271,8 @@
             </renderer>
         </entity>
         <entity id="ENT_PLAYER">
-            <transform orientation="1">
-                <position x="443.066681" y="72.000000"/>
+            <transform orientation="-1">
+                <position x="810.000000" y="72.000000"/>
             </transform>
             <collision-filter category="8" group="-1"/>
             <input-controller/>
@@ -293,7 +310,11 @@
                     </obb>
                 </fixture>
             </sensor>
-            <action-controller max-walk-force-per-second="200.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0"/>
+            <action-controller max-walk-force-per-second="200.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0">
+                <hang-descend-movement x="0.000000" y="0.000000"/>
+                <hang-descnd-original-translation x="0.000000" y="0.000000"/>
+                <hang-descend-start-position x="0.000000" y="0.000000"/>
+            </action-controller>
             <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
                     <single-animator animation-id="POP_ANM_BASE" is-rewind="0" weight="1.000000" timer="0.000000"/>
@@ -370,6 +391,19 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL0">
+            <transform orientation="1">
+                <position x="448.000000" y="55.000000"/>
+            </transform>
+            <camera-control/>
+            <renderer texture="resources/textures/camera.png" sprite-sheet="" layer="1">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
                 <position x="640.000000" y="360.000000"/>
@@ -384,21 +418,21 @@
         </entity>
         <entity id="ENT_BLOCK16">
             <transform orientation="1">
-                <position x="575.999878" y="656.000000"/>
+                <position x="687.999878" y="656.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="320.000000" y="16.000000"/>
+                        <radius x="432.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="5.000000" y="0.250000"/>
+                    <scale x="6.750000" y="0.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -489,7 +523,7 @@
         </entity>
         <entity id="ENT_BLOCK20">
             <transform orientation="1">
-                <position x="1248.000000" y="144.000000"/>
+                <position x="1472.000000" y="144.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -529,44 +563,23 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
-        <entity id="ENT_PATROL0">
-            <transform orientation="1">
-                <position x="1216.000000" y="16.000000"/>
-            </transform>
-            <collision-filter category="1" group="-1"/>
-            <static-body>
-                <fixture>
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="320.000000" y="16.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
-                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="5.000000" y="0.250000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-        </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
-                <position x="16.000000" y="368.000000"/>
+                <position x="16.000000" y="373.866669"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="16.000000" y="336.000000"/>
+                        <radius x="16.000000" y="341.866669"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="0.250000" y="5.250000"/>
+                    <scale x="0.250000" y="5.341667"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -592,44 +605,70 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL2">
+            <transform orientation="1">
+                <position x="1504.000000" y="55.000000"/>
+            </transform>
+            <camera-control/>
+            <renderer texture="resources/textures/camera.png" sprite-sheet="" layer="1">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_CAMERA_CONTROL3">
+            <transform orientation="1">
+                <position x="1502.349365" y="570.666687"/>
+            </transform>
+            <camera-control/>
+            <renderer texture="resources/textures/camera.png" sprite-sheet="" layer="1">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_PATROL1">
             <transform orientation="1">
-                <position x="1520.000000" y="336.000000"/>
+                <position x="1888.000000" y="374.933350"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="16.000000" y="304.000000"/>
+                        <radius x="160.000000" y="342.933350"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="0.250000" y="4.750000"/>
+                    <scale x="2.500000" y="5.358334"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
-                <position x="448.000000" y="16.000000"/>
+                <position x="1024.000000" y="16.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="448.000000" y="16.000000"/>
+                        <radius x="1024.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="7.000000" y="0.250000"/>
+                    <scale x="16.000000" y="0.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -657,7 +696,7 @@
         </entity>
         <entity id="ENT_BLOCK21">
             <transform orientation="1">
-                <position x="1152.000000" y="272.000000"/>
+                <position x="1376.000000" y="272.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -699,7 +738,7 @@
         </entity>
         <entity id="ENT_BLOCK19">
             <transform orientation="1">
-                <position x="1248.000000" y="400.000000"/>
+                <position x="1472.000000" y="400.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>

@@ -373,6 +373,9 @@ namespace Temporal
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
 			serializer.serialize("max-walk-force-per-second", actionController.MAX_WALK_FORCE_PER_SECOND);
+			serializer.serialize("hang-descend-movement", actionController._hangDescendMovement);
+			serializer.serialize("hang-descnd-original-translation", actionController._hangDescendOriginalTranslation);
+			serializer.serialize("hang-descend-start-position", actionController._hangDescendStartPosition);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}
 		
@@ -386,6 +389,7 @@ namespace Temporal
 		static void serialize(const char* key, Navigator& navigator, T& serializer) 
 		{
 			serializer.serialize("destination", navigator._destination);
+			serialize(key, (StateMachineComponent&)navigator, serializer);
 		}
 
 		template<class T>
