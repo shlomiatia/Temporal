@@ -9,7 +9,7 @@ namespace Temporal
 
 	namespace NavigatorStates
 	{
-		static const Hash WALK_STATE = Hash("NAV_STT_WALK");	
+		static const Hash WALK_STATE = Hash("NAV_STT_WALK");
 		static const Hash FALL_STATE = Hash("NAV_STT_FALL");
 		static const Hash JUMP_UP_STATE = Hash("NAV_STT_JUMP_UP");
 		static const Hash JUMP_FORWARD_STATE = Hash("NAV_STT_JUMP_FORWARD");
@@ -25,35 +25,38 @@ namespace Temporal
 			return static_cast<Navigator&>(stateMachine);
 		}
 
-		void plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
+		bool plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
 			Navigator& navigator = getNavigator(stateMachine);
 			OBB startPosition = OBBAABB(getPosition(stateMachine), Vector(1.0f, 1.0f));
-			
+
 			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
-			if(start && goal)
+			if (start && goal)
 			{
 				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
-				if(path)
+				if (path)
 				{
-					if(path->size() != 0)
+					if (path->size() != 0)
 					{
 						navigator.setPath(path);
 					}
 					navigator.setDestination(goalPosition);
 					navigator.changeState(WALK_STATE);
+					return true;
 				}
 			}
+			return false;
 		}
 
 		void Wait::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
+			if (message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
 				const OBB& goalPosition = *static_cast<const OBB*>(message.getParam());
-				plotPath(*_stateMachine, goalPosition); 
+				//OBB goalPosition = OBBAABB(Vector(1700, 70), Vector(1, 1));
+				plotPath(*_stateMachine, goalPosition);
 			}
 			else if (message.getID() == MessageID::UPDATE)
 			{
@@ -65,54 +68,59 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::UPDATE)
+			if (message.getID() == MessageID::UPDATE)
 			{
-				const Vector& position = getPosition(*_stateMachine);
-				float sourceX = position.getX();
-				Navigator& navigator = getNavigator(*_stateMachine);
-				NavigationEdgeList* path = navigator.getPath();
-				float targetX;
-				bool reachedTargetPlatform;
-				if(!path)
-				{
-					const OBB& destination = navigator.getDestination();
-					targetX = destination.getCenterX();
-					reachedTargetPlatform = true;
-				}
-				else
-				{
-					const NavigationEdge* edge = (*path)[0];
-					targetX = edge->getX();
-					reachedTargetPlatform = false;
-				}
-				
-				float distance = targetX - sourceX;
-
-				// BRODER
-				if(abs(distance) <= 10.0f)
-				{
-					if(reachedTargetPlatform)
-					{
-						navigator.setDestination(OBB::Zero);
-						_stateMachine->changeState(WAIT_STATE);
-					}
-					else
-					{
-						updateNext(message);
-					}
-				}
-				else
-				{
-					Side::Enum orientation = getOrientation(*_stateMachine);
-					if(distance < 0)
-						sendDirectionAction(*_stateMachine, Side::LEFT);
-					else
-						sendDirectionAction(*_stateMachine, Side::RIGHT);
-				}
+				update();
 			}
 		}
 
-		void Walk::updateNext(Message& message)
+		void Walk::update()
+		{
+			const Vector& position = getPosition(*_stateMachine);
+			float sourceX = position.getX();
+			Navigator& navigator = getNavigator(*_stateMachine);
+			NavigationEdgeList* path = navigator.getPath();
+			float targetX;
+			bool reachedTargetPlatform;
+			if (!path)
+			{
+				const OBB& destination = navigator.getDestination();
+				targetX = destination.getCenterX();
+				reachedTargetPlatform = true;
+			}
+			else
+			{
+				const NavigationEdge* edge = (*path)[0];
+				targetX = edge->getX();
+				reachedTargetPlatform = false;
+			}
+
+			float distance = targetX - sourceX;
+
+			// BRODER
+			if (abs(distance) <= 10.0f)
+			{
+				if (reachedTargetPlatform)
+				{
+					navigator.setDestination(OBB::Zero);
+					_stateMachine->changeState(WAIT_STATE);
+				}
+				else
+				{
+					updateNext();
+				}
+			}
+			else
+			{
+				Side::Enum orientation = getOrientation(*_stateMachine);
+				if (distance < 0)
+					sendDirectionAction(*_stateMachine, Side::LEFT);
+				else
+					sendDirectionAction(*_stateMachine, Side::RIGHT);
+			}
+		}
+
+		void Walk::updateNext()
 		{
 			Navigator& navigator = getNavigator(*_stateMachine);
 			NavigationEdgeList* path = navigator.getPath();
@@ -123,7 +131,7 @@ namespace Temporal
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
 			}
-			
+
 			path->erase(path->begin());
 			if (path->size() == 0)
 			{
@@ -136,45 +144,46 @@ namespace Temporal
 			else if (edge->getType() == NavigationEdgeType::JUMP_UP)
 				navigator.changeState(JUMP_UP_STATE);
 			else if (edge->getType() == NavigationEdgeType::FALL)
-			{
 				navigator.changeState(FALL_STATE);
-
-				// Prevent stop when edge is walk
-				navigator.handleMessage(message);
-			}
 			else if (edge->getType() == NavigationEdgeType::WALK)
-			{
 				navigator.changeState(WALK_STATE);
 
-				// Prevent stop when edge is walk
-				navigator.handleMessage(message);
-			}
-			
+		}
+
+		void Fall::enter(void* param)
+		{
+			_afterLoad = param && getBoolParam(param);
+			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 		}
 
 		void Fall::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if (message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_FALL_STATE)
-					_stateMachine->changeState(WALK_STATE);
+				if (state == ACTION_FALL_STATE)
+					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
-			else if(message.getID() == MessageID::UPDATE)
+			else if (message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
 			}
 		}
 
+		void JumpUp::enter(void* param)
+		{
+			_afterLoad = param && getBoolParam(param);
+		}
+
 		void JumpUp::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if (message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_CLIMB_STATE)
-					_stateMachine->changeState(WALK_STATE);
+				if (state == ACTION_CLIMB_STATE)
+					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
-			else if(message.getID() == MessageID::UPDATE)
+			else if (message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
@@ -183,19 +192,24 @@ namespace Temporal
 
 		void JumpForward::enter(void* param)
 		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
+			_afterLoad = param && getBoolParam(param);
+			if (!_afterLoad)
+			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_START));
+			}
+
 		}
 
 		void JumpForward::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_EXITED)
+			if (message.getID() == MessageID::STATE_ENTERED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_JUMP_STATE || state == ACTION_CLIMB_STATE)
-					_stateMachine->changeState(WALK_STATE);
+				if (state != ACTION_CLIMB_STATE && state != ACTION_JUMP_STATE && state != JUMP_FORWARD_STATE)
+					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
-			else if(message.getID() == MessageID::UPDATE)
+			else if (message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 			}
@@ -208,13 +222,13 @@ namespace Temporal
 
 		void Descend::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::STATE_ENTERED)
+			if (message.getID() == MessageID::STATE_ENTERED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if(state == ACTION_FALL_STATE)
+				if (state == ACTION_FALL_STATE)
 					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
-			else if(message.getID() == MessageID::UPDATE)
+			else if (message.getID() == MessageID::UPDATE)
 			{
 				_stateMachine->raiseMessage(Message(MessageID::ACTION_DOWN));
 			}
@@ -244,10 +258,10 @@ namespace Temporal
 	{
 		Vector currentPoint = getPosition(*this);
 		NavigationEdgeList* path = getPath();
-			
-		if(path)
-		{	
-			for(NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
+
+		if (path)
+		{
+			for (NavigationEdgeIterator i = path->begin(); i != path->end(); ++i)
 			{
 				const NavigationEdge& edge = **i;
 				const NavigationNode& next = edge.getTarget();
@@ -255,7 +269,7 @@ namespace Temporal
 				Segment segment = SegmentPP(currentPoint, nextPoint);
 				Vector segmentRadius = segment.getRadius();
 				Vector axis = segmentRadius.normalize();
-				Vector radius  = Vector(segmentRadius.getLength(), 1.0);
+				Vector radius = Vector(segmentRadius.getLength(), 1.0);
 				OBB obb = OBB(segment.getCenter(), axis, radius);
 				Graphics::get().getSpriteBatch().add(obb, Color::Cyan);
 				currentPoint = nextPoint;
@@ -266,7 +280,7 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if(message.getID() == MessageID::DRAW_DEBUG)
+		if (message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}
@@ -278,15 +292,29 @@ namespace Temporal
 				bool afterLoad = true;
 				changeState(DESCEND_STATE, &afterLoad);
 			}
+			else if (getCurrentStateID() == JUMP_FORWARD_STATE)
+			{
+				bool afterLoad = true;
+				changeState(JUMP_FORWARD_STATE, &afterLoad);
+			}
+			else if (getCurrentStateID() == JUMP_UP_STATE)
+			{
+				bool afterLoad = true;
+				changeState(JUMP_UP_STATE, &afterLoad);
+			}
+			else if (getCurrentStateID() == FALL_STATE)
+			{
+				bool afterLoad = true;
+				changeState(FALL_STATE, &afterLoad);
+			}
 			else
 			{
 				if (_destination != OBB::Zero)
 				{
-					plotPath(*this, _destination);
-				}
-				if (!_path)
-				{
-					changeState(WAIT_STATE);
+					if (!plotPath(*this, _destination))
+					{
+						changeState(WAIT_STATE);
+					}
 				}
 			}
 		}

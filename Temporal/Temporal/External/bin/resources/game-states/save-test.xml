@@ -50,7 +50,7 @@
         </entity>
         <entity id="ENT_CHASER0">
             <transform orientation="1">
-                <position x="55.511177" y="72.000000"/>
+                <position x="52.666718" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <navigator state="NAV_STT_WAIT" timer="0.000000" state-flag="0">
@@ -87,7 +87,7 @@
             <sight>
                 <size x="480.000000" y="64.000000"/>
             </sight>
-            <action-controller max-walk-force-per-second="300.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0">
+            <action-controller max-walk-force-per-second="325.000000" state="ACT_STT_STAND" timer="0.000000" state-flag="0">
                 <hang-descend-movement x="0.000000" y="0.000000"/>
                 <hang-descnd-original-translation x="0.000000" y="0.000000"/>
                 <hang-descend-start-position x="0.000000" y="0.000000"/>
@@ -209,21 +209,21 @@
         </entity>
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
-                <position x="992.000000" y="336.000000"/>
+                <position x="992.000000" y="352.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="128.000000" y="304.000000"/>
+                        <radius x="128.000000" y="320.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="2.000000" y="4.750000"/>
+                    <scale x="2.000000" y="5.000000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -418,21 +418,21 @@
         </entity>
         <entity id="ENT_BLOCK16">
             <transform orientation="1">
-                <position x="687.999878" y="656.000000"/>
+                <position x="463.999878" y="656.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="432.000000" y="16.000000"/>
+                        <radius x="208.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="6.750000" y="0.250000"/>
+                    <scale x="3.250000" y="0.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>

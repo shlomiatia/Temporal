@@ -13,34 +13,51 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
+			void enter(void* param){};
 			void handleMessage(Message& message);
 		};
 
 		class Walk : public ComponentState
 		{
 		public:
-			void enter(void* param) {};
+			void enter(void* param) { update(); };
 			void handleMessage(Message& message);
-			void updateNext(Message& message);
+			void update();
+			void updateNext();
 		};
 
 		class Fall : public ComponentState
 		{
 		public:
+			Fall() : _afterLoad(true) {}
+
+			void enter(void* param);
 			void handleMessage(Message& message);
+
+		private:
+			bool _afterLoad;
 		};
 
 		class JumpUp : public ComponentState
 		{
 		public:
+			JumpUp() : _afterLoad(true) {}
+
+			void enter(void* param);
 			void handleMessage(Message& message);
+		private:
+			bool _afterLoad;
 		};
 
 		class JumpForward : public ComponentState
 		{
 		public:
+			JumpForward() : _afterLoad(true) {}
+
 			void enter(void* param);
 			void handleMessage(Message& message);
+		private:
+			bool _afterLoad;
 		};
 
 		class Descend : public ComponentState
@@ -50,6 +67,7 @@ namespace Temporal
 
 			void enter(void* param);
 			void handleMessage(Message& message);
+
 		private :
 			bool _afterLoad;
 		};
