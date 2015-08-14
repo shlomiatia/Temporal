@@ -86,6 +86,8 @@ namespace Temporal
 		else if (message.getID() == MessageID::POST_LOAD)
 		{
 			_ground = 0;
+			_groundSegment = Segment::Zero;
+			_previousGroundCenter = Vector::Zero;
 		}
 	}
 

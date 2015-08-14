@@ -25,7 +25,7 @@ namespace Temporal
 		{
 			float fps = _splits / _total;
 			float average = (_total / _splits) * 1000.0f;
-			//Log::write("%s: %f FPS (%f seconds)", name, fps, average);
+			Log::write("%s: %f FPS (%f seconds)", name, fps, average);
 			_splits = 0;
 			_total = 0.0f;
 		}

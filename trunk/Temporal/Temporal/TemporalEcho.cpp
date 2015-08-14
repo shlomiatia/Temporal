@@ -11,8 +11,8 @@ namespace Temporal
 	const Hash TRANSFORM_TYPE = Hash("transform");
 	const Hash RENDERER_TYPE = Hash("renderer");
 	const Hash ANIMATOR_TYPE = Hash("animator");
-	const float TemporalEcho::ECHO_READY_TIME = 2.0f;
-	const float TemporalEcho::ECHO_COOLDOWN_TIME = 1.0f;
+	const float TemporalEcho::ECHO_READY_TIME = 1.0f;
+	const float TemporalEcho::ECHO_COOLDOWN_TIME = 4.0f;
 
 	HashList TemporalEcho::getFilter() const
 	{
