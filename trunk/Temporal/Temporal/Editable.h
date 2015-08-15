@@ -1,7 +1,6 @@
 #ifndef EDITABLE_H
 #define EDITABLE_H
 #include "EntitySystem.h"
-#include "Delegate.h"
 #include "Shapes.h"
 
 namespace Temporal
@@ -46,6 +45,7 @@ namespace Temporal
 		OBB getShape() const;
 		void setRotation(float rotation);
 		void setRadius(const Vector& radius);
+		void setPeriod(int period);
 	};
 }
 #endif

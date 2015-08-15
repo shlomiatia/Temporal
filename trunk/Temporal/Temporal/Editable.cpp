@@ -13,6 +13,7 @@
 #include "SceneNode.h"
 #include "Texture.h"
 #include "Keyboard.h"
+#include "TemporalPeriod.h"
 
 namespace Temporal
 {
@@ -294,6 +295,21 @@ namespace Temporal
 		}
 	}
 
+	void Editable::setPeriod(int period)
+	{
+		if (_selected == this)
+		{
+			Component* component = getEntity().get(TemporalPeriod::TYPE);
+			if (!component)
+			{
+				component = new TemporalPeriod();
+				getEntity().add(component);
+			}
+			TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(component);
+			temporalPeriod->setPeriod(static_cast<Period::Enum>(period));
+		}
+	}
+
 	void Editable::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::ENTITY_INIT)
@@ -353,6 +369,8 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::KEY_UP)
 		{
+			if (this != _selected)
+				return;
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if (key == Key::UP)
 			{
@@ -369,6 +387,22 @@ namespace Temporal
 			else if (key == Key::RIGHT)
 			{
 				handleArrows(Vector(1.0f, 0.0f));
+			}
+			else if (key == Key::TILDE)
+			{
+				getEntity().remove(TemporalPeriod::TYPE);
+			}
+			else if (key == Key::D1)
+			{
+				setPeriod(Period::PAST);
+			}
+			else if (key == Key::D2)
+			{
+				setPeriod(Period::PRESENT);
+			}
+			else if (key == Key::D3)
+			{
+				setPeriod(Period::FUTURE);
 			}
 		}
 	}

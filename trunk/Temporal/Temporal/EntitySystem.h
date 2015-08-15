@@ -71,6 +71,7 @@ namespace Temporal
 
 		void init(EntitiesManager* manager);
 		void add(Component* component);
+		void remove(Hash type);
 		const Component* get(Hash type) const;
 		Component* get(Hash type);
 		void* handleMessage(Message& message, const HashList* filter = 0) const;

@@ -5,6 +5,7 @@
 
 namespace Temporal
 {
+	Hash PLAYER_ID("ENT_PLAYER");
 	const Hash PlayerPeriod::TYPE = Hash("player-period");
 	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
 
@@ -12,7 +13,7 @@ namespace Temporal
 	{
 		_period = period;
 		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
+		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &period));
 	}
 
 	void PlayerPeriod::handleMessage(Message& message)
@@ -28,7 +29,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &_period));
 		}
 		else if(message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
@@ -37,22 +38,41 @@ namespace Temporal
 		}
 	}
 
+	void TemporalPeriod::setPlayerPeriod(Period::Enum period)
+	{
+		float alpha;
+		if (_period == period || _period == -1)
+			alpha = 1.0f;
+		else
+			alpha = 0.2f;
+		raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
+	}
+
+	void TemporalPeriod::setPeriod(Period::Enum period)
+	{
+		_period = period;
+		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
+		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
+		setPlayerPeriod(playerPeriod);
+	}
+
 	void TemporalPeriod::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
-			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
+			setPeriod(_period);
 		}
-		else if(message.getID() == MessageID::SET_PERIOD)
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			int period = -1;
+			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &period));
+			float alpha = 1.0f;
+			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
+		}
+		else if (message.getID() == MessageID::SET_PLAYER_PERIOD)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
-
-			float alpha;
-			if(_period == period)
-				alpha = 1.0f;
-			else
-				alpha = 0.2f;
-			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
+			setPlayerPeriod(period);
 		}
 	}
 
