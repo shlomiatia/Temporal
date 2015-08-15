@@ -13,7 +13,7 @@ namespace Temporal
 {
 	const Hash Laser::TYPE = Hash("laser");
 
-	static const float SPEED_PER_SECOND = 125.0f;
+	static const float SPEED_PER_SECOND = 128.0f;
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
@@ -25,9 +25,7 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::BODY_COLLISION)
 		{
-			const Vector& collision = getVectorParam(message.getParam());
-			Side::Enum side = collision.getX() < 0.0f ? Side::RIGHT : Side::LEFT;
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND * side, 0.0f)));
+			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 		}
 		else if (message.getID() == MessageID::LEVEL_INIT)
 		{
@@ -67,13 +65,17 @@ namespace Temporal
 				takedownEntity->handleMessage(Message(MessageID::DIE));
 			}
 		}
-		if (position.getX() - shape.getRadiusX() - SPEED_PER_SECOND * framePeriod < _platform->getLeft())
+		Side::Enum orientation = getOrientation(*this);
+		if (orientation == Side::LEFT && position.getX() - shape.getRadiusX() - SPEED_PER_SECOND * framePeriod <= _platform->getLeft())
 		{
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+			
 		}
-		else if (position.getX() + shape.getRadiusX() + SPEED_PER_SECOND * framePeriod > _platform->getRight())
+		else if (orientation == Side::RIGHT && position.getX() + shape.getRadiusX() + SPEED_PER_SECOND * framePeriod >= _platform->getRight())
 		{
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(-SPEED_PER_SECOND, 0.0f)));
+			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 		}
+		raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+
 	}
 }
