@@ -64,8 +64,8 @@
 	<light center="0" radius="256.000000">
 		<color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
 	</light>
-	<temporal-echo />
-	<!--<temporal-period period="0" />-->
+	<!--<temporal-echo />-->
+	<temporal-period period="1" />
 </entity>
 <entity id="ENT_CHASER">
 	<transform />
@@ -144,6 +144,7 @@
 		</fixture>
 	</static-body>
 	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
+	<temporal-period period="1" />
 </entity>
 <entity id="ENT_COVER">
 	<transform />
@@ -170,6 +171,7 @@
 <entity id="ENT_LASER">
 	<transform />
 	<collision-filter category="4" />
+	<laser />
 	<dynamic-body gravity-enabled="false">
 		<fixture>
 			<obb angle="0">
@@ -178,7 +180,7 @@
 			</obb>
 		</fixture>
 	</dynamic-body>
-	<laser />
+	
 	<renderer layer="5" texture="resources/textures/laser.png">
 		<color r="1.0" g="0.0" b="0.0" />
 	</renderer>

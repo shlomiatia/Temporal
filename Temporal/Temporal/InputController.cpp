@@ -4,11 +4,106 @@
 #include "MessageUtils.h"
 #include "Input.h"
 #include "Shapes.h"
+#include "Mouse.h"
 
 namespace Temporal
 {
 	const float JUMP_LEEWAY = 0.1f;
 	const Hash InputController::TYPE = Hash("input-controller");
+
+	void InputController::startJump()
+	{
+		_isJump = true;
+		_timer.reset();
+	}
+
+	void InputController::temporalAction()
+	{
+		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
+		raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
+	}
+
+	void InputController::mouseDown(Message& message)
+	{
+		const MouseParams& params = getMouseParams(message.getParam());
+		if (params.getButton() == MouseButton::LEFT)
+		{
+			raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
+		}
+	}
+
+	void InputController::keyDown(Message& message)
+	{
+		Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
+		if (key == Key::SPACE)
+		{
+			startJump();
+		}
+		else if (key == Key::E)
+		{
+			raiseMessage(Message(MessageID::ACTION_ACTIVATE));
+		}
+		else if (key == Key::LEFT_SHIFT)
+		{
+			temporalAction();
+		}
+	}
+
+	void InputController::gamepadButtonDown(Message& message)
+	{
+		GamepadButton::Enum button = *static_cast<GamepadButton::Enum*>(message.getParam());
+		if (button == GamepadButton::ACTION_DOWN)
+		{
+			startJump();
+		}
+		else if (button == GamepadButton::ACTION_LEFT)
+		{
+			raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
+		}
+		else if (button == GamepadButton::ACTION_RIGHT)
+		{
+			raiseMessage(Message(MessageID::ACTION_ACTIVATE));
+		}
+		else if (button == GamepadButton::SHOULDER_LEFT)
+		{
+			temporalAction();
+		}
+	}
+
+	void InputController::update(float time)
+	{
+		if (Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
+		{
+			sendDirectionAction(*this, Side::RIGHT);
+		}
+		if (Keyboard::get().getKey(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
+		{
+			sendDirectionAction(*this, Side::LEFT);
+		}
+		if (_isJump)
+		{
+
+			_timer.update(time);
+			if (_timer.getElapsedTime() < JUMP_LEEWAY)
+				raiseMessage(Message(MessageID::ACTION_UP_START));
+			else
+				_isJump = false;
+		}
+		if (Keyboard::get().getKey(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
+		{
+			raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
+		}
+		if (Keyboard::get().getKey(Key::S) || Input::get().getGamepad().getLeftStick().getY() > 0.0f)
+		{
+			raiseMessage(Message(MessageID::ACTION_DOWN));
+		}
+		// TEMP:
+		if (Keyboard::get().getKey(Key::TAB))
+		{
+			OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
+		}
+	}
 
 	void InputController::handleMessage(Message& message)
 	{
@@ -20,59 +115,22 @@ namespace Temporal
 		{
 			getEntity().getManager().removeInputComponent(this);
 		}
-		else if ((message.getID() == MessageID::KEY_DOWN && *static_cast<Key::Enum*>(message.getParam()) == Key::SPACE) ||
-				 (message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && *static_cast<Key::Enum*>(message.getParam()) == GamepadButton::ACTION_DOWN))
+		else if (message.getID() == MessageID::MOUSE_DOWN)
 		{
-			_isJump = true;
-			_timer.reset();
- 			
+			mouseDown(message);
 		}
-		else if((message.getID() == MessageID::GAMEPAD_BUTTON_DOWN && *static_cast<Key::Enum*>(message.getParam()) == GamepadButton::ACTION_LEFT) || 
-				 message.getID() == MessageID::MOUSE_DOWN ) 
+		else if (message.getID() == MessageID::KEY_DOWN)
 		{
-			raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
+			keyDown(message);
+		}
+		else if (message.getID() == MessageID::GAMEPAD_BUTTON_DOWN)
+		{
+			gamepadButtonDown(message);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
-			
-			if(Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
-			{
-				sendDirectionAction(*this, Side::RIGHT);
-			}
-			if(Keyboard::get().getKey(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
-			{
-				sendDirectionAction(*this, Side::LEFT);
-			}
-			if(_isJump)
-			{
-				float time = getFloatParam(message.getParam());
-				_timer.update(time);
-				if(_timer.getElapsedTime() < JUMP_LEEWAY)
-					raiseMessage(Message(MessageID::ACTION_UP_START));
-				else
-					_isJump = false;
-			}
-			if(Keyboard::get().getKey(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
-			{
-				raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
-			}
-			if(Keyboard::get().getKey(Key::S) || (Input::get().getGamepad().getLeftStick().getY() > 0.0f))
-			{
-				raiseMessage(Message(MessageID::ACTION_DOWN));
-			}
-			if(Keyboard::get().getKey(Key::E) || Input::get().getGamepad().getButton(GamepadButton::ACTION_RIGHT))
-			{
-				raiseMessage(Message(MessageID::ACTION_ACTIVATE));
-			}
-			if (Keyboard::get().getKey(Key::LEFT_SHIFT) || Input::get().getGamepad().getButton(GamepadButton::ACTION_UP))
-			{
-				getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-			}
-			if (Keyboard::get().getKey(Key::TAB))
-			{
-				OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-				getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
-			}
+			float time = getFloatParam(message.getParam());
+			update(time);
 		}
 	}
 }

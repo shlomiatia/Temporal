@@ -55,7 +55,6 @@ namespace Temporal
 			if (message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
 				const OBB& goalPosition = *static_cast<const OBB*>(message.getParam());
-				//OBB goalPosition = OBBAABB(Vector(1700, 70), Vector(1, 1));
 				plotPath(*_stateMachine, goalPosition);
 			}
 			else if (message.getID() == MessageID::UPDATE)

@@ -12,8 +12,6 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		explicit Laser() {}
-
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Laser(); };

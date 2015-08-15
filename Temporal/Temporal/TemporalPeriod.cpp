@@ -12,7 +12,6 @@ namespace Temporal
 	{
 		_period = period;
 		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-		
 		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &period));
 	}
 
@@ -31,21 +30,10 @@ namespace Temporal
 		{
 			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PERIOD, &_period));
 		}
-		else if(message.getID() == MessageID::KEY_UP)
+		else if(message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
-			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if(key == Key::D1)
-			{
-				changePeriod(Period::PAST);
-			}
-			if(key == Key::D2)
-			{
-				changePeriod(Period::PRESENT);
-			}
-			if(key == Key::D3)
-			{
-				changePeriod(Period::FUTURE);
-			}
+			Period::Enum period = _period == Period::PAST ? Period::PRESENT : Period::PAST;
+			changePeriod(period);
 		}
 	}
 

@@ -54,6 +54,7 @@ namespace Temporal
 			ACTION_HOLSTER,
 			ACTION_AIM,
 			ACTION_FIRE,
+			ACTION_TEMPORAL_TRAVEL,
 			
 			GET_GROUND,
 			SET_GROUND,

@@ -166,7 +166,7 @@ namespace Temporal
 			}
 		}
 
-		const float Wait::WAIT_TIME(2.0f);
+		const float Wait::WAIT_TIME(1.0f);
 
 		void Wait::handleMessage(Message& message)
 		{
