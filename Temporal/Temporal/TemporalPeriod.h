@@ -22,11 +22,13 @@ namespace Temporal
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
-
 		Component* clone() const { return new PlayerPeriod(_period); }
+
+		void setPeriod(Period::Enum period) { _period = period; }
+		Period::Enum getPeriod() const { return _period; }
+
 		static const Hash TYPE;
 	private:
-		
 		Period::Enum _period;
 
 		void changePeriod(Period::Enum period);
@@ -41,11 +43,15 @@ namespace Temporal
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
-
 		Component* clone() const { return new TemporalPeriod(_period); }
+
+		void setPeriod(Period::Enum period);
+		Period::Enum getPeriod() const { return _period; }
+
 		static const Hash TYPE;
 	private:		
 
+		void setPlayerPeriod(Period::Enum period);
 		Period::Enum _period;
 
 		friend class SerializationAccess;

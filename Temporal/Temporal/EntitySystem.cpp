@@ -52,7 +52,21 @@ namespace Temporal
 			component->handleMessage(Message(MessageID::ENTITY_INIT));
 			component->handleMessage(Message(MessageID::ENTITY_POST_INIT));
 		}
-		
+	}
+
+	void Entity::remove(Hash type)
+	{
+		for (ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			Component* component = *i;
+			if (component->getType() == type)
+			{
+				(**i).handleMessage(Message(MessageID::ENTITY_DISPOSED));
+				delete *i;
+				i = _components.erase(i);
+				return;
+			}
+		}
 	}
 
 	Entity* Entity::clone() const
