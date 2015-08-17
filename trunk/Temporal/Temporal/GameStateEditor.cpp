@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "Game.h"
 #include "Mouse.h"
+#include "Math.h"
 
 namespace Temporal
 {
@@ -62,7 +63,10 @@ namespace Temporal
 		}
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
+			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
 			Vector position = Mouse::get().getOffsetPosition();
+			position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f));
+			position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f));
 			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
 	}
@@ -218,7 +222,6 @@ namespace Temporal
 		
 
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
-		Vector position = params.getPosition();
 		addEntity(newEntity, id);
 		addEditableToEntity(*newEntity);
 	}
@@ -234,7 +237,10 @@ namespace Temporal
 
 	void GameStateEditor::addEntity(Entity* newEntity, Hash id, bool bypassSave)
 	{
+		float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
 		Vector position = Mouse::get().getOffsetPosition();
+		position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f));
+		position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f));
 		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
 		newEntity->setId(id);
 		newEntity->setBypassSave(bypassSave);
