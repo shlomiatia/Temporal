@@ -61,7 +61,8 @@ namespace Temporal
 			Component* component = *i;
 			if (component->getType() == type)
 			{
-				(**i).handleMessage(Message(MessageID::ENTITY_DISPOSED));
+				if (_manager)
+					(**i).handleMessage(Message(MessageID::ENTITY_DISPOSED));
 				delete *i;
 				i = _components.erase(i);
 				return;
