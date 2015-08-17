@@ -83,7 +83,7 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if (message.getID() == MessageID::POST_LOAD)
+		else if (message.getID() == MessageID::POST_LOAD || message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
 			_ground = 0;
 			_groundSegment = Segment::Zero;
@@ -179,7 +179,8 @@ namespace Temporal
 		Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
 		Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
 		RayCastResult result;
-		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK) &&
+		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK, sourceCollisionGroup) &&
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());

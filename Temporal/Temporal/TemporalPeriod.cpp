@@ -2,6 +2,8 @@
 #include "MessageUtils.h"
 #include "Color.h"
 #include "Keyboard.h"
+#include "Grid.h"
+#include "PhysicsEnums.h"
 
 namespace Temporal
 {
@@ -11,9 +13,15 @@ namespace Temporal
 
 	void PlayerPeriod::changePeriod(Period::Enum period)
 	{
-		_period = period;
-		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &period));
+		OBB shape = getShape(*this);
+		shape.setRadius(shape.getRadius() - 1.0f);
+		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, CollisionCategory::OBSTACLE, period);
+		if (info.size() == 0)
+		{
+			_period = period;
+			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &period));
+		}
 	}
 
 	void PlayerPeriod::handleMessage(Message& message)

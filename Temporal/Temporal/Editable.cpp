@@ -14,6 +14,7 @@
 #include "Texture.h"
 #include "Keyboard.h"
 #include "TemporalPeriod.h"
+#include "Math.h"
 
 namespace Temporal
 {
@@ -218,33 +219,15 @@ namespace Temporal
 		}
 	}
 
-	float snap(float val, float target, float maxSnap)
-	{
-		if (Keyboard::get().getKey(Key::LEFT_SHIFT))
-		{
-			return val;
-		}
-		float valModTarget = fmodf(val, target);
-		float targetMinusValModTarget = target - valModTarget;
-		if (valModTarget <= maxSnap)
-			return val - valModTarget;
-		else if (targetMinusValModTarget <= maxSnap)
-			return val + targetMinusValModTarget;
-		else
-			return val;
-	}
-
 	void Editable::mouseMove(MouseParams& params)
 	{
 		if(_translation)
 		{
 			OBB shape = getShape();
 			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
-			float snapExtraX = tileSize / 2.0f - fmodf(shape.getRadiusX(), tileSize / 2.0f);
-			float snapExtraY = tileSize / 2.0f - fmodf(shape.getRadiusY(), tileSize / 2.0f);
 			Vector newPosition = params.getPosition() - _translationOffset;
-			newPosition.setX(snap(newPosition.getX() + snapExtraX, tileSize / 4.0f, 8.0f) - snapExtraX);
-			newPosition.setY(snap(newPosition.getY() + snapExtraY, tileSize / 4.0f, 8.0f) - snapExtraY);
+			newPosition.setX(snap(newPosition.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+			newPosition.setY(snap(newPosition.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 			params.setHandled(true);
 		}

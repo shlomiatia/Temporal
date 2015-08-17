@@ -10,6 +10,8 @@ namespace Temporal
 	inline bool differentSign(float a, float b) { return (a < -0.0f && b > 0.0f) || (a > 0.0f && b < -0.0f); }
 	bool equals(float a, float b);
 	float easeInOutBezier(float interpolation, float startValue, float endValue);
+	float snap(float val, float target, float maxSnap);
+	float snap(float val, float target, float maxSnap, float size);
 
 	class BaseAngleUtils
 	{
