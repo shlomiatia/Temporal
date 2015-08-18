@@ -43,7 +43,7 @@ namespace Temporal
 		{
 			raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 		}
-		else if (key == Key::LEFT_SHIFT)
+		else if (key == Key::Q)
 		{
 			temporalAction();
 		}
