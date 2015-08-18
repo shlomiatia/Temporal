@@ -102,16 +102,17 @@ namespace Temporal
 		drawBeamShadow(position);
 
 		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
-		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE);
+		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE, sourceCollisionGroup);
 
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());
 		}
 		Graphics::get().getSpriteBatch().end();
-		Graphics::get().getSpriteBatch().begin();
 		glColorMask(true, true, true, true);
 		glEnable(GL_BLEND);
+		Graphics::get().getSpriteBatch().begin();
 		Graphics::get().getSpriteBatch().add(&_lightTexture->getTexture(), position, AABB::Zero, _color, 0.0f, Vector::Zero, Vector(1.0f, 1.0f), false, false, Vector(_radius, _radius));
 		Graphics::get().getSpriteBatch().end();
 	}

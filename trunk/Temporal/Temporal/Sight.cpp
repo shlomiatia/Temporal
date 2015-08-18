@@ -71,10 +71,9 @@ namespace Temporal
 		
 		if (_isSeeing)
 		{
-			float angle = vector.getAngle();
 			if (sourceSide == Side::LEFT)
-				angle = AngleUtils::radian().mirror(angle);
-			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &angle));
+				vector.setX(-vector.getX());
+			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &vector));
 		}
 	}
 
