@@ -1,10 +1,9 @@
 #include "InputController.h"
-#include "Keyboard.h"
 #include "BaseEnums.h"
 #include "MessageUtils.h"
 #include "Input.h"
 #include "Shapes.h"
-#include "Mouse.h"
+#include "Keyboard.h"
 
 namespace Temporal
 {

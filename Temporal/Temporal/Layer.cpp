@@ -8,7 +8,7 @@
 #include "Timer.h"
 #include "Camera.h"
 #include "Lighting.h"
-#include "Keyboard.h"
+#include "InputEnums.h"
 #include <SDL_opengl.h>
 #include <algorithm>
 

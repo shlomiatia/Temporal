@@ -1,6 +1,6 @@
 #include "Editable.h"
 #include "MessageUtils.h"
-#include "Mouse.h"
+#include "InputEnums.h"
 #include "ShapeOperations.h"
 #include "Graphics.h"
 #include "Layer.h"
@@ -12,7 +12,6 @@
 #include "SpriteSheet.h"
 #include "SceneNode.h"
 #include "Texture.h"
-#include "Keyboard.h"
 #include "TemporalPeriod.h"
 #include "Math.h"
 

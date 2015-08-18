@@ -3,7 +3,7 @@
 
 #include "EntitySystem.h"
 #include "Hash.h"
-#include "Keyboard.h"
+#include "InputEnums.h"
 
 namespace Temporal
 {

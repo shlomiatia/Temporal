@@ -4,7 +4,7 @@
 #include "NavigationGraph.h"
 #include "EntitySystem.h"
 #include "ResourceManager.h"
-#include "Keyboard.h"
+#include "InputEnums.h"
 #include "Input.h"
 #include "Game.h"
 
