@@ -6,7 +6,7 @@
 #include "Delegate.h"
 #include "Shapes.h"
 #include "Color.h"
-#include "Keyboard.h"
+#include "InputEnums.h"
 
 namespace Temporal
 {

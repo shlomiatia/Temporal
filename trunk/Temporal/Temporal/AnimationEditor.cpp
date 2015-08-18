@@ -1,6 +1,6 @@
 #include "AnimationEditor.h"
 #include "GameState.h"
-#include "Mouse.h"
+#include "InputEnums.h"
 #include "Math.h"
 #include "SceneNode.h"
 #include "Serialization.h"

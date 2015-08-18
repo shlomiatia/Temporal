@@ -5,9 +5,7 @@
 #include "ResourceManager.h"
 #include "Graphics.h"
 #include "Shapes.h"
-#include "Mouse.h"
 #include "ShapeOperations.h"
-#include "Keyboard.h"
 #include "Font.h"
 #include <SDL_opengl.h>
 

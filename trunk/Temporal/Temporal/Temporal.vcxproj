@@ -19,6 +19,7 @@
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateEditor.h" />
+    <ClInclude Include="InputEnums.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Layer.h" />

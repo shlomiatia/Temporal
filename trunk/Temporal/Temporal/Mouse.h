@@ -4,25 +4,11 @@
 #include "Vector.h"
 #include "Input.h"
 #include "GameEnums.h"
+#include "InputEnums.h"
 #include <unordered_map>
 
 namespace Temporal
 {
-	namespace MouseButton
-	{
-		enum Enum
-		{
-			NONE,
-			LEFT,
-			MIDDLE,
-			RIGHT,
-			WHEEL_DOWN,
-			WHEEL_UP,
-
-			SIZE
-		};
-	}
-
 	class Message;
 	class MouseParams;
 

@@ -215,6 +215,9 @@
     <ClInclude Include="VisibilityGem.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="InputEnums.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
