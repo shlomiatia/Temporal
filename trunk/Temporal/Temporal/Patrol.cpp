@@ -172,7 +172,11 @@ namespace Temporal
 		{
 			if(message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->changeState(ACQUIRE_STATE);
+				void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
+				if (ground)
+				{
+					_stateMachine->changeState(ACQUIRE_STATE);
+				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
