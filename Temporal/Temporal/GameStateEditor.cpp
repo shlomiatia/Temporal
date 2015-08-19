@@ -69,6 +69,23 @@ namespace Temporal
 			position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f));
 			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
+		_autoSaveTimer.update(framePeriod);
+		if (_autoSaveTimer.getElapsedTime() > 10.0f)
+		{
+			save();
+			getEntity().getManager().getGameState().getLayersManager().getDebugLater().notify("auto saved...");
+			_autoSaveTimer.reset();
+		}
+	}
+
+	void GameStateEditor::save()
+	{
+		XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
+		serializer.serialize("game-state", getEntity().getManager().getGameState());
+		serializer.save();
+		XmlSerializer serializer2(new FileStream("resources/game-states/save-test.xml", true, false));
+		serializer2.serialize("game-state", getEntity().getManager().getGameState());
+		serializer2.save();
 	}
 
 	void GameStateEditor::handleKey(Key::Enum key)
@@ -125,9 +142,7 @@ namespace Temporal
 		}
 		else if (key == Key::F5)
 		{
-			XmlSerializer serializer(new FileStream("../temporal/external/bin/resources/game-states/save-test.xml", true, false));
-			serializer.serialize("game-state", getEntity().getManager().getGameState());
-			serializer.save();
+			save();
 		}
 		else if (key == Key::DEL)
 		{

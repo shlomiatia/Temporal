@@ -6,6 +6,7 @@
 #include "Color.h"
 #include "FBO.h"
 #include "EntitySystem.h"
+#include "Timer.h"
 #include <vector>
 #include <unordered_map>
 
@@ -97,6 +98,7 @@ namespace Temporal
 		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
 		void toggleCameraControl() { _cameraControl = !_cameraControl; }
 		bool isCameraControl() const { return _cameraControl; }
+		void notify(const char* notification);
 	private:
 		void drawFPS();
 
@@ -107,6 +109,7 @@ namespace Temporal
 		bool _grid;
 		bool _navigationGraph;
 		bool _cameraControl;
+		Timer _notificationTimer;
 	};
 
 	class DebugManager : public Component
