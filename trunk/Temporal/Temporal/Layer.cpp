@@ -161,6 +161,12 @@ namespace Temporal
 	static const Hash SENSOR_ID("sensor");
 	static const Hash NAVIGATOR_ID("navigator");
 
+	void DebugLayer::notify(const char* notification)
+	{
+		Graphics::get().setTitle(notification);
+		_notificationTimer.reset();
+	}
+
 	void DebugLayer::draw(float framePeriod)
 	{
 		debugLayerTimer.measure();
@@ -193,6 +199,13 @@ namespace Temporal
 		
 		drawFPS();
 		debugLayerTimer.print("DEBUG LAYER");
+
+		_notificationTimer.update(framePeriod);
+		if (_notificationTimer.getElapsedTime() > 3.0f)
+		{
+			Graphics::get().setTitle("");
+		}
+			
 	}
 
 	const Hash DebugManager::TYPE("debug-manager");

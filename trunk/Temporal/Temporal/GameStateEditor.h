@@ -2,6 +2,7 @@
 #define GAME_STATE_EDITOR_H
 
 #include "ToolComponent.h"
+#include "Timer.h"
 
 namespace Temporal
 {
@@ -26,6 +27,9 @@ namespace Temporal
 		void handleKey(Key::Enum key);
 		void moveCamera(const Vector& direction);
 		void leftClick(const MouseParams& params);
+		void save();
+
+		Timer _autoSaveTimer;
 	};
 
 	class GameStateEditorPreview : public Component

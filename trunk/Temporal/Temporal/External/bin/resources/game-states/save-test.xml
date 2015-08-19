@@ -184,7 +184,7 @@
         </entity>
         <entity id="ENT_PATROL0">
             <transform orientation="-1">
-                <position x="724.666687" y="104.000000"/>
+                <position x="746.000000" y="104.000000"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
