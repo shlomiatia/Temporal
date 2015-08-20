@@ -13,6 +13,7 @@ namespace Temporal
 			CHARACTER = 4,
 			PLAYER = 8,
 			BUTTON = 16,
+			PATROL_CONTROL = 32
 		};
 	}
 }
