@@ -1,6 +1,7 @@
 #include "Patrol.h"
 #include "Vector.h"
 #include "MessageUtils.h"
+#include "PhysicsEnums.h"
 
 namespace Temporal
 {
@@ -17,6 +18,7 @@ namespace Temporal
 
 	static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
 	static const Hash TAKEDOWN_SENSOR_ID = Hash("SNS_TAKEDOWN");
+	static const Hash PATROL_CONTROL_SENSOR_ID = Hash("SNS_PATROL_CONTROL");
 
 	void EdgeDetector::start()
 	{
@@ -100,6 +102,14 @@ namespace Temporal
 			else if(message.getID() == MessageID::SENSOR_FRONG_EDGE)
 			{
 				_stateMachine->changeState(WAIT_STATE);
+			}
+			else if (message.getID() == MessageID::SENSOR_SENSE)
+			{
+				const SensorParams& params = getSensorParams(message.getParam());
+				if (params.getSensorId() == PATROL_CONTROL_SENSOR_ID)
+				{
+					_stateMachine->changeState(WAIT_STATE);
+				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{

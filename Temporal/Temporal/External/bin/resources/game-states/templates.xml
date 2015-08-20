@@ -18,6 +18,14 @@
 			</obb>
 		</fixture>
 	</sensor>
+	<sensor id="SNS_PATROL_CONTROL" category-mask="32">
+		<fixture>
+			<obb angle="0">
+				<center x="15" y="0" />
+				<radius x="5" y="20" />
+			</obb>
+		</fixture>
+	</sensor>
 	<sensor id="SNS_TAKEDOWN" category-mask="8">
 		<fixture>
 			<obb angle="0.000000">
@@ -191,4 +199,16 @@
 	<light>
 		<color r="0.5" g="0.5" b="0.5" />
 	</light>
+</entity>
+<entity id="ENT_PATROL_CONTROL">
+	<transform />
+	<collision-filter category="32" />
+	<static-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="32" y="64" />
+			</obb>
+		</fixture>
+	</static-body>
 </entity>
