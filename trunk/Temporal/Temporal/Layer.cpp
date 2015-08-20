@@ -161,10 +161,18 @@ namespace Temporal
 	static const Hash SENSOR_ID("sensor");
 	static const Hash NAVIGATOR_ID("navigator");
 
+	void DebugLayer::showInfo(const char* info)
+	{
+		if (!_notifying)
+			Graphics::get().setTitle(info);
+	}
+	
+
 	void DebugLayer::notify(const char* notification)
 	{
 		Graphics::get().setTitle(notification);
 		_notificationTimer.reset();
+		_notifying = true;
 	}
 
 	void DebugLayer::draw(float framePeriod)
@@ -198,13 +206,19 @@ namespace Temporal
 			getManager().getGameState().getGrid().draw();
 		
 		drawFPS();
+
+		if (_notifying)
+		{
+			_notificationTimer.update(framePeriod);
+			if (_notificationTimer.getElapsedTime() > 3.0f)
+			{
+				_notifying = false;
+				Graphics::get().setTitle("");
+			}
+		}
+
 		debugLayerTimer.print("DEBUG LAYER");
 
-		_notificationTimer.update(framePeriod);
-		if (_notificationTimer.getElapsedTime() > 3.0f)
-		{
-			Graphics::get().setTitle("");
-		}
 			
 	}
 

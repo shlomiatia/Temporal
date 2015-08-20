@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "Mouse.h"
 #include "Math.h"
+#include <sstream>
 
 namespace Temporal
 {
@@ -76,6 +77,12 @@ namespace Temporal
 			getEntity().getManager().getGameState().getLayersManager().getDebugLater().notify("auto saved...");
 			_autoSaveTimer.reset();
 		}
+		
+		std::stringstream s;
+		s << "[X: " << (int)Mouse::get().getPosition().getX() << "][Y: " << (int)Mouse::get().getPosition().getY() << "]";
+		if (Editable::getSelected())
+			s << "[Selected: " << Editable::getSelected()->getEntity().getId().getString() << "]";
+		getEntity().getManager().getGameState().getLayersManager().getDebugLater().showInfo(s.str().c_str());
 	}
 
 	void GameStateEditor::save()

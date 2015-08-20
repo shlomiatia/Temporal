@@ -86,7 +86,8 @@ namespace Temporal
 	class DebugLayer : public Layer
 	{
 	public:
-		DebugLayer(LayersManager* manager) : Layer(manager), _staticBody(false), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false) {}
+		DebugLayer(LayersManager* manager) : 
+			Layer(manager), _staticBody(false), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false), _notifying(false) {}
 
 		void draw(float framePeriod);
 
@@ -98,6 +99,7 @@ namespace Temporal
 		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
 		void toggleCameraControl() { _cameraControl = !_cameraControl; }
 		bool isCameraControl() const { return _cameraControl; }
+		void showInfo(const char* info);
 		void notify(const char* notification);
 	private:
 		void drawFPS();
@@ -109,6 +111,8 @@ namespace Temporal
 		bool _grid;
 		bool _navigationGraph;
 		bool _cameraControl;
+
+		bool _notifying;
 		Timer _notificationTimer;
 	};
 
