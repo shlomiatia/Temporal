@@ -24,5 +24,10 @@ namespace Temporal
 			int category = getIntParam(message.getParam());
 			_category = category;
 		}
+		else if (message.getID() == MessageID::GET_COLLISION_CATEGORY)
+		{
+			message.setParam(&_category);
+		}
+		
 	}
 }

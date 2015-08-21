@@ -343,10 +343,10 @@ namespace Temporal
 			if (_selected == this)
 			{
 				Color color = _translationOnly ? Color(1.0f, 1.0f, 1.0f, 0.75f) : Color(1.0f, 1.0f, 1.0f, 0.5f);
-				Graphics::get().getSpriteBatch().add(_positiveXScale, color);
-				Graphics::get().getSpriteBatch().add(_negativeXScale, color);
-				Graphics::get().getSpriteBatch().add(_positiveYScale, color);
-				Graphics::get().getSpriteBatch().add(_negativeYScale, color);
+				Graphics::get().getLinesSpriteBatch().add(_positiveXScale, color);
+				Graphics::get().getLinesSpriteBatch().add(_negativeXScale, color);
+				Graphics::get().getLinesSpriteBatch().add(_positiveYScale, color);
+				Graphics::get().getLinesSpriteBatch().add(_negativeYScale, color);
 			}
 		}
 		else if (message.getID() == MessageID::KEY_UP)
