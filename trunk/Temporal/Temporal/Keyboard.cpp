@@ -105,7 +105,22 @@ namespace Temporal
 		_keysMap[SDLK_RIGHT] = Key::RIGHT;
 
 		//_keysMap[SDLK_NUMLOCK] = Key::NUM_LOCK;
-		_keysMap[SDLK_ASTERISK] = Key::ASTERISK;
+		_keysMap[SDLK_KP_DIVIDE] = Key::P_DIVIDE;
+		_keysMap[SDLK_KP_MULTIPLY] = Key::P_MULTIPLY;
+		_keysMap[SDLK_KP_MINUS] = Key::P_MINUS;
+		_keysMap[SDLK_KP_PLUS] = Key::P_PLUS;
+		_keysMap[SDLK_KP_ENTER] = Key::P_ENTER;
+		_keysMap[SDLK_KP_PERIOD] = Key::P_PERIOD;
+		_keysMap[SDLK_KP_7] = Key::P7;
+		_keysMap[SDLK_KP_8] = Key::P8;
+		_keysMap[SDLK_KP_9] = Key::P9;
+		_keysMap[SDLK_KP_4] = Key::P4;
+		_keysMap[SDLK_KP_5] = Key::P5;
+		_keysMap[SDLK_KP_6] = Key::P6;
+		_keysMap[SDLK_KP_1] = Key::P1;
+		_keysMap[SDLK_KP_2] = Key::P2;
+		_keysMap[SDLK_KP_3] = Key::P3;
+		_keysMap[SDLK_KP_0] = Key::P0;
 
 		for(IntKeyMapIterator i = _keysMap.begin(); i != _keysMap.end(); ++i)
 		{

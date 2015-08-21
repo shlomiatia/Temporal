@@ -83,9 +83,6 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::UPDATE)
 		{
-			float alpha = getEntity().getManager().getGameState().getLayersManager().getDebugLater().isCameraControl() ? 1.0f : 0.0f;
-			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
-
 			void* result = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
 			const Vector& playerPosition = getVectorParam(result);
 			Vector position = getPosition(*this);

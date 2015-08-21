@@ -7,12 +7,16 @@
 #include "FBO.h"
 #include "EntitySystem.h"
 #include "Timer.h"
+#include "InputEnums.h"
 #include <vector>
 #include <unordered_map>
 
 namespace Temporal
 {
 	class LightLayer;
+	class DebugLayer;
+	class Camera;
+	class LayersManager;
 
 	namespace LayerType
 	{
@@ -25,12 +29,10 @@ namespace Temporal
 			COVER,		// 4
 			NPC,		// 5
 			PARTICLES,	// 6
+			DEBUG_LAYER,// 7
 			SIZE
 		};
 	}
-
-	class Camera;
-	class LayersManager;
 
 	class Layer
 	{
@@ -80,52 +82,8 @@ namespace Temporal
 		std::vector<Component*>& get() { return _components; }
 
 	private:
-		std::vector<Component*> _components;
-	};
-
-	class DebugLayer : public Layer
-	{
-	public:
-		DebugLayer(LayersManager* manager) : 
-			Layer(manager), _staticBody(false), _sight(false), _dynamicBody(false), _sensor(false), _grid(false), _navigationGraph(false), _cameraControl(false), _notifying(false) {}
-
-		void draw(float framePeriod);
-
-		void toggleStaticBody() { _staticBody = !_staticBody;  }
-		void toggleSight() { _sight = !_sight; }
-		void toggleDynamicBody() { _dynamicBody = !_dynamicBody; }
-		void toggleSensor() { _sensor = !_sensor; }
-		void toggleGrid() { _grid = !_grid; }
-		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
-		void toggleCameraControl() { _cameraControl = !_cameraControl; }
-		bool isCameraControl() const { return _cameraControl; }
-		void showInfo(const char* info);
-		void notify(const char* notification);
-	private:
-		void drawFPS();
-
-		bool _staticBody;
-		bool _sight;
-		bool _dynamicBody;
-		bool _sensor;
-		bool _grid;
-		bool _navigationGraph;
-		bool _cameraControl;
-
-		bool _notifying;
-		Timer _notificationTimer;
-	};
-
-	class DebugManager : public Component
-	{
-	public:
-		Hash getType() const { return TYPE; }
-		void handleMessage(Message& message);
-
-		Component* clone() const { return new DebugManager(); }
-
-		static const Hash TYPE;
-	private:
+		
+		ComponentList _components;
 	};
 
 	class FXLayer : public Layer
@@ -164,7 +122,7 @@ namespace Temporal
 		GUILayer& getGUILayer() { return *_guiLayer; }
 		SpriteLayer& getSpriteLayer() { return *_spriteLayer; }
 		FXLayer& getFXLayer() { return *_fxLayer; }
-		DebugLayer& getDebugLater() { return *_debugLayer; }
+		DebugLayer& getDebugLayer() { return *_debugLayer; }
 		LightLayer* getLightLayer() { return _lightLayer; }
 		void draw(float framePeriod);
 

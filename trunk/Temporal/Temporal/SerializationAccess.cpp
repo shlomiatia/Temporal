@@ -27,6 +27,7 @@
 #include "AnimationEditor.h"
 #include "Laser.h"
 #include "VisibilityGem.h"
+#include "DebugLayer.h"
 
 namespace Temporal
 {

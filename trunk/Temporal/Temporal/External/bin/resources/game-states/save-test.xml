@@ -149,6 +149,12 @@
             </renderer>
             <player-period period="2"/>
         </entity>
+        <entity id="ENT_CAMERA_CONTROL0">
+            <transform orientation="1">
+                <position x="406.044403" y="224.000000"/>
+            </transform>
+            <camera-control/>
+        </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
                 <position x="640.000000" y="360.000000"/>
@@ -163,7 +169,7 @@
         </entity>
         <entity id="ENT_COVER1">
             <transform orientation="1">
-                <position x="448.000000" y="128.000000"/>
+                <position x="416.000000" y="128.000000"/>
             </transform>
             <collision-filter category="32" group="-1"/>
             <static-body>
@@ -350,21 +356,21 @@
         </entity>
         <entity id="ENT_COVER0">
             <transform orientation="1">
-                <position x="96.000000" y="128.000000"/>
+                <position x="80.000000" y="128.000000"/>
             </transform>
             <collision-filter category="2" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="64.000000"/>
+                        <radius x="16.000000" y="64.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/glass.png" sprite-sheet="" layer="4">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
+                    <scale x="0.500000" y="1.000000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
