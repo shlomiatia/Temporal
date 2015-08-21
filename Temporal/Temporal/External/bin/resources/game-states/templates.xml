@@ -73,7 +73,6 @@
 		<color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
 	</light>
 	<temporal-echo />
-<!--	<temporal-period period="1" />-->
 </entity>
 <entity id="ENT_CHASER">
 	<transform />
@@ -152,7 +151,6 @@
 		</fixture>
 	</static-body>
 	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
-	<!--<temporal-period period="1" />-->
 </entity>
 <entity id="ENT_COVER">
 	<transform />
