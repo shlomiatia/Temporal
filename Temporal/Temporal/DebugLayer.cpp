@@ -26,12 +26,12 @@ namespace Temporal
 
 	DebugLayer::DebugLayer(LayersManager* manager) : Layer(manager),  _grid(false), _navigationGraph(false), _notifying(false)
 	{
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(STATIC_BODY_ID, Key::P1, true, "resources/textures/patrol-control.png"));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(DYNAMIC_BODY_ID, Key::P2));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(SENSOR_ID, Key::P3));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(SIGHT_ID, Key::P4));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(CAMERA_CONTROL_ID, Key::P5, true, "resources/textures/camera-control.png"));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(LIGHT_ID, Key::P6, true, "resources/textures/light-debug.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(STATIC_BODY_ID, Key::T, true, "resources/textures/patrol-control.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(DYNAMIC_BODY_ID, Key::Y));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(SENSOR_ID, Key::R));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(SIGHT_ID, Key::U));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(CAMERA_CONTROL_ID, Key::I, true, "resources/textures/camera-control.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(LIGHT_ID, Key::O, true, "resources/textures/light-debug.png"));
 	}
 
 	DebugLayer::~DebugLayer()
