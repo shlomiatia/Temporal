@@ -375,7 +375,7 @@ namespace Temporal
 		control->setMouseMoveEvent(createAction1(AnimationEditor, const MouseParams&, skeletonMouseMove));
 
 		AABB bounds(PADDING + BUTTON_SIZE.getX() / 2.0f, WINDOW_SIZE.getY() - PADDING - BUTTON_SIZE.getY() / 2.0f, BUTTON_SIZE.getX(), BUTTON_SIZE.getY());
-		control = addButton(Hash("saveAnimationSet"), bounds, "Save Animation Set", createAction(AnimationEditor, save), Key::F2);
+		control = addButton(Hash("saveAnimationSet"), bounds, "Save Animation Set", createAction(AnimationEditor, save), Key::F5);
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
 		control = addTextBox(Hash("newAnimation"), bounds, "New Animation", createAction1(AnimationEditor, const char*, newAnimation));
 		bounds.setCenterY(bounds.getCenterY() - BUTTON_SIZE.getY() - PADDING);
