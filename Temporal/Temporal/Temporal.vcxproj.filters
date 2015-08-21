@@ -218,6 +218,9 @@
     <ClInclude Include="InputEnums.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="DebugLayer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -415,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="VisibilityGem.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLayer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

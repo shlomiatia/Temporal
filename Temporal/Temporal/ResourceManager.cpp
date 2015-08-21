@@ -2,7 +2,6 @@
 #include "Texture.h"
 #include "SpriteSheet.h"
 #include "Animation.h"
-#include "Layer.h"
 #include "Serialization.h"
 #include "SerializationAccess.h"
 #include "GameState.h"
@@ -15,6 +14,7 @@
 
 // TODO: Remove
 #include "GameStateEditor.h"
+#include "DebugLayer.h"
 
 #include <sstream>
 #include <windows.h>

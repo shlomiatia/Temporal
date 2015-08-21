@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "Mouse.h"
 #include "Math.h"
+#include "DebugLayer.h"
 #include <sstream>
 
 namespace Temporal
@@ -74,7 +75,7 @@ namespace Temporal
 		if (_autoSaveTimer.getElapsedTime() > 10.0f)
 		{
 			save();
-			getEntity().getManager().getGameState().getLayersManager().getDebugLater().notify("auto saved...");
+			getEntity().getManager().getGameState().getLayersManager().getDebugLayer().notify("auto saved...");
 			_autoSaveTimer.reset();
 		}
 		
@@ -82,7 +83,7 @@ namespace Temporal
 		s << "[X: " << (int)Mouse::get().getPosition().getX() << "][Y: " << (int)Mouse::get().getPosition().getY() << "]";
 		if (Editable::getSelected())
 			s << "[Selected: " << Editable::getSelected()->getEntity().getId().getString() << "]";
-		getEntity().getManager().getGameState().getLayersManager().getDebugLater().showInfo(s.str().c_str());
+		getEntity().getManager().getGameState().getLayersManager().getDebugLayer().showInfo(s.str().c_str());
 	}
 
 	void GameStateEditor::save()

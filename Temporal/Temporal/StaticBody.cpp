@@ -31,9 +31,9 @@ namespace Temporal
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
 			if (_fixture->getCategory() != 0)
-				Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
+				Graphics::get().getLinesSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f));
 			else
-				Graphics::get().getSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f, 0.5f));
+				Graphics::get().getLinesSpriteBatch().add(_fixture->getGlobalShape(), Color(0.05f, 0.05f, 0.05f, 0.5f));
 		}
 	}
 }

@@ -13,6 +13,7 @@
 #include "Layer.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
+#include "DebugLayer.h"
 #include <algorithm>
 #include <sstream>
 
@@ -438,7 +439,7 @@ namespace Temporal
 		s << "[Animation: " << _animationId.getString() << "][Frame: " << _index << "][Node: " << _sceneNodeId.getString() << "]";
 		if(sample)
 			s << "[X: " << sample->getTranslation().getX() << "][Y: " << sample->getTranslation().getY() << "][Angle: " << sample->getRotation() << "]";
-		Graphics::get().setTitle(s.str().c_str());
+		getEntity().getManager().getGameState().getLayersManager().getDebugLayer().showInfo(s.str().c_str());
 	}
 
 	const SceneNode& AnimationEditor::getSceneNode(Hash sceneNodeId)

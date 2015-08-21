@@ -174,7 +174,6 @@
 <entity id="ENT_CAMERA_CONTROL">
 	<transform />
 	<camera-control/>
-	<renderer layer="1" texture="resources/textures/camera.png" />
 </entity>
 <entity id="ENT_LASER">
 	<transform />

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DebugLayer.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Editable.h" />
     <ClInclude Include="FBO.h" />
@@ -88,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Editable.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Font.cpp" />
