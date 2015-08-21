@@ -74,6 +74,7 @@ namespace Temporal
 		void remove(Hash type);
 		const Component* get(Hash type) const;
 		Component* get(Hash type);
+		ComponentList getAll(Hash type);
 		void* handleMessage(Message& message, const HashList* filter = 0) const;
 		Entity* clone() const;
 

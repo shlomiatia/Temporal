@@ -10,6 +10,10 @@ namespace Temporal
 
 	void VisibilityGem::handleMessage(Message& message)
 	{
+		if (message.getID() == MessageID::ENTITY_INIT) 
+		{
+			_isVisible = false;
+		}
 		if (message.getID() == MessageID::SET_LIT)
 		{
 			_isLit = getBoolParam(message.getParam());

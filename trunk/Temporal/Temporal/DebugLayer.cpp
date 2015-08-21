@@ -171,8 +171,16 @@ namespace Temporal
 							Entity& entity = *(j->second);
 							if (entity.get(info.getId()) && !isNonPatrolControlStaticBody(info, entity))
 							{
-								float alpha = info.isDebugging() ? 1.0f : 0.0f;
-								entity.handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+								ComponentList renderers = entity.getAll(Renderer::TYPE);
+								for (ComponentIterator k = renderers.begin(); k != renderers.end(); ++k)
+								{
+									if ((**k).isBypassSave())
+									{
+										float alpha = info.isDebugging() ? 1.0f : 0.0f;
+										(**k).handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+									}
+								}
+								
 							}
 						}
 					}

@@ -239,7 +239,6 @@ namespace Temporal
 		
 
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
-		newEntity->remove(Editable::TYPE);
 		addEntity(newEntity, id);
 		addEditableToEntity(*newEntity);
 	}

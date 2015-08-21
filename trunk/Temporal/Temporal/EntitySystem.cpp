@@ -41,6 +41,18 @@ namespace Temporal
 	{
 		return const_cast<Component*>(const_cast<const Entity*>(this)->get(type));
 	}
+
+	ComponentList Entity::getAll(Hash type)
+	{
+		ComponentList result;
+		for (ComponentIterator i = _components.begin(); i != _components.end(); ++i)
+		{
+			Component* component = *i;
+			if (component->getType() == type)
+				result.push_back(component);
+		}
+		return result;
+	}
 	
 	void Entity::add(Component* component)
 	{
