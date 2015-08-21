@@ -128,7 +128,9 @@ namespace Temporal
 	Component* Renderer::clone() const
 	{
 		SceneNode* sceneNodeClone = _root == 0 ? 0 : _root->clone();
-		return new Renderer(_textureFile.c_str(), _spriteSheetFile.c_str(), sceneNodeClone, _layer, _color);
+		Renderer* clone = new Renderer(_textureFile.c_str(), _spriteSheetFile.c_str(), sceneNodeClone, _layer, _color);
+		clone->setBypassSave(isBypassSave());
+		return clone;
 	}
 
 }

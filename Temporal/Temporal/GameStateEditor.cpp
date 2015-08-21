@@ -106,6 +106,8 @@ namespace Temporal
 				getEntity().getManager().getGameState().getEntityTemplatesManager().previousTemplate();
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
 				addEntity(newEntity, CURSOR_ENTITY_ID, true);
+				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
+				debugManager.addDebugRendererToEntity(*newEntity);
 			}
 		}
 		else if (key == Key::E)
@@ -116,6 +118,8 @@ namespace Temporal
 				getEntity().getManager().getGameState().getEntityTemplatesManager().nextTemplate();
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
 				addEntity(newEntity, CURSOR_ENTITY_ID, true);
+				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
+				debugManager.addDebugRendererToEntity(*newEntity);
 			}
 		}
 		else if (key == Key::F1)
@@ -144,6 +148,8 @@ namespace Temporal
 			{
 				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
 				addEntity(newEntity, CURSOR_ENTITY_ID, true);
+				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
+				debugManager.addDebugRendererToEntity(*newEntity);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 
@@ -190,18 +196,6 @@ namespace Temporal
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
 			getEntity().getManager().removeInputComponent(this);
-		}
-		else if (message.getID() == MessageID::LEVEL_INIT)
-		{
-			
-			/*HashEntityMap& entities = getEntity().getManager().getEntities();
-			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
-			{
-				Entity& entity = *i->second;
-				addEditableToEntity(entity);
-			}
-			setEditorMode();*/
-			
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
