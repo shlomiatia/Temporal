@@ -23,13 +23,13 @@ namespace Temporal
 	const HashList EDITABLE_FILTER({ Hash("static-body"), Hash("renderer") });
 	const Hash TRANSFORM = Hash("transform");
 
-	void addEditableToEntity(Entity& entity)
+	void addEditableToEntity(Entity& entity, GameStateEditor& editor)
 	{
 		for (HashIterator i = TRANSLATION_ONLY_EDITABLE_FILTER.begin(); i != TRANSLATION_ONLY_EDITABLE_FILTER.end(); ++i)
 		{
 			if (entity.get(*i))
 			{
-				entity.add(new Editable(true));
+				entity.add(new Editable(true, editor));
 				return;
 			}
 				
@@ -38,7 +38,7 @@ namespace Temporal
 		{
 			if (entity.get(*i))
 			{
-				entity.add(new Editable(false));
+				entity.add(new Editable(false, editor));
 				return;
 			}
 		}
@@ -65,10 +65,11 @@ namespace Temporal
 		}
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
+			OBB shape = Editable::getShape(*getEntity().getManager().getEntity(CURSOR_ENTITY_ID));
 			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
 			Vector position = Mouse::get().getOffsetPosition();
-			position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f));
-			position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f));
+			position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+			position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
 			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
 		_autoSaveTimer.update(framePeriod);
@@ -81,8 +82,8 @@ namespace Temporal
 		
 		std::stringstream s;
 		s << "[X: " << (int)Mouse::get().getPosition().getX() << "][Y: " << (int)Mouse::get().getPosition().getY() << "]";
-		if (Editable::getSelected())
-			s << "[Selected: " << Editable::getSelected()->getEntity().getId().getString() << "]";
+		if (getSelected())
+			s << "[Selected: " << getSelected()->getEntity().getId().getString() << "]";
 		getEntity().getManager().getGameState().getLayersManager().getDebugLayer().showInfo(s.str().c_str());
 	}
 
@@ -160,18 +161,18 @@ namespace Temporal
 		}
 		else if (key == Key::DEL)
 		{
-			if (Editable::getSelected())
+			if (getSelected())
 			{
-				getEntity().getManager().remove(Editable::getSelected()->getEntity().getId());
-				Editable::clearSelected();
+				getEntity().getManager().remove(getSelected()->getEntity().getId());
+				setSelected(0);
 			}
 		}
 		else if (key == Key::C)
 		{
-			if (Editable::getSelected())
+			if (getSelected())
 			{
 				clearCursor();
-				Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(Editable::getSelected()->getEntity().getId())->clone();
+				Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(getSelected()->getEntity().getId())->clone();
 				addEntity(newEntity, CURSOR_ENTITY_ID, true);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
@@ -189,7 +190,7 @@ namespace Temporal
 			for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 			{
 				Entity& entity = *i->second;
-				addEditableToEntity(entity);
+				addEditableToEntity(entity, *this);
 			}
 			setEditorMode();
 		}
@@ -240,7 +241,7 @@ namespace Temporal
 
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
 		addEntity(newEntity, id);
-		addEditableToEntity(*newEntity);
+		addEditableToEntity(*newEntity, *this);
 	}
 
 	void GameStateEditor::clearCursor()
@@ -254,14 +255,17 @@ namespace Temporal
 
 	void GameStateEditor::addEntity(Entity* newEntity, Hash id, bool bypassSave)
 	{
-		float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
-		Vector position = Mouse::get().getOffsetPosition();
-		position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f));
-		position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f));
-		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
 		newEntity->setId(id);
 		newEntity->setBypassSave(bypassSave);
 		getEntity().getManager().getGameState().getEntitiesManager().add(newEntity);
+	
+		Vector position = Mouse::get().getOffsetPosition();
+		OBB shape = Editable::getShape(*newEntity);
+		float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
+		position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+		position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
+
+		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
 	}
 
 	void GameStateEditor::moveCamera(const Vector& direction)

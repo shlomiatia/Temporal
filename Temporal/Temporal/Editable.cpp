@@ -14,13 +14,13 @@
 #include "Texture.h"
 #include "TemporalPeriod.h"
 #include "Math.h"
+#include "GameStateEditor.h"
 
 namespace Temporal
 {
 	static const float MARGIN = 5.0f;
 	static Hash STATIC_BODY_TYPE("static-body");
 	const Hash Editable::TYPE("editable");
-	Editable* Editable::_selected = 0;
 	
 	void fixFlatOBB(OBB& obb)
 	{
@@ -42,33 +42,33 @@ namespace Temporal
 
 	OBB Editable::getShape() const
 	{
-		OBB* shape = static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE)));
+		return getShape(getEntity());
+	}
+
+	OBB Editable::getShape(const Entity& entity)
+	{
+		OBB* shape = static_cast<OBB*>(entity.handleMessage(Message(MessageID::GET_SHAPE)));
 		if (shape)
 		{
 			return *shape;
 		}
+		if (const Renderer* renderer = static_cast<const Renderer*>(entity.get(Renderer::TYPE)))
+		{
+			const SceneNode& root = renderer->getRootSceneNode();
+			const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
+			const Vector& position = getPosition(entity);
+			float rotation = AngleUtils::degreesToRadians(root.getRotation());
+			const Vector& size = spriteSheet.getTexture().getSize();
+			Vector radius = Vector(size.getX() / 2.0f * root.getScale().getX(), size.getY() / 2.0f * root.getScale().getY());
+
+			OBB shape(position, rotation, radius);
+			return shape;
+		}
 		else
 		{
-			const Renderer* renderer = static_cast<const Renderer*>(getEntity().get(Renderer::TYPE));
-			if (renderer)
-			{
-				const SceneNode& root = renderer->getRootSceneNode();
-				const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
-				const Vector& position = getPosition(*this);
-				float rotation = AngleUtils::degreesToRadians(root.getRotation());
-				const Vector& size = spriteSheet.getTexture().getSize();
-				Vector radius = Vector(size.getX() / 2.0f * root.getScale().getX(), size.getY() / 2.0f * root.getScale().getY());
-
-				OBB shape(position, rotation, radius);
-				return shape;
-			}
-			else
-			{
-				const Vector& position = getPosition(*this);
-				return OBBAABB(position, Vector(MARGIN, MARGIN));
-			}
-
-		}	
+			const Vector& position = getPosition(entity);
+			return OBBAABB(position, Vector(MARGIN, MARGIN));
+		}
 	}
 
 	void Editable::setRotation(float rotation)
@@ -108,9 +108,9 @@ namespace Temporal
 		
 	}
 
-	bool isCloserThenSelected(Editable& editable)
+	bool isCloserThenSelected(Editable& editable, GameStateEditor& editor)
 	{
-		const Renderer* selectedRenderer = static_cast<const Renderer*>(Editable::getSelected()->getEntity().get(Renderer::TYPE));
+		const Renderer* selectedRenderer = static_cast<const Renderer*>(editor.getSelected()->getEntity().get(Renderer::TYPE));
 		const Renderer* editableRenderer = static_cast<const Renderer*>(editable.getEntity().get(Renderer::TYPE));
 		return (selectedRenderer && editableRenderer && selectedRenderer->getLayer() >= editableRenderer->getLayer());
 	}
@@ -118,9 +118,9 @@ namespace Temporal
 	void Editable::leftMouseDown(MouseParams& params)
 	{
 		
-		if (_selected && _selected != this && isCloserThenSelected(*this))
+		if (_editor.getSelected() && _editor.getSelected() != this && isCloserThenSelected(*this, _editor))
 		{
-			OBB selectedShape = _selected->getShape();
+			OBB selectedShape = _editor.getSelected()->getShape();
 			fixFlatOBB(selectedShape);
 			selectedShape.setRadiusX(selectedShape.getRadiusX() + MARGIN * 2.0f);
 			selectedShape.setRadiusY(selectedShape.getRadiusY() + MARGIN * 2.0f);
@@ -132,7 +132,7 @@ namespace Temporal
 		fixFlatOBB(shape);
 		if (intersects(shape, params.getPosition()))
 		{
-			_selected = this;
+			_editor.setSelected(this);
 			reset();
 			_translation = true;
 			_translationOffset = params.getPosition() - getPosition(*this);
@@ -142,7 +142,7 @@ namespace Temporal
 		{
 			if (intersects(_positiveXScale, params.getPosition()))
 			{
-				_selected = this;
+				_editor.setSelected(this);
 				reset();
 				_scale = true;
 				_isPositiveScale = true;
@@ -151,7 +151,7 @@ namespace Temporal
 			}
 			else if (intersects(_negativeXScale, params.getPosition()))
 			{
-				_selected = this;
+				_editor.setSelected(this);
 				reset();
 				_scale = true;
 				_isPositiveScale = false;
@@ -160,7 +160,7 @@ namespace Temporal
 			}
 			else if (intersects(_positiveYScale, params.getPosition()))
 			{
-				_selected = this;
+				_editor.setSelected(this);
 				reset();
 				_scale = true;
 				_isPositiveScale = true;
@@ -169,23 +169,23 @@ namespace Temporal
 			}
 			else if (intersects(_negativeYScale, params.getPosition()))
 			{
-				_selected = this;
+				_editor.setSelected(this);
 				reset();
 				_scale = true;
 				_isPositiveScale = false;
 				_scaleAxis = Axis::Y;
 				params.setHandled(true);
 			}
-			else if (_selected == this)
+			else if (_editor.getSelected() == this)
 			{
-				_selected = 0;
+				_editor.setSelected(0);
 			}
 		}
 	}
 
 	void Editable::rightMouseDown(MouseParams& params)
 	{
-		if (!_translationOnly && _selected == this)
+		if (!_translationOnly && _editor.getSelected() == this)
 		{
 			reset();
 			_rotation = true;
@@ -195,7 +195,7 @@ namespace Temporal
 
 	void Editable::middleMouseDown(MouseParams& params)
 	{
-		if (_selected == this)
+		if (_editor.getSelected() == this)
 		{
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 		}
@@ -269,7 +269,7 @@ namespace Temporal
 
 	void Editable::handleArrows(const Vector& params)
 	{
-		if (_selected == this)
+		if (_editor.getSelected() == this)
 		{
 			Vector position = getPosition(*this);
 			position += params;
@@ -279,7 +279,7 @@ namespace Temporal
 
 	void Editable::setPeriod(int period)
 	{
-		if (_selected == this)
+		if (_editor.getSelected() == this)
 		{
 			Component* component = getEntity().get(TemporalPeriod::TYPE);
 			if (!component)
@@ -340,7 +340,7 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
-			if (_selected == this)
+			if (_editor.getSelected() == this)
 			{
 				Color color = _translationOnly ? Color(1.0f, 1.0f, 1.0f, 0.75f) : Color(1.0f, 1.0f, 1.0f, 0.5f);
 				Graphics::get().getLinesSpriteBatch().add(_positiveXScale, color);
@@ -351,7 +351,7 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::KEY_UP)
 		{
-			if (this != _selected)
+			if (this != _editor.getSelected())
 				return;
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
 			if (key == Key::UP)
