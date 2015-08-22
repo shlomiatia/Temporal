@@ -105,10 +105,7 @@ namespace Temporal
 			{
 				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().previousTemplate();
-				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addEntity(newEntity, CURSOR_ENTITY_ID, true);
-				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
-				debugManager.addDebugRendererToEntity(*newEntity);
+				setCursor();
 			}
 		}
 		else if (key == Key::E)
@@ -117,10 +114,7 @@ namespace Temporal
 			{
 				getEntity().getManager().remove(CURSOR_ENTITY_ID);
 				getEntity().getManager().getGameState().getEntityTemplatesManager().nextTemplate();
-				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addEntity(newEntity, CURSOR_ENTITY_ID, true);
-				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
-				debugManager.addDebugRendererToEntity(*newEntity);
+				setCursor();
 			}
 		}
 		else if (key == Key::F1)
@@ -147,10 +141,7 @@ namespace Temporal
 			}
 			else
 			{
-				Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
-				addEntity(newEntity, CURSOR_ENTITY_ID, true);
-				DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
-				debugManager.addDebugRendererToEntity(*newEntity);
+				setCursor();
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 
@@ -251,6 +242,14 @@ namespace Temporal
 			getEntity().getManager().remove(CURSOR_ENTITY_ID);
 			getEntity().getManager().clearFocusInputComponent();
 		}
+	}
+
+	void GameStateEditor::setCursor()
+	{
+		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
+		addEntity(newEntity, CURSOR_ENTITY_ID, true);
+		DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
+		debugManager.addDebugRendererToEntity(*newEntity);
 	}
 
 	void GameStateEditor::addEntity(Entity* newEntity, Hash id, bool bypassSave)
