@@ -269,27 +269,21 @@ namespace Temporal
 
 	void Editable::handleArrows(const Vector& params)
 	{
-		if (_editor.getSelected() == this)
-		{
-			Vector position = getPosition(*this);
-			position += params;
-			raiseMessage(Message(MessageID::SET_POSITION, &position));
-		}
+		Vector position = getPosition(*this);
+		position += params;
+		raiseMessage(Message(MessageID::SET_POSITION, &position));
 	}
 
 	void Editable::setPeriod(int period)
 	{
-		if (_editor.getSelected() == this)
+		Component* component = getEntity().get(TemporalPeriod::TYPE);
+		if (!component)
 		{
-			Component* component = getEntity().get(TemporalPeriod::TYPE);
-			if (!component)
-			{
-				component = new TemporalPeriod();
-				getEntity().add(component);
-			}
-			TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(component);
-			temporalPeriod->setPeriod(static_cast<Period::Enum>(period));
+			component = new TemporalPeriod();
+			getEntity().add(component);
 		}
+		TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(component);
+		temporalPeriod->setPeriod(static_cast<Period::Enum>(period));
 	}
 
 	void Editable::handleMessage(Message& message)

@@ -30,6 +30,7 @@ namespace Temporal
 		void setEditorMode();
 		void addEntity(Entity* newEntity, Hash id, bool bypassSave = false);
 		void clearCursor();
+		void setCursor();
 		void update(float framePeriod);
 		void handleKey(Key::Enum key);
 		void moveCamera(const Vector& direction);
