@@ -50,6 +50,7 @@ namespace Temporal
 	class VisibilityGem;
 	class CameraControl;
 	class Laser;
+	class Button;
 
 	// Singletons
 	class GameSaverLoader;
@@ -390,6 +391,12 @@ namespace Temporal
 		{
 			serializer.serialize("destination", navigator._destination);
 			serialize(key, (StateMachineComponent&)navigator, serializer);
+		}
+
+		template<class T>
+		static void serialize(const char* key, Button& button, T& serializer)
+		{
+			serializer.serialize("target", button._target);
 		}
 
 		template<class T>

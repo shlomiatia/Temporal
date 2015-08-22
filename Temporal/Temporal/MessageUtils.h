@@ -34,18 +34,21 @@ namespace Temporal
 	{
 	public:
 		SensorParams(Hash sensorId, const Contact* contact = 0)
-			: _sensorId(sensorId), _contact(contact) {}
+			: _sensorId(sensorId), _contact(contact), _isHandled(false) {}
 
 		Hash getSensorId() const { return _sensorId; }
 		const Contact& getContact() const { return *_contact; }
+		void setHandled(bool isHandled) { _isHandled = isHandled; }
+		bool isHandled() const { return _isHandled; }
 	private:
 		Hash _sensorId;
 		const Contact* _contact;
+		bool _isHandled;
 
 		SensorParams(const SensorParams&);
 		SensorParams& operator=(const SensorParams&);
 	};
-	inline const SensorParams& getSensorParams(void* data) { return *static_cast<SensorParams*>(data); }
+	inline SensorParams& getSensorParams(void* data) { return *static_cast<SensorParams*>(data); }
 
 	class MouseParams
 	{

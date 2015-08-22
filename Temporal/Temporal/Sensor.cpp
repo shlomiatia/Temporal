@@ -32,7 +32,10 @@ namespace Temporal
 
 			Contact contact(*_fixture, fixture);
 			_sensing = true;
-			raiseMessage(Message(MessageID::SENSOR_SENSE, &SensorParams(_id, &contact)));
+			SensorParams params(_id, &contact);
+			raiseMessage(Message(MessageID::SENSOR_SENSE, &params));
+			if (params.isHandled())
+				break;
 		}
 		raiseMessage(Message(MessageID::SENSOR_END, &_id));
 	}

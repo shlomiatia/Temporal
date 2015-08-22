@@ -45,20 +45,41 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
+		else if (message.getID() == MessageID::ACTIVATE)
+		{
+			_activated = !_activated;
+			if (_activated)
+			{
+				raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+			}
+			else
+			{
+				setLength(0.0f);
+				raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(0.0f, 0.0f)));
+			}
+				
+		}
+	}
+
+	void Laser::setLength(float length)
+	{
+		SceneNode* root = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
+		root->setTranslation(Vector(0.0f, length / 2.0f));
+		root->setScale(Vector(1.0f, abs(length)));
 	}
 
 	void Laser::update(float framePeriod)
 	{
+		if (!_activated)
+			return;
 		const OBB& shape = getShape(*this);
 		RayCastResult result;
 		const Vector& position = getPosition(*this);
 		int group = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if (getEntity().getManager().getGameState().getGrid().cast(position, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
-			float vector = (result.getPoint().getY() - position.getY());
-			SceneNode* root = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
-			root->setTranslation(Vector(0.0f, vector / 2.0f));
-			root->setScale(Vector(1.0f, abs(vector)));
+			float length = (result.getPoint().getY() - position.getY());
+			setLength(length);
 			if (result.getFixture().getEntityId() == PLAYER_ENTITY)
 			{
 				Entity* takedownEntity = getEntity().getManager().getEntity(PLAYER_ENTITY);
