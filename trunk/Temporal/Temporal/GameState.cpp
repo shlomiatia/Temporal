@@ -83,6 +83,9 @@ namespace Temporal
 		GameStateLoader loader(gameStateFile);
 		loader.execute();
 		Hash id = loader.getId();
+		GameStateIterator j = _states.find(id);
+		if (j != _states.end())
+			delete j->second;
 		_states[id] = loader.getResult();
 		return id;
 	}

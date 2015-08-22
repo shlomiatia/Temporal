@@ -1,6 +1,5 @@
 #include "Editable.h"
 #include "MessageUtils.h"
-#include "InputEnums.h"
 #include "ShapeOperations.h"
 #include "Graphics.h"
 #include "Layer.h"
@@ -38,6 +37,7 @@ namespace Temporal
 		_translation = false;
 		_rotation = false;
 		_scale = false;
+		_editor.addUndo();
 	}
 
 	OBB Editable::getShape() const
@@ -197,6 +197,7 @@ namespace Temporal
 	{
 		if (_editor.getSelected() == this)
 		{
+			_editor.addUndo();
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 			params.setHandled(true);
 		}
@@ -275,8 +276,15 @@ namespace Temporal
 		raiseMessage(Message(MessageID::SET_POSITION, &position));
 	}
 
+	void Editable::removePeriod()
+	{
+		_editor.addUndo();
+		getEntity().remove(TemporalPeriod::TYPE);
+	}
+
 	void Editable::setPeriod(int period)
 	{
+		_editor.addUndo();
 		Component* component = getEntity().get(TemporalPeriod::TYPE);
 		if (!component)
 		{
@@ -285,6 +293,38 @@ namespace Temporal
 		}
 		TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(component);
 		temporalPeriod->setPeriod(static_cast<Period::Enum>(period));
+	}
+
+	void Editable::keyUp(Key::Enum key)
+	{
+		if (key == Key::UP)
+		{
+			handleArrows(Vector(0.0f, 1.0f));
+		}
+		else if (key == Key::DOWN)
+		{
+			handleArrows(Vector(0.0f, -1.0f));
+		}
+		else if (key == Key::LEFT)
+		{
+			handleArrows(Vector(-1.0f, 0.0f));
+		}
+		else if (key == Key::RIGHT)
+		{
+			handleArrows(Vector(1.0f, 0.0f));
+		}
+		else if (key == Key::BACKSPACE)
+		{
+			removePeriod();
+		}
+		else if (key == Key::OPEN_BRACKET)
+		{
+			setPeriod(Period::PAST);
+		}
+		else if (key == Key::CLOSE_BRACKET)
+		{
+			setPeriod(Period::PRESENT);
+		}
 	}
 
 	void Editable::handleMessage(Message& message)
@@ -349,34 +389,7 @@ namespace Temporal
 			if (this != _editor.getSelected())
 				return;
 			Key::Enum key = *static_cast<Key::Enum*>(message.getParam());
-			if (key == Key::UP)
-			{
-				handleArrows(Vector(0.0f, 1.0f));
-			}
-			else if (key == Key::DOWN)
-			{
-				handleArrows(Vector(0.0f, -1.0f));
-			}
-			else if (key == Key::LEFT)
-			{
-				handleArrows(Vector(-1.0f, 0.0f));
-			}
-			else if (key == Key::RIGHT)
-			{
-				handleArrows(Vector(1.0f, 0.0f));
-			}
-			else if (key == Key::BACKSPACE)
-			{
-				getEntity().remove(TemporalPeriod::TYPE);
-			}
-			else if (key == Key::OPEN_BRACKET)
-			{
-				setPeriod(Period::PAST);
-			}
-			else if (key == Key::CLOSE_BRACKET)
-			{
-				setPeriod(Period::PRESENT);
-			}
+			keyUp(key);
 		}
 	}
 }

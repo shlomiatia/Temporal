@@ -11,10 +11,7 @@
 #include "Serialization.h"
 #include "Graphics.h"
 #include "Font.h"
-
-// TODO: Remove
-#include "GameStateEditor.h"
-#include "DebugLayer.h"
+#include "Layer.h"
 
 #include <sstream>
 #include <windows.h>
@@ -101,15 +98,6 @@ namespace Temporal
 
 		state->init();
 
-		if (strcmp(_path, "resources/game-states/save-test.xml") == 0)
-		{
-			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
-			Component* component = new GameStateEditor();
-			entity->add(component);
-			component = new DebugManager();
-			entity->add(component);
-			state->getEntitiesManager().add(entity);
-		}
 		_result = state;
 	}
 

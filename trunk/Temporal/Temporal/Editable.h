@@ -2,6 +2,7 @@
 #define EDITABLE_H
 #include "EntitySystem.h"
 #include "Shapes.h"
+#include "InputEnums.h"
 
 namespace Temporal
 {
@@ -41,12 +42,14 @@ namespace Temporal
 		void middleMouseDown(MouseParams& params);
 		void rightMouseDown(MouseParams& params);
 		void mouseDown(MouseParams& params);
+		void keyUp(Key::Enum key);
 		void reset();
 		void handleArrows(const Vector& params);
 
 		OBB getShape() const;
 		void setRotation(float rotation);
 		void setRadius(const Vector& radius);
+		void removePeriod();
 		void setPeriod(int period);
 	};
 }
