@@ -15,6 +15,15 @@ namespace Temporal
 			return Vector::Zero;
 	}
 
+	const Vector& getPosition(const Entity& entity)
+	{
+		void* result = entity.handleMessage(Message(MessageID::GET_POSITION));
+		if (result)
+			return *static_cast<Vector*>(result);
+		else
+			return Vector::Zero;
+	}
+
 	Side::Enum getOrientation(const Component& component)
 	{
 		return *static_cast<Side::Enum*>(component.raiseMessage(Message(MessageID::GET_ORIENTATION)));

@@ -6,22 +6,23 @@
 namespace Temporal
 {
 	class MouseParams;
+	class GameStateEditor;
 
 	class Editable : public Component
 	{
 	public:
-		explicit Editable(bool translationOnly) : Component(true),
-			_translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero) {}
+		explicit Editable(bool translationOnly, GameStateEditor& editor) : Component(true),
+			_translationOnly(translationOnly), _translation(false), _rotation(false), _scale(false), _isPositiveScale(false), _scaleAxis(Axis::X), _translationOffset(Vector::Zero), _editor(editor){}
 
 		Hash getType() const;
 		void handleMessage(Message& message);
-		Component* clone() const { return new Editable(_translationOnly); }
+		Component* clone() const { return new Editable(_translationOnly, _editor); }
+
+		static OBB getShape(const Entity& entity);
 
 		static const Hash TYPE;
-		static void clearSelected() { _selected = 0; }
-		static Editable* getSelected() { return _selected;  }
+		
 	private:
-		static Editable* _selected;
 		bool _translationOnly;
 		bool _translation;
 		bool _rotation;
@@ -33,6 +34,7 @@ namespace Temporal
 		OBB _negativeXScale;
 		OBB _positiveYScale;
 		OBB _negativeYScale;
+		GameStateEditor& _editor;
 
 		void mouseMove(MouseParams& params);
 		void leftMouseDown(MouseParams& params);

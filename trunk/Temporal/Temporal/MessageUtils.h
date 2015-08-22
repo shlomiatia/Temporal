@@ -6,6 +6,7 @@
 
 namespace Temporal
 {
+	class Entity;
 	class Component;
 	class Message;
 	class OBB;
@@ -15,6 +16,7 @@ namespace Temporal
 	namespace MouseButton { enum Enum; }
 
 	const Vector& getPosition(const Component& component);
+	const Vector& getPosition(const Entity& entity);
 	Side::Enum getOrientation(const Component& component);
 	const OBB& getShape(const Component& component);
 
