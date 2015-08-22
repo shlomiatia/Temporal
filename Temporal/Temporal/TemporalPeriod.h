@@ -9,9 +9,10 @@ namespace Temporal
 	{
 		enum Enum
 		{
-			PAST,
-			PRESENT,
-			FUTURE
+			NONE = -1,
+			PAST = 0,
+			PRESENT = 1,
+			FUTURE = 2
 		};
 	}
 
@@ -26,12 +27,11 @@ namespace Temporal
 
 		void setPeriod(Period::Enum period) { _period = period; }
 		Period::Enum getPeriod() const { return _period; }
+		void changePeriod(Period::Enum period);
 
 		static const Hash TYPE;
 	private:
 		Period::Enum _period;
-
-		void changePeriod(Period::Enum period);
 
 		friend class SerializationAccess;
 	};
@@ -51,7 +51,7 @@ namespace Temporal
 		static const Hash TYPE;
 	private:		
 
-		void setPlayerPeriod(Period::Enum period);
+		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;
 
 		friend class SerializationAccess;

@@ -8,6 +8,7 @@
 namespace Temporal
 {
 	const float JUMP_LEEWAY = 0.1f;
+	const Hash PLAYER_PERIOD = Hash("player-period");
 	const Hash InputController::TYPE = Hash("input-controller");
 
 	void InputController::startJump()
@@ -18,8 +19,15 @@ namespace Temporal
 
 	void InputController::temporalAction()
 	{
-		getEntity().getManager().sendMessageToAllEntities(Message(MessageID::MERGE_TO_TEMPORAL_ECHOES));
-		raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
+		if (getEntity().get(PLAYER_PERIOD)) {
+			raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
+		}
+		else 
+		{
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED));
+		}
+		
+		
 	}
 
 	void InputController::mouseDown(Message& message)

@@ -12,12 +12,14 @@
 #include "Mouse.h"
 #include "Math.h"
 #include "DebugLayer.h"
+#include "TemporalPeriod.h"
 #include <sstream>
 
 namespace Temporal
 {
 	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
 	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
+	const Hash PLAYER_ID("ENT_PLAYER");
 	const Hash CURSOR_ENTITY_ID("ENT_CURSOR");
 	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control"), Hash("light") });
 	const HashList EDITABLE_FILTER({ Hash("static-body"), Hash("renderer") });
@@ -84,6 +86,9 @@ namespace Temporal
 		s << "[X: " << (int)Mouse::get().getPosition().getX() << "][Y: " << (int)Mouse::get().getPosition().getY() << "]";
 		if (getSelected())
 			s << "[Selected: " << getSelected()->getEntity().getId().getString() << "]";
+		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+		if (playerPeriod && playerPeriod->getPeriod() != Period::NONE)
+			s << "[Period: " << (playerPeriod->getPeriod() == Period::PAST ? "Past" : "Present") << "]";
 		getEntity().getManager().getGameState().getLayersManager().getDebugLayer().showInfo(s.str().c_str());
 	}
 
@@ -168,6 +173,12 @@ namespace Temporal
 				getEntity().getManager().setFocusInputComponent(this);
 			}
 		}
+		else if (key == Key::BACKSPACE)
+		{
+			PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			if (playerPeriod)
+				playerPeriod->changePeriod(Period::NONE);
+		}
 	}
 
 	void GameStateEditor::handleMessage(Message& message)
@@ -233,6 +244,12 @@ namespace Temporal
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
 		addEntity(newEntity, id);
 		addEditableToEntity(*newEntity, *this);
+		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+		if (playerPeriod && playerPeriod->getPeriod() != Period::NONE)
+		{
+			TemporalPeriod* temporalPeriod = new TemporalPeriod(playerPeriod->getPeriod());
+			newEntity->add(temporalPeriod);
+		}
 	}
 
 	void GameStateEditor::clearCursor()

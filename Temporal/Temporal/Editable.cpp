@@ -19,7 +19,7 @@
 namespace Temporal
 {
 	static const float MARGIN = 5.0f;
-	static Hash STATIC_BODY_TYPE("static-body");
+	static const Hash STATIC_BODY_TYPE("static-body");
 	const Hash Editable::TYPE("editable");
 	
 	void fixFlatOBB(OBB& obb)
@@ -364,21 +364,17 @@ namespace Temporal
 			{
 				handleArrows(Vector(1.0f, 0.0f));
 			}
-			else if (key == Key::TILDE)
+			else if (key == Key::BACKSPACE)
 			{
 				getEntity().remove(TemporalPeriod::TYPE);
 			}
-			else if (key == Key::D1)
+			else if (key == Key::OPEN_BRACKET)
 			{
 				setPeriod(Period::PAST);
 			}
-			else if (key == Key::D2)
+			else if (key == Key::CLOSE_BRACKET)
 			{
 				setPeriod(Period::PRESENT);
-			}
-			else if (key == Key::D3)
-			{
-				setPeriod(Period::FUTURE);
 			}
 		}
 	}
