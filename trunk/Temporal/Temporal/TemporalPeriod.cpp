@@ -19,7 +19,7 @@ namespace Temporal
 		{
 			_period = period;
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &period));
 		}
 	}
 
@@ -36,22 +36,22 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::LEVEL_INIT)
 		{
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::SET_PLAYER_PERIOD, &_period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &_period));
 		}
 		else if(message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
-			Period::Enum period = _period == Period::PAST ? Period::PRESENT : Period::PAST;
+			Period::Enum period = _period == Period::PRESENT ? Period::PAST : Period::PRESENT;
 			changePeriod(period);
 		}
 	}
 
-	void TemporalPeriod::setPlayerPeriod(Period::Enum period)
+	void TemporalPeriod::temporalPeriodChanged(Period::Enum period)
 	{
 		float alpha;
-		if (_period == period || _period == -1)
+		if (_period == period)
 			alpha = 1.0f;
 		else
-			alpha = 0.2f;
+			alpha = 0.1f;
 		raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 	}
 
@@ -60,7 +60,7 @@ namespace Temporal
 		_period = period;
 		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
-		setPlayerPeriod(playerPeriod);
+		temporalPeriodChanged(playerPeriod);
 	}
 
 	void TemporalPeriod::handleMessage(Message& message)
@@ -76,10 +76,10 @@ namespace Temporal
 			float alpha = 1.0f;
 			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
-		else if (message.getID() == MessageID::SET_PLAYER_PERIOD)
+		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
-			setPlayerPeriod(period);
+			temporalPeriodChanged(period);
 		}
 	}
 

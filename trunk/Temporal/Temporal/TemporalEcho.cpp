@@ -63,7 +63,7 @@ namespace Temporal
 					deserializer.serialize("entity", _echo);
 					delete deserialization;
 					_echoesData.erase(first);
-					float alpha = 0.2f;
+					float alpha = 0.1f;
 					_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
 				}
 			}
@@ -123,7 +123,7 @@ namespace Temporal
 			if(_echoReady)
 				_echo->handleMessage(message, &getFilter());
 		}
-		else if(message.getID() == MessageID::MERGE_TO_TEMPORAL_ECHOES)
+		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
 			mergeToTemporalEchoes();
 		}
