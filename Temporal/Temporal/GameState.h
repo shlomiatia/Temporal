@@ -81,6 +81,7 @@ namespace Temporal
 		void syncLoadAndShow(const char* gameStateFile);
 		void syncUnloadCurrent();
 
+		Hash getCurrentStateId() const { return _currentStateId; }
 		GameState& getCurrentState() const; 
 		GameState& getStateById(Hash id);
 

@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "EntitySystem.h"
 #include "Game.h"
+#include "GameStateEditor.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -20,7 +21,7 @@ namespace Temporal
 		_keysMap[SDLK_F9] = Key::F9;
 		_keysMap[SDLK_F10] = Key::F10;
 		_keysMap[SDLK_F11] = Key::F11;
-		_keysMap[SDLK_F12] = Key::F2;
+		_keysMap[SDLK_F12] = Key::F12;
 
 		_keysMap[SDLK_GREATER] = Key::TILDE;
 		_keysMap[SDLK_BACKQUOTE] = Key::TILDE;
@@ -169,6 +170,8 @@ namespace Temporal
 			raiseEvent(Message(MessageID::KEY_UP, &key));
 			if(key == Key::ESC)
 				Game::get().stop();
+			if (key == Key::F12)
+				GameStateEditor::loadEditor();
 		}
 	}
 }

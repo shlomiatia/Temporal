@@ -6,7 +6,6 @@ using namespace Temporal;
 
 int main(int argc, char* argv[])
 {
-	//Game::get().run("resources/game-states/entities.xml");
 	Game::get().run("resources/game-states/save-test.xml");
 	//Game::get().run("resources/game-states/animation-editor.xml");
 	

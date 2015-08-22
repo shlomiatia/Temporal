@@ -157,11 +157,7 @@ namespace Temporal
 		}
 		else if (key == Key::DEL)
 		{
-			if (getSelected())
-			{
-				getEntity().getManager().remove(getSelected()->getEntity().getId());
-				setSelected(0);
-			}
+			deleteEntity();
 		}
 		else if (key == Key::C)
 		{
@@ -178,6 +174,14 @@ namespace Temporal
 			PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
 			if (playerPeriod)
 				playerPeriod->changePeriod(Period::NONE);
+		}
+		else if (key == Key::Z)
+		{
+			--_undo;
+			std::string undoFile = Utils::format("resources/game-states/undo/%d.xml", _undo);
+			GameStateManager::get().syncUnloadCurrent();
+			loadEditor(undoFile.c_str(), _undo);
+			
 		}
 	}
 
@@ -230,6 +234,7 @@ namespace Temporal
 
 	void GameStateEditor::leftClick(const MouseParams& params)
 	{
+		addUndo();
 		int idIndex = 0;
 		const char* key = getEntity().getManager().getGameState().getEntityTemplatesManager().getCurrentTemplateId().getString();
 		Hash id;
@@ -249,6 +254,16 @@ namespace Temporal
 		{
 			TemporalPeriod* temporalPeriod = new TemporalPeriod(playerPeriod->getPeriod());
 			newEntity->add(temporalPeriod);
+		}
+	}
+
+	void GameStateEditor::deleteEntity()
+	{
+		if (getSelected())
+		{
+			addUndo();
+			getEntity().getManager().remove(getSelected()->getEntity().getId());
+			setSelected(0);
 		}
 	}
 
@@ -288,6 +303,28 @@ namespace Temporal
 	{
 		Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
 		camera.translate(direction);
+	}
+
+	void GameStateEditor::addUndo()
+	{
+		XmlSerializer serializer(new FileStream(Utils::format("resources/game-states/undo/%d.xml", _undo).c_str(), true, false));
+		++_undo;
+		serializer.serialize("game-state", getEntity().getManager().getGameState());
+		serializer.save();
+	}
+
+	void GameStateEditor::loadEditor(const char* path, int undo)
+	{
+		if (!path)
+			path = GameStateManager::get().getCurrentStateId().getString();
+		GameStateManager::get().syncLoadAndShow(path);
+		GameState& gameState = GameStateManager::get().getStateById(Hash(path));
+		Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
+		GameStateEditor* editor = new GameStateEditor(undo);
+		entity->add(editor);
+		DebugManager* debugManager = new DebugManager();
+		entity->add(debugManager);
+		gameState.getEntitiesManager().add(entity);
 	}
 
 	void GameStateEditorPreview::handleMessage(Message& message)
