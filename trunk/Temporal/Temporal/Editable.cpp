@@ -198,6 +198,7 @@ namespace Temporal
 		if (_editor.getSelected() == this)
 		{
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+			params.setHandled(true);
 		}
 		
 	}
