@@ -1,3 +1,29 @@
+<entity id="ENT_COVER">
+	<transform />
+	<collision-filter category="2" />
+	<static-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="32" y="64" />
+			</obb>
+		</fixture>
+	</static-body>
+	<renderer layer="4" texture="resources/textures/glass.png" />
+</entity>
+<entity id="ENT_BLOCK">
+	<transform />
+	<collision-filter category="1" />
+	<static-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="64" y="64" />
+			</obb>
+		</fixture>
+	</static-body>
+	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
+</entity>
 <entity id="ENT_PATROL">
 	<transform />
 	<collision-filter category="4" />
@@ -137,39 +163,10 @@
 		</scene-node>
 	</renderer>
 </entity>
-<entity id="ENT_BLOCK">
-	<transform />
-	<collision-filter category="1" />
-	<static-body>
-		<fixture>
-			<obb angle="0">
-				<center x="0" y="0" />
-				<radius x="64" y="64" />
-			</obb>
-		</fixture>
-	</static-body>
-	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
-</entity>
-<entity id="ENT_COVER">
-	<transform />
-	<collision-filter category="2" />
-	<static-body>
-		<fixture>
-			<obb angle="0">
-				<center x="0" y="0" />
-				<radius x="32" y="64" />
-			</obb>
-		</fixture>
-	</static-body>
-	<renderer layer="4" texture="resources/textures/glass.png" />
-</entity>
+
 <entity id="ENT_BACKGROUND">
 	<transform />
 	<renderer layer="0" texture="resources/textures/bg.png" />
-</entity>
-<entity id="ENT_CAMERA_CONTROL">
-	<transform />
-	<camera-control/>
 </entity>
 <entity id="ENT_LASER">
 	<transform />
@@ -187,12 +184,30 @@
 		<color r="1.0" g="0.0" b="0.0" />
 	</renderer>
 </entity>
+<entity id="ENT_BUTTON">
+	<transform />
+	<collision-filter category="16" />
+	<button />
+	<static-body>
+		<fixture>
+            <obb angle="0">
+				<center x="0" y="0" />
+				<radius x="16" y="15" />
+			</obb>
+		</fixture>
+	</static-body>
+	<renderer layer="2" texture="resources/textures/button.png" />
+</entity>
 <entity id="ENT_LIGHT">
 	<transform/>
 	<collision-filter />
 	<light>
 		<color r="0.5" g="0.5" b="0.5" />
 	</light>
+</entity>
+<entity id="ENT_CAMERA_CONTROL">
+	<transform />
+	<camera-control/>
 </entity>
 <entity id="ENT_PATROL_CONTROL">
 	<transform />

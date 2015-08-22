@@ -28,6 +28,7 @@
 #include "Laser.h"
 #include "VisibilityGem.h"
 #include "DebugLayer.h"
+#include "Button.h"
 
 namespace Temporal
 {
@@ -87,6 +88,8 @@ namespace Temporal
 			serialize(key, (CameraControl*&)component, serializer);
 		else if (strcmp(key, Laser::TYPE.getString()) == 0)
 			serialize(key, (Laser*&)component, serializer);
+		else if (strcmp(key, Button::TYPE.getString()) == 0)
+			serialize(key, (Button*&)component, serializer);
 		// Singletons
 		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
@@ -143,6 +146,8 @@ namespace Temporal
 			serialize(key, *(CameraControl*&)component, serializer);
 		else if (component->getType() == Laser::TYPE)
 			serialize(key, *(Laser*&)component, serializer);
+		else if (component->getType() == Button::TYPE)
+			serialize(key, *(Button*&)component, serializer);
 		// Singletons
 		else if (component->getType() == GameSaverLoader::TYPE)
 			serialize(key, *(GameSaverLoader*&)component, serializer);

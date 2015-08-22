@@ -221,6 +221,9 @@
     <ClInclude Include="DebugLayer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -421,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="DebugLayer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
