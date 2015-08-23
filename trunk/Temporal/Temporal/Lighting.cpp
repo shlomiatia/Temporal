@@ -40,6 +40,10 @@ namespace Temporal
 		{
 			draw();
 		}
+		else if (message.getID() == MessageID::ACTIVATE)
+		{
+			_activate = !_activate;
+		}
 	}
 
 	void Light::drawShadowPart(const Vector& lightCenter, const Vector& point1, const Vector& point2)
@@ -92,6 +96,8 @@ namespace Temporal
 	
 	void Light::draw()
 	{
+		if (!_activate)
+			return;
 		Graphics::get().getSpriteBatch().begin();
 		const Vector& position = getPosition(*this);
 		glDisable(GL_BLEND);

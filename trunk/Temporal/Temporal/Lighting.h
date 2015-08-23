@@ -16,13 +16,13 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 4.0f)
-			: _color(color), _radius(radius), _center(center), _size(size) {}
+		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 4.0f, bool activate = true)
+			: _color(color), _radius(radius), _center(center), _size(size), _activate(activate) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new Light(_color, _radius, _center, _size); }
+		Component* clone() const { return new Light(_color, _radius, _center, _size, _activate); }
 
 		static const Hash TYPE;
 	private:
@@ -33,6 +33,7 @@ namespace Temporal
 		float _radius;
 		float _center;
 		float _size;
+		bool _activate;
 
 		void draw();
 		void drawBeamShadow(const Vector& lightCenter);
