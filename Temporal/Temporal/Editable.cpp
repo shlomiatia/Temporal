@@ -14,6 +14,8 @@
 #include "TemporalPeriod.h"
 #include "Math.h"
 #include "GameStateEditor.h"
+#include "Keyboard.h"
+#include "Button.h"
 
 namespace Temporal
 {
@@ -117,7 +119,6 @@ namespace Temporal
 
 	void Editable::leftMouseDown(MouseParams& params)
 	{
-		
 		if (_editor.getSelected() && _editor.getSelected() != this && isCloserThenSelected(*this, _editor))
 		{
 			OBB selectedShape = _editor.getSelected()->getShape();
@@ -132,10 +133,22 @@ namespace Temporal
 		fixFlatOBB(shape);
 		if (intersects(shape, params.getPosition()))
 		{
-			_editor.setSelected(this);
-			reset();
-			_translation = true;
-			_translationOffset = params.getPosition() - getPosition(*this);
+			if (Keyboard::get().getKey(Key::LEFT_SHIFT))
+			{
+				if (_editor.getSelected())
+				{
+					Button* button = static_cast<Button*>(_editor.getSelected()->getEntity().get(Button::TYPE));
+					if (button)
+						button->setTarget(getEntity().getId());
+				}
+			}
+			else 
+			{
+				_editor.setSelected(this);
+				reset();
+				_translation = true;
+				_translationOffset = params.getPosition() - getPosition(*this);
+			}
 			params.setHandled(true);
 		}
 		else if (!_translationOnly)
