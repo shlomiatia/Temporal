@@ -14,8 +14,7 @@ namespace Temporal
 	const Hash Laser::TYPE = Hash("laser");
 
 	static const float SPEED_PER_SECOND = 128.0f;
-	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
-	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER | CollisionCategory::CHARACTER;
 
 	void Laser::handleMessage(Message& message)
 	{
@@ -47,16 +46,17 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::ACTIVATE)
 		{
-			_activated = !_activated;
-			if (_activated)
+			_friendly = !_friendly;
+			Color color = Color::White;
+			if (_friendly)
 			{
-				raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+				color = Color::Green;
 			}
 			else
 			{
-				setLength(0.0f);
-				raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(0.0f, 0.0f)));
+				color = Color::Red;
 			}
+			raiseMessage(Message(MessageID::SET_COLOR, &color));
 				
 		}
 	}
@@ -70,21 +70,27 @@ namespace Temporal
 
 	void Laser::update(float framePeriod)
 	{
-		if (!_activated)
-			return;
 		const OBB& shape = getShape(*this);
 		RayCastResult result;
 		const Vector& position = getPosition(*this);
 		int group = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if (getEntity().getManager().getGameState().getGrid().cast(position, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
-			float length = (result.getPoint().getY() - position.getY());
-			setLength(length);
-			if (result.getFixture().getEntityId() == PLAYER_ENTITY)
+			float length = result.getPoint().getY() - position.getY();
+			
+			
+			if (result.getFixture().getCategory() == CollisionCategory::PLAYER && !_friendly ||
+				result.getFixture().getCategory() == CollisionCategory::CHARACTER && _friendly)
 			{
-				Entity* takedownEntity = getEntity().getManager().getEntity(PLAYER_ENTITY);
-				takedownEntity->handleMessage(Message(MessageID::DIE));
+				getEntity().getManager().sendMessageToEntity(result.getFixture().getEntityId(), Message(MessageID::DIE));
 			}
+			else if (result.getFixture().getCategory() == CollisionCategory::PLAYER && _friendly ||
+					 result.getFixture().getCategory() == CollisionCategory::CHARACTER && !_friendly)
+			{
+   				length = 0.0f;
+			}
+
+			setLength(length);
 		}
 		Side::Enum orientation = getOrientation(*this);
 		if (orientation == Side::LEFT && position.getX() - shape.getRadiusX() - SPEED_PER_SECOND * framePeriod <= _platform->getLeft())

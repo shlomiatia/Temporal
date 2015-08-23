@@ -12,15 +12,15 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		Laser(bool activated = true) : _platform(0), _activated(activated){}
+		Laser(bool friendly = false) : _platform(0), _friendly(friendly){}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-		Component* clone() const { return new Laser(_activated); };
+		Component* clone() const { return new Laser(_friendly); };
 		static const Hash TYPE;
 	private:
 		const OBB* _platform;
-		bool _activated;
+		bool _friendly;
 
 		void update(float framePeriod);
 		void setLength(float length);
