@@ -51,6 +51,7 @@ namespace Temporal
 	class CameraControl;
 	class Laser;
 	class Button;
+	class Door;
 
 	// Singletons
 	class GameSaverLoader;
@@ -306,6 +307,7 @@ namespace Temporal
 			serializer.serialize("radius", light._radius);
 			serializer.serialize("center", light._center);
 			serializer.serialize("size", light._size);
+			serializer.serialize("_activated", light._activate);
 		}
 		
 		template<class T>
@@ -400,7 +402,16 @@ namespace Temporal
 		}
 
 		template<class T>
-		static void serialize(const char* key, Laser& laser, T& serializer) {}
+		static void serialize(const char* key, Door& door, T& serializer)
+		{
+			serializer.serialize("closed", door._closed);
+		}
+
+		template<class T>
+		static void serialize(const char* key, Laser& laser, T& serializer) 
+		{
+			serializer.serialize("friendly", laser._friendly);
+		}
 
 		template<class T>
 		static void serialize(const char* key, MovingPlatform& component, T& serializer) {}
