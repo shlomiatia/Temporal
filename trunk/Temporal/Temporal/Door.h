@@ -19,6 +19,7 @@ namespace Temporal
 
 	private:
 		bool _closed;
+		void set();
 
 		friend class SerializationAccess;
 	};

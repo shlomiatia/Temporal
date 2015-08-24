@@ -18,9 +18,10 @@ namespace Temporal
 
 	void Laser::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+			setColor();
 		}
 		else if (message.getID() == MessageID::BODY_COLLISION)
 		{
@@ -47,18 +48,23 @@ namespace Temporal
 		else if (message.getID() == MessageID::ACTIVATE)
 		{
 			_friendly = !_friendly;
-			Color color = Color::White;
-			if (_friendly)
-			{
-				color = Color::Green;
-			}
-			else
-			{
-				color = Color::Red;
-			}
-			raiseMessage(Message(MessageID::SET_COLOR, &color));
+			setColor();
 				
 		}
+	}
+
+	void Laser::setColor()
+	{
+		Color color = Color::White;
+		if (_friendly)
+		{
+			color = Color::Green;
+		}
+		else
+		{
+			color = Color::Red;
+		}
+		raiseMessage(Message(MessageID::SET_COLOR, &color));
 	}
 
 	void Laser::setLength(float length)

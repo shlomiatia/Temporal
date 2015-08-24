@@ -24,6 +24,7 @@ namespace Temporal
 
 		void update(float framePeriod);
 		void setLength(float length);
+		void setColor();
 
 		friend class SerializationAccess;
 	};
