@@ -212,6 +212,20 @@
 	<door />
 	<renderer layer="2" texture="resources/textures/door.png" />
 </entity>
+<entity id="ENT_MOVING_PLATFORM">
+	<transform />
+	<collision-filter category="1" />
+	<dynamic-body gravity-enabled="false">
+		<fixture>
+			<obb angle="0">
+			<center x="0" y="0" />
+			<radius x="64" y="16" />
+		</obb>
+		</fixture>
+	</dynamic-body>
+	<moving-platform />
+	<renderer layer="2" texture="resources/textures/moving-platform.png" />
+</entity>
 <entity id="ENT_LIGHT">
 	<transform/>
 	<collision-filter />

@@ -9,15 +9,10 @@ namespace Temporal
 
 	void MovingPlatform::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::ACTIVATE)
 		{
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
-		}
-		else if(message.getID() == MessageID::BODY_COLLISION)
-		{
-			const Vector& collision = getVectorParam(message.getParam());
-			float modifier = collision.getX() < 0.0f ? 1.0f : -1.0f;
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND * modifier, 0.0f)));
+			_movement *= -1.0f;
+			raiseMessage(Message(MessageID::SET_IMPULSE, &_movement));
 		}
 	}
 }
