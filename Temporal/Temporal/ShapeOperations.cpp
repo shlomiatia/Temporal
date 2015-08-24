@@ -8,11 +8,12 @@ namespace Temporal
 	bool intersects(const OBB& obb, const Vector& point)
 	{
 		Vector diff = point - obb.getCenter();
+		float f = EPSILON;
 
 		for (Axis::Enum i = Axis::X; i <= Axis::Y; ++i)
 		{
 			float dot = fabsf(diff * obb.getAxis(i));
-			if (dot > obb.getRadius().getAxis(i))
+			if (dot > obb.getRadius().getAxis(i) + f)
 				return false;
 		}
 

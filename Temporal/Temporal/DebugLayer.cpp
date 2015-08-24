@@ -95,7 +95,7 @@ namespace Temporal
 		if (_notifying)
 		{
 			_notificationTimer.update(framePeriod);
-			if (_notificationTimer.getElapsedTime() > 3.0f)
+			if (_notificationTimer.getElapsedTime() > 1.0f)
 			{
 				_notifying = false;
 				Graphics::get().setTitle("");

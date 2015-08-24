@@ -75,7 +75,7 @@ namespace Temporal
 			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
 		_autoSaveTimer.update(framePeriod);
-		if (_autoSaveTimer.getElapsedTime() > 10.0f)
+		if (_autoSaveTimer.getElapsedTime() > 120.0f)
 		{
 			save();
 			getEntity().getManager().getGameState().getLayersManager().getDebugLayer().notify("auto saved...");
