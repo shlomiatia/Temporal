@@ -61,15 +61,20 @@ namespace Temporal
 	class DebugManager : public Component
 	{
 	public:
+		DebugManager(bool startInDebugMode = false) : _startInDebugMode(startInDebugMode) {}
+
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new DebugManager(); }
+		Component* clone() const { return new DebugManager(_startInDebugMode); }
 
 		void addDebugRendererToEntity(Entity& entity);
 
 		static const Hash TYPE;
 	private:
+		void toggleDebugging(ComponentDebugInfo& info);
+
+		bool _startInDebugMode;
 	};
 }
 #endif

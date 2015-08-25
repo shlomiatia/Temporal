@@ -26,12 +26,12 @@ namespace Temporal
 
 	DebugLayer::DebugLayer(LayersManager* manager) : Layer(manager),  _grid(false), _navigationGraph(false), _notifying(false)
 	{
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(STATIC_BODY_ID, Key::T, true, "resources/textures/patrol-control.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(STATIC_BODY_ID, Key::T, false, "resources/textures/patrol-control.png"));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(DYNAMIC_BODY_ID, Key::Y));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(SENSOR_ID, Key::R));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(SIGHT_ID, Key::U));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(CAMERA_CONTROL_ID, Key::I, true, "resources/textures/camera-control.png"));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(LIGHT_ID, Key::O, true, "resources/textures/light-debug.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(CAMERA_CONTROL_ID, Key::I, false, "resources/textures/camera-control.png"));
+		_componentsDebugInfo.push_back(new ComponentDebugInfo(LIGHT_ID, Key::O, false, "resources/textures/light-debug.png"));
 	}
 
 	DebugLayer::~DebugLayer()
@@ -139,18 +139,30 @@ namespace Temporal
 		{
 			getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
-
-			
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().removeInputComponent(this);
+		}
+		else  if (message.getID() == MessageID::ENTITY_READY)
+		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			for (HashEntityIterator j = entities.begin(); j != entities.end(); ++j)
 			{
 				Entity& entity = *(j->second);
 				addDebugRendererToEntity(entity);
 			}
-		}
-		else if (message.getID() == MessageID::ENTITY_DISPOSED)
-		{
-			getEntity().getManager().removeInputComponent(this);
+			if (_startInDebugMode)
+			{
+				ComponentDebugInfoList& list = getEntity().getManager().getGameState().getLayersManager().getDebugLayer().getComponentsDebugInfo();
+				for (ComponentDebugInfoIterator i = list.begin(); i != list.end(); ++i)
+				{
+					ComponentDebugInfo&  info = **i;
+					if (info.getId() == STATIC_BODY_ID || info.getId() == CAMERA_CONTROL_ID || info.getId() == LIGHT_ID)
+						toggleDebugging(info);
+				}
+			}
+			
 		}
 		else  if (message.getID() == MessageID::KEY_UP)
 		{
@@ -162,28 +174,7 @@ namespace Temporal
 				ComponentDebugInfo&  info = **i;
 				if (info.getKey() == key)
 				{
-					info.toggleDebugging();
-					if (info.getTexture())
-					{
-						HashEntityMap& entities = getEntity().getManager().getEntities();
-						for (HashEntityIterator j = entities.begin(); j != entities.end(); ++j)
-						{
-							Entity& entity = *(j->second);
-							if (entity.get(info.getId()) && !isNonPatrolControlStaticBody(info, entity))
-							{
-								ComponentList renderers = entity.getAll(Renderer::TYPE);
-								for (ComponentIterator k = renderers.begin(); k != renderers.end(); ++k)
-								{
-									if ((**k).isBypassSave())
-									{
-										float alpha = info.isDebugging() ? 1.0f : 0.0f;
-										(**k).handleMessage(Message(MessageID::SET_ALPHA, &alpha));
-									}
-								}
-								
-							}
-						}
-					}
+					toggleDebugging(info);
 				}
 			}
 			if (key == Key::G)
@@ -193,6 +184,32 @@ namespace Temporal
 			else if (key == Key::N)
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLayer().toggleNavigationGraph();
+			}
+		}
+	}
+
+	void DebugManager::toggleDebugging(ComponentDebugInfo& info)
+	{
+		info.toggleDebugging();
+		if (info.getTexture())
+		{
+			HashEntityMap& entities = getEntity().getManager().getEntities();
+			for (HashEntityIterator j = entities.begin(); j != entities.end(); ++j)
+			{
+				Entity& entity = *(j->second);
+				if (entity.get(info.getId()) && !isNonPatrolControlStaticBody(info, entity))
+				{
+					ComponentList renderers = entity.getAll(Renderer::TYPE);
+					for (ComponentIterator k = renderers.begin(); k != renderers.end(); ++k)
+					{
+						if ((**k).isBypassSave())
+						{
+							float alpha = info.isDebugging() ? 1.0f : 0.0f;
+							(**k).handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+						}
+					}
+
+				}
 			}
 		}
 	}
