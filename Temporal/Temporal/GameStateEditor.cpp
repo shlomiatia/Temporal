@@ -322,7 +322,7 @@ namespace Temporal
 		Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
 		GameStateEditor* editor = new GameStateEditor(undo);
 		entity->add(editor);
-		DebugManager* debugManager = new DebugManager();
+		DebugManager* debugManager = new DebugManager(true);
 		entity->add(debugManager);
 		gameState.getEntitiesManager().add(entity);
 	}

@@ -63,6 +63,7 @@ namespace Temporal
 			component->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 			component->handleMessage(Message(MessageID::ENTITY_INIT));
 			component->handleMessage(Message(MessageID::ENTITY_POST_INIT));
+			component->handleMessage(Message(MessageID::ENTITY_READY));
 		}
 	}
 
@@ -136,6 +137,7 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::ENTITY_INIT));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
 		_initializing = false;
+		sendMessageToAllEntities(Message(MessageID::ENTITY_READY));
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
@@ -167,6 +169,7 @@ namespace Temporal
 		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_INIT));
 		entity->handleMessage(Message(MessageID::ENTITY_POST_INIT));
+		entity->handleMessage(Message(MessageID::ENTITY_READY));
 	}
 
 	void EntitiesManager::remove(Hash id)
