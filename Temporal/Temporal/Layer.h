@@ -79,10 +79,10 @@ namespace Temporal
 
 		void draw(float framePeriod);
 		void add(Component* component) { _components.push_back(component); }
+		void remove(Component* component);
 		std::vector<Component*>& get() { return _components; }
 
 	private:
-		
 		ComponentList _components;
 	};
 
@@ -109,13 +109,14 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager() : _cameraFollowPlayer(false), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0), _debugLayer(0){};
+		LayersManager(bool cameraFollowPlayer = false) : _cameraFollowPlayer(cameraFollowPlayer), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0), _debugLayer(0){};
 		~LayersManager();
 
 		void init(GameState* gameState);
 		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
 		void removeSprite(LayerType::Enum layer, Component* component) { _spriteLayer->remove(layer, component); }
 		void addGUI(Component* component) { _guiLayer->add(component); }
+		void removeGUI(Component* component) { _guiLayer->remove(component); }
 		void addLight(Component* component);
 		void removeLight(Component* component);
 		Camera& getCamera() { return *_camera; }

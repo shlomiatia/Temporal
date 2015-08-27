@@ -13,6 +13,7 @@ namespace Temporal
 		control->setWidth(shape.getWidth());
 		control->setHeight(shape.getHeight());
 		Entity* entity = new Entity(id);
+		entity->setBypassSave(true);
 		entity->add(transform);
 		entity->add(control);
 		
@@ -41,6 +42,14 @@ namespace Temporal
 		Control* control = addControl(id, shape);
 		control->setText(text);
 		control->setTextChangedEvent(textChangedEvent);
+		return control;
+	}
+
+	Control* ToolComponent::addCheckBox(Hash id, const AABB& shape, bool value, IAction1<bool>* checkChangedEvent)
+	{
+		Control* control = addControl(id, shape);
+		control->setText(value ? "V" : "");
+		control->setCheckChangedEvent(checkChangedEvent);
 		return control;
 	}
 }

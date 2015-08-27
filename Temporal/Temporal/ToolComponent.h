@@ -20,6 +20,7 @@ namespace Temporal
 		Control* addLabel(const AABB& shape, const char* text);
 		Control* addButton(Hash id, const AABB& shape, const char* text, IAction* commandEvent, Key::Enum shortcutKey = Key::NONE);
 		Control* addTextBox(Hash id, const AABB& shape, const char* text, IAction1<const char*>* textChangedEvent);
+		Control* addCheckBox(Hash id, const AABB& shape, bool value, IAction1<bool>* checkChangedEvent);
 	};
 }
 #endif

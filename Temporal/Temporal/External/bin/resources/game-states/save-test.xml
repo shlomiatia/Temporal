@@ -358,6 +358,30 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_MOVING_PLATFORM0">
+            <transform orientation="1">
+                <position x="460.799988" y="216.888885"/>
+            </transform>
+            <collision-filter category="1" group="1"/>
+            <dynamic-body gravity-enabled="0" body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <moving-platform/>
+            <renderer texture="resources/textures/moving-platform.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="1"/>
+        </entity>
         <entity id="ENT_LASER0">
             <transform orientation="1">
                 <position x="144.000000" y="432.000000"/>
@@ -491,6 +515,29 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+        </entity>
+        <entity id="ENT_BUTTON0">
+            <transform orientation="1">
+                <position x="447.288910" y="335.000000"/>
+            </transform>
+            <collision-filter category="16" group="1"/>
+            <button target="ENT_MOVING_PLATFORM0"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="15.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="0.937500"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="1"/>
         </entity>
         <entity id="ENT_BLOCK8">
             <transform orientation="1">

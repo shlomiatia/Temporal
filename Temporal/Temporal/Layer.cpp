@@ -141,6 +141,11 @@ namespace Temporal
 		guiLayerTimer.print("GUI LAYER");
 	}
 
+	void GUILayer::remove(Component* component)
+	{
+		_components.erase(std::remove(_components.begin(), _components.end(), component));
+	}
+
 	FXLayer::FXLayer(LayersManager* manager) : Layer(manager), _fbo1(Graphics::get().getFXSpriteBatch(), 10.0f), _fbo2(Graphics::get().getFXSpriteBatch(), 10.0f), _fxTimeUniform(0)
 	{
 		_fxTime = 0.0f;

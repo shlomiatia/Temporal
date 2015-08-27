@@ -41,7 +41,6 @@ namespace Temporal
 		void moveCamera(const Vector& direction);
 		void leftClick(const MouseParams& params);
 		void save();
-		
 	};
 
 	class GameStateEditorPreview : public Component
