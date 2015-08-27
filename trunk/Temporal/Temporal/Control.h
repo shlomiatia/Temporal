@@ -18,10 +18,10 @@ namespace Temporal
 	{
 	public:
 		explicit Control() : _obb(OBB::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(8), _shortcutKey(Key::NONE),
-			_backgroundColor(0.015f, 0.388f, 0.501f), _foregroundColor(0.937f, 0.925f, 0.792f), _borderColor(0.654f, 0.639f, 0.494f), _hoverColor(0, 0.184f, 0.184f, 0.75f),
-			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isMiddleDown(false), _isMiddleClick(false), _isRightDown(false), _isRightClick(false), _isHover(false),
+			_backgroundColor(0.015f, 0.388f, 0.501f), _foregroundColor(0.937f, 0.925f, 0.792f), _borderColor(0.654f, 0.639f, 0.494f), _hoverColor(0, 0.184f, 0.184f),
+			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isMiddleDown(false), _isMiddleClick(false), _isRightDown(false), _isRightClick(false), _isHover(false), _isCheckbox(false),
 			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _middleMouseDownEvent(0), _middleMouseClickEvent(0), _middleMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0),
-			_mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0),
+			_mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0), _checkChangedEvent(0),
 			_box(&_obb) {}
 		~Control();
 
@@ -56,6 +56,7 @@ namespace Temporal
 		void setRightMouseUpEvent(IAction1<const MouseParams&>* rightMouseUpEvent) { setEvent(_rightMouseUpEvent, rightMouseUpEvent); }
 		void setMouseMoveEvent(IAction1<const MouseParams&>* mouseMoveEvent) { setEvent(_mouseMoveEvent, mouseMoveEvent); }
 		void setTextChangedEvent(IAction1<const char*>* textChangedEvent);
+		void setCheckChangedEvent(IAction1<bool>* checkChangedEvent);
 		void setCommandEvent(IAction* commandEvent);
 
 		void setShortcutKey(Key::Enum key) { _shortcutKey = key; }
@@ -76,6 +77,7 @@ namespace Temporal
 
 		bool _isTextBox;
 		bool _isTextBoxMode;
+		bool _isCheckbox;
 		std::string _label;
 		std::string _textbox;
 
@@ -90,6 +92,7 @@ namespace Temporal
 		IAction1<const MouseParams&>* _rightMouseUpEvent;
 		IAction1<const MouseParams&>* _mouseMoveEvent;
 		IAction1<const char*>* _textChangedEvent;
+		IAction1<bool>* _checkChangedEvent;
 		IAction* _commandEvent;
 
 		bool _isLeftDown;

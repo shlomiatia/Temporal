@@ -13,6 +13,8 @@
 #include "Math.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
+#include "ComponentEditors.h"
+#include "MovingPlatform.h"
 #include <sstream>
 
 namespace Temporal
@@ -181,7 +183,22 @@ namespace Temporal
 			std::string undoFile = Utils::format("resources/game-states/undo/%d.xml", _undo);
 			GameStateManager::get().syncUnloadCurrent();
 			loadEditor(undoFile.c_str(), _undo);
-			
+		}
+		else if (key == Key::TAB)
+		{
+			if (!getSelected())
+			{
+				return;
+			}
+			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(Hash("moving-platform")));
+			if (!platform)
+			{
+				return;
+			}
+			Entity* entity = new Entity(Hash("moving-platform-editor"));
+			entity->setBypassSave(true);
+			entity->add(new MovingPlatformEditor(*platform));
+			getEntity().getManager().add(entity);
 		}
 	}
 

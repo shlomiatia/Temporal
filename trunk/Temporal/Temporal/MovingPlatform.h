@@ -15,6 +15,8 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new MovingPlatform(_movement); }
+		const Vector& getMovement() const { return _movement; }
+		Vector& getMovement() { return _movement; }
 
 		static const Hash TYPE;
 	private:

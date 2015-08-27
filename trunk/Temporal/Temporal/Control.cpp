@@ -17,6 +17,7 @@ namespace Temporal
 	{
 		if(e)
 			delete e;
+		e = 0;
 	}
 
 	void raiseEvent(IAction1<const MouseParams&>* e, const MouseParams& params)
@@ -56,6 +57,14 @@ namespace Temporal
 		_textChangedEvent = textChangedEvent;
 	}
 
+	void Control::setCheckChangedEvent(IAction1<bool>* checkChangedEvent)
+	{
+		_isCheckbox = true;
+		if (_checkChangedEvent)
+			delete _checkChangedEvent;
+		_checkChangedEvent = checkChangedEvent;
+	}
+
 	void Control::setCommandEvent(IAction* commandEvent)
 	{
 		if(_commandEvent)
@@ -83,8 +92,13 @@ namespace Temporal
 		deleteEvent(_mouseMoveEvent);
 		if(_textChangedEvent)
 			delete _textChangedEvent;
+		_textChangedEvent = 0;
 		if(_commandEvent)
 			delete _commandEvent;
+		_commandEvent = 0;
+		if (_checkChangedEvent)
+			delete _checkChangedEvent;
+		_checkChangedEvent = 0;
 	}
 
 	void Control::handleMessage(Message& message)
@@ -99,6 +113,7 @@ namespace Temporal
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
 			getEntity().getManager().removeInputComponent(this);
+			getEntity().getManager().getGameState().getLayersManager().removeGUI(this);
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
@@ -178,18 +193,25 @@ namespace Temporal
 		}
 		else
 		{
-			if(_isLeftClick)
+			bool isLeftClick = _isLeftClick;
+			raiseMouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
+			if (isLeftClick)
 			{
 				if(_isTextBox)
 				{
 					getEntity().getManager().setFocusInputComponent(this);
 					_isTextBoxMode = true;
 				}
+				if (_isCheckbox)
+				{
+					_label = _label == "V" ? "" : "V";
+					if (_checkChangedEvent)
+						(*_checkChangedEvent)(_label == "V");
+				}
 				if(_commandEvent)
 					(*_commandEvent)();
 
 			}
-			raiseMouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
 		}
 	}
 
@@ -222,17 +244,28 @@ namespace Temporal
 
 	void Control::textBoxKeyUp(Key::Enum key)
 	{
-		if(key == Key::ENTER)
+		if (key == Key::ESC)
 		{
 			_isTextBoxMode = false;
 			getEntity().getManager().clearFocusInputComponent();
+			_textbox = "";
+		}
+		else if(key == Key::ENTER)
+		{
 			if(_textChangedEvent)
 				(*_textChangedEvent)(_textbox.c_str());
+			_isTextBoxMode = false;
+			getEntity().getManager().clearFocusInputComponent();
+			_textbox = "";
 		}
 		else if(key == Key::BACKSPACE)
 		{
 			if (_textbox.size() > 0)
 				_textbox.resize(_textbox.size () - 1);
+		}
+		else if (key == Key::SPACE)
+		{
+			_textbox += ' ';
 		}
 		else if(key != Key::NONE)
 		{

@@ -168,7 +168,7 @@ namespace Temporal
 			Key::Enum key = _keysMap[e.key.keysym.sym];
 			_keys[key] = false;
 			raiseEvent(Message(MessageID::KEY_UP, &key));
-			if(key == Key::ESC)
+			if(key == Key::F4 && get().getKey(Key::LEFT_ALT))
 				Game::get().stop();
 			if (key == Key::F12)
 				GameStateEditor::loadEditor();
