@@ -13,7 +13,7 @@ namespace Temporal
 	class GameStateEditor : public ToolComponent
 	{
 	public:
-		GameStateEditor(int undo = 0) : _selectedEditable(0), _undo(undo) {}
+		GameStateEditor(int undo = 0) : _selectedEditable(0), _undo(undo), _idPrefix(0){}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -30,6 +30,7 @@ namespace Temporal
 		Timer _autoSaveTimer;
 		Editable* _selectedEditable;
 		int _undo;
+		const char* _idPrefix;
 
 		void setEditorMode();
 		void addEntity(Entity* newEntity, Hash id, bool bypassSave = false);

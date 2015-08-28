@@ -260,7 +260,7 @@ namespace Temporal
 		{
 			_label += ' ';
 		}
-		else if(key != Key::NONE)
+		else if(key > 0 && key < 256)
 		{
 			_label += static_cast<char>(key);
 		}

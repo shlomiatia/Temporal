@@ -14,8 +14,8 @@ namespace Temporal
 {
 	const Hash Renderer::TYPE = Hash("renderer");
 
-	Renderer::Renderer(const char* textueFile, const char* spritesheetFile, SceneNode* root, LayerType::Enum layer, Color color) :
-		_spriteSheetFile(spritesheetFile), _textureFile(textueFile), _spriteSheet(0), _root(root), _layer(layer), _color(color)
+	Renderer::Renderer(const char* textueFile, const char* spritesheetFile, SceneNode* root, LayerType::Enum layer, Color color, bool visible) :
+		_spriteSheetFile(spritesheetFile), _textureFile(textueFile), _spriteSheet(0), _root(root), _layer(layer), _color(color), _visible(visible)
 	{
 	}
 
@@ -54,6 +54,10 @@ namespace Temporal
 			float alpha = getFloatParam(message.getParam());
 			_color.setA(alpha);
 		}
+		else if (message.getID() == MessageID::SET_VISIBILITY)
+		{
+			_visible = getBoolParam(message.getParam());
+		}
 		else if(message.getID() == MessageID::DRAW)
 		{
 			draw();
@@ -66,6 +70,8 @@ namespace Temporal
 	
 	void Renderer::draw()
 	{
+		if (!_visible)
+			return;
 		const Vector& position = getPosition(*this);
 		const Side::Enum entityOrientation = *static_cast<const Side::Enum*>(raiseMessage(Message(MessageID::GET_ORIENTATION)));
 		

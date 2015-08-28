@@ -317,11 +317,11 @@ namespace Temporal
 		{
 			removePeriod();
 		}
-		else if (key == Key::OPEN_BRACKET)
+		else if (key == Key::OPEN_ANGLE_BRACKET)
 		{
 			setPeriod(Period::PAST);
 		}
-		else if (key == Key::CLOSE_BRACKET)
+		else if (key == Key::CLOSE_ANGLE_BRACKET)
 		{
 			setPeriod(Period::PRESENT);
 		}

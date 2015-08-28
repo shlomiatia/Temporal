@@ -42,7 +42,7 @@ namespace Temporal
 		float Control::getWidth() const	{ return _box.getWidth(); }
 		float Control::getHeight() const { return _box.getHeight();	}
 
-		void setText(const char* text) { getString() = text; }
+		void setText(const char* text) { if(text) getString() = text; }
 		const char* getText() const { return getString().c_str(); }
 
 		void setLeftMouseDownEvent(IAction1<const MouseParams&>* leftMouseDownEvent) { setEvent(_leftMouseDownEvent, leftMouseDownEvent); }

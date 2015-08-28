@@ -126,7 +126,7 @@ namespace Temporal
 			ComponentDebugInfo& info = **i;
 			if (info.getTexture() && entity.get(info.getId()) && !isNonPatrolControlStaticBody(info, entity))
 			{
-				Renderer* renderer = new Renderer(info.getTexture(), "", 0, LayerType::DEBUG_LAYER, Color(1.0f, 1.0f, 1.0f, info.isDebugging() ? 1.0f : 0.0f));
+				Renderer* renderer = new Renderer(info.getTexture(), "", 0, LayerType::DEBUG_LAYER, Color::White, info.isDebugging());
 				renderer->setBypassSave(true);
 				entity.add(renderer);
 			}
@@ -204,8 +204,8 @@ namespace Temporal
 					{
 						if ((**k).isBypassSave())
 						{
-							float alpha = info.isDebugging() ? 1.0f : 0.0f;
-							(**k).handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+							bool isDebugging = info.isDebugging();
+							(**k).handleMessage(Message(MessageID::SET_VISIBILITY, &isDebugging));
 						}
 					}
 

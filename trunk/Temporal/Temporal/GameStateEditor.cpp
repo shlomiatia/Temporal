@@ -137,7 +137,7 @@ namespace Temporal
 			serializer.save();
 			GameStateManager::get().syncLoadAndShow(previewFile);
 			GameState& gameState = GameStateManager::get().getStateById(Hash(previewFile));
-			Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR_PREVIEW"));
+			Entity* entity = new Entity(GameStateEditor::TYPE);
 			GameStateEditorPreview* preview = new GameStateEditorPreview();
 			entity->add(preview);
 			DebugManager* debugManager = new DebugManager();
@@ -169,8 +169,11 @@ namespace Temporal
 		{
 			if (getSelected())
 			{
+				
 				clearCursor();
-				Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(getSelected()->getEntity().getId())->clone();
+				Hash id = getSelected()->getEntity().getId();
+				_idPrefix = id.getString();
+				Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(id)->clone();
 				addEntity(newEntity, CURSOR_ENTITY_ID, true);
 				getEntity().getManager().setFocusInputComponent(this);
 			}
@@ -183,6 +186,8 @@ namespace Temporal
 		}
 		else if (key == Key::Z)
 		{
+			if (_undo <= 0)
+				return;
 			--_undo;
 			std::string undoFile = Utils::format("resources/game-states/undo/%d.xml", _undo);
 			GameStateManager::get().syncUnloadCurrent();
@@ -288,11 +293,14 @@ namespace Temporal
 	{
 		addUndo();
 		int idIndex = 0;
-		const char* key = getEntity().getManager().getGameState().getEntityTemplatesManager().getCurrentTemplateId().getString();
+		std::string key(_idPrefix);
+		int i = key.find_first_of("0123456789");
+		if (i != std::string::npos)
+			key.erase(i, key.size());
 		Hash id;
 		do
 		{
-			std::string idString = Utils::format("%s%d", key, idIndex);
+			std::string idString = Utils::format("%s%d", key.c_str(), idIndex);
 			id = Hash(idString.c_str());
 			idIndex++;
 		} while (getEntity().getManager().getEntity(id));
@@ -301,11 +309,20 @@ namespace Temporal
 		Entity* newEntity = getEntity().getManager().getGameState().getEntitiesManager().getEntity(CURSOR_ENTITY_ID)->clone();
 		addEntity(newEntity, id);
 		addEditableToEntity(*newEntity, *this);
+		
 		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
 		if (playerPeriod && playerPeriod->getPeriod() != Period::NONE)
 		{
-			TemporalPeriod* temporalPeriod = new TemporalPeriod(playerPeriod->getPeriod());
-			newEntity->add(temporalPeriod);
+			TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(newEntity->get(TemporalPeriod::TYPE));
+			if (temporalPeriod)
+			{
+				temporalPeriod->setPeriod(playerPeriod->getPeriod());
+			}
+			else
+			{
+				temporalPeriod = new TemporalPeriod(playerPeriod->getPeriod());
+				newEntity->add(temporalPeriod);
+			}
 		}
 	}
 
@@ -330,6 +347,7 @@ namespace Temporal
 
 	void GameStateEditor::setCursor()
 	{
+		_idPrefix = getEntity().getManager().getGameState().getEntityTemplatesManager().getCurrentTemplateId().getString();
 		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
 		addEntity(newEntity, CURSOR_ENTITY_ID, true);
 		DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
@@ -367,14 +385,12 @@ namespace Temporal
 
 	void GameStateEditor::loadEditor(const char* path, int undo)
 	{
-		Hash id = Hash("ENT_GAME_STATE_EDITOR");
-		if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(id))
-			return;
+		
 		if (!path)
 			path = GameStateManager::get().getCurrentStateId().getString();
 		GameStateManager::get().syncLoadAndShow(path);
 		GameState& gameState = GameStateManager::get().getStateById(Hash(path));
-		Entity* entity = new Entity(id);
+		Entity* entity = new Entity(GameStateEditor::TYPE);
 		GameStateEditor* editor = new GameStateEditor(undo);
 		entity->add(editor);
 		DebugManager* debugManager = new DebugManager(true);
