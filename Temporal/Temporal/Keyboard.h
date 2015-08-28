@@ -11,7 +11,8 @@ namespace Temporal
 	typedef IntKeyMap::const_iterator IntKeyMapIterator;
 	typedef std::unordered_map<Key::Enum, bool> KeyBoolMap;
 	typedef KeyBoolMap::const_iterator KeyBoolMapIterator;
-
+	typedef std::unordered_map<Key::Enum, Key::Enum> KeyKeyMap;
+	typedef KeyKeyMap::const_iterator KeyKeyMapIterator;
 
 	class Keyboard
 	{
@@ -26,9 +27,9 @@ namespace Temporal
 
 		bool getKey(Key::Enum key) const { return _keys.at(key); }
 	private:
-		// TODO:
 		IntKeyMap _keysMap;
 		KeyBoolMap _keys;
+		KeyKeyMap _shiftKeys;
 
 		void raiseEvent(Message& message) const;
 

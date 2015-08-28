@@ -14,7 +14,7 @@ namespace Temporal
 	class Renderer : public Component
 	{
 	public:
-		explicit Renderer(const char* textueFile = "", const char* spritesheetFile = "", SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White);
+		explicit Renderer(const char* textueFile = "", const char* spritesheetFile = "", SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White, bool visibile = true);
 		~Renderer();
 
 		Hash getType() const { return TYPE; }
@@ -29,7 +29,6 @@ namespace Temporal
 		SpriteSheet& getSpriteSheet() const { return *_spriteSheet; }
 		LayerType::Enum getLayer() const { return _layer; }
 	private:
-
 		std::string _textureFile;
 		std::string _spriteSheetFile;
 		std::shared_ptr<SpriteSheet> _spriteSheet;
@@ -37,6 +36,8 @@ namespace Temporal
 
 		LayerType::Enum _layer;
 		Color _color;
+		bool _visible;
+
 
 		void draw();
 		void draw(const SceneNode& sceneNode);

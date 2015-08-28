@@ -23,8 +23,7 @@ namespace Temporal
 		_keysMap[SDLK_F11] = Key::F11;
 		_keysMap[SDLK_F12] = Key::F12;
 
-		_keysMap[SDLK_GREATER] = Key::TILDE;
-		_keysMap[SDLK_BACKQUOTE] = Key::TILDE;
+		_keysMap[SDLK_BACKQUOTE] = Key::BACKQUOTE;
 		_keysMap[SDLK_1] = Key::D1;
 		_keysMap[SDLK_2] = Key::D2;
 		_keysMap[SDLK_3] = Key::D3;
@@ -37,8 +36,7 @@ namespace Temporal
 		_keysMap[SDLK_0] = Key::D0;
 		_keysMap[SDLK_MINUS] = Key::MINUS;
 		_keysMap[SDLK_KP_MINUS] = Key::MINUS;
-		_keysMap[SDLK_PLUS] = Key::PLUS;
-		_keysMap[SDLK_EQUALS] = Key::PLUS;
+		_keysMap[SDLK_EQUALS] = Key::EQUALS;
 		_keysMap[SDLK_KP_PLUS] = Key::PLUS;
 		_keysMap[SDLK_BACKSPACE] = Key::BACKSPACE;
 
@@ -53,8 +51,8 @@ namespace Temporal
 		_keysMap[SDLK_i] = Key::I;
 		_keysMap[SDLK_o] = Key::O;
 		_keysMap[SDLK_p] = Key::P;
-		_keysMap[SDLK_LEFTBRACKET] = Key::OPEN_BRACKET;
-		_keysMap[SDLK_RIGHTBRACKET] = Key::CLOSE_BRACKET;
+		_keysMap[SDLK_LEFTBRACKET] = Key::OPEN_ANGLE_BRACKET;
+		_keysMap[SDLK_RIGHTBRACKET] = Key::CLOSE_ANGLE_BRACKET;
 		_keysMap[SDLK_RETURN] = Key::ENTER;
 
 		_keysMap[SDLK_CAPSLOCK] = Key::CAPS_LOCK;
@@ -69,7 +67,7 @@ namespace Temporal
 		_keysMap[SDLK_l] = Key::L;
 		_keysMap[SDLK_SEMICOLON] = Key::SEMICOLON;
 		_keysMap[SDLK_BACKSLASH] = Key::BACKSLASH;
-		_keysMap[SDLK_QUOTE] = Key::QUOTE;
+		_keysMap[SDLK_QUOTE] = Key::APOSTROPHE; 
 
 		_keysMap[SDLK_LSHIFT] = Key::LEFT_SHIFT;
 		_keysMap[SDLK_z] = Key::Z;
@@ -82,16 +80,17 @@ namespace Temporal
 		_keysMap[SDLK_COMMA] = Key::COMMA;
 		_keysMap[SDLK_PERIOD] = Key::PERIOD;
 		_keysMap[SDLK_SLASH] = Key::SLASH;
+		_keysMap[SDLK_RSHIFT] = Key::RIGHT_SHIFT;
 
 		_keysMap[SDLK_LCTRL] = Key::LEFT_CTRL;
-		//_keysMap[SDLK_LSUPER] = Key::WINDOWS;
+		_keysMap[SDLK_LGUI] = Key::WINDOWS;
 		_keysMap[SDLK_LALT] = Key::LEFT_ALT;
 		_keysMap[SDLK_SPACE] = Key::SPACE;
 		_keysMap[SDLK_RALT] = Key::RIGHT_ALT;
 		_keysMap[SDLK_RCTRL] = Key::RIGHT_CTRL;
 
-		//_keysMap[SDLK_PRINT] = Key::PRINT_SCREEN;
-		//_keysMap[SDLK_SCROLLOCK] = Key::SCROLL_LOCK;
+		_keysMap[SDLK_PRINTSCREEN] = Key::PRINT_SCREEN;
+		_keysMap[SDLK_SCROLLLOCK] = Key::SCROLL_LOCK;
 		_keysMap[SDLK_PAUSE] = Key::PAUSE;
 		_keysMap[SDLK_INSERT] = Key::INSERT;
 		_keysMap[SDLK_HOME] = Key::HOME;
@@ -105,7 +104,7 @@ namespace Temporal
 		_keysMap[SDLK_DOWN] = Key::DOWN;
 		_keysMap[SDLK_RIGHT] = Key::RIGHT;
 
-		//_keysMap[SDLK_NUMLOCK] = Key::NUM_LOCK;
+		_keysMap[SDLK_NUMLOCKCLEAR] = Key::NUM_LOCK;
 		_keysMap[SDLK_KP_DIVIDE] = Key::P_DIVIDE;
 		_keysMap[SDLK_KP_MULTIPLY] = Key::P_MULTIPLY;
 		_keysMap[SDLK_KP_MINUS] = Key::P_MINUS;
@@ -123,6 +122,54 @@ namespace Temporal
 		_keysMap[SDLK_KP_3] = Key::P3;
 		_keysMap[SDLK_KP_0] = Key::P0;
 
+		_shiftKeys[Key::BACKQUOTE] = Key::TILDE;
+		_shiftKeys[Key::D1] = Key::EXCLAMATION_MARK;
+		_shiftKeys[Key::D2] = Key::AT;
+		_shiftKeys[Key::D3] = Key::HASH;
+		_shiftKeys[Key::D4] = Key::DOLLAR;
+		_shiftKeys[Key::D5] = Key::PERCENT;
+		_shiftKeys[Key::D6] = Key::CARET;
+		_shiftKeys[Key::D7] = Key::AMPERSAND;
+		_shiftKeys[Key::D8] = Key::ASTERISK;
+		_shiftKeys[Key::D9] = Key::OPEN_PARENTHESES;
+		_shiftKeys[Key::D0] = Key::CLOSE_PARENTHESES;
+		_shiftKeys[Key::MINUS] = Key::UNDERSCORE;
+		_shiftKeys[Key::EQUALS] = Key::PLUS;
+		_shiftKeys[Key::Q] = Key::CQ;
+		_shiftKeys[Key::W] = Key::CW;
+		_shiftKeys[Key::E] = Key::CE;
+		_shiftKeys[Key::R] = Key::CR;
+		_shiftKeys[Key::T] = Key::CT;
+		_shiftKeys[Key::Y] = Key::CY;
+		_shiftKeys[Key::U] = Key::CU;
+		_shiftKeys[Key::I] = Key::CI;
+		_shiftKeys[Key::O] = Key::CO;
+		_shiftKeys[Key::P] = Key::CP;
+		_shiftKeys[Key::OPEN_ANGLE_BRACKET] = Key::OPEN_CURLY_BRACKET;
+		_shiftKeys[Key::CLOSE_ANGLE_BRACKET] = Key::CLOSE_CURLY_BRACKET;
+		_shiftKeys[Key::A] = Key::CA;
+		_shiftKeys[Key::S] = Key::CS;
+		_shiftKeys[Key::D] = Key::CD;
+		_shiftKeys[Key::F] = Key::CF;
+		_shiftKeys[Key::G] = Key::CG;
+		_shiftKeys[Key::H] = Key::CH;
+		_shiftKeys[Key::J] = Key::CJ;
+		_shiftKeys[Key::K] = Key::CK;
+		_shiftKeys[Key::L] = Key::CL;
+		_shiftKeys[Key::SEMICOLON] = Key::COLON;
+		_shiftKeys[Key::APOSTROPHE] = Key::QUOTATION; 
+		_shiftKeys[Key::BACKSLASH] = Key::PIPE;
+		_shiftKeys[Key::Z] = Key::CZ;
+		_shiftKeys[Key::X] = Key::CX;
+		_shiftKeys[Key::C] = Key::CC;
+		_shiftKeys[Key::V] = Key::CV;
+		_shiftKeys[Key::B] = Key::CB;
+		_shiftKeys[Key::N] = Key::CN;
+		_shiftKeys[Key::M] = Key::CM;
+		_shiftKeys[Key::COMMA] = Key::LESS_THEN;
+		_shiftKeys[Key::PERIOD] = Key::GREATHER_THEN;
+		_shiftKeys[Key::SLASH] = Key::QUESTION_MARK;
+
 		for(IntKeyMapIterator i = _keysMap.begin(); i != _keysMap.end(); ++i)
 		{
 			_keys[i->second] = false;
@@ -139,6 +186,7 @@ namespace Temporal
 		else
 		{
 			ComponentList& components = GameStateManager::get().getCurrentState().getEntitiesManager().getInputComponents();
+
 			// No iteration because we might add stuff to keyboard
 			for (int i = 0; i < components.size(); ++i)
 				components[i]->handleMessage(message);
@@ -156,22 +204,40 @@ namespace Temporal
 		else if (e.type == SDL_KEYDOWN)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
-			if(!_keys[key])
+			if (_keys[Key::LEFT_SHIFT] || _keys[Key::RIGHT_SHIFT])
 			{
-				_keys[key] = true;
-				raiseEvent(Message(MessageID::KEY_DOWN, &key));
+				KeyKeyMapIterator i = _shiftKeys.find(key);
+				if (i != _shiftKeys.end())
+				{
+					key = i->second;
+				}
 			}
+			_keys[key] = true;
+			raiseEvent(Message(MessageID::KEY_DOWN, &key));
 			
 		}
 		else if (e.type == SDL_KEYUP)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
 			_keys[key] = false;
+			
+			KeyKeyMapIterator i = _shiftKeys.find(key);
+			if (i != _shiftKeys.end())
+			{
+				if (_keys[Key::LEFT_SHIFT] || _keys[Key::RIGHT_SHIFT])
+					key = i->second;
+				_keys[key] = false;
+			}
+			
 			raiseEvent(Message(MessageID::KEY_UP, &key));
 			if(key == Key::F4 && get().getKey(Key::LEFT_ALT))
 				Game::get().stop();
 			if (key == Key::F12)
+			{
+				if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(GameStateEditor::TYPE))
+					return;
 				GameStateEditor::loadEditor();
+			}
 		}
 	}
 }
