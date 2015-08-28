@@ -21,8 +21,10 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-
 		Component* clone() const { return new Light(_color, _radius, _center, _size, _activate); }
+
+		bool isActivated() const { return _activate; }
+		void setActivated(bool activated) { _activate = activated; }
 
 		static const Hash TYPE;
 	private:

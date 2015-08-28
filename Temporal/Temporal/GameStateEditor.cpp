@@ -15,6 +15,10 @@
 #include "TemporalPeriod.h"
 #include "ComponentEditors.h"
 #include "MovingPlatform.h"
+#include "Button.h"
+#include "Lighting.h"
+#include "Laser.h"
+#include "Door.h"
 #include <sstream>
 
 namespace Temporal
@@ -190,15 +194,46 @@ namespace Temporal
 			{
 				return;
 			}
-			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(Hash("moving-platform")));
-			if (!platform)
+			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(MovingPlatform::TYPE));
+			if (platform)
 			{
-				return;
+				Entity* entity = new Entity(Hash("moving-platform-editor"));
+				entity->setBypassSave(true);
+				entity->add(new MovingPlatformEditor(*platform));
+				getEntity().getManager().add(entity);
 			}
-			Entity* entity = new Entity(Hash("moving-platform-editor"));
-			entity->setBypassSave(true);
-			entity->add(new MovingPlatformEditor(*platform));
-			getEntity().getManager().add(entity);
+			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
+			if (button)
+			{
+				Entity* entity = new Entity(Hash("button-editor"));
+				entity->setBypassSave(true);
+				entity->add(new ButtonEditor(*button));
+				getEntity().getManager().add(entity);
+			}
+			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(Laser::TYPE));
+			if (laser)
+			{
+				Entity* entity = new Entity(Hash("laser-editor"));
+				entity->setBypassSave(true);
+				entity->add(new LaserEditor(*laser));
+				getEntity().getManager().add(entity);
+			}
+			Light* light = static_cast<Light*>(getSelected()->getEntity().get(Light::TYPE));
+			if (light)
+			{
+				Entity* entity = new Entity(Hash("light-editor"));
+				entity->setBypassSave(true);
+				entity->add(new LightEditor(*light));
+				getEntity().getManager().add(entity);
+			}
+			Door* door = static_cast<Door*>(getSelected()->getEntity().get(Door::TYPE));
+			if (door)
+			{
+				Entity* entity = new Entity(Hash("door-editor"));
+				entity->setBypassSave(true);
+				entity->add(new DoorEditor(*door));
+				getEntity().getManager().add(entity);
+			}
 		}
 	}
 
@@ -332,11 +367,14 @@ namespace Temporal
 
 	void GameStateEditor::loadEditor(const char* path, int undo)
 	{
+		Hash id = Hash("ENT_GAME_STATE_EDITOR");
+		if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(id))
+			return;
 		if (!path)
 			path = GameStateManager::get().getCurrentStateId().getString();
 		GameStateManager::get().syncLoadAndShow(path);
 		GameState& gameState = GameStateManager::get().getStateById(Hash(path));
-		Entity* entity = new Entity(Hash("ENT_GAME_STATE_EDITOR"));
+		Entity* entity = new Entity(id);
 		GameStateEditor* editor = new GameStateEditor(undo);
 		entity->add(editor);
 		DebugManager* debugManager = new DebugManager(true);

@@ -244,32 +244,25 @@ namespace Temporal
 
 	void Control::textBoxKeyUp(Key::Enum key)
 	{
-		if (key == Key::ESC)
-		{
-			_isTextBoxMode = false;
-			getEntity().getManager().clearFocusInputComponent();
-			_textbox = "";
-		}
-		else if(key == Key::ENTER)
+		if(key == Key::ENTER)
 		{
 			if(_textChangedEvent)
-				(*_textChangedEvent)(_textbox.c_str());
+				(*_textChangedEvent)(_label.c_str());
 			_isTextBoxMode = false;
 			getEntity().getManager().clearFocusInputComponent();
-			_textbox = "";
 		}
 		else if(key == Key::BACKSPACE)
 		{
-			if (_textbox.size() > 0)
-				_textbox.resize(_textbox.size () - 1);
+			if (_label.size() > 0)
+				_label.resize(_label.size() - 1);
 		}
 		else if (key == Key::SPACE)
 		{
-			_textbox += ' ';
+			_label += ' ';
 		}
 		else if(key != Key::NONE)
 		{
-			_textbox += static_cast<char>(key);
+			_label += static_cast<char>(key);
 		}
 	}
 	
