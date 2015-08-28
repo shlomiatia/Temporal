@@ -18,6 +18,9 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return new Laser(_friendly); };
 		static const Hash TYPE;
+
+		bool isFriendly() const { return _friendly; }
+		void setFriendly(bool friendly) { _friendly = friendly; }
 	private:
 		const OBB* _platform;
 		bool _friendly;

@@ -15,7 +15,6 @@
 #include "Math.h"
 #include "GameStateEditor.h"
 #include "Keyboard.h"
-#include "Button.h"
 
 namespace Temporal
 {
@@ -133,22 +132,10 @@ namespace Temporal
 		fixFlatOBB(shape);
 		if (intersects(shape, params.getPosition()))
 		{
-			if (Keyboard::get().getKey(Key::LEFT_SHIFT))
-			{
-				if (_editor.getSelected())
-				{
-					Button* button = static_cast<Button*>(_editor.getSelected()->getEntity().get(Button::TYPE));
-					if (button)
-						button->setTarget(getEntity().getId());
-				}
-			}
-			else 
-			{
-				_editor.setSelected(this);
-				reset();
-				_translation = true;
-				_translationOffset = params.getPosition() - getPosition(*this);
-			}
+			_editor.setSelected(this);
+			reset();
+			_translation = true;
+			_translationOffset = params.getPosition() - getPosition(*this);
 			params.setHandled(true);
 		}
 		else if (!_translationOnly)

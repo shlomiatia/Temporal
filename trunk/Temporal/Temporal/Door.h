@@ -11,9 +11,11 @@ namespace Temporal
 		Door(bool closed = true) { _closed = true; }
 
 		Hash getType() const { return TYPE; }
-
 		Component* clone() const { return new Door(_closed); }
 		void handleMessage(Message& message);
+
+		bool isClosed() const { return _closed; }
+		void setClosed(bool closed) { _closed = closed; set(); }
 
 		static const Hash TYPE;
 

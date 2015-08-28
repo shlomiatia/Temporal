@@ -79,7 +79,6 @@ namespace Temporal
 		bool _isTextBoxMode;
 		bool _isCheckbox;
 		std::string _label;
-		std::string _textbox;
 
 		IAction1<const MouseParams&>* _leftMouseDownEvent;
 		IAction1<const MouseParams&>* _leftMouseClickEvent;
@@ -109,8 +108,8 @@ namespace Temporal
 		void drawText();
 		void drawBorder();
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
-		const std::string& getString() const { return _isTextBoxMode ? _textbox : _label; }
-		std::string& getString() { return _isTextBoxMode ? _textbox : _label; }
+		const std::string& getString() const { return _label; }
+		std::string& getString() { return _label; }
 		void buttonKeyUp(Key::Enum key);
 		void textBoxKeyUp(Key::Enum key);
 		void mouseDown(MouseParams& params);
