@@ -61,8 +61,7 @@ namespace Temporal
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		//unsigned int* data = new unsigned int[((static_cast<int>(size.getX()) * static_cast<int>(size.getY()))* 4 * sizeof(unsigned int))];
-		int internalFormat = greyscale ? GL_R8 : GL_RGBA;
+		int internalFormat = GL_RGBA;
 		int format = greyscale ? GL_RED : GL_RGBA;
 		int width = static_cast<int>(size.getX());
 		int height = static_cast<int>(size.getY());

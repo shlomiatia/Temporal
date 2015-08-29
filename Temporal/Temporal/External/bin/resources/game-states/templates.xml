@@ -180,8 +180,13 @@
 			</obb>
 		</fixture>
 	</dynamic-body>
-	<renderer layer="5" texture="resources/textures/laser.png">
-		<color r="1.0" g="0.0" b="0.0" />
+	<renderer layer="5" sprite-sheet="resources/spritesheets/emitter.xml">
+ 		<scene-node id="SCN_ROOT" transform="1">
+			<scene-node id="SCN_LASER" sprite-group="SCN_LASER" />
+			<scene-node id="SCN_EMITTER" sprite-group="SCN_EMITTER" >
+				<translation x="0" y="-8" />
+			</scene-node>
+		</scene-node>
 	</renderer>
 </entity>
 <entity id="ENT_BUTTON">
@@ -232,6 +237,11 @@
 	<light>
 		<color r="0.5" g="0.5" b="0.5" />
 	</light>
+	<renderer layer="5" sprite-sheet="resources/spritesheets/emitter.xml">
+ 		<scene-node id="SCN_ROOT" sprite-group="SCN_EMITTER">
+				<translation x="0" y="-8" />
+		</scene-node>
+	</renderer>
 </entity>
 <entity id="ENT_CAMERA_CONTROL">
 	<transform />

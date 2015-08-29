@@ -31,7 +31,6 @@ namespace Temporal
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(SENSOR_ID, Key::R));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(SIGHT_ID, Key::U));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(CAMERA_CONTROL_ID, Key::I, false, "resources/textures/camera-control.png"));
-		_componentsDebugInfo.push_back(new ComponentDebugInfo(LIGHT_ID, Key::O, false, "resources/textures/light-debug.png"));
 	}
 
 	DebugLayer::~DebugLayer()

@@ -12,6 +12,7 @@
 namespace Temporal
 {
 	const Hash Laser::TYPE = Hash("laser");
+	const Hash LASER_SCENE_NODE = Hash("SCN_LASER");
 
 	static const float SPEED_PER_SECOND = 128.0f;
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER | CollisionCategory::CHARACTER;
@@ -70,6 +71,7 @@ namespace Temporal
 	void Laser::setLength(float length)
 	{
 		SceneNode* root = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
+		root = root->get(LASER_SCENE_NODE);
 		root->setTranslation(Vector(0.0f, length / 2.0f));
 		root->setScale(Vector(1.0f, abs(length)));
 	}
