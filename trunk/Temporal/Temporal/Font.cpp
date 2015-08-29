@@ -27,7 +27,7 @@ namespace Temporal
 			if(error != 0)
 				abort();
 
-			textureSize.setX(textureSize.getX() + face->glyph->bitmap.width + 1.0f);
+			textureSize.setX(textureSize.getX() + static_cast<float>(face->glyph->bitmap.width) + 1.0f);
 			textureSize.setY(std::max(textureSize.getY(), static_cast<float>(face->glyph->bitmap.rows)));
 		}
 

@@ -29,6 +29,8 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return new Control(); }
 
+		void setFontSize(int fontSize) { _fontSize = fontSize; }
+		int getFontSize() const { return _fontSize; }
 		void setBackgroundColor(const Color& backgroundColor) { _backgroundColor = backgroundColor; }
 		const Color& getBackgroundColor() const { return _backgroundColor; }
 		void setForegroundColor(const Color& foregroundColor) { _foregroundColor = foregroundColor; }
