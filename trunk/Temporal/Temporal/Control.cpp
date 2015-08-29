@@ -204,7 +204,7 @@ namespace Temporal
 				}
 				if (_isCheckbox)
 				{
-					_label = _label == "V" ? "" : "V";
+					_label = _label == "V" ? "X" : "V";
 					if (_checkChangedEvent)
 						(*_checkChangedEvent)(_label == "V");
 				}
@@ -278,7 +278,12 @@ namespace Temporal
 	void Control::drawText()
 	{
 		const Vector& position = getPosition(*this);
-		_font->draw(getString().c_str(), position, _foregroundColor);
+		bool showCursor = _isTextBoxMode && fmodf(Time::now(), 1.0f) >= 0.5f;
+		if (showCursor)
+			_label += '|';
+		_font->draw(_label.c_str(), position, _foregroundColor, showCursor);
+		if (showCursor)
+			_label.resize(_label.size() - 1);
 	}
 
 	void Control::drawBorder()

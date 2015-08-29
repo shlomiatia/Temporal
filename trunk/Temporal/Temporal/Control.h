@@ -44,8 +44,8 @@ namespace Temporal
 		float Control::getWidth() const	{ return _box.getWidth(); }
 		float Control::getHeight() const { return _box.getHeight();	}
 
-		void setText(const char* text) { if(text) getString() = text; }
-		const char* getText() const { return getString().c_str(); }
+		void setText(const char* text) { if(text) _label = text; }
+		const char* getText() const { return _label.c_str(); }
 
 		void setLeftMouseDownEvent(IAction1<const MouseParams&>* leftMouseDownEvent) { setEvent(_leftMouseDownEvent, leftMouseDownEvent); }
 		void setLeftMouseClickEvent(IAction1<const MouseParams&>* leftMouseClickEvent) { setEvent(_leftMouseClickEvent, leftMouseClickEvent); }
@@ -110,8 +110,6 @@ namespace Temporal
 		void drawText();
 		void drawBorder();
 		void setEvent(IAction1<const MouseParams&>*& prop, IAction1<const MouseParams&>* value);
-		const std::string& getString() const { return _label; }
-		std::string& getString() { return _label; }
 		void buttonKeyUp(Key::Enum key);
 		void textBoxKeyUp(Key::Enum key);
 		void mouseDown(MouseParams& params);
