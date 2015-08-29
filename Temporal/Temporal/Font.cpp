@@ -21,7 +21,7 @@ namespace Temporal
 			abort();
 
 		Vector textureSize = Vector::Zero;
-		for(char i = '!'; i <= '~'; ++i)
+		for(unsigned char i = '!'; i <= '~'; ++i)
 		{
 			error = FT_Load_Char(face, i, FT_LOAD_RENDER);
 			if(error != 0)
@@ -36,7 +36,7 @@ namespace Temporal
 
 		int x = 0;
 		int j = 0;
-		for(char i = '!'; i <= '~'; ++i)
+		for(unsigned char i = '!'; i <= '~'; ++i)
 		{
 			FT_Load_Char(face, i, FT_LOAD_RENDER);
 			if(error != 0)
@@ -80,7 +80,7 @@ namespace Temporal
 		delete _texture;
 	}
 
-	void Font::draw(const char* string, const Vector& position, const Color& color)
+	void Font::draw(const char* string, const Vector& position, const Color& color, bool ignoreLastCharForWith)
 	{
 		Vector currentPosition(position);
 		float width = 0.0f;
@@ -96,7 +96,8 @@ namespace Temporal
 				continue;
 			}
 			const Glyph& glyph = _glyphs[c];
-			width += glyph.getAdvance().getX();
+			if (!ignoreLastCharForWith || string[i + 1])
+				width += glyph.getAdvance().getX();
 			height = std::max(height, glyph.getBearing().getY());
 		}
 		currentPosition.setX(currentPosition.getX() - width / 2.0f);

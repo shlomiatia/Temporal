@@ -284,6 +284,7 @@ namespace Temporal
 		HashList ids;
 		ids.push_back(GameStateEditor::TYPE);
 		ids.push_back(Editable::TYPE);
+		ids.push_back(Hash("control"));
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(false);
 
@@ -371,6 +372,8 @@ namespace Temporal
 
 	void GameStateEditor::moveCamera(const Vector& direction)
 	{
+		if (getEntity().getManager().getFocusInputComponent() && getEntity().getManager().getFocusInputComponent() != this)
+			return;
 		Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
 		camera.translate(direction);
 	}
