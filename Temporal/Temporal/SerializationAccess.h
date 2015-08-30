@@ -52,6 +52,7 @@ namespace Temporal
 	class Laser;
 	class Button;
 	class Door;
+	class ParticleSample;
 
 	// Singletons
 	class GameSaverLoader;
@@ -319,9 +320,19 @@ namespace Temporal
 			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);
 			serializer.serialize("velocity", particleEmitter._velocity);
-			serializer.serialize("attachment", particleEmitter._attachment);
+//			serializer.serialize("attachment", particleEmitter._attachment);
 			serializer.serializeRadians("center", particleEmitter._directionCenter);
 			serializer.serializeRadians("size", particleEmitter._directionSize);
+			serializer.serialize("particle-sample", particleEmitter._particleSamples);
+		}
+
+		template<class T>
+		static void serialize(const char* key, ParticleSample& particleSample, T& serializer)
+		{
+			serializer.serialize("interpolation", particleSample._interpolation);
+			serializer.serialize("scale", particleSample._scale);
+			serializer.serialize("color", particleSample._color);
+//			serializer.serializeRadians("rotation", particleSample._rotation);
 		}
 		
 		template<class T>

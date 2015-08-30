@@ -50,7 +50,7 @@ namespace Temporal
 	Control* ToolComponent::addCheckBox(Hash id, const AABB& shape, bool value, IAction1<bool>* checkChangedEvent)
 	{
 		Control* control = addControl(id, shape);
-		control->setText(value ? "V" : "");
+		control->setText(value ? "V" : "X");
 		control->setCheckChangedEvent(checkChangedEvent);
 		return control;
 	}
