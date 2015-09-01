@@ -10,10 +10,42 @@
 
 namespace Temporal
 {
+	class ParticleSample
+	{
+	public:
+		explicit ParticleSample(float interpolation = 0.0f, const Vector& scale = Vector(1.0f, 1.0f), Color color = Color::White, float rotation = 0.0f) :
+			_interpolation(interpolation), _scale(scale), _color(color), _rotation(rotation) {}
+
+		void setInterpolation(float interpolation) { _interpolation = interpolation; }
+		float getInterpolation() const { return _interpolation; }
+		void setRotation(float rotation) { _rotation = rotation; }
+		float getRotation() const { return _rotation; }
+		void setScale(const Vector& scale) { _scale = scale; }
+		const Vector& getScale() const { return _scale; }
+		void setColor(const Color& color) { _color = color; }
+		const Color& getColor() const { return _color; }
+
+		ParticleSample* clone() const { return new ParticleSample(_interpolation, _scale, _color, _rotation); }
+
+	private:
+		float _interpolation;
+		Vector _scale;
+		Color _color;
+		float _rotation;
+
+		ParticleSample(const ParticleSample&);
+		ParticleSample& operator=(const ParticleSample&);
+
+		friend class SerializationAccess;
+	};
+
+	typedef std::vector<ParticleSample*> ParticleSampleList;
+	typedef ParticleSampleList::const_iterator ParticleSampleIterator;
+
 	class Particle
 	{
 	public:
-		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _angle(0.0f), _isAlive(true) {}
+		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _rotation(0.0f), _isAlive(true), _scale(Vector(1.0f, 1.0f)), _color(Color::White) {}
 		void resetAge(float time = 0.0f) { _ageTimer.reset(time); }
 		float getAge() const { return _ageTimer.getElapsedTime(); }
 		const Vector& getPosition() const { return _position; }
@@ -22,15 +54,21 @@ namespace Temporal
 		void setVelocity(const Vector& velocity) { _velocity = velocity; }
 		bool isAlive() const { return _isAlive; }
 		void setAlive(bool isAlive) { _isAlive = isAlive; } 
-		float getAngle() const { return _angle; }
-		void setAngle(float angle) { _angle = angle; }
+		float getRotation() const { return _rotation; }
+		void setRotation(float rotation) { _rotation = rotation; }
+		const Vector& getScale() const { return _scale; }
+		void setScale(const Vector& scale) { _scale = scale; }
+		const Color& getColor() const { return _color; }
+		void setColor(const Color& color) { _color = color; }
 
-		void update(float time);
+		void update(float time, float gravity);
 	private:
 
 		Vector _position;
 		Vector _velocity;
-		float _angle;
+		float _rotation;
+		Vector _scale;
+		Color _color;
 		Timer _ageTimer;
 		bool _isAlive;
 
@@ -44,15 +82,16 @@ namespace Temporal
 	{
 	public:
 		ParticleEmitter(const char* textureFile = "", const char* spritesheetFile = "", float lifetime = 0.0f, float birthTreshold = 0.0f, float birthRadius = 0.0f, float velocity = 0.0f, 
-			float directionCenter = 0.0f, float directionSize = 0.0f, Hash attachment = Hash::INVALID) :
+			float directionCenter = 0.0f, float directionSize = 0.0f, float minScale = 1.0f, float maxScale = 1.0f,float gravity = 0.0f/*, Hash attachment = Hash::INVALID*/) :
 			_textureFile(textureFile), _spritesheetFile(spritesheetFile), _lifetime(lifetime), _birthThreshold(birthTreshold), _birthRadius(birthRadius), _velocity(velocity), _directionCenter(directionCenter), 
-			_directionSize(directionSize), _attachment(attachment), _birthIndex(0), _particles(0) {}
+			_directionSize(directionSize), _minScale(minScale), _maxScale(maxScale), _gravity(gravity), _birthIndex(0), _particles(0) /*, _attachment(attachment)*/{}
 		~ParticleEmitter();
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _lifetime, _birthThreshold, _birthRadius, _velocity, _directionCenter, _directionSize, _attachment); }
+		Component* clone() const 
+			{ return new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _lifetime, _birthThreshold, _birthRadius, _velocity, _directionCenter, _directionSize, _minScale, _maxScale, _gravity /*, _attachment*/); }
 
 		static const Hash TYPE;
 	private:
@@ -67,17 +106,23 @@ namespace Temporal
 		float _velocity;
 		float _directionCenter;
 		float _directionSize;
+		float _minScale;
+		float _maxScale;
+		float _gravity;
+		// Hash _attachment;
 
 		Timer _birthTimer;
 		int _birthIndex;
 		Particle* _particles;
-		Hash _attachment;
+
+		ParticleSampleList _particleSamples;
 		
 		void init();
 		void update(float framePeriod);
 		void draw();
 		int getLength();
-		void emit(Vector emitterPosition, float emitterAngle, int length);
+		void emit(const Vector& position, float age);
+		void updateParticle(Particle& particle);
 
 		friend class SerializationAccess;
 	};
