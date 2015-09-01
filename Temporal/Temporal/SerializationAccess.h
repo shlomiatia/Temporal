@@ -321,8 +321,11 @@ namespace Temporal
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);
 			serializer.serialize("velocity", particleEmitter._velocity);
 //			serializer.serialize("attachment", particleEmitter._attachment);
-			serializer.serializeRadians("center", particleEmitter._directionCenter);
-			serializer.serializeRadians("size", particleEmitter._directionSize);
+			serializer.serializeRadians("direction-center", particleEmitter._directionCenter);
+			serializer.serializeRadians("direction-size", particleEmitter._directionSize);
+			serializer.serialize("min-scale", particleEmitter._minScale);
+			serializer.serialize("max-scale", particleEmitter._maxScale);
+			serializer.serialize("gravity", particleEmitter._gravity);
 			serializer.serialize("particle-sample", particleEmitter._particleSamples);
 		}
 
@@ -332,7 +335,7 @@ namespace Temporal
 			serializer.serialize("interpolation", particleSample._interpolation);
 			serializer.serialize("scale", particleSample._scale);
 			serializer.serialize("color", particleSample._color);
-//			serializer.serializeRadians("rotation", particleSample._rotation);
+			serializer.serializeRadians("rotation", particleSample._rotation);
 		}
 		
 		template<class T>
