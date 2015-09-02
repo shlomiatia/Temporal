@@ -10,7 +10,7 @@
 #include "Utils.h"
 #include "Game.h"
 #include "Mouse.h"
-#include "Math.h"
+#include "ToolsUtils.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
 #include "ComponentEditors.h"
@@ -76,8 +76,8 @@ namespace Temporal
 			OBB shape = Editable::getShape(*getEntity().getManager().getEntity(CURSOR_ENTITY_ID));
 			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
 			Vector position = Mouse::get().getOffsetPosition();
-			position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
-			position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
+			position.setX(ToolsUtils::snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+			position.setY(ToolsUtils::snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
 			getEntity().getManager().sendMessageToEntity(CURSOR_ENTITY_ID, Message(MessageID::SET_POSITION, &position));
 		}
 		_autoSaveTimer.update(framePeriod);
@@ -364,8 +364,8 @@ namespace Temporal
 		Vector position = Mouse::get().getOffsetPosition();
 		OBB shape = Editable::getShape(*newEntity);
 		float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
-		position.setX(snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
-		position.setY(snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
+		position.setX(ToolsUtils::snap(position.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+		position.setY(ToolsUtils::snap(position.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
 
 		newEntity->get(TRANSFORM)->handleMessage(Message(MessageID::SET_POSITION, &position));
 	}

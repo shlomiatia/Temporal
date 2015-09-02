@@ -1,5 +1,4 @@
 #include "Math.h"
-#include "Keyboard.h"
 #include <algorithm>
 #include <assert.h>
 
@@ -26,38 +25,6 @@ namespace Temporal
 	{
 		bool bb = fabsf(a - b) < EPSILON; 
 		return bb;
-	}
-
-	float easeInOutBezier(float interpolation, float startValue, float endValue)
-	{
-		float inverseInterpolation = 1 - interpolation;
-		return startValue * inverseInterpolation + endValue * interpolation;
-
-		// TODO: Check if it's usefull. If so, interpolation between aim/fire should be linear
-		/*return startValue * (powf(inverseInterpolation, 3.0f) + 3 * powf(inverseInterpolation, 2.0f) * interpolation) +
-		endValue * (powf(interpolation, 3.0f) + 3 * powf(interpolation, 2.0f) * inverseInterpolation);*/
-	}
-
-	float snap(float val, float target, float maxSnap)
-	{
-		if (Keyboard::get().getKey(Key::LEFT_SHIFT))
-		{
-			return val;
-		}
-		float valModTarget = fmodf(val, target);
-		float targetMinusValModTarget = target - valModTarget;
-		if (valModTarget <= maxSnap)
-			return val - valModTarget;
-		else if (targetMinusValModTarget <= maxSnap)
-			return val + targetMinusValModTarget;
-		else
-			return val;
-	}
-
-	float snap(float val, float target, float maxSnap, float size)
-	{
-		float snapExtra = target - fmodf(size, target);
-		return snap(val + snapExtra, target, maxSnap) - snapExtra;
 	}
 
 	void assertAngle(float angle, float range)

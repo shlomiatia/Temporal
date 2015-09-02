@@ -315,7 +315,7 @@ namespace Temporal
 		static void serialize(const char* key, ParticleEmitter& particleEmitter, T& serializer)
 		{
 			serializer.serialize("lifetime", particleEmitter._lifetime);
-			serializer.serialize("birth-threshold", particleEmitter._birthThreshold);
+			serializer.serialize("size", particleEmitter._size);
 			serializer.serialize("texture", particleEmitter._textureFile);
 			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);

@@ -230,6 +230,12 @@
     <ClInclude Include="ComponentEditors.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationUtils.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolsUtils.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -438,6 +444,12 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="ComponentEditors.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationUtils.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolsUtils.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>

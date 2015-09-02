@@ -10,7 +10,7 @@
             <transform orientation="1">
                 <position x="448.000000" y="16.000000"/>
             </transform>135 67.5 101.25
-            <particle-emitter lifetime="12" birth-threshold="0.12" texture="resources/textures/spark.png" sprite-sheet="" birth-radius="450.000000" velocity="50.000000" direction-center="-101.25000000" direction-size="67.5000000" min-scale="0.25" max-scale="0.5" gravity="-50">
+            <particle-emitter lifetime="12" size="100" texture="resources/textures/spark.png" sprite-sheet="" birth-radius="450.000000" velocity="50.000000" direction-center="-101.25000000" direction-size="67.5000000" min-scale="0.25" max-scale="0.5" gravity="-50">
                 <particle-sample interpolation="0.000000" rotation="0">
                     <scale x="1.00000" y="1.000000"/>
                     <color r="1.000000" g="1.000000" b="1.0000000" a="0.000000"/>

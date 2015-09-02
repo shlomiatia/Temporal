@@ -5,7 +5,7 @@
 #include "GameEnums.h"
 #include "MessageUtils.h"
 #include "Sensor.h"
-#include "Math.h"
+#include "AnimationUtils.h"
 
 namespace Temporal
 {
@@ -106,7 +106,7 @@ namespace Temporal
 			{
 				if (interpolationX < 1.0f)
 				{
-					float newX = easeInOutBezier(interpolationX, playerPosition.getX(), position.getX());
+					float newX = AnimationUtils::transition(interpolationX, playerPosition.getX(), position.getX());
 					position.setX(newX);
 				}
 				

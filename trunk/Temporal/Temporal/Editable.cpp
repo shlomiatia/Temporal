@@ -6,7 +6,7 @@
 #include "StaticBody.h"
 #include "Fixture.h"
 #include "Grid.h"
-#include "Math.h"
+#include "ToolsUtils.h"
 #include "Renderer.h"
 #include "SpriteSheet.h"
 #include "SceneNode.h"
@@ -227,15 +227,15 @@ namespace Temporal
 			OBB shape = getShape();
 			float tileSize = getEntity().getManager().getGameState().getGrid().getTileSize();
 			Vector newPosition = params.getPosition() - _translationOffset;
-			newPosition.setX(snap(newPosition.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
-			newPosition.setY(snap(newPosition.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
+			newPosition.setX(ToolsUtils::snap(newPosition.getX(), tileSize / 4.0f, 8.0f, shape.getRadiusX()));
+			newPosition.setY(ToolsUtils::snap(newPosition.getY(), tileSize / 4.0f, 8.0f, shape.getRadiusY()));
 			raiseMessage(Message(MessageID::SET_POSITION, &newPosition));
 			params.setHandled(true);
 		}
 		else if(_rotation)
 		{
 			Vector vector = (params.getPosition() - getPosition(*this)).normalize();
-			float angle = snap(vector.getAngle(), AngleUtils::radian().ANGLE_15_IN_RADIANS, AngleUtils::degreesToRadians(5.0f));
+			float angle = ToolsUtils::snap(vector.getAngle(), AngleUtils::radian().ANGLE_15_IN_RADIANS, AngleUtils::degreesToRadians(5.0f));
 			if (fabsf(angle) < EPSILON)
 			{
 				angle = 0.0f;
@@ -254,7 +254,7 @@ namespace Temporal
 			Vector radius = shape.getRadius();
 			float axisRadius = radius.getAxis(_scaleAxis);
 			float delta = (vector * axis - axisRadius) / 2.0f;
-			radius.setAxis(_scaleAxis, snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 4.0f));
+			radius.setAxis(_scaleAxis, ToolsUtils::snap(axisRadius + delta, getEntity().getManager().getGameState().getGrid().getTileSize() / 8.0f, 4.0f));
 			delta = radius.getAxis(_scaleAxis) - axisRadius;
 			if (radius.getX() < 0.0f)
 				radius.setX(0.0f);
