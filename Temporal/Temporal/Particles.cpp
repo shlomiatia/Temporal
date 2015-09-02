@@ -1,7 +1,7 @@
 #include "Particles.h"
 #include "Graphics.h"
 #include "Shapes.h"
-#include "Math.h"
+#include "AnimationUtils.h"
 #include "Texture.h"
 #include "MessageUtils.h"
 #include "Layer.h"
@@ -33,8 +33,6 @@ namespace Temporal
 			delete *i;
 	}
 
-	int ParticleEmitter::getLength() { return _birthThreshold == 0 ? 1 : static_cast<int>(_lifetime / _birthThreshold); }
-	
 	void ParticleEmitter::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
@@ -60,8 +58,7 @@ namespace Temporal
 	void ParticleEmitter::init()
 	{
 		getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::PARTICLES, this);
-		int length = getLength();
-		_particles = new Particle[length];
+		_particles = new Particle[_size];
 		if(!_spritesheetFile.empty())
 			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile.c_str());
 		else
@@ -88,24 +85,18 @@ namespace Temporal
 			if (interpolation >= current.getInterpolation() && interpolation <= next.getInterpolation())
 			{
 				float realInterpolation = (interpolation - current.getInterpolation()) / (next.getInterpolation() - current.getInterpolation());
-				Color color(
-					easeInOutBezier(realInterpolation, current.getColor().getR(), next.getColor().getR()),
-					easeInOutBezier(realInterpolation, current.getColor().getG(), next.getColor().getG()),
-					easeInOutBezier(realInterpolation, current.getColor().getB(), next.getColor().getB()),
-					easeInOutBezier(realInterpolation, current.getColor().getA(), next.getColor().getA()));
+				Color color = AnimationUtils::transition(realInterpolation, current.getColor(), next.getColor());
 				particle.setColor(color);
 
 				if (_minScale == 0.0f && _maxScale == 0.0f)
 				{
-					Vector scale(
-						easeInOutBezier(realInterpolation, current.getScale().getX(), next.getScale().getX()),
-						easeInOutBezier(realInterpolation, current.getScale().getY(), next.getScale().getY()));
+					Vector scale = AnimationUtils::transition(realInterpolation, current.getScale(), next.getScale());
 					particle.setScale(scale);
 				}
 
 				if (current.getRotation() != 0.0f || next.getRotation() != 0.0f)
 				{
-					float rotation = easeInOutBezier(realInterpolation, current.getRotation(), next.getRotation());
+					float rotation = AnimationUtils::transition(realInterpolation, current.getRotation(), next.getRotation());
 					particle.setRotation(rotation);
 				}
 				
@@ -118,7 +109,6 @@ namespace Temporal
 	{
 		Vector& vector = Mouse::get().getOffsetPosition();
 		raiseMessage(Message(MessageID::SET_POSITION, &vector));
-		int length = getLength();
 		Vector emitterPosition = getPosition(*this);;
 		/*float emitterAngle = 0.0f;
 		Side::Enum side =  getOrientation(*this);
@@ -135,7 +125,7 @@ namespace Temporal
 			emitterPosition += nodeTranslation;
 		}*/
 		
-		for(int i = 0; i < length; ++i)
+		for(int i = 0; i < _size; ++i)
 		{
 			Particle& particle = _particles[i];
 			if(particle.isAlive())
@@ -153,17 +143,16 @@ namespace Temporal
 		}
 		_birthTimer.update(framePeriod);
 		float timeSinceLastBirth = _birthTimer.getElapsedTime();
-		if(_birthThreshold > 0.0f && timeSinceLastBirth > _birthThreshold)
+		float birthThreshold = _lifetime / static_cast<float>(_size);
+		if (birthThreshold > 0.0f && timeSinceLastBirth > birthThreshold)
 		{
 			_birthTimer.reset();
-			int bornParticles = static_cast<int>(timeSinceLastBirth / _birthThreshold);
-			int lastParticleIndex = (length + _birthIndex - 1) % length;
+			int bornParticles = static_cast<int>(timeSinceLastBirth / birthThreshold);
+			int lastParticleIndex = (_size + _birthIndex - 1) % _size;
 			for(int i = 0; i < bornParticles; ++i)
 			{
 				float interpolation = static_cast<float>(i + 1) / static_cast <float>(bornParticles);
-				Vector position(
-					easeInOutBezier(interpolation, _particles[lastParticleIndex].getPosition().getX(), emitterPosition.getX()),
-					easeInOutBezier(interpolation, _particles[lastParticleIndex].getPosition().getY(), emitterPosition.getY()));
+				Vector position = AnimationUtils::transition(interpolation, _particles[lastParticleIndex].getPosition(), emitterPosition);
 				emit(position, framePeriod * interpolation);
 			}
 		}
@@ -172,7 +161,6 @@ namespace Temporal
 	void ParticleEmitter::emit(const Vector& position, float age)
 	{
 		float angle = 0.0f;
-		int length = getLength();
 		float realAngle = randomF(1000) * _directionSize + _directionCenter + angle - _directionSize / 2.0f;
 		Vector realPosition = position + Vector(-_birthRadius + randomF(1000) * _birthRadius * 2.0f, -_birthRadius + randomF(1000) * _birthRadius * 2.0f);
 		Vector velocity = Vector(_velocity * cos(realAngle), _velocity * sin(realAngle));
@@ -185,7 +173,7 @@ namespace Temporal
 		particle.setScale(Vector(1.0f, 1.0f) * scale);
 		particle.resetAge(age);
 		updateParticle(particle);
-		_birthIndex = (_birthIndex + 1) % length;
+		_birthIndex = (_birthIndex + 1) % _size;
 	}
 
 	void ParticleEmitter::draw()
@@ -194,10 +182,9 @@ namespace Temporal
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		Graphics::get().getSpriteBatch().begin();
 		Side::Enum side =  getOrientation(*this);
-		int length = getLength();
-		for(int i = 0; i < length; ++i)
+		for(int i = 0; i < _size; ++i)
 		{
-			int j = (i + _birthIndex) % length;
+			int j = (i + _birthIndex) % _size;
 			const Particle& particle = _particles[j];
 			if(particle.isAlive())
 			{

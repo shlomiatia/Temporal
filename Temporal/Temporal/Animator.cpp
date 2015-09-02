@@ -4,6 +4,7 @@
 #include "MessageUtils.h"
 #include "ResourceManager.h"
 #include "Math.h"
+#include "AnimationUtils.h"
 #include <math.h>
 
 namespace Temporal
@@ -39,11 +40,9 @@ namespace Temporal
 		sourceRotation = AngleUtils::degree().normalize(sourceRotation);
 		targetRotation = AngleUtils::degree().normalize(targetRotation);
 		targetRotation = getTargetRotation(sceneNode, sourceRotation, targetRotation);
-		float rotation = easeInOutBezier(interpolation, sourceRotation, targetRotation);
+		float rotation = AnimationUtils::transition(interpolation, sourceRotation, targetRotation);
 
-		Vector translation(
-			easeInOutBezier(interpolation, sourceTranslation.getX(), targetTranslation.getX()),
-			easeInOutBezier(interpolation, sourceTranslation.getY(), targetTranslation.getY()));
+		Vector translation = AnimationUtils::transition(interpolation, sourceTranslation, targetTranslation);
 
 		result.setRotation(rotation);
 		result.setTranslation(translation);

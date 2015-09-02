@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComponentEditors.h" />
@@ -69,6 +70,7 @@
     <ClInclude Include="InputController.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="ToolComponent.h" />
+    <ClInclude Include="ToolsUtils.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Animator.h" />
@@ -91,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationEditor.cpp" />
+    <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComponentEditors.cpp" />
@@ -136,6 +139,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="ToolComponent.cpp" />
+    <ClCompile Include="ToolsUtils.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
