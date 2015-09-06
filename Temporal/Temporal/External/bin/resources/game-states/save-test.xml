@@ -127,20 +127,6 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
             <player-period period="1"/>
-            <particle-emitter lifetime="1.000000" size="1" texture="resources/textures/spiral.png" sprite-sheet="" birth-radius="0.000000" velocity="0.000000" direction-center="0.000000" direction-size="0.000000" min-scale="0.000000" max-scale="0.000000" gravity="0.000000" blend="1">
-                <particle-sample interpolation="0.000000" rotation="0.000000">
-                    <scale x="0.000000" y="0.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.000000" a="0.000000"/>
-                </particle-sample>
-                <particle-sample interpolation="0.500000" rotation="360.000000">
-                    <scale x="1.000000" y="1.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-                </particle-sample>
-                <particle-sample interpolation="1.000000" rotation="720.000000">
-                    <scale x="2.000000" y="2.000000"/>
-                    <color r="0.000000" g="0.000000" b="0.000000" a="0.000000"/>
-                </particle-sample>
-            </particle-emitter>
         </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
@@ -153,13 +139,65 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="1"/>
+        </entity>
+        <entity id="ENT_LASER0">
+            <transform orientation="1">
+                <position x="280.177795" y="165.000000"/>
+            </transform>
+            <collision-filter category="-1" group="0"/>
+            <laser friendly="0"/>
+            <dynamic-body gravity-enabled="0" body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="5.000000" y="5.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="128.000000" y="0.000000"/>
+            </dynamic-body>
+            <renderer texture="" sprite-sheet="resources/spritesheets/emitter.xml" layer="5">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                    <scene-node id="SCN_LASER" behind-parent="0" transform="0" sprite-group="SCN_LASER" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                        <translation x="0.000000" y="0.000000"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                    <scene-node id="SCN_EMITTER" behind-parent="0" transform="0" sprite-group="SCN_EMITTER" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                        <translation x="0.000000" y="0.000000"/>
+                        <scale x="1.000000" y="1.000000"/>
+                    </scene-node>
+                </scene-node>
+                <color r="1.000000" g="0.000000" b="0.000000" a="0.100000"/>
+            </renderer>
+            <temporal-period period="0"/>
+        </entity>
+        <entity id="ENT_BLOCK1">
+            <transform orientation="1">
+                <position x="448.000000" y="256.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="448.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="7.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
                 <position x="448.000000" y="16.000000"/>
             </transform>
-            <collision-filter category="1" group="1"/>
+            <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
@@ -175,14 +213,13 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="1"/>
         </entity>
         <entity id="ENT_BUTTON0">
             <transform orientation="1">
-                <position x="336.000000" y="129.422211"/>
+                <position x="432.000000" y="88.177765"/>
             </transform>
             <collision-filter category="16" group="1"/>
-            <button/>
+            <button target="ENT_LASER0"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">

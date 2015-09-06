@@ -314,7 +314,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, ParticleEmitter& particleEmitter, T& serializer)
 		{
-			serializer.serialize("lifetime", particleEmitter._lifetime);
+			serializer.serialize("particle-lifetime", particleEmitter._particleLifetime);
 			serializer.serialize("size", particleEmitter._size);
 			serializer.serialize("texture", particleEmitter._textureFile);
 			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
@@ -326,6 +326,8 @@ namespace Temporal
 			serializer.serialize("max-scale", particleEmitter._maxScale);
 			serializer.serialize("gravity", particleEmitter._gravity);
 			serializer.serialize("blend", (int&)particleEmitter._blend);
+			serializer.serialize("emitter-lifetime", particleEmitter._emitterLifetime);
+			serializer.serialize("enabled", particleEmitter._enabled);
 			serializer.serialize("particle-sample", particleEmitter._particleSamples);
 			// serializer.serialize("attachment", particleEmitter._attachment);
 		}

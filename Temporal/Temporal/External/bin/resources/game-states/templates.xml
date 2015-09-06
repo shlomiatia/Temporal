@@ -259,3 +259,20 @@
 		</fixture>
 	</static-body>
 </entity>
+<entity id="ENT_TEMPORAL_ACTIVATION_NOTIFICATION">
+	<transform />
+	<particle-emitter particle-lifetime="1.000000" size="1" texture="resources/textures/spiral.png" sprite-sheet="" birth-radius="0.000000" velocity="0.000000" direction-center="0.000000" direction-size="0.000000" min-scale="0.000000" max-scale="0.000000" gravity="0.000000" blend="1" emitter-lifetime="1.000000" enabled="0">
+		<particle-sample interpolation="0.000000" rotation="0.000000">
+			<scale x="0.000000" y="0.000000"/>
+			<color r="1.000000" g="1.000000" b="1.000000" a="0.000000"/>
+		</particle-sample>
+		<particle-sample interpolation="0.500000" rotation="360.000000">
+			<scale x="1.000000" y="1.000000"/>
+			<color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+		</particle-sample>
+		<particle-sample interpolation="1.000000" rotation="720.000000">
+			<scale x="2.000000" y="2.000000"/>
+			<color r="0.000000" g="0.000000" b="0.000000" a="0.000000"/>
+		</particle-sample>
+	</particle-emitter>
+</entity>
