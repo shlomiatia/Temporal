@@ -162,6 +162,15 @@ namespace Temporal
 		}
 	}
 
+	void Control::focus()
+	{
+		if (_isTextBox)
+		{
+			getEntity().getManager().setFocusInputComponent(this);
+			_isTextBoxMode = true;
+		}
+	}
+
 	void Control::mouseDown(MouseParams& params)
 	{
 		const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
@@ -197,11 +206,7 @@ namespace Temporal
 			raiseMouseUp(_leftMouseClickEvent, _leftMouseUpEvent, params, _isLeftDown, _isLeftClick);
 			if (isLeftClick)
 			{
-				if(_isTextBox)
-				{
-					getEntity().getManager().setFocusInputComponent(this);
-					_isTextBoxMode = true;
-				}
+				focus();
 				if (_isCheckbox)
 				{
 					_label = _label == "V" ? "X" : "V";
@@ -260,7 +265,7 @@ namespace Temporal
 		{
 			_label += ' ';
 		}
-		else if(key > 0 && key < 256)
+		else if(key > 0 && key < 256 && key != Key::TAB)
 		{
 			_label += static_cast<char>(key);
 		}

@@ -3,7 +3,7 @@
 #include "GameState.h"
 #include "MessageUtils.h"
 #include "EntitySystem.h"
-#include "Layer.h"
+#include "SpriteLayer.h"
 #include "Camera.h"
 #include "Lighting.h"
 

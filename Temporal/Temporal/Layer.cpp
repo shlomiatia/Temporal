@@ -7,8 +7,9 @@
 #include "Lighting.h"
 #include "InputEnums.h"
 #include "DebugLayer.h"
-#include <SDL_opengl.h>
+#include "SpriteLayer.h"
 #include <algorithm>
+#include <SDL_opengl.h>
 
 namespace Temporal
 {
@@ -54,6 +55,16 @@ namespace Temporal
 		}
 	}
 
+	void LayersManager::addSprite(LayerType::Enum layer, Component* component)
+	{
+		_spriteLayer->add(layer, component); 
+	}
+
+	void LayersManager::removeSprite(LayerType::Enum layer, Component* component) 
+	{
+		_spriteLayer->remove(layer, component); 
+	}
+
 	void LayersManager::addLight(Component* component)
 	{
 		if(_lightLayer)
@@ -64,53 +75,6 @@ namespace Temporal
 	{
 		if (_lightLayer)
 			_lightLayer->remove(component);
-	}
-
-	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
-	{
-		for(int i = 0; i <= LayerType::SIZE; ++i)
-			_layers[static_cast<LayerType::Enum>(i)] = ComponentList();
-	}
-
-	void SpriteLayer::innerDraw()
-	{
-		for(int i = 0; i < LayerType::SIZE; ++i)
-		{
-			LayerType::Enum layer = static_cast<LayerType::Enum>(i);
-			if (layer == LayerType::PARALLAX)
-			{
-				Graphics::get().getMatrixStack().top().translate(getManager().getCamera().getBottomLeft() * 0.9f);
-			}
-			
-			Graphics::get().getSpriteBatch().begin();
-			Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
-			ComponentList& components = _layers.at(layer);
-			for(ComponentIterator j = components.begin(); j != components.end(); ++j)
-			{
-				(**j).handleMessage(Message(MessageID::DRAW));
-			}
-			Graphics::get().getSpriteBatch().end();
-
-			if (layer == LayerType::PARALLAX)
-			{
-				Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft() * 0.9f);
-			}
-		}
-		
-	}
-
-	PerformanceTimer& spriteLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_SPRITE_LAYER"));
-	void SpriteLayer::draw(float framePeriod)
-	{
-		spriteLayerTimer.measure();
-		innerDraw();
-		spriteLayerTimer.print("SPRITE LAYER");
-	}
-
-	void SpriteLayer::remove(LayerType::Enum layer, Component* component) 
-	{ 
-		std::vector<Component*>& components = _layers.at(layer);
-		components.erase(std::remove(components.begin(), components.end(), component));
 	}
 
 	PerformanceTimer& guiLayerTimer = PerformanceTimerManager::get().getTimer(Hash("TMR_GUI_LAYER"));

@@ -176,7 +176,7 @@
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
-				<radius x="4" y="1" />
+				<radius x="5" y="5" />
 			</obb>
 		</fixture>
 	</dynamic-body>
@@ -184,7 +184,7 @@
  		<scene-node id="SCN_ROOT" transform="1">
 			<scene-node id="SCN_LASER" sprite-group="SCN_LASER" />
 			<scene-node id="SCN_EMITTER" sprite-group="SCN_EMITTER" >
-				<translation x="0" y="-8" />
+				<translation x="0" y="0" />
 			</scene-node>
 		</scene-node>
 	</renderer>

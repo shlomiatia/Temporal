@@ -1,37 +1,14 @@
 <game-state>
     <layers-manager camera-follow-player="1">
-        <ambient-color r="1.00000" g="1.000000" b="1.000000" a="1.000000"/>
+        <ambient-color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
     </layers-manager>
     <grid tile-size="128.000000">
         <world-size x="3640.000000" y="1024.000000"/>
     </grid>
     <entities-manager>
-        <entity id="ENT_EMITTER">
-            <transform orientation="1">
-                <position x="448.000000" y="16.000000"/>
-            </transform>135 67.5 101.25
-            <particle-emitter lifetime="12" size="100" texture="resources/textures/spark.png" sprite-sheet="" birth-radius="450.000000" velocity="50.000000" direction-center="-101.25000000" direction-size="67.5000000" min-scale="0.25" max-scale="0.5" gravity="-50">
-                <particle-sample interpolation="0.000000" rotation="0">
-                    <scale x="1.00000" y="1.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.0000000" a="0.000000"/>
-                </particle-sample>
-				<particle-sample interpolation="0.100000" rotation="0">
-                    <scale x="1.00000" y="1.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.0000000" a="1.000000"/>
-                </particle-sample>
-				<particle-sample interpolation="0.500000" rotation="0">
-                    <scale x="1.00000" y="1.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.0000000" a="1.000000"/>
-                </particle-sample>
-                <particle-sample interpolation="1.000000" rotation="0">
-                    <scale x="1.00000" y="1.000000"/>
-                    <color r="1.000000" g="1.000000" b="1.0000000" a="0.000000"/>
-                </particle-sample>
-            </particle-emitter>
-        </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
-                <position x="52.666664" y="72.000000"/>
+                <position x="53.377777" y="72.000000"/>
             </transform>
             <collision-filter category="8" group="1"/>
             <input-controller/>
@@ -150,6 +127,20 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
             <player-period period="1"/>
+            <particle-emitter lifetime="1.000000" size="1" texture="resources/textures/spiral.png" sprite-sheet="" birth-radius="0.000000" velocity="0.000000" direction-center="0.000000" direction-size="0.000000" min-scale="0.000000" max-scale="0.000000" gravity="0.000000" blend="1">
+                <particle-sample interpolation="0.000000" rotation="0.000000">
+                    <scale x="0.000000" y="0.000000"/>
+                    <color r="1.000000" g="1.000000" b="1.000000" a="0.000000"/>
+                </particle-sample>
+                <particle-sample interpolation="0.500000" rotation="360.000000">
+                    <scale x="1.000000" y="1.000000"/>
+                    <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+                </particle-sample>
+                <particle-sample interpolation="1.000000" rotation="720.000000">
+                    <scale x="2.000000" y="2.000000"/>
+                    <color r="0.000000" g="0.000000" b="0.000000" a="0.000000"/>
+                </particle-sample>
+            </particle-emitter>
         </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
@@ -181,6 +172,29 @@
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
                     <scale x="7.000000" y="0.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="1"/>
+        </entity>
+        <entity id="ENT_BUTTON0">
+            <transform orientation="1">
+                <position x="336.000000" y="129.422211"/>
+            </transform>
+            <collision-filter category="16" group="1"/>
+            <button/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="15.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="0.937500"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
