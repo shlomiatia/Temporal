@@ -62,6 +62,7 @@ namespace Temporal
 		void setCommandEvent(IAction* commandEvent);
 
 		void setShortcutKey(Key::Enum key) { _shortcutKey = key; }
+		void focus();
 
 		static const Hash TYPE;
 	private:

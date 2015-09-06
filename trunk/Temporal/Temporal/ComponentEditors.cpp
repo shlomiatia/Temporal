@@ -8,6 +8,7 @@
 #include "Laser.h"
 #include "Lighting.h"
 #include "Door.h"
+#include "Control.h"
 
 namespace Temporal
 {
@@ -37,7 +38,8 @@ namespace Temporal
 
 	void ComponentEditor::addPanelTextBox(Hash id, const char* text, IAction1<const char*>* textChangedEvent)
 	{
-		addTextBox(id, getNextControlShape(), text, textChangedEvent);
+		Control* control = addTextBox(id, getNextControlShape(), text, textChangedEvent);
+		control->focus();
 		_ids.push_back(id);
 	}
 

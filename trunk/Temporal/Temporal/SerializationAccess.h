@@ -320,13 +320,14 @@ namespace Temporal
 			serializer.serialize("sprite-sheet", particleEmitter._spritesheetFile);
 			serializer.serialize("birth-radius", particleEmitter._birthRadius);
 			serializer.serialize("velocity", particleEmitter._velocity);
-//			serializer.serialize("attachment", particleEmitter._attachment);
 			serializer.serializeRadians("direction-center", particleEmitter._directionCenter);
 			serializer.serializeRadians("direction-size", particleEmitter._directionSize);
 			serializer.serialize("min-scale", particleEmitter._minScale);
 			serializer.serialize("max-scale", particleEmitter._maxScale);
 			serializer.serialize("gravity", particleEmitter._gravity);
+			serializer.serialize("blend", (int&)particleEmitter._blend);
 			serializer.serialize("particle-sample", particleEmitter._particleSamples);
+			// serializer.serialize("attachment", particleEmitter._attachment);
 		}
 
 		template<class T>

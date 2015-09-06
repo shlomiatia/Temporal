@@ -8,8 +8,8 @@
 #include "EntitySystem.h"
 #include "Timer.h"
 #include "InputEnums.h"
+#include "GraphicsEnums.h"
 #include <vector>
-#include <unordered_map>
 
 namespace Temporal
 {
@@ -17,22 +17,7 @@ namespace Temporal
 	class DebugLayer;
 	class Camera;
 	class LayersManager;
-
-	namespace LayerType
-	{
-		enum Enum
-		{
-			PARALLAX,	// 0
-			BACKGROUND,	// 1
-			STATIC,		// 2
-			PC,			// 3
-			COVER,		// 4
-			NPC,		// 5
-			PARTICLES,	// 6
-			DEBUG_LAYER,// 7
-			SIZE
-		};
-	}
+	class SpriteLayer;
 
 	class Layer
 	{
@@ -50,26 +35,6 @@ namespace Temporal
 
 		Layer(const Layer&);
 		Layer& operator=(const Layer&);
-	};
-
-	class Component;
-	typedef std::unordered_map<LayerType::Enum, std::vector<Component*>> LayerComponentsMap;
-	typedef LayerComponentsMap::const_iterator LayerComponentsIterator;
-
-	class SpriteLayer : public Layer
-	{
-	public:
-		SpriteLayer(LayersManager* manager);
-
-		void draw(float framePeriod);
-		void add(LayerType::Enum layer, Component* component) { _layers.at(layer).push_back(component); }
-		void remove(LayerType::Enum layer, Component* component);
-		LayerComponentsMap& get() { return _layers; }
-
-	private:
-		LayerComponentsMap _layers;
-
-		void innerDraw();
 	};
 
 	class GUILayer : public Layer
@@ -113,8 +78,8 @@ namespace Temporal
 		~LayersManager();
 
 		void init(GameState* gameState);
-		void addSprite(LayerType::Enum layer, Component* component) { _spriteLayer->add(layer, component); }
-		void removeSprite(LayerType::Enum layer, Component* component) { _spriteLayer->remove(layer, component); }
+		void addSprite(LayerType::Enum layer, Component* component);
+		void removeSprite(LayerType::Enum layer, Component* component);
 		void addGUI(Component* component) { _guiLayer->add(component); }
 		void removeGUI(Component* component) { _guiLayer->remove(component); }
 		void addLight(Component* component);

@@ -10,6 +10,15 @@
 
 namespace Temporal
 {
+	namespace Blend
+	{
+		enum Enum
+		{
+			DEFAULT,
+			ADD
+		};
+	}
+
 	class ParticleSample
 	{
 	public:
@@ -82,16 +91,16 @@ namespace Temporal
 	{
 	public:
 		ParticleEmitter(const char* textureFile = "", const char* spritesheetFile = "", float lifetime = 0.0f, int size = 1, float birthRadius = 0.0f, float velocity = 0.0f, 
-			float directionCenter = 0.0f, float directionSize = 0.0f, float minScale = 1.0f, float maxScale = 1.0f,float gravity = 0.0f/*, Hash attachment = Hash::INVALID*/) :
+			float directionCenter = 0.0f, float directionSize = 0.0f, float minScale = 1.0f, float maxScale = 1.0f,float gravity = 0.0f, Blend::Enum blend = Blend::DEFAULT /*, Hash attachment = Hash::INVALID*/) :
 			_textureFile(textureFile), _spritesheetFile(spritesheetFile), _lifetime(lifetime), _size(size), _birthRadius(birthRadius), _velocity(velocity), _directionCenter(directionCenter),
-			_directionSize(directionSize), _minScale(minScale), _maxScale(maxScale), _gravity(gravity), _birthIndex(0), _particles(0) /*, _attachment(attachment)*/{}
+			_directionSize(directionSize), _minScale(minScale), _maxScale(maxScale), _gravity(gravity), _blend(blend), _birthIndex(0), _particles(0) /*, _attachment(attachment)*/{}
 		~ParticleEmitter();
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
 		Component* clone() const 
-			{ return new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _lifetime, _size, _birthRadius, _velocity, _directionCenter, _directionSize, _minScale, _maxScale, _gravity /*, _attachment*/); }
+			{ return new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _lifetime, _size, _birthRadius, _velocity, _directionCenter, _directionSize, _minScale, _maxScale, _gravity, _blend/*, _attachment*/); }
 
 		static const Hash TYPE;
 	private:
@@ -109,6 +118,7 @@ namespace Temporal
 		float _maxScale;
 		float _gravity;
 		int _size;
+		Blend::Enum _blend;
 		// Hash _attachment;
 
 		Timer _birthTimer;

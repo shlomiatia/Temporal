@@ -236,6 +236,12 @@
     <ClInclude Include="ToolsUtils.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteLayer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsEnums.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -451,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="ToolsUtils.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteLayer.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

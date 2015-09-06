@@ -13,8 +13,6 @@
 #include <cstdlib>
 #include <SDL_opengl.h>
 
-#include "Mouse.h"
-
 namespace Temporal
 {
 	const Hash ParticleEmitter::TYPE = Hash("particle-emitter");
@@ -107,8 +105,6 @@ namespace Temporal
 
 	void ParticleEmitter::update(float framePeriod)
 	{
-		Vector& vector = Mouse::get().getOffsetPosition();
-		raiseMessage(Message(MessageID::SET_POSITION, &vector));
 		Vector emitterPosition = getPosition(*this);;
 		/*float emitterAngle = 0.0f;
 		Side::Enum side =  getOrientation(*this);
@@ -178,8 +174,8 @@ namespace Temporal
 
 	void ParticleEmitter::draw()
 	{
-		Graphics::get().getSpriteBatch().end();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		if (_blend == Blend::ADD)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		Graphics::get().getSpriteBatch().begin();
 		Side::Enum side =  getOrientation(*this);
 		for(int i = 0; i < _size; ++i)
@@ -192,7 +188,7 @@ namespace Temporal
 			}
 		}
 		Graphics::get().getSpriteBatch().end();
-		Graphics::get().getSpriteBatch().begin();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (_blend == Blend::ADD)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }
