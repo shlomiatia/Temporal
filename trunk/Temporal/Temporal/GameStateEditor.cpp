@@ -348,8 +348,8 @@ namespace Temporal
 
 	void GameStateEditor::setCursor()
 	{
-		_idPrefix = getEntity().getManager().getGameState().getEntityTemplatesManager().getCurrentTemplateId().getString();
 		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
+		_idPrefix = newEntity->getId().getString();
 		addEntity(newEntity, CURSOR_ENTITY_ID, true);
 		DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
 		debugManager.addDebugRendererToEntity(*newEntity);

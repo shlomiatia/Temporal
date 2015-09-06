@@ -65,7 +65,12 @@ namespace Temporal
 
 	void TemporalPeriod::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_INIT)
+		if (message.getID() == MessageID::ENTITY_READY)
+		{
+			Entity* particleEmitter = getEntity().getManager().getGameState().getEntityTemplatesManager().get(Hash("ENT_TEMPORAL_ACTIVATION_NOTIFICATION"));
+			getEntity().add(particleEmitter->get(Hash("particle-emitter"))->clone());
+		}
+		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			setPeriod(_period);
 		}
@@ -80,6 +85,14 @@ namespace Temporal
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
 			temporalPeriodChanged(period);
+		}
+		else if (message.getID() == MessageID::ACTIVATE)
+		{
+			Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
+			if (_period != playerPeriod)
+			{
+				raiseMessage(Message(MessageID::START_EMITTER));
+			}
 		}
 	}
 

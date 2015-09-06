@@ -114,6 +114,8 @@ namespace Temporal
 		void setFocusInputComponent(Component* component) { _focusInputComponent = component; }
 		void clearFocusInputComponent() { _focusInputComponent = 0; }
 		Component* getFocusInputComponent() const { return _focusInputComponent; }
+
+		bool isInitializing() const { return _initializing; }
 	private:
 		HashEntityMap _entities;
 		ComponentList _inputComponents;
@@ -135,10 +137,11 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		Hash getCurrentTemplateId() const { return  _templateIterator->first; }
 		Entity* cloneCurrent() { return cloneByTemplateId(_templateIterator->first); };
 		void previousTemplate();
 		void nextTemplate();
+
+		Entity* get(Hash id) { return _templates.at(id); }
 
 	private:
 		HashEntityMap _templates;

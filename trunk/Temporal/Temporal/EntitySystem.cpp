@@ -60,6 +60,8 @@ namespace Temporal
 		component->init(this);
 		if (_manager)
 		{
+			if (_manager->isInitializing())
+				abort();
 			component->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
 			component->handleMessage(Message(MessageID::ENTITY_INIT));
 			component->handleMessage(Message(MessageID::ENTITY_POST_INIT));
@@ -203,6 +205,7 @@ namespace Temporal
 	Entity* EntityTemplatesManager::cloneByTemplateId(Hash templateId)
 	{
 		Entity* newEntity = _templates.at(templateId)->clone();
+		newEntity->setId(templateId);
 		return newEntity;
 	}
 

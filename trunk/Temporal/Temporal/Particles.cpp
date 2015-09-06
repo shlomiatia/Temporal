@@ -31,6 +31,18 @@ namespace Temporal
 			delete *i;
 	}
 
+	Component* ParticleEmitter::clone() const
+	{
+		ParticleEmitter* clone = new ParticleEmitter(_textureFile.c_str(), _spritesheetFile.c_str(), _size, _blend, _enabled,
+													 _emitterLifetime, _particleLifetime, _birthRadius, _directionCenter, _directionSize,
+													 _minScale, _maxScale, _velocity, _gravity);
+
+		for (ParticleSampleIterator i = _particleSamples.begin(); i != _particleSamples.end(); ++i)
+			clone->_particleSamples.push_back((**i).clone());
+
+		return clone;
+	}
+
 	void ParticleEmitter::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::ENTITY_INIT)
@@ -50,6 +62,12 @@ namespace Temporal
 		else if(message.getID() == MessageID::DRAW)
 		{
 			draw();
+		}
+		else if (message.getID() == MessageID::START_EMITTER)
+		{
+			_emitterTimer.reset();
+			_enabled = true;
+			_birthTimer.reset(_particleLifetime / static_cast<float>(_size));
 		}
 	}
 
@@ -75,7 +93,7 @@ namespace Temporal
 
 	void ParticleEmitter::updateParticle(Particle& particle)
 	{
-		float interpolation = particle.getAge() / _lifetime;
+		float interpolation = particle.getAge() / _particleLifetime;
 		for (ParticleSampleIterator j = _particleSamples.begin(); j != (_particleSamples.end() - 1); ++j)
 		{
 			const ParticleSample& current = **j;
@@ -105,7 +123,7 @@ namespace Temporal
 
 	void ParticleEmitter::update(float framePeriod)
 	{
-		Vector emitterPosition = getPosition(*this);;
+		Vector emitterPosition = getPosition(*this);
 		/*float emitterAngle = 0.0f;
 		Side::Enum side =  getOrientation(*this);
 		if(_attachment != Hash::INVALID)
@@ -120,38 +138,47 @@ namespace Temporal
 			nodeTranslation.setX(nodeTranslation.getX() * side);
 			emitterPosition += nodeTranslation;
 		}*/
-		
+		_emitterTimer.update(framePeriod);
+		if (_emitterTimer.getElapsedTime() > _emitterLifetime)
+			_enabled = false;
+		if (_enabled)
+		{
+			_birthTimer.update(framePeriod);
+			float timeSinceLastBirth = _birthTimer.getElapsedTime();
+			float birthThreshold = _particleLifetime / static_cast<float>(_size);
+			if (birthThreshold > 0.0f && timeSinceLastBirth > birthThreshold)
+			{
+				_birthTimer.reset(timeSinceLastBirth - birthThreshold);
+				int bornParticles = static_cast<int>(timeSinceLastBirth / birthThreshold);
+				int lastParticleIndex = (_size + _birthIndex - 1) % _size;
+				for (int i = 0; i < bornParticles; ++i)
+				{
+					float interpolation = static_cast<float>(i + 1) / static_cast <float>(bornParticles);
+					Vector position = AnimationUtils::transition(interpolation, _particles[lastParticleIndex].getPosition(), emitterPosition);
+					emit(position, framePeriod * interpolation);
+				}
+			}
+		}
+		Vector diff = _lastPosition == Vector::Zero ? Vector::Zero : emitterPosition - _lastPosition;
 		for(int i = 0; i < _size; ++i)
 		{
 			Particle& particle = _particles[i];
 			if(particle.isAlive())
 			{
 				particle.update(framePeriod, _gravity);
-				if(particle.getAge() > _lifetime)
+				if(particle.getAge() > _particleLifetime)
 				{
 					particle.setAlive(false);	
 				}
 				else
 				{
 					updateParticle(particle);
+					particle.setPosition(particle.getPosition() + diff);
 				}
 			}
 		}
-		_birthTimer.update(framePeriod);
-		float timeSinceLastBirth = _birthTimer.getElapsedTime();
-		float birthThreshold = _lifetime / static_cast<float>(_size);
-		if (birthThreshold > 0.0f && timeSinceLastBirth > birthThreshold)
-		{
-			_birthTimer.reset();
-			int bornParticles = static_cast<int>(timeSinceLastBirth / birthThreshold);
-			int lastParticleIndex = (_size + _birthIndex - 1) % _size;
-			for(int i = 0; i < bornParticles; ++i)
-			{
-				float interpolation = static_cast<float>(i + 1) / static_cast <float>(bornParticles);
-				Vector position = AnimationUtils::transition(interpolation, _particles[lastParticleIndex].getPosition(), emitterPosition);
-				emit(position, framePeriod * interpolation);
-			}
-		}
+		
+		_lastPosition = emitterPosition;
  	}
 
 	void ParticleEmitter::emit(const Vector& position, float age)
