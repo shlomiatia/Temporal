@@ -68,6 +68,7 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
 			Entity* particleEmitter = getEntity().getManager().getGameState().getEntityTemplatesManager().get(Hash("ENT_TEMPORAL_ACTIVATION_NOTIFICATION"));
+			particleEmitter->setBypassSave(true);
 			getEntity().add(particleEmitter->get(Hash("particle-emitter"))->clone());
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)

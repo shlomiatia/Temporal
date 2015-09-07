@@ -19,6 +19,7 @@ namespace Temporal
 		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
 		static const Hash ACTION_JUMP_STATE = Hash("ACT_STT_JUMP");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
+		static const Hash ACTION_WALK_STATE = Hash("ACT_STT_WALK");
 
 		Navigator& getNavigator(StateMachineComponent& stateMachine)
 		{
@@ -27,12 +28,13 @@ namespace Temporal
 
 		bool plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
 		{
+			int collistionGroup = *static_cast<int*>(stateMachine.raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 			Navigator& navigator = getNavigator(stateMachine);
 			OBB startPosition = OBBAABB(getPosition(stateMachine), Vector(1.0f, 1.0f));
 
 			// No shape because it's not ready on load
-			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition);
-			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition);
+			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
+			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, collistionGroup);
 			if (start && goal)
 			{
 				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
@@ -205,7 +207,7 @@ namespace Temporal
 			if (message.getID() == MessageID::STATE_ENTERED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if (state != ACTION_CLIMB_STATE && state != ACTION_JUMP_STATE && state != JUMP_FORWARD_STATE)
+				if (state != ACTION_CLIMB_STATE && state != ACTION_JUMP_STATE && state != JUMP_FORWARD_STATE && state != ACTION_WALK_STATE)
 					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
 			else if (message.getID() == MessageID::UPDATE)

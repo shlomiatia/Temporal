@@ -74,8 +74,29 @@ namespace Temporal
 	typedef NavigationNodeList::const_iterator NavigationNodeIterator;
 	typedef std::vector<const OBB> OBBList;
 	typedef OBBList::const_iterator OBBIterator;
-	typedef std::vector<const OBB*> ShapeList;
-	typedef ShapeList::const_iterator ShapeIterator;
+
+	class NavigationGraphGenerator
+	{
+	public:
+		NavigationGraphGenerator(const Grid& grid, OBBList platforms);
+
+		NavigationNodeList get() const { return _nodes; }
+	private:
+		static const Vector MIN_AREA_SIZE;
+
+		const Grid& _grid;
+		NavigationNodeList _nodes;
+
+		void createNodes(OBBList& platforms);
+		void checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, OBBList& platforms);
+		void checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms);
+		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms);
+		void createEdges(OBBList& platforms);
+		void cutAreasByPlatforms(OBBList& areas, OBBList& platforms);
+
+		NavigationGraphGenerator(const NavigationGraphGenerator&);
+		NavigationGraphGenerator& operator=(const NavigationGraphGenerator&);
+	};
 
 	class NavigationGraph : public GameStateComponent
 	{
@@ -85,20 +106,12 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
-		const NavigationNode* getNode(const OBB& shape) const;
+		const NavigationNode* getNode(const OBB& shape, int period) const;
 		void draw() const;
 
 	private:
-		static const Vector MIN_AREA_SIZE;
-
-		NavigationNodeList _nodes; 
-
-		void createNodes(ShapeList& platforms);
-		void checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms);
-		void checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
-		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms);
-		void createEdges(ShapeList& platforms);
-		void cutAreasByPlatforms(OBBList& areas, ShapeList& platforms);
+		NavigationNodeList _pastNodes;
+		NavigationNodeList _presentNodes;
 		
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);
