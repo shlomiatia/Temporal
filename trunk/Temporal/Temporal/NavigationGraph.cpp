@@ -12,11 +12,29 @@
 #include "PhysicsEnums.h"
 #include "CollisionFilter.h"
 #include "Grid.h"
+#include "TemporalPeriod.h"
 
 namespace Temporal
 {
 	// BRODER
-	const Vector NavigationGraph::MIN_AREA_SIZE = Vector(32.0f, 94.0f);
+	const Vector NavigationGraphGenerator::MIN_AREA_SIZE = Vector(32.0f, 94.0f);
+
+	NavigationNode::~NavigationNode()
+	{
+		for(NavigationEdgeIterator i = _edges.begin(); i != _edges.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+
+	float NavigationEdge::calculateCost(const NavigationNode& source)
+	{
+		const OBB& sourceArea = source.getArea();
+		const OBB& targetArea = getTarget().getArea();
+
+		Segment segment(sourceArea.getCenter(), targetArea.getCenter());
+		return segment.getLength();
+	}
 
 	Vector getBottomRight(const OBB& obb)
 	{
@@ -40,23 +58,6 @@ namespace Temporal
 		{
 			return obb.getCenter() + obb.getAxisX() * obb.getRadiusX() + obb.getAxisX().getLeftNormal() * obb.getRadiusY();
 		}
-	}
-
-	NavigationNode::~NavigationNode()
-	{
-		for(NavigationEdgeIterator i = _edges.begin(); i != _edges.end(); ++i)
-		{
-			delete *i;
-		}
-	}
-
-	float NavigationEdge::calculateCost(const NavigationNode& source)
-	{
-		const OBB& sourceArea = source.getArea();
-		const OBB& targetArea = getTarget().getArea();
-
-		Segment segment(sourceArea.getCenter(), targetArea.getCenter());
-		return segment.getLength();
 	}
 
 	void cutArea(Side::Enum direction, float cutAmount, const OBB& area, OBBList& areas, OBBIterator& iterator)
@@ -89,16 +90,91 @@ namespace Temporal
 		float amount = area.getRight() - x;
 		cutArea(Side::RIGHT, amount, area, areas, iterator);
 	}
+
 	Segment getLowerSegment(const OBB& obb)
 	{
 		return Segment(obb.getCenter() - obb.getAxisY() * obb.getRadiusY(), obb.getAxisX() * obb.getRadiusX());
 	}
 
-	void NavigationGraph::cutAreasByPlatforms(OBBList& areas, ShapeList& platforms)
+	bool intersectWithPlatform(const DirectedSegment& area, OBBList& platforms)
 	{
-		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
+		for (OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
-			const OBB& platform = **i;
+			const OBB& platform = *i;
+			if (intersects(area, platform))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void removeNodesWithoutEdges(NavigationNodeList& nodes)
+	{
+		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end();)
+		{
+			const NavigationNode& inode = **i;
+			bool haveEdge = inode.getEdges().size() > 0;
+
+			// Check if any edge is directed to this node
+			if (!haveEdge)
+			{
+				for (NavigationNodeIterator j = nodes.begin(); j != nodes.end(); ++j)
+				{
+					const NavigationNode& jnode = **j;
+					for (NavigationEdgeIterator k = jnode.getEdges().begin(); k != jnode.getEdges().end(); ++k)
+					{
+						const NavigationEdge& edge = **k;
+						if (&(edge.getTarget()) == &inode)
+						{
+							haveEdge = true;
+							break;
+						}
+					}
+					if (haveEdge)
+						break;
+				}
+			}
+
+			if (!haveEdge)
+			{
+				delete *i;
+				i = nodes.erase(i);
+			}
+			else
+				++i;
+		}
+	}
+
+	void addPlatforms(const HashEntityMap& entities, OBBList& platforms, Period::Enum periodType)
+	{
+		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
+		{
+			const Entity& entity = *(i->second);
+			const StaticBody* body = static_cast<const StaticBody*>(entity.get(StaticBody::TYPE));
+			const TemporalPeriod* period = static_cast<const TemporalPeriod*>(entity.get(TemporalPeriod::TYPE));
+			if (body)
+			{
+				if (period && period->getPeriod() != periodType)
+				{
+					continue;
+				}
+				if (body->getFixture().getCategory() == CollisionCategory::OBSTACLE)
+				{
+					const OBB& platform = body->getFixture().getGlobalShape();
+					platforms.push_back(platform);
+				}
+			}
+				
+		}
+		
+	}
+
+	void NavigationGraphGenerator::cutAreasByPlatforms(OBBList& areas, OBBList& platforms)
+	{
+		for(OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
+		{
+			const OBB& platform = *i;
 
 			for(OBBIterator j = areas.begin(); j != areas.end(); ++j)
 			{	
@@ -119,7 +195,7 @@ namespace Temporal
 					Vector vectorRight = vectorX.getX() < 0.0f ? vectorX : -vectorX;
 
 					RayCastResult result;
-					getGameState().getGrid().cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
+					_grid.cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
 					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f  - (result.getPoint() - startLeft).getLength() + 1.0f;
@@ -135,7 +211,7 @@ namespace Temporal
 							cutAreaRight(min - 1.0f, area, areas, j);
 					}
 					result = RayCastResult();
-					getGameState().getGrid().cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
+					_grid.cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
 					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getPoint() - startRight).getLength() + 1.0f;
@@ -160,73 +236,12 @@ namespace Temporal
 		}
 	}
 
-	bool intersectWithPlatform(const DirectedSegment& area, ShapeList& platforms)
+	void NavigationGraphGenerator::createNodes(OBBList& platforms)
 	{
-		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
-		{
-			const OBB& platform = **i;
-			if(intersects(area, platform))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	void removeNodesWithoutEdges(NavigationNodeList& nodes)
-	{
-		for(NavigationNodeIterator i = nodes.begin(); i != nodes.end();)
-		{
-			const NavigationNode& inode = **i;
-			bool haveEdge = inode.getEdges().size() > 0;
-
-			// Check if any edge is directed to this node
-			if(!haveEdge)
-			{
-				for(NavigationNodeIterator j = nodes.begin(); j != nodes.end(); ++j)
-				{
-					const NavigationNode& jnode = **j;
-					for(NavigationEdgeIterator k = jnode.getEdges().begin(); k != jnode.getEdges().end(); ++k)
-					{
-						const NavigationEdge& edge = **k;
-						if(&(edge.getTarget()) == &inode)
-						{
-							haveEdge = true;
-							break;
-						}
-					}
-					if(haveEdge)
-						break;
-				}
-			}
-				
-			if(!haveEdge)
-			{
-				delete *i;
-				i = nodes.erase(i);
-			}
-			else
-				++i;
-		}
-	}
-
-	const NavigationNode* NavigationGraph::getNode(const OBB& shape) const
-	{
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
-		{
-			const NavigationNode* node = *i;
-			if(intersects(node->getArea(),  shape))
-				return node;
-		}
-		return 0;
-	}
-
-	void NavigationGraph::createNodes(ShapeList& platforms)
-	{
-		for(ShapeIterator i = platforms.begin(); i != platforms.end(); ++i)
+		for(OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			// Create area from platform
-			const OBB& platform = **i;
+			const OBB& platform = *i;
 			Vector axisX = platform.getAxisX();
 			float axisXAngle = axisX.getAngle();
 			Axis::Enum platformAxis = AngleUtils::radian().isModerate(axisXAngle) ? Axis::X : Axis::Y;
@@ -260,7 +275,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, ShapeList& platforms)
+	void NavigationGraphGenerator::checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, OBBList& platforms)
 	{
 		const OBB& area1 = node1.getArea();
 		const OBB& area2 = node2.getArea();
@@ -284,7 +299,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms)
+	void NavigationGraphGenerator::checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms)
 	{
 		float x;
 		if(node1.getArea().getLeft() < node2.getArea().getLeft())
@@ -322,7 +337,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, ShapeList& platforms)
+	void NavigationGraphGenerator::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms)
 	{
 		const OBB& area1 = node1.getArea();
 		const OBB& area2 = node2.getArea();
@@ -349,7 +364,7 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraph::createEdges(ShapeList& platforms)
+	void NavigationGraphGenerator::createEdges(OBBList& platforms)
 	{
 		// Create edges
 		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
@@ -399,48 +414,64 @@ namespace Temporal
 		removeNodesWithoutEdges(_nodes);
 	}
 
-	void addPlatform(const StaticBody& body, ShapeList& platforms) 
+	NavigationGraphGenerator::NavigationGraphGenerator(const Grid& grid, OBBList platforms)
+		: _grid(grid)
 	{
-		if(body.getFixture().getCategory() == CollisionCategory::OBSTACLE)
-		{
-			const OBB& platform = body.getFixture().getGlobalShape();
-			platforms.push_back(&platform);
-		}
+		createNodes(platforms);
+		createEdges(platforms);
 	}
 
 	void NavigationGraph::init(GameState* gameState)
 	{
 		GameStateComponent::init(gameState);
-		ShapeList platforms;
 		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
-		for(HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
-		{
-			const Entity& entity = *(i->second);
-			const Component* component = entity.get(StaticBody::TYPE);
-			if(component)
-				addPlatform(*static_cast<const StaticBody*>(component), platforms);
-		}
-		createNodes(platforms);
-		createEdges(platforms);
+		OBBList pastPlatforms;
+		addPlatforms(entities, pastPlatforms, Period::PAST);
+		NavigationGraphGenerator pastGenerator(getGameState().getGrid(), pastPlatforms);
+		_pastNodes = pastGenerator.get();
+
+		OBBList presentPlatforms;
+		addPlatforms(entities, presentPlatforms, Period::PRESENT);
+		NavigationGraphGenerator presentGenerator(getGameState().getGrid(), presentPlatforms);
+		_presentNodes = presentGenerator.get();
 	}
 
 	NavigationGraph::~NavigationGraph()
 	{
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for (NavigationNodeIterator i = _pastNodes.begin(); i != _pastNodes.end(); ++i)
+		{
+			delete *i;
+		}
+		for (NavigationNodeIterator i = _presentNodes.begin(); i != _presentNodes.end(); ++i)
 		{
 			delete *i;
 		}
 	}
 
+	const NavigationNode* NavigationGraph::getNode(const OBB& shape, int period) const
+	{
+		const NavigationNodeList& nodes = static_cast<Period::Enum>(period) == Period::PAST ? _pastNodes : _presentNodes;
+		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
+		{
+			const NavigationNode* node = *i;
+			if (intersects(node->getArea(), shape))
+				return node;
+		}
+		return 0;
+	}
+
 	void NavigationGraph::draw() const
 	{
+		
+		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getGameState().getEntitiesManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_COLLISION_GROUP)));
+		const NavigationNodeList& nodes = playerPeriod == Period::PAST ? _pastNodes : _presentNodes;
 		Graphics::get().getLinesSpriteBatch().begin();
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
 			Graphics::get().getLinesSpriteBatch().add(node.getArea(), Color::Yellow);
 		}
-		for(NavigationNodeIterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
 			const NavigationEdgeList& edges = node.getEdges();

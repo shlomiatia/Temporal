@@ -89,7 +89,7 @@ namespace Temporal
 		}
 		
 		std::stringstream s;
-		s << "[X: " << (int)Mouse::get().getPosition().getX() << "][Y: " << (int)Mouse::get().getPosition().getY() << "]";
+		s << "[X: " << (int)Mouse::get().getOffsetPosition().getX() << "][Y: " << (int)Mouse::get().getOffsetPosition().getY() << "]";
 		if (getSelected())
 			s << "[Selected: " << getSelected()->getEntity().getId().getString() << "]";
 		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
