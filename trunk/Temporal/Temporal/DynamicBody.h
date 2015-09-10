@@ -15,8 +15,9 @@ namespace Temporal
 	public:
 		static Vector GRAVITY;
 
-		explicit DynamicBody(Fixture* fixture = 0, bool gravityEnabled = true) :
-			_fixture(fixture), _velocity(Vector::Zero), _bodyEnabled(true), _gravityEnabled(gravityEnabled), _ground(0), _maxMovementStepSize(0.0f), _previousGroundCenter(Vector::Zero), _dynamicBodyBounds(&_globalShapeClone) {}
+		explicit DynamicBody(Fixture* fixture = 0, bool gravityEnabled = true, int collisionMask = 0) :
+			_fixture(fixture), _velocity(Vector::Zero), _bodyEnabled(true), _gravityEnabled(gravityEnabled), _ground(0), _maxMovementStepSize(0.0f),
+			_previousGroundCenter(Vector::Zero), _dynamicBodyBounds(&_globalShapeClone), _collisionMask(collisionMask) {}
 
 		~DynamicBody();
 
@@ -32,6 +33,7 @@ namespace Temporal
 		Fixture* _fixture;
 		OBB _globalShapeClone;
 		OBBAABBWrapper _dynamicBodyBounds;
+		int _collisionMask;
 		
 		// Persistent state
 		bool _gravityEnabled;

@@ -44,6 +44,11 @@ namespace Temporal
 		{
 			_activate = !_activate;
 		}
+		else if (message.getID() == MessageID::SET_ALPHA)
+		{
+			float alpha = getFloatParam(message.getParam());
+			_color = Color(alpha, alpha, alpha, 1.0f);
+		}
 	}
 
 	void Light::drawShadowPart(const Vector& lightCenter, const Vector& point1, const Vector& point2)
@@ -163,7 +168,9 @@ namespace Temporal
 		GLubyte alpha[4];
 		
 		glReadPixels(static_cast<int>(relativePosition.getX()), static_cast<int>(relativePosition.getY()), 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &alpha);
-		bool isLit = alpha[0] > AMBIENT_COLOR.getR() * 255.0f || alpha[1] > AMBIENT_COLOR.getG() * 255.0f || alpha[2] > AMBIENT_COLOR.getB() * 255.0f;
+		bool isLit = alpha[0] > roundf(AMBIENT_COLOR.getR() * 255.0f) ||
+					 alpha[1] > roundf(AMBIENT_COLOR.getG() * 255.0f) || 
+					 alpha[2] > roundf(AMBIENT_COLOR.getB() * 255.0f);
 		getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::SET_LIT, &isLit));
 		_fbo.unbind();
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);

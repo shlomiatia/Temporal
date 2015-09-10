@@ -16,7 +16,7 @@ namespace Temporal
 	class Light : public Component
 	{
 	public:
-		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 4.0f, bool activate = true)
+		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 2.0f, bool activate = true)
 			: _color(color), _radius(radius), _center(center), _size(size), _activate(activate) {}
 
 		Hash getType() const { return TYPE; }

@@ -21,6 +21,7 @@ namespace Temporal
 
 	void Graphics::init(const Settings& settings)
 	{
+		glewExperimental = GL_TRUE;
 		_resolution = settings.getResolution();
 		float logicalViewWidth = settings.getViewY() * _resolution.getX() / _resolution.getY();
 		_logicalView = Vector(logicalViewWidth, settings.getViewY());

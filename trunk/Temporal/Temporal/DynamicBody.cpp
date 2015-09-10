@@ -44,6 +44,7 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
+			_collisionMask |= COLLISION_MASK;
 		}
 		else if(message.getID() == MessageID::GET_VELOCITY)
 		{
@@ -180,7 +181,7 @@ namespace Temporal
 		Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
 		RayCastResult result;
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, COLLISION_MASK, sourceCollisionGroup) &&
+		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());
@@ -290,7 +291,7 @@ namespace Temporal
 			_dynamicBodyBounds.getOBB().translate(stepMovement);
 			
 			int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-			FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(_dynamicBodyBounds.getOBB(), COLLISION_MASK, sourceCollisionGroup, false);
+			FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(_dynamicBodyBounds.getOBB(), _collisionMask, sourceCollisionGroup, false);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* fixture = *i;

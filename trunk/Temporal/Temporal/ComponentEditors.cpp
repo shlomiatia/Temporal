@@ -39,7 +39,11 @@ namespace Temporal
 	void ComponentEditor::addPanelTextBox(Hash id, const char* text, IAction1<const char*>* textChangedEvent)
 	{
 		Control* control = addTextBox(id, getNextControlShape(), text, textChangedEvent);
-		control->focus();
+		if (!_focused)
+		{
+			control->focus();
+			_focused = true;
+		}
 		_ids.push_back(id);
 	}
 
