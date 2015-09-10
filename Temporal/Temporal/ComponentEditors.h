@@ -16,7 +16,7 @@ namespace Temporal
 	class ComponentEditor : public ToolComponent
 	{
 	public:
-		ComponentEditor() : ToolComponent(20), _y(0.0f) {}
+		ComponentEditor() : ToolComponent(20), _y(0.0f), _focused(false) {}
 
 		void handleMessage(Message& message);
 
@@ -29,6 +29,7 @@ namespace Temporal
 
 		float _y;
 		HashList _ids;
+		bool _focused;
 
 		AABB getNextControlShape();
 		void ok();

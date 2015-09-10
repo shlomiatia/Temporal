@@ -95,9 +95,9 @@
 			</scene-node>
 		</scene-node>
 	</renderer>
-	<light center="0" radius="256.000000">
+	<!--<light center="0" radius="256.000000">
 		<color r="0.500000" g="0.500000" b="0.500000" a="1.000000"/>
-	</light>
+	</light>-->
 </entity>
 <entity id="ENT_CHASER">
 	<transform />
@@ -255,6 +255,18 @@
 			<obb angle="0">
 				<center x="0" y="0" />
 				<radius x="32" y="64" />
+			</obb>
+		</fixture>
+	</static-body>
+</entity>
+<entity id="ENT_MOVING_PLATFORM_CONTROL">
+	<transform />
+	<collision-filter category="64" />
+	<static-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="64" y="32" />
 			</obb>
 		</fixture>
 	</static-body>

@@ -367,6 +367,7 @@ namespace Temporal
 		{
 			serializer.serialize("fixture", dynamicBody._fixture); // xml
 			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // xml
+			serializer.serialize("collision-mask", dynamicBody._collisionMask); // xml
 			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 		}
