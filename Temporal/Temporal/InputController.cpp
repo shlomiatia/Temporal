@@ -9,6 +9,7 @@ namespace Temporal
 {
 	const float JUMP_LEEWAY = 0.1f;
 	const Hash PLAYER_PERIOD = Hash("player-period");
+	const Hash TEMPORAL_ECHO_MANAGER = Hash("temporal-echo-manager");
 	const Hash InputController::TYPE = Hash("input-controller");
 
 	void InputController::startJump()
@@ -19,15 +20,9 @@ namespace Temporal
 
 	void InputController::temporalAction()
 	{
-		if (getEntity().get(PLAYER_PERIOD)) {
+		if (getEntity().get(PLAYER_PERIOD) || getEntity().get(TEMPORAL_ECHO_MANAGER)) {
 			raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
 		}
-		else 
-		{
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED));
-		}
-		
-		
 	}
 
 	void InputController::mouseDown(Message& message)

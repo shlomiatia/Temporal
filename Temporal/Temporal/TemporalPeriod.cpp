@@ -6,7 +6,8 @@
 
 namespace Temporal
 {
-	Hash PLAYER_ID("ENT_PLAYER");
+	static const Hash PLAYER_ID("ENT_PLAYER");
+	static const Hash TEMPORAL_ACTIVATION_NOTIFICATION_ID("ENT_TEMPORAL_ACTIVATION_NOTIFICATION");
 	const Hash PlayerPeriod::TYPE = Hash("player-period");
 	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
 
@@ -67,7 +68,7 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			Entity* particleEmitter = getEntity().getManager().getGameState().getEntityTemplatesManager().get(Hash("ENT_TEMPORAL_ACTIVATION_NOTIFICATION"));
+			Entity* particleEmitter = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
 			particleEmitter->setBypassSave(true);
 			getEntity().add(particleEmitter->get(Hash("particle-emitter"))->clone());
 		}

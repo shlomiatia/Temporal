@@ -220,7 +220,7 @@
 <entity id="ENT_MOVING_PLATFORM">
 	<transform />
 	<collision-filter category="1" />
-	<dynamic-body gravity-enabled="false">
+	<dynamic-body collision-mask="64" gravity-enabled="false">
 		<fixture>
 			<obb angle="0">
 			<center x="0" y="0" />

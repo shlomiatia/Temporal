@@ -81,6 +81,8 @@ namespace Temporal
 			serialize(key, (Navigator*&)component, serializer);
 		else if(strcmp(key, TemporalEcho::TYPE.getString()) == 0)
 			serialize(key, (TemporalEcho*&)component, serializer);
+		else if (strcmp(key, TemporalEchoManager::TYPE.getString()) == 0)
+			serialize(key, (TemporalEchoManager*&)component, serializer);
 		else if(strcmp(key, TemporalPeriod::TYPE.getString()) == 0)
 			serialize(key, (TemporalPeriod*&)component, serializer);
 		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
@@ -139,6 +141,8 @@ namespace Temporal
 			serialize(key, *(StaticBody*&)component, serializer);
 		else if(component->getType() == Navigator::TYPE)
 			serialize(key, *(Navigator*&)component, serializer);
+		else if (component->getType() == TemporalEchoManager::TYPE)
+			serialize(key, *(TemporalEchoManager*&)component, serializer);
 		else if(component->getType() == TemporalEcho::TYPE)
 			serialize(key, *(TemporalEcho*&)component, serializer);
 		else if(component->getType() == TemporalPeriod::TYPE)

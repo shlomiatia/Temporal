@@ -47,6 +47,7 @@ namespace Temporal
 	class InputController;
 	class Navigator;
 	class TemporalEcho;
+	class TemporalEchoManager;
 	class VisibilityGem;
 	class CameraControl;
 	class Laser;
@@ -442,6 +443,9 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, TemporalEcho& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, TemporalEchoManager& component, T& serializer) {}
 
 		template<class T>
 		static void serialize(const char* key, VisibilityGem& component, T& serializer) {}
