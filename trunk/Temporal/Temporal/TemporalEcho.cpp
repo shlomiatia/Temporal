@@ -17,17 +17,11 @@ namespace Temporal
 	const Hash RENDERER_TYPE = Hash("renderer");
 	const Hash ANIMATOR_TYPE = Hash("animator");
 
+	const HashList TEMPORAL_ECHO_FILTER({ TRANSFORM_TYPE, RENDERER_TYPE, ANIMATOR_TYPE });
+
 	/**********************************************************************************************
 	* Temporal Echo
 	*********************************************************************************************/
-	HashList TemporalEcho::getFilter() const
-	{
-		HashList result;
-		result.push_back(TRANSFORM_TYPE);
-		result.push_back(RENDERER_TYPE);
-		result.push_back(ANIMATOR_TYPE);
-		return result;
-	}
 
 	TemporalEcho::~TemporalEcho()
 	{
@@ -39,7 +33,7 @@ namespace Temporal
 		if (message.getID() == MessageID::UPDATE)
 		{
 			if(_echoReady)
-				_echo->handleMessage(message, &getFilter());
+				_echo->handleMessage(message, &TEMPORAL_ECHO_FILTER);
 		}
 		else if (message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
@@ -47,15 +41,15 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			_echo->handleMessage(message, &getFilter());
+			_echo->handleMessage(message, &TEMPORAL_ECHO_FILTER);
 		}
 		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			_echo->handleMessage(message, &getFilter());
+			_echo->handleMessage(message, &TEMPORAL_ECHO_FILTER);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
-			_echo->handleMessage(message, &getFilter());
+			_echo->handleMessage(message, &TEMPORAL_ECHO_FILTER);
 		}
 	}
 
@@ -109,16 +103,23 @@ namespace Temporal
 	void TemporalEchoManager::init()
 	{
 		HashEntityMap& entities = getEntity().getManager().getEntities();
-		Hash temporalEchoFilter = Hash("dynamic-body");
+		const HashList TEMPORAL_ECHO_FILTER({ Hash("dynamic-body"), Hash("door"), Hash("light") });
 		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			Entity& entity = *i->second;
-			if (entity.getId() != PLAYER_ID && entity.get(temporalEchoFilter))
+			if (entity.getId() != PLAYER_ID)
 			{
-				TemporalEcho* echo = new TemporalEcho();
-				echo->setBypassSave(true);
-				entity.add(echo);
-				_ecohoes.push_back(echo);
+				for (HashIterator j = TEMPORAL_ECHO_FILTER.begin(); j != TEMPORAL_ECHO_FILTER.end(); ++j)
+				{
+					if (entity.get(*j))
+					{
+						TemporalEcho* echo = new TemporalEcho();
+						echo->setBypassSave(true);
+						entity.add(echo);
+						_ecohoes.push_back(echo);
+						break;
+					}
+				}
 			}
 		}
 		disableEchos();

@@ -54,7 +54,6 @@ namespace Temporal
 		bool _echoReady;
 
 		void init();
-		HashList getFilter() const;
 	};
 
 	typedef std::vector<TemporalEcho*> TemporalEchoList;
