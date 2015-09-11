@@ -29,21 +29,21 @@
         </entity>
         <entity id="ENT_BLOCK3">
             <transform orientation="1">
-                <position x="528.000000" y="176.000000"/>
+                <position x="591.999817" y="176.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
                 <fixture>
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="368.000000" y="16.000000"/>
+                        <radius x="304.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="2">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="5.750000" y="0.250000"/>
+                    <scale x="4.750000" y="0.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -182,9 +182,34 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_MOVING_PLATFORM0">
+            <transform orientation="1">
+                <position x="96.000000" y="208.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <dynamic-body gravity-enabled="0" collision-mask="1" body-enabled="1">
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <moving-platform>
+                <movement x="128.000000" y="0.000000"/>
+            </moving-platform>
+            <renderer texture="resources/textures/moving-platform.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_LASER0">
             <transform orientation="1">
-                <position x="165.000000" y="159.000000"/>
+                <position x="886.066650" y="149.355560"/>
             </transform>
             <collision-filter category="-1" group="-1"/>
             <laser friendly="0"/>
@@ -215,7 +240,7 @@
         </entity>
         <entity id="ENT_PATROL0">
             <transform orientation="1">
-                <position x="178.533340" y="72.000000"/>
+                <position x="339.244476" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="-1"/>
             <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
@@ -361,6 +386,28 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
+        <entity id="ENT_BUTTON1">
+            <transform orientation="1">
+                <position x="176.000000" y="79.000000"/>
+            </transform>
+            <collision-filter category="16" group="-1"/>
+            <button target="ENT_DOOR0"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="15.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="0.937500"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_BLOCK0">
             <transform orientation="1">
                 <position x="464.000000" y="16.000000"/>
@@ -378,6 +425,50 @@
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
                     <scale x="7.250000" y="0.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BUTTON0">
+            <transform orientation="1">
+                <position x="112.000000" y="79.000000"/>
+            </transform>
+            <collision-filter category="16" group="-1"/>
+            <button target="ENT_MOVING_PLATFORM0"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="15.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="0.937500"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_DOOR0">
+            <transform orientation="1">
+                <position x="304.000000" y="96.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture>
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="64.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <door closed="1"/>
+            <renderer texture="resources/textures/door.png" sprite-sheet="" layer="2">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
