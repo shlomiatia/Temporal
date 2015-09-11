@@ -7,13 +7,19 @@
 
 namespace Temporal
 {
+	static const Hash PLAYER_ID("ENT_PLAYER");
+	const Hash TemporalEchoManager::TYPE = Hash("temporal-echo-manager");
+	const float TemporalEchoManager::ECHO_READY_TIME = 1.0f;
+	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 1.0f;
 	const Hash TemporalEcho::TYPE = Hash("temporal-echo");
+	
 	const Hash TRANSFORM_TYPE = Hash("transform");
 	const Hash RENDERER_TYPE = Hash("renderer");
 	const Hash ANIMATOR_TYPE = Hash("animator");
-	const float TemporalEcho::ECHO_READY_TIME = 1.0f;
-	const float TemporalEcho::ECHO_COOLDOWN_TIME = 1.0f;
 
+	/**********************************************************************************************
+	* Temporal Echo
+	*********************************************************************************************/
 	HashList TemporalEcho::getFilter() const
 	{
 		HashList result;
@@ -26,82 +32,30 @@ namespace Temporal
 	TemporalEcho::~TemporalEcho()
 	{
 		delete _echo;
-		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
-		{
-			delete *i;
-		}
 	}
 
-	void TemporalEcho::update(float framePeriod)
+	void TemporalEcho::handleMessage(Message& message)
 	{
-		if (_cooldown)
+		if (message.getID() == MessageID::UPDATE)
 		{
-			_cooldownTimer.update(framePeriod);
-			if (_cooldownTimer.getElapsedTime() > ECHO_COOLDOWN_TIME)
-			{
-				_cooldown = false;
-			}
+			if(_echoReady)
+				_echo->handleMessage(message, &getFilter());
 		}
-		if (!_cooldown)
+		else if (message.getID() == MessageID::ENTITY_PRE_INIT)
 		{
-			if (!_echoReady)
-			{
-				if (_saveTimer.getElapsedTime() > ECHO_READY_TIME)
-				{
-					_echoReady = true;
-					_loadTimer.reset();
-				}
-			}
-			if (_echoReady)
-			{
-				_loadTimer.update(framePeriod);
-				TemporalEchoDataIterator first = _echoesData.begin();
-				if ((**first).getTime() <= _loadTimer.getElapsedTime())
-				{
-					const Stream* deserialization = (**first).getStream();
-					BinaryDeserializer deserializer(deserialization);
-					deserializer.serialize("entity", _echo);
-					delete deserialization;
-					_echoesData.erase(first);
-					float alpha = 0.1f;
-					_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
-				}
-			}
-			_saveTimer.update(framePeriod);
-			Stream* serialization = new MemoryStream();
-			BinarySerializer serializer(serialization);
-			serializer.serialize("entity", getEntity());
-			TemporalEchoData* data = new TemporalEchoData(_saveTimer.getElapsedTime(), serialization);
-			_echoesData.push_back(data);
+			init();
 		}
-	}
-
-	void TemporalEcho::disableEcho()
-	{
-		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end();)
+		else if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			delete *i;
-			i = _echoesData.erase(i);
+			_echo->handleMessage(message, &getFilter());
 		}
-		float alpha = 0.0f;
-		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
-		_echoReady = false;
-		_saveTimer.reset();
-	}
-
-	void TemporalEcho::mergeToTemporalEchoes()
-	{
-		if(_echoReady)
+		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			getEntity().handleMessage(Message(MessageID::PRE_LOAD));
-			TemporalEchoDataIterator first = _echoesData.begin();
-			const Stream* deserialization = (**first).getStream();
-			BinaryDeserializer deserializer(deserialization);
-			deserializer.serialize("entity", getEntity());
-			disableEcho();
-			getEntity().handleMessage(Message(MessageID::POST_LOAD));
-			_cooldown = true;
-			_cooldownTimer.reset();
+			_echo->handleMessage(message, &getFilter());
+		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			_echo->handleMessage(message, &getFilter());
 		}
 	}
 
@@ -111,41 +65,170 @@ namespace Temporal
 		_echo->init(&getEntity().getManager());
 		std::string idString = Utils::format("%s_TEMPORAL_ECHO", getEntity().getId().getString());
 		_echo->setId(Hash(idString.c_str()));
-		disableEcho();
 	}
 
-	void TemporalEcho::handleMessage(Message& message)
+	void TemporalEcho::setEchoReady(bool ready)
 	{
-		if(message.getID() == MessageID::UPDATE)
+		_echoReady = ready;
+		float alpha = _echoReady ? 0.1f : 0.0f;
+		_echo->handleMessage(Message(MessageID::SET_ALPHA, &alpha));
+	}
+
+	/**********************************************************************************************
+	* Temporal Echo Manager
+	*********************************************************************************************/
+	TemporalEchoManager::~TemporalEchoManager()
+	{
+		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end(); ++i)
+		{
+			delete *i;
+		}
+	}
+
+	void TemporalEchoManager::handleMessage(Message& message)
+	{
+		if (message.getID() == MessageID::LEVEL_INIT)
+		{
+			init();
+		}
+		else if (message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
-			if(_echoReady)
-				_echo->handleMessage(message, &getFilter());
 		}
-		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
+		else if (message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
 			mergeToTemporalEchoes();
 		}
 		else if(message.getID() == MessageID::LOAD)
 		{
-			disableEcho();
+			disableEchos();
 		}
-		else if(message.getID() == MessageID::ENTITY_PRE_INIT)
+	}
+
+	void TemporalEchoManager::init()
+	{
+		HashEntityMap& entities = getEntity().getManager().getEntities();
+		Hash temporalEchoFilter = Hash("dynamic-body");
+		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
-			init();
+			Entity& entity = *i->second;
+			if (entity.getId() != PLAYER_ID && entity.get(temporalEchoFilter))
+			{
+				TemporalEcho* echo = new TemporalEcho();
+				echo->setBypassSave(true);
+				entity.add(echo);
+				_ecohoes.push_back(echo);
+			}
 		}
-		else if(message.getID() == MessageID::ENTITY_INIT)
+		disableEchos();
+	}
+
+	void TemporalEchoManager::update(float framePeriod)
+	{
+		updateCooldown(framePeriod);
+		if (!_cooldown)
 		{
-			_echo->handleMessage(message, &getFilter());
+			updateEchoReady(framePeriod);
+			if (_echoReady)
+			{
+				updateEchoDeserialization(framePeriod);
+			}
+			updateEchoSerilization(framePeriod);
 		}
-		else if(message.getID() == MessageID::ENTITY_POST_INIT)
+	}
+
+	void TemporalEchoManager::updateCooldown(float framePeriod)
+	{
+		if (_cooldown)
 		{
-			_echo->handleMessage(message, &getFilter());
+			_cooldownTimer.update(framePeriod);
+			if (_cooldownTimer.getElapsedTime() > ECHO_COOLDOWN_TIME)
+			{
+				_cooldown = false;
+			}
 		}
-		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+	}
+
+	void TemporalEchoManager::updateEchoReady(float framePeriod)
+	{
+		if (!_echoReady)
 		{
-			_echo->handleMessage(message, &getFilter());
+			if (_saveTimer.getElapsedTime() > ECHO_READY_TIME)
+			{
+				_echoReady = true;
+				_loadTimer.reset();
+			}
+		}
+	}
+
+	void TemporalEchoManager::updateEchoSerilization(float framePeriod)
+	{
+		_saveTimer.update(framePeriod);
+		Stream* serialization = new MemoryStream();
+		BinarySerializer serializer(serialization);
+		for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+		{
+			TemporalEcho& echo = **i;
+			serializer.serialize("entity", echo.getEntity());
+		}
+		TemporalEchoData* data = new TemporalEchoData(_saveTimer.getElapsedTime(), serialization);
+		_echoesData.push_back(data);
+	}
+
+	void TemporalEchoManager::updateEchoDeserialization(float framePeriod)
+	{
+		_loadTimer.update(framePeriod);
+		TemporalEchoDataIterator first = _echoesData.begin();
+		if ((**first).getTime() <= _loadTimer.getElapsedTime())
+		{
+			const Stream* deserialization = (**first).getStream();
+			BinaryDeserializer deserializer(deserialization);
+			
+			for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+			{
+				TemporalEcho& echo = **i;
+				deserializer.serialize("entity", echo.getEcho());
+				echo.setEchoReady(true);
+			}
+			delete deserialization;
+			_echoesData.erase(first);
+		}
+	}
+
+	void TemporalEchoManager::mergeToTemporalEchoes()
+	{
+		if (_echoReady)
+		{
+			TemporalEchoDataIterator first = _echoesData.begin();
+			const Stream* deserialization = (**first).getStream();
+			BinaryDeserializer deserializer(deserialization);
+			for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+			{
+				Entity& entity = (**i).getEntity();
+				entity.handleMessage(Message(MessageID::PRE_LOAD));
+				deserializer.serialize("entity", entity);
+				entity.handleMessage(Message(MessageID::POST_LOAD));
+			}
+			disableEchos();
+			_cooldown = true;
+			_cooldownTimer.reset();
+		}
+	}
+
+	void TemporalEchoManager::disableEchos()
+	{
+		for (TemporalEchoDataIterator i = _echoesData.begin(); i != _echoesData.end();)
+		{
+			delete *i;
+			i = _echoesData.erase(i);
+		}
+		_echoReady = false;
+		_saveTimer.reset();
+		for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+		{
+			TemporalEcho& echo = **i;
+			echo.setEchoReady(false);
 		}
 	}
 }
