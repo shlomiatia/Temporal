@@ -78,7 +78,7 @@ namespace Temporal
 		static const float ECHO_COOLDOWN_TIME;
 
 		TemporalEchoDataList _echoesData;
-		TemporalEchoList _ecohoes;
+		TemporalEchoList _echoes;
 		bool _echoReady;
 		bool _cooldown;
 		Timer _cooldownTimer;

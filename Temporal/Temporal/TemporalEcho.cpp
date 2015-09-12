@@ -116,7 +116,7 @@ namespace Temporal
 						TemporalEcho* echo = new TemporalEcho();
 						echo->setBypassSave(true);
 						entity.add(echo);
-						_ecohoes.push_back(echo);
+						_echoes.push_back(echo);
 						break;
 					}
 				}
@@ -168,7 +168,7 @@ namespace Temporal
 		_saveTimer.update(framePeriod);
 		Stream* serialization = new MemoryStream();
 		BinarySerializer serializer(serialization);
-		for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+		for (TemporalEchoIterator i = _echoes.begin(); i != _echoes.end(); ++i)
 		{
 			TemporalEcho& echo = **i;
 			serializer.serialize("entity", echo.getEntity());
@@ -186,7 +186,7 @@ namespace Temporal
 			const Stream* deserialization = (**first).getStream();
 			BinaryDeserializer deserializer(deserialization);
 			
-			for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+			for (TemporalEchoIterator i = _echoes.begin(); i != _echoes.end(); ++i)
 			{
 				TemporalEcho& echo = **i;
 				deserializer.serialize("entity", echo.getEcho());
@@ -204,7 +204,7 @@ namespace Temporal
 			TemporalEchoDataIterator first = _echoesData.begin();
 			const Stream* deserialization = (**first).getStream();
 			BinaryDeserializer deserializer(deserialization);
-			for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+			for (TemporalEchoIterator i = _echoes.begin(); i != _echoes.end(); ++i)
 			{
 				Entity& entity = (**i).getEntity();
 				entity.handleMessage(Message(MessageID::PRE_LOAD));
@@ -226,7 +226,7 @@ namespace Temporal
 		}
 		_echoReady = false;
 		_saveTimer.reset();
-		for (TemporalEchoIterator i = _ecohoes.begin(); i != _ecohoes.end(); ++i)
+		for (TemporalEchoIterator i = _echoes.begin(); i != _echoes.end(); ++i)
 		{
 			TemporalEcho& echo = **i;
 			echo.setEchoReady(false);
