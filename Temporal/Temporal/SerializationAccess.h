@@ -371,6 +371,9 @@ namespace Temporal
 			serializer.serialize("collision-mask", dynamicBody._collisionMask); // xml
 			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
+			serializer.serialize("previous-ground-center", dynamicBody._previousGroundCenter); // memory
+			serializer.serialize("ground-id", dynamicBody._groundId);
+
 		}
 		
 		template<class T>

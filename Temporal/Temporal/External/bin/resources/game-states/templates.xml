@@ -224,7 +224,7 @@
 		<fixture>
 			<obb angle="0">
 			<center x="0" y="0" />
-			<radius x="64" y="0" />
+			<radius x="64" y="16" />
 		</obb>
 		</fixture>
 	</dynamic-body>
