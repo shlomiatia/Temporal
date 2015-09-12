@@ -202,7 +202,10 @@ namespace Temporal
 			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(MovingPlatform::TYPE));
 			if (platform)
 			{
-				Entity* entity = new Entity(Hash("moving-platform-editor"));
+				Hash id = Hash("moving-platform-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
 				entity->add(new MovingPlatformEditor(*platform));
 				getEntity().getManager().add(entity);
@@ -210,7 +213,10 @@ namespace Temporal
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
 			if (button)
 			{
-				Entity* entity = new Entity(Hash("button-editor"));
+				Hash id = Hash("button-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
 				entity->add(new ButtonEditor(*button));
 				getEntity().getManager().add(entity);
@@ -218,7 +224,10 @@ namespace Temporal
 			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(Laser::TYPE));
 			if (laser)
 			{
-				Entity* entity = new Entity(Hash("laser-editor"));
+				Hash id = Hash("laser-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
 				entity->add(new LaserEditor(*laser));
 				getEntity().getManager().add(entity);
@@ -226,7 +235,10 @@ namespace Temporal
 			Light* light = static_cast<Light*>(getSelected()->getEntity().get(Light::TYPE));
 			if (light)
 			{
-				Entity* entity = new Entity(Hash("light-editor"));
+				Hash id = Hash("light-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
 				entity->add(new LightEditor(*light));
 				getEntity().getManager().add(entity);
@@ -234,7 +246,10 @@ namespace Temporal
 			Door* door = static_cast<Door*>(getSelected()->getEntity().get(Door::TYPE));
 			if (door)
 			{
-				Entity* entity = new Entity(Hash("door-editor"));
+				Hash id = Hash("door-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
 				entity->add(new DoorEditor(*door));
 				getEntity().getManager().add(entity);

@@ -102,8 +102,8 @@ namespace Temporal
 		// TEMP:
 		if (Keyboard::get().getKey(Key::TAB))
 		{
-			//OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
-			//getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
+			OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
 		}
 	}
 
