@@ -397,7 +397,7 @@ namespace Temporal
 			serializer.serialize("max-walk-force-per-second", actionController.MAX_WALK_FORCE_PER_SECOND);
 			serializer.serialize("hang-descend-movement", actionController._hangDescendMovement);
 			serializer.serialize("hang-descnd-original-translation", actionController._hangDescendOriginalTranslation);
-			serializer.serialize("hang-descend-start-position", actionController._hangDescendStartPosition);
+			serializer.serialize("hang-descend-ground-delta", actionController._hangDescendGroundDelta);
 			serialize(key, (StateMachineComponent&)actionController, serializer);
 		}
 		

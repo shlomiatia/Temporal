@@ -17,7 +17,7 @@ namespace Temporal
 
 		explicit DynamicBody(Fixture* fixture = 0, bool gravityEnabled = true, int collisionMask = 0) :
 			_fixture(fixture), _velocity(Vector::Zero), _bodyEnabled(true), _gravityEnabled(gravityEnabled), _ground(0), _maxMovementStepSize(0.0f),
-			_previousGroundCenter(Vector::Zero), _dynamicBodyBounds(&_globalShapeClone), _collisionMask(collisionMask) {}
+			_previousGroundCenter(Vector::Zero), _dynamicBodyBounds(&_globalShapeClone), _collisionMask(collisionMask), _groundId(Hash::INVALID){}
 
 		~DynamicBody();
 
@@ -41,13 +41,14 @@ namespace Temporal
 		Vector _velocity;
 
 		// Temp state
+		Hash _groundId;
 		const Fixture* _ground;
-		Segment _groundSegment;
+		//Segment _groundSegment;
 		Vector _previousGroundCenter;
 
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
-		void walk(float framePeriod);
+		void walk(float framePeriod, const Segment& groundSegment);
 		void executeMovement(Vector movement);
 		void detectCollision(const Fixture* staticBodyBounds, Vector& collision, Vector& movement);
 		void correctCollision(const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement);

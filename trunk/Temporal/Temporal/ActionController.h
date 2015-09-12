@@ -131,8 +131,8 @@ namespace Temporal
 
 		const Vector& getHangDescendOriginalTranslation() const { return _hangDescendOriginalTranslation; }
 		void setHangDescendOriginalTranslation(const Vector& value) { _hangDescendOriginalTranslation = value; }
-		const Vector& getHangDescendStartPosition() const { return _hangDescendStartPosition; }
-		void setHangDescendStartPosition(const Vector& value) { _hangDescendStartPosition = value; }
+		const Vector& getHangDescendGroundDelta() const { return _hangDescendGroundDelta; }
+		void setHangDescendGroundDelta(const Vector& value) { _hangDescendGroundDelta = value; }
 		const Vector& getHangDescendMovement() const { return _hangDescendMovement; }
 		void setHangDescendMovement(const Vector& value) { _hangDescendMovement = value; }
 
@@ -143,7 +143,7 @@ namespace Temporal
 		LedgeDetector _ledgeDetector;
 		HandleMessageHelper _handleMessageHelper;
 		Vector _hangDescendOriginalTranslation;
-		Vector _hangDescendStartPosition;
+		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
 
 		HashStateMap getStates() const;

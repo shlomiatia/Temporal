@@ -9,7 +9,7 @@ namespace Temporal
 
 	void MovingPlatform::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ACTIVATE)
+		if (message.getID() == MessageID::ACTIVATE || message.getID() == MessageID::ENTITY_INIT || message.getID() == MessageID::BODY_COLLISION)
 		{
 			_movement *= -1.0f;
 			raiseMessage(Message(MessageID::SET_IMPULSE, &_movement));
