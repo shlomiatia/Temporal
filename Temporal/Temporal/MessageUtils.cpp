@@ -64,6 +64,10 @@ namespace Temporal
 			}
 			
 		}
+		else if (message.getID() == MessageID::GET_FIXTURE)
+		{
+			message.setParam(&fixture);
+		}
 		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			fixture.init(component);

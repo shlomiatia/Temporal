@@ -45,7 +45,7 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			getEntity().setBypassSave(true);
+			//getEntity().setBypassSave(true);
 			getEntity().getManager().addInputComponent(this);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)

@@ -56,12 +56,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::GET_GROUND)
 		{
-			if(_ground)
-				message.setParam(&_groundSegment);
+			message.setParam(const_cast<Fixture*>(_ground));
 		}
 		else if(message.getID() == MessageID::SET_GROUND)
 		{
 			_ground = static_cast<Fixture*>(message.getParam());
+			_groundId = _ground->getEntityId();
 			_previousGroundCenter = _ground->getGlobalShape().getCenter();
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
@@ -86,9 +86,16 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::POST_LOAD || message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
 		{
-			_ground = 0;
-			_groundSegment = Segment::Zero;
-			_previousGroundCenter = Vector::Zero;
+			if (_groundId == Hash::INVALID)
+			{
+				_ground = 0;
+				_previousGroundCenter = Vector::Zero;
+			}
+			else 
+			{
+				_ground = static_cast<Fixture*>(getEntity().getManager().sendMessageToEntity(_groundId, Message(MessageID::GET_FIXTURE)));
+			}
+			
 		}
 	}
 
@@ -135,30 +142,35 @@ namespace Temporal
 		{
 			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
 			_dynamicBodyBounds.getOBB().translate(vector);
-			_groundSegment.translate(vector);
 		}
 			
 		if(_bodyEnabled)
 		{
+			Segment groundSegment;
+			if (_ground)
+				groundSegment = getTopSegment(_ground->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
+
 			// Slide
-			if(_ground && !AngleUtils::radian().isModerate(_groundSegment.getRadius().getAngle()))
+			if(_ground && !AngleUtils::radian().isModerate(groundSegment.getRadius().getAngle()))
 			{
 				// BRODER
-				_velocity = _groundSegment.getNaturalDirection() * 375.0f;
+				_velocity = groundSegment.getNaturalDirection() * 375.0f;
 				if(_velocity.getY() > 0.0f)
 					_velocity = -_velocity;
 				_ground = 0;
+				_groundId = Hash::INVALID;
 				executeMovement(determineMovement(framePeriod));
 			}
 			// Walk
 			else if(_ground && _velocity.getY() == 0.0f)
 			{
-				walk(framePeriod);
+				walk(framePeriod, groundSegment);
 			}
 			// Air
 			else
 			{
 				_ground = 0;
+				_groundId = Hash::INVALID;
 				executeMovement(determineMovement(framePeriod));
 			}
 		}
@@ -189,18 +201,18 @@ namespace Temporal
 			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundSegment.getNaturalDirection().getAngle()))
 			{
 				_ground = &result.getFixture();
-				_groundSegment = groundSegment;
+				_groundId = result.getFixture().getEntityId();
 				_previousGroundCenter = _ground->getGlobalShape().getCenter();
 				_dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
 				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
-				walk(leftPeriod);
+				walk(leftPeriod, groundSegment);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	void DynamicBody::walk(float framePeriod)
+	void DynamicBody::walk(float framePeriod, const Segment& groundSegment)
 	{
 		const OBB& staticBodyBounds = _ground->getGlobalShape();
 		
@@ -208,6 +220,7 @@ namespace Temporal
 		if(_velocity.getX() == 0)
 		{
 			_ground = 0;
+			_groundId = Hash::INVALID;
 			executeMovement(determineMovement(framePeriod));
 			return;
 		}
@@ -217,7 +230,7 @@ namespace Temporal
 		Side::Enum oppositeSide = Side::getOpposite(side);
 
 		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
-		Vector direction = (_groundSegment.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) :  _groundSegment.getNaturalDirection()) * static_cast<float>(side);
+		Vector direction = (groundSegment.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : groundSegment.getNaturalDirection()) * static_cast<float>(side);
 		Vector curr = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
 
 		float movementAmount = _velocity.getLength();
@@ -227,7 +240,7 @@ namespace Temporal
 
 		Vector movement = velocity * framePeriod;						
 		Vector dest = curr + movement;
-		Vector max = _groundSegment.getPoint(side);
+		Vector max = groundSegment.getPoint(side);
 		
 
 		// Still on platform
@@ -245,6 +258,7 @@ namespace Temporal
 			if (!transitionPlatform(direction, side, leftPeriod))
 			{
 				_ground = 0;
+				_groundId = Hash::INVALID;
 
 				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
 				if (direction.getY() <= 0.0f)
@@ -362,7 +376,7 @@ namespace Temporal
 		if(correction.getY() > 0.0f && modifyGround)
 		{
 			_ground = staticBodyBounds;
-			_groundSegment = getTopSegment(_ground->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
+			_groundId = staticBodyBounds->getEntityId();
 		}
 		
 	}
