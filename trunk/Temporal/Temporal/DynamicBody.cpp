@@ -141,7 +141,8 @@ namespace Temporal
 		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
 		{
 			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
-			_dynamicBodyBounds.getOBB().translate(vector);
+			if (_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
+				_dynamicBodyBounds.getOBB().translate(vector);
 		}
 			
 		if(_bodyEnabled)
