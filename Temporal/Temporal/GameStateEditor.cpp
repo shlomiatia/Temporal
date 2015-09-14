@@ -19,6 +19,7 @@
 #include "Lighting.h"
 #include "Laser.h"
 #include "Door.h"
+#include "Patrol.h"
 #include <sstream>
 
 namespace Temporal
@@ -199,77 +200,55 @@ namespace Temporal
 			{
 				return;
 			}
+			Hash id("component-editor");
+			if (getEntity().getManager().getEntity(id))
+				return;
+			
+			ComponentList components;
 			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(MovingPlatform::TYPE));
 			if (platform)
 			{
-				Hash id = Hash("moving-platform-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				entity->add(new MovingPlatformEditor(*platform));
-				getEntity().getManager().add(entity);
-				return;
+				components.push_back(new MovingPlatformEditor(*platform));
 			}
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
 			if (button)
 			{
-				Hash id = Hash("button-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				entity->add(new ButtonEditor(*button));
-				getEntity().getManager().add(entity);
-				return;
+				components.push_back(new ButtonEditor(*button));
 			}
 			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(Laser::TYPE));
 			if (laser)
 			{
-				Hash id = Hash("laser-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				entity->add(new LaserEditor(*laser));
-				getEntity().getManager().add(entity);
-				return;
+				components.push_back(new LaserEditor(*laser));
 			}
 			Light* light = static_cast<Light*>(getSelected()->getEntity().get(Light::TYPE));
 			if (light)
 			{
-				Hash id = Hash("light-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				entity->add(new LightEditor(*light));
-				getEntity().getManager().add(entity);
-				return;
+				components.push_back(new LightEditor(*light));
 			}
 			Door* door = static_cast<Door*>(getSelected()->getEntity().get(Door::TYPE));
 			if (door)
 			{
-				Hash id = Hash("door-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				entity->add(new DoorEditor(*door));
-				getEntity().getManager().add(entity);
-				return;
+				components.push_back(new DoorEditor(*door));
 			}
 			TemporalPeriod* period = static_cast<TemporalPeriod*>(getSelected()->getEntity().get(TemporalPeriod::TYPE));
 			if (period)
 			{
-				Hash id = Hash("temporal-period-editor");
-				if (getEntity().getManager().getEntity(id))
-					return;
+				components.push_back(new TemporalPeriodEditor(*period));
+			}
+			Patrol* patrol = static_cast<Patrol*>(getSelected()->getEntity().get(Patrol::TYPE));
+			if (patrol)
+			{
+				components.push_back(new PatrolEditor(*patrol));
+			}
+			if (components.size() != 0)
+			{
 				Entity* entity = new Entity(id);
 				entity->setBypassSave(true);
-				entity->add(new TemporalPeriodEditor(*period));
+				for (ComponentIterator i = components.begin(); i != components.end(); ++i)
+				{
+					entity->add(*i);
+				}
 				getEntity().getManager().add(entity);
-				return;
 			}
 		}
 	}

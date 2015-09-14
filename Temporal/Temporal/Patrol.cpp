@@ -36,10 +36,12 @@ namespace Temporal
 			getOwner().raiseMessage(Message(MessageID::SENSOR_FRONG_EDGE));
 	}
 
-	Patrol::Patrol() : 
-		StateMachineComponent(getStates(), "PAT"),
-		_edgeDetector(FRONT_EDGE_SENSOR_ID, *this)
-		{}
+	Patrol& getPatrol(StateMachineComponent* stateMachine)
+	{
+		return *static_cast<Patrol*>(stateMachine);
+	}
+
+	Patrol::Patrol(bool isStatic) : StateMachineComponent(getStates(), "PAT"), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic) {}
 
 	void Patrol::handleMessage(Message& message)
 	{
@@ -61,7 +63,7 @@ namespace Temporal
 
 	Hash Patrol::getInitialState() const
 	{
-		return WALK_STATE;
+		return WAIT_STATE;
 	}
 
 	HashStateMap Patrol::getStates() const
@@ -157,7 +159,7 @@ namespace Temporal
 		{	
 			if(message.getID() == MessageID::ANIMATION_ENDED)
 			{
-				_stateMachine->changeState(WALK_STATE);
+				_stateMachine->changeState(WAIT_STATE);
 			}
 		}
 
@@ -190,7 +192,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(_stateMachine->getTimer().getElapsedTime() >= WAIT_TIME)
+				if (!getPatrol(_stateMachine).isStatic() && _stateMachine->getTimer().getElapsedTime() >= WAIT_TIME)
 				{
 					_stateMachine->changeState(TURN_STATE);
 				}

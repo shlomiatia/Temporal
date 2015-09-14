@@ -186,10 +186,10 @@
         </entity>
         <entity id="ENT_LASER0">
             <transform orientation="1">
-                <position x="357.000000" y="177.066681"/>
+                <position x="357.000000" y="191.000000"/>
             </transform>
             <collision-filter category="-1" group="1"/>
-            <laser friendly="0" speed-per-second="128.000000"/>
+            <laser friendly="0" speed-per-second="0.000000"/>
             <dynamic-body gravity-enabled="0" collision-mask="1" body-enabled="1">
                 <fixture>
                     <obb angle="0.000000">
@@ -222,7 +222,7 @@
                 <position x="106.000000" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="1"/>
-            <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
+            <patrol state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
             <dynamic-body gravity-enabled="1" collision-mask="1" body-enabled="1">
                 <fixture>
                     <obb angle="0.000000">
@@ -372,7 +372,7 @@
                 <position x="426.000000" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="0"/>
-            <patrol state="PAT_STT_WALK" timer="0.000000" state-flag="0"/>
+            <patrol state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
             <dynamic-body gravity-enabled="1" collision-mask="1" body-enabled="1">
                 <fixture>
                     <obb angle="0.000000">

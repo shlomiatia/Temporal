@@ -24,21 +24,26 @@ namespace Temporal
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol();
+		Patrol(bool isStatic = false);
 
 		Hash getType() const { return TYPE; }
-		Component* clone() const { return new Patrol(); }
+		Component* clone() const { return new Patrol(_isStatic); }
 		void handleMessage(Message& message);
 
 		static const Hash TYPE;
 
+		bool isStatic() const { return _isStatic; }
+		void setStatic(bool isStatic) { _isStatic = isStatic; }
 	protected:
 		Hash getInitialState() const;
 
 	private:
+		bool _isStatic;
 		EdgeDetector _edgeDetector;
 
 		HashStateMap getStates() const;
+
+		friend class SerializationAccess;
 	};
 
 	namespace PatrolStates
