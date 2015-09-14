@@ -16,7 +16,7 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-		Component* clone() const { return new Laser(_friendly); };
+		Component* clone() const { return new Laser(_friendly, _speedPerSecond); };
 		static const Hash TYPE;
 
 		bool isFriendly() const { return _friendly; }

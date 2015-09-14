@@ -408,6 +408,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Patrol& component, T& serializer)
 		{
+			serializer.serialize("is-static", component._isStatic);
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
 

@@ -10,6 +10,7 @@
 #include "Door.h"
 #include "Control.h"
 #include "TemporalPeriod.h"
+#include "Patrol.h"
 
 namespace Temporal
 {
@@ -19,45 +20,73 @@ namespace Temporal
 	/*
 	 * Component editor
 	 */
+	float ComponentEditor::_y = 0.0f;
+	bool ComponentEditor::_focused = false;
+	HashList ComponentEditor::_ids;
+
 	void ComponentEditor::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			const Vector WINDOW_SIZE(Graphics::get().getLogicalView());
 			PANEL_SIZE = WINDOW_SIZE / 1.5f;
-			CONTROL_SIZE = Vector((PANEL_SIZE.getX() - PADDING * 2.0f) / 1.0f, (PANEL_SIZE.getY() - PADDING * 4.0f) / 3.0f);
+			const float COLUMN_CONTROLS = 2.0f;
+			const float ROW_CONTROLS = 6.0f;
+			CONTROL_SIZE = Vector((PANEL_SIZE.getX() - PADDING * (COLUMN_CONTROLS + 1.0f)) / COLUMN_CONTROLS, (PANEL_SIZE.getY() - PADDING * (ROW_CONTROLS + 1.0f)) / ROW_CONTROLS);
 			//	addControl(Hash("ENT_PANEL"), AABB(WINOW_CENTER, PANEL_SIZE / 2.0f));
 			
-			_y = PANEL_SIZE.getY() + (WINDOW_SIZE.getY() - PANEL_SIZE.getY()) / 2.0f;
+			ComponentList& components = getEntity().getAll();
+			if (components.at(0) == this)
+			{
+				_y = PANEL_SIZE.getY() + (WINDOW_SIZE.getY() - PANEL_SIZE.getY()) / 2.0f;
+				_focused = false;
+			}
 		}
 		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			ToolComponent::addButton(OK_BUTTON_ID, getNextControlShape(), "Ok", createAction(ComponentEditor, ok));
-			_ids.push_back(OK_BUTTON_ID);
+			ComponentList& components = getEntity().getAll();
+			if (components.at(components.size() - 1) == this)
+			{
+				ToolComponent::addButton(OK_BUTTON_ID, getNextControlShape(), "Ok", createAction(ComponentEditor, ok));
+				_ids.push_back(OK_BUTTON_ID);
+			}
 		}
 	}
 
-	void ComponentEditor::addPanelTextBox(Hash id, const char* text, IAction1<const char*>* textChangedEvent)
+	void ComponentEditor::addPanelTextBox(const char* label, const char* text, IAction1<const char*>* textChangedEvent)
 	{
+		addLabel(getNextLabelShape(), label);
+		Hash id(Utils::format("%s_TEXTBOX", label).c_str());
 		Control* control = addTextBox(id, getNextControlShape(), text, textChangedEvent);
 		if (!_focused)
 		{
 			control->focus();
 			_focused = true;
 		}
+		_ids.push_back(Hash(label));
 		_ids.push_back(id);
 	}
 
-	void ComponentEditor::addPanelCheckBox(Hash id, bool value, IAction1<bool>* checkChangedEvent)
+	void ComponentEditor::addPanelCheckBox(const char* label, bool value, IAction1<bool>* checkChangedEvent)
 	{
+		addLabel(getNextLabelShape(), label);
+		Hash id(Utils::format("%s_CHECKBOX", label).c_str());
 		addCheckBox(id, getNextControlShape(), value, checkChangedEvent);
+		_ids.push_back(Hash(label));
 		_ids.push_back(id);
+	}
+
+	AABB ComponentEditor::getNextLabelShape()
+	{
+		const Vector WINDOW_SIZE(Graphics::get().getLogicalView());
+		const AABB CONTROL_SHAPE(Vector((WINDOW_SIZE.getX() - PADDING - CONTROL_SIZE.getX()) / 2.0f, _y - PADDING - CONTROL_SIZE.getY() / 2.0f), CONTROL_SIZE / 2.0f);
+		return CONTROL_SHAPE;
 	}
 
 	AABB ComponentEditor::getNextControlShape()
 	{
 		const Vector WINDOW_SIZE(Graphics::get().getLogicalView());
-		const AABB CONTROL_SHAPE(Vector(WINDOW_SIZE.getX() / 2.0f, _y - PADDING - CONTROL_SIZE.getY() / 2.0f), CONTROL_SIZE / 2.0f);
+		const AABB CONTROL_SHAPE(Vector((WINDOW_SIZE.getX() + PADDING + CONTROL_SIZE.getX()) / 2.0f, _y - PADDING - CONTROL_SIZE.getY() / 2.0f), CONTROL_SIZE / 2.0f);
 		_y -= (PADDING + CONTROL_SIZE.getY());
 		return CONTROL_SHAPE;
 	}
@@ -68,19 +97,22 @@ namespace Temporal
 		{
 			getEntity().getManager().remove(*i);
 		}
+		_ids.clear();
 		getEntity().getManager().remove(getEntity().getId());
 	}
 
 	/*
 	 * Moving platform editor
 	 */
+	Hash MovingPlatformEditor::TYPE("moving-platform-editor");
+
 	void MovingPlatformEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
  		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelTextBox(Hash("ENT_TEXTBOX_X"), Utils::toString(_movingPlatform.getMovement().getX()).c_str(), createAction1(MovingPlatformEditor, const char*, movementXChanged));
-			addPanelTextBox(Hash("ENT_TEXTBOX_Y"), Utils::toString(_movingPlatform.getMovement().getY()).c_str(), createAction1(MovingPlatformEditor, const char*, movementYChanged));
+			addPanelTextBox("Movement X", Utils::toString(_movingPlatform.getMovement().getX()).c_str(), createAction1(MovingPlatformEditor, const char*, movementXChanged));
+			addPanelTextBox("Movement Y", Utils::toString(_movingPlatform.getMovement().getY()).c_str(), createAction1(MovingPlatformEditor, const char*, movementYChanged));
 		}
 	}
 
@@ -97,12 +129,14 @@ namespace Temporal
 	/*
 	 * Button editor
 	 */
+	Hash ButtonEditor::TYPE("button-editor");
+
 	void ButtonEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelTextBox(Hash("ENT_TEXTBOX_TARGET"), _button.getTarget().getString(), createAction1(ButtonEditor, const char*, targetChanged));
+			addPanelTextBox("Target", _button.getTarget().getString(), createAction1(ButtonEditor, const char*, targetChanged));
 		}
 	}
 
@@ -114,13 +148,15 @@ namespace Temporal
 	/*
 	* Laser editor
 	*/
+	Hash LaserEditor::TYPE("laser-editor");
+
 	void LaserEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelTextBox(Hash("ENT_TEXTBOX_SPEED_PER_SECOND"), Utils::toString(_laser.getSpeedPerSecond()).c_str(), createAction1(LaserEditor, const char*, speedPerSecondChanged));
-			addPanelCheckBox(Hash("ENT_CHECKBOX_FRIENDLY"), _laser.isFriendly(), createAction1(LaserEditor, bool, friendlyChanged));
+			addPanelTextBox("Speed Per Second", Utils::toString(_laser.getSpeedPerSecond()).c_str(), createAction1(LaserEditor, const char*, speedPerSecondChanged));
+			addPanelCheckBox("Friendly", _laser.isFriendly(), createAction1(LaserEditor, bool, friendlyChanged));
 		}
 	}
 
@@ -137,12 +173,14 @@ namespace Temporal
 	/*
 	* Light editor
 	*/
+	Hash LightEditor::TYPE("light-editor");
+
 	void LightEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelCheckBox(Hash("ENT_CHECKBOX_ACTIVATED"), _light.isActivated(), createAction1(LightEditor, bool, activatedChanged));
+			addPanelCheckBox("Activated", _light.isActivated(), createAction1(LightEditor, bool, activatedChanged));
 		}
 	}
 
@@ -154,12 +192,14 @@ namespace Temporal
 	/*
 	* Door editor
 	*/
+	Hash DoorEditor::TYPE("door-editor");
+
 	void DoorEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelCheckBox(Hash("ENT_CHECKBOX_CLOSED"), _door.isClosed(), createAction1(DoorEditor, bool, closedChanged));
+			addPanelCheckBox("Closed", _door.isClosed(), createAction1(DoorEditor, bool, closedChanged));
 		}
 	}
 
@@ -171,18 +211,39 @@ namespace Temporal
 	/*
 	* Temporal period editor
 	*/
+	Hash TemporalPeriodEditor::TYPE("door-editor");
+
 	void TemporalPeriodEditor::handleMessage(Message& message)
 	{
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			
-			addPanelTextBox(Hash("ENT_TEXTBOX_FUTURE_SELF_ID"), _period.getFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
+			addPanelTextBox("Future Self", _period.getFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
 		}
 	}
 
 	void TemporalPeriodEditor::futureSelfIdChanged(const char* s)
 	{
 		_period.setFutureSelfId(Hash(s));
+	}
+
+	/*
+	* Patrol editor
+	*/
+	Hash PatrolEditor::TYPE("patrol-editor");
+
+	void PatrolEditor::handleMessage(Message& message)
+	{
+		ComponentEditor::handleMessage(message);
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			addPanelCheckBox("Is Static", _patrol.isStatic(), createAction1(PatrolEditor, bool, isStaticChanged));
+		}
+	}
+
+	void PatrolEditor::isStaticChanged(bool b)
+	{
+		_patrol.setStatic(b);
 	}
 }
