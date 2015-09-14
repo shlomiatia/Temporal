@@ -171,6 +171,15 @@ namespace Temporal
 		}
 	}
 
+	void Control::blur()
+	{
+		if (_isTextBox)
+		{
+			getEntity().getManager().clearFocusInputComponent();
+			_isTextBoxMode = false;
+		}
+	}
+
 	void Control::mouseDown(MouseParams& params)
 	{
 		const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
@@ -186,6 +195,11 @@ namespace Temporal
 				raiseMouseDown(_rightMouseDownEvent, params, _isRightDown, _isRightClick);
 			else
 				params.setHandled(false);
+		}
+		else
+		{
+			if (params.getButton() == MouseButton::LEFT)
+				blur();
 		}
 	}
 
@@ -253,8 +267,7 @@ namespace Temporal
 		{
 			if(_textChangedEvent)
 				(*_textChangedEvent)(_label.c_str());
-			_isTextBoxMode = false;
-			getEntity().getManager().clearFocusInputComponent();
+			blur();
 		}
 		else if(key == Key::BACKSPACE)
 		{
