@@ -14,7 +14,8 @@ namespace Temporal
 			PLAYER = 8,
 			BUTTON = 16,
 			PATROL_CONTROL = 32,
-			MOVING_PLATFORM_CONTROL = 64
+			MOVING_PLATFORM_CONTROL = 64,
+			DRAGGABLE = 128
 		};
 	}
 }

@@ -214,6 +214,7 @@ namespace Temporal
 			disableEchos();
 			_cooldown = true;
 			_cooldownTimer.reset();
+			raiseMessage(Message(MessageID::TEMPORAL_ECHOS_MERGED));
 		}
 	}
 
