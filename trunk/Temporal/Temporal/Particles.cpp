@@ -52,7 +52,7 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
-			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::PARTICLES, this);
+			getEntity().getManager().getGameState().getLayersManager().removeSprite(LayerType::BACKGROUND_PARTICLES, this);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -73,7 +73,7 @@ namespace Temporal
 
 	void ParticleEmitter::init()
 	{
-		getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::PARTICLES, this);
+		getEntity().getManager().getGameState().getLayersManager().addSprite(LayerType::BACKGROUND_PARTICLES, this);
 		_particles = new Particle[_size];
 		if(!_spritesheetFile.empty())
 			_spritesheet = ResourceManager::get().getSpritesheet(_spritesheetFile.c_str());

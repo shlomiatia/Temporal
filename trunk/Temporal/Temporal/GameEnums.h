@@ -100,6 +100,7 @@ namespace Temporal
 
 			SET_LIT,
 			IS_VISIBLE,
+			IS_COVERED,
 
 			ACTIVATE,
 			DIE
