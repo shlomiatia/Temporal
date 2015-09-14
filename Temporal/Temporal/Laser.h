@@ -12,7 +12,7 @@ namespace Temporal
 	class Laser : public Component
 	{
 	public:
-		Laser(bool friendly = false) : _platform(0), _friendly(friendly){}
+		Laser(bool friendly = false, float speedPerSecond = 128.0f) : _platform(0), _friendly(friendly), _speedPerSecond(speedPerSecond) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -21,9 +21,13 @@ namespace Temporal
 
 		bool isFriendly() const { return _friendly; }
 		void setFriendly(bool friendly) { _friendly = friendly; }
+		float getSpeedPerSecond() const { return _speedPerSecond; }
+		void setSpeedPerSecond(float speedPerSecond) { _speedPerSecond = speedPerSecond; }
+
 	private:
 		const OBB* _platform;
 		bool _friendly;
+		float _speedPerSecond;
 
 		void update(float framePeriod);
 		void setLength(float length);

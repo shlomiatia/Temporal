@@ -14,14 +14,13 @@ namespace Temporal
 	const Hash Laser::TYPE = Hash("laser");
 	const Hash LASER_SCENE_NODE = Hash("SCN_LASER");
 
-	static const float SPEED_PER_SECOND = 128.0f;
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER | CollisionCategory::CHARACTER;
 
 	void Laser::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(_speedPerSecond, 0.0f)));
 			setColor();
 		}
 		else if (message.getID() == MessageID::BODY_COLLISION)
@@ -101,16 +100,16 @@ namespace Temporal
 			setLength(length);
 		}
 		Side::Enum orientation = getOrientation(*this);
-		if (orientation == Side::LEFT && position.getX() - shape.getRadiusX() - SPEED_PER_SECOND * framePeriod <= _platform->getLeft())
+		if (orientation == Side::LEFT && position.getX() - shape.getRadiusX() - _speedPerSecond * framePeriod <= _platform->getLeft())
 		{
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 			
 		}
-		else if (orientation == Side::RIGHT && position.getX() + shape.getRadiusX() + SPEED_PER_SECOND * framePeriod >= _platform->getRight())
+		else if (orientation == Side::RIGHT && position.getX() + shape.getRadiusX() + _speedPerSecond * framePeriod >= _platform->getRight())
 		{
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 		}
-		raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(SPEED_PER_SECOND, 0.0f)));
+		raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(_speedPerSecond, 0.0f)));
 
 	}
 }

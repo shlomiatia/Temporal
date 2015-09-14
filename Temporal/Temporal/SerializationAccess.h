@@ -372,7 +372,7 @@ namespace Temporal
 			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 			serializer.serialize("previous-ground-center", dynamicBody._previousGroundCenter); // memory
-			serializer.serialize("ground-id", dynamicBody._groundId);
+			serializer.serialize("ground-id", dynamicBody._groundId); // memory
 
 		}
 		
@@ -386,6 +386,7 @@ namespace Temporal
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
+			serializer.serialize("future-self-id", temporalPeriod._futureSelfId);
 		}
 		
 		template<class T>
@@ -433,6 +434,7 @@ namespace Temporal
 		static void serialize(const char* key, Laser& laser, T& serializer) 
 		{
 			serializer.serialize("friendly", laser._friendly);
+			serializer.serialize("speed-per-second", laser._speedPerSecond);
 		}
 
 		template<class T>

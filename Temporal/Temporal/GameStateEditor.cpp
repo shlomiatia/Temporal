@@ -209,6 +209,7 @@ namespace Temporal
 				entity->setBypassSave(true);
 				entity->add(new MovingPlatformEditor(*platform));
 				getEntity().getManager().add(entity);
+				return;
 			}
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
 			if (button)
@@ -220,6 +221,7 @@ namespace Temporal
 				entity->setBypassSave(true);
 				entity->add(new ButtonEditor(*button));
 				getEntity().getManager().add(entity);
+				return;
 			}
 			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(Laser::TYPE));
 			if (laser)
@@ -231,6 +233,7 @@ namespace Temporal
 				entity->setBypassSave(true);
 				entity->add(new LaserEditor(*laser));
 				getEntity().getManager().add(entity);
+				return;
 			}
 			Light* light = static_cast<Light*>(getSelected()->getEntity().get(Light::TYPE));
 			if (light)
@@ -242,6 +245,7 @@ namespace Temporal
 				entity->setBypassSave(true);
 				entity->add(new LightEditor(*light));
 				getEntity().getManager().add(entity);
+				return;
 			}
 			Door* door = static_cast<Door*>(getSelected()->getEntity().get(Door::TYPE));
 			if (door)
@@ -253,6 +257,19 @@ namespace Temporal
 				entity->setBypassSave(true);
 				entity->add(new DoorEditor(*door));
 				getEntity().getManager().add(entity);
+				return;
+			}
+			TemporalPeriod* period = static_cast<TemporalPeriod*>(getSelected()->getEntity().get(TemporalPeriod::TYPE));
+			if (period)
+			{
+				Hash id = Hash("temporal-period-editor");
+				if (getEntity().getManager().getEntity(id))
+					return;
+				Entity* entity = new Entity(id);
+				entity->setBypassSave(true);
+				entity->add(new TemporalPeriodEditor(*period));
+				getEntity().getManager().add(entity);
+				return;
 			}
 		}
 	}
