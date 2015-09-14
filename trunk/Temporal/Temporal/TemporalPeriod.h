@@ -39,20 +39,23 @@ namespace Temporal
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period = Period::PRESENT) : _period(period) {}
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID) : _period(period), _futureSelfId(futureSelfId) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
-		Component* clone() const { return new TemporalPeriod(_period); }
+		Component* clone() const { return new TemporalPeriod(_period, _futureSelfId); }
 
 		void setPeriod(Period::Enum period);
 		Period::Enum getPeriod() const { return _period; }
+		void setFutureSelfId(Hash futureSelfId) { _futureSelfId = futureSelfId; }
+		Hash getFutureSelfId() const { return _futureSelfId; }
 
 		static const Hash TYPE;
 	private:		
 
 		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;
+		Hash _futureSelfId;
 
 		friend class SerializationAccess;
 	};

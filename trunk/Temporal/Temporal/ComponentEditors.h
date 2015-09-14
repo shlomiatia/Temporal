@@ -12,6 +12,7 @@ namespace Temporal
 	class Laser;
 	class Light;
 	class Door;
+	class TemporalPeriod;
 
 	class ComponentEditor : public ToolComponent
 	{
@@ -76,6 +77,7 @@ namespace Temporal
 		Laser& _laser;
 
 		void friendlyChanged(bool b);
+		void speedPerSecondChanged(const char* s);
 	};
 
 	class LightEditor : public ComponentEditor
@@ -104,6 +106,20 @@ namespace Temporal
 		Door& _door;
 
 		void closedChanged(bool b);
+	};
+
+	class TemporalPeriodEditor : public ComponentEditor
+	{
+	public:
+		TemporalPeriodEditor(TemporalPeriod& period) : _period(period) {}
+
+		Hash getType() const { return Hash::INVALID; }
+		void handleMessage(Message& message);
+		Component* clone() const { return 0; }
+	private:
+		TemporalPeriod& _period;
+
+		void futureSelfIdChanged(const char* s);
 	};
 }
 

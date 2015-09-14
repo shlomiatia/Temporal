@@ -68,9 +68,10 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			Entity* particleEmitter = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
+			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
+			Component* particleEmitter = particleEmitterTemplate->get(Hash("particle-emitter"))->clone();
 			particleEmitter->setBypassSave(true);
-			getEntity().add(particleEmitter->get(Hash("particle-emitter"))->clone());
+			getEntity().add(particleEmitter);
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{
@@ -94,6 +95,18 @@ namespace Temporal
 			if (_period != playerPeriod)
 			{
 				raiseMessage(Message(MessageID::START_EMITTER));
+			}
+		}
+		else if (message.getID() == MessageID::DIE)
+		{
+			Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
+			if (_period != playerPeriod)
+			{
+				raiseMessage(Message(MessageID::START_EMITTER));
+			}
+			if (_futureSelfId != Hash::INVALID)
+			{
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
 		}
 	}

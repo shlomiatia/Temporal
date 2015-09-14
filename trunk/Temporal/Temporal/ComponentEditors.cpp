@@ -9,6 +9,7 @@
 #include "Lighting.h"
 #include "Door.h"
 #include "Control.h"
+#include "TemporalPeriod.h"
 
 namespace Temporal
 {
@@ -118,6 +119,7 @@ namespace Temporal
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
+			addPanelTextBox(Hash("ENT_TEXTBOX_SPEED_PER_SECOND"), Utils::toString(_laser.getSpeedPerSecond()).c_str(), createAction1(LaserEditor, const char*, speedPerSecondChanged));
 			addPanelCheckBox(Hash("ENT_CHECKBOX_FRIENDLY"), _laser.isFriendly(), createAction1(LaserEditor, bool, friendlyChanged));
 		}
 	}
@@ -127,6 +129,10 @@ namespace Temporal
 		_laser.setFriendly(b);
 	}
 
+	void LaserEditor::speedPerSecondChanged(const char* s)
+	{
+		_laser.setSpeedPerSecond(Utils::parseFloat(s));
+	}
 
 	/*
 	* Light editor
@@ -160,5 +166,23 @@ namespace Temporal
 	void DoorEditor::closedChanged(bool b)
 	{
 		_door.setClosed(b);
+	}
+
+	/*
+	* Temporal period editor
+	*/
+	void TemporalPeriodEditor::handleMessage(Message& message)
+	{
+		ComponentEditor::handleMessage(message);
+		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			
+			addPanelTextBox(Hash("ENT_TEXTBOX_FUTURE_SELF_ID"), _period.getFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
+		}
+	}
+
+	void TemporalPeriodEditor::futureSelfIdChanged(const char* s)
+	{
+		_period.setFutureSelfId(Hash(s));
 	}
 }
