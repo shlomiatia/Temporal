@@ -63,6 +63,7 @@ namespace Temporal
 
 		void setShortcutKey(Key::Enum key) { _shortcutKey = key; }
 		void focus();
+		void blur();
 
 		static const Hash TYPE;
 	private:
