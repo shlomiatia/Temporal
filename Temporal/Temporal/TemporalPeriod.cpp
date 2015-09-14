@@ -8,8 +8,27 @@ namespace Temporal
 {
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	static const Hash TEMPORAL_ACTIVATION_NOTIFICATION_ID("ENT_TEMPORAL_ACTIVATION_NOTIFICATION");
+	static const Hash PARTICLE_EMITTER_ID("particle-emitter");
 	const Hash PlayerPeriod::TYPE = Hash("player-period");
 	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
+	const ColorList PlayerPeriod::COLORS = {
+		Color(0.6392156862745098f, 0.2862745098039216f, 0.6431372549019608f),
+		Color(0.2470588235294118f, 0.2823529411764706f, 0.8f),
+		Color(0.2470588235294118f, 0.2823529411764706f, 0.8f),
+		Color(0.1333333333333333f, 0.6941176470588235f, 0.2980392156862745f),
+		Color(1.0f, 0.4980392156862745f, 0.1529411764705882f),
+		Color(1.0f, 0.6823529411764706f, 0.7882352941176471f),
+		Color(0.7254901960784314f, 0.4784313725490196f, 0.3411764705882353f)
+	};
+
+	const Color& PlayerPeriod::getNextColor()
+	{
+		if (_colorIterator == COLORS.end())
+			abort();
+		const Color& color = *_colorIterator;
+		_colorIterator++;
+		return color;
+	}
 
 	void PlayerPeriod::changePeriod(Period::Enum period)
 	{
@@ -69,9 +88,19 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
 			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
-			Component* particleEmitter = particleEmitterTemplate->get(Hash("particle-emitter"))->clone();
+			Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
 			particleEmitter->setBypassSave(true);
 			getEntity().add(particleEmitter);
+
+			PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			if (_futureSelfId != Hash::INVALID)
+			{
+				const Color& color = playerPeriod.getNextColor();
+				Message message(MessageID::SET_COLOR, const_cast<Color*>(&color));
+				raiseMessage(message);
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
+			}
+			
 		}
 		else if(message.getID() == MessageID::ENTITY_INIT)
 		{

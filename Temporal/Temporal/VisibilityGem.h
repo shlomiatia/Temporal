@@ -8,7 +8,7 @@ namespace Temporal
 	class VisibilityGem : public Component
 	{
 	public:
-		VisibilityGem() : _isLit(true), _isVisible(true) {}
+		VisibilityGem() : _isLit(true), _isCovered(true), _isVisible(true) {}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -19,6 +19,7 @@ namespace Temporal
 
 		bool _isVisible;
 		bool _isLit;
+		bool _isCovered;
 	};
 }
 #endif
