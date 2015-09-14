@@ -6,7 +6,6 @@
 #include "Shapes.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
-#include "CollisionFilter.h"
 #include "Fixture.h"
 
 namespace Temporal
@@ -19,11 +18,7 @@ namespace Temporal
 
 	void Sight::handleMessage(Message& message)
 	{
-		if(message.getID() == MessageID::ENTITY_POST_INIT)
-		{
-			_filter = static_cast<const CollisionFilter*>(getEntity().get(CollisionFilter::TYPE));
-		}
-		else if(message.getID() == MessageID::UPDATE)
+		if(message.getID() == MessageID::UPDATE)
 		{
 			checkLineOfSight();
 		}
@@ -62,7 +57,7 @@ namespace Temporal
 		if (fabsf(vector.getY()) > _sightSize.getY() || fabsf(vector.getX()) > _sightSize.getX()) return;
 
 		RayCastResult result;
-		if(getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, _filter->getGroup()))
+		if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, sourceCollisionGroup))
 		{
 			_pointOfIntersection = result.getPoint();
 			if(result.getFixture().getEntityId() == PLAYER_ENTITY)

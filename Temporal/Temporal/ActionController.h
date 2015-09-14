@@ -96,6 +96,7 @@ namespace Temporal
 
 		bool handleStandWalkMessage(Message& message);
 		bool handleFallJumpMessage(Message& message);
+		bool handleWalkDragMessage(Message& message);
 		void handleMessage(Message& message);
 
 	private:
@@ -135,6 +136,8 @@ namespace Temporal
 		void setHangDescendGroundDelta(const Vector& value) { _hangDescendGroundDelta = value; }
 		const Vector& getHangDescendMovement() const { return _hangDescendMovement; }
 		void setHangDescendMovement(const Vector& value) { _hangDescendMovement = value; }
+		Hash getDraggableId() const { return _draggableId; }
+		void setDraggableId(Hash value) { _draggableId = value; }
 
 	protected:
 		Hash getInitialState() const;
@@ -145,6 +148,7 @@ namespace Temporal
 		Vector _hangDescendOriginalTranslation;
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
+		Hash _draggableId;
 
 		HashStateMap getStates() const;
 
@@ -258,6 +262,13 @@ namespace Temporal
 		};
 
 		class Fire : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class Drag : public ComponentState
 		{
 		public:
 			void enter(void* param);

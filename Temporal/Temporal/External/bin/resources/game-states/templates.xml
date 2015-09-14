@@ -24,6 +24,19 @@
 	</static-body>
 	<renderer layer="30" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 </entity>
+<entity id="ENT_BOX">
+	<transform />
+	<collision-filter category="129" />
+	<dynamic-body>
+		<fixture>
+			<obb angle="0">
+				<center x="0" y="0" />
+				<radius x="48" y="48" />
+			</obb>
+		</fixture>
+	</dynamic-body>
+	<renderer layer="30" texture="resources/textures/box.png" />
+</entity>
 <entity id="ENT_PATROL">
 	<transform />
 	<collision-filter category="4" />

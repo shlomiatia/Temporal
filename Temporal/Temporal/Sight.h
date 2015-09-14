@@ -9,13 +9,11 @@
 
 namespace Temporal
 {
-	class CollisionFilter;
-
 	class Sight : public Component
 	{
 	public:
 		explicit Sight(Vector sightSize = Vector(480.0f, 64.0f)) :
-		  _sightSize(sightSize), _filter(0), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
+		  _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -24,7 +22,6 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-		const CollisionFilter* _filter;
 		Vector _sightSize;
 		
 		Vector _pointOfIntersection;

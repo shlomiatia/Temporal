@@ -66,9 +66,13 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
-			const Vector& param = getVectorParam(message.getParam());
-			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
-			_velocity = impulse;
+			if (_ground)
+			{
+				const Vector& param = getVectorParam(message.getParam());
+				Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
+				_velocity = impulse;
+			}
+			
 		}
 		else if(message.getID() == MessageID::SET_BODY_ENABLED)
 		{
@@ -79,12 +83,16 @@ namespace Temporal
 		{
 			_gravityEnabled= getBoolParam(message.getParam());
 		}
+		else if (message.getID() == MessageID::IS_BODY_ENABLED)
+		{
+			message.setParam(&_bodyEnabled);
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if (message.getID() == MessageID::POST_LOAD || message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
+		else if (message.getID() == MessageID::POST_LOAD)
 		{
 			if (_groundId == Hash::INVALID)
 			{
@@ -95,7 +103,6 @@ namespace Temporal
 			{
 				_ground = static_cast<Fixture*>(getEntity().getManager().sendMessageToEntity(_groundId, Message(MessageID::GET_FIXTURE)));
 			}
-			
 		}
 	}
 
