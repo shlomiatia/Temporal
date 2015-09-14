@@ -76,9 +76,9 @@ namespace Temporal
 			}
 
 			LayerComponentsMap& layerComponentsMap = layersManager.getSpriteLayer().get();
-			for (int i = LayerType::SIZE - 1; i >= 0; --i)
+			for (LayerType::EnumList::const_reverse_iterator i = LayerType::List.rbegin(); i != LayerType::List.rend(); ++i)
 			{
-				ComponentList& components = layerComponentsMap.at(static_cast<LayerType::Enum>(i));
+				ComponentList& components = layerComponentsMap.at(*i);
 				for (ComponentIterator j = components.begin(); j != components.end(); ++j)
 				{
 					(**j).raiseMessage(offsetMessage);

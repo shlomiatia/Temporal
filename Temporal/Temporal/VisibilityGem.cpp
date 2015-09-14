@@ -23,6 +23,10 @@ namespace Temporal
 			_isVisible = _isLit && !_isCovered;
 			message.setParam(&_isVisible);
 		}
+		else if (message.getID() == MessageID::IS_COVERED)
+		{
+			message.setParam(&_isCovered);
+		}
 		else if (message.getID() == MessageID::SENSOR_START)
 		{
 			const SensorParams& params = getSensorParams(message.getParam());

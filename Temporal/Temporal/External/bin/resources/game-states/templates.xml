@@ -9,7 +9,7 @@
 			</obb>
 		</fixture>
 	</static-body>
-	<renderer layer="4" texture="resources/textures/glass.png" />
+	<renderer layer="50" texture="resources/textures/glass.png" />
 </entity>
 <entity id="ENT_BLOCK">
 	<transform />
@@ -22,7 +22,7 @@
 			</obb>
 		</fixture>
 	</static-body>
-	<renderer layer="2" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
+	<renderer layer="30" texture="resources/textures/generic_wall_texture_by_b_a88.png" />
 </entity>
 <entity id="ENT_PATROL">
 	<transform />
@@ -63,7 +63,7 @@
 	<sight />
 	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
-	<renderer layer="5" sprite-sheet="resources/spritesheets/aquaria.xml">
+	<renderer layer="65" sprite-sheet="resources/spritesheets/aquaria.xml">
 		<scene-node id="SCN_ROOT" transform="1" flip="0">
 			<translation x="0" y="7" />
 			<scale x="0.40" y="0.42" />
@@ -130,7 +130,7 @@
 	<sight />
 	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
-	<renderer layer="5" sprite-sheet="resources/spritesheets/aquaria.xml">
+	<renderer layer="65" sprite-sheet="resources/spritesheets/aquaria.xml">
  		<scene-node id="SCN_ROOT" transform="1" flip="0">
 			<translation x="0" y="7" />
 			<scale x="0.40" y="0.42" />
@@ -166,7 +166,7 @@
 
 <entity id="ENT_BACKGROUND">
 	<transform />
-	<renderer layer="0" texture="resources/textures/bg.png" />
+	<renderer layer="10" texture="resources/textures/bg.png" />
 </entity>
 <entity id="ENT_LASER">
 	<transform />
@@ -180,7 +180,7 @@
 			</obb>
 		</fixture>
 	</dynamic-body>
-	<renderer layer="5" sprite-sheet="resources/spritesheets/emitter.xml">
+	<renderer layer="65" sprite-sheet="resources/spritesheets/emitter.xml">
  		<scene-node id="SCN_ROOT" transform="1">
 			<scene-node id="SCN_LASER" sprite-group="SCN_LASER" />
 			<scene-node id="SCN_EMITTER" sprite-group="SCN_EMITTER" >
@@ -201,7 +201,7 @@
 			</obb>
 		</fixture>
 	</static-body>
-	<renderer layer="2" texture="resources/textures/button.png" />
+	<renderer layer="30" texture="resources/textures/button.png" />
 </entity>
 <entity id="ENT_DOOR">
 	<transform />
@@ -215,7 +215,7 @@
 		</fixture>
 	</static-body>
 	<door />
-	<renderer layer="2" texture="resources/textures/door.png" />
+	<renderer layer="30" texture="resources/textures/door.png" />
 </entity>
 <entity id="ENT_MOVING_PLATFORM">
 	<transform />
@@ -229,7 +229,7 @@
 		</fixture>
 	</dynamic-body>
 	<moving-platform />
-	<renderer layer="2" texture="resources/textures/moving-platform.png" />
+	<renderer layer="30" texture="resources/textures/moving-platform.png" />
 </entity>
 <entity id="ENT_LIGHT">
 	<transform/>
@@ -237,7 +237,7 @@
 	<light>
 		<color r="0.5" g="0.5" b="0.5" />
 	</light>
-	<renderer layer="5" sprite-sheet="resources/spritesheets/emitter.xml">
+	<renderer layer="65" sprite-sheet="resources/spritesheets/emitter.xml">
  		<scene-node id="SCN_ROOT" sprite-group="SCN_EMITTER">
 				<translation x="0" y="-8" />
 		</scene-node>

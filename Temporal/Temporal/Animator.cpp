@@ -210,7 +210,7 @@ namespace Temporal
 		{
 			SceneNode* sceneNode = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
 			createSceneNodesList(_sceneNodes, sceneNode);
-			reset(AnimationParams(Hash("POP_ANM_BASE")));
+			update();
 		}
 		else if(message.getID() == MessageID::RESET_ANIMATION)
 		{

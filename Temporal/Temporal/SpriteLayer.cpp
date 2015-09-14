@@ -7,8 +7,8 @@ namespace Temporal
 {
 	SpriteLayer::SpriteLayer(LayersManager* manager) : Layer(manager)
 	{
-		for (int i = 0; i <= LayerType::SIZE; ++i)
-			_layers[static_cast<LayerType::Enum>(i)] = ComponentList();
+		for (LayerType::EnumIterator i = LayerType::List.begin(); i != LayerType::List.end(); ++i)
+			_layers[*i] = ComponentList();
 	}
 
 	void SpriteLayer::preDraw(LayerType::Enum layer)
@@ -18,7 +18,7 @@ namespace Temporal
 			Graphics::get().getMatrixStack().top().translate(getManager().getCamera().getBottomLeft() * 0.9f);
 		}
 
-		if (layer != LayerType::PARTICLES)
+		if (layer != LayerType::BACKGROUND_PARTICLES)
 		{
 			Graphics::get().getSpriteBatch().begin();
 		}
@@ -26,7 +26,7 @@ namespace Temporal
 	
 	void SpriteLayer::postDraw(LayerType::Enum layer)
 	{
-		if (layer != LayerType::PARTICLES)
+		if (layer != LayerType::BACKGROUND_PARTICLES)
 		{
 			Graphics::get().getSpriteBatch().end();
 		}
@@ -40,9 +40,9 @@ namespace Temporal
 	void SpriteLayer::innerDraw()
 	{
 		Graphics::get().getShaderProgram().setUniform(Graphics::get().getSpriteBatch().getTypeUniform(), 0);
-		for (int i = 0; i < LayerType::SIZE; ++i)
+		for (LayerType::EnumIterator i = LayerType::List.begin(); i != LayerType::List.end(); ++i)
 		{
-			LayerType::Enum layer = static_cast<LayerType::Enum>(i);
+			LayerType::Enum layer = *i;
 			
 			preDraw(layer);
 			
