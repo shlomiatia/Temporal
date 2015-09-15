@@ -90,7 +90,10 @@ namespace Temporal
 		Entity* clone = new Entity();
 		for(ComponentIterator i = _components.begin(); i != _components.end(); ++i)
 		{
-			clone->add((**i).clone());
+			Component& component = **i;
+			Component* componentClone = component.clone();
+			componentClone->setBypassSave(component.isBypassSave());
+			clone->add(componentClone);	
 		}
 		return clone;
 	}

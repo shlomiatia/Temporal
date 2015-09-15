@@ -181,13 +181,6 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class Slide : public ComponentState
-		{
-		public:
-			void enter(void* param);
-			void handleMessage(Message& message);
-		};
-
 		class Turn : public ComponentState
 		{
 		public:

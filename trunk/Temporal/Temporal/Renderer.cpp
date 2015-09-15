@@ -135,7 +135,6 @@ namespace Temporal
 	{
 		SceneNode* sceneNodeClone = _root == 0 ? 0 : _root->clone();
 		Renderer* clone = new Renderer(_textureFile.c_str(), _spriteSheetFile.c_str(), sceneNodeClone, _layer, _color);
-		clone->setBypassSave(isBypassSave());
 		return clone;
 	}
 
