@@ -373,7 +373,7 @@ namespace Temporal
 			modifyGround = false;
 		}
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
-		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON /*&& AngleUtils::radian().isModerate(correction.getRightNormal().getAngle())*/)
+		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && AngleUtils::radian().isModerate(correction.getRightNormal().getAngle()))
 		{	
 			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();

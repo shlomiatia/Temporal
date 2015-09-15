@@ -47,7 +47,7 @@ namespace Temporal
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID) : _period(period), _futureSelfId(futureSelfId) {}
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID) : _period(period), _futureSelfId(futureSelfId), _createFutureSelf(false) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -57,13 +57,15 @@ namespace Temporal
 		Period::Enum getPeriod() const { return _period; }
 		void setFutureSelfId(Hash futureSelfId) { _futureSelfId = futureSelfId; }
 		Hash getFutureSelfId() const { return _futureSelfId; }
+		void setCreateFutureSelf(bool createFutureSelf) { _createFutureSelf = createFutureSelf; }
+		bool isCreateFutureSelf() const { return _createFutureSelf; }
 
 		static const Hash TYPE;
 	private:		
-
 		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;
 		Hash _futureSelfId;
+		bool _createFutureSelf;
 
 		friend class SerializationAccess;
 	};

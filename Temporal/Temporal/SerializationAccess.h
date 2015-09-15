@@ -387,6 +387,7 @@ namespace Temporal
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
 			serializer.serialize("future-self-id", temporalPeriod._futureSelfId);
+			serializer.serialize("create-future-self", temporalPeriod._createFutureSelf);
 		}
 		
 		template<class T>
