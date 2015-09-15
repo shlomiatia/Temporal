@@ -100,12 +100,9 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
-			if (_ground)
-			{
-				const Vector& param = getVectorParam(message.getParam());
-				Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
-				_velocity = impulse;
-			}
+			const Vector& param = getVectorParam(message.getParam());
+			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
+			_velocity = impulse;
 			
 		}
 		else if(message.getID() == MessageID::SET_BODY_ENABLED)

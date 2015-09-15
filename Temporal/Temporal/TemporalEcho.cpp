@@ -9,7 +9,7 @@ namespace Temporal
 {
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	const Hash TemporalEchoManager::TYPE = Hash("temporal-echo-manager");
-	const float TemporalEchoManager::ECHO_READY_TIME = 1.0f;
+	const float TemporalEchoManager::ECHO_READY_TIME = 3.0f;
 	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 1.0f;
 	const Hash TemporalEcho::TYPE = Hash("temporal-echo");
 	
