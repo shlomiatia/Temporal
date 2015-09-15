@@ -13,12 +13,16 @@ namespace Temporal
 	class Vector;
 	class Contact;
 	class Fixture;
+	class Entity;
+	class RayCastResult;
 	namespace MouseButton { enum Enum; }
 
 	const Vector& getPosition(const Component& component);
 	const Vector& getPosition(const Entity& entity);
 	Side::Enum getOrientation(const Component& component);
+	Side::Enum getOrientation(const Entity& component);
 	const OBB& getShape(const Component& component);
+	bool raycast(Entity& entity, const Vector& rayDirection, RayCastResult& result, int mask = -1);
 
 	Hash getHashParam(void* data);
 	const Vector& getVectorParam(void* data);

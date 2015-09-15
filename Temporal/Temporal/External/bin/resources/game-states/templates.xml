@@ -40,7 +40,7 @@
 <entity id="ENT_PATROL">
 	<transform />
 	<collision-filter category="4" />
-	<patrol />
+	<action-controller />
 	<dynamic-body>
 		<fixture>
 			<obb angle="0">
@@ -73,8 +73,8 @@
 			</obb>
 		</fixture>
 	</sensor>
+	<patrol />
 	<sight />
-	<action-controller />
 	<animator animation-set="resources/animations/aquaria.xml" />
 	<renderer layer="65" sprite-sheet="resources/spritesheets/aquaria.xml">
 		<scene-node id="SCN_ROOT" transform="1" flip="0">

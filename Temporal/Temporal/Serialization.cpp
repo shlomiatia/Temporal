@@ -205,7 +205,7 @@ namespace Temporal
 	}
 		
 	// Xml deserializer
-	XmlDeserializer::XmlDeserializer(Stream* stream) : _current(0)
+	XmlDeserializer::XmlDeserializer(Stream* stream) : BaseSerializer(stream), _current(0)
 	{
 		int result = _doc.Parse(stream->str().c_str());
 		if(result != 0)

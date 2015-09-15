@@ -182,7 +182,6 @@ namespace Temporal
 				
 				Vector correction;
 
-				// BRODER
 				if(intersects(area, platform, &correction))
 				{
 					j = areas.erase(j);
