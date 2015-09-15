@@ -3,6 +3,7 @@
 #include "Color.h"
 #include "Grid.h"
 #include "PhysicsEnums.h"
+#include "Utils.h"
 
 namespace Temporal
 {
@@ -87,23 +88,34 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
-			Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
-			particleEmitter->setBypassSave(true);
-			getEntity().add(particleEmitter);
-
-			PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			if (_createFutureSelf)
+			{
+				if (_period != Period::PAST)
+					abort();
+				Entity* clone = getEntity().clone();
+				clone->setBypassSave(true);
+				TemporalPeriod& period = *static_cast<TemporalPeriod*>(clone->get(TemporalPeriod::TYPE));
+				period._period = Period::PRESENT;
+				period._futureSelfId = Hash::INVALID;
+				period._createFutureSelf = false;
+				_futureSelfId = Hash(Utils::format("%s_PRESENT", getEntity().getId().getString()).c_str());
+				clone->setId(_futureSelfId);
+				getEntity().getManager().add(clone);
+			}
+			
 			if (_futureSelfId != Hash::INVALID)
 			{
+				PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
 				const Color& color = playerPeriod.getNextColor();
 				Message message(MessageID::SET_COLOR, const_cast<Color*>(&color));
 				raiseMessage(message);
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
-			
-		}
-		else if(message.getID() == MessageID::ENTITY_INIT)
-		{
+
+			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
+			Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
+			particleEmitter->setBypassSave(true);
+			getEntity().add(particleEmitter);
 			setPeriod(_period);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
@@ -136,6 +148,16 @@ namespace Temporal
 			if (_futureSelfId != Hash::INVALID)
 			{
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
+			}
+		}
+		else if (message.getID() == MessageID::SET_IMPULSE)
+		{
+			if (_futureSelfId != Hash::INVALID)
+			{
+				const Vector& position = getPosition(*this);
+				const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
+				if (position == futurePosition)
+					getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
 		}
 	}

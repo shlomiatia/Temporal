@@ -134,6 +134,7 @@ namespace Temporal
 		TemporalPeriod& _period;
 
 		void futureSelfIdChanged(const char* s);
+		void createFutureSelfChanged(bool b);
 	};
 
 	class PatrolEditor : public ComponentEditor
