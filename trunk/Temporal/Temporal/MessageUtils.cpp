@@ -29,9 +29,21 @@ namespace Temporal
 		return *static_cast<Side::Enum*>(component.raiseMessage(Message(MessageID::GET_ORIENTATION)));
 	}
 
+	Side::Enum getOrientation(const Entity& entity)
+	{
+		return *static_cast<Side::Enum*>(entity.handleMessage(Message(MessageID::GET_ORIENTATION)));
+	}
+
 	const OBB& getShape(const Component& component)
 	{
 		return *static_cast<OBB*>(component.raiseMessage(Message(MessageID::GET_SHAPE)));
+	}
+
+	bool raycast(Entity& entity, const Vector& rayDirection, RayCastResult& result, int mask)
+	{
+		const Vector& position = getPosition(entity);
+		int group = getIntParam(entity.handleMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		return entity.getManager().getGameState().getGrid().cast(position, rayDirection, result, mask, group);
 	}
 
 	Hash getHashParam(void* data)

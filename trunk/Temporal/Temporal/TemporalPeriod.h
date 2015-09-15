@@ -3,6 +3,7 @@
 
 #include "EntitySystem.h"
 #include "Color.h"
+#include "Vector.h"
 
 namespace Temporal
 {
@@ -66,6 +67,7 @@ namespace Temporal
 		Period::Enum _period;
 		Hash _futureSelfId;
 		bool _createFutureSelf;
+		Vector _previousPosition;
 
 		friend class SerializationAccess;
 	};

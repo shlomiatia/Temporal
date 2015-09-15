@@ -263,7 +263,7 @@ namespace Temporal
 	};
 
 	// XML deserializer
-	class XmlDeserializer
+	class XmlDeserializer : public BaseSerializer
 	{
 	public:
 		XmlDeserializer(Stream* stream);

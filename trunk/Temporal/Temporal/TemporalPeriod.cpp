@@ -150,14 +150,15 @@ namespace Temporal
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
 		}
-		else if (message.getID() == MessageID::SET_IMPULSE)
+		else if (message.getID() == MessageID::UPDATE)
 		{
-			if (_futureSelfId != Hash::INVALID)
+			if (_createFutureSelf && _futureSelfId != Hash::INVALID)
 			{
-				const Vector& position = getPosition(*this);
+				Vector position = getPosition(*this);
 				const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-				if (position == futurePosition)
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
+				if (_previousPosition == futurePosition)
+					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
+				_previousPosition = position;
 			}
 		}
 	}
