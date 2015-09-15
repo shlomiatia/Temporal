@@ -235,6 +235,7 @@ namespace Temporal
 			Descend() {}
 
 			void enter(void* param);
+			void exit(void* param);
 			void handleMessage(Message& message);
 		private:
 			

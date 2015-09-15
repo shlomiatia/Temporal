@@ -33,8 +33,8 @@ namespace Temporal
 		_pointOfIntersection = Vector::Zero;
 		_isSeeing = false;
 
-		int sourceCollisionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		int targetCollisionGroup = *static_cast<int*>(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
+		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		int targetCollisionGroup = getIntParam(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
 		if(sourceCollisionGroup != -1 &&
 		   targetCollisionGroup != -1 &&
 		   sourceCollisionGroup != targetCollisionGroup)
