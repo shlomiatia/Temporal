@@ -55,6 +55,7 @@ namespace Temporal
 		void modifyCorrection(const Fixture* staticBodyBounds, Vector& correction, Vector& movement);
 		void modifyVelocity(const Vector& collision);
 		bool transitionPlatform(const Vector& direction, Side::Enum side, float leftPeriod);
+		void resetGround();
 
 		friend class SerializationAccess;
 	};

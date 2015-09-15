@@ -31,6 +31,40 @@ namespace Temporal
 		return std::min(maxHorizontalStepSize, maxVerticalStepSize);
 	}
 
+	Segment getTopSegment(const OBB& shape, float leftX, float rightX)
+	{
+		if (shape.getAxisX().getX() == 0.0f || shape.getAxisX().getY() == 0.0f)
+		{
+			return SegmentPP(shape.getCenter() + Vector(-shape.getRadiusX(), shape.getRadiusY()), shape.getCenter() + shape.getRadius());
+		}
+		Vector topPoint = shape.getCenter() +
+			(shape.getAxisX().getY() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() +
+			(shape.getAxisY().getY() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+		if (rightX < topPoint.getX())
+		{
+			Vector leftPoint = shape.getCenter() -
+				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() -
+				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+			return SegmentPP(leftPoint, topPoint);
+		}
+		else if (leftX > topPoint.getX())
+		{
+			Vector rightPoint = shape.getCenter() +
+				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() +
+				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
+			return SegmentPP(topPoint, rightPoint);
+		}
+		else
+		{
+			return SegmentPP(topPoint, topPoint);
+		}
+	}
+
+	Segment getTopSegment(const OBB& shape, float x)
+	{
+		return getTopSegment(shape, x, x);
+	}
+
 	DynamicBody::~DynamicBody()
 	{
 		delete _fixture;
@@ -96,48 +130,27 @@ namespace Temporal
 		{
 			if (_groundId == Hash::INVALID)
 			{
-				_ground = 0;
-				_previousGroundCenter = Vector::Zero;
+				resetGround();
 			}
 			else 
 			{
 				_ground = static_cast<Fixture*>(getEntity().getManager().sendMessageToEntity(_groundId, Message(MessageID::GET_FIXTURE)));
 			}
 		}
-	}
-
-	Segment getTopSegment(const OBB& shape, float leftX, float rightX)
-	{
-		if(shape.getAxisX().getX() == 0.0f || shape.getAxisX().getY() == 0.0f)
+		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
-			return SegmentPP(shape.getCenter() + Vector(-shape.getRadiusX(), shape.getRadiusY()), shape.getCenter() + shape.getRadius());
+			if (_ground && !_ground->canCollide(CollisionCategory::OBSTACLE, getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)))))
+			{
+				resetGround();
+			}
 		}
-		Vector topPoint = shape.getCenter() + 
-			(shape.getAxisX().getY() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() + 
-			(shape.getAxisY().getY() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
-		if(rightX < topPoint.getX())
+		else if (message.getID() == MessageID::TEMPORAL_ECHOS_MERGED)
 		{
-			Vector leftPoint = shape.getCenter() -
-				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() -
-				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
-			return SegmentPP(leftPoint, topPoint);
+			if (_ground && _ground->getCategory() & CollisionCategory::DRAGGABLE)
+			{
+				resetGround();
+			}
 		}
-		else if(leftX > topPoint.getX())
-		{
-			Vector rightPoint = shape.getCenter() +
-				(shape.getAxisX().getX() > 0.0f ? shape.getAxisX() : -shape.getAxisX()) * shape.getRadiusX() +
-				(shape.getAxisY().getX() > 0.0f ? shape.getAxisY() : -shape.getAxisY()) * shape.getRadiusY();
-			return SegmentPP(topPoint, rightPoint);
-		}
-		else
-		{
-			return SegmentPP(topPoint, topPoint);
-		}
-	}
-
-	Segment getTopSegment(const OBB& shape, float x)
-	{
-		return getTopSegment(shape, x, x);
 	}
 
 	void DynamicBody::update(float framePeriod)
@@ -265,8 +278,7 @@ namespace Temporal
 
 			if (!transitionPlatform(direction, side, leftPeriod))
 			{
-				_ground = 0;
-				_groundId = Hash::INVALID;
+				resetGround();
 
 				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
 				if (direction.getY() <= 0.0f)
@@ -396,5 +408,13 @@ namespace Temporal
 			_velocity.setX(0.0f);
 		if (sameSign(collision.getY(), _velocity.getY()))
 			_velocity.setY(0.0f);
+	}
+
+	void DynamicBody::resetGround()
+	{
+		_ground = 0;
+		_groundId = Hash::INVALID;
+		_previousGroundCenter = Vector::Zero;
+		raiseMessage(Message(MessageID::LOST_GROUND));
 	}
 }
