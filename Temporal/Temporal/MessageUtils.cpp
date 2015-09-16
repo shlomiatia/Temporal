@@ -39,11 +39,19 @@ namespace Temporal
 		return *static_cast<OBB*>(component.raiseMessage(Message(MessageID::GET_SHAPE)));
 	}
 
-	bool raycast(Entity& entity, const Vector& rayDirection, RayCastResult& result, int mask)
+	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result)
+	{
+		return raycast(entity, rayDirection, mask, result, Vector::Zero);
+	}
+
+	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result, const Vector& positionOffset)
 	{
 		const Vector& position = getPosition(entity);
+		Side::Enum side = getOrientation(entity);
 		int group = getIntParam(entity.handleMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		return entity.getManager().getGameState().getGrid().cast(position, rayDirection, result, mask, group);
+		Vector orientedRayDirection = Vector(rayDirection.getX() * side, rayDirection.getY());
+		Vector orientedOffsetPosition = position + Vector(positionOffset.getX() * side, positionOffset.getY());
+		return entity.getManager().getGameState().getGrid().cast(orientedOffsetPosition, orientedRayDirection, result, mask, group);
 	}
 
 	Hash getHashParam(void* data)

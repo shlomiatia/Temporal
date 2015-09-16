@@ -48,11 +48,11 @@ namespace Temporal
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID) : _period(period), _futureSelfId(futureSelfId), _createFutureSelf(false) {}
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : _period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
-		Component* clone() const { return new TemporalPeriod(_period, _futureSelfId); }
+		Component* clone() const { return new TemporalPeriod(_period, Hash::INVALID, _createFutureSelf); }
 
 		void setPeriod(Period::Enum period);
 		Period::Enum getPeriod() const { return _period; }
