@@ -1,5 +1,4 @@
 #include "Pathfinder.h"
-#include "Segment.h"
 #include <assert.h>
 
 namespace Temporal

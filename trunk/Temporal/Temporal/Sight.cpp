@@ -1,6 +1,5 @@
 #include "Sight.h"
 #include "Grid.h"
-#include "Segment.h"
 #include "Math.h"
 #include "Graphics.h"
 #include "Shapes.h"
