@@ -212,9 +212,9 @@ namespace Temporal
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());
-			Vector ass = Vector(groundSegment.getNaturalDirection().getX() * side, groundSegment.getNaturalDirection().getY());
-			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + ass - bodyPoint;
-			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundSegment.getNaturalDirection().getAngle()))
+			Vector groundDirection = groundSegment.getNaturalDirection();
+			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
+			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
 			{
 				_ground = &result.getFixture();
 				_groundId = result.getFixture().getEntityId();
