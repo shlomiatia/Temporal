@@ -60,11 +60,6 @@ namespace Temporal
 		}
 	}
 
-	Segment getTopSegment(const OBB& shape, float x)
-	{
-		return getTopSegment(shape, x, x);
-	}
-
 	DynamicBody::~DynamicBody()
 	{
 		delete _fixture;
@@ -205,13 +200,13 @@ namespace Temporal
 
 		Side::Enum oppositeSide = Side::getOpposite(side);
 		Vector bodyPoint = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
-		Vector rayOrigin = bodyPoint + Vector(dynamicBodyBounds.getRadiusX() * side, 0.0f);
+		Vector rayOrigin = bodyPoint + Vector(side, 0.0f);
 		RayCastResult result;
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
-			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());
+			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
 			Vector groundDirection = groundSegment.getNaturalDirection();
 			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
 			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
