@@ -93,6 +93,7 @@ namespace Temporal
 		{
 			// xml
 			serializer.serialize("obb", fixture._localShape);
+			serializer.serialize("is-enabled", fixture._isEnabled);
 		}
 
 		template<class T>
@@ -369,7 +370,6 @@ namespace Temporal
 			serializer.serialize("fixture", dynamicBody._fixture); // xml
 			serializer.serialize("gravity-enabled", dynamicBody._gravityEnabled); // xml
 			serializer.serialize("collision-mask", dynamicBody._collisionMask); // xml
-			serializer.serialize("body-enabled", dynamicBody._bodyEnabled); // memory
 			serializer.serialize("velocity", dynamicBody._velocity); // memory
 			serializer.serialize("previous-ground-center", dynamicBody._previousGroundCenter); // memory
 			serializer.serialize("ground-id", dynamicBody._groundId); // memory
