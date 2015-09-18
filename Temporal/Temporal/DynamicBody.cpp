@@ -60,11 +60,6 @@ namespace Temporal
 		}
 	}
 
-	Segment getTopSegment(const OBB& shape, float x)
-	{
-		return getTopSegment(shape, x, x);
-	}
-
 	DynamicBody::~DynamicBody()
 	{
 		delete _fixture;
@@ -107,16 +102,12 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_BODY_ENABLED)
 		{
-			_bodyEnabled = getBoolParam(message.getParam());
+			_fixture->setEnabled(getBoolParam(message.getParam()));
 			_velocity = Vector::Zero;
 		}
 		else if (message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled= getBoolParam(message.getParam());
-		}
-		else if (message.getID() == MessageID::IS_BODY_ENABLED)
-		{
-			message.setParam(&_bodyEnabled);
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
@@ -152,21 +143,22 @@ namespace Temporal
 
 	void DynamicBody::update(float framePeriod)
 	{
-		_globalShapeClone = _fixture->getGlobalShape();
+		OBB globalShapeClone = _fixture->getGlobalShape();
+		OBBAABBWrapper dynamicBodyBounds(&globalShapeClone);
 
 		// Moving platform - position is set later
 		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
 		{
 			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
 			if (_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
-				_dynamicBodyBounds.getOBB().translate(vector);
+				dynamicBodyBounds.getOBB().translate(vector);
 		}
 			
-		if(_bodyEnabled)
+		if(_fixture->isEnabled())
 		{
 			Segment groundSegment;
 			if (_ground)
-				groundSegment = getTopSegment(_ground->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
+				groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
 
 			// Slide
 			if(_ground && !AngleUtils::radian().isModerate(groundSegment.getRadius().getAngle()))
@@ -177,23 +169,23 @@ namespace Temporal
 					_velocity = -_velocity;
 				_ground = 0;
 				_groundId = Hash::INVALID;
-				executeMovement(determineMovement(framePeriod));
+				executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
 			}
 			// Walk
 			else if(_ground && _velocity.getY() == 0.0f)
 			{
-				walk(framePeriod, groundSegment);
+				walk(dynamicBodyBounds, framePeriod);
 			}
 			// Air
 			else
 			{
 				_ground = 0;
 				_groundId = Hash::INVALID;
-				executeMovement(determineMovement(framePeriod));
+				executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
 			}
 		}
 
-		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
+		raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
 		
 		if(_ground)
 		{
@@ -202,36 +194,38 @@ namespace Temporal
 		}
 	}
 
-	bool DynamicBody::transitionPlatform(const Vector& direction, Side::Enum side, float leftPeriod)
+	bool DynamicBody::transitionPlatform(OBBAABBWrapper& dynamicBodyBounds, const Vector& direction, Side::Enum side, float leftPeriod)
 	{
 		const float MAX_DISTANCE = 10.0f;
 
 		Side::Enum oppositeSide = Side::getOpposite(side);
-		Vector bodyPoint = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
-		Vector rayOrigin = bodyPoint + Vector(_dynamicBodyBounds.getRadiusX() * side, 0.0f);
+		Vector bodyPoint = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
+		Vector rayOrigin = bodyPoint + Vector(side, -1.0f);
 		RayCastResult result;
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
-			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), rayOrigin.getX());
-			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) - bodyPoint;
-			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundSegment.getNaturalDirection().getAngle()))
+			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
+			Vector groundDirection = groundSegment.getNaturalDirection();
+			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
+			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
 			{
 				_ground = &result.getFixture();
 				_groundId = result.getFixture().getEntityId();
 				_previousGroundCenter = _ground->getGlobalShape().getCenter();
-				_dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
-				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&_dynamicBodyBounds.getCenter())));
-				walk(leftPeriod, groundSegment);
+				dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
+				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
+				walk(dynamicBodyBounds, leftPeriod);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	void DynamicBody::walk(float framePeriod, const Segment& groundSegment)
+	void DynamicBody::walk(OBBAABBWrapper& dynamicBodyBounds, float framePeriod)
 	{
+		const Segment& groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
 		const OBB& staticBodyBounds = _ground->getGlobalShape();
 		
 		// Fix when static
@@ -239,7 +233,7 @@ namespace Temporal
 		{
 			_ground = 0;
 			_groundId = Hash::INVALID;
-			executeMovement(determineMovement(framePeriod));
+			executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
 			return;
 		}
 		
@@ -249,7 +243,7 @@ namespace Temporal
 
 		// /\ When trasnitioning to downward slope we can stuck, so don't modify velocity in this case
 		Vector direction = (groundSegment.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : groundSegment.getNaturalDirection()) * static_cast<float>(side);
-		Vector curr = Vector(direction.getY() > 0.0f ? _dynamicBodyBounds.getSide(side) : _dynamicBodyBounds.getSide(oppositeSide), _dynamicBodyBounds.getBottom());
+		Vector curr = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
 
 		float movementAmount = _velocity.getLength();
 		Vector velocity = _velocity;
@@ -260,20 +254,19 @@ namespace Temporal
 		Vector dest = curr + movement;
 		Vector max = groundSegment.getPoint(side);
 		
-
 		// Still on platform
 		if((dest.getX() - max.getX()) * side <= 0.0f)
 		{
-			executeMovement(movement);
+			executeMovement(dynamicBodyBounds, movement);
 		}
 		else
 		{			
 			Vector actualMovement = max - curr;
-			executeMovement(actualMovement);
+			executeMovement(dynamicBodyBounds, actualMovement);
 			float leftPeriod = framePeriod * (1.0f - actualMovement.getLength() / movement.getLength());
 			_velocity = Vector(velocity.getLength() * side, 0.0f);
 
-			if (!transitionPlatform(direction, side, leftPeriod))
+			if (!transitionPlatform(dynamicBodyBounds, direction, side, leftPeriod))
 			{
 				resetGround();
 
@@ -282,7 +275,7 @@ namespace Temporal
 					_velocity = velocity;
 
 				Vector movementLeft = determineMovement(leftPeriod);
-				executeMovement(movementLeft);
+				executeMovement(dynamicBodyBounds, movementLeft);
 			}
 		}
 	}
@@ -296,7 +289,7 @@ namespace Temporal
 		return movement;
 	}
 
-	void DynamicBody::executeMovement(Vector movement)
+	void DynamicBody::executeMovement(OBBAABBWrapper& dynamicBodyBounds, Vector movement)
 	{
 		Vector collision = Vector::Zero;
 
@@ -319,14 +312,14 @@ namespace Temporal
 			}
 			
 			movement -= stepMovement;
-			_dynamicBodyBounds.getOBB().translate(stepMovement);
+			dynamicBodyBounds.getOBB().translate(stepMovement);
 			
-			int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-			FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(_dynamicBodyBounds.getOBB(), _collisionMask, sourceCollisionGroup, false);
+			
+			FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(dynamicBodyBounds.getOBB(), _collisionMask, _fixture->getGroup(), false);
 			for(FixtureIterator i = info.begin(); i != info.end(); ++i)
 			{
 				const Fixture* fixture = *i;
-				detectCollision(fixture, collision, stepMovement);
+				detectCollision(dynamicBodyBounds, fixture, collision, stepMovement);
 			}
 		}
 		while(movement != Vector::Zero);
@@ -336,32 +329,33 @@ namespace Temporal
 			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
 	}
 
-	void DynamicBody::detectCollision(const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
+	void DynamicBody::detectCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
 	{
 		Vector correction = Vector::Zero;
-		if(_fixture != staticBodyBounds && intersects(_dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
+		if (_fixture != staticBodyBounds && intersects(dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
 		{
 			if(fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
-				correctCollision(staticBodyBounds, correction, collision, movement);
+				correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision, movement);
 		}
 	}
 
-	void DynamicBody::correctCollision(const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement)
+	void DynamicBody::correctCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement)
 	{
-		modifyCorrection(staticBodyBounds, correction, movement);
+		modifyCorrection(dynamicBodyBounds, staticBodyBounds, correction, movement);
 		
-		_dynamicBodyBounds.getOBB().translate(correction);
+		dynamicBodyBounds.getOBB().translate(correction);
 		collision -= correction;
 	}
 
-	void DynamicBody::modifyCorrection(const Fixture* staticBodyBounds, Vector& correction, Vector& movement)
+	void DynamicBody::modifyCorrection(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& movement)
 	{
 		bool modifyGround = true;
+
 		// Fix minor gaps in transitions /*\ /*- BRODER
 		if(_ground && differentSign(movement.getX(), correction.getX()) &&
-			staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom() < 5.0f && staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom() > EPSILON)
+			staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom() < 5.0f && staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom() > EPSILON)
 		{
-			correction = Vector(0, staticBodyBounds->getGlobalShape().getTop() - _dynamicBodyBounds.getBottom());
+			correction = Vector(0, staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom());
 		}
 		if(_ground && 
 				// Don't allow to fix into ground _*\ 
@@ -375,13 +369,13 @@ namespace Temporal
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
 		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && AngleUtils::radian().isModerate(correction.getRightNormal().getAngle()))
 		{	
-			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), _dynamicBodyBounds.getLeft(), _dynamicBodyBounds.getRight());
+			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();
-			float x = normalizedRadius.getY() >= 0.0f ? _dynamicBodyBounds.getRight() : _dynamicBodyBounds.getLeft();
+			float x = normalizedRadius.getY() >= 0.0f ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
 			float length = (x - shape.getCenter().getX()) / normalizedRadius.getX();
 			float y = shape.getCenter().getY() + normalizedRadius.getY() * length;
 			
-			float yCorrection = y - _dynamicBodyBounds.getBottom();
+			float yCorrection = y - dynamicBodyBounds.getBottom();
 
 			// BRODER
 			if(yCorrection > 0.0f && yCorrection < 10.0f) {

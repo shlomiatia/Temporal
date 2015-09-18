@@ -53,7 +53,9 @@ namespace Temporal
 
 	bool Fixture::canCollide(int mask, int group) const
 	{
-		return (getCategory() != -1 && (mask & getCategory())) != 0 &&
+		return 
+			_isEnabled &&
+			(getCategory() != -1 && (mask & getCategory())) != 0 &&
 			(getGroup() == -1 ||
 			group == -1 ||
 			getGroup() == group);

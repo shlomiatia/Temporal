@@ -96,7 +96,6 @@ namespace Temporal
 
 		bool handleStandWalkMessage(Message& message);
 		bool handleFallJumpMessage(Message& message);
-		bool handleWalkDragMessage(Message& message);
 		void handleMessage(Message& message);
 
 	private:

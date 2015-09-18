@@ -6,13 +6,37 @@
         <world-size x="3640.000000" y="1024.000000"/>
     </grid>
     <entities-manager>
+        <entity id="ENT_BOX0">
+            <transform orientation="1">
+                <position x="112.000000" y="122.666687"/>
+            </transform>
+            <collision-filter category="129" group="1"/>
+            <dynamic-body gravity-enabled="1" collision-mask="9">
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="48.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+                <previous-ground-center x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <renderer texture="resources/textures/box.png" sprite-sheet="" layer="30">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="1" create-future-self="0"/>
+        </entity>
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
                 <position x="912.000122" y="272.000000"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
                         <radius x="16.000000" y="240.000000"/>
@@ -29,34 +53,34 @@
         </entity>
         <entity id="ENT_BLOCK3">
             <transform orientation="1">
-                <position x="288.000000" y="80.000000"/>
+                <position x="662.511108" y="47.000000"/>
             </transform>
-            <collision-filter category="1" group="0"/>
+            <collision-filter category="1" group="1"/>
             <static-body>
-                <fixture>
-                    <obb angle="0.000000">
+                <fixture is-enabled="1">
+                    <obb angle="-15.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="64.000000" y="48.000000"/>
+                        <radius x="128.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
-                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="-15.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="0.750000"/>
+                    <scale x="2.000000" y="0.250000"/>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="0.100000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="0" create-future-self="0"/>
+            <temporal-period period="1" create-future-self="0"/>
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
-                <position x="83.955551" y="118.933319"/>
+                <position x="42.000000" y="216.355530"/>
             </transform>
             <collision-filter category="8" group="1"/>
             <input-controller/>
-            <dynamic-body gravity-enabled="1" collision-mask="1" body-enabled="1">
-                <fixture>
+            <dynamic-body gravity-enabled="1" collision-mask="1">
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
                         <radius x="10.000000" y="40.000000"/>
@@ -66,7 +90,7 @@
                 <previous-ground-center x="0.000000" y="0.000000"/>
             </dynamic-body>
             <sensor id="SNS_LEDGE" category-mask="1">
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="10.000000" y="0.000000"/>
                         <radius x="20.000000" y="120.000000"/>
@@ -74,7 +98,7 @@
                 </fixture>
             </sensor>
             <sensor id="SNS_ACTIVATE" category-mask="18">
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
                         <radius x="10.000000" y="40.000000"/>
@@ -82,7 +106,7 @@
                 </fixture>
             </sensor>
             <sensor id="SNS_TAKEDOWN" category-mask="4">
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="20.000000" y="0.000000"/>
                         <radius x="10.000000" y="40.000000"/>
@@ -186,21 +210,21 @@
         </entity>
         <entity id="ENT_BLOCK5">
             <transform orientation="1">
-                <position x="448.000000" y="96.000000"/>
+                <position x="296.000000" y="47.000000"/>
             </transform>
             <collision-filter category="1" group="1"/>
             <static-body>
-                <fixture>
-                    <obb angle="0.000000">
+                <fixture is-enabled="1">
+                    <obb angle="-165.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="64.000000" y="64.000000"/>
+                        <radius x="128.000000" y="16.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
-                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="-165.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
+                    <scale x="2.000000" y="0.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
@@ -212,7 +236,7 @@
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
                         <radius x="16.000000" y="496.000000"/>
@@ -233,7 +257,7 @@
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
                         <radius x="464.000000" y="16.000000"/>
@@ -250,25 +274,25 @@
         </entity>
         <entity id="ENT_BLOCK4">
             <transform orientation="1">
-                <position x="608.000000" y="80.000000"/>
+                <position x="480.000000" y="64.000000"/>
             </transform>
-            <collision-filter category="1" group="0"/>
+            <collision-filter category="1" group="1"/>
             <static-body>
-                <fixture>
+                <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="64.000000" y="48.000000"/>
+                        <radius x="64.000000" y="32.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
                 <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="0.750000"/>
+                    <scale x="1.000000" y="0.500000"/>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="0.100000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="0" create-future-self="0"/>
+            <temporal-period period="1" create-future-self="0"/>
         </entity>
     </entities-manager>
 </game-state>
