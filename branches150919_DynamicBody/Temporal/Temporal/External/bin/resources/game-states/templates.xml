@@ -27,7 +27,7 @@
 <entity id="ENT_BOX">
 	<transform />
 	<collision-filter category="129" />
-	<dynamic-body>
+	<dynamic-body collision-mask="8">
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
