@@ -261,7 +261,21 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class Drag : public ComponentState
+		class DragStand : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class DragForward : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class DragBackwards : public ComponentState
 		{
 		public:
 			void enter(void* param);
