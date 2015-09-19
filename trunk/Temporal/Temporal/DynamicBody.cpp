@@ -167,8 +167,7 @@ namespace Temporal
 				_velocity = groundSegment.getNaturalDirection() * 375.0f;
 				if(_velocity.getY() > 0.0f)
 					_velocity = -_velocity;
-				_ground = 0;
-				_groundId = Hash::INVALID;
+				resetGround();
 				executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
 			}
 			// Walk
@@ -200,12 +199,14 @@ namespace Temporal
 
 		Side::Enum oppositeSide = Side::getOpposite(side);
 		Vector bodyPoint = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
-		Vector rayOrigin = bodyPoint + Vector(side, -1.0f);
+		Vector rayOrigin = bodyPoint + Vector(side, 0.0f);
 		RayCastResult result;
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		_fixture->setEnabled(false);
 		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
 			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
+			_fixture->setEnabled(true);
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
 			Vector groundDirection = groundSegment.getNaturalDirection();
 			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
@@ -220,6 +221,7 @@ namespace Temporal
 				return true;
 			}
 		}
+		_fixture->setEnabled(true);
 		return false;
 	}
 
@@ -394,8 +396,7 @@ namespace Temporal
 
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 
-			// BRODER
-			if (yCorrection > 0.0f && yCorrection < 5.0f) {
+			if (yCorrection > 0.0f && yCorrection < 10.0f) {
 				correction = Vector(0, yCorrection);
 			}
 		}
