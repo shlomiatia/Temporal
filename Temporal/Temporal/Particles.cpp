@@ -137,12 +137,16 @@ namespace Temporal
 				emitterAngle = AngleUtils::radian().mirror(emitterAngle);
 			nodeTranslation.setX(nodeTranslation.getX() * side);
 			emitterPosition += nodeTranslation;
-		}*/
-		_emitterTimer.update(framePeriod);
-		if (_emitterTimer.getElapsedTime() > _emitterLifetime)
-			_enabled = false;
+		}*/		
 		if (_enabled)
 		{
+			_emitterTimer.update(framePeriod);
+			if (_emitterTimer.getElapsedTime() > _emitterLifetime)
+			{
+				_enabled = false;
+				raiseMessage(Message(MessageID::EMITTER_FINISHED));
+				return;
+			}
 			_birthTimer.update(framePeriod);
 			float timeSinceLastBirth = _birthTimer.getElapsedTime();
 			float birthThreshold = _particleLifetime / static_cast<float>(_size);

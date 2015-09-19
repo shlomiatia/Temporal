@@ -48,7 +48,8 @@ namespace Temporal
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : _period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : 
+			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }

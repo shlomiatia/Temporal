@@ -39,6 +39,11 @@ namespace Temporal
 		return *static_cast<OBB*>(component.raiseMessage(Message(MessageID::GET_SHAPE)));
 	}
 
+	const OBB& getShape(const Entity& entity)
+	{
+		return *static_cast<const OBB*>(entity.handleMessage(Message(MessageID::GET_SHAPE)));
+	}
+
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result)
 	{
 		return raycast(entity, rayDirection, mask, result, Vector::Zero);

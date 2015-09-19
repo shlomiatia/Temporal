@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "PhysicsEnums.h"
 #include "Utils.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
@@ -37,9 +38,28 @@ namespace Temporal
 		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, CollisionCategory::OBSTACLE, period);
 		if (info.size() == 0)
 		{
+			Hash draggableId = getHashParam(raiseMessage(Message(MessageID::GET_DRAGGABLE)));
+			if (draggableId != Hash::INVALID)
+			{
+				Entity& draggable = *getEntity().getManager().getEntity(draggableId);
+				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
+				shape = getShape(draggable);
+				shape.setRadius(shape.getRadius() - 1.0f);
+				info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, CollisionCategory::OBSTACLE, period);
+				for (FixtureIterator i = info.begin(); i != info.end(); ++i)
+				{
+					if (temporalPeriod.getFutureSelfId() != (**i).getEntityId())
+					{
+						return;
+					}
+				}
+				temporalPeriod.setPeriod(period);
+			}
+			
 			_period = period;
 			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &period));
+			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &_period));
+			
 		}
 	}
 
@@ -81,28 +101,30 @@ namespace Temporal
 		raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
 		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
 		temporalPeriodChanged(playerPeriod);
-	}
 
-	void TemporalPeriod::handleMessage(Message& message)
-	{
-		if (message.getID() == MessageID::ENTITY_READY)
+		if (_period == Period::PRESENT)
+		{
+			if (_createFutureSelf && _futureSelfId)
+			{
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::DIE));
+				_futureSelfId = Hash::INVALID;
+			}
+		}
+		else
 		{
 			if (_createFutureSelf)
 			{
-				if (_period != Period::PAST)
-					abort();
 				Entity* clone = getEntity().clone();
 				clone->setBypassSave(true);
 				TemporalPeriod& period = *static_cast<TemporalPeriod*>(clone->get(TemporalPeriod::TYPE));
 				period._period = Period::PRESENT;
 				period._futureSelfId = Hash::INVALID;
-				period._createFutureSelf = false;
+				period._createFutureSelf = true;
 				_futureSelfId = Hash(Utils::format("%s_PRESENT", getEntity().getId().getString()).c_str());
 				clone->setId(_futureSelfId);
 				getEntity().getManager().add(clone);
 			}
-			
-			if (_futureSelfId != Hash::INVALID)
+			else if (_futureSelfId != Hash::INVALID)
 			{
 				PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
 				const Color& color = playerPeriod.getNextColor();
@@ -110,7 +132,14 @@ namespace Temporal
 				raiseMessage(message);
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
+		}
+		
+	}
 
+	void TemporalPeriod::handleMessage(Message& message)
+	{
+		if (message.getID() == MessageID::ENTITY_READY)
+		{
 			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
 			Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
 			particleEmitter->setBypassSave(true);
@@ -148,6 +177,7 @@ namespace Temporal
 			{
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
 			}
+			getEntity().getManager().remove(getEntity().getId());
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
