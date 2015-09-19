@@ -366,23 +366,22 @@ namespace Temporal
 			(_ground->getGlobalShape().getAxisX().getX() != 0.0f && _ground->getGlobalShape().getAxisX().getY() != 0.0f) &&
 			(staticBodyBounds->getGlobalShape().getAxisX().getX() == 0.0f || staticBodyBounds->getGlobalShape().getAxisX().getY() == 0.0f)))
 		{
-			Segment groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
+			float staticX = 0.0f;
+			float dynamicX = 0.0f;
 			if (staticBodyBounds->getGlobalShape().getLeft() > dynamicBodyBounds.getLeft())
 			{
-				float staticX = staticBodyBounds->getGlobalShape().getLeft();
-				float dynamicX = dynamicBodyBounds.getRight();
-				float staticY = groundSegment.getY(staticX);
-				float dynamicY = groundSegment.getY(dynamicX);
-				correction = Vector(staticX, staticY) - Vector(dynamicX, dynamicY);
+				staticX = staticBodyBounds->getGlobalShape().getLeft();
+				dynamicX = dynamicBodyBounds.getRight();
 			}
 			else
 			{
-				float staticX = staticBodyBounds->getGlobalShape().getRight();
-				float dynamicX = dynamicBodyBounds.getLeft();
-				float staticY = groundSegment.getY(staticX);
-				float dynamicY = groundSegment.getY(dynamicX);
-				correction = Vector(staticX, staticY) - Vector(dynamicX, dynamicY);
+				staticX = staticBodyBounds->getGlobalShape().getRight();
+				dynamicX = dynamicBodyBounds.getLeft();
 			}
+			Segment groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
+			float staticY = groundSegment.getY(staticX);
+			float dynamicY = groundSegment.getY(dynamicX);
+			correction = Vector(staticX, staticY) - Vector(dynamicX, dynamicY);
 			modifyGround = false;
 		}
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
@@ -392,11 +391,11 @@ namespace Temporal
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();
 			float x = normalizedRadius.getY() >= 0.0f ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
 			float y = shape.getY(x);
-			
+
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 
 			// BRODER
-			if(yCorrection > 0.0f && yCorrection < 10.0f) {
+			if (yCorrection > 0.0f && yCorrection < 5.0f) {
 				correction = Vector(0, yCorrection);
 			}
 		}
