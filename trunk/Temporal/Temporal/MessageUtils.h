@@ -20,8 +20,9 @@ namespace Temporal
 	const Vector& getPosition(const Component& component);
 	const Vector& getPosition(const Entity& entity);
 	Side::Enum getOrientation(const Component& component);
-	Side::Enum getOrientation(const Entity& component);
+	Side::Enum getOrientation(const Entity& entity);
 	const OBB& getShape(const Component& component);
+	const OBB& getShape(const Entity& entity);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result, const Vector& positionOffset);
 
