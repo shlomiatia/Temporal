@@ -85,13 +85,61 @@ namespace Temporal
 	float OBB::getBottom() const { return getCenterY() - fabsf(getAxisX().getY()) * getRadiusX() - fabsf(getAxisY().getY()) * getRadiusY(); }
 	float OBB::getTop() const { return getCenterY() + fabsf(getAxisX().getY()) * getRadiusX() + fabsf(getAxisY().getY()) * getRadiusY(); }
 
-	OBBAABBWrapper OBB::getAABBWrapper()
+	Segment OBB::getTopSegment(float x) const
 	{
-		return OBBAABBWrapper(this);
+		if (getAxisX().getX() == 0.0f || getAxisX().getY() == 0.0f)
+		{
+			return SegmentPP(getCenter() + Vector(-getRadiusX(), getRadiusY()), getCenter() + getRadius());
+		}
+		Vector topPoint = getCenter() +
+			(getAxisX().getY() > 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() +
+			(getAxisY().getY() > 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+		if (x < topPoint.getX())
+		{
+			Vector leftPoint = getCenter() -
+				(getAxisX().getX() > 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() -
+				(getAxisY().getX() > 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+			return SegmentPP(leftPoint, topPoint);
+		}
+		else if (x > topPoint.getX())
+		{
+			Vector rightPoint = getCenter() +
+				(getAxisX().getX() > 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() +
+				(getAxisY().getX() > 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+			return SegmentPP(topPoint, rightPoint);
+		}
+		else
+		{
+			return SegmentPP(topPoint, topPoint);
+		}
 	}
 
-	const OBBAABBWrapper OBB::getAABBWrapper() const 
+	Segment OBB::getBottomSegment(float x) const
 	{
-		return OBBAABBWrapper(const_cast<OBB*>(this));
+		if (getAxisX().getX() == 0.0f || getAxisX().getY() == 0.0f)
+		{
+			return SegmentPP(getCenter() - getRadius(), getCenter() + Vector(getRadiusX(), -getRadiusY()));
+		}
+		Vector bottomPoint = getCenter() +
+			(getAxisX().getY() < 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() +
+			(getAxisY().getY() < 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+		if (x < bottomPoint.getX())
+		{
+			Vector leftPoint = getCenter() -
+				(getAxisX().getX() < 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() -
+				(getAxisY().getX() < 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+			return SegmentPP(leftPoint, bottomPoint);
+		}
+		else if (x > bottomPoint.getX())
+		{
+			Vector rightPoint = getCenter() +
+				(getAxisX().getX() < 0.0f ? getAxisX() : -getAxisX()) * getRadiusX() +
+				(getAxisY().getX() < 0.0f ? getAxisY() : -getAxisY()) * getRadiusY();
+			return SegmentPP(bottomPoint, rightPoint);
+		}
+		else
+		{
+			return SegmentPP(bottomPoint, bottomPoint);
+		}
 	}
 }

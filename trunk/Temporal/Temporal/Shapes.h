@@ -131,8 +131,6 @@ namespace Temporal
 	/**********************************************************************************************
 	 * OBB 
 	 *********************************************************************************************/
-	class OBBAABBWrapper;
-
 	class OBB 
 	{
 	public:
@@ -171,13 +169,14 @@ namespace Temporal
 		float getSide(Side::Enum side) const { return side == Side::LEFT ? getLeft() : getRight(); }
 		float getWidth() const { return getRight() - getLeft(); }
 		float getHeight() const { return getTop() - getBottom(); }
-		OBBAABBWrapper getAABBWrapper();
-		const OBBAABBWrapper getAABBWrapper() const;
-
+		
 		float getAngle() const { return _axes[0].getAngle(); }
 
 		void setAngle(float angle) { setAxis0(Vector(angle)); }
 		void setAxis0(const Vector& axis0);
+
+		Segment getTopSegment(float x) const;
+		Segment getBottomSegment(float x) const;
 
 		bool operator==(const OBB& other) const { return ((getCenter() == other.getCenter()) && (getAxisX() == other.getAxisX()) && (getAxisY() == other.getAxisY()) && (getRadius() == other.getRadius())); }
 		bool operator!=(const OBB& other) const { return !(*this == other); }
