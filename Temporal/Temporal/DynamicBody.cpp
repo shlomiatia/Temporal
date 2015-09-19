@@ -351,29 +351,47 @@ namespace Temporal
 	{
 		bool modifyGround = true;
 
-		// Fix minor gaps in transitions /*\ /*- BRODER
-		if(_ground && differentSign(movement.getX(), correction.getX()) &&
-			staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom() < 5.0f && staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom() > EPSILON)
-		{
-			correction = Vector(0, staticBodyBounds->getGlobalShape().getTop() - dynamicBodyBounds.getBottom());
-		}
 		if(_ground && 
-				// Don't allow to fix into ground _*\ 
-				(correction.getY() < -EPSILON || 
-				// Don't climb on steep slope _*/
-				(differentSign(movement.getX(), correction.getX()) && AngleUtils::radian().isSteep(correction.getRightNormal().getAngle()))))
+			// Don't allow to fix into ground _*\ 
+			(correction.getY() < -EPSILON || 
+			// Don't climb on steep slope _*/
+			(differentSign(movement.getX(), correction.getX()) && AngleUtils::radian().isSteep(correction.getRightNormal().getAngle()))))
 		{
  			correction = -movement;
 			modifyGround = false;
 		}
+		if (_ground &&
+			// Don't climb on wall \*| /*|
+			(differentSign(movement.getX(), correction.getX()) && 
+			(_ground->getGlobalShape().getAxisX().getX() != 0.0f && _ground->getGlobalShape().getAxisX().getY() != 0.0f) &&
+			(staticBodyBounds->getGlobalShape().getAxisX().getX() == 0.0f || staticBodyBounds->getGlobalShape().getAxisX().getY() == 0.0f)))
+		{
+			Segment groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
+			if (staticBodyBounds->getGlobalShape().getLeft() > dynamicBodyBounds.getLeft())
+			{
+				float staticX = staticBodyBounds->getGlobalShape().getLeft();
+				float dynamicX = dynamicBodyBounds.getRight();
+				float staticY = groundSegment.getY(staticX);
+				float dynamicY = groundSegment.getY(dynamicX);
+				correction = Vector(staticX, staticY) - Vector(dynamicX, dynamicY);
+			}
+			else
+			{
+				float staticX = staticBodyBounds->getGlobalShape().getRight();
+				float dynamicX = dynamicBodyBounds.getLeft();
+				float staticY = groundSegment.getY(staticX);
+				float dynamicY = groundSegment.getY(dynamicX);
+				correction = Vector(staticX, staticY) - Vector(dynamicX, dynamicY);
+			}
+			modifyGround = false;
+		}
 		// If entity is falling, we allow to correct by y if small enough. This is good to prevent falling from edges, and sliding on moderate slopes
-		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && AngleUtils::radian().isModerate(correction.getRightNormal().getAngle()))
+		if(abs(_velocity.getY()) > EPSILON && abs(correction.getX()) > EPSILON && !AngleUtils::radian().isSteep(correction.getRightNormal().getAngle()))
 		{	
 			Segment shape = getTopSegment(staticBodyBounds->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
 			Vector normalizedRadius = shape.getRadius() == Vector::Zero ? Vector(1.0f, 0.0f) : shape.getNaturalDirection();
 			float x = normalizedRadius.getY() >= 0.0f ? dynamicBodyBounds.getRight() : dynamicBodyBounds.getLeft();
-			float length = (x - shape.getCenter().getX()) / normalizedRadius.getX();
-			float y = shape.getCenter().getY() + normalizedRadius.getY() * length;
+			float y = shape.getY(x);
 			
 			float yCorrection = y - dynamicBodyBounds.getBottom();
 
