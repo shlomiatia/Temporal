@@ -26,15 +26,15 @@
                     <translation x="0.000000" y="0.000000"/>
                     <scale x="1.000000" y="1.000000"/>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="0.100000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="0" future-self-id="ENT_BOX0_PRESENT" create-future-self="1"/>
+            <temporal-period period="0" create-future-self="1"/>
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
                 <position x="42.000000" y="216.355530"/>
             </transform>
-            <collision-filter category="8" group="1"/>
+            <collision-filter category="8" group="0"/>
             <input-controller/>
             <dynamic-body gravity-enabled="1" collision-mask="1">
                 <fixture is-enabled="1">
@@ -151,7 +151,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <player-period period="1"/>
+            <player-period period="0"/>
         </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
@@ -162,7 +162,7 @@
                     <translation x="0.000000" y="0.000000"/>
                     <scale x="1.000000" y="1.000000"/>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="0.100000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
             <temporal-period period="0" create-future-self="0"/>
         </entity>

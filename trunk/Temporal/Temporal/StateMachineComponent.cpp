@@ -31,23 +31,26 @@ namespace Temporal
 
 	void StateMachineComponent::handleMessage(Message& message)
 	{
-		if(_currentState)
-			_currentState->handleMessage(message);
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			resetState(getInitialState());
 			_currentState->enter(0);
 		}
-		else if(message.getID() == MessageID::UPDATE)
+		else if(message.getID() == MessageID::POST_LOAD)
+		{
+			setState(_currentStateID);
+		}
+
+		if (_currentState)
+			_currentState->handleMessage(message);
+
+		if (message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
 			_timer.update(framePeriod);
 			resetFrameFlags();
 		}
-		else if(message.getID() == MessageID::POST_LOAD)
-		{
-			setState(_currentStateID);
-		}
+
 	}
 
 	void StateMachineComponent::resetState(Hash stateID)
