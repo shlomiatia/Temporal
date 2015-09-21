@@ -54,7 +54,7 @@ namespace Temporal
 	class Particle
 	{
 	public:
-		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _rotation(0.0f), _isAlive(false), _scale(Vector(1.0f, 1.0f)), _color(Color::White) {}
+ 		Particle() : _position(Vector::Zero), _velocity(Vector::Zero), _rotation(0.0f), _isAlive(false), _scale(Vector(1.0f, 1.0f)), _color(Color::White) {}
 		void resetAge(float time = 0.0f) { _ageTimer.reset(time); }
 		float getAge() const { return _ageTimer.getElapsedTime(); }
 		const Vector& getPosition() const { return _position; }

@@ -62,7 +62,7 @@ namespace Temporal
 	class Entity
 	{
 	public:
-		Entity(Hash id = Hash::INVALID) : _id(id), _manager(0), _bypassSave(false) {}
+		Entity(Hash id = Hash::INVALID) : _id(id), _manager(0), _bypassSave(false), _dead(false) {}
 		~Entity();
 
 		Hash getId() const { return _id; }
@@ -81,10 +81,13 @@ namespace Temporal
 
 		bool isBypassSave() const { return _bypassSave; }
 		void setBypassSave(bool bypassSave) { _bypassSave = bypassSave; }
+		bool isDead() const { return _dead; }
+		void setDead(bool dead) { _dead = dead; }
 	private:
 		Hash _id;
 		ComponentList _components;
 		bool _bypassSave;
+		bool _dead;
 
 		EntitiesManager* _manager;
 
@@ -97,12 +100,12 @@ namespace Temporal
 	class EntitiesManager : public GameStateComponent
 	{
 	public:
-		EntitiesManager() : _focusInputComponent(0), _initializing(false) {};
+		EntitiesManager() : _focusInputComponent(0), _initializing(false), _iterating(false) {};
 		~EntitiesManager();
 
 		void init(GameState* gameState);
 
-		void sendMessageToAllEntities(Message& message, const HashList* filter = 0) const;
+		void sendMessageToAllEntities(Message& message, const HashList* filter = 0);
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
@@ -122,9 +125,12 @@ namespace Temporal
 		ComponentList _inputComponents;
 		Component* _focusInputComponent;
 		bool _initializing;
+		bool _iterating;
 		
 		EntitiesManager(const EntitiesManager&);
 		EntitiesManager& operator=(const EntitiesManager&);
+
+		void removeEntity(Entity* entity);
 
 		friend class SerializationAccess;
 	};

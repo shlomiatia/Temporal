@@ -146,10 +146,32 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
-	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter) const
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter)
 	{
-		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
-			(*(*i).second).handleMessage(message, filter);
+		_iterating = true;
+		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+		{
+			Entity* entity = i->second;
+			if (!entity->isDead())
+			{
+				entity->handleMessage(message, filter);
+			}
+			else
+			{
+				removeEntity(entity);
+				i = _entities.erase(i);
+				if (i == _entities.end())
+					break;
+				
+			}
+		}
+		_iterating = false;
+	}
+
+	void EntitiesManager::removeEntity(Entity* entity)
+	{
+		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
+		delete entity;
 	}
 
 	void* EntitiesManager::sendMessageToEntity(Hash id, Message& message) const
@@ -181,9 +203,15 @@ namespace Temporal
 	{
 		HashEntityIterator i = _entities.find(id);
 		Entity* entity = i->second;
-		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
-		_entities.erase(i);
-		delete entity;
+		if (_iterating)
+		{
+			entity->setDead(true);
+		}
+		else
+		{
+			removeEntity(entity);
+			_entities.erase(i);
+		}
 	}
 
 	void EntitiesManager::removeInputComponent(Component* component)
