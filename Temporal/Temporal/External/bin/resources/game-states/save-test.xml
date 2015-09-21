@@ -8,7 +8,7 @@
     <entities-manager>
         <entity id="ENT_BOX0">
             <transform orientation="1">
-                <position x="112.000000" y="122.666687"/>
+                <position x="112.000000" y="80.000000"/>
             </transform>
             <collision-filter category="129" group="0"/>
             <dynamic-body gravity-enabled="1" collision-mask="9">
@@ -28,7 +28,28 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="0" create-future-self="1"/>
+            <temporal-period period="0" future-self-id="ENT_BOX0_PRESENT" create-future-self="1"/>
+        </entity>
+        <entity id="ENT_BLOCK2">
+            <transform orientation="1">
+                <position x="912.000000" y="252.444458"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="496.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="0.250000" y="7.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">

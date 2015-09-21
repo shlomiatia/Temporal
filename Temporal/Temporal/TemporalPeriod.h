@@ -70,6 +70,9 @@ namespace Temporal
 		bool _createFutureSelf;
 		Vector _previousPosition;
 
+		void createFuture();
+		void killFuture();
+
 		friend class SerializationAccess;
 	};
 
