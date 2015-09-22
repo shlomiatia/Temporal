@@ -284,7 +284,7 @@
 		</fixture>
 	</static-body>
 </entity>
-<entity id="ENT_TEMPORAL_ACTIVATION_NOTIFICATION">
+<entity id="ENT_TEMPORAL_NOTIFICATION">
 	<transform />
 	<particle-emitter particle-lifetime="1.000000" size="1" texture="resources/textures/spiral.png" sprite-sheet="" birth-radius="0.000000" velocity="0.000000" direction-center="0.000000" direction-size="0.000000" min-scale="0.000000" max-scale="0.000000" gravity="0.000000" blend="1" emitter-lifetime="1.000000" enabled="0">
 		<particle-sample interpolation="0.000000" rotation="0.000000">

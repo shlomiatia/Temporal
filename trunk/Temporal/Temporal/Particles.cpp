@@ -68,6 +68,7 @@ namespace Temporal
 			_emitterTimer.reset();
 			_enabled = true;
 			_birthTimer.reset(_particleLifetime / static_cast<float>(_size));
+			_lastPosition = getPosition(*this);
 		}
 	}
 

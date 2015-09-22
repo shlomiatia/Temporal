@@ -21,6 +21,9 @@ namespace Temporal
 	typedef std::vector<Color> ColorList;
 	typedef ColorList::const_iterator ColorIterator;
 
+	/**********************************************************************************************
+	* Player Period
+	*********************************************************************************************/
 	class PlayerPeriod : public Component
 	{
 	public:
@@ -45,11 +48,14 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
+	/**********************************************************************************************
+	* Temporal Period
+	*********************************************************************************************/
 	class TemporalPeriod : public Component
 	{
 	public:
 		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : 
-			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
+			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _destroy(false) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -69,6 +75,7 @@ namespace Temporal
 		Hash _futureSelfId;
 		bool _createFutureSelf;
 		Vector _previousPosition;
+		bool _destroy;
 
 		void createFuture();
 		void killFuture();
