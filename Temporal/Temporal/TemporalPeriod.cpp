@@ -8,6 +8,7 @@
 
 namespace Temporal
 {
+	static const int MASK = CollisionCategory::OBSTACLE | CollisionCategory::CHARACTER;
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	static const Hash TEMPORAL_ACTIVATION_NOTIFICATION_ID("ENT_TEMPORAL_NOTIFICATION");
 	static const Hash PARTICLE_EMITTER_ID("particle-emitter");
@@ -38,7 +39,7 @@ namespace Temporal
 	{
 		OBB shape = getShape(*this);
 		shape.setRadius(shape.getRadius() - 1.0f);
-		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, CollisionCategory::OBSTACLE, period);
+		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period);
 		if (info.size() == 0)
 		{
 			Hash draggableId = getHashParam(raiseMessage(Message(MessageID::GET_DRAGGABLE)));
@@ -48,7 +49,7 @@ namespace Temporal
 				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
 				shape = getShape(draggable);
 				shape.setRadius(shape.getRadius() - 1.0f);
-				info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, CollisionCategory::OBSTACLE, period);
+				info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period);
 				for (FixtureIterator i = info.begin(); i != info.end(); ++i)
 				{
 					if (temporalPeriod.getFutureSelfId() != (**i).getEntityId())

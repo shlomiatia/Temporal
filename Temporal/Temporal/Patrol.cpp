@@ -206,7 +206,11 @@ namespace Temporal
 
 		void Takedown::handleMessage(Message& message)
 		{
-			if (message.getID() == MessageID::ANIMATION_ENDED)
+			if (message.getID() == MessageID::UPDATE)
+			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
+			}
+			else if (message.getID() == MessageID::ANIMATION_ENDED)
 			{
 				_stateMachine->changeState(WAIT_STATE);
 			}
