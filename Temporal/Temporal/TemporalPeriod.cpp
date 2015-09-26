@@ -23,6 +23,20 @@ namespace Temporal
 		Color(0.7254901960784314f, 0.4784313725490196f, 0.3411764705882353f)
 	};
 
+	bool checkFuture(Entity& entity, Period::Enum period, Hash futureEntityId)
+	{
+		OBB shape = getShape(entity);
+		FixtureList info = entity.getManager().getGameState().getGrid().iterateTiles(shape, MASK, period, true, true);
+		for (FixtureIterator i = info.begin(); i != info.end(); ++i)
+		{
+			if (futureEntityId != (**i).getEntityId())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**********************************************************************************************
 	* Player Period
 	*********************************************************************************************/
@@ -47,16 +61,8 @@ namespace Temporal
 			{
 				Entity& draggable = *getEntity().getManager().getEntity(draggableId);
 				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
-				shape = getShape(draggable);
-				shape.setRadius(shape.getRadius() - 1.0f);
-				info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period);
-				for (FixtureIterator i = info.begin(); i != info.end(); ++i)
-				{
-					if (temporalPeriod.getFutureSelfId() != (**i).getEntityId())
-					{
-						return;
-					}
-				}
+				if (!checkFuture(draggable, period, temporalPeriod.getFutureSelfId()))
+					return;
 				temporalPeriod.setPeriod(period);
 			}
 			
@@ -113,7 +119,7 @@ namespace Temporal
 		{
 			if (_createFutureSelf && _futureSelfId)
 			{
-				killFuture();
+				destroyFuture();
 			}
 		}
 		else
@@ -166,11 +172,10 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::DIE)
 		{
-			
 			if (_futureSelfId != Hash::INVALID)
 			{
-				bool t = true;
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::DIE, &t));
+				bool temporalDeath = true;
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::DIE, &temporalDeath));
 			}
 			void* temporalDeath = message.getParam();
 			if (temporalDeath && getBoolParam(temporalDeath))
@@ -193,8 +198,11 @@ namespace Temporal
 			{
 				Vector position = getPosition(*this);
 				const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-				if (_previousPosition == futurePosition)
+				if (_previousPosition == futurePosition && futurePosition != position)
 				{
+					bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
+					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
+					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
 					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
 				}
 
@@ -214,7 +222,7 @@ namespace Temporal
 		}
 	}
 
-	void TemporalPeriod::killFuture()
+	void TemporalPeriod::destroyFuture()
 	{
 		bool param = true;
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::DIE, &param));

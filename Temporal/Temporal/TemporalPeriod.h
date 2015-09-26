@@ -78,7 +78,7 @@ namespace Temporal
 		bool _destroy;
 
 		void createFuture();
-		void killFuture();
+		void destroyFuture();
 
 		friend class SerializationAccess;
 	};
