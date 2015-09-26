@@ -146,11 +146,19 @@ namespace Temporal
 		OBB globalShapeClone = _fixture->getGlobalShape();
 		OBBAABBWrapper dynamicBodyBounds(&globalShapeClone);
 
+		if (_ground && !_ground->isEnabled())
+		{
+			resetGround();
+		}
+
 		// Moving platform - position is set later
 		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
 		{
+			// BRODER
 			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
-			if (_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
+			if (vector.getLength() > 10.0f)
+				resetGround();
+			else if(_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
 				dynamicBodyBounds.getOBB().translate(vector);
 		}
 			

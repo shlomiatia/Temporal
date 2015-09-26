@@ -257,7 +257,7 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureList Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
+	FixtureList Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection, bool isIntersectsExclusive) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
@@ -276,7 +276,8 @@ namespace Temporal
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						const Fixture* body = *i;
-						if(body->canCollide(mask, group) && (!checkIntersection || intersects(shape, body->getGlobalShape())))
+						if(body->canCollide(mask, group) && (!checkIntersection || 
+							(isIntersectsExclusive ? intersectsExclusive(shape, body->getGlobalShape()) : intersects(shape, body->getGlobalShape()))))
 							result.push_back(body);
 					}
 				}
