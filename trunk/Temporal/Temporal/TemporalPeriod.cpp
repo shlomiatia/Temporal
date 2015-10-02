@@ -26,7 +26,8 @@ namespace Temporal
 	bool checkFuture(Entity& entity, Period::Enum period, Hash futureEntityId)
 	{
 		OBB shape = getShape(entity);
-		FixtureList info = entity.getManager().getGameState().getGrid().iterateTiles(shape, MASK, period, true, true);
+		FixtureList info;
+		entity.getManager().getGameState().getGrid().iterateTiles(shape, MASK, period, &info, true, true);
 		for (FixtureIterator i = info.begin(); i != info.end(); ++i)
 		{
 			if (futureEntityId != (**i).getEntityId())
@@ -53,8 +54,7 @@ namespace Temporal
 	{
 		OBB shape = getShape(*this);
 		shape.setRadius(shape.getRadius() - 1.0f);
-		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period);
-		if (info.size() == 0)
+		if (!getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period))
 		{
 			Hash draggableId = getHashParam(raiseMessage(Message(MessageID::GET_DRAGGABLE)));
 			if (draggableId != Hash::INVALID)

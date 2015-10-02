@@ -22,7 +22,8 @@ namespace Temporal
 	void Sensor::update()
 	{
 		const OBB& sensorShape = _fixture->getGlobalShape();
-		FixtureList info = getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getGroup());
+		FixtureList info;
+		getEntity().getManager().getGameState().getGrid().iterateTiles(sensorShape, _categoryMask, _fixture->getGroup(), &info);
 		_sensing = false;
 		raiseMessage(Message(MessageID::SENSOR_START, &_id));
 		for(FixtureIterator i = info.begin(); i != info.end(); ++i)

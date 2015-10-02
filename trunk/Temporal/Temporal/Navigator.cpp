@@ -105,6 +105,7 @@ namespace Temporal
 				{
 					navigator.setDestination(OBB::Zero);
 					_stateMachine->changeState(WAIT_STATE);
+					_stateMachine->raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_REACHED));
 				}
 				else
 				{

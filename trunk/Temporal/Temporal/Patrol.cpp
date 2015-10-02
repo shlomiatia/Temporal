@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
@@ -15,6 +16,7 @@ namespace Temporal
 	static const Hash TURN_STATE = Hash("PAT_STT_TURN");
 	static const Hash WAIT_STATE = Hash("PAT_STT_WAIT");
 	static const Hash TAKEDOWN_STATE = Hash("PAT_STT_TAKEDOWN");
+	static const Hash NAVIGATE_STATE = Hash("PAT_STT_NAVIGATE");
 
 	static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
 	static const Hash TAKEDOWN_SENSOR_ID = Hash("SNS_TAKEDOWN");
@@ -45,7 +47,29 @@ namespace Temporal
 
 	void Patrol::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::SENSOR_SENSE)
+		if (message.getID() == MessageID::ENTITY_READY)
+		{
+			FixtureList result;
+			iterateTiles(getEntity(), Vector(256.0f, 256.0f), CollisionCategory::BUTTON, &result);
+			for (FixtureIterator i = result.begin(); i != result.end(); ++i)
+			{
+				_buttons.push_back((**i).getEntityId());
+			}
+		}
+		else if (message.getID() == MessageID::UPDATE)
+		{
+			for (HashIterator i = _buttons.begin(); i != _buttons.end(); ++i)
+			{
+				if (!getBoolParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::IS_ACTIVATED))))
+				{
+					const Vector& positon = getVectorParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::GET_POSITION)));
+					OBB destination = OBBAABB(positon, Vector(1.0f, 1.0f));
+					changeState(NAVIGATE_STATE);
+					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &destination));
+				}
+			}
+		}
+		else if (message.getID() == MessageID::SENSOR_SENSE)
 		{
 			const SensorParams& params = getSensorParams(message.getParam());
 			if (params.getSensorId() == TAKEDOWN_SENSOR_ID)
@@ -77,6 +101,7 @@ namespace Temporal
 		states[TURN_STATE] = new Turn();
 		states[WAIT_STATE] = new Wait();
 		states[TAKEDOWN_STATE] = new Takedown();
+		states[NAVIGATE_STATE] = new Navigate();
 		return states;
 	}
 
@@ -212,6 +237,15 @@ namespace Temporal
 			}
 			else if (message.getID() == MessageID::ANIMATION_ENDED)
 			{
+				_stateMachine->changeState(WAIT_STATE);
+			}
+		}
+
+		void Navigate::handleMessage(Message& message)
+		{
+			if (message.getID() == MessageID::NAVIGATION_DESTINATION_REACHED)
+			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 				_stateMachine->changeState(WAIT_STATE);
 			}
 		}

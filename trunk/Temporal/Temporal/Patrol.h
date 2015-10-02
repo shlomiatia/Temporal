@@ -40,6 +40,7 @@ namespace Temporal
 	private:
 		bool _isStatic;
 		EdgeDetector _edgeDetector;
+		HashList _buttons;
 
 		HashStateMap getStates() const;
 
@@ -92,6 +93,12 @@ namespace Temporal
 		{
 		public:
 			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class Navigate : public ComponentState
+		{
+		public:
 			void handleMessage(Message& message);
 		};
 	}

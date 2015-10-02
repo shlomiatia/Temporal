@@ -257,14 +257,12 @@ namespace Temporal
 		return false;
 	}
 
-	FixtureList Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection, bool isIntersectsExclusive) const
+	bool Grid::iterateTiles(const OBB& shape, int mask, int group, FixtureList* result, bool checkIntersection, bool isIntersectsExclusive) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
 		int bottomIndex = getAxisIndex(shape.getBottom());
-
-		FixtureList result;
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
@@ -276,14 +274,20 @@ namespace Temporal
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						const Fixture* body = *i;
-						if(body->canCollide(mask, group) && (!checkIntersection || 
+						if (body->canCollide(mask, group) && (!checkIntersection ||
 							(isIntersectsExclusive ? intersectsExclusive(shape, body->getGlobalShape()) : intersects(shape, body->getGlobalShape()))))
-							result.push_back(body);
+						{
+							if (result)
+								result->push_back(body);
+							else
+								return true;
+						}
+							
 					}
 				}
 			}
 		}
 
-		return result;
+		return result ? result->size() != 0 : false;
 	}
 }
