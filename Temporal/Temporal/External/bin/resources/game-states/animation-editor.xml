@@ -12,7 +12,7 @@
 				<position x="455" y="384" />
 			</transform>
 			<animator animation-set="resources/animations/aquaria.xml" animation="POP_ANM_STAND" disable-cross-fade="true" />
-			<renderer layer="4" sprite-sheet="resources/spritesheets/aquaria.xml">
+			<renderer layer="40" sprite-sheet="resources/spritesheets/aquaria.xml">
 				<scene-node id="SCN_ROOT" transform="1">
 					<scene-node id="SCN_BACKARM1" sprite-group="SCN_ARM1" center="112.5" radius="112.5">
 						<scene-node id="SCN_BACKARM2" sprite-group="SCN_ARM2" center="-22.5" radius="72.5">

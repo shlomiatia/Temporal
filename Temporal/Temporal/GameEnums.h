@@ -58,6 +58,7 @@ namespace Temporal
 			ACTION_AIM,
 			ACTION_FIRE,
 			ACTION_TEMPORAL_TRAVEL,
+			ACTION_INVESTIGATE,
 			
 			GET_GROUND,
 			SET_GROUND,
@@ -109,6 +110,9 @@ namespace Temporal
 
 			ACTIVATE,
 			IS_ACTIVATED,
+
+			INVESTIGATE,
+			IS_INVESTIGATED,
 
 			DIE
 		};

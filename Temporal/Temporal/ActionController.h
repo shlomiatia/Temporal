@@ -149,6 +149,7 @@ namespace Temporal
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
 		Hash _draggableId;
+		bool _isInvestigated;
 
 		HashStateMap getStates() const;
 
@@ -245,7 +246,7 @@ namespace Temporal
 		{
 		public:
 			void enter(void* param);
-			void handleMessage(Message& message) {}
+			void handleMessage(Message& message) {};
 		};
 
 		class Aim : public ComponentState
@@ -277,6 +278,13 @@ namespace Temporal
 		};
 
 		class DragBackwards : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class Investigate : public ComponentState
 		{
 		public:
 			void enter(void* param);
