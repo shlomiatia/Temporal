@@ -15,7 +15,8 @@ namespace Temporal
 			BUTTON = 16,
 			PATROL_CONTROL = 32,
 			MOVING_PLATFORM_CONTROL = 64,
-			DRAGGABLE = 128
+			DRAGGABLE = 128,
+			DEAD = 256,
 		};
 	}
 }

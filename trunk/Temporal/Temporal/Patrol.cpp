@@ -9,6 +9,7 @@ namespace Temporal
 	const Hash Patrol::TYPE = Hash("patrol");
 
 	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
+	static const Hash INVESTIGATE_SENSOR_ID = Hash("SNS_INVESTIGATE");
 
 	static const Hash WALK_STATE = Hash("PAT_STT_WALK");
 	static const Hash ACQUIRE_STATE = Hash("PAT_STT_ACQUIRE");
@@ -136,6 +137,16 @@ namespace Temporal
 				if (params.getSensorId() == PATROL_CONTROL_SENSOR_ID)
 				{
 					_stateMachine->changeState(WAIT_STATE);
+				}
+				else if (params.getSensorId() == INVESTIGATE_SENSOR_ID)
+				{
+					Hash id = params.getContact().getTarget().getEntityId();
+					if (id != _stateMachine->getEntity().getId() && !getBoolParam(_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))))
+					{
+						_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
+						_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
+					}
+
 				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
