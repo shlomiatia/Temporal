@@ -113,14 +113,14 @@ namespace Temporal
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController(float maxWalkForcePerSecond = 125.0f);
+		ActionController(float maxWalkForcePerSecond = 125.0f, Hash initialStateId = Hash::INVALID);
 
 		Hash getType() const { return TYPE; }
 
 		HandleMessageHelper& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
-		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND); }
+		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND, getCurrentStateID()); }
 
 		float MAX_WALK_FORCE_PER_SECOND;
 		static float WALK_ACC_PER_SECOND;
@@ -243,6 +243,13 @@ namespace Temporal
 		};
 
 		class Die : public ComponentState
+		{
+		public:
+			void enter(void* param);
+			void handleMessage(Message& message);
+		};
+
+		class Dead : public ComponentState
 		{
 		public:
 			void enter(void* param);

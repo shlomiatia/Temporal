@@ -4,8 +4,8 @@
 
 namespace Temporal
 {
-	StateMachineComponent::StateMachineComponent(HashStateMap states, const char* prefix)
-		: _states(states), _currentState(0), _currentStateID(Hash::INVALID), _stateFlag(false), _frameFlag1(false), _frameFlag2(false), _frameFlag3(false)
+	StateMachineComponent::StateMachineComponent(HashStateMap states, const char* prefix, Hash initialState)
+		: _states(states), _currentState(0), _currentStateID(initialState), _stateFlag(false), _frameFlag1(false), _frameFlag2(false), _frameFlag3(false)
 	{
 		for(StateIterator i = _states.begin(); i != _states.end(); ++i)
 			(*(*i).second).setStateMachine(this);
@@ -33,7 +33,10 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			resetState(getInitialState());
+			if (_currentStateID == Hash::INVALID)
+				resetState(getInitialState());
+			else
+				resetState(_currentStateID);
 			_currentState->enter(0);
 		}
 		else if(message.getID() == MessageID::POST_LOAD)

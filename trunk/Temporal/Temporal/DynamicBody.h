@@ -23,8 +23,9 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-
 		Component* clone() const;
+
+		Fixture& getFixture() { return *_fixture; }
 
 		static const Hash TYPE;
 	private:

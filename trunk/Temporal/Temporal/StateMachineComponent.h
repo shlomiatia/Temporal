@@ -37,7 +37,7 @@ namespace Temporal
 	class StateMachineComponent : public Component
 	{
 	public:
-		explicit StateMachineComponent(HashStateMap states, const char* prefix);
+		explicit StateMachineComponent(HashStateMap states, const char* prefix, Hash initialState = Hash::INVALID);
 		virtual ~StateMachineComponent();
 
 		void changeState(Hash stateID, void* param = 0);
