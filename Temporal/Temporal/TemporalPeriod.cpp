@@ -124,11 +124,7 @@ namespace Temporal
 		}
 		else
 		{
-			if (_createFutureSelf)
-			{
-				createFuture();
-			}
-			else if (_futureSelfId != Hash::INVALID)
+			if (!_createFutureSelf && _futureSelfId != Hash::INVALID)
 			{
 				PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
 				const Color& color = playerPeriod.getNextColor();
@@ -194,19 +190,28 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
-			if (_createFutureSelf && _futureSelfId != Hash::INVALID)
+			if (_createFutureSelf)
 			{
-				Vector position = getPosition(*this);
-				const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-				if (_previousPosition == futurePosition && futurePosition != position)
+				if (_futureSelfId == Hash::INVALID)
 				{
-					bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
+					if (_period == Period::PAST)
+						createFuture();
 				}
+				else
+				{
+					Vector position = getPosition(*this);
+					const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
+					if (_previousPosition == futurePosition && futurePosition != position)
+					{
+						bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
+						getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
+						getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
+						getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
+					}
 
-				_previousPosition = position;
+					_previousPosition = position;
+				}
+				
 			}
 		}
 		else if (message.getID() == MessageID::SET_IMPULSE)
