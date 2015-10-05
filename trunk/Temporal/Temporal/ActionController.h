@@ -98,6 +98,7 @@ namespace Temporal
 		bool handleFallJumpMessage(Message& message);
 		bool handleDragMessage(Message& message);
 		void handleMessage(Message& message);
+		void handleDragEnter();
 
 	private:
 		bool _isDescending;
