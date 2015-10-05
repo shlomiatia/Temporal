@@ -68,59 +68,59 @@
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="7.000000"/>
                     <scale x="0.400000" y="0.420000"/>
-                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="41.784748" center="112.500000" radius="112.500000">
-                        <translation x="10.911102" y="18.088837"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
-                            <translation x="-23.511108" y="-21.288879"/>
-                            <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
-                                <translation x="17.022278" y="-19.755554"/>
-                                <scale x="1.000000" y="1.000000"/>
-                            </scene-node>
-                        </scene-node>
-                    </scene-node>
-                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
-                        <translation x="4.000000" y="-23.288910"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
-                            <translation x="1.466675" y="-40.644440"/>
-                            <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
-                                <translation x="-1.711060" y="-33.711105"/>
-                                <scale x="1.000000" y="1.000000"/>
-                            </scene-node>
-                        </scene-node>
-                    </scene-node>
                     <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.000000" center="0.000000" radius="90.000000">
                         <translation x="-2.000000" y="0.536000"/>
                         <scale x="1.000000" y="1.000000"/>
-                    </scene-node>
-                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
-                        <translation x="-3.000000" y="33.000000"/>
-                        <scale x="1.000000" y="1.000000"/>
-                    </scene-node>
-                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
-                        <translation x="-7.888947" y="-25.888885"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
-                            <translation x="1.288940" y="-40.799988"/>
+                        <scene-node id="SCN_BACKARM1" behind-parent="1" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="41.784748" center="112.500000" radius="112.500000">
+                            <translation x="10.911102" y="18.088837"/>
                             <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
-                                <translation x="-2.266693" y="-33.000000"/>
+                            <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                                <translation x="-23.511108" y="-21.288879"/>
                                 <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                    <translation x="17.022278" y="-19.755554"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
                             </scene-node>
                         </scene-node>
-                    </scene-node>
-                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="38.609608" center="112.500000" radius="112.500000">
-                        <translation x="-9.822235" y="15.066650"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
-                            <translation x="-23.333374" y="-21.711121"/>
+                        <scene-node id="SCN_BACKLEG1" behind-parent="1" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                            <translation x="4.000000" y="-23.288910"/>
                             <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
-                                <translation x="17.911133" y="-20.000000"/>
+                            <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                                <translation x="1.466675" y="-40.644440"/>
                                 <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                    <translation x="-1.711060" y="-33.711105"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                        <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
+                            <translation x="-3.000000" y="33.000000"/>
+                            <scale x="1.000000" y="1.000000"/>
+                        </scene-node>
+                        <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                            <translation x="-7.888947" y="-25.888885"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                                <translation x="1.288940" y="-40.799988"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                    <translation x="-2.266693" y="-33.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                        <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="38.609608" center="112.500000" radius="112.500000">
+                            <translation x="-9.822235" y="15.066650"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                                <translation x="-23.333374" y="-21.711121"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                    <translation x="17.911133" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
                             </scene-node>
                         </scene-node>
                     </scene-node>
@@ -212,14 +212,14 @@
                 <hang-descnd-original-translation x="0.000000" y="0.000000"/>
                 <hang-descend-ground-delta x="0.000000" y="0.000000"/>
             </action-controller>
-            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="1">
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
                 <composite-animator1>
                     <single-animator animation-id="POP_ANM_FALL" is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator1>
                 <composite-animator2>
-                    <single-animator animation-id="POP_ANM_FALL" is-rewind="0" weight="1.000000" timer="0.000000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                     <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
                 </composite-animator2>
@@ -228,62 +228,62 @@
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="7.000000"/>
                     <scale x="0.400000" y="0.420000"/>
-                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="69.555801" center="112.500000" radius="112.500000">
-                        <translation x="10.911102" y="18.088837"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
-                            <translation x="-23.511108" y="-21.288879"/>
-                            <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
-                                <translation x="17.022278" y="-19.755554"/>
-                                <scale x="1.000000" y="1.000000"/>
-                            </scene-node>
-                        </scene-node>
-                    </scene-node>
-                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="13.529361" center="22.500000" radius="67.500000">
-                        <translation x="4.000000" y="-23.288910"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-14.391625" center="-67.500000" radius="67.500000">
-                            <translation x="1.466675" y="-40.644440"/>
-                            <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
-                                <translation x="-1.711060" y="-33.711105"/>
-                                <scale x="1.000000" y="1.000000"/>
-                            </scene-node>
-                        </scene-node>
-                    </scene-node>
                     <scene-node id="SCN_BODY" behind-parent="0" transform="0" sprite-group="SCN_BODY" flip="0" rotation="0.000000" center="0.000000" radius="90.000000">
                         <translation x="-2.000000" y="0.536000"/>
                         <scale x="1.000000" y="1.000000"/>
-                    </scene-node>
-                    <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
-                        <translation x="-3.000000" y="33.000000"/>
-                        <scale x="1.000000" y="1.000000"/>
-                    </scene-node>
-                    <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
-                        <translation x="-7.888947" y="-25.888885"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-20.204586" center="-67.500000" radius="67.500000">
-                            <translation x="1.288940" y="-40.799988"/>
+                        <scene-node id="SCN_BACKARM1" behind-parent="1" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="69.555801" center="112.500000" radius="112.500000">
+                            <translation x="10.911102" y="18.088837"/>
                             <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
-                                <translation x="-2.266693" y="-33.000000"/>
+                            <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
+                                <translation x="-23.511108" y="-21.288879"/>
                                 <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_BACKARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.004665" center="30.000000" radius="30.000000">
+                                    <translation x="17.022278" y="-19.755554"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
                             </scene-node>
                         </scene-node>
-                    </scene-node>
-                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="64.584282" center="112.500000" radius="112.500000">
-                        <translation x="-9.822235" y="15.066650"/>
-                        <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
-                            <translation x="-23.333374" y="-21.711121"/>
+                        <scene-node id="SCN_BACKLEG1" behind-parent="1" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="13.529361" center="22.500000" radius="67.500000">
+                            <translation x="4.000000" y="-23.288910"/>
                             <scale x="1.000000" y="1.000000"/>
-                            <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
-                                <translation x="17.911133" y="-20.000000"/>
+                            <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-14.391625" center="-67.500000" radius="67.500000">
+                                <translation x="1.466675" y="-40.644440"/>
                                 <scale x="1.000000" y="1.000000"/>
-                                <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
-                                    <translation x="7.000000" y="-20.000000"/>
+                                <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
+                                    <translation x="-1.711060" y="-33.711105"/>
                                     <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                        <scene-node id="SCN_HEAD" behind-parent="0" transform="0" sprite-group="SCN_HEAD" flip="0" rotation="0.000000" center="-11.250000" radius="33.750000">
+                            <translation x="-3.000000" y="33.000000"/>
+                            <scale x="1.000000" y="1.000000"/>
+                        </scene-node>
+                        <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
+                            <translation x="-7.888947" y="-25.888885"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-20.204586" center="-67.500000" radius="67.500000">
+                                <translation x="1.288940" y="-40.799988"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
+                                    <translation x="-2.266693" y="-33.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                </scene-node>
+                            </scene-node>
+                        </scene-node>
+                        <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="64.584282" center="112.500000" radius="112.500000">
+                            <translation x="-9.822235" y="15.066650"/>
+                            <scale x="1.000000" y="1.000000"/>
+                            <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
+                                <translation x="-23.333374" y="-21.711121"/>
+                                <scale x="1.000000" y="1.000000"/>
+                                <scene-node id="SCN_FRONTARM3" behind-parent="1" transform="0" sprite-group="SCN_ARM3" flip="0" rotation="31.958099" center="30.000000" radius="30.000000">
+                                    <translation x="17.911133" y="-20.000000"/>
+                                    <scale x="1.000000" y="1.000000"/>
+                                    <scene-node id="SCN_GUN" behind-parent="1" transform="0" sprite-group="SCN_GUN" flip="0" rotation="-80.000000" center="0.000000" radius="0.000000">
+                                        <translation x="7.000000" y="-20.000000"/>
+                                        <scale x="1.000000" y="1.000000"/>
+                                    </scene-node>
                                 </scene-node>
                             </scene-node>
                         </scene-node>
