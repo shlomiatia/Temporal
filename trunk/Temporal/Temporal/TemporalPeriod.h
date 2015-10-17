@@ -55,7 +55,7 @@ namespace Temporal
 	{
 	public:
 		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : 
-			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _destroy(false) {}
+			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -75,14 +75,25 @@ namespace Temporal
 		Hash _futureSelfId;
 		bool _createFutureSelf;
 		Vector _previousPosition;
-		bool _destroy;
 
 		void createFuture();
 		void destroyFuture();
+		void addParticleEmitter(Entity& entity);
 
 		friend class SerializationAccess;
 	};
 
-	
+	/**********************************************************************************************
+	* Temporal Notification
+	*********************************************************************************************/
+	class TemporalNotification : public Component
+	{
+	public:
+		TemporalNotification() : Component(true) {}
+
+		void handleMessage(Message& message);
+		Hash getType() const { return Hash::INVALID; }
+		Component* clone() const { return 0; }
+	};
 }
 #endif

@@ -5,6 +5,7 @@
 #include "PhysicsEnums.h"
 #include "Utils.h"
 #include "Fixture.h"
+#include "Transform.h"
 
 namespace Temporal
 {
@@ -140,10 +141,7 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
-			Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
-			particleEmitter->setBypassSave(true);
-			getEntity().add(particleEmitter);
+			addParticleEmitter(getEntity());
 			setPeriod(_period);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
@@ -176,17 +174,21 @@ namespace Temporal
 			void* temporalDeath = message.getParam();
 			if (temporalDeath && getBoolParam(temporalDeath))
 			{
-				raiseMessage(Message(MessageID::START_EMITTER));
-				bool f = false;
-				raiseMessage(Message(MessageID::SET_BODY_ENABLED, &f));
-				raiseMessage(Message(MessageID::SET_VISIBILITY, &f));
-				_destroy = true;
-			}
-		}
-		else if (message.getID() == MessageID::EMITTER_FINISHED)
-		{
-			if (_destroy)
+				Hash id = Hash(Utils::format("%s_NOTIFICATION", getEntity().getId().getString()).c_str());
+				Entity* existing = getEntity().getManager().getEntity(id);
+				if (existing)
+					getEntity().getManager().remove(id);
+				Entity* entity = new Entity();
+				entity->add(new Transform());
+				entity->add(new TemporalNotification());
+				addParticleEmitter(*entity);
+				entity->setId(id);
+				getEntity().getManager().add(entity);
+				Vector position = getPosition(getEntity());
+				getEntity().getManager().sendMessageToEntity(id, Message(MessageID::SET_POSITION, &position));
+
 				getEntity().getManager().remove(getEntity().getId());
+			}
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
@@ -227,6 +229,14 @@ namespace Temporal
 		}
 	}
 
+	void TemporalPeriod::addParticleEmitter(Entity& entity)
+	{
+		Entity* particleEmitterTemplate = getEntity().getManager().getGameState().getEntityTemplatesManager().get(TEMPORAL_ACTIVATION_NOTIFICATION_ID);
+		Component* particleEmitter = particleEmitterTemplate->get(PARTICLE_EMITTER_ID)->clone();
+		particleEmitter->setBypassSave(true);
+		entity.add(particleEmitter);
+	}
+
 	void TemporalPeriod::destroyFuture()
 	{
 		bool param = true;
@@ -249,5 +259,20 @@ namespace Temporal
 		period._createFutureSelf = true;
 		clone->setId(_futureSelfId);
 		getEntity().getManager().add(clone);
+	}
+
+	/**********************************************************************************************
+	* Temporal Notification
+	*********************************************************************************************/
+	void TemporalNotification::handleMessage(Message& message)
+	{
+		if (message.getID() == MessageID::ENTITY_READY)
+		{
+			raiseMessage(Message(MessageID::START_EMITTER));
+		}
+		else if (message.getID() == MessageID::EMITTER_FINISHED)
+		{
+			getEntity().getManager().remove(getEntity().getId());
+		}
 	}
 }
