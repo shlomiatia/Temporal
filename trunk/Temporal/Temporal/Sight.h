@@ -13,7 +13,7 @@ namespace Temporal
 	{
 	public:
 		explicit Sight(Vector sightSize = Vector(480.0f, 64.0f)) :
-		  _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
+		  _sightSize(sightSize) {};
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -24,9 +24,6 @@ namespace Temporal
 	private:
 		Vector _sightSize;
 		
-		Vector _pointOfIntersection;
-		bool _isSeeing;
-
 		void checkLineOfSight();
 		void drawFieldOfView(const Vector& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo() const;

@@ -232,11 +232,11 @@ namespace Temporal
 					   intersects(tile, pointOfIntersection))
 					{
 						result.setFixture(&body);
-						result.SetPoint(pointOfIntersection);
+						result.setDirectedSegment(DirectedSegment(rayOrigin, pointOfIntersection - rayOrigin));
 						minDistance = distance;
 					}
 				}
-				if(result.getPoint() != Vector::Zero)
+				if(result.getDirectedSegment() != DirectedSegment::Zero)
 				{
 					return true;
 				}

@@ -212,7 +212,7 @@ namespace Temporal
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		_fixture->setEnabled(false);
 		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
-			(result.getPoint() - rayOrigin).getLength() < MAX_DISTANCE)
+			(result.getDirectedSegment().getTarget() - rayOrigin).getLength() < MAX_DISTANCE)
 		{
 			_fixture->setEnabled(true);
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);

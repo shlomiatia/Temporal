@@ -230,6 +230,8 @@ namespace Temporal
 	class DirectedSegment
 	{
 	public:
+		static const DirectedSegment Zero;
+
 		DirectedSegment(float x1, float y1, float x2, float y2) : _origin(x1, y1), _vector(x2 - x1, y2 - y1) {}
 		DirectedSegment(const Vector& origin, const Vector& vector) : _origin(origin), _vector(vector) {}
 		const Vector& getOrigin() const { return _origin; }
@@ -238,6 +240,9 @@ namespace Temporal
 		void setVector(const Vector& vector) { _vector = vector; }
 		Vector getTarget() const { return getOrigin() + getVector(); }
 		Vector getDirection() const { return getVector().normalize(); }
+
+		bool operator==(const DirectedSegment& other) const { return ((getOrigin() == other.getOrigin()) && (getVector() == other.getVector())); }
+		bool operator!=(const DirectedSegment& other) const { return !(*this == other); }
 	private:
 		Vector _origin;
 		Vector _vector;

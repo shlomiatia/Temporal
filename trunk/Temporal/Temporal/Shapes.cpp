@@ -142,4 +142,6 @@ namespace Temporal
 			return SegmentPP(bottomPoint, bottomPoint);
 		}
 	}
+
+	const DirectedSegment DirectedSegment::Zero(Vector::Zero, Vector::Zero);
 }

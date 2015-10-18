@@ -83,7 +83,7 @@ namespace Temporal
 		int group = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		if (getEntity().getManager().getGameState().getGrid().cast(position, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
 		{
-			float length = result.getPoint().getY() - position.getY();
+			float length = result.getDirectedSegment().getTarget().getY() - position.getY();
 			
 			
 			if (result.getFixture().getCategory() == CollisionCategory::PLAYER && !_friendly ||

@@ -18,16 +18,16 @@ namespace Temporal
 	class RayCastResult
 	{
 	public:
-		RayCastResult() : _fixture(0), _point(Vector::Zero) {}
+		RayCastResult() : _fixture(0), _directedSegment(DirectedSegment::Zero) {}
 
 		const Fixture& getFixture() const { return *_fixture; }
 		void setFixture(const Fixture* fixture) { _fixture = fixture; }
-		const Vector& getPoint() const { return _point; }
-		void SetPoint(const Vector& point) { _point = point; }
+		const DirectedSegment& getDirectedSegment() const { return _directedSegment; }
+		void setDirectedSegment(const DirectedSegment& directedSegment) { _directedSegment = directedSegment; }
 
 	private:
 		const Fixture* _fixture;
-		Vector _point;
+		DirectedSegment _directedSegment;
 	};
 
 	class Grid : public GameStateComponent
