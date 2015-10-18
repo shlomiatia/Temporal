@@ -70,12 +70,9 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
-		Graphics::get().getLinesSpriteBatch().begin();
 
 		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
 		drawFieldOfView(sourcePosition, sourceSide);
-
-		Graphics::get().getLinesSpriteBatch().end();
 	}
 }

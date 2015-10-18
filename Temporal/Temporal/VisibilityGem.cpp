@@ -12,7 +12,7 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
-			_isVisible = false;
+			_isCovered = true;
 		}
 		else if (message.getID() == MessageID::SET_LIT)
 		{
