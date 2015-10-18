@@ -3,13 +3,13 @@
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
 #include "Fixture.h"
+#include "Grid.h"
 
 namespace Temporal
 {
 	const Hash Patrol::TYPE = Hash("patrol");
 
 	static const Hash FRONT_EDGE_SENSOR_ID = Hash("SNS_FRONT_EDGE");
-	static const Hash INVESTIGATE_SENSOR_ID = Hash("SNS_INVESTIGATE");
 
 	static const Hash WALK_STATE = Hash("PAT_STT_WALK");
 	static const Hash ACQUIRE_STATE = Hash("PAT_STT_ACQUIRE");
@@ -63,8 +63,8 @@ namespace Temporal
 			{
 				if (!getBoolParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::IS_ACTIVATED))))
 				{
-					const Vector& positon = getVectorParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::GET_POSITION)));
-					OBB destination = OBBAABB(positon, Vector(1.0f, 1.0f));
+					const Vector& position = getVectorParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::GET_POSITION)));
+					OBB destination = OBBAABB(position, Vector(1.0f, 1.0f));
 					changeState(NAVIGATE_STATE);
 					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &destination));
 				}
@@ -84,6 +84,38 @@ namespace Temporal
 		}
 		_edgeDetector.handleMessage(message);
 		StateMachineComponent::handleMessage(message);
+	}
+
+	void Patrol::handleWaitWalkMessage(Message& message)
+	{
+		if (message.getID() == MessageID::LINE_OF_SIGHT)
+		{
+			RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
+			if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
+			{
+				void* ground = raiseMessage(Message(MessageID::GET_GROUND));
+				if (!ground)
+					return;
+				changeState(ACQUIRE_STATE);
+			}
+			else
+			{
+				Hash id = result.getFixture().getEntityId();
+				if (id != getEntity().getId() &&
+					!getBoolParam(getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))) &&
+					result.getDirectedSegment().getVector().getLength() == 0.0f)
+				{
+ 					getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
+					raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
+				}
+				else
+				{
+					OBB destination = OBBAABB(result.getDirectedSegment().getTarget(), Vector(1.0f, 1.0f));
+					changeState(NAVIGATE_STATE);
+					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &destination));
+				}
+			}
+		}
 	}
 
 	Hash Patrol::getInitialState() const
@@ -115,11 +147,8 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message)
 		{	
-			if(message.getID() == MessageID::LINE_OF_SIGHT)
-			{
-				_stateMachine->changeState(ACQUIRE_STATE);
-			}
-			else if(message.getID() == MessageID::BODY_COLLISION)
+			getPatrol(_stateMachine).handleWaitWalkMessage(message);
+			if(message.getID() == MessageID::BODY_COLLISION)
 			{
 				const Vector& collision = getVectorParam(message.getParam());
 				if(collision.getX() != 0.0f && collision.getY() >= 0.0f)
@@ -137,16 +166,6 @@ namespace Temporal
 				if (params.getSensorId() == PATROL_CONTROL_SENSOR_ID)
 				{
 					_stateMachine->changeState(WAIT_STATE);
-				}
-				else if (params.getSensorId() == INVESTIGATE_SENSOR_ID)
-				{
-					Hash id = params.getContact().getTarget().getEntityId();
-					if (id != _stateMachine->getEntity().getId() && !getBoolParam(_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))))
-					{
-						_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
-						_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
-					}
-
 				}
 			}
 			else if(message.getID() == MessageID::UPDATE)
@@ -166,9 +185,11 @@ namespace Temporal
 
 		void Acquire::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::LINE_OF_SIGHT)
+			if (message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				_stateMachine->setFrameFlag1(true);
+				RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
+				if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
+					_stateMachine->setFrameFlag1(true);
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
@@ -218,15 +239,8 @@ namespace Temporal
 
 		void Wait::handleMessage(Message& message)
 		{
-			if(message.getID() == MessageID::LINE_OF_SIGHT)
-			{
-				void* ground = _stateMachine->raiseMessage(Message(MessageID::GET_GROUND));
-				if (ground)
-				{
-					_stateMachine->changeState(ACQUIRE_STATE);
-				}
-			}
-			else if(message.getID() == MessageID::UPDATE)
+			getPatrol(_stateMachine).handleWaitWalkMessage(message);
+			if(message.getID() == MessageID::UPDATE)
 			{
 				if (!getPatrol(_stateMachine).isStatic() && _stateMachine->getTimer().getElapsedTime() >= WAIT_TIME)
 				{
@@ -256,7 +270,6 @@ namespace Temporal
 		{
 			if (message.getID() == MessageID::NAVIGATION_DESTINATION_REACHED)
 			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_ACTIVATE));
 				_stateMachine->changeState(WAIT_STATE);
 			}
 		}

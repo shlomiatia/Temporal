@@ -1775,7 +1775,7 @@
                 <translation x="-3.000000" y="33.000000"/>
             </scene-node-sample>
         </scene-graph-sample>
-        <scene-graph-sample index="29">
+        <scene-graph-sample index="14">
             <scene-node-sample scene-node-id="SCN_FRONTARM2" rotation="2.982344" ignore="0">
                 <translation x="-23.333374" y="-21.711121"/>
             </scene-node-sample>

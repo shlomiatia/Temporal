@@ -34,6 +34,8 @@ namespace Temporal
 
 		bool isStatic() const { return _isStatic; }
 		void setStatic(bool isStatic) { _isStatic = isStatic; }
+
+		void handleWaitWalkMessage(Message& message);
 	protected:
 		Hash getInitialState() const;
 

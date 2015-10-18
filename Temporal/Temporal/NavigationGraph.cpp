@@ -195,9 +195,9 @@ namespace Temporal
 
 					RayCastResult result;
 					_grid.cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
-					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
+					if (result.getDirectedSegment().getTarget() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
-						float amount = area.getRadius().getAxis(axisX) * 2.0f  - (result.getPoint() - startLeft).getLength() + 1.0f;
+						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getDirectedSegment().getTarget() - startLeft).getLength() + 1.0f;
 						if (amount > 0.0f)
 							cutArea(Side::RIGHT, amount, area, areas, j);
 					}
@@ -211,9 +211,9 @@ namespace Temporal
 					}
 					result = RayCastResult();
 					_grid.cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
-					if (result.getPoint() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
+					if (result.getDirectedSegment().getTarget() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
-						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getPoint() - startRight).getLength() + 1.0f;
+						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getDirectedSegment().getTarget() - startRight).getLength() + 1.0f;
 						if (amount > 0.0f)
 							cutArea(Side::LEFT, amount, area, areas, j);
 					}
