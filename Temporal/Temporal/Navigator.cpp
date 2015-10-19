@@ -26,11 +26,11 @@ namespace Temporal
 			return static_cast<Navigator&>(stateMachine);
 		}
 
-		bool plotPath(StateMachineComponent& stateMachine, const OBB& goalPosition)
+		bool plotPath(StateMachineComponent& stateMachine, const Vector& goalPosition, Hash tracked)
 		{
 			int collistionGroup = *static_cast<int*>(stateMachine.raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 			Navigator& navigator = getNavigator(stateMachine);
-			OBB startPosition = OBBAABB(getPosition(stateMachine), Vector(1.0f, 1.0f));
+			const Vector& startPosition = getPosition(stateMachine);
 
 			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
@@ -45,6 +45,7 @@ namespace Temporal
 						navigator.setPath(path);
 					}
 					navigator.setDestination(goalPosition);
+					navigator.setTracked(tracked);
 					navigator.changeState(WALK_STATE);
 					return true;
 				}
@@ -56,14 +57,16 @@ namespace Temporal
 		{
 			if (message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
-				const OBB& goalPosition = *static_cast<const OBB*>(message.getParam());
-				plotPath(*_stateMachine, goalPosition);
+				Hash tracked = *static_cast<const Hash*>(message.getParam());
+				const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+				plotPath(*_stateMachine, goalPosition, tracked);
 			}
 			else if (message.getID() == MessageID::UPDATE)
 			{
-				const OBB& destination = getNavigator(*_stateMachine).getDestination();
-				if (destination != OBB::Zero)
-					plotPath(*_stateMachine, destination);
+				const Vector& destination = getNavigator(*_stateMachine).getDestination();
+				Hash tracked = getNavigator(*_stateMachine).getTracked();
+				if (destination != Vector::Zero)
+					plotPath(*_stateMachine, destination, tracked);
 			}
 		}
 
@@ -85,8 +88,8 @@ namespace Temporal
 			bool reachedTargetPlatform;
 			if (!path)
 			{
-				const OBB& destination = navigator.getDestination();
-				targetX = destination.getCenterX();
+				const Vector& destination = navigator.getDestination();
+				targetX = destination.getX();
 				reachedTargetPlatform = true;
 			}
 			else
@@ -103,7 +106,8 @@ namespace Temporal
 			{
 				if (reachedTargetPlatform)
 				{
-					navigator.setDestination(OBB::Zero);
+					navigator.setDestination(Vector::Zero);
+					navigator.setTracked(Hash::INVALID);
 					_stateMachine->changeState(WAIT_STATE);
 					_stateMachine->raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_REACHED));
 				}
@@ -282,7 +286,30 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if (message.getID() == MessageID::DRAW_DEBUG)
+		if (message.getID() == MessageID::UPDATE)
+		{
+			if (_destination != Vector::Zero)
+			{
+				if (!getEntity().getManager().getEntity(_tracked))
+				{
+					setDestination(Vector::Zero);
+					setTracked(Hash::INVALID);
+					changeState(WAIT_STATE);
+					raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_LOST));
+				}
+				else
+				{
+					const Vector& destination = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
+					if (_destination != destination)
+					{
+						plotPath(*this, destination, _tracked);
+					}
+				}
+				
+			}
+			
+		}
+		else if (message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}
@@ -311,9 +338,9 @@ namespace Temporal
 			}
 			else
 			{
-				if (_destination != OBB::Zero)
+				if (_destination != Vector::Zero)
 				{
-					if (!plotPath(*this, _destination))
+					if (!plotPath(*this, _destination, _tracked))
 					{
 						changeState(WAIT_STATE);
 					}

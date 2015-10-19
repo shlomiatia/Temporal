@@ -13,13 +13,15 @@ namespace Temporal
 	const Hash Sight::TYPE = Hash("sight");
 
 	static const float RAYS = 3.0f;
-	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER | CollisionCategory::DEAD;
+	static const int COLLISION_MASK1 = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
+	static const int COLLISION_MASK2 = CollisionCategory::OBSTACLE | CollisionCategory::DEAD;
 
 	void Sight::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			checkLineOfSight();
+			checkLineOfSight(COLLISION_MASK1);
+			checkLineOfSight(COLLISION_MASK2);
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
@@ -27,7 +29,7 @@ namespace Temporal
 		}
 	}
 
-	void Sight::checkLineOfSight()
+	void Sight::checkLineOfSight(int collisionMask)
 	{
 
 		const Vector& position = getPosition(*this);
@@ -38,7 +40,7 @@ namespace Temporal
 		{
 			Vector sourcePosition = position + Vector(0.0f, i);
 			RayCastResult result;
-			if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, sourceDirection, result, COLLISION_MASK, sourceCollisionGroup))
+			if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, sourceDirection, result, collisionMask, sourceCollisionGroup))
 			{
 				if (result.getFixture().getCategory() == CollisionCategory::OBSTACLE)
 					continue;
@@ -51,6 +53,7 @@ namespace Temporal
 					continue;
 
 				raiseMessage(Message(MessageID::LINE_OF_SIGHT, &result));
+				return;
 				
 			}
 		}
