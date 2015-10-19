@@ -48,29 +48,7 @@ namespace Temporal
 
 	void Patrol::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_READY)
-		{
-			FixtureList result;
-			iterateTiles(getEntity(), Vector(256.0f, 256.0f), CollisionCategory::BUTTON, &result);
-			for (FixtureIterator i = result.begin(); i != result.end(); ++i)
-			{
-				_buttons.push_back((**i).getEntityId());
-			}
-		}
-		else if (message.getID() == MessageID::UPDATE)
-		{
-			for (HashIterator i = _buttons.begin(); i != _buttons.end(); ++i)
-			{
-				if (!getBoolParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::IS_ACTIVATED))))
-				{
-					const Vector& position = getVectorParam(getEntity().getManager().sendMessageToEntity(*i, Message(MessageID::GET_POSITION)));
-					OBB destination = OBBAABB(position, Vector(1.0f, 1.0f));
-					changeState(NAVIGATE_STATE);
-					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &destination));
-				}
-			}
-		}
-		else if (message.getID() == MessageID::SENSOR_SENSE)
+		if (message.getID() == MessageID::SENSOR_SENSE)
 		{
 			const SensorParams& params = getSensorParams(message.getParam());
 			if (params.getSensorId() == TAKEDOWN_SENSOR_ID)
@@ -101,19 +79,12 @@ namespace Temporal
 			else
 			{
 				Hash id = result.getFixture().getEntityId();
-				if (id != getEntity().getId() &&
-					!getBoolParam(getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))) &&
-					result.getDirectedSegment().getVector().getLength() == 0.0f)
+				if (id != getEntity().getId())
 				{
- 					getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
-					raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
-				}
-				else
-				{
-					OBB destination = OBBAABB(result.getDirectedSegment().getTarget(), Vector(1.0f, 1.0f));
 					changeState(NAVIGATE_STATE);
-					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &destination));
+					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
 				}
+				
 			}
 		}
 	}
@@ -268,7 +239,13 @@ namespace Temporal
 
 		void Navigate::handleMessage(Message& message)
 		{
+			getPatrol(_stateMachine).handleWaitWalkMessage(message);
 			if (message.getID() == MessageID::NAVIGATION_DESTINATION_REACHED)
+			{
+				_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
+				_stateMachine->changeState(WAIT_STATE);
+			}
+			else if (message.getID() == MessageID::NAVIGATION_DESTINATION_LOST)
 			{
 				_stateMachine->changeState(WAIT_STATE);
 			}

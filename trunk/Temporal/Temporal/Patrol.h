@@ -42,7 +42,6 @@ namespace Temporal
 	private:
 		bool _isStatic;
 		EdgeDetector _edgeDetector;
-		HashList _buttons;
 
 		HashStateMap getStates() const;
 
