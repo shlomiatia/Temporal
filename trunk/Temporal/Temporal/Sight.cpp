@@ -9,7 +9,6 @@
 
 namespace Temporal
 {
-	
 	const Hash Sight::TYPE = Hash("sight");
 
 	static const float RAYS = 3.0f;
@@ -31,9 +30,9 @@ namespace Temporal
 
 	void Sight::checkLineOfSight(int collisionMask)
 	{
-
-		const Vector& position = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
+		Vector position = getPosition(*this) + _sightOffset.multiplyComponents(sourceSide, 1.0f);
+		
 		Vector sourceDirection = Vector(sourceSide, 0.0f);
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / RAYS)
@@ -73,9 +72,9 @@ namespace Temporal
 
 	void Sight::drawDebugInfo() const
 	{
-
-		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
+		Vector sourcePosition = getPosition(*this) + _sightOffset.multiplyComponents(sourceSide, 1.0f);
+		
 		drawFieldOfView(sourcePosition, sourceSide);
 	}
 }

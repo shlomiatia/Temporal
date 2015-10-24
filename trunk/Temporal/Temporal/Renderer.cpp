@@ -33,8 +33,11 @@ namespace Temporal
 				_spriteSheet = ResourceManager::get().getSpritesheet(_spriteSheetFile.c_str());
 			else
 				_spriteSheet = ResourceManager::get().getSingleTextureSpritesheet(_textureFile.c_str());
-			if(!_root)
-				_root = new SceneNode();
+			if (!_root)
+			{
+				_root = new SceneNode(Hash("SCN_ROOT"));
+			}
+				
 			_root->init();
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
@@ -105,7 +108,6 @@ namespace Temporal
 
 			if(!sceneNode.isTransformOnly())
 			{
-				
 				const Texture& texture = _spriteSheet->getTexture();
 				Hash spriteGroupID = sceneNode.getSpriteGroupId();
 				const SpriteGroup& spriteGroup = _spriteSheet->get(spriteGroupID);

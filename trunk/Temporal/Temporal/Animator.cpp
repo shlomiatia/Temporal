@@ -102,7 +102,7 @@ namespace Temporal
 		float interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
 
 		lerp(interpolation, sceneNode, currentSample->getRotation(), nextSample->getRotation(), currentSample->getTranslation(), nextSample->getTranslation(), srt);
-		//srt.setSpriteGroupId(currentSample->getSpriteGroupId());
+		srt.setSpriteGroupId(currentSample->getSpriteGroupId());
 
 		return true;
 	}
@@ -292,9 +292,9 @@ namespace Temporal
 				lerp(interpolation, sceneNode, previousSRT.getRotation(), currentSRT.getRotation(), previousSRT.getTranslation(), currentSRT.getTranslation(), currentSRT);
 			}
 
-			/*if(currentSRT.getSpriteGroupId() != Hash::INVALID)
+			if(currentSRT.getSpriteGroupId() != Hash::INVALID)
 				sceneNode.setSpriteGroupId(currentSRT.getSpriteGroupId());
-			sceneNode.setSpriteInterpolation(interpolation);*/
+			/*sceneNode.setSpriteInterpolation(interpolation);*/
 			sceneNode.setRotation(currentSRT.getRotation());
 			sceneNode.setTranslation(currentSRT.getTranslation());
 		}
