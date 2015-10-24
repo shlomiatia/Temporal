@@ -51,6 +51,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="SecurityCamera.h" />
     <ClInclude Include="Serialization.h" />
     <ClInclude Include="SerializationAccess.h" />
     <ClInclude Include="Settings.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="SecurityCamera.cpp" />
     <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="SerializationAccess.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

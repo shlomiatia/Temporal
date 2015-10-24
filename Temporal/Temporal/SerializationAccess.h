@@ -353,6 +353,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Sight& sight, T& serializer)
 		{
+			serializer.serialize("offset", sight._sightOffset);
 			serializer.serialize("size", sight._sightSize);
 		}
 		

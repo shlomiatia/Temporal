@@ -30,6 +30,7 @@
 #include "DebugLayer.h"
 #include "Button.h"
 #include "Door.h"
+#include "SecurityCamera.h"
 
 namespace Temporal
 {
@@ -95,6 +96,8 @@ namespace Temporal
 			serialize(key, (Button*&)component, serializer);
 		else if (strcmp(key, Door::TYPE.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
+		else if (strcmp(key, SecurityCamera::TYPE.getString()) == 0)
+			serialize(key, (SecurityCamera*&)component, serializer);
 		// Singletons
 		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
@@ -157,6 +160,8 @@ namespace Temporal
 			serialize(key, *(Button*&)component, serializer);
 		else if (component->getType() == Door::TYPE)
 			serialize(key, *(Door*&)component, serializer);
+		else if (component->getType() == SecurityCamera::TYPE)
+			serialize(key, *(SecurityCamera*&)component, serializer);
 		// Singletons
 		else if (component->getType() == GameSaverLoader::TYPE)
 			serialize(key, *(GameSaverLoader*&)component, serializer);

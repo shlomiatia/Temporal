@@ -19,16 +19,19 @@ namespace Temporal
 	class SRT
 	{
 	public:
-		explicit SRT(float rotation = 0.0f, Vector translation = Vector::Zero) : _rotation(rotation), _translation(translation) {}
+		explicit SRT(float rotation = 0.0f, Vector translation = Vector::Zero, Hash spriteGroupId = Hash::INVALID) : _rotation(rotation), _translation(translation), _spriteGroupId(spriteGroupId) {}
 
 		float getRotation() const { return _rotation; }
 		void setRotation(float rotation) { _rotation = rotation; }
 		const Vector& getTranslation() const { return _translation; }
 		void setTranslation(const Vector& translation) { _translation = translation; }
+		Hash getSpriteGroupId() const { return _spriteGroupId; }
+		void setSpriteGroupId(Hash spriteGroupId) { _spriteGroupId = spriteGroupId; }
 
 	private:
 		float _rotation;
 		Vector _translation;
+		Hash _spriteGroupId;
 
 		SRT(const SRT&);
 		SRT& operator=(const SRT&);
