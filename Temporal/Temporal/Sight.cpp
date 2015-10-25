@@ -35,7 +35,7 @@ namespace Temporal
 		
 		Vector sourceDirection = Vector(sourceSide, 0.0f);
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / RAYS)
+		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / (RAYS - 1.0f))
 		{
 			Vector sourcePosition = position + Vector(0.0f, i);
 			RayCastResult result;
@@ -66,7 +66,7 @@ namespace Temporal
 
 	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
 	{
-		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / RAYS)
+		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / (RAYS - 1.0f))
 			drawFieldOfViewSegment(sourcePosition, sourceSide, Vector(_sightSize.getX(), i));
 	}
 

@@ -114,6 +114,7 @@ namespace Temporal
 
 			INVESTIGATE,
 			IS_INVESTIGATED,
+			ALARM,
 
 			DIE
 		};

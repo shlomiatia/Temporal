@@ -16,7 +16,7 @@ namespace Temporal
 		static const Hash DESCEND_STATE = Hash("NAV_STT_DESCEND");
 		static const Hash WAIT_STATE = Hash("NAV_STT_WAIT");
 
-		static const Hash ACTION_FALL_STATE = Hash("ACT_STT_FALL");
+		static const Hash ACTION_JUMP_END_STATE = Hash("ACT_STT_JUMP_END");
 		static const Hash ACTION_JUMP_STATE = Hash("ACT_STT_JUMP");
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 		static const Hash ACTION_WALK_STATE = Hash("ACT_STT_WALK");
@@ -35,7 +35,11 @@ namespace Temporal
 			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, collistionGroup);
-			if (start && goal)
+			if (!start || !goal)
+			{
+				getNavigator(stateMachine).raiseNavigationDestinationLost();
+			}
+			else
 			{
 				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
 				if (path)
@@ -72,7 +76,11 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message)
 		{
-			if (message.getID() == MessageID::UPDATE)
+			if (message.getID() == MessageID::LINE_OF_SIGHT)
+			{
+				getNavigator(*_stateMachine).raiseNavigationDestinationLost();
+			}
+			else if (message.getID() == MessageID::UPDATE)
 			{
 				update();
 			}
@@ -106,10 +114,7 @@ namespace Temporal
 			{
 				if (reachedTargetPlatform)
 				{
-					navigator.setDestination(Vector::Zero);
-					navigator.setTracked(Hash::INVALID);
-					_stateMachine->changeState(WAIT_STATE);
-					_stateMachine->raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_REACHED));
+					navigator.raiseNavigationDestinationFound();
 				}
 				else
 				{
@@ -167,7 +172,7 @@ namespace Temporal
 			if (message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if (state == ACTION_FALL_STATE)
+				if (state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
 			else if (message.getID() == MessageID::UPDATE)
@@ -228,10 +233,10 @@ namespace Temporal
 
 		void Descend::handleMessage(Message& message)
 		{
-			if (message.getID() == MessageID::STATE_ENTERED)
+			if (message.getID() == MessageID::STATE_EXITED)
 			{
 				Hash state = getHashParam(message.getParam());
-				if (state == ACTION_FALL_STATE)
+				if (state == ACTION_JUMP_END_STATE)
 					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
 			}
 			else if (message.getID() == MessageID::UPDATE)
@@ -283,6 +288,24 @@ namespace Temporal
 		}
 	}
 
+	void Navigator::raiseNavigationDestinationFound()
+	{
+		Hash id = getTracked();
+		raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_REACHED, &id));
+		setDestination(Vector::Zero);
+		setTracked(Hash::INVALID);
+		changeState(WAIT_STATE);
+	}
+
+	void Navigator::raiseNavigationDestinationLost()
+	{
+		raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_LOST));
+		setDestination(Vector::Zero);
+		setTracked(Hash::INVALID);
+		changeState(WAIT_STATE);
+		
+	}
+
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
@@ -292,10 +315,7 @@ namespace Temporal
 			{
 				if (!getEntity().getManager().getEntity(_tracked))
 				{
-					setDestination(Vector::Zero);
-					setTracked(Hash::INVALID);
-					changeState(WAIT_STATE);
-					raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_LOST));
+					raiseNavigationDestinationLost();
 				}
 				else
 				{
