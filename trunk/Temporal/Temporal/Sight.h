@@ -12,7 +12,7 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		explicit Sight(Vector sightOffset = Vector::Zero, Vector sightSize = Vector(480.0f, 64.0f)) : _sightOffset(sightOffset), _sightSize(sightSize) {};
+		explicit Sight(Vector sightOffset = Vector::Zero, Vector sightSize = Vector(480.0f, 32.0f)) : _sightOffset(sightOffset), _sightSize(sightSize) {};
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);

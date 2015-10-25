@@ -103,7 +103,7 @@ namespace Temporal
 		if (Keyboard::get().getKey(Key::TAB))
 		{
 			Hash id = Hash("ENT_PLAYER");
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_PATROL0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
 		}
 	}
 

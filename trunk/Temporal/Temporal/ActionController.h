@@ -150,6 +150,7 @@ namespace Temporal
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
 		Hash _draggableId;
+		bool _isInvestigated;
 
 		HashStateMap getStates() const;
 

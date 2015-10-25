@@ -71,21 +71,22 @@ namespace Temporal
 			RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
 			if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
 			{
-				void* ground = raiseMessage(Message(MessageID::GET_GROUND));
-				if (!ground)
-					return;
 				changeState(ACQUIRE_STATE);
 			}
-			else
+			else if (result.getFixture().getCategory() & CollisionCategory::DEAD)
 			{
 				Hash id = result.getFixture().getEntityId();
-				if (id != getEntity().getId())
+				if (!getBoolParam(getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))))
 				{
-					changeState(NAVIGATE_STATE);
-					raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
+					raiseMessage(Message(MessageID::ALARM, &id));
 				}
-				
 			}
+		}
+		else if (message.getID() == MessageID::ALARM)
+		{
+			Hash id = getHashParam(message.getParam());
+			changeState(NAVIGATE_STATE);
+			raiseMessage(Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
 		}
 	}
 
@@ -239,10 +240,16 @@ namespace Temporal
 
 		void Navigate::handleMessage(Message& message)
 		{
-			getPatrol(_stateMachine).handleWaitWalkMessage(message);
 			if (message.getID() == MessageID::NAVIGATION_DESTINATION_REACHED)
 			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
+				Hash id = getHashParam(message.getParam());
+				
+				CollisionCategory::Enum category = *static_cast<CollisionCategory::Enum*>(_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::GET_COLLISION_CATEGORY)));
+				if (category & CollisionCategory::DEAD)
+				{
+					_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
+					_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
+				}
 				_stateMachine->changeState(WAIT_STATE);
 			}
 			else if (message.getID() == MessageID::NAVIGATION_DESTINATION_LOST)
