@@ -151,6 +151,11 @@ namespace Temporal
 			float alpha = 1.0f;
 			raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 		}
+		else if (message.getID() == MessageID::SET_TEMPORAL_PERIOD)
+		{
+			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
+			setPeriod(period);
+		}
 		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
