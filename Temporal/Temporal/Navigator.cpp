@@ -2,6 +2,9 @@
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
+#include "Grid.h"
+#include "PhysicsEnums.h"
+#include "Fixture.h"
 
 namespace Temporal
 {
@@ -21,12 +24,14 @@ namespace Temporal
 		static const Hash ACTION_CLIMB_STATE = Hash("ACT_STT_CLIMB");
 		static const Hash ACTION_WALK_STATE = Hash("ACT_STT_WALK");
 
+		static const Hash TIME_MACHINE_ID = Hash("ENT_TIME_MACHINE0");
+
 		Navigator& getNavigator(StateMachineComponent& stateMachine)
 		{
 			return static_cast<Navigator&>(stateMachine);
 		}
 
-		bool plotPath(StateMachineComponent& stateMachine, const Vector& goalPosition, Hash tracked)
+		bool plotPath(StateMachineComponent& stateMachine, const Vector& goalPosition, Hash tracked = Hash::INVALID)
 		{
 			int collistionGroup = *static_cast<int*>(stateMachine.raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 			Navigator& navigator = getNavigator(stateMachine);
@@ -35,11 +40,8 @@ namespace Temporal
 			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, collistionGroup);
-			if (!start || !goal)
-			{
-				getNavigator(stateMachine).raiseNavigationDestinationLost();
-			}
-			else
+			bool success = true;
+			if (start && goal)
 			{
 				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
 				if (path)
@@ -49,12 +51,17 @@ namespace Temporal
 						navigator.setPath(path);
 					}
 					navigator.setDestination(goalPosition);
-					navigator.setTracked(tracked);
+					if (tracked != Hash::INVALID)
+						navigator.setTracked(tracked);
 					navigator.changeState(WALK_STATE);
-					return true;
+					success = true;
 				}
 			}
-			return false;
+			if (!success)
+			{
+				getNavigator(stateMachine).raiseNavigationDestinationLost();
+			}
+			return success;
 		}
 
 		void Wait::handleMessage(Message& message)
@@ -62,15 +69,17 @@ namespace Temporal
 			if (message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
 			{
 				Hash tracked = *static_cast<const Hash*>(message.getParam());
-				const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+				int sourceCollisionGroup = getIntParam(_stateMachine->raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+				int targetCollisionGroup = getIntParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_COLLISION_GROUP)));
+				Hash destinationId = tracked;
+				if (sourceCollisionGroup != targetCollisionGroup)
+				{
+					destinationId = TIME_MACHINE_ID;
+					getNavigator(*_stateMachine).setTimeMachine(true);
+				}
+					
+				const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(destinationId, Message(MessageID::GET_POSITION)));
 				plotPath(*_stateMachine, goalPosition, tracked);
-			}
-			else if (message.getID() == MessageID::UPDATE)
-			{
-				const Vector& destination = getNavigator(*_stateMachine).getDestination();
-				Hash tracked = getNavigator(*_stateMachine).getTracked();
-				if (destination != Vector::Zero)
-					plotPath(*_stateMachine, destination, tracked);
 			}
 		}
 
@@ -78,7 +87,12 @@ namespace Temporal
 		{
 			if (message.getID() == MessageID::LINE_OF_SIGHT)
 			{
-				getNavigator(*_stateMachine).raiseNavigationDestinationLost();
+				RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
+				if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
+				{
+					getNavigator(*_stateMachine).raiseNavigationDestinationLost();
+				}
+				
 			}
 			else if (message.getID() == MessageID::UPDATE)
 			{
@@ -114,7 +128,20 @@ namespace Temporal
 			{
 				if (reachedTargetPlatform)
 				{
-					navigator.raiseNavigationDestinationFound();
+					if (navigator.isTimeMachine())
+					{
+						int targetCollisionGroup = getIntParam(_stateMachine->getEntity().getManager().sendMessageToEntity(navigator.getTracked(), Message(MessageID::GET_COLLISION_GROUP)));
+						_stateMachine->raiseMessage(Message(MessageID::SET_TEMPORAL_PERIOD, &targetCollisionGroup));
+						navigator.setTimeMachine(false);
+						Hash tracked = navigator.getTracked();
+						const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+						plotPath(*_stateMachine, goalPosition);
+					}
+					else
+					{
+						navigator.raiseNavigationDestinationFound();
+					}
+					
 				}
 				else
 				{
@@ -317,12 +344,12 @@ namespace Temporal
 				{
 					raiseNavigationDestinationLost();
 				}
-				else
+				else if (!_timeMachine)
 				{
 					const Vector& destination = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
 					if (_destination != destination)
 					{
-						plotPath(*this, destination, _tracked);
+						plotPath(*this, destination);
 					}
 				}
 				
@@ -360,10 +387,7 @@ namespace Temporal
 			{
 				if (_destination != Vector::Zero)
 				{
-					if (!plotPath(*this, _destination, _tracked))
-					{
-						changeState(WAIT_STATE);
-					}
+					plotPath(*this, _destination);
 				}
 			}
 		}

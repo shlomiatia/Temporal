@@ -146,6 +146,10 @@
 	<transform />
 	<renderer layer="10" texture="resources/textures/bg.png" />
 </entity>
+<entity id="ENT_TIME_MACHINE">
+	<transform />
+	<renderer layer="30" texture="resources/textures/Time_Machine_HD.png" />
+</entity>
 <entity id="ENT_LASER">
 	<transform />
 	<collision-filter />

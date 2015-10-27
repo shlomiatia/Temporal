@@ -76,7 +76,7 @@ namespace Temporal
 	class Navigator : public StateMachineComponent
 	{
 	public:
-		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(Vector::Zero), _path(0) {}
+		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(Vector::Zero), _path(0), _timeMachine(false){}
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
@@ -88,6 +88,8 @@ namespace Temporal
 		void setTracked(Hash tracked) { _tracked = tracked; }
 		NavigationEdgeList* getPath() const { return _path; }
 		void setPath(NavigationEdgeList* path) { if(_path) delete _path; _path = path; }
+		bool isTimeMachine() const { return _timeMachine; }
+		void setTimeMachine(bool timeMachine) { _timeMachine = timeMachine; }
 		
 		void raiseNavigationDestinationFound();
 		void raiseNavigationDestinationLost();
@@ -100,6 +102,7 @@ namespace Temporal
 	private:
 		Vector _destination;
 		Hash _tracked;
+		bool _timeMachine;
 		NavigationEdgeList* _path;
 
 		void debugDraw() const;

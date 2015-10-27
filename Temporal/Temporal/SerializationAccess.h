@@ -418,6 +418,7 @@ namespace Temporal
 		static void serialize(const char* key, Navigator& navigator, T& serializer) 
 		{
 			serializer.serialize("destination", navigator._destination);
+			serializer.serialize("tracked", navigator._tracked);
 			serialize(key, (StateMachineComponent&)navigator, serializer);
 		}
 
