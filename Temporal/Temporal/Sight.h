@@ -24,7 +24,7 @@ namespace Temporal
 		Vector _sightOffset;
 		Vector _sightSize;
 		
-		void checkLineOfSight(int collisionMask);
+		bool checkLineOfSight(int collisionMask);
 		void drawFieldOfView(const Vector& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo() const;
 

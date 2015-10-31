@@ -17,6 +17,7 @@ namespace Temporal
 			MOVING_PLATFORM_CONTROL = 64,
 			DRAGGABLE = 128,
 			DEAD = 256,
+			SECURITY_CAMERA_TARGET = 512
 		};
 	}
 }

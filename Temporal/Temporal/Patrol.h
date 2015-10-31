@@ -24,10 +24,10 @@ namespace Temporal
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol(bool isStatic = false);
+		Patrol(bool isStatic = false, Hash initialStateId = Hash::INVALID);
 
 		Hash getType() const { return TYPE; }
-		Component* clone() const { return new Patrol(_isStatic); }
+		Component* clone() const { return new Patrol(_isStatic, getCurrentStateID()); }
 		void handleMessage(Message& message);
 
 		static const Hash TYPE;
@@ -35,7 +35,8 @@ namespace Temporal
 		bool isStatic() const { return _isStatic; }
 		void setStatic(bool isStatic) { _isStatic = isStatic; }
 
-		void handleWaitWalkMessage(Message& message);
+		bool handleWaitWalkMessage(Message& message);
+		bool handleNonDeadMessage(Message& message);
 	protected:
 		Hash getInitialState() const;
 
@@ -53,7 +54,6 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
-			void enter(void* param);
 			void handleMessage(Message& message);
 		};
 
@@ -84,6 +84,7 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
+			void enter(void* param);
 			void handleMessage(Message& message);
 
 		private:
@@ -100,7 +101,14 @@ namespace Temporal
 		class Navigate : public ComponentState
 		{
 		public:
+			void enter(void* param);
 			void handleMessage(Message& message);
+		};
+
+		class Dead : public ComponentState
+		{
+		public:
+			void handleMessage(Message& message) {};
 		};
 	}
 }

@@ -19,8 +19,10 @@ namespace Temporal
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			checkLineOfSight(COLLISION_MASK1);
-			checkLineOfSight(COLLISION_MASK2);
+			if (!checkLineOfSight(COLLISION_MASK1))
+			{
+				checkLineOfSight(COLLISION_MASK2);
+			}
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
@@ -28,7 +30,7 @@ namespace Temporal
 		}
 	}
 
-	void Sight::checkLineOfSight(int collisionMask)
+	bool Sight::checkLineOfSight(int collisionMask)
 	{
 		Side::Enum sourceSide = getOrientation(*this);
 		Vector position = getPosition(*this) + _sightOffset.multiplyComponents(sourceSide, 1.0f);
@@ -52,10 +54,11 @@ namespace Temporal
 					continue;
 
 				raiseMessage(Message(MessageID::LINE_OF_SIGHT, &result));
-				return;
+				return true;
 				
 			}
 		}
+		return false;
 	}
 
 	void drawFieldOfViewSegment(const Vector &sourcePosition, Side::Enum sourceSide, const Vector& delta)
