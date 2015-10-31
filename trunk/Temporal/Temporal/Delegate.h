@@ -45,6 +45,28 @@ namespace Temporal
 	};
 
 	#define createAction1(T, P1, func) new Action1<T, P1>(this, &T::func)
+
+	template<class R, class P1>
+	class IFunc1
+	{
+	public:
+		virtual R operator()(P1 param1) = 0;
+	};
+
+	template<class T, class R, class P1>
+	class Func1 : public IFunc1<R, P1>
+	{
+	public:
+		Func1(T* obj, R(T::*func)(P1)) : _obj(obj), _func(func) {}
+
+		R operator()(P1 param1) { return (*_obj.*_func)(param1); }
+
+	private:
+		R (T::*_func)(P1);
+		T* _obj;
+	};
+
+#define createFunc1(T, R, P1, func) new Func1<T, R, P1>(this, &T::func)
 }
 
 #endif

@@ -2,9 +2,6 @@
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
-#include "Grid.h"
-#include "PhysicsEnums.h"
-#include "Fixture.h"
 
 namespace Temporal
 {
@@ -59,14 +56,14 @@ namespace Temporal
 			}
 			if (!success)
 			{
-				getNavigator(stateMachine).raiseNavigationDestinationLost();
+				getNavigator(stateMachine).raiseNavigationFailure();
 			}
 			return success;
 		}
 
 		void Wait::handleMessage(Message& message)
 		{
-			if (message.getID() == MessageID::SET_NAVIGATION_DESTINATION)
+			if (message.getID() == MessageID::NAVIGATE)
 			{
 				Hash tracked = *static_cast<const Hash*>(message.getParam());
 				int sourceCollisionGroup = getIntParam(_stateMachine->raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
@@ -85,16 +82,7 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message)
 		{
-			if (message.getID() == MessageID::LINE_OF_SIGHT)
-			{
-				RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
-				if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
-				{
-					getNavigator(*_stateMachine).raiseNavigationDestinationLost();
-				}
-				
-			}
-			else if (message.getID() == MessageID::UPDATE)
+			if (message.getID() == MessageID::UPDATE)
 			{
 				update();
 			}
@@ -139,7 +127,7 @@ namespace Temporal
 					}
 					else
 					{
-						navigator.raiseNavigationDestinationFound();
+						navigator.raiseNavigationSuccess();
 					}
 					
 				}
@@ -292,6 +280,64 @@ namespace Temporal
 		return WAIT_STATE;
 	}
 
+	void Navigator::raiseNavigationSuccess()
+	{
+		Hash id = getTracked();
+		raiseMessage(Message(MessageID::NAVIGATION_SUCCESS, &id));
+		setDestination(Vector::Zero);
+		setTracked(Hash::INVALID);
+		changeState(WAIT_STATE);
+	}
+
+	void Navigator::raiseNavigationFailure()
+	{
+		raiseMessage(Message(MessageID::NAVIGATION_FAILURE));
+		setDestination(Vector::Zero);
+		setTracked(Hash::INVALID);
+		changeState(WAIT_STATE);
+		
+	}
+
+	void Navigator::handleMessage(Message& message)
+	{
+		StateMachineComponent::handleMessage(message);
+		if (message.getID() == MessageID::UPDATE)
+		{
+			update();
+		}
+		else if (message.getID() == MessageID::DRAW_DEBUG)
+		{
+			debugDraw();
+		}
+		else if (message.getID() == MessageID::POST_LOAD)
+		{
+			postLoad();
+		}
+		else if (message.getID() == MessageID::STOP_NAVIGATE)
+		{
+			raiseNavigationFailure();
+		}
+	}
+
+	void Navigator::update()
+	{
+		if (_destination != Vector::Zero)
+		{
+			if (!getEntity().getManager().getEntity(_tracked))
+			{
+				raiseNavigationFailure();
+			}
+			else if (!_timeMachine)
+			{
+				const Vector& destination = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
+				if (_destination != destination)
+				{
+					plotPath(*this, destination);
+				}
+			}
+		}
+	}
+
 	void Navigator::debugDraw() const
 	{
 		Vector currentPoint = getPosition(*this);
@@ -315,80 +361,34 @@ namespace Temporal
 		}
 	}
 
-	void Navigator::raiseNavigationDestinationFound()
+	void Navigator::postLoad()
 	{
-		Hash id = getTracked();
-		raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_REACHED, &id));
-		setDestination(Vector::Zero);
-		setTracked(Hash::INVALID);
-		changeState(WAIT_STATE);
-	}
-
-	void Navigator::raiseNavigationDestinationLost()
-	{
-		raiseMessage(Message(MessageID::NAVIGATION_DESTINATION_LOST));
-		setDestination(Vector::Zero);
-		setTracked(Hash::INVALID);
-		changeState(WAIT_STATE);
-		
-	}
-
-	void Navigator::handleMessage(Message& message)
-	{
-		StateMachineComponent::handleMessage(message);
-		if (message.getID() == MessageID::UPDATE)
+		setPath(0);
+		if (getCurrentStateID() == DESCEND_STATE)
+		{
+			bool afterLoad = true;
+			changeState(DESCEND_STATE, &afterLoad);
+		}
+		else if (getCurrentStateID() == JUMP_FORWARD_STATE)
+		{
+			bool afterLoad = true;
+			changeState(JUMP_FORWARD_STATE, &afterLoad);
+		}
+		else if (getCurrentStateID() == JUMP_UP_STATE)
+		{
+			bool afterLoad = true;
+			changeState(JUMP_UP_STATE, &afterLoad);
+		}
+		else if (getCurrentStateID() == FALL_STATE)
+		{
+			bool afterLoad = true;
+			changeState(FALL_STATE, &afterLoad);
+		}
+		else
 		{
 			if (_destination != Vector::Zero)
 			{
-				if (!getEntity().getManager().getEntity(_tracked))
-				{
-					raiseNavigationDestinationLost();
-				}
-				else if (!_timeMachine)
-				{
-					const Vector& destination = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
-					if (_destination != destination)
-					{
-						plotPath(*this, destination);
-					}
-				}
-				
-			}
-			
-		}
-		else if (message.getID() == MessageID::DRAW_DEBUG)
-		{
-			debugDraw();
-		}
-		else if (message.getID() == MessageID::POST_LOAD)
-		{
-			setPath(0);
-			if (getCurrentStateID() == DESCEND_STATE)
-			{
-				bool afterLoad = true;
-				changeState(DESCEND_STATE, &afterLoad);
-			}
-			else if (getCurrentStateID() == JUMP_FORWARD_STATE)
-			{
-				bool afterLoad = true;
-				changeState(JUMP_FORWARD_STATE, &afterLoad);
-			}
-			else if (getCurrentStateID() == JUMP_UP_STATE)
-			{
-				bool afterLoad = true;
-				changeState(JUMP_UP_STATE, &afterLoad);
-			}
-			else if (getCurrentStateID() == FALL_STATE)
-			{
-				bool afterLoad = true;
-				changeState(FALL_STATE, &afterLoad);
-			}
-			else
-			{
-				if (_destination != Vector::Zero)
-				{
-					plotPath(*this, _destination);
-				}
+				plotPath(*this, _destination);
 			}
 		}
 	}

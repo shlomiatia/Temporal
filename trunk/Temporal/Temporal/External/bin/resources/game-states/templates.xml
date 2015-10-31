@@ -131,7 +131,7 @@
 </entity>
 <entity id="ENT_CAMERA">
 	<transform />
-	<collision-filter category="4" />
+	<collision-filter category="512" />
 	<security-camera />
 	<sight>
 		<offset x="32" y="-32" />

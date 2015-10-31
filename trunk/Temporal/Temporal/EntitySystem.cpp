@@ -146,7 +146,7 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
-	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter)
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter, IFunc1<bool, Entity&>* entityFilter)
 	{
 		_iterating = true;
 		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
@@ -154,7 +154,8 @@ namespace Temporal
 			Entity* entity = i->second;
 			if (!entity->isDead())
 			{
-				entity->handleMessage(message, filter);
+				if (!entityFilter || (*entityFilter)(*entity))
+					entity->handleMessage(message, filter);
 			}
 			else
 			{

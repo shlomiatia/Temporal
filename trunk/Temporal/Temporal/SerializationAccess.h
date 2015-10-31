@@ -54,6 +54,7 @@ namespace Temporal
 	class Button;
 	class Door;
 	class ParticleSample;
+	class SecurityCamera;
 
 	// Singletons
 	class GameSaverLoader;
@@ -445,6 +446,12 @@ namespace Temporal
 		static void serialize(const char* key, MovingPlatform& movingPlatform, T& serializer) 
 		{
 			serializer.serialize("movement", movingPlatform._movement);
+		}
+
+		template<class T>
+		static void serialize(const char* key, SecurityCamera& securityCamera, T& serializer)
+		{
+			serializer.serialize("target-id", securityCamera._targetId);
 		}
 
 		template<class T>

@@ -91,8 +91,8 @@ namespace Temporal
 		bool isTimeMachine() const { return _timeMachine; }
 		void setTimeMachine(bool timeMachine) { _timeMachine = timeMachine; }
 		
-		void raiseNavigationDestinationFound();
-		void raiseNavigationDestinationLost();
+		void raiseNavigationSuccess();
+		void raiseNavigationFailure();
 
 		static const Hash TYPE;
 
@@ -105,6 +105,8 @@ namespace Temporal
 		bool _timeMachine;
 		NavigationEdgeList* _path;
 
+		void update();
+		void postLoad();
 		void debugDraw() const;
 		HashStateMap getStates() const;
 

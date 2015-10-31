@@ -99,12 +99,6 @@ namespace Temporal
 		{
 			raiseMessage(Message(MessageID::ACTION_DOWN));
 		}
-		// TEMP:
-		if (Keyboard::get().getKey(Key::TAB))
-		{
-			Hash id = Hash("ENT_PLAYER");
-			getEntity().getManager().sendMessageToEntity(Hash("ENT_PATROL0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &id));
-		}
 	}
 
 	void InputController::handleMessage(Message& message)
