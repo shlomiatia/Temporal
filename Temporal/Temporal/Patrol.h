@@ -35,8 +35,9 @@ namespace Temporal
 		bool isStatic() const { return _isStatic; }
 		void setStatic(bool isStatic) { _isStatic = isStatic; }
 
-		bool handleWaitWalkMessage(Message& message);
-		bool handleNonDeadMessage(Message& message);
+		bool handleAlarmMessage(Message& message);
+		bool handleFireMessage(Message& message);
+		bool handleTakedownMessage(Message& message);
 	protected:
 		Hash getInitialState() const;
 
@@ -57,17 +58,17 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class Acquire : public ComponentState
+		class Aim : public ComponentState
 		{
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
 
 		private:
-			static const float ACQUIRE_TIME;
+			static const float AIM_TIME;
 		};
 
-		class See : public ComponentState
+		class Fire : public ComponentState
 		{
 		public:
 			void enter(void* param);
