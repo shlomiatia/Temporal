@@ -43,7 +43,7 @@ namespace Temporal
 			RayCastResult result;
 			if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, sourceDirection, result, collisionMask, sourceCollisionGroup))
 			{
-				if (result.getFixture().getCategory() == CollisionCategory::OBSTACLE)
+				if (result.getFixture().getCategory() & CollisionCategory::OBSTACLE)
 					continue;
 
 				void* isVisible = getEntity().getManager().sendMessageToEntity(result.getFixture().getEntityId(), Message(MessageID::IS_VISIBLE));

@@ -390,6 +390,7 @@ namespace Temporal
 			serializer.serialize("period", (int&)temporalPeriod._period);
 			serializer.serialize("future-self-id", temporalPeriod._futureSelfId);
 			serializer.serialize("create-future-self", temporalPeriod._createFutureSelf);
+			serializer.serialize("sync-future-self", temporalPeriod._syncFutureSelf);
 		}
 		
 		template<class T>
@@ -420,6 +421,7 @@ namespace Temporal
 		{
 			serializer.serialize("destination", navigator._destination);
 			serializer.serialize("tracked", navigator._tracked);
+			serializer.serialize("is-time-machine", navigator._timeMachine);
 			serialize(key, (StateMachineComponent&)navigator, serializer);
 		}
 
