@@ -77,6 +77,7 @@ namespace Temporal
 			changeState(NAVIGATE_STATE, &id);
 			return true;
 		}
+		return false;
 	}
 
 	bool Patrol::handleFireMessage(Message& message)
@@ -286,8 +287,16 @@ namespace Temporal
 
 		void Navigate::enter(void* param)
 		{
-			Hash id = getHashParam(param);
-			_stateMachine->raiseMessage(Message(MessageID::NAVIGATE, &id));
+			if (!param)
+			{
+				_stateMachine->changeState(WAIT_STATE);
+			}
+			else 
+			{
+				Hash id = getHashParam(param);
+				_stateMachine->raiseMessage(Message(MessageID::NAVIGATE, &id));
+			}
+			
 		}
 
 		void Navigate::handleMessage(Message& message)

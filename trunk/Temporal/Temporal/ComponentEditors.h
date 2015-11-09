@@ -135,6 +135,7 @@ namespace Temporal
 
 		void futureSelfIdChanged(const char* s);
 		void createFutureSelfChanged(bool b);
+		void syncFutureSelfChanged(bool b);
 	};
 
 	class PatrolEditor : public ComponentEditor

@@ -54,8 +54,8 @@ namespace Temporal
 	class TemporalPeriod : public Component
 	{
 	public:
-		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false) : 
-			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf) {}
+		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false, bool syncFutureSelf = false) :
+			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _syncFutureSelf(syncFutureSelf) {}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -67,6 +67,8 @@ namespace Temporal
 		Hash getFutureSelfId() const { return _futureSelfId; }
 		void setCreateFutureSelf(bool createFutureSelf) { _createFutureSelf = createFutureSelf; }
 		bool isCreateFutureSelf() const { return _createFutureSelf; }
+		void setSyncFutureSelf(bool syncFutureSelf) { _syncFutureSelf = syncFutureSelf; }
+		bool isSyncFutureSelf() const { return _syncFutureSelf; }
 
 		static const Hash TYPE;
 	private:		
@@ -74,6 +76,7 @@ namespace Temporal
 		Period::Enum _period;
 		Hash _futureSelfId;
 		bool _createFutureSelf;
+		bool _syncFutureSelf;
 		Vector _previousPosition;
 
 		void createFuture();

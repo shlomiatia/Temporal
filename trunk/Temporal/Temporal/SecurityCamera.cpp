@@ -145,6 +145,10 @@ namespace Temporal
 			entity->setId(_cameraTargetId);
 			getEntity().getManager().add(entity);
 		}
+		else if (message.getID() == MessageID::ENTITY_DISPOSED)
+		{
+			getEntity().getManager().remove(_cameraTargetId);
+		}
 	}
 
 	void SecurityCamera::trackTarget(RayCastResult& result)
