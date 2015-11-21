@@ -38,6 +38,7 @@ namespace Temporal
 		HashList* updateFilter = 0;
 		if (_updateFilter.size() != 0)
 			updateFilter = &_updateFilter;
+		_entitiesManager->onNewFrame();
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod), updateFilter);	
 	}
 

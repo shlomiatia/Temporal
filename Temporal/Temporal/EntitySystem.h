@@ -106,6 +106,7 @@ namespace Temporal
 
 		void init(GameState* gameState);
 
+		void onNewFrame();
 		void sendMessageToAllEntities(Message& message, const HashList* componentFilter = 0, IFunc1<bool, Entity&>* entityFilter = 0);
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		HashEntityMap& getEntities() { return _entities; }
@@ -123,6 +124,7 @@ namespace Temporal
 		bool isInitializing() const { return _initializing; }
 	private:
 		HashEntityMap _entities;
+		HashEntityMap _entitiesToAdd;
 		ComponentList _inputComponents;
 		Component* _focusInputComponent;
 		bool _initializing;

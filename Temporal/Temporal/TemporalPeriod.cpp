@@ -199,10 +199,10 @@ namespace Temporal
 		{
 			destroyFuture();
 		}
-		/*if (_period == Period::PAST &&  _createFutureSelf && _futureSelfId == Hash::INVALID)
+		if (_period == Period::PAST &&  _createFutureSelf && _futureSelfId == Hash::INVALID)
 		{
-		createFuture();
-		}*/
+			createFuture();
+		}
 		if (temporalDeath)
 		{
 			Hash id = Hash(Utils::format("%s_NOTIFICATION", getEntity().getId().getString()).c_str());
