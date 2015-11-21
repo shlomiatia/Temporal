@@ -122,7 +122,13 @@ namespace Temporal
 						_stateMachine->raiseMessage(Message(MessageID::SET_TEMPORAL_PERIOD, &targetCollisionGroup));
 						navigator.setTimeMachine(false);
 						Hash tracked = navigator.getTracked();
-						const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+						Vector goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+						Hash temporalFutureId = getHashParam(_stateMachine->raiseMessage(Message(MessageID::GET_TEMPORAL_FUTURE_ID)));
+						if (temporalFutureId != Hash::INVALID)
+						{
+							_stateMachine->getEntity().getManager().sendMessageToEntity(temporalFutureId, Message(MessageID::SET_POSITION, &goalPosition));
+						}
+						
 						plotPath(*_stateMachine, goalPosition);
 					}
 					else

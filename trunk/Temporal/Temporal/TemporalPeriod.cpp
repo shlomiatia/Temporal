@@ -128,18 +128,13 @@ namespace Temporal
 
 	void TemporalPeriod::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::ENTITY_READY)
+		if (message.getID() == MessageID::GET_TEMPORAL_FUTURE_ID)
 		{
-			addParticleEmitter(getEntity());
-			setPeriod(_period);
-			if (_period == Period::PAST && !_createFutureSelf && _futureSelfId != Hash::INVALID)
-			{
-				PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
-				const Color& color = playerPeriod.getNextColor();
-				Message message(MessageID::SET_COLOR, const_cast<Color*>(&color));
-				raiseMessage(message);
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
-			}
+			message.setParam(&_futureSelfId);
+		}
+		else if (message.getID() == MessageID::ENTITY_READY)
+		{
+			entityReady();
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
@@ -168,67 +163,96 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::DIE)
 		{
-			setCreateFutureSelf(true);
-			setSyncFutureSelf(true);
-			if (_futureSelfId != Hash::INVALID)
-			{
-				destroyFuture();
-			}
-			/*if (_period == Period::PAST &&  _createFutureSelf && _futureSelfId == Hash::INVALID)
-			{
-				createFuture();
-			}*/
-			void* temporalDeath = message.getParam();
-			if (temporalDeath && getBoolParam(temporalDeath))
-			{
-				Hash id = Hash(Utils::format("%s_NOTIFICATION", getEntity().getId().getString()).c_str());
-				Entity* existing = getEntity().getManager().getEntity(id);
-				if (existing)
-					getEntity().getManager().remove(id);
-				Entity* entity = new Entity();
-				entity->add(new Transform());
-				entity->add(new TemporalNotification());
-				addParticleEmitter(*entity);
-				entity->setId(id);
-				getEntity().getManager().add(entity);
-				Vector position = getPosition(getEntity());
-				getEntity().getManager().sendMessageToEntity(id, Message(MessageID::SET_POSITION, &position));
-
-				getEntity().getManager().remove(getEntity().getId());
-			}
+			void* temporalDeathParam = message.getParam();
+			bool temporalDeath = temporalDeathParam && getBoolParam(temporalDeathParam);
+			die(temporalDeath);
 		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
-			if (_futureSelfId != Hash::INVALID && _syncFutureSelf)
-			{
-				Vector position = getPosition(*this);
-				const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-				if (_previousPosition == futurePosition && futurePosition != position)
-				{
-					bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
-					getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
-				}
-				else if (futurePosition != position)
-				{
-					_previousPosition = Vector::Zero;
-				}
-
-				_previousPosition = position;
-			}
-				
+			update();
 		}
 		else if (message.getID() == MessageID::SET_IMPULSE)
 		{
+			setImpulse();
+		}
+	}
+
+	void TemporalPeriod::entityReady()
+	{
+		addParticleEmitter(getEntity());
+		setPeriod(_period);
+		if (_period == Period::PAST && !_createFutureSelf && _futureSelfId != Hash::INVALID)
+		{
+			PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			const Color& color = playerPeriod.getNextColor();
+			Message message(MessageID::SET_COLOR, const_cast<Color*>(&color));
+			raiseMessage(message);
+			getEntity().getManager().sendMessageToEntity(_futureSelfId, message);
+		}
+	}
+
+	void TemporalPeriod::die(bool temporalDeath)
+	{
+		setCreateFutureSelf(true);
+		setSyncFutureSelf(true);
+		if (_futureSelfId != Hash::INVALID)
+		{
+			destroyFuture();
+		}
+		/*if (_period == Period::PAST &&  _createFutureSelf && _futureSelfId == Hash::INVALID)
+		{
+		createFuture();
+		}*/
+		if (temporalDeath)
+		{
+			Hash id = Hash(Utils::format("%s_NOTIFICATION", getEntity().getId().getString()).c_str());
+			Entity* existing = getEntity().getManager().getEntity(id);
+			if (existing)
+				getEntity().getManager().remove(id);
+			Entity* entity = new Entity();
+			entity->add(new Transform());
+			entity->add(new TemporalNotification());
+			addParticleEmitter(*entity);
+			entity->setId(id);
+			getEntity().getManager().add(entity);
+			Vector position = getPosition(getEntity());
+			getEntity().getManager().sendMessageToEntity(id, Message(MessageID::SET_POSITION, &position));
+
+			getEntity().getManager().remove(getEntity().getId());
+		}
+	}
+
+	void TemporalPeriod::update()
+	{
+		if (_futureSelfId != Hash::INVALID && _syncFutureSelf)
+		{
 			Vector position = getPosition(*this);
-			if (_syncFutureSelf && _futureSelfId != Hash::INVALID && position != getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION))))
+			const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
+			if (_previousPosition == futurePosition && futurePosition != position)
 			{
-				TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(TemporalPeriod::TYPE));
-				future.setPeriod(Period::PRESENT);
+				bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
+				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
 				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::START_EMITTER));
 			}
+			else if (futurePosition != position)
+			{
+				_previousPosition = Vector::Zero;
+			}
+
+			_previousPosition = position;
+		}
+	}
+
+	void TemporalPeriod::setImpulse()
+	{
+		Vector position = getPosition(*this);
+		if (_syncFutureSelf && _futureSelfId != Hash::INVALID && position != getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION))))
+		{
+			TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(TemporalPeriod::TYPE));
+			future.setPeriod(Period::PRESENT);
+			getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
+			getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::START_EMITTER));
 		}
 	}
 

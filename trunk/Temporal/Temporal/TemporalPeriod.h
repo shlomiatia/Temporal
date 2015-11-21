@@ -79,6 +79,10 @@ namespace Temporal
 		bool _syncFutureSelf;
 		Vector _previousPosition;
 
+		void entityReady();
+		void die(bool temporalDeath);
+		void update();
+		void setImpulse();
 		void createFuture();
 		void destroyFuture();
 		void addParticleEmitter(Entity& entity);
