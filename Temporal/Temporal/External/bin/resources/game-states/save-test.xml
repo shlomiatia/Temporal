@@ -6,17 +6,27 @@
         <world-size x="3640.000000" y="1024.000000"/>
     </grid>
     <entities-manager>
-        <entity id="ENT_TIME_MACHINE0">
+        <entity id="ENT_BLOCK2">
             <transform orientation="1">
-                <position x="864.000000" y="89.500000"/>
+                <position x="320.000000" y="80.000000"/>
             </transform>
-            <renderer texture="resources/textures/Time_Machine_HD.png" sprite-sheet="" layer="30">
+            <collision-filter category="1" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
+                    <scale x="1.000000" y="0.750000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="-1">
@@ -58,29 +68,19 @@
                     </obb>
                 </fixture>
             </sensor>
-            <action-controller max-walk-force-per-second="200.000000" state="ACT_STT_FALL" timer="0.000000" state-flag="0">
+            <action-controller max-walk-force-per-second="200.000000" timer="0.000000" state-flag="0">
                 <hang-descend-movement x="0.000000" y="0.000000"/>
                 <hang-descnd-original-translation x="0.000000" y="0.000000"/>
                 <hang-descend-ground-delta x="0.000000" y="0.000000"/>
             </action-controller>
             <visibility-gem/>
-            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="0">
-                <composite-animator1>
-                    <single-animator animation-id="POP_ANM_FALL" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator1>
-                <composite-animator2>
-                    <single-animator animation-id="POP_ANM_STAND" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator2>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0">
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="40">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="7.000000"/>
                     <scale x="0.400000" y="0.420000"/>
-                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="41.784748" center="112.500000" radius="112.500000">
+                    <scene-node id="SCN_BACKARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="69.555801" center="112.500000" radius="112.500000">
                         <translation x="10.911102" y="18.088837"/>
                         <scale x="1.000000" y="1.000000"/>
                         <scene-node id="SCN_BACKARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-79.129143" center="-22.500000" radius="72.500000">
@@ -92,10 +92,10 @@
                             </scene-node>
                         </scene-node>
                     </scene-node>
-                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="0.000000" center="22.500000" radius="67.500000">
+                    <scene-node id="SCN_BACKLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="13.529361" center="22.500000" radius="67.500000">
                         <translation x="4.000000" y="-23.288910"/>
                         <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-1.871535" center="-67.500000" radius="67.500000">
+                        <scene-node id="SCN_BACKLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-14.391625" center="-67.500000" radius="67.500000">
                             <translation x="1.466675" y="-40.644440"/>
                             <scale x="1.000000" y="1.000000"/>
                             <scene-node id="SCN_BACKLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="1.959046" center="-11.250000" radius="33.750000">
@@ -115,7 +115,7 @@
                     <scene-node id="SCN_FRONTLEG1" behind-parent="0" transform="0" sprite-group="SCN_LEG1" flip="0" rotation="-0.863152" center="22.500000" radius="67.500000">
                         <translation x="-7.888947" y="-25.888885"/>
                         <scale x="1.000000" y="1.000000"/>
-                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-4.251616" center="-67.500000" radius="67.500000">
+                        <scene-node id="SCN_FRONTLEG2" behind-parent="1" transform="0" sprite-group="SCN_LEG2" flip="0" rotation="-20.204586" center="-67.500000" radius="67.500000">
                             <translation x="1.288940" y="-40.799988"/>
                             <scale x="1.000000" y="1.000000"/>
                             <scene-node id="SCN_FRONTLEG3" behind-parent="1" transform="0" sprite-group="SCN_LEG3" flip="0" rotation="2.940588" center="-11.250000" radius="33.750000">
@@ -124,7 +124,7 @@
                             </scene-node>
                         </scene-node>
                     </scene-node>
-                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="38.609608" center="112.500000" radius="112.500000">
+                    <scene-node id="SCN_FRONTARM1" behind-parent="0" transform="0" sprite-group="SCN_ARM1" flip="0" rotation="64.584282" center="112.500000" radius="112.500000">
                         <translation x="-9.822235" y="15.066650"/>
                         <scale x="1.000000" y="1.000000"/>
                         <scene-node id="SCN_FRONTARM2" behind-parent="0" transform="0" sprite-group="SCN_ARM2" flip="0" rotation="-76.499626" center="-22.500000" radius="72.500000">
@@ -163,10 +163,10 @@
             <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
         <entity id="ENT_PATROL0">
-            <transform orientation="1">
-                <position x="810.000000" y="72.000000"/>
+            <transform orientation="-1">
+                <position x="682.000000" y="72.000000"/>
             </transform>
-            <collision-filter category="4" group="1"/>
+            <collision-filter category="4" group="0"/>
             <patrol is-static="0" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
             <navigator is-time-machine="0" state="NAV_STT_WAIT" timer="0.000000" state-flag="0">
                 <destination x="0.000000" y="0.000000"/>
@@ -225,22 +225,12 @@
                 <offset x="0.000000" y="0.000000"/>
                 <size x="480.000000" y="32.000000"/>
             </sight>
-            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_FALL" timer="0.000000" state-flag="0">
+            <action-controller max-walk-force-per-second="125.000000" timer="0.000000" state-flag="0">
                 <hang-descend-movement x="0.000000" y="0.000000"/>
                 <hang-descnd-original-translation x="0.000000" y="0.000000"/>
                 <hang-descend-ground-delta x="0.000000" y="0.000000"/>
             </action-controller>
-            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0" use-animator2="1">
-                <composite-animator1>
-                    <single-animator animation-id="POP_ANM_FALL" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator1>
-                <composite-animator2>
-                    <single-animator animation-id="POP_ANM_FALL" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator2>
+            <animator animation-set="resources/animations/aquaria.xml" disable-cross-fade="0">
             </animator>
             <renderer texture="" sprite-sheet="resources/spritesheets/aquaria.xml" layer="65">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="1" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -307,9 +297,9 @@
                         </scene-node>
                     </scene-node>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="0.100000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="1" create-future-self="1" sync-future-self="0"/>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
@@ -373,59 +363,6 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-        </entity>
-        <entity id="ENT_COVER0">
-            <transform orientation="1">
-                <position x="428.799988" y="96.000000"/>
-            </transform>
-            <collision-filter category="2" group="0"/>
-            <static-body>
-                <fixture is-enabled="1">
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="32.000000" y="64.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-            <renderer texture="resources/textures/glass.png" sprite-sheet="" layer="50">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
-        </entity>
-        <entity id="ENT_CAMERA0">
-            <transform orientation="1">
-                <position x="64.000000" y="128.000000"/>
-            </transform>
-            <collision-filter category="512" group="0"/>
-            <security-camera/>
-            <sight>
-                <offset x="32.000000" y="-32.000000"/>
-                <size x="480.000000" y="32.000000"/>
-            </sight>
-            <animator animation-set="resources/animations/camera.xml" disable-cross-fade="0" use-animator2="1">
-                <composite-animator1>
-                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator1>
-                <composite-animator2>
-                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="0.000000"/>
-                </composite-animator2>
-            </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/camera.xml" layer="65">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" sprite-group="CAM_ANM_SEARCH" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
     </entities-manager>
 </game-state>
