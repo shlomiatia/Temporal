@@ -146,25 +146,34 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
+	void EntitiesManager::onNewFrame()
+	{
+		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+		{
+			Entity* entity = i->second;
+			if (entity->isDead())
+			{
+				removeEntity(entity);
+				i = _entities.erase(i);
+				if (i == _entities.end())
+					break;
+			}
+		}
+		for (HashEntityIterator i = _entitiesToAdd.begin(); i != _entitiesToAdd.end();)
+		{
+			add(i->second);
+			i = _entitiesToAdd.erase(i);
+		}
+	}
+
 	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter, IFunc1<bool, Entity&>* entityFilter)
 	{
 		_iterating = true;
 		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 		{
 			Entity* entity = i->second;
-			if (!entity->isDead())
-			{
-				if (!entityFilter || (*entityFilter)(*entity))
-					entity->handleMessage(message, filter);
-			}
-			else
-			{
-				removeEntity(entity);
-				i = _entities.erase(i);
-				if (i == _entities.end())
-					break;
-				
-			}
+			if (!entityFilter || (*entityFilter)(*entity))
+				entity->handleMessage(message, filter);
 		}
 		_iterating = false;
 	}
@@ -190,8 +199,19 @@ namespace Temporal
 
 	void EntitiesManager::add(Entity* entity)
 	{
-		if (_entities.find(entity->getId()) != _entities.end() || _initializing)
-			abort();
+		HashEntityIterator i = _entities.find(entity->getId());
+		if (i != _entities.end() || _initializing)
+		{
+			if (i->second->isDead())
+			{
+				_entitiesToAdd[entity->getId()] = entity;
+				return;
+			}
+			else
+			{
+				abort();
+			}
+		}
 		_entities[entity->getId()] = entity;
 		entity->init(this);
 		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
