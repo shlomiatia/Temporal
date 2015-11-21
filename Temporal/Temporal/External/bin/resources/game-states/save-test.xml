@@ -8,7 +8,7 @@
     <entities-manager>
         <entity id="ENT_TIME_MACHINE0">
             <transform orientation="1">
-                <position x="864.000000" y="121.500000"/>
+                <position x="864.000000" y="89.500000"/>
             </transform>
             <renderer texture="resources/textures/Time_Machine_HD.png" sprite-sheet="" layer="30">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
