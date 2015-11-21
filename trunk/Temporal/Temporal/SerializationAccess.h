@@ -274,9 +274,7 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade); // xml
-			serializer.serialize("use-animator2", animator._useAnimator2); // memory
-			serializer.serialize("composite-animator1", animator._animator1); // memory
-			serializer.serialize("composite-animator2", animator._animator2); // memory
+			serializer.serialize("composite-animator", animator._animator); // memory
 		}
 
 		template<class T>

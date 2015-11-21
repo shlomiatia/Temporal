@@ -8,6 +8,7 @@
 #include "SceneNode.h"
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 namespace Temporal
 {
@@ -83,7 +84,7 @@ namespace Temporal
 		bool isActive() const { return _singleAnimators[0]->getAnimationId() != Hash::INVALID; }
 		bool isCrossFade() const { return isActive() && _singleAnimators[0]->isCrossFade(); };
 
-		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, int layer = 0, float weight = 1.0f, float normalizedTime = -1.0f);
+		void reset(Hash animationId = Hash::INVALID, bool isRewind = false, int layer = 0, float weight = 1.0f, float normalizedTime = 0.0f);
 		void setTime(float time);
 		bool isEnded() const;
 		void update(float time);
@@ -98,10 +99,13 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 
+	typedef std::unordered_map<Hash, SRT> HashSRTMap;
+	typedef HashSRTMap::const_iterator HashSRTIterator;
+
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _useAnimator2(false), _isDisableCrossFade(false) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _isDisableCrossFade(false), _isCrossFade(false), _isInitialized(false) {}
 		
 		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
 		Hash getType() const { return TYPE; }
@@ -118,15 +122,12 @@ namespace Temporal
 		SceneNodeList _sceneNodes;
 		bool _isPaused;
 		bool _isDisableCrossFade;
-		bool _useAnimator2;
-		CompositeAnimator _animator1;
-		CompositeAnimator _animator2;
+		bool _isCrossFade;
+		bool _isInitialized;
+		CompositeAnimator _animator;
+		HashSRTMap _previous;
 
-		CompositeAnimator& getPreviousAnimator() { return _useAnimator2 ? _animator1 : _animator2; }
-		const CompositeAnimator& getPreviousAnimator() const { return _useAnimator2 ? _animator1 : _animator2; }
-		CompositeAnimator& getCurrentAnimator() { return _useAnimator2 ? _animator2 : _animator1; }
-		const CompositeAnimator& getCurrentAnimator() const { return _useAnimator2 ? _animator2 : _animator1; }
-		bool isCrossFade() const;
+		
 		void update();
 		void reset(AnimationParams& animationParams);
 		
