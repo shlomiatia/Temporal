@@ -37,7 +37,7 @@ namespace Temporal
 			// No shape because it's not ready on load
 			const NavigationNode* start = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
 			const NavigationNode* goal = stateMachine.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, collistionGroup);
-			bool success = true;
+			bool success = false;
 			if (start && goal)
 			{
 				NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);

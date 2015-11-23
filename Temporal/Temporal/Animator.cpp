@@ -53,7 +53,8 @@ namespace Temporal
 		_animationId = animationId;
 		_isRewind = isRewind;
 		_weight = weight;
-		float time = frameToTime(normalizedTime * _owner->getAnimation(_animationId).getFrames());	
+		int frames = animationId == Hash::INVALID ? 0 : _owner->getAnimation(_animationId).getFrames();
+		float time = frameToTime(normalizedTime * frames);
 		_timer.reset(time);
 	}
 

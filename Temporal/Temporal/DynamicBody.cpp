@@ -162,7 +162,7 @@ namespace Temporal
 				dynamicBodyBounds.getOBB().translate(vector);
 		}
 			
-		if(_fixture->isEnabled())
+		if(_fixture->isEnabled() && _gravityEnabled)
 		{
 			Segment groundSegment;
 			if (_ground)
@@ -217,7 +217,7 @@ namespace Temporal
 			_fixture->setEnabled(true);
 			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
 			Vector groundDirection = groundSegment.getNaturalDirection();
-			Vector distanceFromPlatform = groundSegment.getPoint(oppositeSide) + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
+			Vector distanceFromPlatform = /* groundSegment.getPoint(oppositeSide)*/ result.getDirectedSegment().getTarget() + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
 			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
 			{
 				_ground = &result.getFixture();
