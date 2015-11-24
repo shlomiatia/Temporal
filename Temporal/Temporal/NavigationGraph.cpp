@@ -180,9 +180,7 @@ namespace Temporal
 			{	
 				OBB area = *j;
 				
-				Vector correction;
-
-				if(intersects(area, platform, &correction))
+				if(intersects(area, platform))
 				{
 					j = areas.erase(j);
 					
@@ -237,6 +235,7 @@ namespace Temporal
 
 	void NavigationGraphGenerator::createNodes(OBBList& platforms)
 	{
+		OBBList areas;
 		for(OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
 			// Create area from platform
@@ -256,21 +255,50 @@ namespace Temporal
 			radius.setAxis(platformOppositeAxisSign, MIN_AREA_SIZE.getY() / 2.0f);
 			OBB area = OBB(center, axisX, radius);
 
-			OBBList areas;
-			areas.push_back(area);
-			cutAreasByPlatforms(areas, platforms);
+			OBBList platformAreas;
+			platformAreas.push_back(area);
+			cutAreasByPlatforms(platformAreas, platforms);
 			
 			// Create nodes from areas
-			for(OBBIterator j = areas.begin(); j != areas.end(); ++j)
+			for (OBBIterator j = platformAreas.begin(); j != platformAreas.end(); ++j)
 			{
 				const OBB& area = *j;
 
 				Vector axisVector = area.getAxis(platformAxis) * area.getRadius().getAxis(platformAxis);
 				Vector oppositeAxisVector = area.getAxis(platformOppositeAxisSign) * area.getRadius().getAxis(platformOppositeAxisSign);
 				// Check min width
-				if(axisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX() && oppositeAxisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getY())
-					_nodes.push_back(new NavigationNode(area));
+				if (axisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getX() && oppositeAxisVector.getLength() * 2.0f >= MIN_AREA_SIZE.getY())
+				{
+					areas.push_back(area);
+				}
 			}
+		}
+
+		for (OBBList::iterator i = areas.begin(); i != areas.end(); ++i)
+		{
+			bool shouldAdd = true;
+			OBB& area1 = *i;
+			for (OBBIterator j = areas.begin(); j != areas.end(); ++j)
+			{
+				const OBB& area2 = *j;
+				if (area1 != area2 && area1.getCenterY() == area2.getCenterY() && area1.getAxisX().getY() == 0.0f && area2.getAxisX().getY() == 0.0f && intersects(area1, area2))
+				{
+					float left = fminf(area1.getLeft(), area2.getLeft());
+					float right = fmaxf(area1.getRight(), area2.getRight());
+					area1.setRadiusX((right - left) / 2.0f);
+					area1.setCenterX(left + area1.getRadiusX());
+					j = areas.erase(j);
+					if (j == areas.end())
+						break;
+				}
+			}
+			
+		}
+
+		for (OBBIterator i = areas.begin(); i != areas.end(); ++i)
+		{
+			const OBB& area = *i;
+			_nodes.push_back(new NavigationNode(area));
 		}
 	}
 
@@ -410,7 +438,7 @@ namespace Temporal
 		}
 
 		// Remove nodes without edges
-		removeNodesWithoutEdges(_nodes);
+		//removeNodesWithoutEdges(_nodes);
 	}
 
 	NavigationGraphGenerator::NavigationGraphGenerator(const Grid& grid, OBBList platforms)
