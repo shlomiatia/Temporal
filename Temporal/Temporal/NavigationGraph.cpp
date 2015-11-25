@@ -274,27 +274,6 @@ namespace Temporal
 			}
 		}
 
-		for (OBBList::iterator i = areas.begin(); i != areas.end(); ++i)
-		{
-			bool shouldAdd = true;
-			OBB& area1 = *i;
-			for (OBBIterator j = areas.begin(); j != areas.end(); ++j)
-			{
-				const OBB& area2 = *j;
-				if (area1 != area2 && area1.getCenterY() == area2.getCenterY() && area1.getAxisX().getY() == 0.0f && area2.getAxisX().getY() == 0.0f && intersects(area1, area2))
-				{
-					float left = fminf(area1.getLeft(), area2.getLeft());
-					float right = fmaxf(area1.getRight(), area2.getRight());
-					area1.setRadiusX((right - left) / 2.0f);
-					area1.setCenterX(left + area1.getRadiusX());
-					j = areas.erase(j);
-					if (j == areas.end())
-						break;
-				}
-			}
-			
-		}
-
 		for (OBBIterator i = areas.begin(); i != areas.end(); ++i)
 		{
 			const OBB& area = *i;

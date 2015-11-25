@@ -141,7 +141,7 @@ namespace Temporal
 			entity->setBypassSave(true);
 			entity->add(new Transform());
 			entity->add(new CollisionFilter(categoryId, groupId));
-			entity->add(new StaticBody(new Fixture(OBB::Zero)));
+			entity->add(new StaticBody(new Fixture(OBBAABB(Vector::Zero, Vector(5.0f, 5.0f)))));
 			entity->setId(_cameraTargetId);
 			getEntity().getManager().add(entity);
 		}
@@ -164,7 +164,7 @@ namespace Temporal
 			return;
 		}
 		Hash cameraTargetId = getCameraTargetId();
-		Vector position = result.getFixture().getGlobalShape().getCenter();
+		Vector position = result.getDirectedSegment().getTarget();
 		getEntity().getManager().sendMessageToEntity(cameraTargetId, Message(MessageID::SET_POSITION, &position));
 		setFrameFlag1(true);
 	}
