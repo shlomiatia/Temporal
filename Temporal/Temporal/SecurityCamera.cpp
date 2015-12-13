@@ -1,6 +1,5 @@
 #include "SecurityCamera.h"
 #include "MessageUtils.h"
-#include "Utils.h"
 #include "Transform.h"
 #include "CollisionFilter.h"
 #include "StaticBody.h"
@@ -10,6 +9,7 @@
 namespace Temporal
 {
 	const Hash SecurityCamera::TYPE = Hash("security-camera");
+	const Hash SecurityCamera::ALARM_TARGET_ID = Hash("ENT_ALARM_TARGET_ID");
 
 	namespace SecurityCameraStates
 	{
@@ -30,7 +30,6 @@ namespace Temporal
 
 		void Search::enter(void* param)
 		{
-			getSecurityCamera(_stateMachine).setTargetId(Hash::INVALID);
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEARCH_ANIMATION)));
 		}
 
@@ -55,7 +54,7 @@ namespace Temporal
 
 		void See::enter(void* param)
 		{
-			Hash cameraTargetId = getSecurityCamera(_stateMachine).getCameraTargetId();
+			Hash cameraTargetId = SecurityCamera::ALARM_TARGET_ID;
 			Entity* timeMachine = _stateMachine->getEntity().getManager().getEntity(TIME_MACHINE_ID);
 			_stateMachine->getEntity().getManager().sendMessageToAllEntities(Message(MessageID::ALARM, &cameraTargetId), 0, timeMachine ? 0 : createFunc1(See, bool, Entity&, samePeriod));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEE_ANIMATION)));
@@ -131,8 +130,7 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			_cameraTargetId = Hash(Utils::format("%s_TARGET", getEntity().getId().getString()).c_str());
-			Entity* existing = getEntity().getManager().getEntity(_targetId);
+			Entity* existing = getEntity().getManager().getEntity(SecurityCamera::ALARM_TARGET_ID);
 			if (existing)
 				return;
 			int categoryId = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_CATEGORY)));
@@ -142,30 +140,21 @@ namespace Temporal
 			entity->add(new Transform());
 			entity->add(new CollisionFilter(categoryId, groupId));
 			entity->add(new StaticBody(new Fixture(OBBAABB(Vector::Zero, Vector(5.0f, 5.0f)))));
-			entity->setId(_cameraTargetId);
+			entity->setId(SecurityCamera::ALARM_TARGET_ID);
 			getEntity().getManager().add(entity);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
-			getEntity().getManager().remove(_cameraTargetId);
+			Entity* existing = getEntity().getManager().getEntity(SecurityCamera::ALARM_TARGET_ID);
+			if (existing)
+				getEntity().getManager().remove(SecurityCamera::ALARM_TARGET_ID);
 		}
 	}
 
 	void SecurityCamera::trackTarget(RayCastResult& result)
 	{
-		if (_targetId == Hash::INVALID)
-		{
-			_targetId = result.getFixture().getEntityId();
-		}
-		else if (_targetId != result.getFixture().getEntityId())
-		{
-			_targetId = result.getFixture().getEntityId();
-			changeState(ACQUIRE_STATE);
-			return;
-		}
-		Hash cameraTargetId = getCameraTargetId();
 		Vector position = result.getDirectedSegment().getTarget();
-		getEntity().getManager().sendMessageToEntity(cameraTargetId, Message(MessageID::SET_POSITION, &position));
+		getEntity().getManager().sendMessageToEntity(ALARM_TARGET_ID, Message(MessageID::SET_POSITION, &position));
 		setFrameFlag1(true);
 	}
 }

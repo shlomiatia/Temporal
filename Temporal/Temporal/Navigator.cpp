@@ -112,11 +112,27 @@ namespace Temporal
 			float distance = targetX - sourceX;
 
 			// BRODER
-			if (abs(distance) <= 10.0f)
+			if (abs(distance) > 10.0f)
 			{
-				if (reachedTargetPlatform)
+				Side::Enum orientation = getOrientation(*_stateMachine);
+				if (distance < 0)
+					sendDirectionAction(*_stateMachine, Side::LEFT);
+				else
+					sendDirectionAction(*_stateMachine, Side::RIGHT);
+			}
+			else
+			{
+				if (!reachedTargetPlatform)
 				{
-					if (navigator.isTimeMachine())
+					updateNext();
+				}
+				else
+				{
+					if (!navigator.isTimeMachine())
+					{
+						navigator.raiseNavigationSuccess();
+					}
+					else
 					{
 						int targetCollisionGroup = getIntParam(_stateMachine->getEntity().getManager().sendMessageToEntity(navigator.getTracked(), Message(MessageID::GET_COLLISION_GROUP)));
 						_stateMachine->raiseMessage(Message(MessageID::SET_TEMPORAL_PERIOD, &targetCollisionGroup));
@@ -131,25 +147,12 @@ namespace Temporal
 						
 						plotPath(*_stateMachine, goalPosition);
 					}
-					else
-					{
-						navigator.raiseNavigationSuccess();
-					}
+					
 					
 				}
-				else
-				{
-					updateNext();
-				}
+				
 			}
-			else
-			{
-				Side::Enum orientation = getOrientation(*_stateMachine);
-				if (distance < 0)
-					sendDirectionAction(*_stateMachine, Side::LEFT);
-				else
-					sendDirectionAction(*_stateMachine, Side::RIGHT);
-			}
+			
 		}
 
 		void Walk::updateNext()
@@ -327,7 +330,7 @@ namespace Temporal
 
 	void Navigator::update()
 	{
-		if (_destination != Vector::Zero)
+		if (getCurrentStateID() == WALK_STATE && _destination != Vector::Zero)
 		{
 			if (!getEntity().getManager().getEntity(_tracked))
 			{
