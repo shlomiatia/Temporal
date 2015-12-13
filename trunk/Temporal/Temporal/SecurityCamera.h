@@ -47,20 +47,15 @@ namespace Temporal
 		Component* clone() const { return new SecurityCamera(); }
 		void handleMessage(Message& message);
 
-		Hash getCameraTargetId() const { return _cameraTargetId; }
-		Hash getTargetId() const { return _targetId; }
-		void setTargetId(Hash targetId) { _targetId = targetId; }
-
 		void trackTarget(RayCastResult& result);
 
 		static const Hash TYPE;
+		static const Hash ALARM_TARGET_ID;
 	protected:
 		Hash getInitialState() const;
 
 	private:
 		HashStateMap getStates() const;
-		Hash _cameraTargetId;
-		Hash _targetId;
 
 		friend class SerializationAccess;
 	};

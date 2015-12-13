@@ -451,7 +451,6 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, SecurityCamera& securityCamera, T& serializer)
 		{
-			serializer.serialize("target-id", securityCamera._targetId);
 		}
 
 		template<class T>
