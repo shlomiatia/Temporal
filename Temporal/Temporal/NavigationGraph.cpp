@@ -454,13 +454,13 @@ namespace Temporal
 		}
 	}
 
-	const NavigationNode* NavigationGraph::getNode(const Vector& shape, int period) const
+	const NavigationNode* NavigationGraph::getNode(const Vector& position, int period) const
 	{
 		const NavigationNodeList& nodes = static_cast<Period::Enum>(period) == Period::PAST ? _pastNodes : _presentNodes;
 		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
 			const NavigationNode* node = *i;
-			if (intersects(node->getArea(), shape))
+			if (intersects(node->getArea(), position))
 				return node;
 		}
 		return 0;

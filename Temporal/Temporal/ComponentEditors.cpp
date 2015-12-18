@@ -218,7 +218,7 @@ namespace Temporal
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelTextBox("Future Self", _period.getFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
+			addPanelTextBox("Future Self", _period.getEditorFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
 			addPanelCheckBox("Create Future Self", _period.isCreateFutureSelf(), createAction1(TemporalPeriodEditor, bool, createFutureSelfChanged));
 			addPanelCheckBox("Sync Future Self", _period.isSyncFutureSelf(), createAction1(TemporalPeriodEditor, bool, syncFutureSelfChanged));
 		}
@@ -226,7 +226,7 @@ namespace Temporal
 
 	void TemporalPeriodEditor::futureSelfIdChanged(const char* s)
 	{
-		_period.setFutureSelfId(Hash(s));
+		_period.setEditorFutureSelfId(Hash(s));
 	}
 
 	void TemporalPeriodEditor::createFutureSelfChanged(bool b)

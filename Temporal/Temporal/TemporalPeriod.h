@@ -65,6 +65,8 @@ namespace Temporal
 		Period::Enum getPeriod() const { return _period; }
 		void setFutureSelfId(Hash futureSelfId) { _futureSelfId = futureSelfId; }
 		Hash getFutureSelfId() const { return _futureSelfId; }
+		void setEditorFutureSelfId(Hash editorFutureSelfId) { _editorFutureSelfId = editorFutureSelfId; }
+		Hash getEditorFutureSelfId() const { return _editorFutureSelfId; }
 		void setCreateFutureSelf(bool createFutureSelf) { _createFutureSelf = createFutureSelf; }
 		bool isCreateFutureSelf() const { return _createFutureSelf; }
 		void setSyncFutureSelf(bool syncFutureSelf) { _syncFutureSelf = syncFutureSelf; }
@@ -75,6 +77,7 @@ namespace Temporal
 		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;
 		Hash _futureSelfId;
+		Hash _editorFutureSelfId;
 		bool _createFutureSelf;
 		bool _syncFutureSelf;
 		Vector _previousPosition;

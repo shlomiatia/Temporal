@@ -5,6 +5,7 @@
 #include "StaticBody.h"
 #include "Fixture.h"
 #include "Grid.h"
+#include "NavigationGraph.h"
 
 namespace Temporal
 {
@@ -154,7 +155,11 @@ namespace Temporal
 	void SecurityCamera::trackTarget(RayCastResult& result)
 	{
 		Vector position = result.getDirectedSegment().getTarget();
-		getEntity().getManager().sendMessageToEntity(ALARM_TARGET_ID, Message(MessageID::SET_POSITION, &position));
-		setFrameFlag1(true);
+		int groupId = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		const NavigationNode* node = getEntity().getManager().getGameState().getNavigationGraph().getNode(position, groupId);
+		if (node) {
+			getEntity().getManager().sendMessageToEntity(ALARM_TARGET_ID, Message(MessageID::SET_POSITION, &position));
+			setFrameFlag1(true);
+		}
 	}
 }
