@@ -109,6 +109,10 @@ namespace Temporal
 		{
 			_gravityEnabled= getBoolParam(message.getParam());
 		}
+		else if (message.getID() == MessageID::SET_TANGIBLE)
+		{
+			_fixture->setTangible(getBoolParam(message.getParam()));
+		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			float framePeriod = getFloatParam(message.getParam());
@@ -163,7 +167,7 @@ namespace Temporal
 		}
 			
 		// fix for hang and laser
-		if(_fixture->isEnabled() && (_gravityEnabled || _groundId == Hash::INVALID))
+		if(_fixture->isEnabled() && _fixture->isTangible())
 		{
 			Segment groundSegment;
 			if (_ground)
@@ -343,7 +347,7 @@ namespace Temporal
 	void DynamicBody::detectCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
 	{
 		Vector correction = Vector::Zero;
-		if (_fixture != staticBodyBounds && intersects(dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
+		if (_fixture != staticBodyBounds && staticBodyBounds->isTangible() && intersects(dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
 		{
 			if(fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
 				correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision, movement);
