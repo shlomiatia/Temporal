@@ -179,6 +179,8 @@ namespace Temporal
 
 	void TemporalPeriod::entityReady()
 	{
+		if (_editorFutureSelfId != Hash::INVALID)
+			_futureSelfId = _editorFutureSelfId;
 		addParticleEmitter(getEntity());
 		setPeriod(_period);
 		if (_period == Period::PAST && !_createFutureSelf && _futureSelfId != Hash::INVALID)

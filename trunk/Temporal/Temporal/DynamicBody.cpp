@@ -162,7 +162,8 @@ namespace Temporal
 				dynamicBodyBounds.getOBB().translate(vector);
 		}
 			
-		if(_fixture->isEnabled() && _gravityEnabled)
+		// fix for hang and laser
+		if(_fixture->isEnabled() && (_gravityEnabled || _groundId == Hash::INVALID))
 		{
 			Segment groundSegment;
 			if (_ground)

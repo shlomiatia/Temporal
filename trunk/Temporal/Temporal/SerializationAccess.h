@@ -386,7 +386,7 @@ namespace Temporal
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
-			serializer.serialize("future-self-id", temporalPeriod._futureSelfId);
+			serializer.serialize("editor-future-self-id", temporalPeriod._editorFutureSelfId);
 			serializer.serialize("create-future-self", temporalPeriod._createFutureSelf);
 			serializer.serialize("sync-future-self", temporalPeriod._syncFutureSelf);
 		}
