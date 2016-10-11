@@ -23,15 +23,25 @@ namespace Temporal
 
 		void Walk::update()
 		{
+			Navigator& navigator = static_cast<Navigator&>(*_stateMachine);
+			Hash tracked = navigator.getTracked();
+			Vector goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
+			const Vector& destination = navigator.getDestination();
+
+			if (goalPosition != destination)
+			{
+				navigator.plotPath(goalPosition);
+				return;
+			}
+
 			const Vector& position = getPosition(*_stateMachine);
 			float sourceX = position.getX();
-			Navigator& navigator = static_cast<Navigator&>(*_stateMachine);
+			
 			NavigationEdgeList* path = navigator.getPath();
 			float targetX;
 			bool reachedTargetPlatform;
 			if (!path)
 			{
-				const Vector& destination = navigator.getDestination();
 				targetX = destination.getX();
 				reachedTargetPlatform = true;
 			}
@@ -49,9 +59,14 @@ namespace Temporal
 			{
 				Side::Enum orientation = getOrientation(*_stateMachine);
 				if (distance < 0)
+				{
 					sendDirectionAction(*_stateMachine, Side::LEFT);
+				}
 				else
+				{
 					sendDirectionAction(*_stateMachine, Side::RIGHT);
+				}
+					
 			}
 			else
 			{
@@ -61,25 +76,7 @@ namespace Temporal
 				}
 				else
 				{
-					if (!navigator.isTimeMachine())
-					{
-						navigator.raiseNavigationSuccess();
-					}
-					else
-					{
-						int targetCollisionGroup = getIntParam(_stateMachine->getEntity().getManager().sendMessageToEntity(navigator.getTracked(), Message(MessageID::GET_COLLISION_GROUP)));
-						_stateMachine->raiseMessage(Message(MessageID::SET_TEMPORAL_PERIOD, &targetCollisionGroup));
-						navigator.setTimeMachine(false);
-						Hash tracked = navigator.getTracked();
-						Vector goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
-						Hash temporalFutureId = getHashParam(_stateMachine->raiseMessage(Message(MessageID::GET_TEMPORAL_FUTURE_ID)));
-						if (temporalFutureId != Hash::INVALID)
-						{
-							_stateMachine->getEntity().getManager().sendMessageToEntity(temporalFutureId, Message(MessageID::SET_POSITION, &goalPosition));
-						}
-
-						navigator.plotPath(goalPosition);
-					}
+					navigator.raiseNavigationSuccess();
 				}
 			}
 		}
@@ -111,7 +108,13 @@ namespace Temporal
 				navigator.changeState(FALL_STATE);
 			else if (edge->getType() == NavigationEdgeType::WALK)
 				navigator.changeState(WALK_STATE);
-
+			else if (edge->getType() == NavigationEdgeType::TEMPORAL_TRAVEL)
+			{
+				int targetCollisionGroup = getIntParam(_stateMachine->getEntity().getManager().sendMessageToEntity(navigator.getTracked(), Message(MessageID::GET_COLLISION_GROUP)));
+				_stateMachine->raiseMessage(Message(MessageID::SET_TEMPORAL_PERIOD, &targetCollisionGroup));
+				navigator.changeState(WALK_STATE);
+			}
+				
 		}
 	}
 }

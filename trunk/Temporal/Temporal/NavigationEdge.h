@@ -15,7 +15,8 @@ namespace Temporal
 			FALL,
 			JUMP_UP,
 			JUMP_FORWARD,
-			DESCEND
+			DESCEND,
+			TEMPORAL_TRAVEL
 		};
 	}
 

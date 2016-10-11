@@ -60,14 +60,15 @@ namespace Temporal
 		changeState(WAIT_STATE);	
 	}
 
-	bool Navigator::plotPath(const Vector& goalPosition, Hash tracked)
+	bool Navigator::plotPath(const Vector& goalPosition)
 	{
-		int collistionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		int sourceCollistionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		int targetCollistionGroup = *static_cast<int*>(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_COLLISION_GROUP)));
 		const Vector& startPosition = getPosition(*this);
 
 		// No shape because it's not ready on load
-		const NavigationNode* start = getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, collistionGroup);
-		const NavigationNode* goal = getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, collistionGroup);
+		const NavigationNode* start = getEntity().getManager().getGameState().getNavigationGraph().getNode(startPosition, sourceCollistionGroup);
+		const NavigationNode* goal = getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, targetCollistionGroup);
 		bool success = false;
 		if (start && goal)
 		{
@@ -79,8 +80,6 @@ namespace Temporal
 					setPath(path);
 				}
 				setDestination(goalPosition);
-				if (tracked != Hash::INVALID)
-					setTracked(tracked);
 				changeState(WALK_STATE);
 				success = true;
 			}
@@ -95,11 +94,7 @@ namespace Temporal
 	void Navigator::handleMessage(Message& message)
 	{
 		StateMachineComponent::handleMessage(message);
-		if (message.getID() == MessageID::UPDATE)
-		{
-			update();
-		}
-		else if (message.getID() == MessageID::DRAW_DEBUG)
+		if (message.getID() == MessageID::DRAW_DEBUG)
 		{
 			debugDraw();
 		}
@@ -110,25 +105,6 @@ namespace Temporal
 		else if (message.getID() == MessageID::STOP_NAVIGATE)
 		{
 			raiseNavigationFailure();
-		}
-	}
-
-	void Navigator::update()
-	{
-		if (getCurrentStateID() == WALK_STATE && _destination != Vector::Zero)
-		{
-			if (!getEntity().getManager().getEntity(_tracked))
-			{
-				raiseNavigationFailure();
-			}
-			else if (!_timeMachine)
-			{
-				const Vector& destination = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
-				if (_destination != destination)
-				{
-					plotPath(destination);
-				}
-			}
 		}
 	}
 

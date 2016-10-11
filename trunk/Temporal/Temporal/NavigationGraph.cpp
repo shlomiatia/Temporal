@@ -9,9 +9,12 @@
 #include "Graphics.h"
 #include "PhysicsEnums.h"
 #include "TemporalPeriod.h"
+#include "MessageUtils.h"
 
 namespace Temporal
 {
+	static const Hash TIME_MACHINE_ID = Hash("ENT_TIME_MACHINE0");
+
 	void addPlatforms(const HashEntityMap& entities, OBBList& platforms, Period::Enum periodType)
 	{
 		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
@@ -48,6 +51,16 @@ namespace Temporal
 		addPlatforms(entities, presentPlatforms, Period::PRESENT);
 		NavigationGraphGenerator presentGenerator(getGameState().getGrid(), presentPlatforms);
 		_presentNodes = presentGenerator.get();
+		
+		Entity* timeMachine = getGameState().getEntitiesManager().getEntity(TIME_MACHINE_ID);
+		if (timeMachine)
+		{
+			const Vector& timeMachinePosition = getVectorParam(timeMachine->handleMessage(Message(MessageID::GET_POSITION)));
+			NavigationNode* pastTimeMachineNode = getNode(timeMachinePosition, Period::PAST);
+			NavigationNode* presentTimeMachineNode = getNode(timeMachinePosition, Period::PRESENT);
+			pastTimeMachineNode->addEdge(new NavigationEdge(*pastTimeMachineNode, *presentTimeMachineNode, timeMachinePosition.getX(), static_cast<Side::Enum>(0), NavigationEdgeType::TEMPORAL_TRAVEL));
+			presentTimeMachineNode->addEdge(new NavigationEdge(*presentTimeMachineNode, *pastTimeMachineNode, timeMachinePosition.getX(), static_cast<Side::Enum>(0), NavigationEdgeType::TEMPORAL_TRAVEL));
+		}
 	}
 
 	NavigationGraph::~NavigationGraph()
@@ -72,6 +85,11 @@ namespace Temporal
 				return node;
 		}
 		return 0;
+	}
+
+	NavigationNode* NavigationGraph::getNode(const Vector& position, int period)
+	{
+		return const_cast<NavigationNode*>(const_cast<const NavigationGraph*>(this)->getNode(position, period));
 	}
 
 	void NavigationGraph::draw() const

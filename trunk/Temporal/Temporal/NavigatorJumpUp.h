@@ -5,8 +5,6 @@
 
 namespace Temporal
 {
-	class Serialization;
-
 	namespace NavigatorStates
 	{
 		class JumpUp : public ComponentState

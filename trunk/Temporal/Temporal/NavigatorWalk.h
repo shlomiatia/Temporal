@@ -5,8 +5,6 @@
 
 namespace Temporal
 {
-	class Serialization;
-
 	namespace NavigatorStates
 	{
 		class Walk : public ComponentState
@@ -14,6 +12,8 @@ namespace Temporal
 		public:
 			void enter(void* param) { update(); };
 			void handleMessage(Message& message);
+			
+		private:
 			void update();
 			void updateNext();
 		};
