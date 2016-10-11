@@ -419,7 +419,6 @@ namespace Temporal
 		{
 			serializer.serialize("destination", navigator._destination);
 			serializer.serialize("tracked", navigator._tracked);
-			serializer.serialize("is-time-machine", navigator._timeMachine);
 			serialize(key, (StateMachineComponent&)navigator, serializer);
 		}
 

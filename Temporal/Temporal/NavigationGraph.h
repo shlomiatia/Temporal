@@ -21,6 +21,7 @@ namespace Temporal
 		void init(GameState* gameState);
 
 		const NavigationNode* getNode(const Vector& position, int period) const;
+		NavigationNode* getNode(const Vector& position, int period);
 		void draw() const;
 
 	private:
