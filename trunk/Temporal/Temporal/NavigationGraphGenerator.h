@@ -17,7 +17,7 @@ namespace Temporal
 	class NavigationGraphGenerator
 	{
 	public:
-		NavigationGraphGenerator(const Grid& grid, OBBList platforms);
+		NavigationGraphGenerator(const Grid& grid, OBBList& platforms);
 
 		NavigationNodeList get() const { return _nodes; }
 	private:

@@ -1,78 +1,11 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-#include "Shapes.h"
+
 #include "StateMachineComponent.h"
 #include "Pathfinder.h"
 
 namespace Temporal
 {
-	class Serialization;
-
-	namespace NavigatorStates
-	{
-		class Wait : public ComponentState
-		{
-		public:
-			void enter(void* param){};
-			void handleMessage(Message& message);
-		};
-
-		class Walk : public ComponentState
-		{
-		public:
-			void enter(void* param) { update(); };
-			void handleMessage(Message& message);
-			void update();
-			void updateNext();
-		};
-
-		class Fall : public ComponentState
-		{
-		public:
-			Fall() : _afterLoad(true) {}
-
-			void enter(void* param);
-			void handleMessage(Message& message);
-
-		private:
-			bool _afterLoad;
-		};
-
-		class JumpUp : public ComponentState
-		{
-		public:
-			JumpUp() : _afterLoad(true) {}
-
-			void enter(void* param);
-			void handleMessage(Message& message);
-		private:
-			bool _afterLoad;
-		};
-
-		class JumpForward : public ComponentState
-		{
-		public:
-			JumpForward() : _afterLoad(true) {}
-
-			void enter(void* param);
-			void handleMessage(Message& message);
-		private:
-			bool _afterLoad;
-		};
-
-		class Descend : public ComponentState
-		{
-		public:
-			Descend() : _afterLoad(false) {}
-
-			void enter(void* param);
-			void handleMessage(Message& message);
-
-		private :
-			bool _afterLoad;
-		};
-	}
-
 	class Navigator : public StateMachineComponent
 	{
 	public:
@@ -93,6 +26,7 @@ namespace Temporal
 		
 		void raiseNavigationSuccess();
 		void raiseNavigationFailure();
+		bool plotPath(const Vector& goalPosition, Hash tracked = Hash::INVALID);
 
 		static const Hash TYPE;
 
