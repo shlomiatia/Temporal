@@ -33,7 +33,10 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovingPlatform.h" />
+    <ClInclude Include="NavigationEdge.h" />
     <ClInclude Include="NavigationGraph.h" />
+    <ClInclude Include="NavigationGraphGenerator.h" />
+    <ClInclude Include="NavigationNode.h" />
     <ClInclude Include="Navigator.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -115,7 +118,10 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
+    <ClCompile Include="NavigationEdge.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
+    <ClCompile Include="NavigationGraphGenerator.cpp" />
+    <ClCompile Include="NavigationNode.cpp" />
     <ClCompile Include="Navigator.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
