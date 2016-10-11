@@ -1,7 +1,7 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-#include "NavigationGraph.h"
+#include "NavigationNode.h"
 
 namespace Temporal
 {

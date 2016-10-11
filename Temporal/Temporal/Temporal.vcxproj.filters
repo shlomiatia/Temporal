@@ -245,6 +245,15 @@
     <ClInclude Include="SecurityCamera.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="NavigationNode.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationEdge.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavigationGraphGenerator.h">
+      <Filter>AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -465,6 +474,15 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SecurityCamera.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationGraphGenerator.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationNode.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationEdge.cpp">
       <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>

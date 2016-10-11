@@ -1,7 +1,10 @@
-#include "Navigator.h"
+#include "Navigator.h""
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
+#include "StateMachineComponent.h"
+#include "NavigationGraph.h"
+#include "NavigationEdge.h"
 
 namespace Temporal
 {

@@ -1,4 +1,5 @@
 #include "Pathfinder.h"
+#include "NavigationEdge.h"
 #include <assert.h>
 
 namespace Temporal
