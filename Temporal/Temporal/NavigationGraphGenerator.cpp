@@ -374,7 +374,7 @@ namespace Temporal
 		//removeNodesWithoutEdges(_nodes);
 	}
 
-	NavigationGraphGenerator::NavigationGraphGenerator(const Grid& grid, OBBList platforms)
+	NavigationGraphGenerator::NavigationGraphGenerator(const Grid& grid, OBBList& platforms)
 		: _grid(grid)
 	{
 		createNodes(platforms);
