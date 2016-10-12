@@ -8,6 +8,8 @@
 #include "DynamicBody.h"
 #include "PhysicsEnums.h"
 #include "Grid.h"
+#include "Door.h"
+#include "StaticBody.h"
 
 namespace Temporal
 {
@@ -146,7 +148,7 @@ namespace Temporal
 					Vector vectorRight = vectorX.getX() < 0.0f ? vectorX : -vectorX;
 
 					RayCastResult result;
-					_grid.cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
+					_gameState.getGrid().cast(startLeft, vectorLeft, result, CollisionCategory::OBSTACLE);
 					if (result.getDirectedSegment().getTarget() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getDirectedSegment().getTarget() - startLeft).getLength() + 1.0f;
@@ -162,7 +164,7 @@ namespace Temporal
 							cutAreaRight(min - 1.0f, area, areas, j);
 					}
 					result = RayCastResult();
-					_grid.cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
+					_gameState.getGrid().cast(startRight, vectorRight, result, CollisionCategory::OBSTACLE);
 					if (result.getDirectedSegment().getTarget() != Vector::Zero && result.getFixture().getGlobalShape() == platform)
 					{
 						float amount = area.getRadius().getAxis(axisX) * 2.0f - (result.getDirectedSegment().getTarget() - startRight).getLength() + 1.0f;
@@ -374,9 +376,41 @@ namespace Temporal
 		//removeNodesWithoutEdges(_nodes);
 	}
 
-	NavigationGraphGenerator::NavigationGraphGenerator(const Grid& grid, OBBList& platforms)
-		: _grid(grid)
+	void NavigationGraphGenerator::createPlatforms(Period::Enum periodType, OBBList& platforms)
 	{
+		const HashEntityMap& entities = _gameState.getEntitiesManager().getEntities();
+
+		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
+		{
+			const Entity& entity = *(i->second);
+			const Door* door = static_cast<const Door*>(entity.get(Door::TYPE));
+			const StaticBody* body = static_cast<const StaticBody*>(entity.get(StaticBody::TYPE));
+			const TemporalPeriod* period = static_cast<const TemporalPeriod*>(entity.get(TemporalPeriod::TYPE));
+			if (body)
+			{
+				if (period && period->getPeriod() != periodType)
+				{
+					continue;
+				}
+				const OBB& platform = body->getFixture().getGlobalShape();
+				if (door || body->getFixture().getCategory() == CollisionCategory::OBSTACLE)
+				{
+					platforms.push_back(platform);
+				}
+				if (door)
+				{
+					_nodes.push_back(new NavigationNode(platform, entity.getId()));
+				}
+			}
+		}
+	}
+
+
+	NavigationGraphGenerator::NavigationGraphGenerator(const GameState& gameState, Period::Enum period)
+		: _gameState(gameState)
+	{
+		OBBList platforms;
+		createPlatforms(period, platforms);
 		createNodes(platforms);
 		createEdges(platforms);
 	}

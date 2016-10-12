@@ -2,6 +2,12 @@
 #include "NavigationEdge.h"
 #include <assert.h>
 
+#include "GameState.h"
+#include "EntitySystem.h"
+#include "StaticBody.h"
+#include "PhysicsEnums.h"
+#include "Fixture.h"
+
 namespace Temporal
 {
 	typedef std::vector<PathNode*> PathNodeList;
@@ -104,6 +110,10 @@ namespace Temporal
 			{
 				const NavigationEdge& edge = **i;
 				const NavigationNode& navigationNeighbour = edge.getTarget();
+
+				if (navigationNeighbour.getDoorId() != Hash::INVALID &&
+					static_cast<const StaticBody*>(GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(navigationNeighbour.getDoorId())->get(StaticBody::TYPE))->getFixture().getCategory() == CollisionCategory::OBSTACLE)
+					continue;
 
 				// Don't explore closed neighbours
 				if(find(closed, &navigationNeighbour))
