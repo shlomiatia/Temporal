@@ -3,11 +3,7 @@
 #include "NavigationEdge.h"
 #include "NavigationGraphGenerator.h"
 #include "ShapeOperations.h"
-#include "DynamicBody.h"
-#include "StaticBody.h"
-#include "Fixture.h"
 #include "Graphics.h"
-#include "PhysicsEnums.h"
 #include "TemporalPeriod.h"
 #include "MessageUtils.h"
 
@@ -15,42 +11,20 @@ namespace Temporal
 {
 	static const Hash TIME_MACHINE_ID = Hash("ENT_TIME_MACHINE0");
 
-	void addPlatforms(const HashEntityMap& entities, OBBList& platforms, Period::Enum periodType)
+	NavigationNodeList generateNavigationGraph(const GameState& gameState, Period::Enum period)
 	{
-		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
-		{
-			const Entity& entity = *(i->second);
-			const StaticBody* body = static_cast<const StaticBody*>(entity.get(StaticBody::TYPE));
-			const TemporalPeriod* period = static_cast<const TemporalPeriod*>(entity.get(TemporalPeriod::TYPE));
-			if (body)
-			{
-				if (period && period->getPeriod() != periodType)
-				{
-					continue;
-				}
-				if (body->getFixture().getCategory() == CollisionCategory::OBSTACLE)
-				{
-					const OBB& platform = body->getFixture().getGlobalShape();
-					platforms.push_back(platform);
-				}
-			}
+		NavigationGraphGenerator navigationGraphGenerator(gameState, period);
+		NavigationNodeList result = navigationGraphGenerator.get();
 
-		}
+		return result;
 	}
 
 	void NavigationGraph::init(GameState* gameState)
 	{
 		GameStateComponent::init(gameState);
-		const HashEntityMap& entities = getGameState().getEntitiesManager().getEntities();
-		OBBList pastPlatforms;
-		addPlatforms(entities, pastPlatforms, Period::PAST);
-		NavigationGraphGenerator pastGenerator(getGameState().getGrid(), pastPlatforms);
-		_pastNodes = pastGenerator.get();
 
-		OBBList presentPlatforms;
-		addPlatforms(entities, presentPlatforms, Period::PRESENT);
-		NavigationGraphGenerator presentGenerator(getGameState().getGrid(), presentPlatforms);
-		_presentNodes = presentGenerator.get();
+		_pastNodes = generateNavigationGraph(getGameState(), Period::PAST);
+		_presentNodes = generateNavigationGraph(getGameState(), Period::PRESENT);
 		
 		Entity* timeMachine = getGameState().getEntitiesManager().getEntity(TIME_MACHINE_ID);
 		if (timeMachine)
@@ -80,7 +54,7 @@ namespace Temporal
 		const NavigationNodeList& nodes = static_cast<Period::Enum>(period) == Period::PAST ? _pastNodes : _presentNodes;
 		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
-			const NavigationNode* node = *i;
+			NavigationNode* node = *i;
 			if (intersects(node->getArea(), position))
 				return node;
 		}

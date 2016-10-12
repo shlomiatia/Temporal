@@ -2,11 +2,12 @@
 #define NAVIGATIONGRAPHGENERATOR_H
 
 #include "Shapes.h"
+#include "TemporalPeriod.h"
 #include <vector>
 
 namespace Temporal
 {
-	class Grid;
+	class GameState;
 	class NavigationNode;
 
 	typedef std::vector<NavigationNode*> NavigationNodeList;
@@ -17,13 +18,13 @@ namespace Temporal
 	class NavigationGraphGenerator
 	{
 	public:
-		NavigationGraphGenerator(const Grid& grid, OBBList& platforms);
+		NavigationGraphGenerator(const GameState& gameState, Period::Enum period);
 
 		NavigationNodeList get() const { return _nodes; }
 	private:
 		static const Vector MIN_AREA_SIZE;
 
-		const Grid& _grid;
+		const GameState& _gameState;
 		NavigationNodeList _nodes;
 
 		void createNodes(OBBList& platforms);
@@ -32,6 +33,7 @@ namespace Temporal
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms);
 		void createEdges(OBBList& platforms);
 		void cutAreasByPlatforms(OBBList& areas, OBBList& platforms);
+		void createPlatforms(Period::Enum periodType, OBBList& platforms);
 
 		NavigationGraphGenerator(const NavigationGraphGenerator&);
 		NavigationGraphGenerator& operator=(const NavigationGraphGenerator&);
