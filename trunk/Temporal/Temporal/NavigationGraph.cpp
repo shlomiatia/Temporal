@@ -51,7 +51,7 @@ namespace Temporal
 
 	const NavigationNode* NavigationGraph::getNode(const Vector& position, int period) const
 	{
-		const NavigationNodeList& nodes = static_cast<Period::Enum>(period) == Period::PAST ? _pastNodes : _presentNodes;
+		const NavigationNodeList& nodes = getNodesByPeriod(period);
 		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
 			NavigationNode* node = *i;
@@ -66,11 +66,28 @@ namespace Temporal
 		return const_cast<NavigationNode*>(const_cast<const NavigationGraph*>(this)->getNode(position, period));
 	}
 
+	const NavigationNode* NavigationGraph::getNode(Hash id, int period) const
+	{
+		const NavigationNodeList& nodes = getNodesByPeriod(period);
+		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
+		{
+			NavigationNode* node = *i;
+			if (node->getId() == id)
+				return node;
+		}
+		return 0;
+	}
+
+	NavigationNode* NavigationGraph::getNode(Hash id, int period)
+	{
+		return const_cast<NavigationNode*>(const_cast<const NavigationGraph*>(this)->getNode(id, period));
+	}
+
 	void NavigationGraph::draw() const
 	{
 		
 		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getGameState().getEntitiesManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_COLLISION_GROUP)));
-		const NavigationNodeList& nodes = playerPeriod == Period::PAST ? _pastNodes : _presentNodes;
+		const NavigationNodeList& nodes = getNodesByPeriod(playerPeriod);
 		Graphics::get().getLinesSpriteBatch().begin();
 		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
@@ -125,5 +142,10 @@ namespace Temporal
 			}
 		}
 		Graphics::get().getLinesSpriteBatch().end();
+	}
+
+	const NavigationNodeList& NavigationGraph::getNodesByPeriod(int period) const
+	{
+		return period == Period::PAST ? _pastNodes : _presentNodes;
 	}
 }

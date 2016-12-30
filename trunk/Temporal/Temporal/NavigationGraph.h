@@ -22,11 +22,15 @@ namespace Temporal
 
 		const NavigationNode* getNode(const Vector& position, int period) const;
 		NavigationNode* getNode(const Vector& position, int period);
+		const NavigationNode* getNode(Hash id, int period) const;
+		NavigationNode* getNode(Hash id, int period);
 		void draw() const;
 
 	private:
 		NavigationNodeList _pastNodes;
 		NavigationNodeList _presentNodes;
+
+		const NavigationNodeList& getNodesByPeriod(int period) const;
 		
 		NavigationGraph(const NavigationGraph&);
 		NavigationGraph& operator=(const NavigationGraph&);

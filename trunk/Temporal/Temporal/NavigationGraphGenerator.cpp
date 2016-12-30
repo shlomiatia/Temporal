@@ -373,7 +373,7 @@ namespace Temporal
 		}
 
 		// Remove nodes without edges
-		//removeNodesWithoutEdges(_nodes);
+		removeNodesWithoutEdges(_nodes);
 	}
 
 	void NavigationGraphGenerator::createPlatforms(Period::Enum periodType, OBBList& platforms)

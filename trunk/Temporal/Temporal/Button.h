@@ -20,7 +20,6 @@ namespace Temporal
 
 		static const Hash TYPE;
 	private:
-
 		Hash _target;
 
 		friend class SerializationAccess;

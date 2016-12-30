@@ -6,33 +6,185 @@
         <world-size x="3640.000000" y="1024.000000"/>
     </grid>
     <entities-manager>
-        <entity id="ENT_BLOCK2">
+        <entity id="ENT_DOOR2">
             <transform orientation="1">
-                <position x="464.000000" y="160.000000"/>
+                <position x="2142.547607" y="208.000000"/>
             </transform>
-            <collision-filter category="1" group="0"/>
+            <collision-filter category="-1" group="-1"/>
             <static-body>
                 <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
-                        <radius x="432.000000" y="0.000000"/>
+                        <radius x="16.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <door closed="0"/>
+            <renderer texture="resources/textures/door.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="43.200001"/>
+                    <scale x="1.000000" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BUTTON2">
+            <transform orientation="1">
+                <position x="2096.000000" y="80.000000"/>
+            </transform>
+            <collision-filter category="16" group="0"/>
+            <button target="ENT_DOOR2"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BLOCK6">
+            <transform orientation="1">
+                <position x="2624.000000" y="368.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="80.000000"/>
                     </obb>
                 </fixture>
             </static-body>
             <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="6.750000" y="0.015625"/>
+                    <scale x="1.000000" y="1.250000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
+        </entity>
+        <entity id="ENT_BLOCK2">
+            <transform orientation="1">
+                <position x="1744.000000" y="144.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="1712.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="26.750000" y="0.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BUTTON3">
+            <transform orientation="1">
+                <position x="3120.000000" y="80.000000"/>
+            </transform>
+            <collision-filter category="16" group="0"/>
+            <button target="ENT_DOOR3"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
             <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_DOOR3">
+            <transform orientation="1">
+                <position x="2768.000000" y="208.000000"/>
+            </transform>
+            <collision-filter category="-1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <door closed="0"/>
+            <renderer texture="resources/textures/door.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="43.200001"/>
+                    <scale x="1.000000" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK3">
+            <transform orientation="1">
+                <position x="1744.000000" y="288.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="1712.000000" y="0.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="26.750000" y="0.015625"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK7">
+            <transform orientation="1">
+                <position x="3392.000000" y="368.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="80.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
         </entity>
         <entity id="ENT_PLAYER">
             <transform orientation="1">
-                <position x="536.933289" y="72.000000"/>
+                <position x="42.000000" y="72.000000"/>
             </transform>
-            <collision-filter category="8" group="0"/>
+            <collision-filter category="8" group="1"/>
             <input-controller/>
             <dynamic-body gravity-enabled="1" collision-mask="1">
                 <fixture is-enabled="1">
@@ -144,12 +296,12 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <player-period period="0"/>
+            <player-period period="1"/>
             <game-saver-loader/>
         </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">
-                <position x="640.000000" y="346.488892"/>
+                <position x="640.000000" y="347.911133"/>
             </transform>
             <renderer texture="resources/textures/bg.png" sprite-sheet="" layer="10">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
@@ -159,38 +311,98 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
-        <entity id="ENT_CAMERA1">
-            <transform orientation="-1">
-                <position x="1011.500000" y="104.500000"/>
+        <entity id="ENT_BLOCK12">
+            <transform orientation="1">
+                <position x="3392.000488" y="80.000000"/>
             </transform>
-            <collision-filter category="512" group="0"/>
-            <security-camera/>
-            <sight>
-                <offset x="32.000000" y="-32.000000"/>
-                <size x="480.000000" y="32.000000"/>
-            </sight>
-            <animator animation-set="resources/animations/camera.xml" disable-cross-fade="0">
-                <composite-animator>
-                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                </composite-animator>
-            </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/camera.xml" layer="65">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" sprite-group="SCN_SEARCH" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+            <collision-filter category="1" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="224.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
+                    <scale x="3.500000" y="0.750000"/>
                 </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
             </renderer>
             <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
+        <entity id="ENT_BLOCK10">
+            <transform orientation="1">
+                <position x="1589.332397" y="80.000000"/>
+            </transform>
+            <collision-filter category="1" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="469.332397" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="7.333319" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BLOCK14">
+            <transform orientation="1">
+                <position x="463.999969" y="528.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="464.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="7.250000" y="0.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK5">
+            <transform orientation="1">
+                <position x="1728.000000" y="368.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="80.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
         <entity id="ENT_PATROL0">
             <transform orientation="1">
-                <position x="58.311111" y="88.177765"/>
+                <position x="42.000000" y="200.000000"/>
             </transform>
-            <collision-filter category="4" group="0"/>
-            <patrol is-static="0" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
+            <collision-filter category="4" group="1"/>
+            <patrol is-static="1" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
             <navigator state="NAV_STT_WAIT" timer="0.000000" state-flag="0">
                 <destination x="0.000000" y="0.000000"/>
             </navigator>
@@ -248,7 +460,7 @@
                 <offset x="0.000000" y="0.000000"/>
                 <size x="480.000000" y="32.000000"/>
             </sight>
-            <action-controller max-walk-force-per-second="125.000000" state="ACT_STT_FALL" timer="0.000000" state-flag="0">
+            <action-controller max-walk-force-per-second="300.000000" state="ACT_STT_FALL" timer="0.000000" state-flag="0">
                 <hang-descend-movement x="0.000000" y="0.000000"/>
                 <hang-descnd-original-translation x="0.000000" y="0.000000"/>
                 <hang-descend-ground-delta x="0.000000" y="0.000000"/>
@@ -327,7 +539,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+            <temporal-period period="1" create-future-self="0" sync-future-self="0"/>
         </entity>
         <entity id="ENT_BLOCK1">
             <transform orientation="1">
@@ -350,78 +562,11 @@
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
         </entity>
-        <entity id="ENT_BUTTON1">
+        <entity id="ENT_DOOR1">
             <transform orientation="1">
-                <position x="528.000000" y="80.000000"/>
+                <position x="1360.000000" y="208.000000"/>
             </transform>
-            <collision-filter category="16" group="0"/>
-            <button target="ENT_DOOR0"/>
-            <static-body>
-                <fixture is-enabled="1">
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="16.000000" y="16.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
-        </entity>
-        <entity id="ENT_BLOCK0">
-            <transform orientation="1">
-                <position x="1808.000000" y="16.000000"/>
-            </transform>
-            <collision-filter category="1" group="-1"/>
-            <static-body>
-                <fixture is-enabled="1">
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="1808.000000" y="16.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
-                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="28.250000" y="0.250000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-        </entity>
-        <entity id="ENT_BUTTON0">
-            <transform orientation="1">
-                <position x="400.000000" y="80.000000"/>
-            </transform>
-            <collision-filter category="16" group="0"/>
-            <button target="ENT_DOOR0"/>
-            <static-body>
-                <fixture is-enabled="1">
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="16.000000" y="16.000000"/>
-                    </obb>
-                </fixture>
-            </static-body>
-            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
-        </entity>
-        <entity id="ENT_DOOR0">
-            <transform orientation="1">
-                <position x="464.000000" y="80.000000"/>
-            </transform>
-            <collision-filter category="1" group="0"/>
+            <collision-filter category="-1" group="-1"/>
             <static-body>
                 <fixture is-enabled="1">
                     <obb angle="0.000000">
@@ -430,13 +575,228 @@
                     </obb>
                 </fixture>
             </static-body>
-            <door closed="1"/>
+            <door closed="0"/>
             <renderer texture="resources/textures/door.png" sprite-sheet="" layer="30">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
+                    <translation x="0.000000" y="43.200001"/>
                     <scale x="1.000000" y="0.750000"/>
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK9">
+            <transform orientation="1">
+                <position x="577.421387" y="80.000000"/>
+            </transform>
+            <collision-filter category="1" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="469.332397" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="7.333319" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BUTTON1">
+            <transform orientation="1">
+                <position x="1072.000000" y="80.000000"/>
+            </transform>
+            <collision-filter category="16" group="0"/>
+            <button target="ENT_DOOR1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_MOVING_PLATFORM_CONTROL1">
+            <transform orientation="1">
+                <position x="224.000000" y="-32.155548"/>
+            </transform>
+            <collision-filter category="64" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="32.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BLOCK0">
+            <transform orientation="1">
+                <position x="1824.000000" y="16.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="1824.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="28.500000" y="0.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BLOCK4">
+            <transform orientation="1">
+                <position x="832.000000" y="368.000000"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="64.000000" y="80.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.250000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_BUTTON0">
+            <transform orientation="1">
+                <position x="80.000000" y="80.000000"/>
+            </transform>
+            <collision-filter category="16" group="0"/>
+            <button target="ENT_DOOR0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="16.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/button.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BLOCK8">
+            <transform orientation="1">
+                <position x="3631.999756" y="271.999969"/>
+            </transform>
+            <collision-filter category="1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="240.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="0.250000" y="3.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_DOOR0">
+            <transform orientation="1">
+                <position x="592.000000" y="208.000000"/>
+            </transform>
+            <collision-filter category="-1" group="-1"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="16.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <door closed="0"/>
+            <renderer texture="resources/textures/door.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="43.200001"/>
+                    <scale x="1.000000" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+        </entity>
+        <entity id="ENT_CAMERA0">
+            <transform orientation="-1">
+                <position x="627.500000" y="72.500000"/>
+            </transform>
+            <collision-filter category="512" group="1"/>
+            <security-camera/>
+            <sight>
+                <offset x="32.000000" y="-32.000000"/>
+                <size x="480.000000" y="32.000000"/>
+            </sight>
+            <animator animation-set="resources/animations/camera.xml" disable-cross-fade="0">
+                <composite-animator>
+                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
+                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
+                </composite-animator>
+            </animator>
+            <renderer texture="" sprite-sheet="resources/spritesheets/camera.xml" layer="65">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" sprite-group="SCN_SEARCH" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="1" create-future-self="0" sync-future-self="0"/>
+        </entity>
+        <entity id="ENT_BLOCK11">
+            <transform orientation="1">
+                <position x="2613.332520" y="80.000000"/>
+            </transform>
+            <collision-filter category="1" group="0"/>
+            <static-body>
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="469.332397" y="48.000000"/>
+                    </obb>
+                </fixture>
+            </static-body>
+            <renderer texture="resources/textures/generic_wall_texture_by_b_a88.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="7.333319" y="0.750000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="0.300000"/>
             </renderer>
             <temporal-period period="0" create-future-self="0" sync-future-self="0"/>
         </entity>
