@@ -15,18 +15,21 @@ namespace Temporal
 	class NavigationNode
 	{
 	public:
-		NavigationNode(const OBB& area, Hash doorId = Hash::INVALID) : _area(area), _doorId(doorId) {}
+		NavigationNode(const OBB& area, Hash id = Hash::INVALID) : _area(area), _id(id), _isDisabled(false) {}
 		~NavigationNode();
 
 		const OBB& getArea() const { return _area; }
 		void addEdge(const NavigationEdge* edge) { _edges.push_back(edge); }
 		const NavigationEdgeList& getEdges() const { return _edges; }
-		Hash getDoorId() const { return _doorId; }
+		Hash getId() const { return _id; }
+		bool isDisabled() const { return _isDisabled;  }
+		void setDisabled(bool isDisabled) { _isDisabled = isDisabled; }
 
 	private:
 		const OBB _area;
-		Hash _doorId;
+		Hash _id;
 		NavigationEdgeList _edges;
+		bool _isDisabled;
 
 		NavigationNode(const NavigationNode&);
 		NavigationNode& operator=(const NavigationNode&);

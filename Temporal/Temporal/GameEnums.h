@@ -17,6 +17,8 @@ namespace Temporal
 
 			ENTITY_READY, // Initialize component based on other entities - always
 
+			GAME_STATE_READY,
+
 			SAVE,
 			PRE_LOAD,
 			LOAD,

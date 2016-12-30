@@ -105,7 +105,7 @@ namespace Temporal
 		if (_period == period)
 			alpha = 1.0f;
 		else
-			alpha = 0.1f;
+			alpha = 0.3f;
 		raiseMessage(Message(MessageID::SET_ALPHA, &alpha));
 	}
 

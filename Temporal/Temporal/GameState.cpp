@@ -31,6 +31,8 @@ namespace Temporal
 		_entityTemplatesManager->init(this);
 		_entitiesManager->init(this);
 		_navigationGraph->init(this);
+
+		_entitiesManager->sendMessageToAllEntities(Message(MessageID::GAME_STATE_READY));
 	}
 
 	void GameState::update(float framePeriod)

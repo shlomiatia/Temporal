@@ -9,7 +9,7 @@ namespace Temporal
 		const OBB& sourceArea = source.getArea();
 		const OBB& targetArea = getTarget().getArea();
 
-		Segment segment(sourceArea.getCenter(), targetArea.getCenter());
+		Segment segment = SegmentPP(sourceArea.getCenter(), targetArea.getCenter());
 		return segment.getLength();
 	}
 }

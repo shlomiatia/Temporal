@@ -27,8 +27,9 @@ namespace Temporal
 			Hash tracked = navigator.getTracked();
 			Vector goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
 			const Vector& destination = navigator.getDestination();
+			NavigationEdgeList* path = navigator.getPath();
 
-			if (goalPosition != destination)
+			if (goalPosition != destination || (path &&  (*path)[0]->getTarget().isDisabled()))
 			{
 				navigator.plotPath(goalPosition);
 				return;
@@ -37,7 +38,7 @@ namespace Temporal
 			const Vector& position = getPosition(*_stateMachine);
 			float sourceX = position.getX();
 			
-			NavigationEdgeList* path = navigator.getPath();
+			
 			float targetX;
 			bool reachedTargetPlatform;
 			if (!path)
