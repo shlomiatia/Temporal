@@ -1,6 +1,5 @@
 #include "SerializationAccess.h"
 #include "Serialization.h"
-#include "MovingPlatform.h"
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"
@@ -62,8 +61,6 @@ namespace Temporal
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, InputController::TYPE.getString()) == 0)
 			serialize(key, (InputController*&)component, serializer);
-		else if(strcmp(key, MovingPlatform::TYPE.getString()) == 0)
-			serialize(key, (MovingPlatform*&)component, serializer);
 		else if(strcmp(key, ActionController::TYPE.getString()) == 0)
 			serialize(key, (ActionController*&)component, serializer);
 		else if(strcmp(key, CollisionFilter::TYPE.getString()) == 0)
@@ -132,8 +129,6 @@ namespace Temporal
 			serialize(key, *(ParticleEmitter*&)component, serializer);
 		else if(component->getType() == InputController::TYPE)
 			serialize(key, *(InputController*&)component, serializer);
-		else if(component->getType() == MovingPlatform::TYPE)
-			serialize(key, *(MovingPlatform*&)component, serializer);
 		else if(component->getType() == CollisionFilter::TYPE)
 			serialize(key, *(CollisionFilter*&)component, serializer);
 		else if(component->getType() == Sight::TYPE)

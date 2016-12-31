@@ -1,5 +1,4 @@
 #include "ComponentEditors.h"
-#include "MovingPlatform.h"
 #include "Shapes.h"
 #include "Graphics.h"
 #include "Utils.h"
@@ -99,31 +98,6 @@ namespace Temporal
 		}
 		_ids.clear();
 		getEntity().getManager().remove(getEntity().getId());
-	}
-
-	/*
-	 * Moving platform editor
-	 */
-	Hash MovingPlatformEditor::TYPE("moving-platform-editor");
-
-	void MovingPlatformEditor::handleMessage(Message& message)
-	{
-		ComponentEditor::handleMessage(message);
- 		if (message.getID() == MessageID::ENTITY_INIT)
-		{
-			addPanelTextBox("Movement X", Utils::toString(_movingPlatform.getMovement().getX()).c_str(), createAction1(MovingPlatformEditor, const char*, movementXChanged));
-			addPanelTextBox("Movement Y", Utils::toString(_movingPlatform.getMovement().getY()).c_str(), createAction1(MovingPlatformEditor, const char*, movementYChanged));
-		}
-	}
-
-	void MovingPlatformEditor::movementXChanged(const char* s)
-	{
-		_movingPlatform.getMovement().setX(Utils::parseFloat(s));
-	}
-
-	void MovingPlatformEditor::movementYChanged(const char* s)
-	{
-		_movingPlatform.getMovement().setY(Utils::parseFloat(s));
 	}
 
 	/*

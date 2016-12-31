@@ -194,9 +194,6 @@
     <ClInclude Include="ActionController.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="MovingPlatform.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="TemporalEcho.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -447,9 +444,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ActionController.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="MovingPlatform.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="TemporalEcho.cpp">

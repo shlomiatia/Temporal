@@ -38,23 +38,6 @@ namespace Temporal
 		void ok();
 	};
 
-	class MovingPlatformEditor : public ComponentEditor
-	{
-	public:
-		MovingPlatformEditor(MovingPlatform& movingPlatform) : _movingPlatform(movingPlatform) {}
-
-		Hash getType() const { return TYPE; }
-		void handleMessage(Message& message);
-		Component* clone() const { return 0; }
-
-		static Hash TYPE;
-	private:
-		MovingPlatform& _movingPlatform;
-
-		void movementXChanged(const char* s);
-		void movementYChanged(const char* s);
-	};
-
 	class ButtonEditor : public ComponentEditor
 	{
 	public:
