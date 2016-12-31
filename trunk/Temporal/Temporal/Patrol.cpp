@@ -218,6 +218,7 @@ namespace Temporal
 
 		void Fire::enter(void* param)
 		{
+			_stateMachine->raiseMessage(Message(MessageID::STOP_NAVIGATE));
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_FIRE));
 		}
 
@@ -270,6 +271,7 @@ namespace Temporal
 
 		void Takedown::enter(void* param)
 		{
+			_stateMachine->raiseMessage(Message(MessageID::STOP_NAVIGATE));
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
 		}
 
@@ -301,11 +303,9 @@ namespace Temporal
 
 		void Navigate::handleMessage(Message& message)
 		{
-			if (getPatrol(_stateMachine).handleTakedownMessage(message) ||
-				getPatrol(_stateMachine).handleFireMessage(message))
-			{
-				_stateMachine->raiseMessage(Message(MessageID::STOP_NAVIGATE));
-			}
+			getPatrol(_stateMachine).handleFireMessage(message);
+			getPatrol(_stateMachine).handleTakedownMessage(message);
+
 			if (message.getID() == MessageID::NAVIGATION_SUCCESS)
 			{
 				Hash id = getHashParam(message.getParam());
