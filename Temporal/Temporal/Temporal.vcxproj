@@ -32,7 +32,6 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="NavigationEdge.h" />
     <ClInclude Include="NavigationGraph.h" />
     <ClInclude Include="NavigationGraphGenerator.h" />
@@ -123,7 +122,6 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="NavigationEdge.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
     <ClCompile Include="NavigationGraphGenerator.cpp" />

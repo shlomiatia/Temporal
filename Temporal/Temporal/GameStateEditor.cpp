@@ -14,7 +14,6 @@
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
 #include "ComponentEditors.h"
-#include "MovingPlatform.h"
 #include "Button.h"
 #include "Lighting.h"
 #include "Laser.h"
@@ -205,11 +204,6 @@ namespace Temporal
 				return;
 			
 			ComponentList components;
-			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(MovingPlatform::TYPE));
-			if (platform)
-			{
-				components.push_back(new MovingPlatformEditor(*platform));
-			}
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
 			if (button)
 			{
