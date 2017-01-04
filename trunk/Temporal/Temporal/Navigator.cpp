@@ -82,6 +82,7 @@ namespace Temporal
 				setDestination(goalPosition);
 				changeState(WALK_STATE);
 				success = true;
+				raiseMessage(Message(MessageID::NAVIGATION_START));
 			}
 		}
 		if (!success)

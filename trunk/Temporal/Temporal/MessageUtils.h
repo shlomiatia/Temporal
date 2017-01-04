@@ -109,5 +109,24 @@ namespace Temporal
 	};
 
 	inline AnimationParams& getAnimationParams(void* data) { return *static_cast<AnimationParams*>(data); }
+
+	class SourceTargetParams
+	{
+	public:
+		explicit SourceTargetParams(Hash sourceId, Hash targetId) :
+			_sourceId(sourceId), _targetId(targetId) {}
+
+		Hash getSourceId() const { return _sourceId; }
+		Hash getTargetId() const { return _targetId; }
+
+	private:
+		Hash _sourceId;
+		Hash _targetId;
+
+		SourceTargetParams(const SourceTargetParams&);
+		SourceTargetParams& operator=(const SourceTargetParams&);
+	};
+
+	inline SourceTargetParams& getSourceTargetParams(void* data) { return *static_cast<SourceTargetParams*>(data); }
 }
 #endif

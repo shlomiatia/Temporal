@@ -135,6 +135,7 @@ namespace Temporal
 		Patrol& _patrol;
 
 		void isStaticChanged(bool b);
+		void securityCameraIdChanged(const char* s);
 	};
 }
 

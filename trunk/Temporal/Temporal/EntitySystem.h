@@ -107,7 +107,7 @@ namespace Temporal
 		void init(GameState* gameState);
 
 		void onNewFrame();
-		void sendMessageToAllEntities(Message& message, const HashList* componentFilter = 0, IFunc1<bool, Entity&>* entityFilter = 0);
+		void sendMessageToAllEntities(Message& message, const HashList* componentFilter = 0);
 		void* sendMessageToEntity(Hash id, Message& message) const;
 		HashEntityMap& getEntities() { return _entities; }
 		Entity* getEntity(Hash id) const;
