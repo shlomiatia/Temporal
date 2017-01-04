@@ -21,8 +21,6 @@ namespace Temporal
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
-		private:
-			bool samePeriod(Entity& entity);
 		};
 
 		class Acquire : public ComponentState
@@ -47,15 +45,17 @@ namespace Temporal
 		Component* clone() const { return new SecurityCamera(); }
 		void handleMessage(Message& message);
 
+		Hash getTargetId() const { return _targetId; }
 		void trackTarget(RayCastResult& result);
 
 		static const Hash TYPE;
-		static const Hash ALARM_TARGET_ID;
 	protected:
 		Hash getInitialState() const;
 
 	private:
 		HashStateMap getStates() const;
+
+		Hash _targetId;
 
 		friend class SerializationAccess;
 	};

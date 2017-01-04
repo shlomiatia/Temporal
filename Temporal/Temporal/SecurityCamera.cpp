@@ -6,11 +6,11 @@
 #include "Fixture.h"
 #include "Grid.h"
 #include "NavigationGraph.h"
+#include "Utils.h"
 
 namespace Temporal
 {
 	const Hash SecurityCamera::TYPE = Hash("security-camera");
-	const Hash SecurityCamera::ALARM_TARGET_ID = Hash("ENT_ALARM_TARGET_ID");
 
 	namespace SecurityCameraStates
 	{
@@ -21,8 +21,6 @@ namespace Temporal
 		static const Hash SEARCH_STATE = Hash("CAM_STT_SEARCH");
 		static const Hash SEE_STATE = Hash("CAM_STT_SEE");
 		static const Hash ACQUIRE_STATE = Hash("CAM_STT_ACQUIRE");
-
-		static const Hash TIME_MACHINE_ID = Hash("ENT_TIME_MACHINE0");
 
 		SecurityCamera& getSecurityCamera(StateMachineComponent* stateMachine)
 		{
@@ -42,22 +40,14 @@ namespace Temporal
 			}
 		}
 
-		bool See::samePeriod(Entity& entity)
-		{
-			void* result = entity.handleMessage(Message(MessageID::GET_COLLISION_GROUP));
-			if (result)
-			{
-				int targetCollsionGroup = getIntParam(result);
-				int sourceCollisionGroup = getIntParam(_stateMachine->raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-				return sourceCollisionGroup == targetCollsionGroup;
-			}
-		}
-
 		void See::enter(void* param)
 		{
-			Hash cameraTargetId = SecurityCamera::ALARM_TARGET_ID;
-			Entity* timeMachine = _stateMachine->getEntity().getManager().getEntity(TIME_MACHINE_ID);
-			_stateMachine->getEntity().getManager().sendMessageToAllEntities(Message(MessageID::ALARM, &cameraTargetId), 0, timeMachine ? 0 : createFunc1(See, bool, Entity&, samePeriod));
+			Hash targetId = getSecurityCamera(_stateMachine).getTargetId();
+			int sourceCollisionGroup = getIntParam(_stateMachine->raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+			_stateMachine->getEntity().getManager().sendMessageToEntity(targetId, Message(MessageID::SET_COLLISION_GROUP, &sourceCollisionGroup));
+			Hash id = _stateMachine->getEntity().getId();
+			SourceTargetParams params(id, targetId);
+			_stateMachine->getEntity().getManager().sendMessageToAllEntities(Message(MessageID::ALARM, &params));
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(SEE_ANIMATION)));
 		}
 
@@ -131,9 +121,7 @@ namespace Temporal
 		StateMachineComponent::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_READY)
 		{
-			Entity* existing = getEntity().getManager().getEntity(SecurityCamera::ALARM_TARGET_ID);
-			if (existing)
-				return;
+			_targetId = Hash(Utils::format("%s_TARGET", getEntity().getId().getString()).c_str());
 			int categoryId = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_CATEGORY)));
 			int groupId = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 			Entity* entity = new Entity();
@@ -141,14 +129,12 @@ namespace Temporal
 			entity->add(new Transform());
 			entity->add(new CollisionFilter(categoryId, groupId));
 			entity->add(new StaticBody(new Fixture(OBBAABB(Vector::Zero, Vector(5.0f, 5.0f)))));
-			entity->setId(SecurityCamera::ALARM_TARGET_ID);
+			entity->setId(_targetId);
 			getEntity().getManager().add(entity);
 		}
 		else if (message.getID() == MessageID::ENTITY_DISPOSED)
 		{
-			Entity* existing = getEntity().getManager().getEntity(SecurityCamera::ALARM_TARGET_ID);
-			if (existing)
-				getEntity().getManager().remove(SecurityCamera::ALARM_TARGET_ID);
+			getEntity().getManager().remove(_targetId);
 		}
 	}
 
@@ -158,7 +144,7 @@ namespace Temporal
 		int groupId = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		const NavigationNode* node = getEntity().getManager().getGameState().getNavigationGraph().getNode(position, groupId);
 		if (node) {
-			getEntity().getManager().sendMessageToEntity(ALARM_TARGET_ID, Message(MessageID::SET_POSITION, &position));
+			getEntity().getManager().sendMessageToEntity(_targetId, Message(MessageID::SET_POSITION, &position));
 			setFrameFlag1(true);
 		}
 	}

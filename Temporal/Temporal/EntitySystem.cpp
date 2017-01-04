@@ -166,13 +166,12 @@ namespace Temporal
 		}
 	}
 
-	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter, IFunc1<bool, Entity&>* entityFilter)
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter)
 	{
 		_iterating = true;
 		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 		{
 			Entity* entity = i->second;
-			if (!entityFilter || (*entityFilter)(*entity))
 				entity->handleMessage(message, filter);
 		}
 		_iterating = false;

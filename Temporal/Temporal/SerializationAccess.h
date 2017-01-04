@@ -411,6 +411,7 @@ namespace Temporal
 		static void serialize(const char* key, Patrol& component, T& serializer)
 		{
 			serializer.serialize("is-static", component._isStatic);
+			serializer.serialize("security-camera-id", component._securityCameraId);
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
 

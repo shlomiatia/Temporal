@@ -45,7 +45,8 @@ namespace Temporal
 		return *static_cast<Patrol*>(stateMachine);
 	}
 
-	Patrol::Patrol(bool isStatic, Hash initialStateId) : StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic) {}
+	Patrol::Patrol(Hash securityCameraId, bool isStatic, Hash initialStateId) :
+		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _securityCameraId(securityCameraId) {}
 
 	void Patrol::handleMessage(Message& message)
 	{
@@ -67,16 +68,29 @@ namespace Temporal
 				Hash id = result.getFixture().getEntityId();
 				if (!getBoolParam(getEntity().getManager().sendMessageToEntity(id, Message(MessageID::IS_INVESTIGATED))))
 				{
-					raiseMessage(Message(MessageID::ALARM, &id));
+					raiseMessage(Message(MessageID::NAVIGATE, &id));
 				}
 			}
+			return true;
 		}
 		else if (message.getID() == MessageID::ALARM)
 		{
-			Hash id = getHashParam(message.getParam());
-			changeState(NAVIGATE_STATE, &id);
+			const SourceTargetParams& params = getSourceTargetParams(message.getParam());
+			Hash securityCameraId = params.getSourceId();
+
+			if (getSecurityCameraId() == Hash::INVALID || getSecurityCameraId() == securityCameraId)
+			{
+				Hash alarmTargetId = params.getTargetId();
+				raiseMessage(Message(MessageID::NAVIGATE, &alarmTargetId));
+			}
 			return true;
 		}
+		else if (message.getID() == MessageID::NAVIGATION_START)
+		{
+			changeState(NAVIGATE_STATE);
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -287,20 +301,6 @@ namespace Temporal
 			}
 		}
 
-		void Navigate::enter(void* param)
-		{
-			if (!param)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
-			else 
-			{
-				Hash id = getHashParam(param);
-				_stateMachine->raiseMessage(Message(MessageID::NAVIGATE, &id));
-			}
-			
-		}
-
 		void Navigate::handleMessage(Message& message)
 		{
 			getPatrol(_stateMachine).handleFireMessage(message);
@@ -316,10 +316,6 @@ namespace Temporal
 					_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
 					_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
 				}
-				_stateMachine->changeState(WAIT_STATE);
-			}
-			else if (message.getID() == MessageID::NAVIGATION_FAILURE)
-			{
 				_stateMachine->changeState(WAIT_STATE);
 			}
 		}
