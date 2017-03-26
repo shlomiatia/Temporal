@@ -32,6 +32,10 @@ namespace Temporal
 		{
 			raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
 		}
+		else if (params.getButton() == MouseButton::RIGHT)
+		{
+			raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
+		}
 	}
 
 	void InputController::keyDown(Message& message)
