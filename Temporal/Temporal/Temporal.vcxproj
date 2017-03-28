@@ -41,6 +41,7 @@
     <ClInclude Include="NavigatorFall.h" />
     <ClInclude Include="NavigatorJumpForward.h" />
     <ClInclude Include="NavigatorJumpUp.h" />
+    <ClInclude Include="NavigatorSkipBox.h" />
     <ClInclude Include="NavigatorWait.h" />
     <ClInclude Include="NavigatorWalk.h" />
     <ClInclude Include="Pathfinder.h" />
@@ -131,6 +132,7 @@
     <ClCompile Include="NavigatorFall.cpp" />
     <ClCompile Include="NavigatorJumpForward.cpp" />
     <ClCompile Include="NavigatorJumpUp.cpp" />
+    <ClCompile Include="NavigatorSkipBox.cpp" />
     <ClCompile Include="NavigatorWait.cpp" />
     <ClCompile Include="NavigatorWalk.cpp" />
     <ClCompile Include="Pathfinder.cpp" />

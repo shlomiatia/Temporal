@@ -24,7 +24,7 @@ namespace Temporal
 		
 		void raiseNavigationSuccess();
 		void raiseNavigationFailure();
-		bool plotPath(const Vector& goalPosition);
+		bool plotPath();
 
 		static const Hash TYPE;
 

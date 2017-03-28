@@ -14,10 +14,9 @@ namespace Temporal
 			if (message.getID() == MessageID::NAVIGATE)
 			{
 				Hash tracked = *static_cast<const Hash*>(message.getParam());
-				const Vector& goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
 				Navigator& navigator = static_cast<Navigator&>(*_stateMachine);
 				navigator.setTracked(tracked);
-				navigator.plotPath(goalPosition);
+				navigator.plotPath();
 			}
 		}
 	}
