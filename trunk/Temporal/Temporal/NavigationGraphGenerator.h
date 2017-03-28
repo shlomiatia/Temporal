@@ -29,6 +29,7 @@ namespace Temporal
 
 		void createNodes(OBBList& platforms);
 		void checkFallVerticalEdges(NavigationNode& node1, NavigationNode& node2, float x, Side::Enum orientation, OBBList& platforms);
+		void getMinMaxX(NavigationNode& node1, NavigationNode& node2, float& minX, float& maxX);
 		void checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms);
 		void checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms);
 		void createEdges(OBBList& platforms);

@@ -5,6 +5,7 @@
 #include "NavigatorJumpForward.h"
 #include "NavigatorDescend.h"
 #include "NavigatorWait.h"
+#include "NavigatorSkipBox.h"
 #include "Serialization.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
@@ -22,6 +23,7 @@ namespace Temporal
 	static const Hash JUMP_FORWARD_STATE = Hash("NAV_STT_JUMP_FORWARD");
 	static const Hash DESCEND_STATE = Hash("NAV_STT_DESCEND");
 	static const Hash WAIT_STATE = Hash("NAV_STT_WAIT");
+	static const Hash SKIP_BOX_STATE = Hash("NAV_STT_SKIP_BOX");
 
 	using namespace NavigatorStates;
 
@@ -35,6 +37,7 @@ namespace Temporal
 		states[JUMP_FORWARD_STATE] = new JumpForward();
 		states[DESCEND_STATE] = new Descend();
 		states[WAIT_STATE] = new Wait();
+		states[SKIP_BOX_STATE] = new SkipBox();
 		return states;
 	}
 
@@ -60,8 +63,9 @@ namespace Temporal
 		changeState(WAIT_STATE);	
 	}
 
-	bool Navigator::plotPath(const Vector& goalPosition)
+	bool Navigator::plotPath()
 	{
+		const Vector& goalPosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_POSITION)));
 		int sourceCollistionGroup = *static_cast<int*>(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
 		int targetCollistionGroup = *static_cast<int*>(getEntity().getManager().sendMessageToEntity(_tracked, Message(MessageID::GET_COLLISION_GROUP)));
 		const Vector& startPosition = getPosition(*this);
@@ -159,7 +163,7 @@ namespace Temporal
 		{
 			if (_destination != Vector::Zero)
 			{
-				plotPath(_destination);
+				plotPath();
 			}
 		}
 	}

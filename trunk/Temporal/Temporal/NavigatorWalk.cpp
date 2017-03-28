@@ -12,12 +12,21 @@ namespace Temporal
 		static const Hash JUMP_UP_STATE = Hash("NAV_STT_JUMP_UP");
 		static const Hash JUMP_FORWARD_STATE = Hash("NAV_STT_JUMP_FORWARD");
 		static const Hash DESCEND_STATE = Hash("NAV_STT_DESCEND");
+		static const Hash SKIP_BOX_STATE = Hash("NAV_STT_SKIP_BOX");
 
 		void Walk::handleMessage(Message& message)
 		{
 			if (message.getID() == MessageID::UPDATE)
 			{
 				update();
+			}
+			else if (message.getID() == MessageID::BODY_COLLISION)
+			{
+				const Vector& collision = getVectorParam(message.getParam());
+				if (collision.getX() != 0.0f && collision.getY() == 0.0f)
+				{
+					_stateMachine->changeState(SKIP_BOX_STATE);
+				}
 			}
 		}
 
@@ -31,7 +40,7 @@ namespace Temporal
 
 			if (goalPosition != destination || (path &&  (*path)[0]->getTarget().isDisabled()))
 			{
-				navigator.plotPath(goalPosition);
+				navigator.plotPath();
 				return;
 			}
 

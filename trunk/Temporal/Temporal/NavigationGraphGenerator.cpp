@@ -261,42 +261,70 @@ namespace Temporal
 		}
 	}
 
-	void NavigationGraphGenerator::checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms)
+	void NavigationGraphGenerator::getMinMaxX(NavigationNode& node1, NavigationNode& node2, float& minX, float& maxX)
 	{
-		float x;
 		if (node1.getArea().getLeft() < node2.getArea().getLeft())
 		{
 			if (node1.getArea().getRight() < node2.getArea().getRight())
-				x = (node1.getArea().getRight() + node2.getArea().getLeft()) / 2.0f;
+			{
+				minX = node2.getArea().getLeft();
+				maxX = node1.getArea().getRight();
+				
+			}
 			else
-				x = (node2.getArea().getRight() + node2.getArea().getLeft()) / 2.0f;
+			{
+				minX = node2.getArea().getLeft();
+				maxX = node2.getArea().getRight();
+			}
 		}
 		else
 		{
 			if (node1.getArea().getRight() > node2.getArea().getRight())
-				x = (node1.getArea().getLeft() + node2.getArea().getRight()) / 2.0f;
+			{
+				minX = node1.getArea().getLeft();
+				maxX = node2.getArea().getRight();
+			}
 			else
-				x = (node1.getArea().getRight() + node1.getArea().getLeft()) / 2.0f;
+			{
+				minX = node1.getArea().getLeft();
+				maxX = node1.getArea().getRight();
+			}
 		}
+	}
+
+	void NavigationGraphGenerator::checkClimbDescendVerticalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms)
+	{
+		float minX;
+		float maxX;
+		getMinMaxX(node1, node2, minX, maxX);
+
 		const OBB& area1 = node1.getArea();
 		const OBB& area2 = node2.getArea();
 		Segment lowerSegment1 = getLowerSegment(area1);
 		Segment lowerSegment2 = getLowerSegment(area2);
-		float y1 = lowerSegment1.getY(x);
-		float y2 = lowerSegment2.getY(x);
-		float verticalDistance = y1 - y2;
 
-		DirectedSegment fallArea = DirectedSegment(x, y1 - 2.0f, x, y2);
-
-		if (!intersectWithPlatform(fallArea, platforms))
+		// BRODER
+		float segments = (maxX - minX) / 40.0f;
+		for (float i = 1.0f; i < segments; i += 1.0f)
 		{
-			node1.addEdge(new NavigationEdge(node1, node2, x, static_cast<Side::Enum>(0), NavigationEdgeType::DESCEND));
+			float x = minX + (maxX - minX) * (i / segments);
+			float y1 = lowerSegment1.getY(x);
+			float y2 = lowerSegment2.getY(x);
+			float verticalDistance = y1 - y2;
 
-			// BRODER
-			float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
-			if (verticalDistance <= maxJumpHeight)
-				node2.addEdge(new NavigationEdge(node2, node1, x, static_cast<Side::Enum>(0), NavigationEdgeType::JUMP_UP));
+			DirectedSegment fallArea = DirectedSegment(x, y1 - 2.0f, x, y2);
+
+			if (!intersectWithPlatform(fallArea, platforms))
+			{
+				node1.addEdge(new NavigationEdge(node1, node2, x, static_cast<Side::Enum>(0), NavigationEdgeType::DESCEND));
+
+				// BRODER
+				float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
+				if (verticalDistance <= maxJumpHeight)
+					node2.addEdge(new NavigationEdge(node2, node1, x, static_cast<Side::Enum>(0), NavigationEdgeType::JUMP_UP));
+			}
 		}
+		
 	}
 
 	void NavigationGraphGenerator::checkHorizontalEdges(NavigationNode& node1, NavigationNode& node2, OBBList& platforms)
