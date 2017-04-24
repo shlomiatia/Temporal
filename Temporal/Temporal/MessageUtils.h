@@ -29,7 +29,7 @@ namespace Temporal
 	const OBB& getShape(const Entity& entity);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result, const Vector& positionOffset);
-	bool iterateTiles(Entity& entity, const Vector& radius, int mask, FixtureList* result);
+	bool iterateTiles(Entity& entity, int mask, int group, Hash excludeId);
 
 	Hash getHashParam(void* data);
 	const Vector& getVectorParam(void* data);

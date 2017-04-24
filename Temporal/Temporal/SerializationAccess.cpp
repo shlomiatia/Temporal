@@ -11,15 +11,11 @@
 #include "Navigator.h"
 #include "TemporalEcho.h"
 #include "TemporalPeriod.h"
-#include "SceneNode.h"
 #include "InputController.h"
-#include "Shapes.h"
 #include "Transform.h"
 #include "Animator.h"
 #include "ActionController.h"
 #include "DynamicBody.h"
-#include "Patrol.h"
-#include "Editable.h"
 #include "SaverLoader.h"
 #include "GameStateEditor.h"
 #include "Camera.h"
@@ -30,6 +26,7 @@
 #include "Button.h"
 #include "Door.h"
 #include "SecurityCamera.h"
+#include "PlayerPeriod.h"
 
 namespace Temporal
 {

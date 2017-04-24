@@ -89,9 +89,8 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::SET_GROUND)
 		{
-			_ground = static_cast<Fixture*>(message.getParam());
-			_groundId = _ground->getEntityId();
-			_previousGroundCenter = _ground->getGlobalShape().getCenter();
+			const Fixture* ground = static_cast<Fixture*>(message.getParam());
+			setGround(ground);
 		}
 		else if(message.getID() == MessageID::SET_IMPULSE)
 		{
@@ -122,25 +121,26 @@ namespace Temporal
 		{
 			if (_groundId == Hash::INVALID)
 			{
-				resetGround();
+				loseGround();
 			}
 			else 
 			{
-				_ground = static_cast<Fixture*>(getEntity().getManager().sendMessageToEntity(_groundId, Message(MessageID::GET_FIXTURE)));
+				const Fixture* ground = static_cast<Fixture*>(getEntity().getManager().sendMessageToEntity(_groundId, Message(MessageID::GET_FIXTURE)));
+				setGround(ground);
 			}
 		}
 		else if (message.getID() == MessageID::TEMPORAL_PERIOD_CHANGED)
 		{
 			if (_ground && !_ground->canCollide(CollisionCategory::OBSTACLE, getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)))))
 			{
-				resetGround();
+				loseGround();
 			}
 		}
 		else if (message.getID() == MessageID::TEMPORAL_ECHOS_MERGED)
 		{
 			if (_ground && _ground->getCategory() & CollisionCategory::DRAGGABLE)
 			{
-				resetGround();
+				loseGround();
 			}
 		}
 	}
@@ -152,47 +152,30 @@ namespace Temporal
 
 		if (_ground && !_ground->isEnabled())
 		{
-			resetGround();
+			loseGround();
 		}
 
-		// Moving platform - position is set later
-		if(_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
-		{
-			// BRODER
-			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
-			if (vector.getLength() > 10.0f)
-				resetGround();
-			else if(_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
-				dynamicBodyBounds.getOBB().translate(vector);
-		}
+		handleMovingPlatform(dynamicBodyBounds);
 			
 		// fix for hang and laser
 		if(_fixture->isEnabled() && _fixture->isTangible())
 		{
 			Segment groundSegment;
+			bool isModerateGround = false;
 			if (_ground)
-				groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
-
-			// Slide
-			if(_ground && !AngleUtils::radian().isModerate(groundSegment.getRadius().getAngle()))
 			{
-				// BRODER
-				_velocity = groundSegment.getNaturalDirection() * 375.0f;
-				if(_velocity.getY() > 0.0f)
-					_velocity = -_velocity;
-				resetGround();
-				executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
+				groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
+				isModerateGround = AngleUtils::radian().isModerate(groundSegment.getRadius().getAngle());
 			}
-			// Walk
-			else if(_ground && _velocity.getY() == 0.0f)
+
+			if (_ground && isModerateGround && _velocity.getX() != 0.0f && _velocity.getY() == 0.0f)
 			{
 				walk(dynamicBodyBounds, framePeriod);
 			}
-			// Air
 			else
 			{
-				_ground = 0;
-				_groundId = Hash::INVALID;
+				handleSlide(groundSegment, isModerateGround);
+				resetGround();
 				executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
 			}
 		}
@@ -206,52 +189,41 @@ namespace Temporal
 		}
 	}
 
-	bool DynamicBody::transitionPlatform(OBBAABBWrapper& dynamicBodyBounds, const Vector& direction, Side::Enum side, float leftPeriod)
+	void DynamicBody::handleMovingPlatform(OBBAABBWrapper dynamicBodyBounds)
 	{
-		const float MAX_DISTANCE = 10.0f;
-
-		Side::Enum oppositeSide = Side::getOpposite(side);
-		Vector bodyPoint = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
-		Vector rayOrigin = bodyPoint + Vector(side, 0.0f);
-		RayCastResult result;
-		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		_fixture->setEnabled(false);
-		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
-			(result.getDirectedSegment().getTarget() - rayOrigin).getLength() < MAX_DISTANCE)
+		if (_ground && _ground->getGlobalShape().getCenter() != _previousGroundCenter)
 		{
-			_fixture->setEnabled(true);
-			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
-			Vector groundDirection = groundSegment.getNaturalDirection();
-			Vector distanceFromPlatform = /* groundSegment.getPoint(oppositeSide)*/ result.getDirectedSegment().getTarget() + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
-			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
+			// BRODER
+			Vector vector = _ground->getGlobalShape().getCenter() - _previousGroundCenter;
+			if (vector.getLength() > 10.0f)
 			{
-				_ground = &result.getFixture();
-				_groundId = result.getFixture().getEntityId();
-				_previousGroundCenter = _ground->getGlobalShape().getCenter();
-				dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
-				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
-				walk(dynamicBodyBounds, leftPeriod);
-				return true;
+				loseGround();
+			}
+			else if (_velocity.getX() == 0.0f || sameSign(_velocity.getX(), vector.getX()))
+			{
+				dynamicBodyBounds.getOBB().translate(vector);
 			}
 		}
-		_fixture->setEnabled(true);
-		return false;
+	}
+
+	void DynamicBody::handleSlide(Segment groundSegment, bool isModerateGround)
+	{
+		if (_ground && !isModerateGround)
+		{
+			// BRODER
+			_velocity = groundSegment.getNaturalDirection() * 375.0f;
+			if (_velocity.getY() > 0.0f)
+			{
+				_velocity = -_velocity;
+			}
+		}
 	}
 
 	void DynamicBody::walk(OBBAABBWrapper& dynamicBodyBounds, float framePeriod)
 	{
 		const Segment& groundSegment = getTopSegment(_ground->getGlobalShape(), dynamicBodyBounds.getLeft(), dynamicBodyBounds.getRight());
 		const OBB& staticBodyBounds = _ground->getGlobalShape();
-		
-		// Fix when static
-		if(_velocity.getX() == 0)
-		{
-			_ground = 0;
-			_groundId = Hash::INVALID;
-			executeMovement(dynamicBodyBounds, determineMovement(framePeriod));
-			return;
-		}
-		
+
 		// Calculate platform touch point, or front if flat
 		Side::Enum side = Side::get(_velocity.getX());
 		Side::Enum oppositeSide = Side::getOpposite(side);
@@ -265,25 +237,27 @@ namespace Temporal
 
 		velocity = direction * movementAmount;
 
-		Vector movement = velocity * framePeriod;						
+		Vector movement = velocity * framePeriod;
 		Vector dest = curr + movement;
 		Vector max = groundSegment.getPoint(side);
-		
+
 		// Still on platform
-		if((dest.getX() - max.getX()) * side <= 0.0f)
+		if ((dest.getX() - max.getX()) * side <= 0.0f)
 		{
 			executeMovement(dynamicBodyBounds, movement);
 		}
 		else
-		{			
+		{
 			Vector actualMovement = max - curr;
 			executeMovement(dynamicBodyBounds, actualMovement);
 			float leftPeriod = framePeriod * (1.0f - actualMovement.getLength() / movement.getLength());
 			_velocity = Vector(velocity.getLength() * side, 0.0f);
 
-			if (!transitionPlatform(dynamicBodyBounds, direction, side, leftPeriod))
+			const Fixture* nextPlatform = transitionPlatform(dynamicBodyBounds, direction, side, leftPeriod);
+
+			if (!nextPlatform)
 			{
-				resetGround();
+				loseGround();
 
 				// When falling from downward slope, it's look better to fall in the direction of the platform. This is not the case for upward slopes
 				if (direction.getY() <= 0.0f)
@@ -292,7 +266,44 @@ namespace Temporal
 				Vector movementLeft = determineMovement(leftPeriod);
 				executeMovement(dynamicBodyBounds, movementLeft);
 			}
+			else
+			{
+				setGround(nextPlatform);
+				
+				walk(dynamicBodyBounds, leftPeriod);
+			}
 		}
+	}
+
+	const Fixture* DynamicBody::transitionPlatform(OBBAABBWrapper& dynamicBodyBounds, const Vector& direction, Side::Enum side, float leftPeriod)
+	{
+		const Fixture* nextPlatform = 0;
+
+		// BRODER
+		const float MAX_DISTANCE = 10.0f;
+
+		Side::Enum oppositeSide = Side::getOpposite(side);
+		Vector bodyPoint = Vector(direction.getY() > 0.0f ? dynamicBodyBounds.getSide(side) : dynamicBodyBounds.getSide(oppositeSide), dynamicBodyBounds.getBottom());
+		Vector rayOrigin = bodyPoint + Vector(side, 0.0f);
+		RayCastResult result;
+		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
+		_fixture->setEnabled(false);
+
+		if (getEntity().getManager().getGameState().getGrid().cast(rayOrigin, Vector(0.0f, -1.0f), result, _collisionMask, sourceCollisionGroup) &&
+			(result.getDirectedSegment().getTarget() - rayOrigin).getLength() < MAX_DISTANCE)
+		{
+			Segment groundSegment = getTopSegment(result.getFixture().getGlobalShape(), dynamicBodyBounds.getLeft() + side, dynamicBodyBounds.getRight() + side);
+			Vector groundDirection = groundSegment.getNaturalDirection();
+			Vector distanceFromPlatform = result.getDirectedSegment().getTarget() + Vector(groundDirection.getX() * side, groundDirection.getY()) - bodyPoint;
+			if (distanceFromPlatform.getLength() < MAX_DISTANCE && AngleUtils::radian().isModerate(groundDirection.getAngle()))
+			{
+				dynamicBodyBounds.getOBB().translate(distanceFromPlatform);
+				raiseMessage(Message(MessageID::SET_POSITION, const_cast<Vector*>(&dynamicBodyBounds.getCenter())));
+				nextPlatform = &result.getFixture();
+			}
+		}
+		_fixture->setEnabled(true);
+		return nextPlatform;
 	}
 
 	Vector DynamicBody::determineMovement(float framePeriod)
@@ -340,8 +351,10 @@ namespace Temporal
 		while(movement != Vector::Zero);
 
 		modifyVelocity(collision);
-		if(collision != Vector::Zero)
+		if (collision != Vector::Zero)
+		{
 			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
+		}
 	}
 
 	void DynamicBody::detectCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement)
@@ -417,8 +430,7 @@ namespace Temporal
 		// If got collision from below, calculate ground vector. Take front ground when there is a dellima
 		if(correction.getY() > 0.0f && modifyGround)
 		{
-			_ground = staticBodyBounds;
-			_groundId = staticBodyBounds->getEntityId();
+			setGround(staticBodyBounds);
 		}
 		
 	}
@@ -432,11 +444,23 @@ namespace Temporal
 			_velocity.setY(0.0f);
 	}
 
+	void DynamicBody::loseGround()
+	{
+		resetGround();
+		raiseMessage(Message(MessageID::LOST_GROUND));
+	}
+
+	void DynamicBody::setGround(const Fixture* ground)
+	{
+		_ground = ground;
+		_groundId = _ground->getEntityId();
+		_previousGroundCenter = _ground->getGlobalShape().getCenter();
+	}
+
 	void DynamicBody::resetGround()
 	{
 		_ground = 0;
 		_groundId = Hash::INVALID;
 		_previousGroundCenter = Vector::Zero;
-		raiseMessage(Message(MessageID::LOST_GROUND));
 	}
 }

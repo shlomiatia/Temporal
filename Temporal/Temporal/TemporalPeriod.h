@@ -2,60 +2,16 @@
 #define TEMPORALPERIOD_H
 
 #include "EntitySystem.h"
-#include "Color.h"
 #include "Vector.h"
+#include "ScriptsEnums.h"
 
 namespace Temporal
 {
-	namespace Period
-	{
-		enum Enum
-		{
-			NONE = -1,
-			PAST = 0,
-			PRESENT = 1,
-			FUTURE = 2
-		};
-	}
-
-	typedef std::vector<Color> ColorList;
-	typedef ColorList::const_iterator ColorIterator;
-
-	/**********************************************************************************************
-	* Player Period
-	*********************************************************************************************/
-	class PlayerPeriod : public Component
-	{
-	public:
-		explicit PlayerPeriod(Period::Enum period = Period::PRESENT) : _period(period) { _colorIterator = COLORS.begin(); }
-
-		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
-		Component* clone() const { return new PlayerPeriod(_period); }
-
-		void setPeriod(Period::Enum period) { _period = period; }
-		Period::Enum getPeriod() const { return _period; }
-		const Color& getNextColor();
-		void changePeriod(Period::Enum period);
-
-		static const Hash TYPE;
-	private:
-		Period::Enum _period;
-		ColorIterator _colorIterator;
-
-		static const ColorList COLORS;
-
-		friend class SerializationAccess;
-	};
-
-	/**********************************************************************************************
-	* Temporal Period
-	*********************************************************************************************/
 	class TemporalPeriod : public Component
 	{
 	public:
 		explicit TemporalPeriod(Period::Enum period = Period::PRESENT, Hash futureSelfId = Hash::INVALID, bool createFutureSelf = false, bool syncFutureSelf = false) :
-			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _syncFutureSelf(syncFutureSelf) {}
+			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _syncFutureSelf(syncFutureSelf), _isMoving(false){}
 
 		void handleMessage(Message& message);
 		Hash getType() const { return TYPE; }
@@ -80,10 +36,13 @@ namespace Temporal
 		Hash _editorFutureSelfId;
 		bool _createFutureSelf;
 		bool _syncFutureSelf;
-		Vector _previousPosition;
+		Vector _previousFramePosition;
+		bool _isMoving;
 
 		void entityReady();
 		void die(bool temporalDeath);
+		void endMovement(Vector presentPosition);
+		void startMovement();
 		void update();
 		void setImpulse();
 		void createFuture();
@@ -91,19 +50,6 @@ namespace Temporal
 		void addParticleEmitter(Entity& entity);
 
 		friend class SerializationAccess;
-	};
-
-	/**********************************************************************************************
-	* Temporal Notification
-	*********************************************************************************************/
-	class TemporalNotification : public Component
-	{
-	public:
-		TemporalNotification() : Component(true) {}
-
-		void handleMessage(Message& message);
-		Hash getType() const { return Hash::INVALID; }
-		Component* clone() const { return 0; }
 	};
 }
 #endif

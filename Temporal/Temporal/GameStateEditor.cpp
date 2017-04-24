@@ -5,10 +5,8 @@
 #include "SerializationAccess.h"
 #include "Grid.h"
 #include "Camera.h"
-#include "Graphics.h"
 #include "MessageUtils.h"
 #include "Utils.h"
-#include "Game.h"
 #include "Mouse.h"
 #include "ToolsUtils.h"
 #include "DebugLayer.h"
@@ -19,6 +17,7 @@
 #include "Laser.h"
 #include "Door.h"
 #include "Patrol.h"
+#include "PlayerPeriod.h"
 #include <sstream>
 
 namespace Temporal

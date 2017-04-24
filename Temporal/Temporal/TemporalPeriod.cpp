@@ -4,8 +4,9 @@
 #include "Grid.h"
 #include "PhysicsEnums.h"
 #include "Utils.h"
-#include "Fixture.h"
 #include "Transform.h"
+#include "PlayerPeriod.h"
+#include "TemporalNotification.h"
 
 namespace Temporal
 {
@@ -13,92 +14,8 @@ namespace Temporal
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	static const Hash TEMPORAL_ACTIVATION_NOTIFICATION_ID("ENT_TEMPORAL_NOTIFICATION");
 	static const Hash PARTICLE_EMITTER_ID("particle-emitter");
-	const Hash PlayerPeriod::TYPE = Hash("player-period");
 	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
-	const ColorList PlayerPeriod::COLORS = {
-		Color(0.6392156862745098f, 0.2862745098039216f, 0.6431372549019608f),
-		Color(0.2470588235294118f, 0.2823529411764706f, 0.8f),
-		Color(0.1333333333333333f, 0.6941176470588235f, 0.2980392156862745f),
-		Color(1.0f, 0.4980392156862745f, 0.1529411764705882f),
-		Color(1.0f, 0.6823529411764706f, 0.7882352941176471f),
-		Color(0.7254901960784314f, 0.4784313725490196f, 0.3411764705882353f)
-	};
 
-	bool checkFuture(Entity& entity, Period::Enum period, Hash futureEntityId)
-	{
-		OBB shape = getShape(entity);
-		FixtureList info;
-		entity.getManager().getGameState().getGrid().iterateTiles(shape, MASK, period, &info, true, true);
-		for (FixtureIterator i = info.begin(); i != info.end(); ++i)
-		{
-			if (futureEntityId != (**i).getEntityId())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**********************************************************************************************
-	* Player Period
-	*********************************************************************************************/
-	const Color& PlayerPeriod::getNextColor()
-	{
-		if (_colorIterator == COLORS.end())
-			abort();
-		const Color& color = *_colorIterator;
-		_colorIterator++;
-		return color;
-	}
-
-	void PlayerPeriod::changePeriod(Period::Enum period)
-	{
-		OBB shape = getShape(*this);
-		shape.setRadius(shape.getRadius() - 1.0f);
-		if (!getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period))
-		{
-			Hash draggableId = getHashParam(raiseMessage(Message(MessageID::GET_DRAGGABLE)));
-			if (draggableId != Hash::INVALID)
-			{
-				Entity& draggable = *getEntity().getManager().getEntity(draggableId);
-				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
-				if (!checkFuture(draggable, period, temporalPeriod.getFutureSelfId()))
-					return;
-				temporalPeriod.setPeriod(period);
-			}
-			
-			_period = period;
-			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &_period));
-			
-		}
-	}
-
-	void PlayerPeriod::handleMessage(Message& message)
-	{
-		if(message.getID() == MessageID::ENTITY_INIT)
-		{
-			getEntity().getManager().addInputComponent(this);
-			raiseMessage(Message(MessageID::SET_COLLISION_GROUP, &_period));
-		}
-		else if (message.getID() == MessageID::ENTITY_DISPOSED)
-		{
-			getEntity().getManager().removeInputComponent(this);
-		}
-		else if(message.getID() == MessageID::LEVEL_INIT)
-		{
-			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &_period));
-		}
-		else if(message.getID() == MessageID::ACTION_TEMPORAL_TRAVEL)
-		{
-			Period::Enum period = _period == Period::PRESENT ? Period::PAST : Period::PRESENT;
-			changePeriod(period);
-		}
-	}
-
-	/**********************************************************************************************
-	* Temporal Period
-	*********************************************************************************************/
 	void TemporalPeriod::temporalPeriodChanged(Period::Enum period)
 	{
 		float alpha;
@@ -228,22 +145,42 @@ namespace Temporal
 	{
 		if (_futureSelfId != Hash::INVALID && _syncFutureSelf)
 		{
-			Vector position = getPosition(*this);
-			const Vector& futurePosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-			if (_previousPosition == futurePosition && futurePosition != position)
+			Vector presentPosition = getPosition(*this);
+			if (_isMoving)
 			{
-				bool b = checkFuture(getEntity(), Period::PRESENT, _futureSelfId);
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &b));
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &b));
-				getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
+				if (_previousFramePosition == presentPosition)
+				{
+					endMovement(presentPosition);
+				}
 			}
-			else if (futurePosition != position)
+			else
 			{
-				_previousPosition = Vector::Zero;
+				const Vector& futureSelfPosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
+				if (_previousFramePosition == futureSelfPosition && _previousFramePosition != presentPosition)
+				{
+					startMovement();
+				}
 			}
 
-			_previousPosition = position;
+			_previousFramePosition = presentPosition;
 		}
+	}
+
+	void TemporalPeriod::endMovement(Vector presentPosition)
+	{
+		bool isFutureBlocked = iterateTiles(getEntity(), MASK, Period::PRESENT, _futureSelfId);
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &isFutureBlocked));
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &isFutureBlocked));
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &presentPosition));
+		_isMoving = false;
+	}
+
+	void TemporalPeriod::startMovement()
+	{
+		_isMoving = true;
+		bool falseValue = false;
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &falseValue));
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &falseValue));
 	}
 
 	void TemporalPeriod::setImpulse()
@@ -289,20 +226,5 @@ namespace Temporal
 		period._syncFutureSelf = _syncFutureSelf;
 		clone->setId(_futureSelfId);
 		getEntity().getManager().add(clone);
-	}
-
-	/**********************************************************************************************
-	* Temporal Notification
-	*********************************************************************************************/
-	void TemporalNotification::handleMessage(Message& message)
-	{
-		if (message.getID() == MessageID::ENTITY_READY)
-		{
-			raiseMessage(Message(MessageID::START_EMITTER));
-		}
-		else if (message.getID() == MessageID::EMITTER_FINISHED)
-		{
-			getEntity().getManager().remove(getEntity().getId());
-		}
 	}
 }
