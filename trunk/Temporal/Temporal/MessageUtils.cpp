@@ -59,12 +59,20 @@ namespace Temporal
 		return entity.getManager().getGameState().getGrid().cast(orientedOffsetPosition, orientedRayDirection, result, mask, group);
 	}
 
-	bool iterateTiles(Entity& entity, const Vector& radius, int mask, FixtureList* result)
+	bool iterateTiles(Entity& entity, int mask, int group, Hash excludeId)
 	{
-		const Vector& position = getPosition(entity);
-		OBB shape = OBBAABB(position, radius);
-		int group = getIntParam(entity.handleMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		return entity.getManager().getGameState().getGrid().iterateTiles(shape, mask, group, result);
+		OBB shape = getShape(entity);
+		FixtureList fixtureList;
+		entity.getManager().getGameState().getGrid().iterateTiles(shape, mask, group, &fixtureList, true, true);
+
+		for (FixtureIterator i = fixtureList.begin(); i != fixtureList.end(); ++i)
+		{
+			if (excludeId != (**i).getEntityId())
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	Hash getHashParam(void* data)

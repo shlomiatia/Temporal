@@ -272,6 +272,15 @@
     <ClInclude Include="NavigatorSkipBox.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerPeriod.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptsEnums.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporalNotification.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -520,6 +529,12 @@
     </ClCompile>
     <ClCompile Include="NavigatorSkipBox.cpp">
       <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPeriod.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporalNotification.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
