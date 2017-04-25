@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LEDGEDETECTOR_H
+#define LEDGEDETECTOR_H
 
 #include "Hash.h"
 #include "Sensor.h"
@@ -35,3 +36,5 @@ namespace Temporal
 		void handleFrontCheckY(float y);
 	};
 }
+
+#endif

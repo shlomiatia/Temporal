@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JUMPINFO_H
+#define JUMPINFO_H
 
 #include "Hash.h"
 
@@ -23,3 +24,5 @@ namespace Temporal
 		JumpInfo& operator=(const JumpInfo&);
 	};
 }
+
+#endif

@@ -290,6 +290,12 @@
     <ClInclude Include="LedgeDetector.h">
       <Filter>Scripts\ActionController</Filter>
     </ClInclude>
+    <ClInclude Include="CommonMessagesHandler.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="Ids.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -549,6 +555,9 @@
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
     <ClCompile Include="LedgeDetector.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonMessagesHandler.cpp">
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
   </ItemGroup>

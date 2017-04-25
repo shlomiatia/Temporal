@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JUMPINFOBYTYPEPROVIDER_H
+#define JUMPINFOBYTYPEPROVIDER_H
 
 #include "JumpInfo.h"
 #include "ScriptsEnums.h"
@@ -24,3 +25,5 @@ namespace Temporal
 		friend class SerializationAccess;
 	};
 }
+
+#endif
