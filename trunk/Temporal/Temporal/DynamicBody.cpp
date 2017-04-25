@@ -15,8 +15,6 @@ namespace Temporal
 {
 	const Hash DynamicBody::TYPE = Hash("dynamic-body");
 
-	static const int COLLISION_MASK = CollisionCategory::OBSTACLE;
-
 	Vector DynamicBody::GRAVITY(0.0f, -1200.0f);
 
 	float getMaxMovementStepSize(const Fixture& fixture)
@@ -73,7 +71,6 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
 			_maxMovementStepSize = getMaxMovementStepSize(*_fixture);
-			_collisionMask |= COLLISION_MASK;
 		}
 		else if(message.getID() == MessageID::GET_VELOCITY)
 		{
@@ -97,7 +94,6 @@ namespace Temporal
 			const Vector& param = getVectorParam(message.getParam());
 			Vector impulse = Vector(param.getX() * getOrientation(*this), param.getY());
 			_velocity = impulse;
-			
 		}
 		else if(message.getID() == MessageID::SET_BODY_ENABLED)
 		{
@@ -107,6 +103,11 @@ namespace Temporal
 		else if (message.getID() == MessageID::SET_GRAVITY_ENABLED)
 		{
 			_gravityEnabled= getBoolParam(message.getParam());
+		}
+		else if (message.getID() == MessageID::REMOVE_FROM_COLLISION_MASK)
+		{
+			int collisionCategory = getIntParam(message.getParam());
+			_collisionMask &= ~collisionCategory;
 		}
 		else if (message.getID() == MessageID::SET_TANGIBLE)
 		{
@@ -353,7 +354,7 @@ namespace Temporal
 		modifyVelocity(collision);
 		if (collision != Vector::Zero)
 		{
-			raiseMessage(Message(MessageID::BODY_COLLISION, &collision));
+			raiseMessage(Message(MessageID::COLLISIONS_CORRECTED, &collision));
 		}
 	}
 
@@ -362,16 +363,19 @@ namespace Temporal
 		Vector correction = Vector::Zero;
 		if (_fixture != staticBodyBounds && staticBodyBounds->isTangible() && intersects(dynamicBodyBounds.getOBB(), staticBodyBounds->getGlobalShape(), &correction))
 		{
-			if(fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
+			if (fabsf(correction.getX()) > EPSILON || fabsf(correction.getY()) > EPSILON)
+			{
 				correctCollision(dynamicBodyBounds, staticBodyBounds, correction, collision, movement);
+			}	
 		}
 	}
 
 	void DynamicBody::correctCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement)
 	{
 		modifyCorrection(dynamicBodyBounds, staticBodyBounds, correction, movement);
-		
 		dynamicBodyBounds.getOBB().translate(correction);
+
+		getEntity().getManager().sendMessageToEntity(staticBodyBounds->getEntityId(), Message(MessageID::COLLIDED_BY_ENTITY, &correction));
 		collision -= correction;
 	}
 

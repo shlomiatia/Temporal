@@ -23,7 +23,7 @@ namespace Temporal
 			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(_speedPerSecond, 0.0f)));
 			setColor();
 		}
-		else if (message.getID() == MessageID::BODY_COLLISION)
+		else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
 		{
 			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
 		}

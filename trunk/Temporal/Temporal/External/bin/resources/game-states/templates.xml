@@ -1,6 +1,6 @@
 <entity id="ENT_COVER">
 	<transform />
-	<collision-filter category="2" />
+	<collision-filter category="1024" />
 	<static-body>
 		<fixture>
 			<obb angle="0">
@@ -26,8 +26,8 @@
 </entity>
 <entity id="ENT_BOX">
 	<transform />
-	<collision-filter category="129" />
-	<dynamic-body collision-mask="12">
+	<collision-filter category="130" />
+	<dynamic-body collision-mask="15">
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
@@ -42,7 +42,7 @@
 	<collision-filter category="4" />
 	<patrol />
 	<navigator />
-	<dynamic-body>
+	<dynamic-body collision-mask="3">
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
@@ -50,7 +50,7 @@
 			</obb>
 		</fixture>
 	</dynamic-body>
-	<sensor id="SNS_LEDGE" category-mask="1">
+	<sensor id="SNS_LEDGE" category-mask="3">
 		<fixture is-enabled="1">
 			<obb angle="0.000000">
 				<center x="10.000000" y="0.000000"/>
@@ -58,7 +58,7 @@
 			</obb>
 		</fixture>
 	</sensor>
-	<sensor id="SNS_FRONT_EDGE" category-mask="1">
+	<sensor id="SNS_FRONT_EDGE" category-mask="3">
 		<fixture>
 			<obb angle="0">
 				<center x="15" y="-45" />
@@ -154,7 +154,7 @@
 	<transform />
 	<collision-filter />
 	<laser />
-	<dynamic-body gravity-enabled="false">
+	<dynamic-body collision-mask="3" gravity-enabled="false">
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
@@ -205,6 +205,14 @@
 	<light>
 		<color r="0.5" g="0.5" b="0.5" />
 	</light>
+	<static-body>
+		<fixture>
+            <obb angle="0">
+				<center x="0" y="0" />
+				<radius x="16" y="16" />
+			</obb>
+		</fixture>
+	</static-body>
 	<renderer layer="65" sprite-sheet="resources/spritesheets/emitter.xml">
  		<scene-node id="SCN_ROOT" sprite-group="SCN_EMITTER">
 				<translation x="0" y="-8" />
