@@ -20,7 +20,7 @@ namespace Temporal
 			{
 				update();
 			}
-			else if (message.getID() == MessageID::BODY_COLLISION)
+			else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
 			{
 				const Vector& collision = getVectorParam(message.getParam());
 				if (collision.getX() != 0.0f && collision.getY() == 0.0f)

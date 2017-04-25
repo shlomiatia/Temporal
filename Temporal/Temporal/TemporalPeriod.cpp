@@ -143,25 +143,13 @@ namespace Temporal
 
 	void TemporalPeriod::update()
 	{
-		if (_futureSelfId != Hash::INVALID && _syncFutureSelf)
+		if (_futureSelfId != Hash::INVALID && _syncFutureSelf && _isMoving)
 		{
 			Vector presentPosition = getPosition(*this);
-			if (_isMoving)
+			if (_previousFramePosition == presentPosition)
 			{
-				if (_previousFramePosition == presentPosition)
-				{
-					endMovement(presentPosition);
-				}
+				endMovement(presentPosition);
 			}
-			else
-			{
-				const Vector& futureSelfPosition = getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION)));
-				if (_previousFramePosition == futureSelfPosition && _previousFramePosition != presentPosition)
-				{
-					startMovement();
-				}
-			}
-
 			_previousFramePosition = presentPosition;
 		}
 	}
@@ -172,6 +160,7 @@ namespace Temporal
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &isFutureBlocked));
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &isFutureBlocked));
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &presentPosition));
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::START_EMITTER));
 		_isMoving = false;
 	}
 
@@ -179,19 +168,19 @@ namespace Temporal
 	{
 		_isMoving = true;
 		bool falseValue = false;
+		TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(TemporalPeriod::TYPE));
+		future.setPeriod(Period::PRESENT);
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &falseValue));
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &falseValue));
+		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::START_EMITTER));
 	}
 
 	void TemporalPeriod::setImpulse()
 	{
 		Vector position = getPosition(*this);
-		if (_syncFutureSelf && _futureSelfId != Hash::INVALID && position != getVectorParam(getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::GET_POSITION))))
+		if (_syncFutureSelf && _futureSelfId != Hash::INVALID && !_isMoving)
 		{
-			TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(TemporalPeriod::TYPE));
-			future.setPeriod(Period::PRESENT);
-			getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_POSITION, &position));
-			getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::START_EMITTER));
+			startMovement();
 		}
 	}
 
