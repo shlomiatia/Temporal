@@ -6,29 +6,10 @@
 #include "StateMachineComponent.h"
 #include "Sensor.h"
 #include "LedgeDetector.h"
+#include "CommonMessagesHandler.h"
 
 namespace Temporal
 {
-	class CommonMessagesHandler
-	{
-	public:
-		CommonMessagesHandler(StateMachineComponent& controller) : _controller(controller), _isDescending(false), _isActivating(false), _isTakingDown(false) {}
-
-		bool handleStandWalkMessage(Message& message);
-		bool handleFallJumpMessage(Message& message);
-		bool handleDragMessage(Message& message);
-		void handleMessage(Message& message);
-		void handleDragEnter();
-		void die();
-
-	private:
-		bool _isDescending;
-		bool _isActivating;
-		bool _isTakingDown;
-
-		StateMachineComponent& _controller;
-	};
-
 	/**********************************************************************************************
 	 * Action controller
 	 *********************************************************************************************/
@@ -51,6 +32,8 @@ namespace Temporal
 		static float JUMP_STOP_MODIFIER;
 		static float MAX_WALK_JUMP_MODIFIER;
 		static const Hash TYPE;
+
+		static ActionController& getActionController(StateMachineComponent* stateMachine);
 
 		const Vector& getHangDescendOriginalTranslation() const { return _hangDescendOriginalTranslation; }
 		void setHangDescendOriginalTranslation(const Vector& value) { _hangDescendOriginalTranslation = value; }

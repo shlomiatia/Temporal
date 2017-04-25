@@ -14,6 +14,7 @@
     <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CommonMessagesHandler.h" />
     <ClInclude Include="ComponentEditors.h" />
     <ClInclude Include="DebugLayer.h" />
     <ClInclude Include="Delegate.h" />
@@ -25,6 +26,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateEditor.h" />
     <ClInclude Include="GraphicsEnums.h" />
+    <ClInclude Include="Ids.h" />
     <ClInclude Include="InputEnums.h" />
     <ClInclude Include="JumpInfo.h" />
     <ClInclude Include="JumpInfoByTypeProvider.h" />
@@ -114,6 +116,7 @@
     <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CommonMessagesHandler.cpp" />
     <ClCompile Include="ComponentEditors.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Door.cpp" />
