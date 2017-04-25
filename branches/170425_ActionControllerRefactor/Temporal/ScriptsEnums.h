@@ -13,6 +13,15 @@ namespace Temporal
 			FUTURE = 2
 		};
 	}
+
+	namespace JumpType
+	{
+		enum Enum
+		{
+			UP,
+			FORWARD
+		};
+	}
 }
 
 #endif

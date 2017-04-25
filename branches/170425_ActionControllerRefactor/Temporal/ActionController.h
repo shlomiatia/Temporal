@@ -3,96 +3,16 @@
 
 #include "Vector.h"
 #include "Hash.h"
-#include "BaseEnums.h"
 #include "StateMachineComponent.h"
 #include "Sensor.h"
+#include "LedgeDetector.h"
 
 namespace Temporal
 {
-	/**********************************************************************************************
-	 * Helper classes
-	 *********************************************************************************************/
-	class JumpInfo
+	class CommonMessagesHandler
 	{
 	public:
-		JumpInfo(float angle, Hash jumpAnimation, Hash endAnimation)
-			: _angle(angle), _jumpAnimation(jumpAnimation), _endAnimation(endAnimation) {}
-
-		float getAngle() const { return _angle; }
-		Hash getJumpAnimation() const { return _jumpAnimation; }
-		Hash getEndAnimation() const { return _endAnimation; }
-
-	private:
-		float _angle;
-		Hash _jumpAnimation;
-		Hash _endAnimation;
-
-		JumpInfo(const JumpInfo&);
-		JumpInfo& operator=(const JumpInfo&);
-	};
-
-	namespace JumpType
-	{
-		enum Enum
-		{
-			UP,
-			FORWARD
-		};
-	}
-
-	class JumpHelper
-	{
-	public:
-		explicit JumpHelper(JumpType::Enum type) : _type(type) {}
-
-		JumpType::Enum getType() const { return _type; }
-		const JumpInfo& getInfo() const { return _type == JumpType::UP ? JUMP_UP_INFO : JUMP_FORWARD_INFO; }
-	private:
-		static const JumpInfo JUMP_UP_INFO;
-		static const JumpInfo JUMP_FORWARD_INFO;
-
-		JumpType::Enum _type;
-
-		JumpHelper(const JumpHelper&);
-		JumpHelper& operator=(const JumpHelper&);
-
-		friend class SerializationAccess;
-	};
-
-	class LedgeDetector : public ContactListener
-	{
-	public:
-		explicit LedgeDetector(Hash sensorId, Component& owner)
-			: ContactListener(sensorId, owner), _up(0), _upFailed(false), _down(0), _downFailed(false), _front(0), _frontFailed(false), _height(0.0f), _max(0.0f), _body(0), _side(Side::LEFT) {}
-
-	protected:
-		void start();
-		void handle(const Contact& contact);
-		void end();
-
-	private:
-		Fixture* _up;
-		bool _upFailed;
-		Fixture* _down;
-		bool _downFailed;
-		Fixture* _front;
-		bool _frontFailed;
-		float _height;
-		float _max;
-		OBBAABBWrapper _body;
-		Side::Enum _side;
-
-		void handleUp(const Contact& contact);
-		void handleDown(const Contact& contact);
-		void handleFront(const Contact& contact);
-
-		void handleFrontCheckY(float y);
-	};
-
-	class HandleMessageHelper
-	{
-	public:
-		HandleMessageHelper(StateMachineComponent& controller) : _controller(controller), _isDescending(false), _isActivating(false), _isTakingDown(false) {}
+		CommonMessagesHandler(StateMachineComponent& controller) : _controller(controller), _isDescending(false), _isActivating(false), _isTakingDown(false) {}
 
 		bool handleStandWalkMessage(Message& message);
 		bool handleFallJumpMessage(Message& message);
@@ -119,7 +39,7 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 
-		HandleMessageHelper& getHandleMessageHelper() { return _handleMessageHelper; }
+		CommonMessagesHandler& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND, getCurrentStateID()); }
@@ -146,7 +66,7 @@ namespace Temporal
 
 	private:
 		LedgeDetector _ledgeDetector;
-		HandleMessageHelper _handleMessageHelper;
+		CommonMessagesHandler _handleMessageHelper;
 		Vector _hangDescendOriginalTranslation;
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
