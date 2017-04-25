@@ -26,9 +26,12 @@
     <ClInclude Include="GameStateEditor.h" />
     <ClInclude Include="GraphicsEnums.h" />
     <ClInclude Include="InputEnums.h" />
+    <ClInclude Include="JumpInfo.h" />
+    <ClInclude Include="JumpInfoByTypeProvider.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="LedgeDetector.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Mouse.h" />
@@ -120,9 +123,11 @@
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateEditor.cpp" />
+    <ClCompile Include="JumpInfoByTypeProvider.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="LedgeDetector.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Mouse.cpp" />
