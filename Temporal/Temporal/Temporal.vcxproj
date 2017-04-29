@@ -11,9 +11,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionControllerAim.h" />
+    <ClInclude Include="ActionControllerClimb.h" />
+    <ClInclude Include="ActionControllerDead.h" />
+    <ClInclude Include="ActionControllerDescend.h" />
+    <ClInclude Include="ActionControllerDie.h" />
+    <ClInclude Include="ActionControllerDragBackwards.h" />
+    <ClInclude Include="ActionControllerDragForward.h" />
+    <ClInclude Include="ActionControllerDragStand.h" />
+    <ClInclude Include="ActionControllerFall.h" />
+    <ClInclude Include="ActionControllerFire.h" />
+    <ClInclude Include="ActionControllerHang.h" />
+    <ClInclude Include="ActionControllerInvestigate.h" />
+    <ClInclude Include="ActionControllerJump.h" />
+    <ClInclude Include="ActionControllerJumpEnd.h" />
+    <ClInclude Include="ActionControllerStand.h" />
+    <ClInclude Include="ActionControllerTakedown.h" />
+    <ClInclude Include="ActionControllerTurn.h" />
+    <ClInclude Include="ActionControllerWalk.h" />
     <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CommonMessagesHandler.h" />
     <ClInclude Include="ComponentEditors.h" />
     <ClInclude Include="DebugLayer.h" />
     <ClInclude Include="Delegate.h" />
@@ -25,10 +44,14 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateEditor.h" />
     <ClInclude Include="GraphicsEnums.h" />
+    <ClInclude Include="Ids.h" />
     <ClInclude Include="InputEnums.h" />
+    <ClInclude Include="JumpInfo.h" />
+    <ClInclude Include="JumpInfoByTypeProvider.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="LedgeDetector.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Mouse.h" />
@@ -107,10 +130,29 @@
     <ClInclude Include="VisibilityGem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionControllerAim.cpp" />
+    <ClCompile Include="ActionControllerClimb.cpp" />
+    <ClCompile Include="ActionControllerDead.cpp" />
+    <ClCompile Include="ActionControllerDescend.cpp" />
+    <ClCompile Include="ActionControllerDie.cpp" />
+    <ClCompile Include="ActionControllerDragBackwards.cpp" />
+    <ClCompile Include="ActionControllerDragForward.cpp" />
+    <ClCompile Include="ActionControllerDragStand.cpp" />
+    <ClCompile Include="ActionControllerFall.cpp" />
+    <ClCompile Include="ActionControllerFire.cpp" />
+    <ClCompile Include="ActionControllerHang.cpp" />
+    <ClCompile Include="ActionControllerInvestigate.cpp" />
+    <ClCompile Include="ActionControllerJump.cpp" />
+    <ClCompile Include="ActionControllerJumpEnd.cpp" />
+    <ClCompile Include="ActionControllerStand.cpp" />
+    <ClCompile Include="ActionControllerTakedown.cpp" />
+    <ClCompile Include="ActionControllerTurn.cpp" />
+    <ClCompile Include="ActionControllerWalk.cpp" />
     <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CommonMessagesHandler.cpp" />
     <ClCompile Include="ComponentEditors.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Door.cpp" />
@@ -120,9 +162,11 @@
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateEditor.cpp" />
+    <ClCompile Include="JumpInfoByTypeProvider.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="LedgeDetector.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Mouse.cpp" />
