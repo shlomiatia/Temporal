@@ -296,6 +296,60 @@
     <ClInclude Include="Ids.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="ActionControllerStand.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerFall.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerWalk.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerTurn.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerJump.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerJumpEnd.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerHang.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerClimb.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDescend.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerTakedown.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDie.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDead.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerAim.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerFire.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDragStand.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDragForward.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerDragBackwards.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionControllerInvestigate.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -558,6 +612,60 @@
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
     <ClCompile Include="CommonMessagesHandler.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerStand.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerFall.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerWalk.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerTurn.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerJump.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerJumpEnd.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerHang.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerClimb.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDescend.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerTakedown.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDie.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDead.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerAim.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerFire.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDragStand.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDragForward.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerDragBackwards.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionControllerInvestigate.cpp">
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
   </ItemGroup>
