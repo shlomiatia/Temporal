@@ -11,6 +11,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionControllerAim.h" />
+    <ClInclude Include="ActionControllerClimb.h" />
+    <ClInclude Include="ActionControllerDead.h" />
+    <ClInclude Include="ActionControllerDescend.h" />
+    <ClInclude Include="ActionControllerDie.h" />
+    <ClInclude Include="ActionControllerDragBackwards.h" />
+    <ClInclude Include="ActionControllerDragForward.h" />
+    <ClInclude Include="ActionControllerDragStand.h" />
+    <ClInclude Include="ActionControllerFall.h" />
+    <ClInclude Include="ActionControllerFire.h" />
+    <ClInclude Include="ActionControllerHang.h" />
+    <ClInclude Include="ActionControllerInvestigate.h" />
+    <ClInclude Include="ActionControllerJump.h" />
+    <ClInclude Include="ActionControllerJumpEnd.h" />
+    <ClInclude Include="ActionControllerStand.h" />
+    <ClInclude Include="ActionControllerTakedown.h" />
+    <ClInclude Include="ActionControllerTurn.h" />
+    <ClInclude Include="ActionControllerWalk.h" />
     <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
@@ -112,6 +130,24 @@
     <ClInclude Include="VisibilityGem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionControllerAim.cpp" />
+    <ClCompile Include="ActionControllerClimb.cpp" />
+    <ClCompile Include="ActionControllerDead.cpp" />
+    <ClCompile Include="ActionControllerDescend.cpp" />
+    <ClCompile Include="ActionControllerDie.cpp" />
+    <ClCompile Include="ActionControllerDragBackwards.cpp" />
+    <ClCompile Include="ActionControllerDragForward.cpp" />
+    <ClCompile Include="ActionControllerDragStand.cpp" />
+    <ClCompile Include="ActionControllerFall.cpp" />
+    <ClCompile Include="ActionControllerFire.cpp" />
+    <ClCompile Include="ActionControllerHang.cpp" />
+    <ClCompile Include="ActionControllerInvestigate.cpp" />
+    <ClCompile Include="ActionControllerJump.cpp" />
+    <ClCompile Include="ActionControllerJumpEnd.cpp" />
+    <ClCompile Include="ActionControllerStand.cpp" />
+    <ClCompile Include="ActionControllerTakedown.cpp" />
+    <ClCompile Include="ActionControllerTurn.cpp" />
+    <ClCompile Include="ActionControllerWalk.cpp" />
     <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="Button.cpp" />
