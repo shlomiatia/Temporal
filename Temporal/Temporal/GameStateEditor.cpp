@@ -5,19 +5,21 @@
 #include "SerializationAccess.h"
 #include "Grid.h"
 #include "Camera.h"
+#include "Graphics.h"
 #include "MessageUtils.h"
 #include "Utils.h"
+#include "Game.h"
 #include "Mouse.h"
 #include "ToolsUtils.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
 #include "ComponentEditors.h"
+#include "MovingPlatform.h"
 #include "Button.h"
 #include "Lighting.h"
 #include "Laser.h"
 #include "Door.h"
 #include "Patrol.h"
-#include "PlayerPeriod.h"
 #include <sstream>
 
 namespace Temporal
@@ -203,6 +205,11 @@ namespace Temporal
 				return;
 			
 			ComponentList components;
+			MovingPlatform* platform = static_cast<MovingPlatform*>(getSelected()->getEntity().get(MovingPlatform::TYPE));
+			if (platform)
+			{
+				components.push_back(new MovingPlatformEditor(*platform));
+			}
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
 			if (button)
 			{

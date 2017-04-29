@@ -194,6 +194,9 @@
     <ClInclude Include="ActionController.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
     <ClInclude Include="TemporalEcho.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -238,48 +241,6 @@
     </ClInclude>
     <ClInclude Include="GraphicsEnums.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="SecurityCamera.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigationNode.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigationEdge.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigationGraphGenerator.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorWait.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorWalk.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorFall.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorJumpUp.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorJumpForward.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorDescend.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="NavigatorSkipBox.h">
-      <Filter>AI</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerPeriod.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptsEnums.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="TemporalNotification.h">
-      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +419,9 @@
     <ClCompile Include="ActionController.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="TemporalEcho.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -496,45 +460,6 @@
     </ClCompile>
     <ClCompile Include="SpriteLayer.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="SecurityCamera.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigationGraphGenerator.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigationNode.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigationEdge.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorWalk.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorWait.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorFall.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorJumpUp.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorJumpForward.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorDescend.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="NavigatorSkipBox.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerPeriod.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="TemporalNotification.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

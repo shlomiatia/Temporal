@@ -12,19 +12,22 @@ namespace Temporal
 	class Sight : public Component
 	{
 	public:
-		explicit Sight(Vector sightOffset = Vector::Zero, Vector sightSize = Vector(480.0f, 32.0f)) : _sightOffset(sightOffset), _sightSize(sightSize) {};
+		explicit Sight(Vector sightSize = Vector(480.0f, 64.0f)) :
+		  _sightSize(sightSize), _pointOfIntersection(Vector::Zero), _isSeeing(false) {};
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
 
-		Component* clone() const { return new Sight(_sightOffset, _sightSize); }
+		Component* clone() const { return new Sight(_sightSize); }
 
 		static const Hash TYPE;
 	private:
-		Vector _sightOffset;
 		Vector _sightSize;
 		
-		bool checkLineOfSight(int collisionMask);
+		Vector _pointOfIntersection;
+		bool _isSeeing;
+
+		void checkLineOfSight();
 		void drawFieldOfView(const Vector& sourcePosition, Side::Enum sourceSide) const;
 		void drawDebugInfo() const;
 

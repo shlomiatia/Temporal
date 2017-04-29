@@ -96,10 +96,7 @@ namespace Temporal
 
 		bool handleStandWalkMessage(Message& message);
 		bool handleFallJumpMessage(Message& message);
-		bool handleDragMessage(Message& message);
 		void handleMessage(Message& message);
-		void handleDragEnter();
-		void die();
 
 	private:
 		bool _isDescending;
@@ -115,14 +112,14 @@ namespace Temporal
 	class ActionController : public StateMachineComponent
 	{
 	public:
-		ActionController(float maxWalkForcePerSecond = 125.0f, Hash initialStateId = Hash::INVALID);
+		ActionController(float maxWalkForcePerSecond = 125.0f);
 
 		Hash getType() const { return TYPE; }
 
 		HandleMessageHelper& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
-		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND, getCurrentStateID()); }
+		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND); }
 
 		float MAX_WALK_FORCE_PER_SECOND;
 		static float WALK_ACC_PER_SECOND;
@@ -151,7 +148,6 @@ namespace Temporal
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
 		Hash _draggableId;
-		bool _isInvestigated;
 
 		HashStateMap getStates() const;
 
@@ -248,14 +244,7 @@ namespace Temporal
 		{
 		public:
 			void enter(void* param);
-			void handleMessage(Message& message);
-		};
-
-		class Dead : public ComponentState
-		{
-		public:
-			void enter(void* param);
-			void handleMessage(Message& message) {};
+			void handleMessage(Message& message) {}
 		};
 
 		class Aim : public ComponentState
@@ -272,28 +261,7 @@ namespace Temporal
 			void handleMessage(Message& message);
 		};
 
-		class DragStand : public ComponentState
-		{
-		public:
-			void enter(void* param);
-			void handleMessage(Message& message);
-		};
-
-		class DragForward : public ComponentState
-		{
-		public:
-			void enter(void* param);
-			void handleMessage(Message& message);
-		};
-
-		class DragBackwards : public ComponentState
-		{
-		public:
-			void enter(void* param);
-			void handleMessage(Message& message);
-		};
-
-		class Investigate : public ComponentState
+		class Drag : public ComponentState
 		{
 		public:
 			void enter(void* param);

@@ -54,7 +54,6 @@ namespace Temporal
 	class Button;
 	class Door;
 	class ParticleSample;
-	class SecurityCamera;
 
 	// Singletons
 	class GameSaverLoader;
@@ -274,7 +273,9 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade); // xml
-			serializer.serialize("composite-animator", animator._animator); // memory
+			serializer.serialize("use-animator2", animator._useAnimator2); // memory
+			serializer.serialize("composite-animator1", animator._animator1); // memory
+			serializer.serialize("composite-animator2", animator._animator2); // memory
 		}
 
 		template<class T>
@@ -352,7 +353,6 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, Sight& sight, T& serializer)
 		{
-			serializer.serialize("offset", sight._sightOffset);
 			serializer.serialize("size", sight._sightSize);
 		}
 		
@@ -386,9 +386,8 @@ namespace Temporal
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
 			serializer.serialize("period", (int&)temporalPeriod._period);
-			serializer.serialize("editor-future-self-id", temporalPeriod._editorFutureSelfId);
+			serializer.serialize("future-self-id", temporalPeriod._futureSelfId);
 			serializer.serialize("create-future-self", temporalPeriod._createFutureSelf);
-			serializer.serialize("sync-future-self", temporalPeriod._syncFutureSelf);
 		}
 		
 		template<class T>
@@ -411,7 +410,6 @@ namespace Temporal
 		static void serialize(const char* key, Patrol& component, T& serializer)
 		{
 			serializer.serialize("is-static", component._isStatic);
-			serializer.serialize("security-camera-id", component._securityCameraId);
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
 
@@ -419,7 +417,6 @@ namespace Temporal
 		static void serialize(const char* key, Navigator& navigator, T& serializer) 
 		{
 			serializer.serialize("destination", navigator._destination);
-			serializer.serialize("tracked", navigator._tracked);
 			serialize(key, (StateMachineComponent&)navigator, serializer);
 		}
 
@@ -446,11 +443,6 @@ namespace Temporal
 		static void serialize(const char* key, MovingPlatform& movingPlatform, T& serializer) 
 		{
 			serializer.serialize("movement", movingPlatform._movement);
-		}
-
-		template<class T>
-		static void serialize(const char* key, SecurityCamera& securityCamera, T& serializer)
-		{
 		}
 
 		template<class T>

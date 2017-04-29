@@ -24,28 +24,21 @@ namespace Temporal
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol(Hash securityCameraId = Hash::INVALID, bool isStatic = false, Hash initialStateId = Hash::INVALID);
+		Patrol(bool isStatic = false);
 
 		Hash getType() const { return TYPE; }
-		Component* clone() const { return new Patrol(_securityCameraId, _isStatic, getCurrentStateID()); }
+		Component* clone() const { return new Patrol(_isStatic); }
 		void handleMessage(Message& message);
 
 		static const Hash TYPE;
 
 		bool isStatic() const { return _isStatic; }
 		void setStatic(bool isStatic) { _isStatic = isStatic; }
-		Hash getSecurityCameraId() const { return _securityCameraId; }
-		void setSecurityCameraId(Hash securityCameraId) { _securityCameraId = securityCameraId; }
-
-		bool handleAlarmMessage(Message& message);
-		bool handleFireMessage(Message& message);
-		bool handleTakedownMessage(Message& message);
 	protected:
 		Hash getInitialState() const;
 
 	private:
 		bool _isStatic;
-		Hash _securityCameraId;
 		EdgeDetector _edgeDetector;
 
 		HashStateMap getStates() const;
@@ -58,20 +51,21 @@ namespace Temporal
 		class Walk : public ComponentState
 		{
 		public:
+			void enter(void* param);
 			void handleMessage(Message& message);
 		};
 
-		class Aim : public ComponentState
+		class Acquire : public ComponentState
 		{
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
 
 		private:
-			static const float AIM_TIME;
+			static const float ACQUIRE_TIME;
 		};
 
-		class Fire : public ComponentState
+		class See : public ComponentState
 		{
 		public:
 			void enter(void* param);
@@ -88,7 +82,6 @@ namespace Temporal
 		class Wait : public ComponentState
 		{
 		public:
-			void enter(void* param);
 			void handleMessage(Message& message);
 
 		private:
@@ -100,18 +93,6 @@ namespace Temporal
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
-		};
-
-		class Navigate : public ComponentState
-		{
-		public:
-			void handleMessage(Message& message);
-		};
-
-		class Dead : public ComponentState
-		{
-		public:
-			void handleMessage(Message& message) {};
 		};
 	}
 }

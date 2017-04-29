@@ -1,6 +1,7 @@
 #ifndef DYNAMICBODY_H
 #define DYNAMICBODY_H
 
+#include <vector>
 #include "Vector.h"
 #include "EntitySystem.h"
 #include "Shapes.h"
@@ -22,9 +23,8 @@ namespace Temporal
 
 		Hash getType() const { return TYPE; }
 		void handleMessage(Message& message);
-		Component* clone() const;
 
-		Fixture& getFixture() { return *_fixture; }
+		Component* clone() const;
 
 		static const Hash TYPE;
 	private:
@@ -43,18 +43,14 @@ namespace Temporal
 
 		void update(float framePeriod);
 		Vector determineMovement(float framePeriod);
-		void handleSlide(Segment groundSegment, bool isModerateGround);
-		void setGround(const Fixture* ground);
-		void handleMovingPlatform(OBBAABBWrapper dynamicBodyBounds);
-		void resetGround();
 		void walk(OBBAABBWrapper& dynamicBodyBounds, float framePeriod);
 		void executeMovement(OBBAABBWrapper& dynamicBodyBounds, Vector movement);
 		void detectCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& collision, Vector& movement);
 		void correctCollision(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& collision, Vector& movement);
 		void modifyCorrection(OBBAABBWrapper& dynamicBodyBounds, const Fixture* staticBodyBounds, Vector& correction, Vector& movement);
 		void modifyVelocity(const Vector& collision);
-		const Fixture* transitionPlatform(OBBAABBWrapper& dynamicBodyBounds, const Vector& direction, Side::Enum side, float leftPeriod);
-		void loseGround();
+		bool transitionPlatform(OBBAABBWrapper& dynamicBodyBounds, const Vector& direction, Side::Enum side, float leftPeriod);
+		void resetGround();
 
 		friend class SerializationAccess;
 	};

@@ -9,12 +9,7 @@ namespace Temporal
 		if (message.getID() == MessageID::ACTIVATE)
 		{
 			if (_target != Hash::INVALID)
-				getEntity().getManager().sendMessageToEntity(_target, message);
-		}
-		else if (message.getID() == MessageID::IS_ACTIVATED)
-		{
-			if (_target != Hash::INVALID)
-				getEntity().getManager().sendMessageToEntity(_target, message);
+				getEntity().getManager().sendMessageToEntity(_target, Message(MessageID::ACTIVATE));
 		}
 	}
 }

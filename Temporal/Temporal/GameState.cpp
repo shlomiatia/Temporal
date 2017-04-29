@@ -31,8 +31,6 @@ namespace Temporal
 		_entityTemplatesManager->init(this);
 		_entitiesManager->init(this);
 		_navigationGraph->init(this);
-
-		_entitiesManager->sendMessageToAllEntities(Message(MessageID::GAME_STATE_READY));
 	}
 
 	void GameState::update(float framePeriod)
@@ -40,7 +38,6 @@ namespace Temporal
 		HashList* updateFilter = 0;
 		if (_updateFilter.size() != 0)
 			updateFilter = &_updateFilter;
-		_entitiesManager->onNewFrame();
 		_entitiesManager->sendMessageToAllEntities(Message(MessageID::UPDATE, &framePeriod), updateFilter);	
 	}
 

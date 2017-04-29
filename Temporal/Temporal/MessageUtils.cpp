@@ -39,11 +39,6 @@ namespace Temporal
 		return *static_cast<OBB*>(component.raiseMessage(Message(MessageID::GET_SHAPE)));
 	}
 
-	const OBB& getShape(const Entity& entity)
-	{
-		return *static_cast<const OBB*>(entity.handleMessage(Message(MessageID::GET_SHAPE)));
-	}
-
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result)
 	{
 		return raycast(entity, rayDirection, mask, result, Vector::Zero);
@@ -57,22 +52,6 @@ namespace Temporal
 		Vector orientedRayDirection = Vector(rayDirection.getX() * side, rayDirection.getY());
 		Vector orientedOffsetPosition = position + Vector(positionOffset.getX() * side, positionOffset.getY());
 		return entity.getManager().getGameState().getGrid().cast(orientedOffsetPosition, orientedRayDirection, result, mask, group);
-	}
-
-	bool iterateTiles(Entity& entity, int mask, int group, Hash excludeId)
-	{
-		OBB shape = getShape(entity);
-		FixtureList fixtureList;
-		entity.getManager().getGameState().getGrid().iterateTiles(shape, mask, group, &fixtureList, true, true);
-
-		for (FixtureIterator i = fixtureList.begin(); i != fixtureList.end(); ++i)
-		{
-			if (excludeId != (**i).getEntityId())
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 
 	Hash getHashParam(void* data)

@@ -1,4 +1,5 @@
 #include "ComponentEditors.h"
+#include "MovingPlatform.h"
 #include "Shapes.h"
 #include "Graphics.h"
 #include "Utils.h"
@@ -101,6 +102,31 @@ namespace Temporal
 	}
 
 	/*
+	 * Moving platform editor
+	 */
+	Hash MovingPlatformEditor::TYPE("moving-platform-editor");
+
+	void MovingPlatformEditor::handleMessage(Message& message)
+	{
+		ComponentEditor::handleMessage(message);
+ 		if (message.getID() == MessageID::ENTITY_INIT)
+		{
+			addPanelTextBox("Movement X", Utils::toString(_movingPlatform.getMovement().getX()).c_str(), createAction1(MovingPlatformEditor, const char*, movementXChanged));
+			addPanelTextBox("Movement Y", Utils::toString(_movingPlatform.getMovement().getY()).c_str(), createAction1(MovingPlatformEditor, const char*, movementYChanged));
+		}
+	}
+
+	void MovingPlatformEditor::movementXChanged(const char* s)
+	{
+		_movingPlatform.getMovement().setX(Utils::parseFloat(s));
+	}
+
+	void MovingPlatformEditor::movementYChanged(const char* s)
+	{
+		_movingPlatform.getMovement().setY(Utils::parseFloat(s));
+	}
+
+	/*
 	 * Button editor
 	 */
 	Hash ButtonEditor::TYPE("button-editor");
@@ -192,25 +218,19 @@ namespace Temporal
 		ComponentEditor::handleMessage(message);
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
-			addPanelTextBox("Future Self", _period.getEditorFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
+			addPanelTextBox("Future Self", _period.getFutureSelfId().getString(), createAction1(TemporalPeriodEditor, const char*, futureSelfIdChanged));
 			addPanelCheckBox("Create Future Self", _period.isCreateFutureSelf(), createAction1(TemporalPeriodEditor, bool, createFutureSelfChanged));
-			addPanelCheckBox("Sync Future Self", _period.isSyncFutureSelf(), createAction1(TemporalPeriodEditor, bool, syncFutureSelfChanged));
 		}
 	}
 
 	void TemporalPeriodEditor::futureSelfIdChanged(const char* s)
 	{
-		_period.setEditorFutureSelfId(Hash(s));
+		_period.setFutureSelfId(Hash(s));
 	}
 
 	void TemporalPeriodEditor::createFutureSelfChanged(bool b)
 	{
 		_period.setCreateFutureSelf(b);
-	}
-
-	void TemporalPeriodEditor::syncFutureSelfChanged(bool b)
-	{
-		_period.setSyncFutureSelf(b);
 	}
 
 	/*
@@ -224,17 +244,11 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			addPanelCheckBox("Is Static", _patrol.isStatic(), createAction1(PatrolEditor, bool, isStaticChanged));
-			addPanelTextBox("Security Camera Id", _patrol.getSecurityCameraId().getString(), createAction1(PatrolEditor, const char*, securityCameraIdChanged));
 		}
 	}
 
 	void PatrolEditor::isStaticChanged(bool b)
 	{
 		_patrol.setStatic(b);
-	}
-
-	void PatrolEditor::securityCameraIdChanged(const char* s)
-	{
-		_patrol.setSecurityCameraId(Hash(s));
 	}
 }

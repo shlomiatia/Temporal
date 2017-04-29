@@ -18,16 +18,16 @@ namespace Temporal
 	class RayCastResult
 	{
 	public:
-		RayCastResult() : _fixture(0), _directedSegment(DirectedSegment::Zero) {}
+		RayCastResult() : _fixture(0), _point(Vector::Zero) {}
 
 		const Fixture& getFixture() const { return *_fixture; }
 		void setFixture(const Fixture* fixture) { _fixture = fixture; }
-		const DirectedSegment& getDirectedSegment() const { return _directedSegment; }
-		void setDirectedSegment(const DirectedSegment& directedSegment) { _directedSegment = directedSegment; }
+		const Vector& getPoint() const { return _point; }
+		void SetPoint(const Vector& point) { _point = point; }
 
 	private:
 		const Fixture* _fixture;
-		DirectedSegment _directedSegment;
+		Vector _point;
 	};
 
 	class Grid : public GameStateComponent
@@ -46,7 +46,7 @@ namespace Temporal
 		void remove(Fixture* body);
 
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
-		bool iterateTiles(const OBB& shape, int mask = -1, int group = -1, FixtureList* result = 0, bool checkIntersection = true, bool isIntersectsExclusive = false) const;
+		FixtureList iterateTiles(const OBB& shape, int mask = -1, int group = -1, bool checkIntersection = true) const;
 
 		void draw() const;
 

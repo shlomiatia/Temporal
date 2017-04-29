@@ -38,6 +38,7 @@ namespace Temporal
 		Color _color;
 		bool _visible;
 
+
 		void draw();
 		void draw(const SceneNode& sceneNode);
 

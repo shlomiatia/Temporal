@@ -8,18 +8,14 @@ namespace Temporal
 		enum Enum
 		{
 			NONE = 0,
-			STATIC_OBSTACLE = 1,
-			DYNAMIC_OBSTACLE = 2,
-			OBSTACLE = 3,
+			OBSTACLE = 1,
+			COVER = 2,
 			CHARACTER = 4,
 			PLAYER = 8,
 			BUTTON = 16,
 			PATROL_CONTROL = 32,
 			MOVING_PLATFORM_CONTROL = 64,
-			DRAGGABLE = 128,
-			DEAD = 256,
-			SECURITY_CAMERA_TARGET = 512,
-			COVER = 1024,
+			DRAGGABLE = 128
 		};
 	}
 }

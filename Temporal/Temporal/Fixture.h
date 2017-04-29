@@ -13,8 +13,7 @@ namespace Temporal
 	class Fixture
 	{
 	public:
-		explicit Fixture(const OBB& shape = OBB::Zero, bool isEnabled = true, bool isTangible = true) :
-			_localShape(shape), _transform(0), _filter(0), _isEnabled(isEnabled), _isTangible(isTangible) {}
+		explicit Fixture(const OBB& shape = OBB::Zero, bool isEnabled = true) : _localShape(shape), _transform(0), _filter(0), _isEnabled(isEnabled) {}
 
 		void init(const Component& parent);
 
@@ -27,8 +26,6 @@ namespace Temporal
 		bool canCollide(int mask, int group) const;
 		bool isEnabled() const { return _isEnabled; }
 		void setEnabled(bool isEnabled) { _isEnabled = isEnabled; }
-		bool isTangible() const { return _isTangible; }
-		void setTangible(bool isTangible) { _isTangible = isTangible; }
 		Hash getEntityId() const;
 
 		void update();
@@ -40,7 +37,6 @@ namespace Temporal
 		OBB _localShape; 
 		OBB _globalShape;
 		bool _isEnabled;
-		bool _isTangible;
 
 		friend class SerializationAccess;
 

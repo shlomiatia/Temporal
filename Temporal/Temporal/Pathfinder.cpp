@@ -1,12 +1,5 @@
 #include "Pathfinder.h"
-#include "NavigationEdge.h"
 #include <assert.h>
-
-#include "GameState.h"
-#include "EntitySystem.h"
-#include "StaticBody.h"
-#include "PhysicsEnums.h"
-#include "Fixture.h"
 
 namespace Temporal
 {
@@ -110,9 +103,6 @@ namespace Temporal
 			{
 				const NavigationEdge& edge = **i;
 				const NavigationNode& navigationNeighbour = edge.getTarget();
-
-				if (navigationNeighbour.isDisabled())
-					continue;
 
 				// Don't explore closed neighbours
 				if(find(closed, &navigationNeighbour))

@@ -146,41 +146,10 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
-	void EntitiesManager::onNewFrame()
+	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter) const
 	{
-		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
-		{
-			Entity* entity = i->second;
-			if (entity->isDead())
-			{
-				removeEntity(entity);
-				i = _entities.erase(i);
-				if (i == _entities.end())
-					break;
-			}
-		}
-		for (HashEntityIterator i = _entitiesToAdd.begin(); i != _entitiesToAdd.end();)
-		{
-			add(i->second);
-			i = _entitiesToAdd.erase(i);
-		}
-	}
-
-	void EntitiesManager::sendMessageToAllEntities(Message& message, const HashList* filter)
-	{
-		_iterating = true;
-		for (HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
-		{
-			Entity* entity = i->second;
-				entity->handleMessage(message, filter);
-		}
-		_iterating = false;
-	}
-
-	void EntitiesManager::removeEntity(Entity* entity)
-	{
-		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
-		delete entity;
+		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
+			(*(*i).second).handleMessage(message, filter);
 	}
 
 	void* EntitiesManager::sendMessageToEntity(Hash id, Message& message) const
@@ -198,19 +167,8 @@ namespace Temporal
 
 	void EntitiesManager::add(Entity* entity)
 	{
-		HashEntityIterator i = _entities.find(entity->getId());
-		if (i != _entities.end() || _initializing)
-		{
-			if (i->second->isDead())
-			{
-				_entitiesToAdd[entity->getId()] = entity;
-				return;
-			}
-			else
-			{
-				abort();
-			}
-		}
+		if (_entities.find(entity->getId()) != _entities.end() || _initializing)
+			abort();
 		_entities[entity->getId()] = entity;
 		entity->init(this);
 		entity->handleMessage(Message(MessageID::ENTITY_PRE_INIT));
@@ -223,15 +181,9 @@ namespace Temporal
 	{
 		HashEntityIterator i = _entities.find(id);
 		Entity* entity = i->second;
-		if (_iterating)
-		{
-			entity->setDead(true);
-		}
-		else
-		{
-			removeEntity(entity);
-			_entities.erase(i);
-		}
+		entity->handleMessage(Message(MessageID::ENTITY_DISPOSED));
+		_entities.erase(i);
+		delete entity;
 	}
 
 	void EntitiesManager::removeInputComponent(Component* component)

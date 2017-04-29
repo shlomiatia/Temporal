@@ -164,12 +164,4 @@ namespace Temporal
 
 		return true;
 	}
-
-	bool intersectsExclusive(const OBB& o1, const OBB& o2, Vector* correction)
-	{
-		Vector dummy = Vector::Zero;
-		if (!correction)
-			correction = &dummy;
-		return(intersects(o1, o2, correction) && (!equals(correction->getX(), 0.0f) || !equals(correction->getY(), 0.0f)));
-	}
 }

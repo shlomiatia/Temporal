@@ -44,10 +44,6 @@ namespace Temporal
 		{
 			_activate = !_activate;
 		}
-		else if (message.getID() == MessageID::IS_ACTIVATED)
-		{
-			message.setParam(&_activate);
-		}
 		else if (message.getID() == MessageID::SET_ALPHA)
 		{
 			float alpha = getFloatParam(message.getParam());
@@ -118,8 +114,8 @@ namespace Temporal
 
 		OBB lightBounds = OBBAABB(position, Vector(_radius, _radius));
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		FixtureList result;
-		getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE, sourceCollisionGroup, &result);
+		FixtureList result = getEntity().getManager().getGameState().getGrid().iterateTiles(lightBounds, CollisionCategory::OBSTACLE, sourceCollisionGroup);
+
 		for(FixtureIterator i = result.begin(); i != result.end(); ++i)
 		{
 			drawShadow(position, (**i).getGlobalShape());

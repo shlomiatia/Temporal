@@ -15,21 +15,15 @@ namespace Temporal
 	class Fixture;
 	class Entity;
 	class RayCastResult;
-
-	typedef std::vector<const Fixture*> FixtureList;
-	typedef FixtureList::const_iterator FixtureIterator;
-	
 	namespace MouseButton { enum Enum; }
 
 	const Vector& getPosition(const Component& component);
 	const Vector& getPosition(const Entity& entity);
 	Side::Enum getOrientation(const Component& component);
-	Side::Enum getOrientation(const Entity& entity);
+	Side::Enum getOrientation(const Entity& component);
 	const OBB& getShape(const Component& component);
-	const OBB& getShape(const Entity& entity);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result);
 	bool raycast(Entity& entity, const Vector& rayDirection, int mask, RayCastResult& result, const Vector& positionOffset);
-	bool iterateTiles(Entity& entity, int mask, int group, Hash excludeId);
 
 	Hash getHashParam(void* data);
 	const Vector& getVectorParam(void* data);
@@ -109,24 +103,5 @@ namespace Temporal
 	};
 
 	inline AnimationParams& getAnimationParams(void* data) { return *static_cast<AnimationParams*>(data); }
-
-	class SourceTargetParams
-	{
-	public:
-		explicit SourceTargetParams(Hash sourceId, Hash targetId) :
-			_sourceId(sourceId), _targetId(targetId) {}
-
-		Hash getSourceId() const { return _sourceId; }
-		Hash getTargetId() const { return _targetId; }
-
-	private:
-		Hash _sourceId;
-		Hash _targetId;
-
-		SourceTargetParams(const SourceTargetParams&);
-		SourceTargetParams& operator=(const SourceTargetParams&);
-	};
-
-	inline SourceTargetParams& getSourceTargetParams(void* data) { return *static_cast<SourceTargetParams*>(data); }
 }
 #endif

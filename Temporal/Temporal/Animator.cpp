@@ -53,9 +53,11 @@ namespace Temporal
 		_animationId = animationId;
 		_isRewind = isRewind;
 		_weight = weight;
-		int frames = animationId == Hash::INVALID ? 0 : _owner->getAnimation(_animationId).getFrames();
-		float time = frameToTime(normalizedTime * frames);
-		_timer.reset(time);
+		if(normalizedTime != -1.0f)
+		{
+			float time = frameToTime(normalizedTime * _owner->getAnimation(_animationId).getFrames());	
+			_timer.reset(time); 
+		}
 	}
 
 	float SingleAnimator::getNormalizedTime() const
@@ -100,7 +102,7 @@ namespace Temporal
 		float interpolation = animationDuration == 0 ? 0 : (sampleDuration == 0 ? sampleOffset / animationDuration : sampleOffset / sampleDuration);
 
 		lerp(interpolation, sceneNode, currentSample->getRotation(), nextSample->getRotation(), currentSample->getTranslation(), nextSample->getTranslation(), srt);
-		srt.setSpriteGroupId(currentSample->getSpriteGroupId());
+		//srt.setSpriteGroupId(currentSample->getSpriteGroupId());
 
 		return true;
 	}
@@ -201,7 +203,8 @@ namespace Temporal
 		if(message.getID() == MessageID::ENTITY_INIT)
 		{
 			_animationSet = ResourceManager::get().getAnimationSet(_animationSetFile.c_str());
-			_animator.init(*this);
+			_animator1.init(*this);
+			_animator2.init(*this);
 		}
 		else if(message.getID() == MessageID::ENTITY_POST_INIT)
 		{
@@ -222,18 +225,18 @@ namespace Temporal
 		{
 			int index = getIntParam(message.getParam());
 			float time = frameToTime(static_cast<float>(index));
-			_animator.setTime(time);
+			getCurrentAnimator().setTime(time);
 		}
 		else if(message.getID() == MessageID::GET_ANIMATION_NORMALIZED_TIME)
 		{
-			*static_cast<float*>(message.getParam()) = _animator.getNormalizedTime();
+			*static_cast<float*>(message.getParam()) = getCurrentAnimator().getNormalizedTime();
 		}
 		else if(message.getID() == MessageID::UPDATE)
 		{
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
-				_animator.update(framePeriod);
+				getCurrentAnimator().update(framePeriod);
 			}
 
 			update();
@@ -242,18 +245,27 @@ namespace Temporal
 
 	void Animator::reset(AnimationParams& animationParams)
 	{
-		bool mainLayer = animationParams.getLayer() == 0;
-		for (SceneNodeIterator i = _sceneNodes.begin(); i != _sceneNodes.end(); ++i)
+		const Animation& nextAnimation = _animationSet->get(animationParams.getAnimationId());
+		bool mainLayer = animationParams.getLayer() == 0.0f;
+		bool previousCrossFadeFinished = getCurrentAnimator().getTime() > CROSS_FADE_DURATION || !getPreviousAnimator().isCrossFade();
+		bool isCrossFade = !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && nextAnimation.isCrossFade();
+		if(mainLayer)
 		{
-			SceneNode& sceneNode = **i;
-			SRT& srt = _previous[sceneNode.getID()];
-			srt.setRotation(sceneNode.getRotation());
-			srt.setTranslation(sceneNode.getTranslation());
-			srt.setSpriteGroupId(sceneNode.getSpriteGroupId());
+			if(!isCrossFade)
+			{
+				getPreviousAnimator().reset();
+			}
+			else if(previousCrossFadeFinished || !getPreviousAnimator().isActive())
+			{
+				_useAnimator2 = !_useAnimator2;
+			}
 		}
-		_isCrossFade = _isInitialized && !_isDisableCrossFade && _animator.isCrossFade() && getAnimation(animationParams.getAnimationId()).isCrossFade();
-		_isInitialized = true;
-		_animator.reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), animationParams.getNormalizedTime());
+		float normalizedTime = -1.0f;
+		if(!mainLayer || !isCrossFade || previousCrossFadeFinished)
+		{
+			normalizedTime = animationParams.getNormalizedTime();
+		}
+		getCurrentAnimator().reset(animationParams.getAnimationId(), animationParams.isRewind(), animationParams.getLayer(), animationParams.getWeight(), normalizedTime);
 		if(mainLayer)
 			update();
 	}
@@ -266,29 +278,35 @@ namespace Temporal
 
 			SRT currentSRT;
 
-			if(!_animator.animate(sceneNode, currentSRT))
+			if(!getCurrentAnimator().animate(sceneNode, currentSRT))
 				continue;
 			
-			float time = _animator.getTime();
-			if (_isCrossFade && time <= CROSS_FADE_DURATION)
+			float time = getCurrentAnimator().getTime();
+			if(isCrossFade() && time <= CROSS_FADE_DURATION)
 			{
-				SRT& previousSRT = _previous[sceneNode.getID()];
- 				
+ 				SRT previousSRT;
+				getPreviousAnimator().animate(sceneNode, previousSRT);
+
 				float interpolation = time / CROSS_FADE_DURATION;
 
 				lerp(interpolation, sceneNode, previousSRT.getRotation(), currentSRT.getRotation(), previousSRT.getTranslation(), currentSRT.getTranslation(), currentSRT);
 			}
 
-			if(currentSRT.getSpriteGroupId() != Hash::INVALID)
+			/*if(currentSRT.getSpriteGroupId() != Hash::INVALID)
 				sceneNode.setSpriteGroupId(currentSRT.getSpriteGroupId());
-			/*sceneNode.setSpriteInterpolation(interpolation);*/
+			sceneNode.setSpriteInterpolation(interpolation);*/
 			sceneNode.setRotation(currentSRT.getRotation());
 			sceneNode.setTranslation(currentSRT.getTranslation());
 		}
 
-		if(_animator.isEnded())
+		if(getCurrentAnimator().isEnded())
 		{
 			raiseMessage(Message(MessageID::ANIMATION_ENDED));
 		}
+	}
+
+	bool Animator::isCrossFade() const
+	{
+		return !_isDisableCrossFade && getCurrentAnimator().isCrossFade() && getPreviousAnimator().isCrossFade();
 	}
 }

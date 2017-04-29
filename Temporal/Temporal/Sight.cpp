@@ -11,18 +11,15 @@ namespace Temporal
 {
 	const Hash Sight::TYPE = Hash("sight");
 
-	static const float RAYS = 3.0f;
-	static const int COLLISION_MASK1 = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
-	static const int COLLISION_MASK2 = CollisionCategory::OBSTACLE | CollisionCategory::DEAD;
+	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
+
+	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
 	void Sight::handleMessage(Message& message)
 	{
 		if(message.getID() == MessageID::UPDATE)
 		{
-			if (!checkLineOfSight(COLLISION_MASK1))
-			{
-				checkLineOfSight(COLLISION_MASK2);
-			}
+			checkLineOfSight();
 		}
 		else if(message.getID() == MessageID::DRAW_DEBUG)
 		{
@@ -30,35 +27,48 @@ namespace Temporal
 		}
 	}
 
-	bool Sight::checkLineOfSight(int collisionMask)
+	void Sight::checkLineOfSight()
 	{
-		Side::Enum sourceSide = getOrientation(*this);
-		Vector position = getPosition(*this) + _sightOffset.multiplyComponents(sourceSide, 1.0f);
-		
-		Vector sourceDirection = Vector(sourceSide, 0.0f);
+		_pointOfIntersection = Vector::Zero;
+		_isSeeing = false;
+
 		int sourceCollisionGroup = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / (RAYS - 1.0f))
+		int targetCollisionGroup = getIntParam(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_COLLISION_GROUP)));
+		if(sourceCollisionGroup != -1 &&
+		   targetCollisionGroup != -1 &&
+		   sourceCollisionGroup != targetCollisionGroup)
+		   return;
+
+		const Vector& sourcePosition = getPosition(*this);
+		Side::Enum sourceSide = getOrientation(*this);
+		const Vector& targetPosition = *static_cast<Vector*>(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+
+		// Check orientation
+		if(differentSign(targetPosition.getX() - sourcePosition.getX(), static_cast<float>(sourceSide)))
+			return;
+
+		void* isVisible = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::IS_VISIBLE));
+		if (isVisible && !getBoolParam(isVisible))
+			return;
+
+		// Check field of view
+		Vector vector = targetPosition - sourcePosition;
+		if (fabsf(vector.getY()) > _sightSize.getY() || fabsf(vector.getX()) > _sightSize.getX()) return;
+
+		RayCastResult result;
+		if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, vector.normalize(), result, COLLISION_MASK, sourceCollisionGroup))
 		{
-			Vector sourcePosition = position + Vector(0.0f, i);
-			RayCastResult result;
-			if (getEntity().getManager().getGameState().getGrid().cast(sourcePosition, sourceDirection, result, collisionMask, sourceCollisionGroup))
-			{
-				if (result.getFixture().getCategory() & CollisionCategory::OBSTACLE)
-					continue;
-
-				void* isVisible = getEntity().getManager().sendMessageToEntity(result.getFixture().getEntityId(), Message(MessageID::IS_VISIBLE));
-				if (isVisible && !getBoolParam(isVisible))
-					continue;
-
-				if (fabsf(result.getDirectedSegment().getVector().getY()) > _sightSize.getY() || fabsf(result.getDirectedSegment().getVector().getX()) > _sightSize.getX())
-					continue;
-
-				raiseMessage(Message(MessageID::LINE_OF_SIGHT, &result));
-				return true;
-				
-			}
+			_pointOfIntersection = result.getPoint();
+			if(result.getFixture().getEntityId() == PLAYER_ENTITY)
+				_isSeeing = true;
 		}
-		return false;
+		
+		if (_isSeeing)
+		{
+			if (sourceSide == Side::LEFT)
+				vector.setX(-vector.getX());
+			raiseMessage(Message(MessageID::LINE_OF_SIGHT, &vector));
+		}
 	}
 
 	void drawFieldOfViewSegment(const Vector &sourcePosition, Side::Enum sourceSide, const Vector& delta)
@@ -69,15 +79,23 @@ namespace Temporal
 
 	void Sight::drawFieldOfView(const Vector &sourcePosition, Side::Enum sourceSide) const
 	{
-		for (float i = -_sightSize.getY(); i <= _sightSize.getY(); i += (_sightSize.getY() * 2.0f) / (RAYS - 1.0f))
-			drawFieldOfViewSegment(sourcePosition, sourceSide, Vector(_sightSize.getX(), i));
+		drawFieldOfViewSegment(sourcePosition, sourceSide, _sightSize);
+		drawFieldOfViewSegment(sourcePosition, sourceSide, Vector(_sightSize.getX(), -_sightSize.getY()));
 	}
 
 	void Sight::drawDebugInfo() const
 	{
+		Graphics::get().getLinesSpriteBatch().begin();
+		const Vector& sourcePosition = getPosition(*this);
 		Side::Enum sourceSide = getOrientation(*this);
-		Vector sourcePosition = getPosition(*this) + _sightOffset.multiplyComponents(sourceSide, 1.0f);
-		
+
 		drawFieldOfView(sourcePosition, sourceSide);
+		Vector radius = _pointOfIntersection - sourcePosition;
+
+		if(_pointOfIntersection != Vector::Zero && radius != Vector::Zero)
+		{
+			Graphics::get().getLinesSpriteBatch().add(OBB(sourcePosition + radius / 2.0f, radius.normalize(), Vector(radius.getLength() / 2.0f, 0.5f)), _isSeeing ? Color::Green : Color::Red);
+		}
+		Graphics::get().getLinesSpriteBatch().end();
 	}
 }

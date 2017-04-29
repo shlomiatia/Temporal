@@ -1,5 +1,6 @@
 #include "SerializationAccess.h"
 #include "Serialization.h"
+#include "MovingPlatform.h"
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"
@@ -11,11 +12,15 @@
 #include "Navigator.h"
 #include "TemporalEcho.h"
 #include "TemporalPeriod.h"
+#include "SceneNode.h"
 #include "InputController.h"
+#include "Shapes.h"
 #include "Transform.h"
 #include "Animator.h"
 #include "ActionController.h"
 #include "DynamicBody.h"
+#include "Patrol.h"
+#include "Editable.h"
 #include "SaverLoader.h"
 #include "GameStateEditor.h"
 #include "Camera.h"
@@ -25,8 +30,6 @@
 #include "DebugLayer.h"
 #include "Button.h"
 #include "Door.h"
-#include "SecurityCamera.h"
-#include "PlayerPeriod.h"
 
 namespace Temporal
 {
@@ -58,6 +61,8 @@ namespace Temporal
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, InputController::TYPE.getString()) == 0)
 			serialize(key, (InputController*&)component, serializer);
+		else if(strcmp(key, MovingPlatform::TYPE.getString()) == 0)
+			serialize(key, (MovingPlatform*&)component, serializer);
 		else if(strcmp(key, ActionController::TYPE.getString()) == 0)
 			serialize(key, (ActionController*&)component, serializer);
 		else if(strcmp(key, CollisionFilter::TYPE.getString()) == 0)
@@ -90,8 +95,6 @@ namespace Temporal
 			serialize(key, (Button*&)component, serializer);
 		else if (strcmp(key, Door::TYPE.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
-		else if (strcmp(key, SecurityCamera::TYPE.getString()) == 0)
-			serialize(key, (SecurityCamera*&)component, serializer);
 		// Singletons
 		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
@@ -126,6 +129,8 @@ namespace Temporal
 			serialize(key, *(ParticleEmitter*&)component, serializer);
 		else if(component->getType() == InputController::TYPE)
 			serialize(key, *(InputController*&)component, serializer);
+		else if(component->getType() == MovingPlatform::TYPE)
+			serialize(key, *(MovingPlatform*&)component, serializer);
 		else if(component->getType() == CollisionFilter::TYPE)
 			serialize(key, *(CollisionFilter*&)component, serializer);
 		else if(component->getType() == Sight::TYPE)
@@ -152,8 +157,6 @@ namespace Temporal
 			serialize(key, *(Button*&)component, serializer);
 		else if (component->getType() == Door::TYPE)
 			serialize(key, *(Door*&)component, serializer);
-		else if (component->getType() == SecurityCamera::TYPE)
-			serialize(key, *(SecurityCamera*&)component, serializer);
 		// Singletons
 		else if (component->getType() == GameSaverLoader::TYPE)
 			serialize(key, *(GameSaverLoader*&)component, serializer);

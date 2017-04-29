@@ -32,10 +32,6 @@ namespace Temporal
 		{
 			raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
 		}
-		else if (params.getButton() == MouseButton::RIGHT)
-		{
-			raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
-		}
 	}
 
 	void InputController::keyDown(Message& message)
@@ -102,6 +98,12 @@ namespace Temporal
 		if (Keyboard::get().getKey(Key::S) || Input::get().getGamepad().getLeftStick().getY() > 0.0f)
 		{
 			raiseMessage(Message(MessageID::ACTION_DOWN));
+		}
+		// TEMP:
+		if (Keyboard::get().getKey(Key::TAB))
+		{
+			OBB& bounds = *static_cast<OBB*>(getEntity().getManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_SHAPE)));
+			getEntity().getManager().sendMessageToEntity(Hash("ENT_CHASER0"), Message(MessageID::SET_NAVIGATION_DESTINATION, &bounds));
 		}
 	}
 

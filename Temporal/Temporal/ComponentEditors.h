@@ -38,6 +38,23 @@ namespace Temporal
 		void ok();
 	};
 
+	class MovingPlatformEditor : public ComponentEditor
+	{
+	public:
+		MovingPlatformEditor(MovingPlatform& movingPlatform) : _movingPlatform(movingPlatform) {}
+
+		Hash getType() const { return TYPE; }
+		void handleMessage(Message& message);
+		Component* clone() const { return 0; }
+
+		static Hash TYPE;
+	private:
+		MovingPlatform& _movingPlatform;
+
+		void movementXChanged(const char* s);
+		void movementYChanged(const char* s);
+	};
+
 	class ButtonEditor : public ComponentEditor
 	{
 	public:
@@ -118,7 +135,6 @@ namespace Temporal
 
 		void futureSelfIdChanged(const char* s);
 		void createFutureSelfChanged(bool b);
-		void syncFutureSelfChanged(bool b);
 	};
 
 	class PatrolEditor : public ComponentEditor
@@ -135,7 +151,6 @@ namespace Temporal
 		Patrol& _patrol;
 
 		void isStaticChanged(bool b);
-		void securityCameraIdChanged(const char* s);
 	};
 }
 

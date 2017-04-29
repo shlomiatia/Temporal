@@ -21,6 +21,7 @@ namespace Temporal
 		_spriteLayer = new SpriteLayer(this);
 		_debugLayer = new DebugLayer(this);
 		_guiLayer = new GUILayer(this);
+		
 			
 		_layers.push_back(_camera);
 		_layers.push_back(_spriteLayer);

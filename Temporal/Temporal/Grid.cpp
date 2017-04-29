@@ -232,11 +232,11 @@ namespace Temporal
 					   intersects(tile, pointOfIntersection))
 					{
 						result.setFixture(&body);
-						result.setDirectedSegment(DirectedSegment(rayOrigin, pointOfIntersection - rayOrigin));
+						result.SetPoint(pointOfIntersection);
 						minDistance = distance;
 					}
 				}
-				if(result.getDirectedSegment() != DirectedSegment::Zero)
+				if(result.getPoint() != Vector::Zero)
 				{
 					return true;
 				}
@@ -257,12 +257,14 @@ namespace Temporal
 		return false;
 	}
 
-	bool Grid::iterateTiles(const OBB& shape, int mask, int group, FixtureList* result, bool checkIntersection, bool isIntersectsExclusive) const
+	FixtureList Grid::iterateTiles(const OBB& shape, int mask, int group, bool checkIntersection) const
 	{
 		int leftIndex = getAxisIndex(shape.getLeft());
 		int rightIndex = getAxisIndex(shape.getRight());
 		int topIndex = getAxisIndex(shape.getTop());
 		int bottomIndex = getAxisIndex(shape.getBottom());
+
+		FixtureList result;
 
 		for(int i = leftIndex; i <= rightIndex; ++i)
 		{
@@ -274,20 +276,13 @@ namespace Temporal
 					for(FixtureIterator i = bodies->begin(); i != bodies->end(); ++i)
 					{
 						const Fixture* body = *i;
-						if (body->canCollide(mask, group) && (!checkIntersection ||
-							(isIntersectsExclusive ? intersectsExclusive(shape, body->getGlobalShape()) : intersects(shape, body->getGlobalShape()))))
-						{
-							if (result)
-								result->push_back(body);
-							else
-								return true;
-						}
-							
+						if(body->canCollide(mask, group) && (!checkIntersection || intersects(shape, body->getGlobalShape())))
+							result.push_back(body);
 					}
 				}
 			}
 		}
 
-		return result ? result->size() != 0 : false;
+		return result;
 	}
 }
