@@ -13,15 +13,21 @@ namespace Temporal
 
 		bool handleStandWalkMessage(Message& message);
 		bool handleFallJumpMessage(Message& message);
+		
 		bool handleDragMessage(Message& message);
 		void handleMessage(Message& message);
 		void handleDragEnter();
+		
 		void die();
 
 	private:
 		bool _isDescending;
 		bool _isActivating;
 		bool _isTakingDown;
+
+		Vector getMovement();
+		void move(Vector& movement);
+		void moveDraggable(Vector& movement);
 
 		StateMachineComponent& _controller;
 	};

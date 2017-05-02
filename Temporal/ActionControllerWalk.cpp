@@ -17,9 +17,7 @@ namespace Temporal
 			// State flag - started animation
 			_stateMachine->setStateFlag(false);
 
-			// BRODER
-			Vector force = Vector(32.0f, 0.0f);
-			_stateMachine->raiseMessage(Message(MessageID::SET_IMPULSE, &force));
+			setImpulse();
 		}
 
 		void Walk::handleMessage(Message& message)
@@ -43,23 +41,20 @@ namespace Temporal
 			}
 			else if (message.getID() == MessageID::UPDATE)
 			{
+				// StateFlag - Animation started
 				if (!_stateMachine->getStateFlag())
 				{
 					_stateMachine->setStateFlag(true);
 					_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::WALK_ANIMATION)));
 				}
+				// TempFlag 1 - still walking
 				if (!_stateMachine->getFrameFlag1())
 				{
 					_stateMachine->changeState(ActionControllerStateIds::STAND_STATE);
 				}
 				else
 				{
-					// We need to apply this every update because the ground has infinite restitution. 
-					float x = ActionController::WALK_ACC_PER_SECOND * _stateMachine->getTimer().getElapsedTime();
-					if (x > ActionController::getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND)
-						x = ActionController::getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND;
-					Vector force = Vector(x, 0.0f);
-					_stateMachine->raiseMessage(Message(MessageID::SET_IMPULSE, &force));
+					setImpulse();
 				}
 			}
 			else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
@@ -71,6 +66,28 @@ namespace Temporal
 					_stateMachine->changeState(ActionControllerStateIds::STAND_STATE);
 				}
 			}
+		}
+
+		void Walk::setImpulse()
+		{
+			// BRODER
+			float minWalkForcePerSecond = ActionController::WALK_ACC_PER_SECOND / 60.0f;
+			float maxWalkForcePerSecond = ActionController::getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND;
+			float x = ActionController::WALK_ACC_PER_SECOND * _stateMachine->getTimer().getElapsedTime();
+
+			if (x < minWalkForcePerSecond)
+			{
+				x = minWalkForcePerSecond;
+			}
+			else if (x > maxWalkForcePerSecond)
+			{
+				x = maxWalkForcePerSecond;
+			}
+
+			Vector force = Vector(x, 0.0f);
+
+			// We need to apply this every update because the ground has infinite restitution. 
+			_stateMachine->raiseMessage(Message(MessageID::SET_IMPULSE, &force));
 		}
 	}
 }
