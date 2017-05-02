@@ -1,0 +1,28 @@
+<animation-set>
+    <animation id="CAM_ANM_SEARCH" repeat="0" cross-fade="0">
+        <scene-graph-sample index="0">
+            <scene-node-sample scene-node-id="SCN_ROOT" rotation="0" ignore="0" sprite-group="SCN_SEARCH">
+                <translation x="0" y="0"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+    </animation>
+	<animation id="CAM_ANM_SEE" repeat="0" cross-fade="0">
+        <scene-graph-sample index="0">
+            <scene-node-sample scene-node-id="SCN_ROOT" rotation="0" ignore="0" sprite-group="SCN_SEE">
+                <translation x="0" y="0"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+    </animation>
+	<animation id="CAM_ANM_ACQUIRE" repeat="1" cross-fade="0">
+        <scene-graph-sample index="0">
+            <scene-node-sample scene-node-id="SCN_ROOT" rotation="0" ignore="0" sprite-group="SCN_SEE">
+                <translation x="0" y="0"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+		<scene-graph-sample index="1">
+            <scene-node-sample scene-node-id="SCN_ROOT" rotation="0" ignore="0" sprite-group="SCN_SEARCH">
+                <translation x="0" y="0"/>
+            </scene-node-sample>
+        </scene-graph-sample>
+    </animation>
+</animation-set>
