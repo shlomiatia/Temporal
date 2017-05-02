@@ -400,7 +400,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, ActionController& actionController, T& serializer)
 		{
-			serializer.serialize("max-walk-force-per-second", actionController.MAX_WALK_FORCE_PER_SECOND);
+			serializer.serialize("max-walk-force-per-second", actionController._maxWalkForcePerSecond);
 			serializer.serialize("hang-descend-movement", actionController._hangDescendMovement);
 			serializer.serialize("hang-descnd-original-translation", actionController._hangDescendOriginalTranslation);
 			serializer.serialize("hang-descend-ground-delta", actionController._hangDescendGroundDelta);

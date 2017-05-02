@@ -8,7 +8,7 @@
     <entities-manager>
         <entity id="ENT_BOX0">
             <transform orientation="1">
-                <position x="432.000000" y="272.000000"/>
+                <position x="432.000000" y="368.000000"/>
             </transform>
             <collision-filter category="130" group="0"/>
             <dynamic-body gravity-enabled="1" collision-mask="15">
@@ -97,7 +97,7 @@
                     </obb>
                 </fixture>
             </sensor>
-            <sensor id="SNS_ACTIVATE" category-mask="18">
+            <sensor id="SNS_ACTIVATE" category-mask="274">
                 <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="0.000000" y="0.000000"/>
@@ -206,7 +206,7 @@
         </entity>
         <entity id="ENT_PATROL0">
             <transform orientation="1">
-                <position x="437.333344" y="91.733337"/>
+                <position x="426.000000" y="88.177765"/>
             </transform>
             <collision-filter category="4" group="1"/>
             <patrol is-static="0" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
@@ -223,7 +223,7 @@
                 <velocity x="0.000000" y="0.000000"/>
                 <previous-ground-center x="0.000000" y="0.000000"/>
             </dynamic-body>
-            <sensor id="SNS_LEDGE" category-mask="1">
+            <sensor id="SNS_LEDGE" category-mask="3">
                 <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="10.000000" y="0.000000"/>
@@ -231,7 +231,7 @@
                     </obb>
                 </fixture>
             </sensor>
-            <sensor id="SNS_FRONT_EDGE" category-mask="1">
+            <sensor id="SNS_FRONT_EDGE" category-mask="3">
                 <fixture is-enabled="1">
                     <obb angle="0.000000">
                         <center x="15.000000" y="-45.000000"/>
