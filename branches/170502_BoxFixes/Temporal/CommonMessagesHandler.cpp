@@ -110,6 +110,16 @@ namespace Temporal
 			_controller.changeState(ActionControllerStateIds::STAND_STATE);
 			return true;
 		}
+		else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
+		{
+			const Vector& collisions = getVectorParam(message.getParam());
+			if (collisions.getX() != 0.0f)
+			{
+				_controller.changeState(ActionControllerStateIds::DRAG_STAND_STATE);
+				return true;
+			}
+
+		}
 		else if (message.getID() == MessageID::UPDATE)
 		{
 			Hash draggableId = ActionController::getActionController(&_controller).getDraggableId();
@@ -128,18 +138,9 @@ namespace Temporal
 				}
 				else
 				{
-					Vector movement = Vector(ActionController::getActionController(&_controller).MAX_WALK_FORCE_PER_SECOND / 2.0f, 0.0f);
-					if (_controller.getCurrentStateID() == ActionControllerStateIds::DRAG_BACKWARDS_STATE)
-						movement.setX(movement.getX() * -1.0f);
-
-
-					_controller.raiseMessage(Message(MessageID::SET_IMPULSE, &movement));
-
-					Side::Enum sourceSide = getOrientation(_controller);
-					Side::Enum targetSide = *static_cast<Side::Enum*>(_controller.getEntity().getManager().sendMessageToEntity(draggableId, Message(MessageID::GET_ORIENTATION)));
-					movement.setX(movement.getX() * sourceSide * targetSide);
-
-					_controller.getEntity().getManager().sendMessageToEntity(draggableId, Message(MessageID::SET_IMPULSE, &movement));
+					Vector& movement = getMovement();
+					move(movement);
+					moveDraggable(movement);
 				}
 			}
 		}
@@ -149,28 +150,54 @@ namespace Temporal
 	void CommonMessagesHandler::handleDragEnter()
 	{
 		Hash draggableId = ActionController::getActionController(&_controller).getDraggableId();
+		Vector& movement = getMovement();
+		
 		if (_controller.getEntity().getManager().getEntity(draggableId)->get(ActionController::TYPE))
 		{
+			if (_controller.getCurrentStateID() != ActionControllerStateIds::DRAG_STAND_STATE)
+			{
+				move(movement);
+			}
 			_controller.raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::DRAG_ANIMATION, false, 0.0f, 1)));
 		}
 		else
 		{
+			if (_controller.getCurrentStateID() != ActionControllerStateIds::DRAG_STAND_STATE)
+			{
+				moveDraggable(movement);
+			}
 			_controller.raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::AIM_DOWN_ANIMATION, false, 0.0f, 1)));
 			_controller.raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::AIM_UP_ANIMATION, false, 0.0f, 2, 0.5f)));
 		}
 	}
 
-	void CommonMessagesHandler::die()
+	Vector CommonMessagesHandler::getMovement()
 	{
-		if (_controller.getCurrentStateID() != ActionControllerStateIds::DIE_STATE)
+		Vector movement = Vector(ActionController::getActionController(&_controller).MAX_WALK_FORCE_PER_SECOND / 2.0f, 0.0f);
+		if (_controller.getCurrentStateID() == ActionControllerStateIds::DRAG_BACKWARDS_STATE)
 		{
-			_controller.changeState(ActionControllerStateIds::DIE_STATE);
+			movement.setX(movement.getX() * -1.0f);
 		}
+		return movement;
+	}
+
+	void CommonMessagesHandler::move(Vector& movement)
+	{
+		_controller.raiseMessage(Message(MessageID::SET_IMPULSE, &movement));
+	}
+
+	void CommonMessagesHandler::moveDraggable(Vector& movement)
+	{
+		Hash draggableId = ActionController::getActionController(&_controller).getDraggableId();
+		Side::Enum sourceSide = getOrientation(_controller);
+		Side::Enum targetSide = *static_cast<Side::Enum*>(_controller.getEntity().getManager().sendMessageToEntity(draggableId, Message(MessageID::GET_ORIENTATION)));
+		movement.setX(movement.getX() * sourceSide * targetSide);
+
+		_controller.getEntity().getManager().sendMessageToEntity(draggableId, Message(MessageID::SET_IMPULSE, &movement));
 	}
 
 	void CommonMessagesHandler::handleMessage(Message& message)
 	{
-
 		if (message.getID() == MessageID::DIE)
 		{
 			die();
@@ -178,7 +205,7 @@ namespace Temporal
 		else if (message.getID() == MessageID::COLLIDED_BY_ENTITY)
 		{
 			const Vector& collision = getVectorParam(message.getParam());
-			if (collision.getY() > 0.0f)
+			if (collision.getX() == 0.0f && collision.getY() > 0.0f)
 			{
 				die();
 			}
@@ -189,17 +216,26 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::LOST_GROUND)
 		{
+			if (_controller.getCurrentStateID() == ActionControllerStateIds::DESCEND_STATE)
+			{
+				bool bodyEnabled = true;
+				_controller.raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &bodyEnabled));
+				_controller.raiseMessage(Message(MessageID::SET_TANGIBLE, &bodyEnabled));
+			}
+
 			if (_controller.getCurrentStateID() != ActionControllerStateIds::FALL_STATE &&
 				_controller.getCurrentStateID() != ActionControllerStateIds::JUMP_STATE)
 			{
-				if (_controller.getCurrentStateID() == ActionControllerStateIds::DESCEND_STATE)
-				{
-					bool bodyEnabled = true;
-					_controller.raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &bodyEnabled));
-					_controller.raiseMessage(Message(MessageID::SET_TANGIBLE, &bodyEnabled));
-				}
 				_controller.changeState(ActionControllerStateIds::FALL_STATE);
 			}
+		}
+	}
+
+	void CommonMessagesHandler::die()
+	{
+		if (_controller.getCurrentStateID() != ActionControllerStateIds::DIE_STATE)
+		{
+			_controller.changeState(ActionControllerStateIds::DIE_STATE);
 		}
 	}
 }

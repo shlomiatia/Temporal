@@ -12,6 +12,9 @@ namespace Temporal
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
+
+		private:
+			void setImpulse();
 		};
 	}
 }

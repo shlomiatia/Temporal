@@ -34,7 +34,7 @@ namespace Temporal
 		}
 		else if (params.getButton() == MouseButton::RIGHT)
 		{
-			raiseMessage(Message(MessageID::ACTION_TEMPORAL_TRAVEL));
+			temporalAction();
 		}
 	}
 
@@ -88,7 +88,6 @@ namespace Temporal
 		}
 		if (_isJump)
 		{
-
 			_timer.update(time);
 			if (_timer.getElapsedTime() < JUMP_LEEWAY)
 				raiseMessage(Message(MessageID::ACTION_UP_START));
