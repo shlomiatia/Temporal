@@ -20,9 +20,9 @@ namespace Temporal
 		CommonMessagesHandler& getHandleMessageHelper() { return _handleMessageHelper; }
 
 		void handleMessage(Message& message);
-		Component* clone() const { return new ActionController(MAX_WALK_FORCE_PER_SECOND, getCurrentStateID()); }
+		Component* clone() const { return new ActionController(_maxWalkForcePerSecond, getCurrentStateID()); }
 
-		float MAX_WALK_FORCE_PER_SECOND;
+		float _maxWalkForcePerSecond;
 		static float WALK_ACC_PER_SECOND;
 		static float JUMP_FORCE_PER_SECOND;
 		static float FALL_ALLOW_JUMP_TIME;
@@ -38,8 +38,6 @@ namespace Temporal
 		void setHangDescendGroundDelta(const Vector& value) { _hangDescendGroundDelta = value; }
 		const Vector& getHangDescendMovement() const { return _hangDescendMovement; }
 		void setHangDescendMovement(const Vector& value) { _hangDescendMovement = value; }
-		Hash getDraggableId() const { return _draggableId; }
-		void setDraggableId(Hash value) { _draggableId = value; }
 
 	protected:
 		Hash getInitialState() const;
@@ -50,10 +48,10 @@ namespace Temporal
 		Vector _hangDescendOriginalTranslation;
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;
-		Hash _draggableId;
 		bool _isInvestigated;
 
 		HashStateMap getStates() const;
+		void die();
 
 		friend class SerializationAccess;
 	};
