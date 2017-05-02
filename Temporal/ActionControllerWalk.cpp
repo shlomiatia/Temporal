@@ -22,7 +22,7 @@ namespace Temporal
 
 		void Walk::handleMessage(Message& message)
 		{
-			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleStandWalkMessage(message))
+			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleStandWalkAimMessage(message))
 			{
 			}
 			else if (message.getID() == MessageID::ACTION_UP_START)
@@ -72,7 +72,7 @@ namespace Temporal
 		{
 			// BRODER
 			float minWalkForcePerSecond = ActionController::WALK_ACC_PER_SECOND / 60.0f;
-			float maxWalkForcePerSecond = ActionController::getActionController(_stateMachine).MAX_WALK_FORCE_PER_SECOND;
+			float maxWalkForcePerSecond = ActionController::getActionController(_stateMachine)._maxWalkForcePerSecond;
 			float x = ActionController::WALK_ACC_PER_SECOND * _stateMachine->getTimer().getElapsedTime();
 
 			if (x < minWalkForcePerSecond)
