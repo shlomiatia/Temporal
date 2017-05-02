@@ -10,8 +10,9 @@ namespace Temporal
 		void DragStand::enter(void* param)
 		{
 			if (param)
-				ActionController::getActionController(_stateMachine).setDraggableId(getHashParam(param));
-
+			{
+				ActionController::getActionController(_stateMachine).getHandleMessageHelper().setDraggableId(getHashParam(param));
+			}
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::STAND_ANIMATION)));
 			ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragEnter();
 		}

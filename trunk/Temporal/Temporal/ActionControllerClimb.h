@@ -10,8 +10,6 @@ namespace Temporal
 		class Climb : public ComponentState
 		{
 		public:
-			Climb() {}
-
 			void enter(void* param);
 			void exit(void* param);
 			void handleMessage(Message& message);

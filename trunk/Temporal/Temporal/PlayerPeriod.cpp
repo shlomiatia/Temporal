@@ -37,9 +37,10 @@ namespace Temporal
 		shape.setRadius(shape.getRadius() - 1.0f);
 		if (!getEntity().getManager().getGameState().getGrid().iterateTiles(shape, MASK, period))
 		{
-			Hash draggableId = getHashParam(raiseMessage(Message(MessageID::GET_DRAGGABLE)));
-			if (draggableId != Hash::INVALID)
+			void* result = raiseMessage(Message(MessageID::GET_DRAGGABLE));
+			if (result)
 			{
+				Hash draggableId = getHashParam(result);
 				Entity& draggable = *getEntity().getManager().getEntity(draggableId);
 				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
 				if (!iterateTiles(draggable, MASK, period, temporalPeriod.getFutureSelfId()))

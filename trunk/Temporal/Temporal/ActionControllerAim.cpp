@@ -17,7 +17,7 @@ namespace Temporal
 
 		void Aim::handleMessage(Message& message)
 		{
-			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleStandWalkMessage(message))
+			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleStandWalkAimMessage(message))
 			{
 			}
 			else if (message.getID() == MessageID::ACTION_FIRE)

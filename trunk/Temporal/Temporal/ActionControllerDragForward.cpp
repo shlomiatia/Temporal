@@ -11,13 +11,13 @@ namespace Temporal
 		{
 			// Frame flag 1 - Still walking forward
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::WALK_ANIMATION)));
-			ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragEnter();
+			ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragWalkEnter();
 			_stateMachine->setFrameFlag1(true);
 		}
 
 		void DragForward::handleMessage(Message& message)
 		{
-			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragMessage(message))
+			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragWalkMessage(message))
 			{
 			}
 			else if (message.getID() == MessageID::ACTION_FORWARD)

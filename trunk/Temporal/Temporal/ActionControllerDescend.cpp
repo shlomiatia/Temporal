@@ -59,6 +59,12 @@ namespace Temporal
 				_stateMachine->raiseMessage(Message(MessageID::SET_POSITION, &position));
 				_stateMachine->changeState(ActionControllerStateIds::HANG_STATE);
 			}
+			else if (message.getID() == MessageID::LOST_GROUND)
+			{
+				bool bodyEnabled = true;
+				_stateMachine->raiseMessage(Message(MessageID::SET_GRAVITY_ENABLED, &bodyEnabled));
+				_stateMachine->raiseMessage(Message(MessageID::SET_TANGIBLE, &bodyEnabled));
+			}
 		}
 	}
 }
