@@ -20,17 +20,11 @@ namespace Temporal
 {
 	static const float MARGIN = 5.0f;
 	static const Hash STATIC_BODY_TYPE("static-body");
-	const Hash Editable::TYPE("editable");
 	
 	void fixFlatOBB(OBB& obb)
 	{
 		if (obb.getHeight() == 0.0f)
 			obb.setRadiusY(MARGIN);
-	}
-		
-	Hash Editable::getType() const
-	{
-		return TYPE;
 	}
 
 	void Editable::reset()
@@ -53,7 +47,7 @@ namespace Temporal
 		{
 			return *shape;
 		}
-		if (const Renderer* renderer = static_cast<const Renderer*>(entity.get(Renderer::TYPE)))
+		if (const Renderer* renderer = static_cast<const Renderer*>(entity.get(ComponentsIds::RENDERER)))
 		{
 			const SceneNode& root = renderer->getRootSceneNode();
 			const SpriteSheet& spriteSheet = renderer->getSpriteSheet();
@@ -80,7 +74,7 @@ namespace Temporal
 			staticBody->getFixture().getLocalShape().setAxis0(Vector(rotation));
 			getEntity().getManager().getGameState().getGrid().update(&staticBody->getFixture());
 		}
-		Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
+		Renderer* renderer = static_cast<Renderer*>(getEntity().get(ComponentsIds::RENDERER));
 		if (renderer)
 		{
 			SceneNode& root = renderer->getRootSceneNode();
@@ -97,7 +91,7 @@ namespace Temporal
 			staticBody->getFixture().getLocalShape().setRadius(radius);
 			getEntity().getManager().getGameState().getGrid().update(&staticBody->getFixture());
 		}
-		Renderer* renderer = static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
+		Renderer* renderer = static_cast<Renderer*>(getEntity().get(ComponentsIds::RENDERER));
 		if (renderer)
 		{
 			SceneNode& root = renderer->getRootSceneNode();
@@ -111,8 +105,8 @@ namespace Temporal
 
 	bool isCloserThenSelected(Editable& editable, GameStateEditor& editor)
 	{
-		const Renderer* selectedRenderer = static_cast<const Renderer*>(editor.getSelected()->getEntity().get(Renderer::TYPE));
-		const Renderer* editableRenderer = static_cast<const Renderer*>(editable.getEntity().get(Renderer::TYPE));
+		const Renderer* selectedRenderer = static_cast<const Renderer*>(editor.getSelected()->getEntity().get(ComponentsIds::RENDERER));
+		const Renderer* editableRenderer = static_cast<const Renderer*>(editable.getEntity().get(ComponentsIds::RENDERER));
 		return (selectedRenderer && editableRenderer && selectedRenderer->getLayer() >= editableRenderer->getLayer());
 	}
 
@@ -279,13 +273,13 @@ namespace Temporal
 	void Editable::removePeriod()
 	{
 		_editor.addUndo();
-		getEntity().remove(TemporalPeriod::TYPE);
+		getEntity().remove(ComponentsIds::TEMPORAL_PERIOD);
 	}
 
 	void Editable::setPeriod(int period)
 	{
 		_editor.addUndo();
-		Component* component = getEntity().get(TemporalPeriod::TYPE);
+		Component* component = getEntity().get(ComponentsIds::TEMPORAL_PERIOD);
 		if (!component)
 		{
 			component = new TemporalPeriod();

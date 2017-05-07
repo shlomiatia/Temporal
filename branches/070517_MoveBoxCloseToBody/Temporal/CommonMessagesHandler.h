@@ -25,13 +25,14 @@ namespace Temporal
 		bool _isActivating;
 		bool _isTakingDown;
 		Hash _draggableId;
+		Vector _distance;
 
 		bool handleSensorSense(Message& message);
 		bool activate(SensorParams& params);
 		bool takedown(SensorParams& params);
 		Vector getMovement();
-		void move(Vector& movement);
-		void moveDraggable(Vector& movement);
+		void move(Vector movement, float framePeriod);
+		void moveDraggable(Vector movement, float framePeriod);
 
 		StateMachineComponent& _controller;
 	};

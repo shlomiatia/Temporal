@@ -11,7 +11,6 @@
 
 namespace Temporal
 {
-	const Hash Laser::TYPE = Hash("laser");
 	const Hash LASER_SCENE_NODE = Hash("SCN_LASER");
 
 	static const int COLLISION_MASK = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER | CollisionCategory::CHARACTER;

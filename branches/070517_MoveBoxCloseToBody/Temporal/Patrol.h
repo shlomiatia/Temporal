@@ -26,11 +26,11 @@ namespace Temporal
 	public:
 		Patrol(Hash securityCameraId = Hash::INVALID, bool isStatic = false, Hash initialStateId = Hash::INVALID);
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::PATROL; }
 		Component* clone() const { return new Patrol(_securityCameraId, _isStatic, getCurrentStateID()); }
 		void handleMessage(Message& message);
 
-		static const Hash TYPE;
+		
 
 		bool isStatic() const { return _isStatic; }
 		void setStatic(bool isStatic) { _isStatic = isStatic; }

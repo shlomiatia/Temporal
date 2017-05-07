@@ -44,62 +44,62 @@ namespace Temporal
 
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
 	{
-		if(strcmp(key, Transform::TYPE.getString()) == 0)
+		if(strcmp(key, ComponentsIds::TRANSFORM.getString()) == 0)
 			serialize(key, (Transform*&)component, serializer);
-		else if(strcmp(key, Animator::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::ANIMATOR.getString()) == 0)
 			serialize(key, (Animator*&)component, serializer);
-		else if(strcmp(key, Renderer::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::RENDERER.getString()) == 0)
 			serialize(key, (Renderer*&)component, serializer);
-		else if(strcmp(key, Light::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::LIGHT.getString()) == 0)
 			serialize(key, (Light*&)component, serializer);
-		else if(strcmp(key, VisibilityGem::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::VISIBILITY_GEM.getString()) == 0)
 			serialize(key, (VisibilityGem*&)component, serializer);
-		else if(strcmp(key, ParticleEmitter::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::PARTICLE_EMITTER.getString()) == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
-		else if(strcmp(key, InputController::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::INPUT_CONTROLLER.getString()) == 0)
 			serialize(key, (InputController*&)component, serializer);
-		else if(strcmp(key, ActionController::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::ACTION_CONTROLLER.getString()) == 0)
 			serialize(key, (ActionController*&)component, serializer);
-		else if(strcmp(key, CollisionFilter::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::COLLISION_FILTER.getString()) == 0)
 			serialize(key, (CollisionFilter*&)component, serializer);
-		else if(strcmp(key, Sight::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::SIGHT.getString()) == 0)
 			serialize(key, (Sight*&)component, serializer);
-		else if(strcmp(key, Sensor::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::SENSOR.getString()) == 0)
 			serialize(key, (Sensor*&)component, serializer);
-		else if(strcmp(key, DynamicBody::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::DYNAMIC_BODY.getString()) == 0)
 			serialize(key, (DynamicBody*&)component, serializer);
-		else if(strcmp(key, StaticBody::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::STATIC_BODY.getString()) == 0)
 			serialize(key, (StaticBody*&)component, serializer);
-		else if(strcmp(key, Patrol::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::PATROL.getString()) == 0)
 			serialize(key, (Patrol*&)component, serializer);
-		else if(strcmp(key, Navigator::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::NAVIGATOR.getString()) == 0)
 			serialize(key, (Navigator*&)component, serializer);
-		else if(strcmp(key, TemporalEcho::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::TEMPORAL_ECHO.getString()) == 0)
 			serialize(key, (TemporalEcho*&)component, serializer);
-		else if (strcmp(key, TemporalEchoManager::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::TEMPORAL_ECHO_MANAGER.getString()) == 0)
 			serialize(key, (TemporalEchoManager*&)component, serializer);
-		else if(strcmp(key, TemporalPeriod::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::TEMPORAL_PERIOD.getString()) == 0)
 			serialize(key, (TemporalPeriod*&)component, serializer);
-		else if(strcmp(key, PlayerPeriod::TYPE.getString()) == 0)
+		else if(strcmp(key, ComponentsIds::PLAYER_PERIOD.getString()) == 0)
 			serialize(key, (PlayerPeriod*&)component, serializer);
-		else if (strcmp(key, CameraControl::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::CAMERA_CONTROL.getString()) == 0)
 			serialize(key, (CameraControl*&)component, serializer);
-		else if (strcmp(key, Laser::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::LASER.getString()) == 0)
 			serialize(key, (Laser*&)component, serializer);
-		else if (strcmp(key, Button::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::BUTTON.getString()) == 0)
 			serialize(key, (Button*&)component, serializer);
-		else if (strcmp(key, Door::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::DOOR.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
-		else if (strcmp(key, SecurityCamera::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::SECURITY_CAMERA.getString()) == 0)
 			serialize(key, (SecurityCamera*&)component, serializer);
 		// Singletons
-		else if (strcmp(key, GameSaverLoader::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::GAME_SAVER_LOADER.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
-		else if (strcmp(key, AnimationEditor::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::ANIMATION_EDITOR.getString()) == 0)
 			serialize(key, (AnimationEditor*&)component, serializer);
-		else if (strcmp(key, GameStateEditor::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::GAME_STATE_EDITOR.getString()) == 0)
 			serialize(key, (GameStateEditor*&)component, serializer);
-		else if (strcmp(key, DebugManager::TYPE.getString()) == 0)
+		else if (strcmp(key, ComponentsIds::DEBUG_MANAGER.getString()) == 0)
 			serialize(key, (DebugManager*&)component, serializer);
 		else
 			abort();
@@ -107,61 +107,61 @@ namespace Temporal
 
 	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)
 	{
-		if(component->getType() == Transform::TYPE)
+		if(component->getType() == ComponentsIds::TRANSFORM)
 			serialize(key, *(Transform*&)component, serializer);
-		else if(component->getType() == Animator::TYPE)
+		else if(component->getType() == ComponentsIds::ANIMATOR)
 			serialize(key, *(Animator*&)component, serializer);
-		else if(component->getType() == ActionController::TYPE)
+		else if(component->getType() == ComponentsIds::ACTION_CONTROLLER)
 			serialize(key, *(ActionController*&)component, serializer);
-		else if(component->getType() == DynamicBody::TYPE)
+		else if(component->getType() == ComponentsIds::DYNAMIC_BODY)
 			serialize(key, *(DynamicBody*&)component, serializer);
-		else if(component->getType() == Patrol::TYPE)
+		else if(component->getType() == ComponentsIds::PATROL)
 			serialize(key, *(Patrol*&)component, serializer);
 		// XML ONLY
-		else if(component->getType() == Renderer::TYPE)
+		else if(component->getType() == ComponentsIds::RENDERER)
 			serialize(key, *(Renderer*&)component, serializer);
-		else if(component->getType() == Light::TYPE)
+		else if(component->getType() == ComponentsIds::LIGHT)
 			serialize(key, *(Light*&)component, serializer);
-		else if(component->getType() == ParticleEmitter::TYPE)
+		else if(component->getType() == ComponentsIds::PARTICLE_EMITTER)
 			serialize(key, *(ParticleEmitter*&)component, serializer);
-		else if(component->getType() == InputController::TYPE)
+		else if(component->getType() == ComponentsIds::INPUT_CONTROLLER)
 			serialize(key, *(InputController*&)component, serializer);
-		else if(component->getType() == CollisionFilter::TYPE)
+		else if(component->getType() == ComponentsIds::COLLISION_FILTER)
 			serialize(key, *(CollisionFilter*&)component, serializer);
-		else if(component->getType() == Sight::TYPE)
+		else if(component->getType() == ComponentsIds::SIGHT)
 			serialize(key, *(Sight*&)component, serializer);
-		else if(component->getType() == Sensor::TYPE)
+		else if(component->getType() == ComponentsIds::SENSOR)
 			serialize(key, *(Sensor*&)component, serializer);
-		else if(component->getType() == StaticBody::TYPE)
+		else if(component->getType() == ComponentsIds::STATIC_BODY)
 			serialize(key, *(StaticBody*&)component, serializer);
-		else if(component->getType() == Navigator::TYPE)
+		else if(component->getType() == ComponentsIds::NAVIGATOR)
 			serialize(key, *(Navigator*&)component, serializer);
-		else if (component->getType() == TemporalEchoManager::TYPE)
+		else if (component->getType() == ComponentsIds::TEMPORAL_ECHO_MANAGER)
 			serialize(key, *(TemporalEchoManager*&)component, serializer);
-		else if(component->getType() == TemporalEcho::TYPE)
+		else if(component->getType() == ComponentsIds::TEMPORAL_ECHO)
 			serialize(key, *(TemporalEcho*&)component, serializer);
-		else if(component->getType() == TemporalPeriod::TYPE)
+		else if(component->getType() == ComponentsIds::TEMPORAL_PERIOD)
 			serialize(key, *(TemporalPeriod*&)component, serializer);
-		else if(component->getType() == PlayerPeriod::TYPE)
+		else if(component->getType() == ComponentsIds::PLAYER_PERIOD)
 			serialize(key, *(PlayerPeriod*&)component, serializer);
-		else if (component->getType() == CameraControl::TYPE)
+		else if (component->getType() == ComponentsIds::CAMERA_CONTROL)
 			serialize(key, *(CameraControl*&)component, serializer);
-		else if (component->getType() == Laser::TYPE)
+		else if (component->getType() == ComponentsIds::LASER)
 			serialize(key, *(Laser*&)component, serializer);
-		else if (component->getType() == Button::TYPE)
+		else if (component->getType() == ComponentsIds::BUTTON)
 			serialize(key, *(Button*&)component, serializer);
-		else if (component->getType() == Door::TYPE)
+		else if (component->getType() == ComponentsIds::DOOR)
 			serialize(key, *(Door*&)component, serializer);
-		else if (component->getType() == SecurityCamera::TYPE)
+		else if (component->getType() == ComponentsIds::SECURITY_CAMERA)
 			serialize(key, *(SecurityCamera*&)component, serializer);
 		// Singletons
-		else if (component->getType() == GameSaverLoader::TYPE)
+		else if (component->getType() == ComponentsIds::GAME_SAVER_LOADER)
 			serialize(key, *(GameSaverLoader*&)component, serializer);
-		else if (component->getType() == AnimationEditor::TYPE)
+		else if (component->getType() == ComponentsIds::ANIMATION_EDITOR)
 			serialize(key, *(AnimationEditor*&)component, serializer);
-		else if (component->getType() == GameStateEditor::TYPE)
+		else if (component->getType() == ComponentsIds::GAME_STATE_EDITOR)
 			serialize(key, *(GameStateEditor*&)component, serializer);
-		else if (component->getType() == DebugManager::TYPE)
+		else if (component->getType() == ComponentsIds::DEBUG_MANAGER)
 			serialize(key, *(DebugManager*&)component, serializer);
 	}
 }

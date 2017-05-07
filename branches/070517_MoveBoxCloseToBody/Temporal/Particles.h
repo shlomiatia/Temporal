@@ -7,6 +7,7 @@
 #include "EntitySystem.h"
 #include "Timer.h"
 #include <memory>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -98,12 +99,11 @@ namespace Temporal
 						_minScale(minScale), _maxScale(maxScale), _velocity(velocity), _gravity(gravity) {}
 		~ParticleEmitter();
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::PARTICLE_EMITTER; }
 		void handleMessage(Message& message);
 
 		Component* clone() const;
-
-		static const Hash TYPE;
+		
 	private:
 
 		std::string _textureFile;

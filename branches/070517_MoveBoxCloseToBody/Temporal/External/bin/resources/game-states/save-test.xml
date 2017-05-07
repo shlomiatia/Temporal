@@ -6,30 +6,7 @@
         <world-size x="3640.000000" y="1024.000000"/>
     </grid>
     <entities-manager>
-        <entity id="ENT_BOX0">
-            <transform orientation="1">
-                <position x="432.000000" y="368.000000"/>
-            </transform>
-            <collision-filter category="130" group="0"/>
-            <dynamic-body gravity-enabled="1" collision-mask="15">
-                <fixture is-enabled="1">
-                    <obb angle="0.000000">
-                        <center x="0.000000" y="0.000000"/>
-                        <radius x="48.000000" y="48.000000"/>
-                    </obb>
-                </fixture>
-                <velocity x="0.000000" y="0.000000"/>
-                <previous-ground-center x="0.000000" y="0.000000"/>
-            </dynamic-body>
-            <renderer texture="resources/textures/box.png" sprite-sheet="" layer="30">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-            <temporal-period period="0" create-future-self="1" sync-future-self="1"/>
-        </entity>
+        
         <entity id="ENT_BLOCK2">
             <transform orientation="1">
                 <position x="3632.000000" y="511.999878"/>
@@ -191,6 +168,30 @@
             </renderer>
             <player-period period="0"/>
             <game-saver-loader/>
+        </entity>
+		<entity id="ENT_BOX0">
+            <transform orientation="1">
+                <position x="432.000000" y="368.000000"/>
+            </transform>
+            <collision-filter category="130" group="0"/>
+            <dynamic-body gravity-enabled="1" collision-mask="15">
+                <fixture is-enabled="1">
+                    <obb angle="0.000000">
+                        <center x="0.000000" y="0.000000"/>
+                        <radius x="48.000000" y="48.000000"/>
+                    </obb>
+                </fixture>
+                <velocity x="0.000000" y="0.000000"/>
+                <previous-ground-center x="0.000000" y="0.000000"/>
+            </dynamic-body>
+            <renderer texture="resources/textures/box.png" sprite-sheet="" layer="30">
+                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
+                    <translation x="0.000000" y="0.000000"/>
+                    <scale x="1.000000" y="1.000000"/>
+                </scene-node>
+                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
+            </renderer>
+            <temporal-period period="0" create-future-self="1" sync-future-self="1"/>
         </entity>
         <entity id="ENT_BACKGROUND0">
             <transform orientation="1">

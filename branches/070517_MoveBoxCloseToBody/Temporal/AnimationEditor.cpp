@@ -19,8 +19,6 @@
 
 namespace Temporal
 {
-	const Hash AnimationEditor::TYPE("animation-editor");
-
 	void AnimationEditor::setAnimation(Hash animationId)
 	{
 		_animationId = animationId;
@@ -59,7 +57,7 @@ namespace Temporal
 					continue;
 				Hash id = getSnsId(i, *j);
 
-				Control* control = static_cast<Control*>(getEntity().getManager().getEntity(id)->get(Control::TYPE));
+				Control* control = static_cast<Control*>(getEntity().getManager().getEntity(id)->get(ComponentsIds::CONTROL));
 				if(!control)
 					continue;
 				SceneNodeSample* sns = getSceneNodeSample(i, *j);

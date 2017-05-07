@@ -14,7 +14,6 @@ namespace Temporal
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	static const Hash TEMPORAL_ACTIVATION_NOTIFICATION_ID("ENT_TEMPORAL_NOTIFICATION");
 	static const Hash PARTICLE_EMITTER_ID("particle-emitter");
-	const Hash TemporalPeriod::TYPE = Hash("temporal-period");
 
 	void TemporalPeriod::temporalPeriodChanged(Period::Enum period)
 	{
@@ -102,7 +101,7 @@ namespace Temporal
 		setPeriod(_period);
 		if (_period == Period::PAST && !_createFutureSelf && _futureSelfId != Hash::INVALID)
 		{
-			PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			PlayerPeriod& playerPeriod = *static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(ComponentsIds::PLAYER_PERIOD));
 			const Color& color = playerPeriod.getNextColor();
 			Message message(MessageID::SET_COLOR, const_cast<Color*>(&color));
 			raiseMessage(message);
@@ -168,7 +167,7 @@ namespace Temporal
 	{
 		_isMoving = true;
 		bool falseValue = false;
-		TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(TemporalPeriod::TYPE));
+		TemporalPeriod& future = *static_cast<TemporalPeriod*>(getEntity().getManager().getEntity(_futureSelfId)->get(ComponentsIds::TEMPORAL_PERIOD));
 		future.setPeriod(Period::PRESENT);
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_BODY_ENABLED, &falseValue));
 		getEntity().getManager().sendMessageToEntity(_futureSelfId, Message(MessageID::SET_VISIBILITY, &falseValue));
@@ -208,7 +207,7 @@ namespace Temporal
 		Entity* clone = getEntity().clone();
 		clone->remove(PARTICLE_EMITTER_ID);
 		clone->setBypassSave(true);
-		TemporalPeriod& period = *static_cast<TemporalPeriod*>(clone->get(TemporalPeriod::TYPE));
+		TemporalPeriod& period = *static_cast<TemporalPeriod*>(clone->get(ComponentsIds::TEMPORAL_PERIOD));
 		period._period = Period::PRESENT;
 		period._futureSelfId = Hash::INVALID;
 		period._createFutureSelf = true;

@@ -15,7 +15,7 @@ namespace Temporal
 	public:
 		ActionController(float maxWalkForcePerSecond = 125.0f, Hash initialStateId = Hash::INVALID);
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::ACTION_CONTROLLER; }
 
 		CommonMessagesHandler& getHandleMessageHelper() { return _handleMessageHelper; }
 
@@ -28,7 +28,7 @@ namespace Temporal
 		static float FALL_ALLOW_JUMP_TIME;
 		static float JUMP_STOP_MODIFIER;
 		static float MAX_WALK_JUMP_MODIFIER;
-		static const Hash TYPE;
+		
 
 		static ActionController& getActionController(StateMachineComponent* stateMachine);
 

@@ -21,8 +21,6 @@ namespace Temporal
 		}
 	}
 
-	const Hash EntitySaverLoader::TYPE = Hash("entity-saver-loader");
-
 	void GameLoader::executeImpl()
 	{
 		FileStream fileStream(_path, false, true);
@@ -38,8 +36,6 @@ namespace Temporal
 		fileStream.close();
 		delete _stream;
 	}
-
-	const Hash GameSaverLoader::TYPE("game-saver-loader");
 
 	void GameSaverLoader::handleMessage(Message& message)
 	{

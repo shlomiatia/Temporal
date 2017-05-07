@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 #include "EntitySystem.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -14,11 +15,11 @@ namespace Temporal
 		const Vector& getPosition() const { return _position; }
 		Side::Enum getOrientation() const { return _orientation; }
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::TRANSFORM; }
 		void handleMessage(Message& message);
 		
 		Component* clone() const { return new Transform(_position, _orientation); }
-		static const Hash TYPE;
+		
 	private:
 
 		Vector _position;

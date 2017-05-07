@@ -20,7 +20,6 @@
 
 namespace Temporal
 {
-	const Hash Light::TYPE = Hash("light");
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
 
 	void Light::handleMessage(Message& message)

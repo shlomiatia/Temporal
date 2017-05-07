@@ -176,18 +176,32 @@ namespace Temporal
 				return true;
 			}
 				
-			Vector& movement = getMovement();
-			move(movement);
-			moveDraggable(movement);
+			Vector movement = getMovement();
+			float framePeriod = getFloatParam(message.getParam());
+			if (_controller.getCurrentStateID() != ActionControllerStateIds::DRAG_BACKWARDS_STATE)
+			{
+				moveDraggable(movement, framePeriod);
+			}
+			move(movement, framePeriod);
+			if (_controller.getCurrentStateID() == ActionControllerStateIds::DRAG_BACKWARDS_STATE)
+			{
+				moveDraggable(movement, framePeriod);
+			}
+			Vector currentDistance = getPosition(_controller.getEntity()) - getPosition(_draggableId);
+			if (!equals(_distance.getX(), currentDistance.getX()) || !equals(_distance.getY(), currentDistance.getY()))
+			{
+				_controller.changeState(ActionControllerStateIds::STAND_STATE);
+				return true;
+			}
+			
 		}
 		return false;
 	}
 
 	void CommonMessagesHandler::handleDragEnter()
 	{
-		Vector movement = getMovement();
 		
-		if (_controller.getEntity().getManager().getEntity(_draggableId)->get(ActionController::TYPE))
+		if (_controller.getEntity().getManager().getEntity(_draggableId)->get(ComponentsIds::ACTION_CONTROLLER))
 		{
 			_controller.raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::DRAG_ANIMATION, false, 0.0f, 1)));
 		}
@@ -200,17 +214,8 @@ namespace Temporal
 
 	void CommonMessagesHandler::handleDragWalkEnter()
 	{
+		_distance = getPosition(_controller.getEntity()) - getPosition(_draggableId);
 		handleDragEnter();
-		Vector movement = getMovement();
-
-		if (_controller.getEntity().getManager().getEntity(_draggableId)->get(ActionController::TYPE))
-		{
-			move(movement);
-		}
-		else
-		{
-			moveDraggable(movement);
-		}
 	}
 
 	Vector CommonMessagesHandler::getMovement()
@@ -223,17 +228,19 @@ namespace Temporal
 		return movement;
 	}
 
-	void CommonMessagesHandler::move(Vector& movement)
+	void CommonMessagesHandler::move(Vector movement, float framePeriod)
 	{
 		_controller.raiseMessage(Message(MessageID::SET_IMPULSE, &movement));
+		_controller.getEntity().get(Hash("dynamic-body"))->handleMessage(Message(MessageID::UPDATE, &framePeriod));
 	}
 
-	void CommonMessagesHandler::moveDraggable(Vector& movement)
+	void CommonMessagesHandler::moveDraggable(Vector movement, float framePeriod)
 	{
 		Side::Enum sourceSide = getOrientation(_controller);
 		Side::Enum targetSide = *static_cast<Side::Enum*>(_controller.getEntity().getManager().sendMessageToEntity(_draggableId, Message(MessageID::GET_ORIENTATION)));
 		movement.setX(movement.getX() * sourceSide * targetSide);
 
 		_controller.getEntity().getManager().sendMessageToEntity(_draggableId, Message(MessageID::SET_IMPULSE, &movement));
+		_controller.getEntity().getManager().getEntity(_draggableId)->get(Hash("dynamic-body"))->handleMessage(Message(MessageID::UPDATE, &framePeriod));
 	}
 }

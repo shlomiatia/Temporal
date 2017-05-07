@@ -7,6 +7,7 @@
 #include "Shapes.h"
 #include "Color.h"
 #include "InputEnums.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -25,7 +26,7 @@ namespace Temporal
 			_box(&_obb) {}
 		~Control();
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::CONTROL; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Control(); }
 
@@ -65,7 +66,7 @@ namespace Temporal
 		void focus();
 		void blur();
 
-		static const Hash TYPE;
+		
 	private:
 		std::string _fontFamily;
 		unsigned int _fontSize;

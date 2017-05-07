@@ -52,6 +52,42 @@ namespace Temporal
 		static const Hash DRAG_BACKWARDS_STATE = Hash("ACT_STT_DRAG_BACKWARDS");
 		static const Hash INVESTIGATE_STATE = Hash("ACT_STT_INVESTIGATE");
 	}
+
+	namespace ComponentsIds
+	{
+		static const Hash VISIBILITY_GEM = Hash("visibility-gem");
+		static const Hash SENSOR = Hash("sensor");
+		static const Hash TRANSFORM = Hash("transform");
+		static const Hash TEMPORAL_PERIOD = Hash("temporal-period");
+		static const Hash PLAYER_PERIOD = Hash("player-period");
+		static const Hash TEMPORAL_ECHO = Hash("temporal-echo");
+		static const Hash TEMPORAL_ECHO_MANAGER = Hash("temporal-echo-manager");
+		static const Hash STATIC_BODY = Hash("static-body");
+		static const Hash COLLISION_FILTER = Hash("collision-filter");
+		static const Hash SIGHT = Hash("sight");
+		static const Hash RENDERER = Hash("renderer");
+		static const Hash PARTICLE_EMITTER = Hash("particle-emitter");
+		static const Hash LIGHT = Hash("light");
+		static const Hash PATROL = Hash("patrol");
+		static const Hash NAVIGATOR = Hash("navigator");
+		static const Hash CONTROL = Hash("control");
+		static const Hash CAMERA_CONTROL("camera-control");
+		static const Hash INPUT_CONTROLLER = Hash("input-controller");
+		static const Hash ANIMATOR = Hash("animator");
+		static const Hash ACTION_CONTROLLER = Hash("action-controller");
+		static const Hash DYNAMIC_BODY = Hash("dynamic-body");
+		static const Hash ENTITY_SAVER_LOADER = Hash("entity-saver-loader");
+		static const Hash GAME_SAVER_LOADER = Hash("game-saver-loader");
+		static const Hash GAME_STATE_EDITOR = Hash("game-state-editor");
+		static const Hash GAME_STATE_EDITOR_PREVIEW = Hash("game-state-editor-preview");
+		static const Hash ANIMATION_EDITOR = Hash("animation-editor");
+		static const Hash LASER = Hash("laser");
+		static const Hash DEBUG_MANAGER = Hash("debug-manager");
+		static const Hash BUTTON = Hash("button");
+		static const Hash DOOR = Hash("door");
+		static const Hash SECURITY_CAMERA = Hash("security-camera");
+		static const Hash EDITABLE = Hash("editable");
+	}
 }
 
 #endif

@@ -5,6 +5,7 @@
 #include "EntitySystem.h"
 #include "Layer.h"
 #include <memory>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -17,12 +18,10 @@ namespace Temporal
 		explicit Renderer(const char* textueFile = "", const char* spritesheetFile = "", SceneNode* root = 0, LayerType::Enum layer = LayerType::BACKGROUND, Color color = Color::White, bool visibile = true);
 		~Renderer();
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::RENDERER; }
 
 		void handleMessage(Message& message);
 		Component* clone() const;
-
-		static const Hash TYPE;
 
 		const SceneNode& getRootSceneNode() const { return *_root; }
 		SceneNode& getRootSceneNode() { return *_root; }

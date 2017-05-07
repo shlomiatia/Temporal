@@ -10,7 +10,6 @@ namespace Temporal
 	const float JUMP_LEEWAY = 0.1f;
 	const Hash PLAYER_PERIOD = Hash("player-period");
 	const Hash TEMPORAL_ECHO_MANAGER = Hash("temporal-echo-manager");
-	const Hash InputController::TYPE = Hash("input-controller");
 
 	void InputController::startJump()
 	{
