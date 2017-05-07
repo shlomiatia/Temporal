@@ -3,6 +3,7 @@
 
 #include "StateMachineComponent.h"
 #include "Pathfinder.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -11,7 +12,7 @@ namespace Temporal
 	public:
 		Navigator() : StateMachineComponent(getStates(), "NAV"), _destination(Vector::Zero), _path(0){}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::NAVIGATOR; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Navigator(); }
 
@@ -26,7 +27,7 @@ namespace Temporal
 		void raiseNavigationFailure();
 		bool plotPath();
 
-		static const Hash TYPE;
+		
 
 	protected:
 		Hash getInitialState() const;

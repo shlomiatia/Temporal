@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "EntitySystem.h"
 #include "Shapes.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -20,13 +21,13 @@ namespace Temporal
 
 		~DynamicBody();
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::DYNAMIC_BODY; }
 		void handleMessage(Message& message);
 		Component* clone() const;
 
 		Fixture& getFixture() { return *_fixture; }
 
-		static const Hash TYPE;
+		
 	private:
 		float _maxMovementStepSize;
 		Fixture* _fixture;

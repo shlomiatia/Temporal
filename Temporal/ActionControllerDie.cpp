@@ -25,7 +25,7 @@ namespace Temporal
 			{
 				float normalizedTime;
 				_stateMachine->raiseMessage(Message(MessageID::GET_ANIMATION_NORMALIZED_TIME, &normalizedTime));
-				DynamicBody& body = *static_cast<DynamicBody*>(_stateMachine->getEntity().get(DynamicBody::TYPE));
+				DynamicBody& body = *static_cast<DynamicBody*>(_stateMachine->getEntity().get(ComponentsIds::DYNAMIC_BODY));
 				body.getFixture().getLocalShape().setRadius(Vector(body.getFixture().getLocalShape().getRadiusY()  *normalizedTime, body.getFixture().getLocalShape().getRadiusY()));
 				_stateMachine->getEntity().getManager().getGameState().getGrid().update(&body.getFixture());
 			}

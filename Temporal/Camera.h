@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "Layer.h"
 #include "EntitySystem.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -41,12 +42,12 @@ namespace Temporal
 	{
 	public:
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::CAMERA_CONTROL; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new CameraControl(); }
 
-		static const Hash TYPE;
+		
 	private:
 	};
 }

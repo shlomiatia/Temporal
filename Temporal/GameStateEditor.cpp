@@ -22,8 +22,6 @@
 
 namespace Temporal
 {
-	const Hash GameStateEditor::TYPE = Hash("game-state-editor");
-	const Hash GameStateEditorPreview::TYPE = Hash("game-state-editor-preview");
 	const Hash PLAYER_ID("ENT_PLAYER");
 	const Hash CURSOR_ENTITY_ID("ENT_CURSOR");
 	const HashList TRANSLATION_ONLY_EDITABLE_FILTER({ Hash("dynamic-body"), Hash("camera-control"), Hash("light") });
@@ -91,7 +89,7 @@ namespace Temporal
 		s << "[X: " << (int)Mouse::get().getOffsetPosition().getX() << "][Y: " << (int)Mouse::get().getOffsetPosition().getY() << "]";
 		if (getSelected())
 			s << "[Selected: " << getSelected()->getEntity().getId().getString() << "]";
-		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(ComponentsIds::PLAYER_PERIOD));
 		if (playerPeriod && playerPeriod->getPeriod() != Period::NONE)
 			s << "[Period: " << (playerPeriod->getPeriod() == Period::PAST ? "Past" : "Present") << "]";
 		getEntity().getManager().getGameState().getLayersManager().getDebugLayer().showInfo(s.str().c_str());
@@ -136,7 +134,7 @@ namespace Temporal
 			serializer.save();
 			GameStateManager::get().syncLoadAndShow(previewFile);
 			GameState& gameState = GameStateManager::get().getStateById(Hash(previewFile));
-			Entity* entity = new Entity(GameStateEditor::TYPE);
+			Entity* entity = new Entity(ComponentsIds::GAME_STATE_EDITOR);
 			GameStateEditorPreview* preview = new GameStateEditorPreview();
 			entity->add(preview);
 			DebugManager* debugManager = new DebugManager();
@@ -179,7 +177,7 @@ namespace Temporal
 		}
 		else if (key == Key::BACKSPACE)
 		{
-			PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+			PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(ComponentsIds::PLAYER_PERIOD));
 			if (playerPeriod)
 				playerPeriod->changePeriod(Period::NONE);
 		}
@@ -203,32 +201,32 @@ namespace Temporal
 				return;
 			
 			ComponentList components;
-			Button* button = static_cast<Button*>(getSelected()->getEntity().get(Button::TYPE));
+			Button* button = static_cast<Button*>(getSelected()->getEntity().get(ComponentsIds::BUTTON));
 			if (button)
 			{
 				components.push_back(new ButtonEditor(*button));
 			}
-			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(Laser::TYPE));
+			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(ComponentsIds::LASER));
 			if (laser)
 			{
 				components.push_back(new LaserEditor(*laser));
 			}
-			Light* light = static_cast<Light*>(getSelected()->getEntity().get(Light::TYPE));
+			Light* light = static_cast<Light*>(getSelected()->getEntity().get(ComponentsIds::LIGHT));
 			if (light)
 			{
 				components.push_back(new LightEditor(*light));
 			}
-			Door* door = static_cast<Door*>(getSelected()->getEntity().get(Door::TYPE));
+			Door* door = static_cast<Door*>(getSelected()->getEntity().get(ComponentsIds::DOOR));
 			if (door)
 			{
 				components.push_back(new DoorEditor(*door));
 			}
-			TemporalPeriod* period = static_cast<TemporalPeriod*>(getSelected()->getEntity().get(TemporalPeriod::TYPE));
+			TemporalPeriod* period = static_cast<TemporalPeriod*>(getSelected()->getEntity().get(ComponentsIds::TEMPORAL_PERIOD));
 			if (period)
 			{
 				components.push_back(new TemporalPeriodEditor(*period));
 			}
-			Patrol* patrol = static_cast<Patrol*>(getSelected()->getEntity().get(Patrol::TYPE));
+			Patrol* patrol = static_cast<Patrol*>(getSelected()->getEntity().get(ComponentsIds::PATROL));
 			if (patrol)
 			{
 				components.push_back(new PatrolEditor(*patrol));
@@ -286,9 +284,9 @@ namespace Temporal
 	void GameStateEditor::setEditorMode()
 	{
 		HashList ids;
-		ids.push_back(GameStateEditor::TYPE);
-		ids.push_back(Editable::TYPE);
-		ids.push_back(Hash("control"));
+		ids.push_back(ComponentsIds::GAME_STATE_EDITOR);
+		ids.push_back(ComponentsIds::EDITABLE);
+		ids.push_back(ComponentsIds::CONTROL);
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
 		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(false);
 
@@ -315,10 +313,10 @@ namespace Temporal
 		addEntity(newEntity, id);
 		addEditableToEntity(*newEntity, *this);
 		
-		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(PlayerPeriod::TYPE));
+		PlayerPeriod* playerPeriod = static_cast<PlayerPeriod*>(getEntity().getManager().getEntity(PLAYER_ID)->get(ComponentsIds::PLAYER_PERIOD));
 		if (playerPeriod && playerPeriod->getPeriod() != Period::NONE)
 		{
-			TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(newEntity->get(TemporalPeriod::TYPE));
+			TemporalPeriod* temporalPeriod = static_cast<TemporalPeriod*>(newEntity->get(ComponentsIds::TEMPORAL_PERIOD));
 			if (temporalPeriod)
 			{
 				temporalPeriod->setPeriod(playerPeriod->getPeriod());
@@ -355,7 +353,7 @@ namespace Temporal
 		Entity* newEntity = getEntity().getManager().getGameState().getEntityTemplatesManager().cloneCurrent();
 		_idPrefix = newEntity->getId().getString();
 		addEntity(newEntity, CURSOR_ENTITY_ID, true);
-		DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(DebugManager::TYPE));
+		DebugManager& debugManager = *static_cast<DebugManager*>(getEntity().get(ComponentsIds::DEBUG_MANAGER));
 		debugManager.addDebugRendererToEntity(*newEntity);
 	}
 
@@ -397,7 +395,7 @@ namespace Temporal
 			path = GameStateManager::get().getCurrentStateId().getString();
 		GameStateManager::get().syncLoadAndShow(path);
 		GameState& gameState = GameStateManager::get().getStateById(Hash(path));
-		Entity* entity = new Entity(GameStateEditor::TYPE);
+		Entity* entity = new Entity(ComponentsIds::GAME_STATE_EDITOR);
 		GameStateEditor* editor = new GameStateEditor(undo);
 		entity->add(editor);
 		DebugManager* debugManager = new DebugManager(true);

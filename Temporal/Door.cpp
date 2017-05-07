@@ -11,8 +11,6 @@
 
 namespace Temporal
 {
-	const Hash Door::TYPE = Hash("door");
-
 	void Door::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::GAME_STATE_READY)
@@ -30,7 +28,7 @@ namespace Temporal
 	{
 		int collisionCategory = _closed ? CollisionCategory::OBSTACLE : -1;
 		raiseMessage(Message(MessageID::SET_COLLISION_CATEGORY, &collisionCategory));
-		Renderer& renderer = *static_cast<Renderer*>(getEntity().get(Renderer::TYPE));
+		Renderer& renderer = *static_cast<Renderer*>(getEntity().get(ComponentsIds::RENDERER));
 		const OBB& shape = getShape(*this);
 		if (_closed)
 		{

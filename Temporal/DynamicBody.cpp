@@ -13,8 +13,6 @@
 
 namespace Temporal
 {
-	const Hash DynamicBody::TYPE = Hash("dynamic-body");
-
 	Vector DynamicBody::GRAVITY(0.0f, -1200.0f);
 
 	float getMaxMovementStepSize(const Fixture& fixture)

@@ -5,7 +5,6 @@
 
 namespace Temporal
 {
-	const Hash VisibilityGem::TYPE = Hash("visibility-gem");
 	static const Hash ACTIVATE_SENSOR_ID = Hash("SNS_ACTIVATE");
 
 	void VisibilityGem::handleMessage(Message& message)

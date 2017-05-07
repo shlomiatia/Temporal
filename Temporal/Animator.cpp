@@ -9,7 +9,6 @@
 
 namespace Temporal
 {
-	const Hash Animator::TYPE = Hash("animator");
 	const float FPS = 15;
 	const float Animator::CROSS_FADE_DURATION = 0.15f;
 
