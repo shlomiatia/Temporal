@@ -350,6 +350,9 @@
     <ClInclude Include="ActionControllerInvestigate.h">
       <Filter>Scripts\ActionController</Filter>
     </ClInclude>
+    <ClInclude Include="DragMessagesHandler.h">
+      <Filter>Scripts\ActionController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -666,6 +669,9 @@
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
     <ClCompile Include="ActionControllerInvestigate.cpp">
+      <Filter>Scripts\ActionController</Filter>
+    </ClCompile>
+    <ClCompile Include="DragMessagesHandler.cpp">
       <Filter>Scripts\ActionController</Filter>
     </ClCompile>
   </ItemGroup>

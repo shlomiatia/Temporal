@@ -11,15 +11,15 @@ namespace Temporal
 		{
 			if (param)
 			{
-				ActionController::getActionController(_stateMachine).getHandleMessageHelper().setDraggableId(getHashParam(param));
+				ActionController::getActionController(_stateMachine).getDragMessagesHandler().setDraggableId(getHashParam(param));
 			}
 			_stateMachine->raiseMessage(Message(MessageID::RESET_ANIMATION, &AnimationParams(AnimationIds::STAND_ANIMATION)));
-			ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragEnter();
+			ActionController::getActionController(_stateMachine).getDragMessagesHandler().handleDragEnter();
 		}
 
 		void DragStand::handleMessage(Message& message)
 		{
-			if (ActionController::getActionController(_stateMachine).getHandleMessageHelper().handleDragMessage(message))
+			if (ActionController::getActionController(_stateMachine).getDragMessagesHandler().handleDragMessage(message))
 			{
 
 			}
