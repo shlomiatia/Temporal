@@ -3,6 +3,7 @@
 
 #include "ToolComponent.h"
 #include "Timer.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -15,7 +16,7 @@ namespace Temporal
 	public:
 		GameStateEditor(int undo = 0) : _selectedEditable(0), _undo(undo), _idPrefix(0){}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::GAME_STATE_EDITOR; }
 		void handleMessage(Message& message);
 		Component* clone() const { return 0; }
 
@@ -25,7 +26,7 @@ namespace Temporal
 
 		static void loadEditor(const char* path = 0, int undo = 0);
 
-		static const Hash TYPE;
+		
 	private:
 		Timer _autoSaveTimer;
 		Editable* _selectedEditable;
@@ -49,11 +50,11 @@ namespace Temporal
 	public:
 		GameStateEditorPreview() {}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::GAME_STATE_EDITOR_PREVIEW; }
 		void handleMessage(Message& message);
 		Component* clone() const { return 0; }
 
-		static const Hash TYPE;
+		
 	private:
 	};
 }

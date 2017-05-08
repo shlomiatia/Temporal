@@ -11,8 +11,6 @@
 
 namespace Temporal
 {
-	const Hash Control::TYPE = Hash("control");
-
 	void deleteEvent(IAction1<const MouseParams&>* e)
 	{
 		if(e)

@@ -11,8 +11,6 @@ namespace Temporal
 {
 	static const int MASK = CollisionCategory::OBSTACLE | CollisionCategory::CHARACTER;
 
-	const Hash PlayerPeriod::TYPE = Hash("player-period");
-
 	const ColorList PlayerPeriod::COLORS = {
 		Color(0.6392156862745098f, 0.2862745098039216f, 0.6431372549019608f),
 		Color(0.2470588235294118f, 0.2823529411764706f, 0.8f),
@@ -42,7 +40,7 @@ namespace Temporal
 			{
 				Hash draggableId = getHashParam(result);
 				Entity& draggable = *getEntity().getManager().getEntity(draggableId);
-				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(TemporalPeriod::TYPE));
+				TemporalPeriod& temporalPeriod = *static_cast<TemporalPeriod*>(draggable.get(ComponentsIds::TEMPORAL_PERIOD));
 				if (!iterateTiles(draggable, MASK, period, temporalPeriod.getFutureSelfId()))
 					return;
 				temporalPeriod.setPeriod(period);

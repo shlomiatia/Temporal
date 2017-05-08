@@ -9,8 +9,6 @@
 
 namespace Temporal
 {
-	const Hash Sight::TYPE = Hash("sight");
-
 	static const float RAYS = 3.0f;
 	static const int COLLISION_MASK1 = CollisionCategory::OBSTACLE | CollisionCategory::PLAYER;
 	static const int COLLISION_MASK2 = CollisionCategory::OBSTACLE | CollisionCategory::DEAD;

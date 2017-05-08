@@ -2,6 +2,7 @@
 #define SECURITYCAMERA_H
 
 #include "StateMachineComponent.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -41,14 +42,14 @@ namespace Temporal
 	public:
 		SecurityCamera() : StateMachineComponent(getStates(), "CAM") {}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::SECURITY_CAMERA; }
 		Component* clone() const { return new SecurityCamera(); }
 		void handleMessage(Message& message);
 
 		Hash getTargetId() const { return _targetId; }
 		void trackTarget(RayCastResult& result);
 
-		static const Hash TYPE;
+		
 	protected:
 		Hash getInitialState() const;
 

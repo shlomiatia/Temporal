@@ -10,8 +10,6 @@
 
 namespace Temporal
 {
-	const Hash SecurityCamera::TYPE = Hash("security-camera");
-
 	namespace SecurityCameraStates
 	{
 		static Hash SEARCH_ANIMATION = Hash("CAM_ANM_SEARCH");

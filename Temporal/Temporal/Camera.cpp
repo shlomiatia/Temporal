@@ -77,8 +77,6 @@ namespace Temporal
 			_targetCenter.setY(levelHeight - cameraRadiusY);
 	}
 
-	const Hash CameraControl::TYPE("camera-control");
-	
 	void CameraControl::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::UPDATE)

@@ -3,6 +3,7 @@
 
 #include "EntitySystem.h"
 #include "Timer.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -12,11 +13,10 @@ namespace Temporal
 		InputController() : _isJump(false) {}
 
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::INPUT_CONTROLLER; }
 
 		Component* clone() const { return new InputController(); }
-
-		static const Hash TYPE;
+		
 	private:
 		Timer _timer;
 		bool _isJump;

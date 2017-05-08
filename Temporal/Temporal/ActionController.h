@@ -7,6 +7,7 @@
 #include "Sensor.h"
 #include "LedgeDetector.h"
 #include "CommonMessagesHandler.h"
+#include "DragMessagesHandler.h"
 
 namespace Temporal
 {
@@ -15,9 +16,10 @@ namespace Temporal
 	public:
 		ActionController(float maxWalkForcePerSecond = 125.0f, Hash initialStateId = Hash::INVALID);
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::ACTION_CONTROLLER; }
 
 		CommonMessagesHandler& getHandleMessageHelper() { return _handleMessageHelper; }
+		DragMessagesHandler& getDragMessagesHandler() { return _dragMessagesHandler; }
 
 		void handleMessage(Message& message);
 		Component* clone() const { return new ActionController(_maxWalkForcePerSecond, getCurrentStateID()); }
@@ -28,7 +30,6 @@ namespace Temporal
 		static float FALL_ALLOW_JUMP_TIME;
 		static float JUMP_STOP_MODIFIER;
 		static float MAX_WALK_JUMP_MODIFIER;
-		static const Hash TYPE;
 
 		static ActionController& getActionController(StateMachineComponent* stateMachine);
 
@@ -45,6 +46,7 @@ namespace Temporal
 	private:
 		LedgeDetector _ledgeDetector;
 		CommonMessagesHandler _handleMessageHelper;
+		DragMessagesHandler _dragMessagesHandler;
 		Vector _hangDescendOriginalTranslation;
 		Vector _hangDescendGroundDelta;
 		Vector _hangDescendMovement;

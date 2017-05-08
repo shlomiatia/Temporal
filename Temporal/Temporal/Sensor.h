@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "EntitySystem.h"
 #include "Fixture.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -55,12 +56,12 @@ namespace Temporal
 		~Sensor() { delete _fixture; }
 		
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::SENSOR; }
 		Component* clone() const;
 
 		const Hash& getId() const { return _id; }
 
-		static const Hash TYPE;
+		
 	private:
 
 		Hash _id;

@@ -3,6 +3,7 @@
 
 #include "Hash.h"
 #include "EntitySystem.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -11,14 +12,14 @@ namespace Temporal
 	public:
 		Button(const Hash& target = Hash::INVALID) : _target(target) {}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::BUTTON; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new Button(_target); }
 		void setTarget(Hash target) { _target = target; }
 		Hash getTarget() const { return _target; }
 
-		static const Hash TYPE;
+		
 	private:
 		Hash _target;
 

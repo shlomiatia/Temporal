@@ -8,6 +8,7 @@
 #include "SpriteBatch.h"
 #include "ShaderProgram.h"
 #include <memory>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -19,14 +20,13 @@ namespace Temporal
 		explicit Light(const Color& color = Color::White, float radius = 256.0, float center = -3.14f / 2.0f, float size = 3.14f / 2.0f, bool activate = true)
 			: _color(color), _radius(radius), _center(center), _size(size), _activate(activate) {}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::LIGHT; }
 		void handleMessage(Message& message);
 		Component* clone() const { return new Light(_color, _radius, _center, _size, _activate); }
 
 		bool isActivated() const { return _activate; }
 		void setActivated(bool activated) { _activate = activated; }
-
-		static const Hash TYPE;
+		
 	private:
 		std::shared_ptr<SpriteSheet> _lightTexture;
 		std::shared_ptr<SpriteSheet> _shadowTexture;

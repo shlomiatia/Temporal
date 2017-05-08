@@ -411,9 +411,9 @@ namespace Temporal
 		for (HashEntityIterator i = entities.begin(); i != entities.end(); ++i)
 		{
 			const Entity& entity = *(i->second);
-			const Door* door = static_cast<const Door*>(entity.get(Door::TYPE));
-			const StaticBody* body = static_cast<const StaticBody*>(entity.get(StaticBody::TYPE));
-			const TemporalPeriod* period = static_cast<const TemporalPeriod*>(entity.get(TemporalPeriod::TYPE));
+			const Door* door = static_cast<const Door*>(entity.get(ComponentsIds::DOOR));
+			const StaticBody* body = static_cast<const StaticBody*>(entity.get(ComponentsIds::STATIC_BODY));
+			const TemporalPeriod* period = static_cast<const TemporalPeriod*>(entity.get(ComponentsIds::TEMPORAL_PERIOD));
 			if (body)
 			{
 				if (period && period->getPeriod() != periodType)

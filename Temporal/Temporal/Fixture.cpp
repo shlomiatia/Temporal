@@ -7,8 +7,8 @@ namespace Temporal
 {
 	void Fixture::init(const Component& parent)
 	{
-		_transform = static_cast<const Transform*>(parent.getEntity().get(Transform::TYPE));
-		_filter = static_cast<const CollisionFilter*>(parent.getEntity().get(CollisionFilter::TYPE));
+		_transform = static_cast<const Transform*>(parent.getEntity().get(ComponentsIds::TRANSFORM));
+		_filter = static_cast<const CollisionFilter*>(parent.getEntity().get(ComponentsIds::COLLISION_FILTER));
 		_globalShape = _localShape;
 		update();
 	}

@@ -4,6 +4,7 @@
 #include "EntitySystem.h"
 #include "Color.h"
 #include "ScriptsEnums.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -19,7 +20,7 @@ namespace Temporal
 		explicit PlayerPeriod(Period::Enum period = Period::PRESENT) : _period(period) { _colorIterator = COLORS.begin(); }
 
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::PLAYER_PERIOD; }
 		Component* clone() const { return new PlayerPeriod(_period); }
 
 		void setPeriod(Period::Enum period) { _period = period; }
@@ -27,7 +28,7 @@ namespace Temporal
 		const Color& getNextColor();
 		void changePeriod(Period::Enum period);
 
-		static const Hash TYPE;
+		
 	private:
 		Period::Enum _period;
 		ColorIterator _colorIterator;

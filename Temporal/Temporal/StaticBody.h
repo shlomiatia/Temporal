@@ -2,6 +2,7 @@
 #define STATICBODY_H
 
 #include "EntitySystem.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -16,11 +17,11 @@ namespace Temporal
 		Fixture& getFixture() { return *_fixture; }
 		const Fixture& getFixture() const { return *_fixture; }
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::STATIC_BODY; }
 		void handleMessage(Message& message);
 
 		Component* clone() const;
-		static const Hash TYPE;
+		
 	private:
 
 		Fixture* _fixture;
