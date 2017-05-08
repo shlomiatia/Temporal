@@ -37,6 +37,7 @@
     <ClInclude Include="DebugLayer.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="DragMessagesHandler.h" />
     <ClInclude Include="Editable.h" />
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Font.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="ComponentEditors.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="DragMessagesHandler.cpp" />
     <ClCompile Include="Editable.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Font.cpp" />
