@@ -234,7 +234,7 @@ namespace Temporal
 				Game::get().stop();
 			if (key == Key::F12)
 			{
-				if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(GameStateEditor::TYPE))
+				if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(ComponentsIds::GAME_STATE_EDITOR))
 					return;
 				GameStateEditor::loadEditor();
 			}

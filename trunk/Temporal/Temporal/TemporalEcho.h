@@ -4,6 +4,7 @@
 #include "EntitySystem.h"
 #include "Timer.h"
 #include <vector>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -41,14 +42,14 @@ namespace Temporal
 		~TemporalEcho();
 
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::TEMPORAL_ECHO; }
 		Component* clone() const { return new TemporalEcho(); }
 
 		Entity& getEcho() { return *_echo; }
 		const Entity& getEcho() const { return *_echo; }
 		void setEchoReady(bool ready);
 
-		static const Hash TYPE;
+		
 	private:
 		Entity* _echo;
 		bool _echoReady;
@@ -69,10 +70,10 @@ namespace Temporal
 		~TemporalEchoManager();
 
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::TEMPORAL_ECHO_MANAGER; }
 		Component* clone() const { return new TemporalEchoManager(); }
 
-		static const Hash TYPE;
+		
 	private:
 		static const float ECHO_READY_TIME;
 		static const float ECHO_COOLDOWN_TIME;

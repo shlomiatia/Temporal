@@ -71,7 +71,7 @@ namespace Temporal
 		HashList filter;
 
 		filter.push_back(EDITABLE_ID);
-		filter.push_back(Renderer::TYPE);
+		filter.push_back(ComponentsIds::RENDERER);
 		for (ComponentDebugInfoIterator i = _componentsDebugInfo.begin(); i != _componentsDebugInfo.end(); ++i)
 		{
 			ComponentDebugInfo&  info = **i;
@@ -103,8 +103,6 @@ namespace Temporal
 
 		debugLayerTimer.print("DEBUG LAYER");
 	}
-
-	const Hash DebugManager::TYPE("debug-manager");
 
 	bool isNonPatrolControlStaticBody(const ComponentDebugInfo& info, const Entity& entity)
 	{
@@ -198,7 +196,7 @@ namespace Temporal
 				Entity& entity = *(j->second);
 				if (entity.get(info.getId()) && !isNonPatrolControlStaticBody(info, entity))
 				{
-					ComponentList renderers = entity.getAll(Renderer::TYPE);
+					ComponentList renderers = entity.getAll(ComponentsIds::RENDERER);
 					for (ComponentIterator k = renderers.begin(); k != renderers.end(); ++k)
 					{
 						if ((**k).isBypassSave())

@@ -3,8 +3,6 @@
 
 namespace Temporal
 {
-	const Hash CollisionFilter::TYPE = Hash("collision-filter");
-
 	CollisionFilter::CollisionFilter(int category, int group)
 		: _category(category), _group(group) {}
 

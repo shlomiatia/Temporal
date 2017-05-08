@@ -23,6 +23,7 @@ namespace Temporal
 
 	const Vector& getPosition(const Component& component);
 	const Vector& getPosition(const Entity& entity);
+	const Vector& getPosition(Hash id);
 	Side::Enum getOrientation(const Component& component);
 	Side::Enum getOrientation(const Entity& entity);
 	const OBB& getShape(const Component& component);

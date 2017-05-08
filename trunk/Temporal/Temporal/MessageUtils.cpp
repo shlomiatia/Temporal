@@ -6,22 +6,25 @@
 
 namespace Temporal
 {
+	const Vector& castPosition(void* result)
+	{
+		return result ? *static_cast<Vector*>(result) : Vector::Zero;
+	}
+
 	const Vector& getPosition(const Component& component)
 	{
-		void* result = component.raiseMessage(Message(MessageID::GET_POSITION));
-		if(result)
-			return *static_cast<Vector*>(result);
-		else
-			return Vector::Zero;
+		return castPosition(component.raiseMessage(Message(MessageID::GET_POSITION)));
+		
 	}
 
 	const Vector& getPosition(const Entity& entity)
 	{
-		void* result = entity.handleMessage(Message(MessageID::GET_POSITION));
-		if (result)
-			return *static_cast<Vector*>(result);
-		else
-			return Vector::Zero;
+		return castPosition(entity.handleMessage(Message(MessageID::GET_POSITION)));
+	}
+
+	const Vector& getPosition(Hash id)
+	{
+		return castPosition(GameStateManager::get().getCurrentState().getEntitiesManager().sendMessageToEntity(id, Message(MessageID::GET_POSITION)));
 	}
 
 	Side::Enum getOrientation(const Component& component)

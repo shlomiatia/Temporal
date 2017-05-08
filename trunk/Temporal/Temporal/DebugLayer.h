@@ -4,6 +4,7 @@
 #include "InputEnums.h"
 #include "Layer.h"
 #include <vector>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -63,14 +64,14 @@ namespace Temporal
 	public:
 		DebugManager(bool startInDebugMode = false) : _startInDebugMode(startInDebugMode) {}
 
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::DEBUG_MANAGER; }
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new DebugManager(_startInDebugMode); }
 
 		void addDebugRendererToEntity(Entity& entity);
 
-		static const Hash TYPE;
+		
 	private:
 		void toggleDebugging(ComponentDebugInfo& info);
 

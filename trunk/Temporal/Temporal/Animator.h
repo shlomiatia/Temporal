@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -108,12 +109,12 @@ namespace Temporal
 		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _isDisableCrossFade(false), _isCrossFade(false), _isInitialized(false) {}
 		
 		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::ANIMATOR; }
 		void handleMessage(Message& message);
 		
 		Component* clone() const { return new Animator(_animationSetFile.c_str()); }
 
-		static const Hash TYPE;
+		
 	private:
 		static const float CROSS_FADE_DURATION;
 

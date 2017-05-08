@@ -4,6 +4,7 @@
 #include "EntitySystem.h"
 #include "Vector.h"
 #include "ScriptsEnums.h"
+#include "Ids.h"
 
 namespace Temporal
 {
@@ -14,7 +15,7 @@ namespace Temporal
 			_period(period), _futureSelfId(futureSelfId), _createFutureSelf(createFutureSelf), _syncFutureSelf(syncFutureSelf), _isMoving(false){}
 
 		void handleMessage(Message& message);
-		Hash getType() const { return TYPE; }
+		Hash getType() const { return ComponentsIds::TEMPORAL_PERIOD; }
 		Component* clone() const { return new TemporalPeriod(_period, Hash::INVALID, _createFutureSelf); }
 
 		void setPeriod(Period::Enum period);
@@ -28,7 +29,7 @@ namespace Temporal
 		void setSyncFutureSelf(bool syncFutureSelf) { _syncFutureSelf = syncFutureSelf; }
 		bool isSyncFutureSelf() const { return _syncFutureSelf; }
 
-		static const Hash TYPE;
+		
 	private:		
 		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;
