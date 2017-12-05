@@ -421,7 +421,7 @@ namespace Temporal
 					continue;
 				}
 				const OBB& platform = body->getFixture().getGlobalShape();
-				if (door || body->getFixture().getCategory() == CollisionCategory::OBSTACLE)
+				if (door || (body->getFixture().getCategory() & CollisionCategory::OBSTACLE) != CollisionCategory::NONE)
 				{
 					platforms.push_back(platform);
 				}

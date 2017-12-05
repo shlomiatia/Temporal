@@ -304,6 +304,10 @@ namespace Temporal
 			getPatrol(_stateMachine).handleFireMessage(message);
 			getPatrol(_stateMachine).handleTakedownMessage(message);
 
+			if (message.getID() == MessageID::ENTITY_READY)
+			{
+				_stateMachine->changeState(WAIT_STATE);
+			}
 			if (message.getID() == MessageID::NAVIGATION_SUCCESS)
 			{
 				Hash id = getHashParam(message.getParam());
