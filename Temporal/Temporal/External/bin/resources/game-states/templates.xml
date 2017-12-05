@@ -31,7 +31,7 @@
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
-				<radius x="48" y="48" />
+				<radius x="48" y="80" />
 			</obb>
 		</fixture>
 	</dynamic-body>
@@ -145,6 +145,10 @@
 <entity id="ENT_BACKGROUND">
 	<transform />
 	<renderer layer="10" texture="resources/textures/bg.png" />
+</entity>
+<entity id="ENT_ASS">
+	<transform />
+	<renderer layer="10" texture="resources/textures/bg2.png" />
 </entity>
 <entity id="ENT_TIME_MACHINE">
 	<transform />
