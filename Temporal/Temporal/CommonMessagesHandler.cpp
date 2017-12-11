@@ -82,7 +82,7 @@ namespace Temporal
 		Hash entityId = params.getContact().getTarget().getEntityId();
 		if (params.getContact().getTarget().getCategory() == CollisionCategory::BUTTON)
 		{
-			_controller.getEntity().getManager().sendMessageToEntity(entityId, Message(MessageID::ACTIVATE));
+			_controller.getEntity().getManager().sendMessageToEntity(entityId, Message(MessageID::TOGGLE_ACTIVATION));
 		}
 		else
 		{

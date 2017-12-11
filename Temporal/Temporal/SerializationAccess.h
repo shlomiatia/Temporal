@@ -52,6 +52,7 @@ namespace Temporal
 	class CameraControl;
 	class Laser;
 	class Button;
+	class ActivationSensor;
 	class Door;
 	class ParticleSample;
 	class SecurityCamera;
@@ -430,9 +431,15 @@ namespace Temporal
 		}
 
 		template<class T>
+		static void serialize(const char* key, ActivationSensor& activationSensor, T& serializer)
+		{
+			serializer.serialize("target", activationSensor._target);
+		}
+
+		template<class T>
 		static void serialize(const char* key, Door& door, T& serializer)
 		{
-			serializer.serialize("closed", door._closed);
+			serializer.serialize("opened", door._opened);
 		}
 
 		template<class T>

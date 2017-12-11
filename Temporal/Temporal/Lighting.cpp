@@ -39,7 +39,7 @@ namespace Temporal
 		{
 			draw();
 		}
-		else if (message.getID() == MessageID::ACTIVATE)
+		else if (message.getID() == MessageID::TOGGLE_ACTIVATION)
 		{
 			_activate = !_activate;
 		}

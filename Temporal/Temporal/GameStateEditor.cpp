@@ -11,7 +11,14 @@
 #include "ToolsUtils.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
-#include "ComponentEditors.h"
+#include "LaserEditor.h"
+#include "LightEditor.h"
+#include "DoorEditor.h"
+#include "TemporalPeriodEditor.h"
+#include "PatrolEditor.h"
+#include "ButtonEditor.h"
+#include "ActivationSensorEditor.h"
+#include "ActivationSensor.h"
 #include "Button.h"
 #include "Lighting.h"
 #include "Laser.h"
@@ -19,6 +26,7 @@
 #include "Patrol.h"
 #include "PlayerPeriod.h"
 #include <sstream>
+
 
 namespace Temporal
 {
@@ -201,6 +209,11 @@ namespace Temporal
 				return;
 			
 			ComponentList components;
+			ActivationSensor* activationSensor = static_cast<ActivationSensor*>(getSelected()->getEntity().get(ComponentsIds::ACTIVATION_SENSOR));
+			if (activationSensor)
+			{
+				components.push_back(new ActivationSensorEditor(*activationSensor));
+			}
 			Button* button = static_cast<Button*>(getSelected()->getEntity().get(ComponentsIds::BUTTON));
 			if (button)
 			{

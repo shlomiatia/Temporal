@@ -69,7 +69,7 @@ namespace Temporal
 			Period::Enum period = *static_cast<Period::Enum*>(message.getParam());
 			temporalPeriodChanged(period);
 		}
-		else if (message.getID() == MessageID::ACTIVATE)
+		else if (message.getID() == MessageID::TOGGLE_ACTIVATION)
 		{
 			Period::Enum playerPeriod = *static_cast<Period::Enum*>(getEntity().getManager().sendMessageToEntity(PLAYER_ID, Message(MessageID::GET_COLLISION_GROUP)));
 			if (_period != playerPeriod)

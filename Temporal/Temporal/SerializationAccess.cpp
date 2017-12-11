@@ -24,6 +24,7 @@
 #include "VisibilityGem.h"
 #include "DebugLayer.h"
 #include "Button.h"
+#include "ActivationSensor.h"
 #include "Door.h"
 #include "SecurityCamera.h"
 #include "PlayerPeriod.h"
@@ -88,6 +89,8 @@ namespace Temporal
 			serialize(key, (Laser*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::BUTTON.getString()) == 0)
 			serialize(key, (Button*&)component, serializer);
+		else if (strcmp(key, ComponentsIds::ACTIVATION_SENSOR.getString()) == 0)
+			serialize(key, (ActivationSensor*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::DOOR.getString()) == 0)
 			serialize(key, (Door*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::SECURITY_CAMERA.getString()) == 0)
@@ -117,7 +120,6 @@ namespace Temporal
 			serialize(key, *(DynamicBody*&)component, serializer);
 		else if(component->getType() == ComponentsIds::PATROL)
 			serialize(key, *(Patrol*&)component, serializer);
-		// XML ONLY
 		else if(component->getType() == ComponentsIds::RENDERER)
 			serialize(key, *(Renderer*&)component, serializer);
 		else if(component->getType() == ComponentsIds::LIGHT)
@@ -150,6 +152,8 @@ namespace Temporal
 			serialize(key, *(Laser*&)component, serializer);
 		else if (component->getType() == ComponentsIds::BUTTON)
 			serialize(key, *(Button*&)component, serializer);
+		else if (component->getType() == ComponentsIds::ACTIVATION_SENSOR)
+			serialize(key, *(ActivationSensor*&)component, serializer);
 		else if (component->getType() == ComponentsIds::DOOR)
 			serialize(key, *(Door*&)component, serializer);
 		else if (component->getType() == ComponentsIds::SECURITY_CAMERA)

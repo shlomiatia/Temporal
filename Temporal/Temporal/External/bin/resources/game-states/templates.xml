@@ -31,7 +31,7 @@
 		<fixture>
 			<obb angle="0">
 				<center x="0" y="0" />
-				<radius x="48" y="80" />
+				<radius x="48" y="48" />
 			</obb>
 		</fixture>
 	</dynamic-body>
@@ -146,10 +146,6 @@
 	<transform />
 	<renderer layer="10" texture="resources/textures/bg.png" />
 </entity>
-<entity id="ENT_ASS">
-	<transform />
-	<renderer layer="10" texture="resources/textures/bg2.png" />
-</entity>
 <entity id="ENT_TIME_MACHINE">
 	<transform />
 	<renderer layer="30" texture="resources/textures/Time_Machine_HD.png" />
@@ -188,6 +184,21 @@
 		</fixture>
 	</static-body>
 	<renderer layer="30" texture="resources/textures/button.png" />
+</entity>
+<entity id="ENT_ACTIVATION_SENSOR">
+	<transform />
+	<sensor id="SNS_SENSOR" category-mask="8">
+		<fixture is-enabled="1">
+			<obb angle="0.000000">
+				<center x="0.000000" y="0.000000"/>
+				<radius x="48.000000" y="48.000000"/>
+			</obb>
+		</fixture>
+	</sensor>
+	<activation-sensor />
+	<renderer layer="30" texture="resources/textures/box.png">
+		<color r="1.00000" g="1.00000" b="1.00000" a="0.500000"/>
+	</renderer>
 </entity>
 <entity id="ENT_DOOR">
 	<transform />
