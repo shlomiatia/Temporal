@@ -17,20 +17,24 @@ namespace Temporal
 		{
 			set();
 		}
-		else if (message.getID() == MessageID::ACTIVATE)
+		else if (message.getID() == MessageID::TOGGLE_ACTIVATION)
 		{
-			_closed = !_closed;
+			_opened = !_opened;
 			set();
+		}
+		else if (message.getID() == MessageID::IS_ACTIVATED)
+		{
+			message.setParam(&_opened);
 		}
 	}
 
 	void Door::set()
 	{
-		int collisionCategory = _closed ? CollisionCategory::OBSTACLE : -1;
+		int collisionCategory = !_opened ? CollisionCategory::OBSTACLE : -1;
 		raiseMessage(Message(MessageID::SET_COLLISION_CATEGORY, &collisionCategory));
 		Renderer& renderer = *static_cast<Renderer*>(getEntity().get(ComponentsIds::RENDERER));
 		const OBB& shape = getShape(*this);
-		if (_closed)
+		if (!_opened)
 		{
 			renderer.getRootSceneNode().setTranslation(Vector::Zero);
 			renderer.getRootSceneNode().setScale(Vector(shape.getRadius().getX() / (renderer.getSpriteSheet().getTexture().getSize().getX() / 2.0f), 
@@ -49,7 +53,7 @@ namespace Temporal
 		NavigationNode* navigationNode = navigationGraph.getNode(getEntity().getId(), group);
 		if (navigationNode)
 		{
-			navigationNode->setDisabled(_closed);
+			navigationNode->setDisabled(!_opened);
 		}
 	}
 }

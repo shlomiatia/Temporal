@@ -120,7 +120,7 @@ namespace Temporal
 			IS_VISIBLE,
 			IS_COVERED,
 
-			ACTIVATE,
+			TOGGLE_ACTIVATION,
 			IS_ACTIVATED,
 
 			INVESTIGATE,

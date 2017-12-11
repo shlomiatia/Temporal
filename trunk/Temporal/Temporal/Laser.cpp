@@ -3,7 +3,6 @@
 #include "Grid.h"
 #include "Math.h"
 #include "Vector.h"
-#include "Serialization.h"
 #include "MessageUtils.h"
 #include "Fixture.h"
 #include "PhysicsEnums.h"
@@ -44,11 +43,15 @@ namespace Temporal
 			float framePeriod = getFloatParam(message.getParam());
 			update(framePeriod);
 		}
-		else if (message.getID() == MessageID::ACTIVATE)
+		else if (message.getID() == MessageID::TOGGLE_ACTIVATION)
 		{
 			_friendly = !_friendly;
 			setColor();
 				
+		}
+		else if (message.getID() == MessageID::IS_ACTIVATED)
+		{
+			message.setParam(&_friendly);
 		}
 	}
 

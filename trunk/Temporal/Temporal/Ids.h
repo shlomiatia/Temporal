@@ -84,6 +84,7 @@ namespace Temporal
 		static const Hash LASER = Hash("laser");
 		static const Hash DEBUG_MANAGER = Hash("debug-manager");
 		static const Hash BUTTON = Hash("button");
+		static const Hash ACTIVATION_SENSOR = Hash("activation-sensor");
 		static const Hash DOOR = Hash("door");
 		static const Hash SECURITY_CAMERA = Hash("security-camera");
 		static const Hash EDITABLE = Hash("editable");

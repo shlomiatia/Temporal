@@ -9,17 +9,17 @@ namespace Temporal
 	class Door : public Component
 	{
 	public:
-		Door(bool closed = true) { _closed = true; }
+		Door(bool opened = false) { _opened = opened; }
 
 		Hash getType() const { return ComponentsIds::DOOR; }
-		Component* clone() const { return new Door(_closed); }
+		Component* clone() const { return new Door(_opened); }
 		void handleMessage(Message& message);
 
-		bool isClosed() const { return _closed; }
-		void setClosed(bool closed) { _closed = closed; set(); }
+		bool isOpened() const { return _opened; }
+		void setOpened(bool opened) { _opened = opened; set(); }
 
 	private:
-		bool _closed;
+		bool _opened;
 		void set();
 
 		friend class SerializationAccess;
