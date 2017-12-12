@@ -56,8 +56,6 @@ namespace Temporal
 	class Door;
 	class ParticleSample;
 	class SecurityCamera;
-
-	// Singletons
 	class GameSaverLoader;
 	class AnimationEditor;
 	class GameStateEditor;
@@ -72,7 +70,6 @@ namespace Temporal
 		template<class T, class S>
 		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize){}
 
-		// Factory methods
 		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
 
