@@ -77,10 +77,7 @@ namespace Temporal
 			NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
 			if (path)
 			{
-				if (path->size() != 0)
-				{
-					setPath(path);
-				}
+				setPath(path);
 				setDestination(goalPosition);
 				changeState(WALK_STATE);
 				success = true;

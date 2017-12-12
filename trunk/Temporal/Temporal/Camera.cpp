@@ -88,7 +88,7 @@ namespace Temporal
 				
 			bool inY = fabsf(position.getY() - playerPosition.getY()) < cameraSize.getY() / 2.0f;
 			float diffX = cameraSize.getX() / 2.0f + cameraSize.getX() / 5.0f - fabsf(position.getX() - playerPosition.getX());
-			float interpolationX = diffX / (cameraSize.getX() / 4.0f);
+			float interpolationX = diffX / (cameraSize.getX() / 2.0f);
 			Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
 			if (!inY || interpolationX < 0.0f)
 			{

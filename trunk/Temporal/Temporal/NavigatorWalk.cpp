@@ -37,8 +37,9 @@ namespace Temporal
 			Vector goalPosition = getVectorParam(_stateMachine->getEntity().getManager().sendMessageToEntity(tracked, Message(MessageID::GET_POSITION)));
 			const Vector& destination = navigator.getDestination();
 			NavigationEdgeList* path = navigator.getPath();
+			bool isEmptyPath = !path || (path->size() == 0);
 
-			if (goalPosition != destination || (path &&  (*path)[0]->getTarget().isDisabled()))
+			if (goalPosition != destination || (!isEmptyPath && path->at(0)->getTarget().isDisabled()))
 			{
 				navigator.plotPath();
 				return;
@@ -50,14 +51,14 @@ namespace Temporal
 			
 			float targetX;
 			bool reachedTargetPlatform;
-			if (!path)
+			if (isEmptyPath)
 			{
 				targetX = destination.getX();
 				reachedTargetPlatform = true;
 			}
 			else
 			{
-				const NavigationEdge* edge = (*path)[0];
+				const NavigationEdge* edge = path->at(0);
 				targetX = edge->getX();
 				reachedTargetPlatform = false;
 			}
