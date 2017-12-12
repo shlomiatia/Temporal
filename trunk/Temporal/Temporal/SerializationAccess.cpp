@@ -53,8 +53,6 @@ namespace Temporal
 			serialize(key, (Renderer*&)component, serializer);
 		else if(strcmp(key, ComponentsIds::LIGHT.getString()) == 0)
 			serialize(key, (Light*&)component, serializer);
-		else if(strcmp(key, ComponentsIds::VISIBILITY_GEM.getString()) == 0)
-			serialize(key, (VisibilityGem*&)component, serializer);
 		else if(strcmp(key, ComponentsIds::PARTICLE_EMITTER.getString()) == 0)
 			serialize(key, (ParticleEmitter*&)component, serializer);
 		else if(strcmp(key, ComponentsIds::INPUT_CONTROLLER.getString()) == 0)
@@ -95,7 +93,8 @@ namespace Temporal
 			serialize(key, (Door*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::SECURITY_CAMERA.getString()) == 0)
 			serialize(key, (SecurityCamera*&)component, serializer);
-		// Singletons
+		else if (strcmp(key, ComponentsIds::VISIBILITY_GEM.getString()) == 0)
+			serialize(key, (VisibilityGem*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::GAME_SAVER_LOADER.getString()) == 0)
 			serialize(key, (GameSaverLoader*&)component, serializer);
 		else if (strcmp(key, ComponentsIds::ANIMATION_EDITOR.getString()) == 0)
@@ -114,34 +113,34 @@ namespace Temporal
 			serialize(key, *(Transform*&)component, serializer);
 		else if(component->getType() == ComponentsIds::ANIMATOR)
 			serialize(key, *(Animator*&)component, serializer);
+		else if (component->getType() == ComponentsIds::RENDERER)
+			serialize(key, *(Renderer*&)component, serializer);
+		else if (component->getType() == ComponentsIds::LIGHT)
+			serialize(key, *(Light*&)component, serializer);
+		else if (component->getType() == ComponentsIds::PARTICLE_EMITTER)
+			serialize(key, *(ParticleEmitter*&)component, serializer);
+		else if (component->getType() == ComponentsIds::INPUT_CONTROLLER)
+			serialize(key, *(InputController*&)component, serializer);
 		else if(component->getType() == ComponentsIds::ACTION_CONTROLLER)
 			serialize(key, *(ActionController*&)component, serializer);
+		else if (component->getType() == ComponentsIds::COLLISION_FILTER)
+			serialize(key, *(CollisionFilter*&)component, serializer);
+		else if (component->getType() == ComponentsIds::SIGHT)
+			serialize(key, *(Sight*&)component, serializer);
+		else if (component->getType() == ComponentsIds::SENSOR)
+			serialize(key, *(Sensor*&)component, serializer);
 		else if(component->getType() == ComponentsIds::DYNAMIC_BODY)
 			serialize(key, *(DynamicBody*&)component, serializer);
+		else if (component->getType() == ComponentsIds::STATIC_BODY)
+			serialize(key, *(StaticBody*&)component, serializer);
 		else if(component->getType() == ComponentsIds::PATROL)
 			serialize(key, *(Patrol*&)component, serializer);
-		else if(component->getType() == ComponentsIds::RENDERER)
-			serialize(key, *(Renderer*&)component, serializer);
-		else if(component->getType() == ComponentsIds::LIGHT)
-			serialize(key, *(Light*&)component, serializer);
-		else if(component->getType() == ComponentsIds::PARTICLE_EMITTER)
-			serialize(key, *(ParticleEmitter*&)component, serializer);
-		else if(component->getType() == ComponentsIds::INPUT_CONTROLLER)
-			serialize(key, *(InputController*&)component, serializer);
-		else if(component->getType() == ComponentsIds::COLLISION_FILTER)
-			serialize(key, *(CollisionFilter*&)component, serializer);
-		else if(component->getType() == ComponentsIds::SIGHT)
-			serialize(key, *(Sight*&)component, serializer);
-		else if(component->getType() == ComponentsIds::SENSOR)
-			serialize(key, *(Sensor*&)component, serializer);
-		else if(component->getType() == ComponentsIds::STATIC_BODY)
-			serialize(key, *(StaticBody*&)component, serializer);
 		else if(component->getType() == ComponentsIds::NAVIGATOR)
 			serialize(key, *(Navigator*&)component, serializer);
+		else if (component->getType() == ComponentsIds::TEMPORAL_ECHO)
+			serialize(key, *(TemporalEcho*&)component, serializer);
 		else if (component->getType() == ComponentsIds::TEMPORAL_ECHO_MANAGER)
 			serialize(key, *(TemporalEchoManager*&)component, serializer);
-		else if(component->getType() == ComponentsIds::TEMPORAL_ECHO)
-			serialize(key, *(TemporalEcho*&)component, serializer);
 		else if(component->getType() == ComponentsIds::TEMPORAL_PERIOD)
 			serialize(key, *(TemporalPeriod*&)component, serializer);
 		else if(component->getType() == ComponentsIds::PLAYER_PERIOD)
@@ -158,7 +157,8 @@ namespace Temporal
 			serialize(key, *(Door*&)component, serializer);
 		else if (component->getType() == ComponentsIds::SECURITY_CAMERA)
 			serialize(key, *(SecurityCamera*&)component, serializer);
-		// Singletons
+		else if (component->getType() == ComponentsIds::VISIBILITY_GEM)
+			serialize(key, *(VisibilityGem*&)component, serializer);
 		else if (component->getType() == ComponentsIds::GAME_SAVER_LOADER)
 			serialize(key, *(GameSaverLoader*&)component, serializer);
 		else if (component->getType() == ComponentsIds::ANIMATION_EDITOR)
