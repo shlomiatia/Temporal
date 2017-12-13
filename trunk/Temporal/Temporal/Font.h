@@ -33,7 +33,7 @@ namespace Temporal
 		Font(const char* name, int size);
 		~Font();
 
-		void draw(const char* string, const Vector& position = Vector::Zero, const Color& color = Color::White, bool ignoreLastCharForWith = false);
+		void draw(const char* string, const Vector& position = Vector::Zero, const Color& color = Color::White, bool ignoreLastCharForWidth = false);
 	private:
 		float _newLineAdvance;
 		float _spaceAdvance;
