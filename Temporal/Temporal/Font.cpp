@@ -80,7 +80,7 @@ namespace Temporal
 		delete _texture;
 	}
 
-	void Font::draw(const char* string, const Vector& position, const Color& color, bool ignoreLastCharForWith)
+	void Font::draw(const char* string, const Vector& position, const Color& color, bool ignoreLastCharForWidth)
 	{
 		Vector currentPosition(position);
 		float width = 0.0f;
@@ -96,7 +96,7 @@ namespace Temporal
 				continue;
 			}
 			const Glyph& glyph = _glyphs[c];
-			if (!ignoreLastCharForWith || string[i + 1])
+			if (!ignoreLastCharForWidth || string[i + 1])
 				width += glyph.getAdvance().getX();
 			height = std::max(height, glyph.getBearing().getY());
 		}
