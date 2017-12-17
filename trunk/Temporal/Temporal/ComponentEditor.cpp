@@ -7,7 +7,7 @@
 
 namespace Temporal
 {
-	static const float PADDING = 16.0f;
+	static const float PADDING = 0;
 	static const Hash OK_BUTTON_ID = Hash("ENT_BUTTON_OK");
 
 	float ComponentEditor::_y = 0.0f;
@@ -19,9 +19,9 @@ namespace Temporal
 		if (message.getID() == MessageID::ENTITY_INIT)
 		{
 			const Vector WINDOW_SIZE(Graphics::get().getLogicalView());
-			PANEL_SIZE = WINDOW_SIZE / 1.5f;
+			PANEL_SIZE = WINDOW_SIZE;
 			const float COLUMN_CONTROLS = 2.0f;
-			const float ROW_CONTROLS = 6.0f;
+			const float ROW_CONTROLS = 24.0f;
 			CONTROL_SIZE = Vector((PANEL_SIZE.getX() - PADDING * (COLUMN_CONTROLS + 1.0f)) / COLUMN_CONTROLS, (PANEL_SIZE.getY() - PADDING * (ROW_CONTROLS + 1.0f)) / ROW_CONTROLS);
 			//	addControl(Hash("ENT_PANEL"), AABB(WINOW_CENTER, PANEL_SIZE / 2.0f));
 			
@@ -37,7 +37,8 @@ namespace Temporal
 			ComponentList& components = getEntity().getAll();
 			if (components.at(components.size() - 1) == this)
 			{
-				ToolComponent::addButton(OK_BUTTON_ID, getNextControlShape(), "Ok", createAction(ComponentEditor, ok));
+				Control* okButton = addButton(OK_BUTTON_ID, getNextControlShape(), "Ok", createAction(ComponentEditor, ok));
+				okButton->setBackgroundColor(Color(0.984375f, 0.2890625f, 0.1015625f, 0.9f));
 				_ids.push_back(OK_BUTTON_ID);
 			}
 		}

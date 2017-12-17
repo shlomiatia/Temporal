@@ -18,8 +18,8 @@ namespace Temporal
 	class Control : public Component
 	{
 	public:
-		explicit Control() : _obb(OBB::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(20), _shortcutKey(Key::NONE),
-			_backgroundColor(0.015f, 0.388f, 0.501f), _foregroundColor(0.937f, 0.925f, 0.792f), _borderColor(0.654f, 0.639f, 0.494f), _hoverColor(0, 0.184f, 0.184f),
+		explicit Control() : _obb(OBB::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(16), _shortcutKey(Key::NONE),
+			_backgroundColor(0.2890625f, 0.73828125f, 0.671875f, 0.9f), _foregroundColor(0.87109375f, 0.859375f, 0.88671875f), _borderColor(0.21484375f, 0.21484375f, 0.21484375f), _hoverColor(0.96484375f, 0.71484375f, 0.19921875f, 0.9f),
 			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isMiddleDown(false), _isMiddleClick(false), _isRightDown(false), _isRightClick(false), _isHover(false), _isCheckbox(false),
 			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _middleMouseDownEvent(0), _middleMouseClickEvent(0), _middleMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0),
 			_mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0), _checkChangedEvent(0),

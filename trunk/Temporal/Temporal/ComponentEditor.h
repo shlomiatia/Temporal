@@ -12,7 +12,7 @@ namespace Temporal
 	class ComponentEditor : public ToolComponent
 	{
 	public:
-		ComponentEditor() : ToolComponent(20) {}
+		ComponentEditor() : ToolComponent() {}
 
 		void handleMessage(Message& message);
 
