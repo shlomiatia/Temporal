@@ -169,7 +169,7 @@
         </entity>
         <entity id="ENT_BOX1">
             <transform orientation="1">
-                <position x="664.177795" y="355.555542"/>
+                <position x="573.177795" y="560.000000"/>
             </transform>
             <collision-filter category="130" group="-1"/>
             <dynamic-body gravity-enabled="1" collision-mask="15">

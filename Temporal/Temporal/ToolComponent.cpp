@@ -12,8 +12,6 @@ namespace Temporal
 		Control* control = new Control();
 		control->setWidth(shape.getWidth());
 		control->setHeight(shape.getHeight());
-		if (_defaultFontSize != 0)
-			control->setFontSize(_defaultFontSize);
 		Entity* entity = new Entity(id);
 		entity->setBypassSave(true);
 		entity->add(transform);

@@ -243,7 +243,7 @@ namespace Temporal
 			params.setHandled(true);
 			raiseEvent(_mouseMoveEvent, params);
 		}
-		if(_leftMouseClickEvent || _commandEvent || _textChangedEvent)
+		if (_leftMouseClickEvent || _commandEvent || _textChangedEvent || _checkChangedEvent)
 		{
 			const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
 			_isHover = intersects(shape.getOBB(), params.getPosition());
