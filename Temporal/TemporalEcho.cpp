@@ -1,9 +1,11 @@
 #include "TemporalEcho.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Color.h"
 #include "MessageUtils.h"
 #include "Utils.h"
+#include "MemoryStream.h"
+#include "BinarySerializer.h"
+#include "BinaryDeserializer.h"
 
 namespace Temporal
 {

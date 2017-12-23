@@ -1,9 +1,8 @@
 #include "Log.h"
 #include "Timer.h"
+#include "FileStream.h"
 #include <cstdarg>
 #include <stdio.h>
-
-#include "Serialization.h"
 
 namespace Temporal
 {

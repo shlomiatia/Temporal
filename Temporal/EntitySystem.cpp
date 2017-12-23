@@ -1,9 +1,10 @@
 #include "EntitySystem.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Vector.h"
 
 #include <algorithm> 
+#include "FileStream.h"
+#include "XmlDeserializer.h"
 
 namespace Temporal
 {

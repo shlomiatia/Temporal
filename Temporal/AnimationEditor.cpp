@@ -3,7 +3,6 @@
 #include "InputEnums.h"
 #include "Math.h"
 #include "SceneNode.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Control.h"
 #include "Transform.h"
@@ -16,6 +15,8 @@
 #include "DebugLayer.h"
 #include <algorithm>
 #include <sstream>
+#include "FileStream.h"
+#include "XmlSerializer.h"
 
 namespace Temporal
 {

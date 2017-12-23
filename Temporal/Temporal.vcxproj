@@ -31,16 +31,20 @@
     <ClInclude Include="ActionControllerWalk.h" />
     <ClInclude Include="ActivationSensor.h" />
     <ClInclude Include="AnimationUtils.h" />
+    <ClInclude Include="BinaryDeserializer.h" />
+    <ClInclude Include="BinarySerializer.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CommonMessagesHandler.h" />
     <ClInclude Include="ComponentEditor.h" />
+    <ClInclude Include="ComponentEditorSerializer.h" />
     <ClInclude Include="DebugLayer.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="DragMessagesHandler.h" />
     <ClInclude Include="Editable.h" />
     <ClInclude Include="FBO.h" />
+    <ClInclude Include="FileStream.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Gamepad.h" />
     <ClInclude Include="GameState.h" />
@@ -56,6 +60,7 @@
     <ClInclude Include="LedgeDetector.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MemoryStream.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="NavigationEdge.h" />
     <ClInclude Include="NavigationGraph.h" />
@@ -88,7 +93,6 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="ScriptsEnums.h" />
     <ClInclude Include="SecurityCamera.h" />
-    <ClInclude Include="Serialization.h" />
     <ClInclude Include="SerializationAccess.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -97,6 +101,7 @@
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="AnimationEditor.h" />
     <ClInclude Include="SpriteLayer.h" />
+    <ClInclude Include="Stream.h" />
     <ClInclude Include="TemporalNotification.h" />
     <ClInclude Include="TemporalPeriod.h" />
     <ClInclude Include="Control.h" />
@@ -130,6 +135,8 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="StaticBody.h" />
     <ClInclude Include="VisibilityGem.h" />
+    <ClInclude Include="XmlDeserializer.h" />
+    <ClInclude Include="XmlSerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionControllerAim.cpp" />
@@ -153,15 +160,19 @@
     <ClCompile Include="ActivationSensor.cpp" />
     <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="AnimationUtils.cpp" />
+    <ClCompile Include="BinaryDeserializer.cpp" />
+    <ClCompile Include="BinarySerializer.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CommonMessagesHandler.cpp" />
     <ClCompile Include="ComponentEditor.cpp" />
+    <ClCompile Include="ComponentEditorSerializer.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="DragMessagesHandler.cpp" />
     <ClCompile Include="Editable.cpp" />
     <ClCompile Include="FBO.cpp" />
+    <ClCompile Include="FileStream.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Gamepad.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -173,6 +184,7 @@
     <ClCompile Include="LedgeDetector.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MemoryStream.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="NavigationEdge.cpp" />
     <ClCompile Include="NavigationGraph.cpp" />
@@ -201,13 +213,13 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />
-    <ClCompile Include="Serialization.cpp" />
     <ClCompile Include="SerializationAccess.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="ShapeOperations.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="SpriteLayer.cpp" />
+    <ClCompile Include="Stream.cpp" />
     <ClCompile Include="TemporalNotification.cpp" />
     <ClCompile Include="TemporalPeriod.cpp" />
     <ClCompile Include="Control.cpp" />
@@ -240,6 +252,8 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="StaticBody.cpp" />
     <ClCompile Include="VisibilityGem.cpp" />
+    <ClCompile Include="XmlDeserializer.cpp" />
+    <ClCompile Include="XmlSerializer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA48D0FC-FC62-43C4-95A0-520220DD4DB6}</ProjectGuid>

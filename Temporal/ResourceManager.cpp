@@ -1,22 +1,23 @@
 #include "ResourceManager.h"
-#include "Texture.h"
 #include "SpriteSheet.h"
 #include "Animation.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "GameState.h"
-#include "EntitySystem.h"
-#include "Grid.h"
 #include "Settings.h"
-#include "Serialization.h"
 #include "Graphics.h"
 #include "Font.h"
+#include "FileStream.h"
+#include "XmlDeserializer.h"
+
+// For Serialization
 #include "Layer.h"
+#include "Grid.h"
 
 #include <sstream>
 #include <windows.h>
 #include <SDL.h>
 #include <SDL_syswm.h>
+
 
 namespace Temporal
 {
