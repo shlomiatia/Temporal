@@ -10,10 +10,10 @@ namespace Temporal
 {
 	class ComponentEditor;
 
-	class ComponentEditorSerializer : public BaseSerializer
+	class ComponentEditorSerializer
 	{
 	public:
-		ComponentEditorSerializer(ComponentEditor& componentEditorSerializer) : BaseSerializer((Stream*)0), _componentEditorSerializer(componentEditorSerializer) {}
+		ComponentEditorSerializer(ComponentEditor& componentEditorSerializer) : _componentEditorSerializer(componentEditorSerializer) {}
 
 		void serialize(const char* key, int& value) {};
 		void serialize(const char* key, unsigned int& value) {};
@@ -23,7 +23,6 @@ namespace Temporal
 		void serialize(const char* key, Timer& value) {};
 		void serializeRadians(const char* key, float& value) {};
 		void serialize(const char* key, std::string& value) {};
-		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
 
 		template<class T>
 		void serialize(const char* key, T*& value)
@@ -33,7 +32,7 @@ namespace Temporal
 
 			SerializationAccess::modifyKey(key, value);
 
-			if (strcmp(key, "sensor") == 0 || strcmp(key, "animator") == 0 || strcmp(key, "renderer") == 0 || strcmp(key, "dynamic-body") == 0 || strcmp(key, "navigator") == 0)
+			if (strcmp(key, "sensor") == 0 || strcmp(key, "animator") == 0 || strcmp(key, "renderer") == 0)
 				return;
 
 			preSerialize(key);
@@ -76,6 +75,9 @@ namespace Temporal
 		void hashChanged(const char* controlValue, Hash& componentValue);
 		void boolChanged(bool controlValue, bool& componentValue);
 		void floatChanged(const char* controlValue, float& componentValue);
+
+		ComponentEditorSerializer(const ComponentEditorSerializer&);
+		ComponentEditorSerializer& operator=(const ComponentEditorSerializer&);
 	};
 
 	class ComponentEditor : public ToolComponent

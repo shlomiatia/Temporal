@@ -4,10 +4,8 @@
 namespace Temporal
 {
 	class Settings;
-	class BaseSerializer;
 	class XmlDeserializer;
 	class XmlSerializer;
-	class XmlDeserializer;
 	class BinarySerializer;
 	class BinaryDeserializer;
 	class ComponentEditorSerializer;

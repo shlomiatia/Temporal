@@ -712,8 +712,8 @@
     <Filter Include="Scripts\ActionController">
       <UniqueIdentifier>{eaf26acb-a610-46f6-95ed-286c6ff9acd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools\ComponentEditors">
-      <UniqueIdentifier>{c3ce5b55-1030-4583-931b-43fb64f759c6}</UniqueIdentifier>
+    <Filter Include="Common\Serialization">
+      <UniqueIdentifier>{938a0e8c-1837-4918-ac84-8b7f06ef85ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
