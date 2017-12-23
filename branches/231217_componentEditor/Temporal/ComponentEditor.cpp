@@ -11,53 +11,37 @@ namespace Temporal
 	static const float PADDING = 0;
 	static const Hash OK_BUTTON_ID = Hash("ENT_BUTTON_OK");
 
-	int zubi;
-
-	void ComponentEditorSerializer::serialize(const char* key, int& value)
-	{
-		zubi = value;
-	}
-
-	void ComponentEditorSerializer::serialize(const char* key, unsigned int& value)
-	{
-		zubi = value;
-	}
-
 	void ComponentEditorSerializer::serialize(const char* key, float& value)
 	{
-		zubi = value;
+		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
+		_componentEditorSerializer.addPanelTextBox(label.c_str(), Utils::toString(value).c_str(), createClosureAction1(ComponentEditorSerializer, const char*, floatChanged, float&, value));
 	}
 
 	void ComponentEditorSerializer::serialize(const char* key, bool& value)
 	{
-		zubi = value;
+		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
+		_componentEditorSerializer.addPanelCheckBox(label.c_str(), value, createClosureAction1(ComponentEditorSerializer, bool, boolChanged, bool&, value));
 	}
 
 	void ComponentEditorSerializer::serialize(const char* key, Hash& value)
 	{
-		zubi = value;
-		std::string label = Utils::format("%s %s", Utils::join(_prefixes, " ").c_str(), key);
+		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
 		_componentEditorSerializer.addPanelTextBox(label.c_str(), value.getString(), createClosureAction1(ComponentEditorSerializer, const char*, hashChanged, Hash&, value));
 	}
 
-	void ComponentEditorSerializer::serialize(const char* key, Timer& value)
+	void ComponentEditorSerializer::hashChanged(const char* controlValue, Hash& componentValue)
 	{
-		
+		componentValue = Hash(controlValue);
 	}
 
-	void ComponentEditorSerializer::serializeRadians(const char* key, float& value)
+	void ComponentEditorSerializer::boolChanged(bool controlValue, bool& componentValue)
 	{
-		zubi = value;
+		componentValue = controlValue;
 	}
 
-	void ComponentEditorSerializer::serialize(const char* key, std::string& value)
+	void ComponentEditorSerializer::floatChanged(const char* controlValue, float& componentValue)
 	{
-		zubi = value.length(); 
-	}
-
-	void ComponentEditorSerializer::hashChanged(const char* s, Hash& hash)
-	{
-		hash = Hash(s);
+		componentValue = Utils::parseFloat(controlValue);
 	}
 
 	void ComponentEditorSerializer::preSerialize(const char* key)
