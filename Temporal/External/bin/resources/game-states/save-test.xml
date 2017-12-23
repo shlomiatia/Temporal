@@ -164,8 +164,7 @@
                 </scene-node>
                 <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
             </renderer>
-            <!--<temporal-echo-manager/>-->
-			<player-period period="0" />
+            <temporal-echo-manager/>
             <game-saver-loader/>
         </entity>
         <entity id="ENT_BACKGROUND0">
@@ -174,31 +173,6 @@
             </transform>
             <renderer texture="resources/textures/bg.png" sprite-sheet="" layer="10">
                 <scene-node id="SCN_ROOT" behind-parent="0" transform="0" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
-        </entity>
-        <entity id="ENT_CAMERA1">
-            <transform orientation="1">
-                <position x="723.500000" y="296.500000"/>
-            </transform>
-            <collision-filter category="512" group="-1"/>
-            <security-camera/>
-            <sight>
-                <offset x="32.000000" y="-32.000000"/>
-                <size x="480.000000" y="32.000000"/>
-            </sight>
-            <animator animation-set="resources/animations/camera.xml" disable-cross-fade="0">
-                <composite-animator>
-                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                </composite-animator>
-            </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/camera.xml" layer="65">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" sprite-group="SCN_SEARCH" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
                     <translation x="0.000000" y="0.000000"/>
                     <scale x="1.000000" y="1.000000"/>
                 </scene-node>
@@ -435,31 +409,6 @@
             <transform orientation="1">
                 <position x="720.000000" y="102.399994"/>
             </transform>
-        </entity>
-        <entity id="ENT_CAMERA0">
-            <transform orientation="1">
-                <position x="243.500000" y="296.500000"/>
-            </transform>
-            <collision-filter category="512" group="-1"/>
-            <security-camera/>
-            <sight>
-                <offset x="32.000000" y="-32.000000"/>
-                <size x="480.000000" y="32.000000"/>
-            </sight>
-            <animator animation-set="resources/animations/camera.xml" disable-cross-fade="0">
-                <composite-animator>
-                    <single-animator animation-id="CAM_ANM_SEARCH" is-rewind="0" weight="1.000000" timer="0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                    <single-animator is-rewind="0" weight="1.000000" timer="-0.000000"/>
-                </composite-animator>
-            </animator>
-            <renderer texture="" sprite-sheet="resources/spritesheets/camera.xml" layer="65">
-                <scene-node id="SCN_ROOT" behind-parent="0" transform="0" sprite-group="SCN_SEARCH" flip="0" rotation="0.000000" center="0.000000" radius="0.000000">
-                    <translation x="0.000000" y="0.000000"/>
-                    <scale x="1.000000" y="1.000000"/>
-                </scene-node>
-                <color r="1.000000" g="1.000000" b="1.000000" a="1.000000"/>
-            </renderer>
         </entity>
     </entities-manager>
 </game-state>

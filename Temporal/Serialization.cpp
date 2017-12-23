@@ -39,31 +39,31 @@ namespace Temporal
 		write(length);
 		_buffer->write(value, sizeof(char)*length);
 	}
-	int Stream::readInt()
+	int Stream::readInt() const
 	{
 		int value;
 		_buffer->read((char*)&value, sizeof(int));
 		return value;
 	}
-	unsigned int Stream::readUInt()
+	unsigned int Stream::readUInt() const
 	{
 		unsigned int value;
 		_buffer->read((char*)&value, sizeof(unsigned int));
 		return value;
 	}
-	float Stream::readFloat()
+	float Stream::readFloat() const
 	{
 		float value;
 		_buffer->read((char*)&value, sizeof(float));
 		return value;
 	}
-	bool Stream::readBool()
+	bool Stream::readBool() const
 	{
 		bool value;
 		_buffer->read((char*)&value, sizeof(bool));
 		return value;
 	}
-	const char* Stream::readString()
+	const char* Stream::readString() const
 	{
 		int length = readInt();
 		char* value = new char[length];
@@ -77,7 +77,7 @@ namespace Temporal
 			      std::ostreambuf_iterator<char>(*_buffer));
 	}
 
-	std::string Stream::str()
+	std::string Stream::str() const
 	{
 		std::ostringstream buffer;
 		std::copy(std::istreambuf_iterator<char>(*_buffer),
@@ -133,7 +133,7 @@ namespace Temporal
 	 *********************************************************************************************/
 
 	// Xml serializer
-	XmlSerializer::XmlSerializer(Stream* stream) : BaseSerializer(stream), _current(&_doc) 
+	XmlSerializer::XmlSerializer(Stream* buffer) : _buffer(buffer), _current(&_doc)
 	{
 	}
 
@@ -205,9 +205,9 @@ namespace Temporal
 	}
 		
 	// Xml deserializer
-	XmlDeserializer::XmlDeserializer(Stream* stream) : BaseSerializer(stream), _current(0)
+	XmlDeserializer::XmlDeserializer(Stream* buffer) : _buffer(buffer), _current(0)
 	{
-		int result = _doc.Parse(stream->str().c_str());
+		int result = _doc.Parse(buffer->str().c_str());
 		if(result != 0)
 			abort();
 		_current = _doc.GetDocument(); 
