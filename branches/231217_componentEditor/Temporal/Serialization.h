@@ -85,45 +85,7 @@ namespace Temporal
 		virtual void serialize(const char* key, std::string& value) = 0;
 		virtual void serializeRadians(const char* key, float& value) = 0;
 		virtual SerializationDirection::Enum type() = 0;
-		virtual void preSerialize(const char* key) {};
-		virtual void postSerialize(const char* key) {};
-
-		template<class T>
-		void serialize(const char* key, T*& value)
-		{
-			bool shouldSerialize = true;
-			SerializationAccess::getConfig(key, value, *this, shouldSerialize);
-			if(!shouldSerialize)
-				return;
-			preSerialize(key);
-			SerializationAccess::serialize(key, value, *this);
-			postSerialize(key);
-		}
-
-		template<class T>
-		void serialize(const char* key, T& value)
-		{
-			preSerialize(key);
-			SerializationAccess::serialize(key, value, *this);
-			postSerialize(key);
-		}
-
-		template<class T>
-		void serialize(const char* key, std::vector<T*>& value)
-		{
-			typedef std::vector<T*>::iterator TIterator;
-			for(TIterator i = value.begin(); i != value.end(); ++i)
-				serialize(key, *i);
-		}
-
-		template<class T>
-		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
-		{
-			std::map<Hash, T*> orderedValue(value.begin(), value.end());
-			typedef std::map<Hash, T*>::iterator TIterator;
-			for(TIterator i = orderedValue.begin(); i != orderedValue.end(); ++i)
-				serialize(key, i->second);
-		}
+		
 	protected:
 		Stream* _buffer;
 
@@ -150,23 +112,37 @@ namespace Temporal
 		void serializeRadians(const char* key, float& value) { _buffer->write(value); };
 		void serialize(const char* key, std::string& value) { _buffer->write(value.c_str()); }
 		SerializationDirection::Enum type() { return SerializationDirection::SERIALIZATION; };
-		
+
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			BaseSerializer::serialize(key, value);
+			if (SerializationAccess::shouldSerialize(value))
+			{
+				SerializationAccess::serialize(key, value, *this);
+			}
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			BaseSerializer::serialize(key, value);
+			SerializationAccess::serialize(key, value, *this);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			BaseSerializer::serialize(key, value);
+			typedef std::vector<T*>::iterator TIterator;
+			for (TIterator i = value.begin(); i != value.end(); ++i)
+				serialize(key, *i);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
+		{
+			std::map<Hash, T*> orderedValue(value.begin(), value.end());
+			typedef std::map<Hash, T*>::iterator TIterator;
+			for (TIterator i = orderedValue.begin(); i != orderedValue.end(); ++i)
+				serialize(key, i->second);
 		}
 	};
 
@@ -186,22 +162,39 @@ namespace Temporal
 		void serialize(const char* key, std::string& value) { value = _buffer->readString(); }
 		SerializationDirection::Enum type() { return SerializationDirection::DESERIALIZATION; };
 
+		virtual void preSerialize(const char* key) {};
+		virtual void postSerialize(const char* key) {};
+
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			BaseSerializer::serialize(key, value);
+			if (SerializationAccess::shouldSerialize(value))
+			{
+				SerializationAccess::serialize(key, value, *this);
+			}
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			BaseSerializer::serialize(key, value);
+			SerializationAccess::serialize(key, value, *this);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			BaseSerializer::serialize(key, value);
+			typedef std::vector<T*>::iterator TIterator;
+			for (TIterator i = value.begin(); i != value.end(); ++i)
+				serialize(key, *i);
+		}
+
+		template<class T>
+		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
+		{
+			std::map<Hash, T*> orderedValue(value.begin(), value.end());
+			typedef std::map<Hash, T*>::iterator TIterator;
+			for (TIterator i = orderedValue.begin(); i != orderedValue.end(); ++i)
+				serialize(key, i->second);
 		}
 	};
 
@@ -233,25 +226,38 @@ namespace Temporal
 		template<class T>
 		void serialize(const char* key, T*& value)
 		{
-			BaseSerializer::serialize(key, value);
+			if (SerializationAccess::shouldSerialize(value))
+			{
+				SerializationAccess::modifyKey(key, value);
+				preSerialize(key);
+				SerializationAccess::serialize(key, value, *this);
+				postSerialize(key);
+			}
 		}
 
 		template<class T>
 		void serialize(const char* key, T& value)
 		{
-			BaseSerializer::serialize(key, value);
+			preSerialize(key);
+			SerializationAccess::serialize(key, value, *this);
+			postSerialize(key);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::vector<T*>& value)
 		{
-			BaseSerializer::serialize(key, value);
+			typedef std::vector<T*>::iterator TIterator;
+			for (TIterator i = value.begin(); i != value.end(); ++i)
+				serialize(key, *i);
 		}
 
 		template<class T>
 		void serialize(const char* key, std::unordered_map<Hash, T*>& value)
 		{
-			BaseSerializer::serialize(key, value);
+			std::map<Hash, T*> orderedValue(value.begin(), value.end());
+			typedef std::map<Hash, T*>::iterator TIterator;
+			for (TIterator i = orderedValue.begin(); i != orderedValue.end(); ++i)
+				serialize(key, i->second);
 		}
 
 	private:

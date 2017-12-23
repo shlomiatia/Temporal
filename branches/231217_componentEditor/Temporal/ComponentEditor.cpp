@@ -4,15 +4,71 @@
 #include "Utils.h"
 #include "Delegate.h"
 #include "Control.h"
+#include "SerializationAccess.h"
 
 namespace Temporal
 {
 	static const float PADDING = 0;
 	static const Hash OK_BUTTON_ID = Hash("ENT_BUTTON_OK");
 
-	float ComponentEditor::_y = 0.0f;
-	bool ComponentEditor::_focused = false;
-	HashList ComponentEditor::_ids;
+	int zubi;
+
+	void ComponentEditorSerializer::serialize(const char* key, int& value)
+	{
+		zubi = value;
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, unsigned int& value)
+	{
+		zubi = value;
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, float& value)
+	{
+		zubi = value;
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, bool& value)
+	{
+		zubi = value;
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, Hash& value)
+	{
+		zubi = value;
+		std::string label = Utils::format("%s %s", Utils::join(_prefixes, " ").c_str(), key);
+		_componentEditorSerializer.addPanelTextBox(label.c_str(), value.getString(), createClosureAction1(ComponentEditorSerializer, const char*, hashChanged, Hash&, value));
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, Timer& value)
+	{
+		
+	}
+
+	void ComponentEditorSerializer::serializeRadians(const char* key, float& value)
+	{
+		zubi = value;
+	}
+
+	void ComponentEditorSerializer::serialize(const char* key, std::string& value)
+	{
+		zubi = value.length(); 
+	}
+
+	void ComponentEditorSerializer::hashChanged(const char* s, Hash& hash)
+	{
+		hash = Hash(s);
+	}
+
+	void ComponentEditorSerializer::preSerialize(const char* key)
+	{
+		_prefixes.push_back(key);
+	}
+
+	void ComponentEditorSerializer::postSerialize(const char* key)
+	{
+		_prefixes.pop_back();
+	}
 
 	void ComponentEditor::handleMessage(Message& message)
 	{
@@ -23,7 +79,6 @@ namespace Temporal
 			const float COLUMN_CONTROLS = 2.0f;
 			const float ROW_CONTROLS = 24.0f;
 			CONTROL_SIZE = Vector((PANEL_SIZE.getX() - PADDING * (COLUMN_CONTROLS + 1.0f)) / COLUMN_CONTROLS, (PANEL_SIZE.getY() - PADDING * (ROW_CONTROLS + 1.0f)) / ROW_CONTROLS);
-			//	addControl(Hash("ENT_PANEL"), AABB(WINOW_CENTER, PANEL_SIZE / 2.0f));
 			
 			ComponentList& components = getEntity().getAll();
 			if (components.at(0) == this)
@@ -31,6 +86,7 @@ namespace Temporal
 				_y = PANEL_SIZE.getY() + (WINDOW_SIZE.getY() - PANEL_SIZE.getY()) / 2.0f;
 				_focused = false;
 			}
+			_componentEditorSerializer.serialize("entity", _entity);
 		}
 		else if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{

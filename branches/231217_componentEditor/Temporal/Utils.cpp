@@ -85,4 +85,13 @@ namespace Temporal
 		}
 		return result;
 	}
+
+	std::string Utils::join(std::vector<std::string> strings, const char* d)
+	{
+		std::ostringstream imploded;
+		std::copy(strings.begin(), strings.end(),
+			std::ostream_iterator<std::string>(imploded, d));
+
+		return imploded.str();
+	}
 }

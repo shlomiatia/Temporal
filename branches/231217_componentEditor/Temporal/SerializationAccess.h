@@ -4,8 +4,13 @@
 namespace Temporal
 {
 	class Settings;
-	class XmlDeserializer;
 	class BaseSerializer;
+	class XmlDeserializer;
+	class XmlSerializer;
+	class XmlDeserializer;
+	class BinarySerializer;
+	class BinaryDeserializer;
+	class ComponentEditorSerializer;
 	class Component;
 	class Vector;
 	class AABB;
@@ -64,14 +69,22 @@ namespace Temporal
 	class SerializationAccess
 	{
 	public:
-		static void getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize);
-		static void getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize);
+		static bool shouldSerialize(Component*& value);
+		static bool shouldSerialize(Entity*& value);
 
-		template<class T, class S>
-		static void getConfig(const char*& key, T*& value, S& serializer, bool& shouldSerialize){}
+		template<class T>
+		static bool shouldSerialize(T*& value){ return true; }
 
-		static void serialize(const char* key, Component*& component, BaseSerializer& serializer);
+		static void modifyKey(const char*& key, Component*& value);
+
+		template<class T>
+		static void modifyKey(const char*& key, T*& value){}
+
+		static void serialize(const char* key, Component*& component, XmlSerializer& serializer);
 		static void serialize(const char* key, Component*& component, XmlDeserializer& serializer);
+		static void serialize(const char* key, Component*& component, BinarySerializer& serializer);
+		static void serialize(const char* key, Component*& component, BinaryDeserializer& serializer);
+		static void serialize(const char* key, Component*& component, ComponentEditorSerializer& serializer);
 
 		template<class T, class S>
 		static void serialize(const char* key, T*& value, S& serializer)
@@ -453,9 +466,7 @@ namespace Temporal
 		}
 
 		template<class T>
-		static void serialize(const char* key, SecurityCamera& securityCamera, T& serializer)
-		{
-		}
+		static void serialize(const char* key, SecurityCamera& securityCamera, T& serializer){}
 
 		template<class T>
 		static void serialize(const char* key, InputController& component, T& serializer) {}
