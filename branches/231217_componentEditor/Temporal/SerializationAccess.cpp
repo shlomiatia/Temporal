@@ -1,6 +1,10 @@
 #include "SerializationAccess.h"
-#include "Serialization.h"
-#include "ComponentEditor.h"
+#include "BinarySerializer.h"
+#include "BinaryDeserializer.h"
+#include "XmlSerializer.h"
+#include "XmlDeserializer.h"
+#include "ComponentEditorSerializer.h"
+
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"

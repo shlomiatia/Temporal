@@ -1,7 +1,6 @@
 #include "GameStateEditor.h"
 #include "Editable.h"
 #include "Keyboard.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "Grid.h"
 #include "Camera.h"
@@ -11,22 +10,12 @@
 #include "ToolsUtils.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
-/*#include "LaserEditor.h"
-#include "LightEditor.h"
-#include "DoorEditor.h"
-#include "TemporalPeriodEditor.h"
-#include "PatrolEditor.h"
-#include "ButtonEditor.h"
-#include "ActivationSensorEditor.h"*/
-#include "ActivationSensor.h"
-#include "Button.h"
 #include "Lighting.h"
-#include "Laser.h"
-#include "Door.h"
-#include "Patrol.h"
 #include "PlayerPeriod.h"
 #include <sstream>
 #include "ComponentEditor.h"
+#include "FileStream.h"
+#include "XmlSerializer.h"
 
 
 namespace Temporal
@@ -205,57 +194,17 @@ namespace Temporal
 			{
 				return;
 			}
+
 			Hash id("component-editor");
 			if (getEntity().getManager().getEntity(id))
+			{
 				return;
+			}
 			
-			ComponentList components;
-			/*ActivationSensor* activationSensor = static_cast<ActivationSensor*>(getSelected()->getEntity().get(ComponentsIds::ACTIVATION_SENSOR));
-			if (activationSensor)
-			{
-				components.push_back(new ActivationSensorEditor(*activationSensor));
-			}
-			Button* button = static_cast<Button*>(getSelected()->getEntity().get(ComponentsIds::BUTTON));
-			if (button)
-			{
-				components.push_back(new ButtonEditor(*button));
-			}
-			Laser* laser = static_cast<Laser*>(getSelected()->getEntity().get(ComponentsIds::LASER));
-			if (laser)
-			{
-				components.push_back(new LaserEditor(*laser));
-			}
-			Light* light = static_cast<Light*>(getSelected()->getEntity().get(ComponentsIds::LIGHT));
-			if (light)
-			{
-				components.push_back(new LightEditor(*light));
-			}
-			Door* door = static_cast<Door*>(getSelected()->getEntity().get(ComponentsIds::DOOR));
-			if (door)
-			{
-				components.push_back(new DoorEditor(*door));
-			}
-			TemporalPeriod* period = static_cast<TemporalPeriod*>(getSelected()->getEntity().get(ComponentsIds::TEMPORAL_PERIOD));
-			if (period)
-			{
-				components.push_back(new TemporalPeriodEditor(*period));
-			}
-			Patrol* patrol = static_cast<Patrol*>(getSelected()->getEntity().get(ComponentsIds::PATROL));
-			if (patrol)
-			{
-				components.push_back(new PatrolEditor(*patrol));
-			}*/
-			components.push_back(new ComponentEditor(getSelected()->getEntity()));
-			if (components.size() != 0)
-			{
-				Entity* entity = new Entity(id);
-				entity->setBypassSave(true);
-				for (ComponentIterator i = components.begin(); i != components.end(); ++i)
-				{
-					entity->add(*i);
-				}
-				getEntity().getManager().add(entity);
-			}
+			Entity* entity = new Entity(id);
+			entity->setBypassSave(true);
+			entity->add(new ComponentEditor(getSelected()->getEntity()));
+			getEntity().getManager().add(entity);
 		}
 	}
 

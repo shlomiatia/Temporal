@@ -275,7 +275,7 @@ namespace Temporal
 		static void serialize(const char* key, Transform& transform, T& serializer)
 		{
 			serializer.serialize("position", transform._position);
-			serializer.serialize("orientation", (int&)transform._orientation);
+			serializer.serialize("orientation", reinterpret_cast<int&>(transform._orientation));
 		}
 		
 		template<class T>
@@ -306,7 +306,7 @@ namespace Temporal
 		{
 			serializer.serialize("texture", renderer._textureFile);
 			serializer.serialize("sprite-sheet", renderer._spriteSheetFile);
-			serializer.serialize("layer", (int&)renderer._layer);
+			serializer.serialize("layer", reinterpret_cast<int&>(renderer._layer));
 			serializer.serialize("scene-node", renderer._root);
 			serializer.serialize("color", renderer._color);
 		}
@@ -335,7 +335,7 @@ namespace Temporal
 			serializer.serialize("min-scale", particleEmitter._minScale);
 			serializer.serialize("max-scale", particleEmitter._maxScale);
 			serializer.serialize("gravity", particleEmitter._gravity);
-			serializer.serialize("blend", (int&)particleEmitter._blend);
+			serializer.serialize("blend", reinterpret_cast<int&>(particleEmitter._blend));
 			serializer.serialize("emitter-lifetime", particleEmitter._emitterLifetime);
 			serializer.serialize("enabled", particleEmitter._enabled);
 			serializer.serialize("particle-sample", particleEmitter._particleSamples);
@@ -394,7 +394,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, TemporalPeriod& temporalPeriod, T& serializer)
 		{
-			serializer.serialize("period", (int&)temporalPeriod._period);
+			serializer.serialize("period", reinterpret_cast<int&>(temporalPeriod._period));
 			serializer.serialize("editor-future-self-id", temporalPeriod._editorFutureSelfId);
 			serializer.serialize("create-future-self", temporalPeriod._createFutureSelf);
 			serializer.serialize("sync-future-self", temporalPeriod._syncFutureSelf);
@@ -403,7 +403,7 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, PlayerPeriod& playerPeriod, T& serializer)
 		{
-			serializer.serialize("period", (int&)playerPeriod._period);
+			serializer.serialize("period", reinterpret_cast<int&>(playerPeriod._period));
 		}
 		
 		template<class T>

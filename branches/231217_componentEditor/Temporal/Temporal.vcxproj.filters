@@ -122,9 +122,6 @@
     <ClInclude Include="Animation.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Serialization.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -356,6 +353,30 @@
     <ClInclude Include="ComponentEditor.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Stream.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryStream.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="FileStream.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="BinarySerializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryDeserializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlSerializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlDeserializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEditorSerializer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -463,9 +484,6 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Serialization.cpp">
-      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
@@ -678,6 +696,30 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="ComponentEditor.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryStream.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="FileStream.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="BinarySerializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryDeserializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlSerializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlDeserializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEditorSerializer.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>

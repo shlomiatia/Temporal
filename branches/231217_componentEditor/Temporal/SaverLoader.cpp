@@ -1,7 +1,10 @@
 #include "SaverLoader.h"
-#include "Serialization.h"
 #include "SerializationAccess.h"
 #include "InputEnums.h"
+#include "BinaryDeserializer.h"
+#include "FileStream.h"
+#include "MemoryStream.h"
+#include "BinarySerializer.h"
 
 namespace Temporal
 {
