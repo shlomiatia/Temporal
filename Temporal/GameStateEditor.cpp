@@ -11,13 +11,13 @@
 #include "ToolsUtils.h"
 #include "DebugLayer.h"
 #include "TemporalPeriod.h"
-#include "LaserEditor.h"
+/*#include "LaserEditor.h"
 #include "LightEditor.h"
 #include "DoorEditor.h"
 #include "TemporalPeriodEditor.h"
 #include "PatrolEditor.h"
 #include "ButtonEditor.h"
-#include "ActivationSensorEditor.h"
+#include "ActivationSensorEditor.h"*/
 #include "ActivationSensor.h"
 #include "Button.h"
 #include "Lighting.h"
@@ -26,6 +26,7 @@
 #include "Patrol.h"
 #include "PlayerPeriod.h"
 #include <sstream>
+#include "ComponentEditor.h"
 
 
 namespace Temporal
@@ -209,7 +210,7 @@ namespace Temporal
 				return;
 			
 			ComponentList components;
-			ActivationSensor* activationSensor = static_cast<ActivationSensor*>(getSelected()->getEntity().get(ComponentsIds::ACTIVATION_SENSOR));
+			/*ActivationSensor* activationSensor = static_cast<ActivationSensor*>(getSelected()->getEntity().get(ComponentsIds::ACTIVATION_SENSOR));
 			if (activationSensor)
 			{
 				components.push_back(new ActivationSensorEditor(*activationSensor));
@@ -243,7 +244,8 @@ namespace Temporal
 			if (patrol)
 			{
 				components.push_back(new PatrolEditor(*patrol));
-			}
+			}*/
+			components.push_back(new ComponentEditor(getSelected()->getEntity()));
 			if (components.size() != 0)
 			{
 				Entity* entity = new Entity(id);
