@@ -111,8 +111,8 @@ namespace Temporal
 
 	void TemporalPeriod::die(bool temporalDeath)
 	{
-		setCreateFutureSelf(true);
-		setSyncFutureSelf(true);
+		_createFutureSelf = true;
+		_syncFutureSelf = true;
 		if (_futureSelfId != Hash::INVALID)
 		{
 			destroyFuture();

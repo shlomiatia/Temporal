@@ -13,7 +13,7 @@ namespace Temporal
 	class ComponentEditorSerializer
 	{
 	public:
-		ComponentEditorSerializer(ComponentEditor& componentEditorSerializer) : _componentEditorSerializer(componentEditorSerializer) {}
+		ComponentEditorSerializer(ComponentEditor& componentEditor) : _componentEditor(componentEditor) {}
 
 		void serialize(const char* key, int& value) {};
 		void serialize(const char* key, unsigned int& value) {};
@@ -74,7 +74,7 @@ namespace Temporal
 		void preSerialize(const char* key);
 		void postSerialize(const char* key);
 
-		ComponentEditor& _componentEditorSerializer;
+		ComponentEditor& _componentEditor;
 		std::vector<std::string> _prefixes;
 
 		void hashChanged(const char* controlValue, Hash& componentValue);

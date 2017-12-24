@@ -115,14 +115,23 @@ namespace Temporal
 		}
 		else if(message.getID() == MessageID::DRAW)
 		{
+			if (!_isVisible)
+				return;
+
 			drawControl();
 		}
 		else if(message.getID() == MessageID::DRAW_TEXT)
 		{
+			if (!_isVisible)
+				return;
+
 			drawText();
 		}
 		else if(message.getID() == MessageID::DRAW_BORDERS)
 		{
+			if (!_isVisible)
+				return;
+
 			drawBorder();
 		}
 		else if(message.getID() == MessageID::GET_SHAPE)

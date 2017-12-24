@@ -11,7 +11,7 @@ namespace Temporal
 	class ComponentEditor : public ToolComponent
 	{
 	public:
-		ComponentEditor(Entity& entity) : ToolComponent(), _y(0.0f), _focused(false), _entity(entity), _componentEditorSerializer(*this) {}
+		ComponentEditor(Entity& entity) : ToolComponent(), _entity(entity), _componentEditorSerializer(*this) {}
 
 		Hash getType() const { return Hash("component-editor"); }
 		void handleMessage(Message& message);
@@ -20,18 +20,19 @@ namespace Temporal
 		void addPanelTextBox(const char* label, const char* text, IAction1<const char*>* textChangedEvent);
 		void addPanelCheckBox(const char* label, bool value, IAction1<bool>* checkChangedEvent);
 	private:
-		Vector PANEL_SIZE;
 		Vector CONTROL_SIZE;
 
 		HashList _ids;
-		float _y;
-		bool _focused;
 		Entity& _entity;
 		ComponentEditorSerializer _componentEditorSerializer;
 
-		AABB getNextLabelShape();
-		AABB getNextControlShape();
-		void ok();
+		float getLeftControlX() const;
+		float getRightControlX() const;
+		float getControlY() const;
+		void previousPage();
+		void nextPage();
+		int getPage() const;
+		void setPage(int page);
 	};
 }
 
