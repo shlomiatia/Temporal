@@ -20,7 +20,7 @@ namespace Temporal
 	public:
 		explicit Control() : _obb(OBB::Zero), _fontFamily("c:/windows/fonts/Arial.ttf"), _fontSize(16), _shortcutKey(Key::NONE),
 			_backgroundColor(0.2890625f, 0.73828125f, 0.671875f, 0.9f), _foregroundColor(0.87109375f, 0.859375f, 0.88671875f), _borderColor(0.21484375f, 0.21484375f, 0.21484375f), _hoverColor(0.96484375f, 0.71484375f, 0.19921875f, 0.9f),
-			_isTextBox(false), _isTextBoxMode(false), _isLeftDown(false), _isLeftClick(false), _isMiddleDown(false), _isMiddleClick(false), _isRightDown(false), _isRightClick(false), _isHover(false), _isCheckbox(false),
+			_isTextBox(false), _isTextBoxMode(false), _isVisible(true), _isLeftDown(false), _isLeftClick(false), _isMiddleDown(false), _isMiddleClick(false), _isRightDown(false), _isRightClick(false), _isHover(false), _isCheckbox(false),
 			_leftMouseDownEvent(0), _leftMouseClickEvent(0), _leftMouseUpEvent(0), _middleMouseDownEvent(0), _middleMouseClickEvent(0), _middleMouseUpEvent(0), _rightMouseDownEvent(0), _rightMouseClickEvent(0), _rightMouseUpEvent(0),
 			_mouseMoveEvent(0), _textChangedEvent(0), _commandEvent(0), _checkChangedEvent(0),
 			_box(&_obb) {}
@@ -41,12 +41,13 @@ namespace Temporal
 		void setHoverColor(const Color& color) { _hoverColor = color; }
 		const Color& getHoverColor() const { return _hoverColor; }
 		void setWidth(float width) { _box.setWidth(width);	}
-		void Control::setHeight(float height) { _box.setHeight(height);	}
-		float Control::getWidth() const	{ return _box.getWidth(); }
-		float Control::getHeight() const { return _box.getHeight();	}
-
+		void setHeight(float height) { _box.setHeight(height);	}
+		float getWidth() const	{ return _box.getWidth(); }
+		float getHeight() const { return _box.getHeight();	}
 		void setText(const char* text) { if(text) _label = text; }
 		const char* getText() const { return _label.c_str(); }
+		void setVisible(bool isVisible) { _isVisible = isVisible; }
+		bool isVisible() const { return _isVisible; }
 
 		void setLeftMouseDownEvent(IAction1<const MouseParams&>* leftMouseDownEvent) { setEvent(_leftMouseDownEvent, leftMouseDownEvent); }
 		void setLeftMouseClickEvent(IAction1<const MouseParams&>* leftMouseClickEvent) { setEvent(_leftMouseClickEvent, leftMouseClickEvent); }
@@ -65,7 +66,6 @@ namespace Temporal
 		void setShortcutKey(Key::Enum key) { _shortcutKey = key; }
 		void focus();
 		void blur();
-
 		
 	private:
 		std::string _fontFamily;
@@ -83,6 +83,7 @@ namespace Temporal
 		bool _isTextBox;
 		bool _isTextBoxMode;
 		bool _isCheckbox;
+		bool _isVisible;
 		std::string _label;
 
 		IAction1<const MouseParams&>* _leftMouseDownEvent;

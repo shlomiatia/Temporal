@@ -198,13 +198,17 @@ namespace Temporal
 			Hash id("component-editor");
 			if (getEntity().getManager().getEntity(id))
 			{
-				return;
+				getEntity().getManager().remove(id);
+			}
+			else
+			{
+				Entity* entity = new Entity(id);
+				entity->setBypassSave(true);
+				entity->add(new ComponentEditor(getSelected()->getEntity()));
+				getEntity().getManager().add(entity);
 			}
 			
-			Entity* entity = new Entity(id);
-			entity->setBypassSave(true);
-			entity->add(new ComponentEditor(getSelected()->getEntity()));
-			getEntity().getManager().add(entity);
+			
 		}
 	}
 

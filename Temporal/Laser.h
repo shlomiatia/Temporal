@@ -19,11 +19,6 @@ namespace Temporal
 		void handleMessage(Message& message);
 		Component* clone() const { return new Laser(_friendly, _speedPerSecond); };
 
-		bool isFriendly() const { return _friendly; }
-		void setFriendly(bool friendly) { _friendly = friendly; }
-		float getSpeedPerSecond() const { return _speedPerSecond; }
-		void setSpeedPerSecond(float speedPerSecond) { _speedPerSecond = speedPerSecond; }
-
 	private:
 		const OBB* _platform;
 		bool _friendly;

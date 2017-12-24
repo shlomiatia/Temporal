@@ -15,9 +15,6 @@ namespace Temporal
 		Component* clone() const { return new Door(_opened); }
 		void handleMessage(Message& message);
 
-		bool isOpened() const { return _opened; }
-		void setOpened(bool opened) { _opened = opened; set(); }
-
 	private:
 		bool _opened;
 		void set();

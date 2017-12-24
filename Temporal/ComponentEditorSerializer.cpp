@@ -9,19 +9,19 @@ namespace Temporal
 	void ComponentEditorSerializer::serialize(const char* key, float& value)
 	{
 		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
-		_componentEditorSerializer.addPanelTextBox(label.c_str(), Utils::toString(value).c_str(), createClosureAction1(ComponentEditorSerializer, const char*, floatChanged, float&, value));
+		_componentEditor.addPanelTextBox(label.c_str(), Utils::toString(value).c_str(), createClosureAction1(ComponentEditorSerializer, const char*, floatChanged, float&, value));
 	}
 
 	void ComponentEditorSerializer::serialize(const char* key, bool& value)
 	{
 		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
-		_componentEditorSerializer.addPanelCheckBox(label.c_str(), value, createClosureAction1(ComponentEditorSerializer, bool, boolChanged, bool&, value));
+		_componentEditor.addPanelCheckBox(label.c_str(), value, createClosureAction1(ComponentEditorSerializer, bool, boolChanged, bool&, value));
 	}
 
 	void ComponentEditorSerializer::serialize(const char* key, Hash& value)
 	{
 		std::string label = Utils::format("%s%s", Utils::join(_prefixes, " ").c_str(), key);
-		_componentEditorSerializer.addPanelTextBox(label.c_str(), value.getString(), createClosureAction1(ComponentEditorSerializer, const char*, hashChanged, Hash&, value));
+		_componentEditor.addPanelTextBox(label.c_str(), value.getString(), createClosureAction1(ComponentEditorSerializer, const char*, hashChanged, Hash&, value));
 	}
 
 	void ComponentEditorSerializer::hashChanged(const char* controlValue, Hash& componentValue)
