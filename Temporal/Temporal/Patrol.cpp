@@ -76,7 +76,7 @@ namespace Temporal
 			const SourceTargetParams& params = getSourceTargetParams(message.getParam());
 			Hash securityCameraId = params.getSourceId();
 
-			if (getSecurityCameraId() == Hash::INVALID || getSecurityCameraId() == securityCameraId)
+			if (_securityCameraId == Hash::INVALID || _securityCameraId == securityCameraId)
 			{
 				Hash alarmTargetId = params.getTargetId();
 				raiseMessage(Message(MessageID::NAVIGATE, &alarmTargetId));

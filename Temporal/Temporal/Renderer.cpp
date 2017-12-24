@@ -2,12 +2,10 @@
 #include "Graphics.h"
 #include "SpriteSheet.h"
 #include "Hash.h"
-#include "Serialization.h"
 #include "SceneNode.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
 #include "Texture.h"
-#include "Math.h"
 #include <SDL_opengl.h>
 
 namespace Temporal

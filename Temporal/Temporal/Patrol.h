@@ -29,14 +29,7 @@ namespace Temporal
 		Hash getType() const { return ComponentsIds::PATROL; }
 		Component* clone() const { return new Patrol(_securityCameraId, _isStatic, getCurrentStateID()); }
 		void handleMessage(Message& message);
-
-		
-
 		bool isStatic() const { return _isStatic; }
-		void setStatic(bool isStatic) { _isStatic = isStatic; }
-		Hash getSecurityCameraId() const { return _securityCameraId; }
-		void setSecurityCameraId(Hash securityCameraId) { _securityCameraId = securityCameraId; }
-
 		bool handleAlarmMessage(Message& message);
 		bool handleFireMessage(Message& message);
 		bool handleTakedownMessage(Message& message);

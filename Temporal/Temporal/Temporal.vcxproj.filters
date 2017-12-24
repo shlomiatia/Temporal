@@ -122,9 +122,6 @@
     <ClInclude Include="Animation.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Serialization.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="DynamicBody.h">
       <Filter>Physics</Filter>
     </ClInclude>
@@ -353,29 +350,32 @@
     <ClInclude Include="ActivationSensor.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentEditor.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="LaserEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="Stream.h">
+      <Filter>Common\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="LightEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="MemoryStream.h">
+      <Filter>Common\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="DoorEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="FileStream.h">
+      <Filter>Common\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="TemporalPeriodEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="BinarySerializer.h">
+      <Filter>Common\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="PatrolEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="BinaryDeserializer.h">
+      <Filter>Common\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="ActivationSensorEditor.h">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClInclude Include="XmlSerializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlDeserializer.h">
+      <Filter>Common\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEditorSerializer.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -484,9 +484,6 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Serialization.cpp">
-      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="DynamicBody.cpp">
       <Filter>Physics</Filter>
@@ -698,29 +695,32 @@
     <ClCompile Include="ActivationSensor.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentEditor.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="LaserEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="Stream.cpp">
+      <Filter>Common\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="LightEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="MemoryStream.cpp">
+      <Filter>Common\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="DoorEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="FileStream.cpp">
+      <Filter>Common\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="TemporalPeriodEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="BinarySerializer.cpp">
+      <Filter>Common\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="PatrolEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="BinaryDeserializer.cpp">
+      <Filter>Common\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="ActivationSensorEditor.cpp">
-      <Filter>Tools\ComponentEditors</Filter>
+    <ClCompile Include="XmlSerializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlDeserializer.cpp">
+      <Filter>Common\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEditorSerializer.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -754,8 +754,8 @@
     <Filter Include="Scripts\ActionController">
       <UniqueIdentifier>{eaf26acb-a610-46f6-95ed-286c6ff9acd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools\ComponentEditors">
-      <UniqueIdentifier>{c3ce5b55-1030-4583-931b-43fb64f759c6}</UniqueIdentifier>
+    <Filter Include="Common\Serialization">
+      <UniqueIdentifier>{938a0e8c-1837-4918-ac84-8b7f06ef85ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

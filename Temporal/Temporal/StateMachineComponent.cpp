@@ -1,5 +1,4 @@
 #include "StateMachineComponent.h"
-#include "Serialization.h"
 #include "MessageUtils.h"
 
 namespace Temporal

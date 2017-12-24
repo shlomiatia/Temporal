@@ -44,7 +44,22 @@ namespace Temporal
 		T* _obj;
 	};
 
+	template<class T, class P1, class C1>
+	class ClosureAction1 : public IAction1<P1>
+	{
+	public:
+		ClosureAction1(T* obj, void(T::*func)(P1, C1), C1 closureParam) : _obj(obj), _func(func), _closureParam(closureParam) {}
+
+		void operator()(P1 param1) { (*_obj.*_func)(param1, _closureParam); }
+
+	private:
+		void (T::*_func)(P1, C1);
+		T* _obj;
+		C1 _closureParam;
+	};
+
 	#define createAction1(T, P1, func) new Action1<T, P1>(this, &T::func)
+	#define createClosureAction1(T, P1, func, C1, closureParam) new ClosureAction1<T, P1, C1>(this, &T::func, closureParam)
 
 	template<class R, class P1>
 	class IFunc1
