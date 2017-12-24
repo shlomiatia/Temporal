@@ -6,7 +6,6 @@
 #include "NavigatorDescend.h"
 #include "NavigatorWait.h"
 #include "NavigatorSkipBox.h"
-#include "Serialization.h"
 #include "MessageUtils.h"
 #include "Graphics.h"
 #include "StateMachineComponent.h"

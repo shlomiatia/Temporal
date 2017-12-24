@@ -16,9 +16,6 @@ namespace Temporal
 		void handleMessage(Message& message);
 
 		Component* clone() const { return new Button(_target); }
-		void setTarget(Hash target) { _target = target; }
-		Hash getTarget() const { return _target; }
-
 		
 	private:
 		Hash _target;

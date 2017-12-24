@@ -1,5 +1,10 @@
 #include "SerializationAccess.h"
-#include "Serialization.h"
+#include "BinarySerializer.h"
+#include "BinaryDeserializer.h"
+#include "XmlSerializer.h"
+#include "XmlDeserializer.h"
+#include "ComponentEditorSerializer.h"
+
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"
@@ -93,18 +98,6 @@ else \
 
 namespace Temporal
 {
-	void SerializationAccess::getConfig(const char*& key, Component*& value, BaseSerializer& serializer, bool& shouldSerialize)
-	{
-		shouldSerialize = !value->isBypassSave();
-		Hash type = value->getType();
-		key = type.getString();
-	}
-
-	void SerializationAccess::getConfig(const char*& key, Entity*& value, BaseSerializer& serializer, bool& shouldSerialize)
-	{
-		shouldSerialize = !value->isBypassSave();
-	}
-
 	bool compare(const char* key, Component*& component, Hash componentId)
 	{
 		return component ?
@@ -112,12 +105,45 @@ namespace Temporal
 			strcmp(key, componentId.getString()) == 0;
 	}
 
-	void SerializationAccess::serialize(const char* key, Component*& component, BaseSerializer& serializer)
+	bool SerializationAccess::shouldSerialize(Component*& value)
+	{
+		bool shouldSerialize = !value->isBypassSave();
+		return shouldSerialize;
+	}
+
+	bool SerializationAccess::shouldSerialize(Entity*& value)
+	{
+		bool shouldSerialize = !value->isBypassSave();
+		return shouldSerialize;
+	}
+
+	void SerializationAccess::modifyKey(const char*& key, Component*& value)
+	{
+		Hash type = value->getType();
+		key = type.getString();
+	}
+
+	void SerializationAccess::serialize(const char* key, Component*& component, XmlSerializer& serializer)
 	{
 		I_HATE_CPP
 	}
 
 	void SerializationAccess::serialize(const char* key, Component*& component, XmlDeserializer& serializer)
+	{
+		I_HATE_CPP
+	}
+
+	void SerializationAccess::serialize(const char* key, Component*& component, BinarySerializer& serializer)
+	{
+		I_HATE_CPP
+	}
+
+	void SerializationAccess::serialize(const char* key, Component*& component, BinaryDeserializer& serializer)
+	{
+		I_HATE_CPP
+	}
+
+	void SerializationAccess::serialize(const char* key, Component*& component, ComponentEditorSerializer& serializer)
 	{
 		I_HATE_CPP
 	}

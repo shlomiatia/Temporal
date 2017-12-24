@@ -20,16 +20,8 @@ namespace Temporal
 
 		void setPeriod(Period::Enum period);
 		Period::Enum getPeriod() const { return _period; }
-		void setFutureSelfId(Hash futureSelfId) { _futureSelfId = futureSelfId; }
 		Hash getFutureSelfId() const { return _futureSelfId; }
-		void setEditorFutureSelfId(Hash editorFutureSelfId) { _editorFutureSelfId = editorFutureSelfId; }
-		Hash getEditorFutureSelfId() const { return _editorFutureSelfId; }
-		void setCreateFutureSelf(bool createFutureSelf) { _createFutureSelf = createFutureSelf; }
-		bool isCreateFutureSelf() const { return _createFutureSelf; }
-		void setSyncFutureSelf(bool syncFutureSelf) { _syncFutureSelf = syncFutureSelf; }
-		bool isSyncFutureSelf() const { return _syncFutureSelf; }
 
-		
 	private:		
 		void temporalPeriodChanged(Period::Enum period);
 		Period::Enum _period;

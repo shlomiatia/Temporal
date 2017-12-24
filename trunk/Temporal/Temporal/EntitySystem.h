@@ -69,6 +69,7 @@ namespace Temporal
 		Hash getId() const { return _id; }
 		void setId(Hash id) { _id = id; }
 		EntitiesManager& getManager() { return *_manager; }
+		const EntitiesManager& getManager() const { return *_manager; }
 
 		void init(EntitiesManager* manager);
 		void add(Component* component);
