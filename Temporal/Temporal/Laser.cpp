@@ -18,24 +18,31 @@ namespace Temporal
 	{
 		if (message.getID() == MessageID::ENTITY_POST_INIT)
 		{
-			raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(_speedPerSecond, 0.0f)));
+			_direction = -_platformSearchDirection.getRightNormal();
+			Vector impulse = _speedPerSecond * _direction;
+			raiseMessage(Message(MessageID::SET_IMPULSE, &impulse));
 			setColor();
 		}
 		else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
 		{
-			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+			_direction *= -1.0f;
 		}
 		else if (message.getID() == MessageID::LEVEL_INIT)
 		{
 			RayCastResult result;
 			const Vector& position = getPosition(*this);
 			int group = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-			if (getEntity().getManager().getGameState().getGrid().cast(position, Vector(0.0f, 1.0f), result, CollisionCategory::OBSTACLE, group))
+			if (getEntity().getManager().getGameState().getGrid().cast(position, _platformSearchDirection, result, CollisionCategory::OBSTACLE, group))
 			{
 				Hash id = result.getFixture().getEntityId();
 				Entity* entity = getEntity().getManager().getEntity(id);
 				_platform = static_cast<const OBB*>(entity->handleMessage(Message(MessageID::GET_SHAPE)));
-				raiseMessage(Message(MessageID::SET_POSITION, &Vector(position.getX(), _platform->getBottom() - 1.0f)));
+				Vector position = result.getDirectedSegment().getTarget() - _platformSearchDirection;
+				raiseMessage(Message(MessageID::SET_POSITION, &position));
+			}
+			else
+			{
+				abort();
 			}
 		}
 		else if (message.getID() == MessageID::UPDATE)
@@ -73,8 +80,11 @@ namespace Temporal
 	{
 		SceneNode* root = static_cast<SceneNode*>(raiseMessage(Message(MessageID::GET_ROOT_SCENE_NODE)));
 		root = root->get(LASER_SCENE_NODE);
-		root->setTranslation(Vector(0.0f, length / 2.0f));
-		root->setScale(Vector(1.0f, abs(length)));
+		Vector translation = -_platformSearchDirection * length / 2.0f;
+		root->setTranslation(translation);
+		root->setRotation(AngleUtils::radiansToDegrees(_direction.getAngle()));
+		root->setScale(Vector(1.0f, length));
+		
 	}
 
 	void Laser::update(float framePeriod)
@@ -83,10 +93,9 @@ namespace Temporal
 		RayCastResult result;
 		const Vector& position = getPosition(*this);
 		int group = getIntParam(raiseMessage(Message(MessageID::GET_COLLISION_GROUP)));
-		if (getEntity().getManager().getGameState().getGrid().cast(position, Vector(0.0f, -1.0f), result, COLLISION_MASK, group))
+		if (getEntity().getManager().getGameState().getGrid().cast(position, -_platformSearchDirection, result, COLLISION_MASK, group))
 		{
-			float length = result.getDirectedSegment().getTarget().getY() - position.getY();
-			
+			float length = result.getDirectedSegment().getVector().getLength();
 			
 			if (result.getFixture().getCategory() == CollisionCategory::PLAYER && !_friendly ||
 				result.getFixture().getCategory() == CollisionCategory::CHARACTER && _friendly)
@@ -101,17 +110,27 @@ namespace Temporal
 
 			setLength(length);
 		}
-		Side::Enum orientation = getOrientation(*this);
-		if (orientation == Side::LEFT && position.getX() - shape.getRadiusX() - _speedPerSecond * framePeriod <= _platform->getLeft())
+
+		Vector nextPosition = position + _speedPerSecond * _direction * framePeriod;
+		Vector normal = _platformSearchDirection.getRightNormal();
+		float dp = nextPosition.getX() * normal.getX() + nextPosition.getY() * normal.getY();
+		Vector position1 = _platform->getCenter() - _platform->getRadius();
+		float dp1 = position1.getX() * normal.getX() + position1.getY() * normal.getY();
+		Vector position2 = _platform->getCenter() + _platform->getRadius();
+		float dp2 = position2.getX() * normal.getX() + position2.getY() * normal.getY();
+		
+		if (dp1 > dp2)
 		{
-			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
+			std::swap(dp1, dp2);
+		}
+		
+		if (dp < dp1 || dp > dp2)
+		{
+			_direction *= -1.0f;
 			
 		}
-		else if (orientation == Side::RIGHT && position.getX() + shape.getRadiusX() + _speedPerSecond * framePeriod >= _platform->getRight())
-		{
-			raiseMessage(Message(MessageID::FLIP_ORIENTATION));
-		}
-		raiseMessage(Message(MessageID::SET_IMPULSE, &Vector(_speedPerSecond, 0.0f)));
+		Vector impulse = _speedPerSecond * _direction;
+		raiseMessage(Message(MessageID::SET_IMPULSE, &impulse));
 
 	}
 }
