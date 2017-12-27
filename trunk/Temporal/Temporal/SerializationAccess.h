@@ -421,6 +421,8 @@ namespace Temporal
 		{
 			serializer.serialize("is-static", component._isStatic);
 			serializer.serialize("security-camera-id", component._securityCameraId);
+			serializer.serialize("wait-time", component._waitTime);
+			serializer.serialize("aim-time", component._aimTime);
 			serialize(key, (StateMachineComponent&)component, serializer);
 		}
 
@@ -455,6 +457,7 @@ namespace Temporal
 		{
 			serializer.serialize("friendly", laser._friendly);
 			serializer.serialize("speed-per-second", laser._speedPerSecond);
+			serializer.serialize("platform-search-direction", laser._platformSearchDirection);
 		}
 
 		template<class T>
