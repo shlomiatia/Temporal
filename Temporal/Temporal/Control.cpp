@@ -191,7 +191,7 @@ namespace Temporal
 	{
 		const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
 		params.setSender(this);
-		if(intersects(shape.getOBB(), params.getPosition()))
+		if(_isVisible && intersects(shape.getOBB(), params.getPosition()))
 		{
 			params.setHandled(true);
 			if(params.getButton() == MouseButton::LEFT)
@@ -255,7 +255,7 @@ namespace Temporal
 		if (_leftMouseClickEvent || _commandEvent || _textChangedEvent || _checkChangedEvent)
 		{
 			const OBBAABBWrapper shape(static_cast<OBB*>(raiseMessage(Message(MessageID::GET_SHAPE))));
-			_isHover = intersects(shape.getOBB(), params.getPosition());
+			_isHover = _isVisible && intersects(shape.getOBB(), params.getPosition());
 		}
 	}
 

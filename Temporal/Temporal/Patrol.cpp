@@ -43,8 +43,8 @@ namespace Temporal
 		return *static_cast<Patrol*>(stateMachine);
 	}
 
-	Patrol::Patrol(Hash securityCameraId, bool isStatic, Hash initialStateId) :
-		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _securityCameraId(securityCameraId) {}
+	Patrol::Patrol(Hash securityCameraId, bool isStatic, float waitTime, float aimTime, Hash initialStateId) :
+		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _waitTime(waitTime), _aimTime(aimTime), _securityCameraId(securityCameraId) {}
 
 	void Patrol::handleMessage(Message& message)
 	{
@@ -191,8 +191,6 @@ namespace Temporal
 			}
 		}
 
-		const float Aim::AIM_TIME(0.5f);
-
 		void Aim::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_AIM));
@@ -214,7 +212,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if(_stateMachine->getTimer().getElapsedTime() >= AIM_TIME) 
+				if(_stateMachine->getTimer().getElapsedTime() >= getPatrol(_stateMachine).getAimTime()) 
 				{
 					if(!_stateMachine->getFrameFlag1())
 					{
@@ -257,8 +255,6 @@ namespace Temporal
 			}
 		}
 
-		const float Wait::WAIT_TIME(1.0f);
-
 		void Wait::enter(void* param)
 		{
 			_stateMachine->raiseMessage(Message(MessageID::ACTION_HOLSTER));
@@ -274,7 +270,7 @@ namespace Temporal
 			}
 			else if(message.getID() == MessageID::UPDATE)
 			{
-				if (!getPatrol(_stateMachine).isStatic() && _stateMachine->getTimer().getElapsedTime() >= WAIT_TIME)
+				if (!getPatrol(_stateMachine).isStatic() && _stateMachine->getTimer().getElapsedTime() >= getPatrol(_stateMachine).getWaitTime())
 				{
 					_stateMachine->changeState(TURN_STATE);
 				}

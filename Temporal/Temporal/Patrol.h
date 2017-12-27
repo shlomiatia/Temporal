@@ -24,12 +24,16 @@ namespace Temporal
 	class Patrol : public StateMachineComponent
 	{
 	public:
-		Patrol(Hash securityCameraId = Hash::INVALID, bool isStatic = false, Hash initialStateId = Hash::INVALID);
+		Patrol(Hash securityCameraId = Hash::INVALID, bool isStatic = false, float waitTime = 1.0f, float aimTime = 0.5f, Hash initialStateId = Hash::INVALID);
 
 		Hash getType() const { return ComponentsIds::PATROL; }
-		Component* clone() const { return new Patrol(_securityCameraId, _isStatic, getCurrentStateID()); }
+		Component* clone() const { return new Patrol(_securityCameraId, _isStatic, _waitTime, _aimTime, getCurrentStateID()); }
 		void handleMessage(Message& message);
+
 		bool isStatic() const { return _isStatic; }
+		float getWaitTime() const { return _waitTime; }
+		float getAimTime() const { return _aimTime; }
+
 		bool handleAlarmMessage(Message& message);
 		bool handleFireMessage(Message& message);
 		bool handleTakedownMessage(Message& message);
@@ -39,6 +43,8 @@ namespace Temporal
 	private:
 		bool _isStatic;
 		Hash _securityCameraId;
+		float _waitTime;
+		float _aimTime;
 		EdgeDetector _edgeDetector;
 
 		HashStateMap getStates() const;
@@ -59,9 +65,6 @@ namespace Temporal
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
-
-		private:
-			static const float AIM_TIME;
 		};
 
 		class Fire : public ComponentState
@@ -83,9 +86,6 @@ namespace Temporal
 		public:
 			void enter(void* param);
 			void handleMessage(Message& message);
-
-		private:
-			static const float WAIT_TIME;
 		};
 
 		class Takedown : public ComponentState
