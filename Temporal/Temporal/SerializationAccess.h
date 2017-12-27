@@ -458,6 +458,7 @@ namespace Temporal
 			serializer.serialize("friendly", laser._friendly);
 			serializer.serialize("speed-per-second", laser._speedPerSecond);
 			serializer.serialize("platform-search-direction", laser._platformSearchDirection);
+			serializer.serialize("direction", laser._direction);
 		}
 
 		template<class T>
