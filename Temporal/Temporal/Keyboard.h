@@ -25,7 +25,8 @@ namespace Temporal
 
 		void dispatchEvent(void* obj);
 
-		bool getKey(Key::Enum key) const { return _keys.at(key); }
+		bool isKeyPressed(Key::Enum key) const { return _keys.at(key); }
+		Key::Enum getShiftedKey(Key::Enum key);
 	private:
 		IntKeyMap _keysMap;
 		KeyBoolMap _keys;

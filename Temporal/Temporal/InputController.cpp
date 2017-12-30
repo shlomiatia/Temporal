@@ -77,11 +77,11 @@ namespace Temporal
 
 	void InputController::update(float time)
 	{
-		if (Keyboard::get().getKey(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
+		if (Keyboard::get().isKeyPressed(Key::D) || Input::get().getGamepad().getLeftStick().getX() > 0.0f)
 		{
 			sendDirectionAction(*this, Side::RIGHT);
 		}
-		if (Keyboard::get().getKey(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
+		if (Keyboard::get().isKeyPressed(Key::A) || Input::get().getGamepad().getLeftStick().getX() < 0.0f)
 		{
 			sendDirectionAction(*this, Side::LEFT);
 		}
@@ -93,11 +93,11 @@ namespace Temporal
 			else
 				_isJump = false;
 		}
-		if (Keyboard::get().getKey(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
+		if (Keyboard::get().isKeyPressed(Key::SPACE) || Input::get().getGamepad().getButton(GamepadButton::ACTION_DOWN))
 		{
 			raiseMessage(Message(MessageID::ACTION_UP_CONTINUE));
 		}
-		if (Keyboard::get().getKey(Key::S) || Input::get().getGamepad().getLeftStick().getY() > 0.0f)
+		if (Keyboard::get().isKeyPressed(Key::S) || Input::get().getGamepad().getLeftStick().getY() > 0.0f)
 		{
 			raiseMessage(Message(MessageID::ACTION_DOWN));
 		}

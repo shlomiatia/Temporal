@@ -193,6 +193,19 @@ namespace Temporal
 		}
 	}
 
+	Key::Enum Keyboard::getShiftedKey(Key::Enum key)
+	{
+		if (_keys[Key::LEFT_SHIFT] || _keys[Key::RIGHT_SHIFT])
+		{
+			KeyKeyMapIterator i = _shiftKeys.find(key);
+			if (i != _shiftKeys.end())
+			{
+				key = i->second;
+			}
+		}
+		return key;
+	}
+
 	void Keyboard::dispatchEvent(void* obj)
 	{
 		SDL_Event& e = *static_cast<SDL_Event*>(obj);
@@ -204,14 +217,6 @@ namespace Temporal
 		else if (e.type == SDL_KEYDOWN)
 		{
 			Key::Enum key = _keysMap[e.key.keysym.sym];
-			if (_keys[Key::LEFT_SHIFT] || _keys[Key::RIGHT_SHIFT])
-			{
-				KeyKeyMapIterator i = _shiftKeys.find(key);
-				if (i != _shiftKeys.end())
-				{
-					key = i->second;
-				}
-			}
 			_keys[key] = true;
 			raiseEvent(Message(MessageID::KEY_DOWN, &key));
 			
@@ -221,17 +226,13 @@ namespace Temporal
 			Key::Enum key = _keysMap[e.key.keysym.sym];
 			_keys[key] = false;
 			
-			KeyKeyMapIterator i = _shiftKeys.find(key);
-			if (i != _shiftKeys.end())
-			{
-				if (_keys[Key::LEFT_SHIFT] || _keys[Key::RIGHT_SHIFT])
-					key = i->second;
-				_keys[key] = false;
-			}
-			
 			raiseEvent(Message(MessageID::KEY_UP, &key));
-			if(key == Key::F4 && get().getKey(Key::LEFT_ALT))
+
+			if (key == Key::F4 && get().isKeyPressed(Key::LEFT_ALT))
+			{
 				Game::get().stop();
+			}
+				
 			if (key == Key::F12)
 			{
 				if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(ComponentsIds::GAME_STATE_EDITOR))
