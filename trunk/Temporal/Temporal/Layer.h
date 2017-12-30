@@ -74,7 +74,7 @@ namespace Temporal
 	class LayersManager : public GameStateComponent
 	{
 	public:
-		LayersManager(bool cameraFollowPlayer = false) : _cameraFollowPlayer(cameraFollowPlayer), _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0), _debugLayer(0){};
+		LayersManager() : _ambientColor(Color::White), _camera(0), _spriteLayer(0), _guiLayer(0), _lightLayer(0), _fxLayer(0), _debugLayer(0){};
 		~LayersManager();
 
 		void init(GameState* gameState);
@@ -93,7 +93,6 @@ namespace Temporal
 		void draw(float framePeriod);
 
 	private:
-		bool _cameraFollowPlayer;
 		Color _ambientColor;
 
 		LayerList _layers;

@@ -7,7 +7,7 @@
 #include "Shapes.h"
 #include "ShapeOperations.h"
 #include "Font.h"
-#include <SDL_opengl.h>
+#include "Keyboard.h"
 
 namespace Temporal
 {
@@ -287,6 +287,7 @@ namespace Temporal
 		}
 		else if(key > 0 && key < 256 && key != Key::TAB)
 		{
+			key = Keyboard::get().getShiftedKey(key);
 			_label += static_cast<char>(key);
 		}
 	}

@@ -5,7 +5,7 @@ namespace Temporal
 {
 	float ToolsUtils::snap(float val, float target, float maxSnap)
 	{
-		if (Keyboard::get().getKey(Key::LEFT_SHIFT))
+		if (Keyboard::get().isKeyPressed(Key::LEFT_SHIFT))
 		{
 			return val;
 		}
