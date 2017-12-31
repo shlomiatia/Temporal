@@ -7,6 +7,7 @@
 #include "InputEnums.h"
 #include "Renderer.h"
 #include "PhysicsEnums.h"
+#include "Camera.h"
 
 namespace Temporal
 {
@@ -24,7 +25,7 @@ namespace Temporal
 
 	static const Hash EDITABLE_ID("editable");
 
-	DebugLayer::DebugLayer(LayersManager* manager) : Layer(manager),  _grid(false), _navigationGraph(false), _notifying(false)
+	DebugLayer::DebugLayer(LayersManager* manager) : Layer(manager), _grid(false), _navigationGraph(false), _notifying(false), _camera(false)
 	{
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(STATIC_BODY_ID, Key::T, false, "resources/textures/patrol-control.png"));
 		_componentsDebugInfo.push_back(new ComponentDebugInfo(DYNAMIC_BODY_ID, Key::Y));
@@ -82,12 +83,16 @@ namespace Temporal
 			filter.push_back(NAVIGATOR_ID);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 
-		Graphics::get().getLinesSpriteBatch().end();
 
 		if (_navigationGraph)
-			getManager().getGameState().getNavigationGraph().draw();
+			getManager().getGameState().getNavigationGraph().drawDebug();
 		if (_grid)
-			getManager().getGameState().getGrid().draw();
+			getManager().getGameState().getGrid().drawDebug();
+		if (_camera)
+			getManager().getCamera().drawDebug();
+
+		Graphics::get().getLinesSpriteBatch().end();
+
 
 		drawFPS();
 
@@ -181,6 +186,10 @@ namespace Temporal
 			else if (key == Key::N)
 			{
 				getEntity().getManager().getGameState().getLayersManager().getDebugLayer().toggleNavigationGraph();
+			}
+			else if (key == Key::C)
+			{
+				getEntity().getManager().getGameState().getLayersManager().getDebugLayer().toggleCamera();
 			}
 		}
 	}

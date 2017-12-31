@@ -17,7 +17,7 @@ namespace Temporal
 	{
 		GameStateComponent::init(gameState);
 
-		_camera = new Camera(this, _cameraFollowPlayer);
+		_camera = new Camera(this);
 		_spriteLayer = new SpriteLayer(this);
 		_debugLayer = new DebugLayer(this);
 		_guiLayer = new GUILayer(this);

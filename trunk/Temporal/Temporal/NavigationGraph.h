@@ -24,7 +24,7 @@ namespace Temporal
 		NavigationNode* getNode(const Vector& position, int period);
 		const NavigationNode* getNode(Hash id, int period) const;
 		NavigationNode* getNode(Hash id, int period);
-		void draw() const;
+		void drawDebug() const;
 
 	private:
 		NavigationNodeList _pastNodes;

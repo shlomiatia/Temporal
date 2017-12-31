@@ -52,7 +52,6 @@ namespace Temporal
 	class TemporalEcho;
 	class TemporalEchoManager;
 	class VisibilityGem;
-	class CameraControl;
 	class Laser;
 	class Button;
 	class ActivationSensor;
@@ -481,8 +480,6 @@ namespace Temporal
 		template<class T>
 		static void serialize(const char* key, VisibilityGem& component, T& serializer) {}
 
-		template<class T>
-		static void serialize(const char* key, CameraControl& component, T& serializer) {}
 
 		// Singletons
 

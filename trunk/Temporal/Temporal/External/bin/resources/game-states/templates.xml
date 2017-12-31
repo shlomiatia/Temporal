@@ -233,10 +233,10 @@
 		</scene-node>
 	</renderer>
 </entity>
-<entity id="ENT_CAMERA_CONTROL">
+<!--<entity id="ENT_CAMERA_CONTROL">
 	<transform />
 	<camera-control/>
-</entity>
+</entity>-->
 <entity id="ENT_PATROL_CONTROL">
 	<transform />
 	<collision-filter category="32" />

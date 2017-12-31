@@ -42,7 +42,10 @@ namespace Temporal
 				const OBB& body = params.getContact().getSource().getGlobalShape();
 				const OBB& cover = params.getContact().getTarget().getGlobalShape();
 
-				if (body.getLeft() >= cover.getLeft() && body.getRight() <= cover.getRight() && body.getBottom() >= cover.getBottom() && body.getTop() <= cover.getTop())
+				if (body.getRight() >= cover.getLeft() &&
+					body.getLeft() <= cover.getRight() &&
+					body.getTop() >= cover.getBottom() &&
+					body.getBottom() <= cover.getTop())
 					_isCovered = true;
 			}
 		}

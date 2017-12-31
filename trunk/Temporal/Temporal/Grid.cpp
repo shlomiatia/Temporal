@@ -36,9 +36,8 @@ namespace Temporal
 		delete _grid;
 	}
 
-	void Grid::draw() const
+	void Grid::drawDebug() const
 	{
-		Graphics::get().getLinesSpriteBatch().begin();
 		for(int i = 0; i < _gridWidth; ++i)
 		{
 			for(int j = 0; j < _gridHeight; ++j)
@@ -56,7 +55,6 @@ namespace Temporal
 				}
 			}
 		}
-		Graphics::get().getLinesSpriteBatch().end();
 	}
 
 	void Grid::add(const Fixture* body, int i, int j)
