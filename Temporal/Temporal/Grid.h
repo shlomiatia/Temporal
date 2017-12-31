@@ -48,7 +48,7 @@ namespace Temporal
 		bool cast(const Vector& rayOrigin, const Vector& rayDirection, RayCastResult& result, int mask = -1, int group = -1) const;
 		bool iterateTiles(const OBB& shape, int mask = -1, int group = -1, FixtureList* result = 0, bool checkIntersection = true, bool isIntersectsExclusive = false) const;
 
-		void draw() const;
+		void drawDebug() const;
 
 	private:
 		FixtureList** _grid;

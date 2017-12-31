@@ -71,8 +71,6 @@ else if (compare(key, component, ComponentsIds::TEMPORAL_PERIOD)) \
 	serialize(key, (TemporalPeriod*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::PLAYER_PERIOD)) \
 	serialize(key, (PlayerPeriod*&)component, serializer); \
-else if (compare(key, component, ComponentsIds::CAMERA_CONTROL)) \
-	serialize(key, (CameraControl*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::LASER)) \
 	serialize(key, (Laser*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::BUTTON)) \

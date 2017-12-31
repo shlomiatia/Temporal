@@ -42,6 +42,7 @@ namespace Temporal
 
 		void toggleGrid() { _grid = !_grid; }
 		void toggleNavigationGraph() { _navigationGraph = !_navigationGraph; }
+		void toggleCamera() { _camera = !_camera; }
 
 		void showInfo(const char* info);
 		void notify(const char* notification);
@@ -52,6 +53,7 @@ namespace Temporal
 
 		bool _grid;
 		bool _navigationGraph;
+		bool _camera;
 
 		ComponentDebugInfoList _componentsDebugInfo;
 

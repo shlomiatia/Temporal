@@ -83,12 +83,11 @@ namespace Temporal
 		return const_cast<NavigationNode*>(const_cast<const NavigationGraph*>(this)->getNode(id, period));
 	}
 
-	void NavigationGraph::draw() const
+	void NavigationGraph::drawDebug() const
 	{
 		
 		Period::Enum playerPeriod = *static_cast<Period::Enum*>(getGameState().getEntitiesManager().sendMessageToEntity(Hash("ENT_PLAYER"), Message(MessageID::GET_COLLISION_GROUP)));
 		const NavigationNodeList& nodes = getNodesByPeriod(playerPeriod);
-		Graphics::get().getLinesSpriteBatch().begin();
 		for (NavigationNodeIterator i = nodes.begin(); i != nodes.end(); ++i)
 		{
 			const NavigationNode& node = **i;
@@ -141,7 +140,6 @@ namespace Temporal
 				Graphics::get().getLinesSpriteBatch().add(obb, color);
 			}
 		}
-		Graphics::get().getLinesSpriteBatch().end();
 	}
 
 	const NavigationNodeList& NavigationGraph::getNodesByPeriod(int period) const
