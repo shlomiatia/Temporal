@@ -1,9 +1,15 @@
 #include "Patrol.h"
-#include "Vector.h"
+#include "Grid.h"
 #include "MessageUtils.h"
 #include "PhysicsEnums.h"
-#include "Fixture.h"
-#include "Grid.h"
+#include "PatrolWalk.h"
+#include "PatrolAim.h"
+#include "PatrolFire.h"
+#include "PatrolTurn.h"
+#include "PatrolTakedown.h"
+#include "PatrolWait.h"
+#include "PatrolNavigate.h"
+#include "PatrolDead.h"
 
 namespace Temporal
 {
@@ -18,30 +24,7 @@ namespace Temporal
 	static const Hash NAVIGATE_STATE = Hash("PAT_STT_NAVIGATE");
 	static const Hash DEAD_STATE = Hash("PAT_STT_DEAD");
 
-	static const Hash ACTION_TURN_STATE = Hash("ACT_STT_TURN");
 	static const Hash TAKEDOWN_SENSOR_ID = Hash("SNS_TAKEDOWN");
-	static const Hash PATROL_CONTROL_SENSOR_ID = Hash("SNS_PATROL_CONTROL");
-
-	void EdgeDetector::start()
-	{
-		_isFound = true;
-	}
-
-	void EdgeDetector::handle(const Contact& contact)
-	{
-		_isFound = false;
-	}
-
-	void EdgeDetector::end()
-	{
-		if(_isFound)
-			getOwner().raiseMessage(Message(MessageID::SENSOR_FRONG_EDGE));
-	}
-
-	Patrol& getPatrol(StateMachineComponent* stateMachine)
-	{
-		return *static_cast<Patrol*>(stateMachine);
-	}
 
 	Patrol::Patrol(Hash securityCameraId, bool isStatic, float waitTime, float aimTime, Hash initialStateId) :
 		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _waitTime(waitTime), _aimTime(aimTime), _securityCameraId(securityCameraId) {}
@@ -88,7 +71,7 @@ namespace Temporal
 			changeState(NAVIGATE_STATE);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -107,7 +90,7 @@ namespace Temporal
 				changeState(AIM_STATE);
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
@@ -123,7 +106,7 @@ namespace Temporal
 				raiseMessage(Message(MessageID::CAN_ATTACK, &canAttack));
 				if (!canAttack)
 					return false;
-				
+
 				void* isVisible = getEntity().getManager().sendMessageToEntity(params.getContact().getTarget().getEntityId(), Message(MessageID::IS_VISIBLE));
 				if (isVisible && !getBoolParam(isVisible))
 					return false;
@@ -144,7 +127,7 @@ namespace Temporal
 	{
 		using namespace PatrolStates;
 		HashStateMap states;
-		
+
 		states[WALK_STATE] = new Walk();
 		states[AIM_STATE] = new Aim();
 		states[FIRE_STATE] = new Fire();
@@ -154,168 +137,5 @@ namespace Temporal
 		states[NAVIGATE_STATE] = new Navigate();
 		states[DEAD_STATE] = new Dead();
 		return states;
-	}
-
-	namespace PatrolStates
-	{
-		void Walk::handleMessage(Message& message)
-		{	
-			if (getPatrol(_stateMachine).handleTakedownMessage(message) ||
-				getPatrol(_stateMachine).handleFireMessage(message) ||
-				getPatrol(_stateMachine).handleAlarmMessage(message))
-			{
-			}
-			else if(message.getID() == MessageID::COLLISIONS_CORRECTED)
-			{
-				const Vector& collision = getVectorParam(message.getParam());
-				if(collision.getX() != 0.0f && collision.getY() >= 0.0f)
-				{
-					_stateMachine->changeState(WAIT_STATE);
-				}
-			}
-			else if(message.getID() == MessageID::SENSOR_FRONG_EDGE)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
-			else if (message.getID() == MessageID::SENSOR_SENSE)
-			{
-				const SensorParams& params = getSensorParams(message.getParam());
-				if (params.getSensorId() == PATROL_CONTROL_SENSOR_ID)
-				{
-					_stateMachine->changeState(WAIT_STATE);
-				}
-			}
-			else if(message.getID() == MessageID::UPDATE)
-			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_FORWARD));
-			}
-		}
-
-		void Aim::enter(void* param)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_AIM));
-			// TempFlag 1 - LOS
-			_stateMachine->setFrameFlag1(true);
-		}
-
-		void Aim::handleMessage(Message& message)
-		{
-			if (getPatrol(_stateMachine).handleTakedownMessage(message))
-			{
-
-			}
-			else if (message.getID() == MessageID::LINE_OF_SIGHT)
-			{
-				RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
-				if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
-					_stateMachine->setFrameFlag1(true);
-			}
-			else if(message.getID() == MessageID::UPDATE)
-			{
-				if(_stateMachine->getTimer().getElapsedTime() >= getPatrol(_stateMachine).getAimTime()) 
-				{
-					if(!_stateMachine->getFrameFlag1())
-					{
-						_stateMachine->changeState(WAIT_STATE);
-					}
-					else
-					{
-						_stateMachine->changeState(FIRE_STATE);
-					}
-				}
-			}
-		}
-
-		void Fire::enter(void* param)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::STOP_NAVIGATE));
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_FIRE));
-		}
-
-		void Fire::handleMessage(Message& message)
-		{	
-			if(message.getID() == MessageID::ANIMATION_ENDED)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
-		}
-
-		void Turn::enter(void* param)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_BACKWARD));
-		}
-
-		void Turn::handleMessage(Message& message)
-		{	
-			if(message.getID() == MessageID::STATE_EXITED)
-			{
-				Hash actionID = getHashParam(message.getParam());
-				if(actionID == ACTION_TURN_STATE)
-					_stateMachine->changeState(WALK_STATE);
-			}
-		}
-
-		void Wait::enter(void* param)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_HOLSTER));
-		}
-
-		void Wait::handleMessage(Message& message)
-		{
-			if (getPatrol(_stateMachine).handleTakedownMessage(message) ||
-				getPatrol(_stateMachine).handleFireMessage(message) ||
-				getPatrol(_stateMachine).handleAlarmMessage(message))
-			{
-
-			}
-			else if(message.getID() == MessageID::UPDATE)
-			{
-				if (!getPatrol(_stateMachine).isStatic() && _stateMachine->getTimer().getElapsedTime() >= getPatrol(_stateMachine).getWaitTime())
-				{
-					_stateMachine->changeState(TURN_STATE);
-				}
-			}
-		}
-
-		void Takedown::enter(void* param)
-		{
-			_stateMachine->raiseMessage(Message(MessageID::STOP_NAVIGATE));
-			_stateMachine->raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
-		}
-
-		void Takedown::handleMessage(Message& message)
-		{
-			if (message.getID() == MessageID::UPDATE)
-			{
-				_stateMachine->raiseMessage(Message(MessageID::ACTION_TAKEDOWN));
-			}
-			else if (message.getID() == MessageID::ANIMATION_ENDED)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
-		}
-
-		void Navigate::handleMessage(Message& message)
-		{
-			getPatrol(_stateMachine).handleFireMessage(message);
-			getPatrol(_stateMachine).handleTakedownMessage(message);
-
-			if (message.getID() == MessageID::ENTITY_READY)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
-			if (message.getID() == MessageID::NAVIGATION_SUCCESS)
-			{
-				Hash id = getHashParam(message.getParam());
-				
-				CollisionCategory::Enum category = *static_cast<CollisionCategory::Enum*>(_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::GET_COLLISION_CATEGORY)));
-				if (category & CollisionCategory::DEAD)
-				{
-					_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
-					_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
-				}
-				_stateMachine->changeState(WAIT_STATE);
-			}
-		}
 	}
 }

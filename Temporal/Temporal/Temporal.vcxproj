@@ -42,6 +42,7 @@
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="DragMessagesHandler.h" />
+    <ClInclude Include="EdgeDetector.h" />
     <ClInclude Include="Editable.h" />
     <ClInclude Include="FBO.h" />
     <ClInclude Include="FileStream.h" />
@@ -75,6 +76,15 @@
     <ClInclude Include="NavigatorWait.h" />
     <ClInclude Include="NavigatorWalk.h" />
     <ClInclude Include="Pathfinder.h" />
+    <ClInclude Include="Patrol.h" />
+    <ClInclude Include="PatrolAim.h" />
+    <ClInclude Include="PatrolDead.h" />
+    <ClInclude Include="PatrolFire.h" />
+    <ClInclude Include="PatrolNavigate.h" />
+    <ClInclude Include="PatrolTakedown.h" />
+    <ClInclude Include="PatrolTurn.h" />
+    <ClInclude Include="PatrolWait.h" />
+    <ClInclude Include="PatrolWalk.h" />
     <ClInclude Include="PlayerPeriod.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SaverLoader.h" />
@@ -85,7 +95,6 @@
     <ClInclude Include="Hash.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Particles.h" />
-    <ClInclude Include="Patrol.h" />
     <ClInclude Include="CollisionFilter.h" />
     <ClInclude Include="PhysicsEnums.h" />
     <ClInclude Include="SceneNode.h" />
@@ -170,6 +179,7 @@
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="DragMessagesHandler.cpp" />
+    <ClCompile Include="EdgeDetector.cpp" />
     <ClCompile Include="Editable.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="FileStream.cpp" />
@@ -199,6 +209,14 @@
     <ClCompile Include="NavigatorWait.cpp" />
     <ClCompile Include="NavigatorWalk.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
+    <ClCompile Include="Patrol.cpp" />
+    <ClCompile Include="PatrolAim.cpp" />
+    <ClCompile Include="PatrolFire.cpp" />
+    <ClCompile Include="PatrolNavigate.cpp" />
+    <ClCompile Include="PatrolTakedown.cpp" />
+    <ClCompile Include="PatrolTurn.cpp" />
+    <ClCompile Include="PatrolWait.cpp" />
+    <ClCompile Include="PatrolWalk.cpp" />
     <ClCompile Include="PlayerPeriod.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaverLoader.cpp" />
@@ -209,7 +227,6 @@
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Particles.cpp" />
-    <ClCompile Include="Patrol.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="SecurityCamera.cpp" />

@@ -27,8 +27,6 @@ namespace Temporal
 		void raiseNavigationFailure();
 		bool plotPath();
 
-		
-
 	protected:
 		Hash getInitialState() const;
 

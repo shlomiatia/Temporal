@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Patrol.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="BaseEnums.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -377,12 +374,39 @@
     <ClInclude Include="ComponentEditorSerializer.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="EdgeDetector.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="Patrol.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolWalk.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolAim.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolFire.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolTurn.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolWait.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolTakedown.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolNavigate.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="PatrolDead.h">
+      <Filter>AI\Patrol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Patrol.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -722,6 +746,33 @@
     <ClCompile Include="ComponentEditorSerializer.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="EdgeDetector.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="Patrol.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolWalk.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolAim.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolFire.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolTurn.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolWait.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolTakedown.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="PatrolNavigate.cpp">
+      <Filter>AI\Patrol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -756,6 +807,9 @@
     </Filter>
     <Filter Include="Common\Serialization">
       <UniqueIdentifier>{938a0e8c-1837-4918-ac84-8b7f06ef85ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI\Patrol">
+      <UniqueIdentifier>{1b9f49c9-4585-419b-8ef5-783cfdb204d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
