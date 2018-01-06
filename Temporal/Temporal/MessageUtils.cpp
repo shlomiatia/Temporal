@@ -88,6 +88,11 @@ namespace Temporal
 		return *static_cast<const Vector*>(data);
 	}
 
+	const OBB& getOBBParam(void * data)
+	{
+		return *static_cast<const OBB*>(data);
+	}
+
 	void sendDirectionAction(const Component& component, Side::Enum direction)
 	{
 		Side::Enum orientation = getOrientation(component);

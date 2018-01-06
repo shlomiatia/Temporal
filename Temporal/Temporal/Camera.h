@@ -11,28 +11,26 @@ namespace Temporal
 	class Camera : public Layer
 	{
 	public:
-		Camera(LayersManager* manager, bool followPlayer);
+		Camera(LayersManager* manager);
 
 		void draw(float framePeriod);
+		void drawDebug();
 		
-		void setFollowPlayer(bool followPlayer) { _followPlayer = followPlayer; }
-		bool isFollowPlayer() const { return _followPlayer;  }
-		void setCenter(const Vector& position) { _targetCenter = position; clamp(); };
-		const Vector& getCenter() const { return _targetCenter; }
-		void translate(const Vector& movement) { _targetCenter += movement; clamp(); _center = _targetCenter; };
-		void setActiveCameraControl(Hash activeCameraControl) { _activeCameraControl = activeCameraControl; }
-		Hash getActiveCameraControl() const { return _activeCameraControl; }
-
+		void setTrackedEntityId(Hash trackedEntityId);
+		Hash getTrackedEntityId() const { return _trackedEntityId; }
+		void translate(const Vector& movement) { _center += movement; clamp(); };
 		Vector getBottomLeft() const;
 		
 	private:
-		bool _followPlayer;
-		bool _foundPlayer;
+		Hash _trackedEntityId;
 		Vector _center;
-		Vector _targetCenter;	
-		Hash _activeCameraControl;
+		Vector _previousCenter;
+		Vector _targetCenter;
+		Vector _window;
+		float _t;
 
 		void clamp();
+		void handleWindow(const Vector& playerPosition);
 
 		Camera(const Camera&);
 		Camera& operator=(const Camera&);
@@ -47,8 +45,6 @@ namespace Temporal
 
 		Component* clone() const { return new CameraControl(); }
 
-		
-	private:
 	};
 }
 

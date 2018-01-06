@@ -4,7 +4,7 @@
 #include "XmlSerializer.h"
 #include "XmlDeserializer.h"
 #include "ComponentEditorSerializer.h"
-
+#include "Camera.h"
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"
@@ -23,7 +23,6 @@
 #include "DynamicBody.h"
 #include "SaverLoader.h"
 #include "GameStateEditor.h"
-#include "Camera.h"
 #include "AnimationEditor.h"
 #include "Laser.h"
 #include "VisibilityGem.h"
@@ -83,6 +82,8 @@ else if (compare(key, component, ComponentsIds::SECURITY_CAMERA)) \
 	serialize(key, (SecurityCamera*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::VISIBILITY_GEM)) \
 	serialize(key, (VisibilityGem*&)component, serializer); \
+else if (compare(key, component, ComponentsIds::CAMERA_CONTROL)) \
+	serialize(key, (CameraControl*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::GAME_SAVER_LOADER)) \
 	serialize(key, (GameSaverLoader*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::ANIMATION_EDITOR)) \
