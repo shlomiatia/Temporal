@@ -404,6 +404,9 @@
     <ClInclude Include="PatrolDead.h">
       <Filter>AI\Patrol</Filter>
     </ClInclude>
+    <ClInclude Include="CameraControl.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -772,6 +775,9 @@
     </ClCompile>
     <ClCompile Include="PatrolNavigate.cpp">
       <Filter>AI\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraControl.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
