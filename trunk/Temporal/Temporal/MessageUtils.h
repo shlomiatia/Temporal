@@ -34,9 +34,11 @@ namespace Temporal
 
 	Hash getHashParam(void* data);
 	const Vector& getVectorParam(void* data);
+	const OBB& getOBBParam(void* data);
 	inline float getFloatParam(void* data) { return *static_cast<float*>(data); }
 	inline int getIntParam(void* data) { return *static_cast<int*>(data); }
 	inline bool getBoolParam(void* data) { return *static_cast<bool*>(data); }
+	
 
 	void sendDirectionAction(const Component& component, Side::Enum direction);
 	void handleGridFixtureMessage(Message& message, Component& component, Fixture& fixture);

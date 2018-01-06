@@ -6,47 +6,84 @@
 #include "MessageUtils.h"
 #include "Sensor.h"
 #include "AnimationUtils.h"
+#include "Keyboard.h"
 
 namespace Temporal
 {
 	static const Hash PLAYER_ENTITY = Hash("ENT_PLAYER");
-	static const float MAX_CHANGE_PER_SECOND = 500.0f;
 
-	Camera::Camera(LayersManager* manager, bool followPlayer) : Layer(manager), _followPlayer(followPlayer), _foundPlayer(false), _center(Vector::Zero), _targetCenter(Vector::Zero), _activeCameraControl(Hash::INVALID)
+	Camera::Camera(LayersManager* manager) : Layer(manager), _trackedEntityId(PLAYER_ENTITY), _window(0.0f, 50.0f), _t(0.0f)
 	{
 		const Vector& cameraSize = Graphics::get().getLogicalView();
 		_center = cameraSize / 2.0f;
-		_targetCenter = cameraSize / 2.0f;
+		_previousCenter = Vector::Zero;
+		_targetCenter = _center;
+		_t = 1.0f;
+		
+	}
+
+	void Camera::setTrackedEntityId(Hash trackedEntityId)
+	{
+		void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(_trackedEntityId, Message(MessageID::GET_POSITION));
+		_previousCenter = getVectorParam(result);
+		_t = 0.0f;
+		_trackedEntityId = trackedEntityId;
+		
 	}
 
 	void Camera::draw(float framePeriod)
 	{
-		if(_followPlayer)
+		if(_trackedEntityId != Hash::INVALID)
 		{
-			void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
-			Vector playerPosition = getVectorParam(result);
-			setCenter(playerPosition);
-			if (!_foundPlayer)
+			void* result = getManager().getGameState().getEntitiesManager().sendMessageToEntity(_trackedEntityId, Message(MessageID::GET_POSITION));
+			Vector trackedEntityPosition = getVectorParam(result);
+			if (_trackedEntityId == PLAYER_ENTITY)
 			{
-				_foundPlayer = true;
+				_targetCenter.setX(trackedEntityPosition.getX());
+				handleWindow(trackedEntityPosition);
+			}
+			else
+			{
+				_targetCenter = trackedEntityPosition;
+			}
+			if (_t >= 1.0f)
+			{
 				_center = _targetCenter;
 			}
+			else
+			{
+				_t += framePeriod * 2.0f;
+				if (_t > 1.0f)
+					_t = 1.0f;
+				_center = _previousCenter + _t * (_targetCenter - _previousCenter);
+			}
+			
+			clamp();
 		}
-		
-		Vector movement = _targetCenter - _center;;
-		
-		float maxChange = MAX_CHANGE_PER_SECOND * framePeriod;
-		float modifierX = abs(maxChange / movement.getX());
-		if (modifierX < 1.0f && modifierX > 0.0f)
-			movement.setX(movement.getX() * modifierX);
-		float modifierY = abs(maxChange / movement.getY());
-		if (modifierY < 1.0f && modifierY > 0.0f)
-			movement.setY(movement.getY() * modifierY);
-
-		_center += movement;
 		
 		Vector translation = -getBottomLeft();
 		Graphics::get().getMatrixStack().top().translate(translation);
+	}
+
+	void Camera::handleWindow(const Vector& trackedEntityPosition)
+	{
+		Vector delta = trackedEntityPosition - _targetCenter;
+		if (fabsf(delta.getY()) > _window.getY())
+		{
+			if (delta.getY() > 0.0f)
+			{
+				_targetCenter.setY(_targetCenter.getY() + delta.getY() - _window.getY());
+			}
+			else
+			{
+				_targetCenter.setY(_targetCenter.getY() + delta.getY() + _window.getY());
+			}
+		}
+	}
+
+	void Camera::drawDebug()
+	{
+		
 	}
 
 	Vector Camera::getBottomLeft() const
@@ -67,52 +104,51 @@ namespace Temporal
 		const Vector& levelSize = getManager().getGameState().getGrid().getWorldSize();
 		float levelWidth = levelSize.getX();
 		float levelHeight = levelSize.getY();
-		if (_targetCenter.getX() < cameraRadiusX)
-			_targetCenter.setX(cameraRadiusX);
-		if (_targetCenter.getY() < cameraRadiusY)
-			_targetCenter.setY(cameraRadiusY);
-		if (_targetCenter.getX() + cameraRadiusX > levelWidth)
-			_targetCenter.setX(levelWidth - cameraRadiusX);
-		if (_targetCenter.getY() + cameraRadiusY > levelHeight)
-			_targetCenter.setY(levelHeight - cameraRadiusY);
+		if (_center.getX() < cameraRadiusX)
+			_center.setX(cameraRadiusX);
+		if (_center.getY() < cameraRadiusY)
+			_center.setY(cameraRadiusY);
+		if (_center.getX() + cameraRadiusX > levelWidth)
+			_center.setX(levelWidth - cameraRadiusX);
+		if (_center.getY() + cameraRadiusY > levelHeight)
+			_center.setY(levelHeight - cameraRadiusY);
 	}
 
 	void CameraControl::handleMessage(Message& message)
 	{
 		if (message.getID() == MessageID::UPDATE)
 		{
-			void* result = getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION));
-			const Vector& playerPosition = getVectorParam(result);
-			Vector position = getPosition(*this);
-			const Vector& cameraSize = Graphics::get().getLogicalView();
-				
-			bool inY = fabsf(position.getY() - playerPosition.getY()) < cameraSize.getY() / 2.0f;
-			float diffX = cameraSize.getX() / 2.0f + cameraSize.getX() / 5.0f - fabsf(position.getX() - playerPosition.getX());
-			float interpolationX = diffX / (cameraSize.getX() / 2.0f);
 			Camera& camera = getEntity().getManager().getGameState().getLayersManager().getCamera();
-			if (!inY || interpolationX < 0.0f)
+			Hash trackedEntityId = camera.getTrackedEntityId();
+			const Vector& cameraCurrentTrackedEntityPosition = getVectorParam(getEntity().getManager().sendMessageToEntity(trackedEntityId, Message(MessageID::GET_POSITION)));
+			const Vector& playerPosition = getVectorParam(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_POSITION)));
+			const OBB& playerShape = getOBBParam(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
+			Vector position = getPosition(*this);
+			
+
+			Vector positionToPlayerPositionDelta = (position - playerPosition).absolute();
+			
+			if (trackedEntityId != PLAYER_ENTITY &&
+				trackedEntityId != getEntity().getId() &&
+				positionToPlayerPositionDelta.getLength() > (cameraCurrentTrackedEntityPosition - playerPosition).getLength())
 			{
-				if (camera.getActiveCameraControl() == getEntity().getId())
-				{
-					camera.setFollowPlayer(true);
-					camera.setActiveCameraControl(Hash::INVALID);
-				}
-			}
-			else if (camera.getActiveCameraControl() == Hash::INVALID ||
-					 camera.getActiveCameraControl() == getEntity().getId() ||
-					(camera.getActiveCameraControl() != getEntity().getId() && camera.getCenter().getX() < position.getX()))
-			{
-				if (interpolationX < 1.0f)
-				{
-					float newX = AnimationUtils::transition(interpolationX, playerPosition.getX(), position.getX());
-					position.setX(newX);
-				}
-				
-				camera.setFollowPlayer(false);
-				camera.setCenter(position);
-				camera.setActiveCameraControl(getEntity().getId());
+				return;
 			}
 			
+			Vector positionToPlayerShapeDelta = positionToPlayerPositionDelta + playerShape.getRadius();
+			const Vector& cameraRadius = Graphics::get().getLogicalView() / 2.0f;
+
+			if (positionToPlayerShapeDelta.getX() <= cameraRadius.getX() && positionToPlayerShapeDelta.getY() <= cameraRadius.getY())
+			{
+				if (camera.getTrackedEntityId() != getEntity().getId())
+				{
+					camera.setTrackedEntityId(getEntity().getId());
+				}
+			}
+			else if (camera.getTrackedEntityId() == getEntity().getId())
+			{
+				camera.setTrackedEntityId(PLAYER_ENTITY);
+			}
 		}
 	}
 }

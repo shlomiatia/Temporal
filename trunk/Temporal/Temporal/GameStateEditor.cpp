@@ -256,7 +256,7 @@ namespace Temporal
 		ids.push_back(ComponentsIds::EDITABLE);
 		ids.push_back(ComponentsIds::CONTROL);
 		getEntity().getManager().getGameState().setUpdateFilter(ids);
-		getEntity().getManager().getGameState().getLayersManager().getCamera().setFollowPlayer(false);
+		getEntity().getManager().getGameState().getLayersManager().getCamera().setTrackedEntityId(Hash::INVALID);
 
 	}
 
