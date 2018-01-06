@@ -31,10 +31,7 @@ namespace Temporal
 		Vector getLeftNormal() const { return Vector(-getY(), getX()); }
 		Vector getRightNormal() const { return Vector(getY(), -getX()); }
 		Vector absolute() const;
-		Vector addComponents(float x, float y) const { return Vector(_x + x, _y + y); }
-		Vector subtractComponents(float x, float y) const { return Vector(_x - x, _y - y); }
 		Vector multiplyComponents(float x, float y) const { return Vector(_x * x, _y * y); }
-		Vector divideComponents(float x, float y) const { return Vector(_x / x, _y / y); }
 
 		Vector operator-() const { return Vector(-getX(), -getY()); }
 		bool operator==(const Vector& vector) const { return ((getX() == vector.getX()) && (getY() == vector.getY())); }

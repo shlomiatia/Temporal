@@ -113,11 +113,11 @@ namespace Temporal
 
 		Vector nextPosition = position + _speedPerSecond * _direction * framePeriod;
 		Vector normal = _platformSearchDirection.getRightNormal();
-		float dp = nextPosition.getX() * normal.getX() + nextPosition.getY() * normal.getY();
+		float dp = nextPosition * normal;
 		Vector position1 = _platform->getCenter() - _platform->getRadius();
-		float dp1 = position1.getX() * normal.getX() + position1.getY() * normal.getY();
+		float dp1 = position1 * normal;
 		Vector position2 = _platform->getCenter() + _platform->getRadius();
-		float dp2 = position2.getX() * normal.getX() + position2.getY() * normal.getY();
+		float dp2 = position2 * normal;
 		
 		if (dp1 > dp2)
 		{
