@@ -71,9 +71,9 @@ namespace Temporal
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
 
 		glBindVertexArray(0);
-		glDisableVertexAttribArray(getCoordinateAttribute());
-		glDisableVertexAttribArray(getTextureCoordinateAttribute());
-		glDisableVertexAttribArray(getColorAttribute());
+		//glDisableVertexAttribArray(getCoordinateAttribute());
+		//glDisableVertexAttribArray(getTextureCoordinateAttribute());
+		//glDisableVertexAttribArray(getColorAttribute());
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}

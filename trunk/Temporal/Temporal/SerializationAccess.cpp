@@ -4,7 +4,7 @@
 #include "XmlSerializer.h"
 #include "XmlDeserializer.h"
 #include "ComponentEditorSerializer.h"
-#include "Camera.h"
+#include "CameraControl.h"
 #include "Renderer.h"
 #include "Particles.h"
 #include "Lighting.h"

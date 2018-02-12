@@ -85,11 +85,19 @@ namespace Temporal
 
 
 		if (_navigationGraph)
+		{
 			getManager().getGameState().getNavigationGraph().drawDebug();
+		}
+			
 		if (_grid)
+		{
 			getManager().getGameState().getGrid().drawDebug();
+		}
+			
 		if (_camera)
+		{
 			getManager().getCamera().drawDebug();
+		}
 
 		Graphics::get().getLinesSpriteBatch().end();
 
