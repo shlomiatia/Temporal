@@ -3,9 +3,10 @@
 
 #include "InputEnums.h"
 #include "Layer.h"
+#include "Timer.h"
+#include "EntitySystem.h"
 #include <vector>
 #include "Ids.h"
-
 namespace Temporal
 {
 	class ComponentDebugInfo
@@ -72,7 +73,6 @@ namespace Temporal
 		Component* clone() const { return new DebugManager(_startInDebugMode); }
 
 		void addDebugRendererToEntity(Entity& entity);
-
 		
 	private:
 		void toggleDebugging(ComponentDebugInfo& info);

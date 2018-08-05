@@ -4,7 +4,7 @@
 #include "Grid.h"
 #include "MessageUtils.h"
 #include "CollisionFilter.h"
-#include "Layer.h"
+#include "LayersManager.h"
 
 namespace Temporal
 {

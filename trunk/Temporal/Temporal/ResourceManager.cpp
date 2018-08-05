@@ -10,7 +10,7 @@
 #include "XmlDeserializer.h"
 
 // For Serialization
-#include "Layer.h"
+#include "LayersManager.h"
 #include "Grid.h"
 
 #include <sstream>

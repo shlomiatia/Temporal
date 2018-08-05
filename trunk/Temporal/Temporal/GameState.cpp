@@ -7,6 +7,7 @@
 #include "InputEnums.h"
 #include "Input.h"
 #include "Game.h"
+#include "LayersManager.h"
 
 namespace Temporal
 {

@@ -4,7 +4,7 @@
 #include "AnimationUtils.h"
 #include "Texture.h"
 #include "MessageUtils.h"
-#include "Layer.h"
+#include "LayersManager.h"
 #include "ResourceManager.h"
 #include "SpriteSheet.h"
 #include "SceneNode.h"

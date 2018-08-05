@@ -3,7 +3,7 @@
 #include "Hash.h"
 #include "Color.h"
 #include "EntitySystem.h"
-#include "Layer.h"
+#include "LayersManager.h"
 #include <memory>
 #include "Ids.h"
 

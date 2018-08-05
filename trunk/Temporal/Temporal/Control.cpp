@@ -1,5 +1,5 @@
 #include "Control.h"
-#include "Layer.h"
+#include "LayersManager.h"
 #include "Vector.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
@@ -8,6 +8,7 @@
 #include "ShapeOperations.h"
 #include "Font.h"
 #include "Keyboard.h"
+#include "Timer.h"
 
 namespace Temporal
 {

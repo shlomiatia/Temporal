@@ -5,7 +5,9 @@
 #include "EntitySystem.h"
 #include "SpriteLayer.h"
 #include "Camera.h"
+#include "LayersManager.h"
 #include "Lighting.h"
+#include "GUILayer.h"
 
 #include <SDL.h>
 
