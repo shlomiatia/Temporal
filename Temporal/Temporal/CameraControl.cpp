@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "ActionController.h"
 #include "Graphics.h"
+#include "LayersManager.h"
 
 namespace Temporal
 {

@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "GameEnums.h"
 #include "MessageUtils.h"
+#include "LayersManager.h"
 
 namespace Temporal
 {

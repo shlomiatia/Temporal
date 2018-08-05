@@ -16,7 +16,7 @@
 #include "ComponentEditor.h"
 #include "FileStream.h"
 #include "XmlSerializer.h"
-
+#include "LayersManager.h"
 
 namespace Temporal
 {

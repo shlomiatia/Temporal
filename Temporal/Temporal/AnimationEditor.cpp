@@ -9,7 +9,7 @@
 #include "Utils.h"
 #include "Graphics.h"
 #include "Shapes.h"
-#include "Layer.h"
+#include "LayersManager.h"
 #include "MessageUtils.h"
 #include "ResourceManager.h"
 #include "DebugLayer.h"

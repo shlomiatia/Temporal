@@ -1,6 +1,8 @@
 #include "SpriteLayer.h"
 #include "Graphics.h"
 #include "Camera.h"
+#include "LayersManager.h"
+#include "Timer.h"
 #include <algorithm>
 
 namespace Temporal

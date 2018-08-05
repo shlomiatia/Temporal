@@ -104,12 +104,6 @@
     <ClInclude Include="Vector.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Layer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="tinyxml2.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -203,9 +197,6 @@
     <ClInclude Include="InputEnums.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="DebugLayer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -217,9 +208,6 @@
     </ClInclude>
     <ClInclude Include="ToolsUtils.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteLayer.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsEnums.h">
       <Filter>Graphics</Filter>
@@ -410,6 +398,27 @@
     <ClInclude Include="CrashDump.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="DebugLayer.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="GUILayer.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="FXLayer.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteLayer.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="LayersManager.h">
+      <Filter>Graphics\Layer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -500,12 +509,6 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Layer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -593,9 +596,6 @@
     <ClCompile Include="VisibilityGem.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="DebugLayer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -607,9 +607,6 @@
     </ClCompile>
     <ClCompile Include="ToolsUtils.cpp">
       <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteLayer.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SecurityCamera.cpp">
       <Filter>AI</Filter>
@@ -785,6 +782,27 @@
     <ClCompile Include="CrashDump.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="DebugLayer.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="GUILayer.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="FXLayer.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteLayer.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="LayersManager.cpp">
+      <Filter>Graphics\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -822,6 +840,9 @@
     </Filter>
     <Filter Include="AI\Patrol">
       <UniqueIdentifier>{1b9f49c9-4585-419b-8ef5-783cfdb204d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Layer">
+      <UniqueIdentifier>{e863d519-dc63-4167-8bde-06810a17bea6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
