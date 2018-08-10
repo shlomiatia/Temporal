@@ -34,6 +34,7 @@ namespace Temporal
 			MOUSE_DOWN,
 			MOUSE_MOVE,
 			MOUSE_UP,
+			MOUSE_SCROLL,
 
 			KEY_DOWN,
 			KEY_UP,

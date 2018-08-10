@@ -166,7 +166,7 @@ namespace Temporal
 		const Vector& playerPosition = *static_cast<Vector*>(result);
 		
 		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
-		Vector relativePosition = playerPosition - layersManager.getCamera().getBottomLeft();
+		Vector relativePosition = playerPosition - layersManager.getCamera().getUnscaledBottomLeft();
 		relativePosition.setX(relativePosition.getX() * Graphics::get().getResolution().getX() / Graphics::get().getLogicalView().getX());
 		relativePosition.setY(relativePosition.getY() * Graphics::get().getResolution().getY() / Graphics::get().getLogicalView().getY());
 		GLubyte alpha[4];
@@ -181,7 +181,7 @@ namespace Temporal
 		Graphics::get().getMatrixStack().top().reset();
 		Graphics::get().getFXShaderProgram().setUniform(Graphics::get().getFXSpriteBatch().getTypeUniform(), -1);
 		_fbo.draw();
-		Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft());
+		Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getUnscaledBottomLeft());
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }

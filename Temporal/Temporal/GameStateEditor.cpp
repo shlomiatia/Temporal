@@ -75,6 +75,18 @@ namespace Temporal
 		{
 			moveCamera(Vector(movement, 0.0f));
 		}
+		if (Keyboard::get().isKeyPressed(Key::PAGE_DOWN))
+		{
+			getEntity().getManager().getGameState().getLayersManager().getCamera().scale(0.99f);
+		}
+		if (Keyboard::get().isKeyPressed(Key::PAGE_UP))
+		{
+			getEntity().getManager().getGameState().getLayersManager().getCamera().scale(1.01f);
+		}
+		if (Keyboard::get().isKeyPressed(Key::BACKSPACE))
+		{
+			getEntity().getManager().getGameState().getLayersManager().getCamera().resetScale();
+		}
 		if (getEntity().getManager().getFocusInputComponent() == this)
 		{
 			OBB shape = Editable::getShape(*getEntity().getManager().getEntity(CURSOR_ENTITY_ID));
@@ -216,8 +228,6 @@ namespace Temporal
 				entity->add(new ComponentEditor(getSelected()->getEntity()));
 				getEntity().getManager().add(entity);
 			}
-			
-			
 		}
 	}
 

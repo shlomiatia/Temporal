@@ -14,23 +14,30 @@ namespace Temporal
 		Camera(LayersManager* manager);
 
 		void draw(float framePeriod);
-		void drawDebug();
 		
 		void setTrackedEntityId(Hash trackedEntityId);
 		Hash getTrackedEntityId() const { return _trackedEntityId; }
 		void translate(const Vector& movement) { _center += movement; clamp(); };
-		Vector getBottomLeft() const;
+		void scale(float scale) { _scale *= scale; clamp(); }
+		void resetScale() { _scale = 1.0f; clamp(); }
+		
+		Vector getOffsetPosition(const Vector& vector) const;
+		Vector getParallaxPosition(float parallaxScale) const;
+		Vector getUnscaledBottomLeft() const;
+
 		
 	private:
 		Hash _trackedEntityId;
-		Vector _center;
+		Vector _center; 
 		Vector _previousCenter;
 		Vector _targetCenter;
 		Vector _window;
-		float _t;
+		float _time;
+		float _scale;
 
 		void clamp();
 		void handleWindow(const Vector& playerPosition);
+		Vector getBottomLeft() const;
 
 		Camera(const Camera&);
 		Camera& operator=(const Camera&);

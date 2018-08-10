@@ -25,8 +25,6 @@ namespace Temporal
 		_buttonsMap[SDL_BUTTON_LEFT] = MouseButton::LEFT;
 		_buttonsMap[SDL_BUTTON_MIDDLE] = MouseButton::MIDDLE;
 		_buttonsMap[SDL_BUTTON_RIGHT] = MouseButton::RIGHT;
-		//_buttonsMap[SDL_BUTTON_WHEELDOWN] = MouseButton::WHEEL_DOWN;
-		//_buttonsMap[SDL_BUTTON_WHEELUP] = MouseButton::WHEEL_UP;
 
 		for(IntMouseButtonIterator i = _buttonsMap.begin(); i != _buttonsMap.end(); ++i)
 		{
@@ -37,8 +35,9 @@ namespace Temporal
 
 	Vector Mouse::getOffsetPosition() const
 	{
-		LayersManager& layersManager = GameStateManager::get().getCurrentState().getLayersManager();
-		Vector offsetPosition = layersManager.getCamera().getBottomLeft() + getPosition();
+		Camera& camera = GameStateManager::get().getCurrentState().getLayersManager().getCamera();
+		Vector offsetPosition = camera.getOffsetPosition(getPosition());
+
 		return offsetPosition;
 	}
 
@@ -116,6 +115,11 @@ namespace Temporal
 			fillPosition(e, _position);
 			MouseParams params(MouseButton::NONE, _position);
 			sendMessage(MessageID::MOUSE_MOVE, params);
+		}
+		else if (e.type == SDL_MOUSEWHEEL)
+		{
+			MouseParams params(MouseButton::NONE, Vector(0.0f, e.wheel.y));
+			sendMessage(MessageID::MOUSE_SCROLL, params);
 		}
 	}
 }

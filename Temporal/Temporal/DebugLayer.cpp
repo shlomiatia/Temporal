@@ -83,7 +83,6 @@ namespace Temporal
 			filter.push_back(NAVIGATOR_ID);
 		getManager().getGameState().getEntitiesManager().sendMessageToAllEntities(Message(MessageID::DRAW_DEBUG), &filter);
 
-
 		if (_navigationGraph)
 		{
 			getManager().getGameState().getNavigationGraph().drawDebug();
@@ -92,11 +91,6 @@ namespace Temporal
 		if (_grid)
 		{
 			getManager().getGameState().getGrid().drawDebug();
-		}
-			
-		if (_camera)
-		{
-			getManager().getCamera().drawDebug();
 		}
 
 		Graphics::get().getLinesSpriteBatch().end();
