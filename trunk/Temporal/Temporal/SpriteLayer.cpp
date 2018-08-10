@@ -17,7 +17,7 @@ namespace Temporal
 	{
 		if (layer == LayerType::PARALLAX)
 		{
-			Graphics::get().getMatrixStack().top().translate(getManager().getCamera().getBottomLeft() * 0.9f);
+			Graphics::get().getMatrixStack().top().translate(getManager().getCamera().getParallaxPosition(0.9f));
 		}
 
 		if (layer != LayerType::BACKGROUND_PARTICLES)
@@ -35,7 +35,7 @@ namespace Temporal
 
 		if (layer == LayerType::PARALLAX)
 		{
-			Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getBottomLeft() * 0.9f);
+			Graphics::get().getMatrixStack().top().translate(-getManager().getCamera().getParallaxPosition(0.9f));
 		}
 	}
 

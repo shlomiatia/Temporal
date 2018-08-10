@@ -199,7 +199,6 @@
     <ClCompile Include="JumpInfoByTypeProvider.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Laser.cpp" />
-    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="LayersManager.cpp" />
     <ClCompile Include="LedgeDetector.cpp" />
     <ClCompile Include="Log.cpp" />
