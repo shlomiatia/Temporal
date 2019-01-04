@@ -18,14 +18,13 @@ namespace Temporal
 		void setTrackedEntityId(Hash trackedEntityId);
 		Hash getTrackedEntityId() const { return _trackedEntityId; }
 		void translate(const Vector& movement) { _center += movement; clamp(); };
-		void scale(float scale) { _scale *= scale; clamp(); }
-		void resetScale() { _scale = 1.0f; clamp(); }
+		void scale(float scale);
+		void resetScale() { _scale = 1.0f; }
 		
 		Vector getOffsetPosition(const Vector& vector) const;
 		Vector getParallaxPosition(float parallaxScale) const;
 		Vector getUnscaledBottomLeft() const;
 
-		
 	private:
 		Hash _trackedEntityId;
 		Vector _center; 

@@ -112,15 +112,7 @@ namespace Temporal
 		float levelWidth = levelSize.getX();
 		float levelHeight = levelSize.getY();
 
-		if (cameraSize.getX() / _scale > levelWidth)
-		{
-			_scale = cameraSize.getX() / levelWidth;
-		}
-
-		if (cameraSize.getY() / _scale > levelHeight)
-		{
-			_scale = cameraSize.getY() / levelHeight;
-		}
+		
 
 		Vector center = _center / _scale;
 
@@ -143,5 +135,28 @@ namespace Temporal
 		{
 			_center.setY((levelHeight - cameraRadiusY) * _scale);
 		}
+	}
+
+	void Camera::scale(float scale)
+	{
+		const Vector& cameraSize = Graphics::get().getLogicalView();
+		const Vector& levelSize = getManager().getGameState().getGrid().getWorldSize();
+		float levelWidth = levelSize.getX();
+		float levelHeight = levelSize.getY();
+		float newScale = _scale * scale;
+
+		if (cameraSize.getX() / newScale > levelWidth)
+		{
+			newScale = cameraSize.getX() / levelWidth;
+		}
+
+		if (cameraSize.getY() / newScale > levelHeight)
+		{
+			newScale = cameraSize.getY() / levelHeight;
+		}
+
+		_scale = newScale;
+
+		clamp();
 	}
 }
