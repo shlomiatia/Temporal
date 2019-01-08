@@ -12,7 +12,7 @@ namespace Temporal
 
 	Vector Vector::absolute() const
 	{
-		return Vector(abs(_x), abs(_y));
+		return Vector(fabsf(_x), fabsf(_y));
 	}
 
 	float Vector::getLength() const

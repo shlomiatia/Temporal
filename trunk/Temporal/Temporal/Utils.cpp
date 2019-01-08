@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include <sstream>
+#include <iterator>
 #include <cstdarg>
 
 namespace Temporal
