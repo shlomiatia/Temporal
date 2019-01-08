@@ -12,7 +12,7 @@ namespace Temporal
 
 	typedef std::vector<NavigationNode*> NavigationNodeList;
 	typedef NavigationNodeList::const_iterator NavigationNodeIterator;
-	typedef std::vector<const OBB> OBBList;
+	typedef std::vector<OBB> OBBList;
 	typedef OBBList::const_iterator OBBIterator;
 
 	class NavigationGraphGenerator
