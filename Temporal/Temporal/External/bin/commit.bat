@@ -1,0 +1,1 @@
+cmd /c "C:\Program Files\TortoiseSVN\bin\TortoiseProc.exe" /path:C:\Users\Shlomi\source\repos\Temporal /command:commit

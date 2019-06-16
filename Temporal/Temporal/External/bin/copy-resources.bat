@@ -1,0 +1,1 @@
+xcopy C:\Users\Shlomi\source\repos\Temporal\Temporal\External\bin\resources C:\Users\Shlomi\source\repos\Temporal\Debug\resources /y /s
