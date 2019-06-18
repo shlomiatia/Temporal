@@ -1,8 +1,6 @@
 #include "Keyboard.h"
-#include "GameState.h"
 #include "EntitySystem.h"
 #include "Game.h"
-#include "GameStateEditor.h"
 #include <SDL.h>
 
 namespace Temporal
@@ -231,13 +229,6 @@ namespace Temporal
 			if (key == Key::F4 && get().isKeyPressed(Key::LEFT_ALT))
 			{
 				Game::get().stop();
-			}
-				
-			if (key == Key::F12)
-			{
-				if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(ComponentsIds::GAME_STATE_EDITOR))
-					return;
-				GameStateEditor::loadEditor();
 			}
 		}
 	}

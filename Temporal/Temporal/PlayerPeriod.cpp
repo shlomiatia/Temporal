@@ -64,7 +64,7 @@ namespace Temporal
 		{
 			getEntity().getManager().removeInputComponent(this);
 		}
-		else if (message.getID() == MessageID::LEVEL_INIT)
+		else if (message.getID() == MessageID::GAME_STATE_READY)
 		{
 			getEntity().getManager().sendMessageToAllEntities(Message(MessageID::TEMPORAL_PERIOD_CHANGED, &_period));
 		}

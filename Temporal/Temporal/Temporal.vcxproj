@@ -31,7 +31,6 @@
     <ClInclude Include="ActionControllerWalk.h" />
     <ClInclude Include="ActivationSensor.h" />
     <ClInclude Include="AnimationUtils.h" />
-    <ClInclude Include="Beacon.h" />
     <ClInclude Include="BinaryDeserializer.h" />
     <ClInclude Include="BinarySerializer.h" />
     <ClInclude Include="Button.h" />
@@ -175,7 +174,6 @@
     <ClCompile Include="ActivationSensor.cpp" />
     <ClCompile Include="AnimationEditor.cpp" />
     <ClCompile Include="AnimationUtils.cpp" />
-    <ClCompile Include="Beacon.cpp" />
     <ClCompile Include="BinaryDeserializer.cpp" />
     <ClCompile Include="BinarySerializer.cpp" />
     <ClCompile Include="Button.cpp" />

@@ -2,6 +2,7 @@
 #include "Navigator.h""
 #include "MessageUtils.h"
 #include "NavigationEdge.h"
+#include "NavigationGraph.h"
 
 namespace Temporal
 {
@@ -39,7 +40,9 @@ namespace Temporal
 			NavigationEdgeList* path = navigator.getPath();
 			bool isEmptyPath = !path || (path->size() == 0);
 
-			if (goalPosition != destination || (!isEmptyPath && path->at(0)->getTarget().isDisabled()))
+			int targetCollistionGroup = *static_cast<int*>(navigator.getEntity().getManager().sendMessageToEntity(navigator.getTracked(), Message(MessageID::GET_COLLISION_GROUP)));
+			const NavigationNode* start = navigator.getEntity().getManager().getGameState().getNavigationGraph().getNode(goalPosition, targetCollistionGroup);
+			if ((goalPosition != destination && start) || (!isEmptyPath && path->at(0)->getTarget().isDisabled()))
 			{
 				navigator.plotPath();
 				return;
@@ -77,7 +80,6 @@ namespace Temporal
 				{
 					sendDirectionAction(*_stateMachine, Side::RIGHT);
 				}
-					
 			}
 			else
 			{

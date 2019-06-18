@@ -27,7 +27,7 @@ namespace Temporal
 		{
 			_direction *= -1.0f;
 		}
-		else if (message.getID() == MessageID::LEVEL_INIT)
+		else if (message.getID() == MessageID::GAME_STATE_READY)
 		{
 			RayCastResult result;
 			const Vector& position = getPosition(*this);

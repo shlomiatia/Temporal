@@ -419,9 +419,6 @@
     <ClInclude Include="LayersManager.h">
       <Filter>Graphics\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="Beacon.h">
-      <Filter>AI</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -802,9 +799,6 @@
     </ClCompile>
     <ClCompile Include="LayersManager.cpp">
       <Filter>Graphics\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="Beacon.cpp">
-      <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -63,7 +63,6 @@ namespace Temporal
 	class GameStateEditor;
 	class DebugManager;
 	class CameraControl;
-	class Beacon;
 
 	class SerializationAccess
 	{
@@ -105,6 +104,7 @@ namespace Temporal
 			// xml
 			serializer.serialize("obb", fixture._localShape);
 			serializer.serialize("is-enabled", fixture._isEnabled);
+			serializer.serialize("is-tangible", fixture._isTangible);
 		}
 
 		template<class T>
@@ -484,9 +484,6 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, CameraControl& component, T& serializer) {}
-
-		template<class T>
-		static void serialize(const char* key, Beacon& component, T& serializer) {}
 
 		// Singletons
 

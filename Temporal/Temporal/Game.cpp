@@ -8,6 +8,7 @@
 #include "Settings.h"
 #include "Font.h"
 #include "Log.h"
+#include "GameStateEditor.h"
 
 namespace Temporal
 {
@@ -27,6 +28,10 @@ namespace Temporal
 		ResourceManager::get().init();
 		GameStateManager::get().init(gameState);
 		delete settings;
+
+		if (GameStateManager::get().getCurrentState().getEntitiesManager().getEntity(ComponentsIds::GAME_STATE_EDITOR))
+			return;
+		GameStateEditor::loadEditor();
 	}
 
 	void Game::dispose()

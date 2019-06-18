@@ -51,7 +51,7 @@ namespace Temporal
 		{
 			getEntity().getManager().removeInputComponent(this);
 		}
-		else if (message.getID() == MessageID::LEVEL_INIT)
+		else if (message.getID() == MessageID::GAME_STATE_READY)
 		{
 			HashEntityMap& entities = getEntity().getManager().getEntities();
 			Hash saverLoaderFilter = Hash("dynamic-body");
