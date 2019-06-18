@@ -63,6 +63,7 @@ namespace Temporal
 	class GameStateEditor;
 	class DebugManager;
 	class CameraControl;
+	class Beacon;
 
 	class SerializationAccess
 	{
@@ -483,6 +484,9 @@ namespace Temporal
 
 		template<class T>
 		static void serialize(const char* key, CameraControl& component, T& serializer) {}
+
+		template<class T>
+		static void serialize(const char* key, Beacon& component, T& serializer) {}
 
 		// Singletons
 

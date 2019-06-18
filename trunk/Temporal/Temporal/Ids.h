@@ -88,6 +88,7 @@ namespace Temporal
 		static const Hash DOOR = Hash("door");
 		static const Hash SECURITY_CAMERA = Hash("security-camera");
 		static const Hash EDITABLE = Hash("editable");
+		static const Hash BEACON = Hash("beacon");
 	}
 }
 
