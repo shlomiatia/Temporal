@@ -128,6 +128,7 @@ namespace Temporal
 			if (existing)
 				getEntity().getManager().remove(id);
 			Entity* entity = new Entity();
+			entity->setBypassSave(true);
 			entity->add(new Transform());
 			entity->add(new TemporalNotification());
 			addParticleEmitter(*entity);

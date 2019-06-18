@@ -32,6 +32,7 @@
 #include "Door.h"
 #include "SecurityCamera.h"
 #include "PlayerPeriod.h"
+#include "Beacon.h"
 
 #define I_HATE_CPP \
 if (compare(key, component, ComponentsIds::TRANSFORM)) \
@@ -92,6 +93,8 @@ else if (compare(key, component, ComponentsIds::GAME_STATE_EDITOR)) \
 	serialize(key, (GameStateEditor*&)component, serializer); \
 else if (compare(key, component, ComponentsIds::DEBUG_MANAGER)) \
 	serialize(key, (DebugManager*&)component, serializer); \
+else if (compare(key, component, ComponentsIds::BEACON)) \
+	serialize(key, (Beacon*&)component, serializer); \
 else \
 	abort(); \
 
