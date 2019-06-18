@@ -12,12 +12,9 @@ namespace Temporal
 			ENTITY_POST_INIT, // Initialize component based on other components
 			ENTITY_DISPOSED,
 
-			LEVEL_INIT, // Initialize component based on other entities - on level load
-			LEVEL_DISPOSED,
-
 			ENTITY_READY, // Initialize component based on other entities - always
 
-			GAME_STATE_READY,
+			GAME_STATE_READY, // Initialize component based on other entities - on level load
 
 			SAVE,
 			PRE_LOAD,

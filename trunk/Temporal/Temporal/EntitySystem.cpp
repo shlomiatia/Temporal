@@ -127,7 +127,6 @@ namespace Temporal
 
 	EntitiesManager::~EntitiesManager()
 	{
-		sendMessageToAllEntities(Message(MessageID::LEVEL_DISPOSED));
 		sendMessageToAllEntities(Message(MessageID::ENTITY_DISPOSED));
 		for(HashEntityIterator i = _entities.begin(); i != _entities.end(); ++i)
 			delete (*i).second;
@@ -144,7 +143,6 @@ namespace Temporal
 		sendMessageToAllEntities(Message(MessageID::ENTITY_POST_INIT));
 		_initializing = false;
 		sendMessageToAllEntities(Message(MessageID::ENTITY_READY));
-		sendMessageToAllEntities(Message(MessageID::LEVEL_INIT));
 	}
 
 	void EntitiesManager::onNewFrame()

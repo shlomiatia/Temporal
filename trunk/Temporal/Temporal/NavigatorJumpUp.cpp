@@ -1,5 +1,6 @@
 #include "NavigatorJumpUp.h"
 #include "MessageUtils.h"
+#include "Navigator.h"
 
 namespace Temporal
 {
@@ -21,7 +22,17 @@ namespace Temporal
 			{
 				Hash state = getHashParam(message.getParam());
 				if (state == ACTION_CLIMB_STATE)
-					_stateMachine->changeState(_afterLoad ? WAIT_STATE : WALK_STATE);
+				{
+					if (_afterLoad)
+					{
+						Navigator& navigator = static_cast<Navigator&>(*_stateMachine);
+						navigator.plotPath();
+					}
+					else
+					{
+						_stateMachine->changeState(WALK_STATE);
+					}
+				}
 			}
 			else if (message.getID() == MessageID::UPDATE)
 			{

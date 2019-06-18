@@ -103,7 +103,7 @@ namespace Temporal
 		}
 		else if (message.getID() == MessageID::STOP_NAVIGATE)
 		{
-			raiseNavigationFailure();
+ 			raiseNavigationFailure();
 		}
 	}
 

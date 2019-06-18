@@ -11,7 +11,7 @@ namespace Temporal
 {
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	const float TemporalEchoManager::ECHO_READY_TIME = 1.0f;
-	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 1.0f;
+	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 7.0f;
 	
 	const Hash TRANSFORM_TYPE = Hash("transform");
 	const Hash RENDERER_TYPE = Hash("renderer");
@@ -81,7 +81,7 @@ namespace Temporal
 
 	void TemporalEchoManager::handleMessage(Message& message)
 	{
-		if (message.getID() == MessageID::LEVEL_INIT)
+		if (message.getID() == MessageID::GAME_STATE_READY)
 		{
 			init();
 		}
@@ -212,8 +212,7 @@ namespace Temporal
 				entity.handleMessage(Message(MessageID::POST_LOAD));
 			}
 			disableEchos();
-			_cooldown = true;
-			_cooldownTimer.reset();
+			
 			raiseMessage(Message(MessageID::TEMPORAL_ECHOS_MERGED));
 		}
 	}
@@ -232,5 +231,7 @@ namespace Temporal
 			TemporalEcho& echo = **i;
 			echo.setEchoReady(false);
 		}
+		_cooldown = true;
+		_cooldownTimer.reset();
 	}
 }

@@ -66,7 +66,7 @@ namespace Temporal
 	class TemporalEchoManager : public Component
 	{
 	public:
-		TemporalEchoManager() : _echoReady(false), _cooldown(false) {}
+		TemporalEchoManager() : _echoReady(false), _cooldown(true) {}
 		~TemporalEchoManager();
 
 		void handleMessage(Message& message);

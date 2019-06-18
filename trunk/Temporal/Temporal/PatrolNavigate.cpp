@@ -16,10 +16,6 @@ namespace Temporal
 			patrol.handleFireMessage(message);
 			patrol.handleTakedownMessage(message);
 
-			if (message.getID() == MessageID::ENTITY_READY)
-			{
-				_stateMachine->changeState(WAIT_STATE);
-			}
 			if (message.getID() == MessageID::NAVIGATION_SUCCESS)
 			{
 				Hash id = getHashParam(message.getParam());
@@ -30,6 +26,10 @@ namespace Temporal
 					_stateMachine->getEntity().getManager().sendMessageToEntity(id, Message(MessageID::INVESTIGATE));
 					_stateMachine->raiseMessage(Message(MessageID::ACTION_INVESTIGATE));
 				}
+				_stateMachine->changeState(WAIT_STATE);
+			}
+			else if (message.getID() == MessageID::NAVIGATION_FAILURE)
+			{
 				_stateMachine->changeState(WAIT_STATE);
 			}
 		}
