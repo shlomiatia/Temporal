@@ -26,8 +26,10 @@ namespace Temporal
 
 	static const Hash TAKEDOWN_SENSOR_ID = Hash("SNS_TAKEDOWN");
 
+	static const Hash PLAYER = Hash("ENT_PLAYER");
+
 	Patrol::Patrol(Hash securityCameraId, bool isStatic, float waitTime, float aimTime, Hash initialStateId) :
-		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _waitTime(waitTime), _aimTime(aimTime), _securityCameraId(securityCameraId) {}
+		StateMachineComponent(getStates(), "PAT", initialStateId), _edgeDetector(FRONT_EDGE_SENSOR_ID, *this), _isStatic(isStatic), _waitTime(waitTime), _aimTime(aimTime), _securityCameraId(securityCameraId), _isChaser(true) {}
 
 	void Patrol::handleMessage(Message& message)
 	{
@@ -36,7 +38,16 @@ namespace Temporal
 			changeState(DEAD_STATE);
 		}
 		_edgeDetector.handleMessage(message);
+		if (message.getID() == MessageID::UPDATE)
+		{
+			if (_isChaser && getCurrentStateID() != NAVIGATE_STATE)
+			{
+				Hash targetId = PLAYER;
+				raiseMessage(Message(MessageID::NAVIGATE, &targetId));
+			}
+		}
 		StateMachineComponent::handleMessage(message);
+		
 	}
 
 	bool Patrol::handleAlarmMessage(Message& message)
@@ -77,14 +88,14 @@ namespace Temporal
 
 	bool Patrol::handleFireMessage(Message& message)
 	{
-		if (message.getID() == MessageID::LINE_OF_SIGHT)
+		if (message.getID() == MessageID::LINE_OF_SIGHT && !_isChaser)
 		{
 			bool canAttack = false;
 			raiseMessage(Message(MessageID::CAN_ATTACK, &canAttack));
 			if (!canAttack)
 				return false;
 
-			RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
+ 			RayCastResult& result = *static_cast<RayCastResult*>(message.getParam());
 			if (result.getFixture().getCategory() == CollisionCategory::PLAYER)
 			{
 				changeState(AIM_STATE);

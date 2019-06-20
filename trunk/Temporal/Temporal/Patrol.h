@@ -25,6 +25,7 @@ namespace Temporal
 		Hash getInitialState() const;
 
 	private:
+		bool _isChaser;
 		bool _isStatic;
 		Hash _securityCameraId;
 		float _waitTime;
