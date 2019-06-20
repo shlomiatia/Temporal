@@ -420,6 +420,7 @@ namespace Temporal
 		static void serialize(const char* key, Patrol& component, T& serializer)
 		{
 			serializer.serialize("is-static", component._isStatic);
+			serializer.serialize("is-chaser", component._isChaser);
 			serializer.serialize("security-camera-id", component._securityCameraId);
 			serializer.serialize("wait-time", component._waitTime);
 			serializer.serialize("aim-time", component._aimTime);

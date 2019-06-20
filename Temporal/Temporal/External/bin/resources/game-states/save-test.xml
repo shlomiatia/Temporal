@@ -295,7 +295,7 @@
         </entity>
         <entity id="ENT_BLOCK16">
             <transform orientation="1">
-                <position x="1031.307861" y="140.088898"/>
+                <position x="1040.000000" y="140.088898"/>
             </transform>
             <collision-filter category="1" group="-1"/>
             <static-body>
@@ -445,7 +445,7 @@
                 <position x="106.000000" y="72.000000"/>
             </transform>
             <collision-filter category="4" group="-1"/>
-            <patrol is-static="0" wait-time="1.000000" aim-time="0.000000" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
+            <patrol is-static="0" is-chaser="1" wait-time="1.000000" aim-time="0.000000" state="PAT_STT_WAIT" timer="0.000000" state-flag="0"/>
             <navigator state="NAV_STT_WAIT" timer="0.000000" state-flag="0">
                 <destination x="96.000000" y="428.799988"/>
             </navigator>

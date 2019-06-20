@@ -11,7 +11,7 @@ namespace Temporal
 {
 	static const Hash PLAYER_ID("ENT_PLAYER");
 	const float TemporalEchoManager::ECHO_READY_TIME = 1.0f;
-	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 7.0f;
+	const float TemporalEchoManager::ECHO_COOLDOWN_TIME = 11.0f;
 	
 	const Hash TRANSFORM_TYPE = Hash("transform");
 	const Hash RENDERER_TYPE = Hash("renderer");
