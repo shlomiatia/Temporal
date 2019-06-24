@@ -78,7 +78,7 @@ namespace Temporal
 			delete *i;
 	}
 
-	NavigationEdgeList* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal) const
+	NavigationEdgeList* Pathfinder::findPath(const NavigationNode* start, const NavigationNode* goal, float x) const
 	{
 		assert(start);
 		assert(goal);
@@ -89,6 +89,9 @@ namespace Temporal
 		while (!open.empty())
 		{
 			PathNode& pathNode = *open.back();
+			if (pathNode.getEdge()) {
+				x = pathNode.getEdge()->getX();
+			}
 			const NavigationNode& navigationNode = pathNode.getNavigationNode();
 
 			// Reached goal
@@ -119,7 +122,7 @@ namespace Temporal
 					continue;
 
 				// Find cost from start through current edge
-				float tentativeCostFromStart = pathNode.getCostFromStart() + edge.getCost();
+				float tentativeCostFromStart = pathNode.getCostFromStart() + edge.getCost() + fabsf(edge.getX() - x);
 
 				// If node wasn't explore, we use the current edge
 				PathNode* pathNeighbour = find(open, &navigationNeighbour);
