@@ -283,6 +283,7 @@ namespace Temporal
 		{
 			serializer.serialize("animation-set", animator._animationSetFile); // xml
 			serializer.serialize("disable-cross-fade", animator._isDisableCrossFade); // xml
+			serializer.serialize("scale", animator._scale); // xml
 			serializer.serialize("composite-animator", animator._animator); // memory
 		}
 

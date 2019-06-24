@@ -19,7 +19,6 @@ namespace Temporal
 			const OBB& playerShape = getOBBParam(getEntity().getManager().sendMessageToEntity(PLAYER_ENTITY, Message(MessageID::GET_SHAPE)));
 			Vector position = getPosition(*this);
 
-
 			Vector positionToPlayerPositionDelta = (position - playerPosition).absolute();
 
 			if (trackedEntityId != PLAYER_ENTITY &&

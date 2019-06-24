@@ -231,7 +231,7 @@ namespace Temporal
 			if(!_isPaused)
 			{
 				float framePeriod = getFloatParam(message.getParam());
-				_animator.update(framePeriod);
+				_animator.update(framePeriod * _scale);
 			}
 
 			update();

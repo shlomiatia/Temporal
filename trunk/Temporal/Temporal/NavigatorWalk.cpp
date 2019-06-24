@@ -21,14 +21,14 @@ namespace Temporal
 			{
 				update();
 			}
-			else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
+			/*else if (message.getID() == MessageID::COLLISIONS_CORRECTED)
 			{
 				const Vector& collision = getVectorParam(message.getParam());
 				if (collision.getX() != 0.0f && collision.getY() == 0.0f)
 				{
 					_stateMachine->changeState(SKIP_BOX_STATE);
 				}
-			}
+			}*/
 		}
 
 		void Walk::update()
