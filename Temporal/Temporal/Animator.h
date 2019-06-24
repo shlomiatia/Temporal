@@ -106,7 +106,7 @@ namespace Temporal
 	class Animator : public Component
 	{
 	public:
-		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _isDisableCrossFade(false), _isCrossFade(false), _isInitialized(false) {}
+		Animator(const char* animationSetFile = "") : _animationSetFile(animationSetFile), _isPaused(false), _isDisableCrossFade(false), _isCrossFade(false), _isInitialized(false), _scale(1.0f){}
 		
 		const Animation& getAnimation(Hash animationId) const { return _animationSet->get(animationId); }
 		Hash getType() const { return ComponentsIds::ANIMATOR; }
@@ -125,9 +125,9 @@ namespace Temporal
 		bool _isDisableCrossFade;
 		bool _isCrossFade;
 		bool _isInitialized;
+		float _scale;
 		CompositeAnimator _animator;
 		HashSRTMap _previous;
-
 		
 		void update();
 		void reset(AnimationParams& animationParams);
