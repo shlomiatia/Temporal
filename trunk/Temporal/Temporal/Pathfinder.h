@@ -43,7 +43,7 @@ namespace Temporal
 			return instance;
 		}
 
-		NavigationEdgeList* findPath(const NavigationNode* start, const NavigationNode* goal) const;
+		NavigationEdgeList* findPath(const NavigationNode* start, const NavigationNode* goal, float x) const;
 	private:
 		Pathfinder() {}
 		Pathfinder(const Pathfinder&);

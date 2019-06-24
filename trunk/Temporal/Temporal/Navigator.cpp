@@ -73,7 +73,7 @@ namespace Temporal
 		bool success = false;
 		if (start && goal)
 		{
-			NavigationEdgeList* path = Pathfinder::get().findPath(start, goal);
+			NavigationEdgeList* path = Pathfinder::get().findPath(start, goal, startPosition.getX());
 			if (path)
 			{
 				setPath(path);
