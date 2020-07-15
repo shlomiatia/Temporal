@@ -15,6 +15,7 @@ namespace Temporal
 {
 	// BRODER
 	const Vector NavigationGraphGenerator::MIN_AREA_SIZE = Vector(32.0f, 94.0f);
+	const Vector STATIC_BODY_SIZE = Vector(20.0f, 80.0f);
 
 	Vector getBottomRight(const OBB& obb)
 	{
@@ -77,6 +78,19 @@ namespace Temporal
 	}
 
 	bool intersectWithPlatform(const DirectedSegment& area, OBBList& platforms)
+	{
+		for (OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
+		{
+			const OBB& platform = *i;
+			if (intersects(area, platform))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool intersectWithPlatform(const OBB& area, OBBList& platforms)
 	{
 		for (OBBIterator i = platforms.begin(); i != platforms.end(); ++i)
 		{
@@ -303,8 +317,7 @@ namespace Temporal
 		Segment lowerSegment1 = getLowerSegment(area1);
 		Segment lowerSegment2 = getLowerSegment(area2);
 
-		// BRODER
-		float segments = (maxX - minX) / 40.0f;
+		float segments = (maxX - minX) / STATIC_BODY_SIZE.getX() * 2.0f;
 		for (float i = 1.0f; i < segments; i += 1.0f)
 		{
 			float x = minX + (maxX - minX) * (i / segments);
@@ -312,14 +325,17 @@ namespace Temporal
 			float y2 = lowerSegment2.getY(x);
 			float verticalDistance = y1 - y2;
 
-			DirectedSegment fallArea = DirectedSegment(x, y1 - 2.0f, x, y2);
+			float y1BelowPlatform = y1 - 2.0f;
+			float radiusY = (y1BelowPlatform - y2) / 2.0f;
+			OBB obb1 = OBBAABB(Vector(x, y1BelowPlatform - radiusY), Vector(STATIC_BODY_SIZE.getX() / 2.0f, radiusY));
+			OBB obb2 = OBBAABB(Vector(x, y1 + STATIC_BODY_SIZE.getY() / 2.0f), STATIC_BODY_SIZE / 2.0f);
 
-			if (!intersectWithPlatform(fallArea, platforms))
+			if (!intersectWithPlatform(obb1, platforms) && !intersectWithPlatform(obb2, platforms))
 			{
 				node1.addEdge(new NavigationEdge(node1, node2, x, static_cast<Side::Enum>(0), NavigationEdgeType::DESCEND));
 
 				// BRODER
-				float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + 80.0f;
+				float maxJumpHeight = getMaxJumpHeight(AngleUtils::radian().ANGLE_90_IN_RADIANS, ActionController::JUMP_FORCE_PER_SECOND, DynamicBody::GRAVITY.getY()) + STATIC_BODY_SIZE.getY();
 				if (verticalDistance <= maxJumpHeight)
 					node2.addEdge(new NavigationEdge(node2, node1, x, static_cast<Side::Enum>(0), NavigationEdgeType::JUMP_UP));
 			}

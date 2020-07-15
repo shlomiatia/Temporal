@@ -1,0 +1,1 @@
+"C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe" /command:commit /path:"C:\Users\User\source\repos\Temporal"

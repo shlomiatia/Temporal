@@ -1,0 +1,1 @@
+xcopy C:\Users\User\source\repos\Temporal\Temporal\Temporal\External\bin\resources C:\Users\User\source\repos\Temporal\Temporal\Debug\resources /y /s
